@@ -9,7 +9,7 @@
 Usage:  python ferramentas/publicar_design.py [--sem-push]
 Needs:  git, gh logged in as DinisDiscover, Node/npm (configurator build). Clone kept in _trabalho/design/.
 """
-import io, os, shutil, subprocess, sys, tarfile
+import io, json, os, shutil, subprocess, sys, tarfile
 from pathlib import Path
 
 RAIZ = Path(__file__).resolve().parents[1]
@@ -20,6 +20,10 @@ EXCLUIR = (".dwfx", ".pdf")
 PORTA = ('  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>\n'
          '  <script src="/js/design-core.js"></script>\n'
          '  <script src="/js/porta.js"></script>')
+# the Python the document generator runs in the browser (ferramentas/documentos/de_desenhos.py and what it imports)
+MOTOR_GERADOR = ("ferramentas/__init__.py", "ferramentas/comum.py", "ferramentas/dwfx/__init__.py", "ferramentas/dwfx/leitor.py",
+                 "ferramentas/modelo/*.py", "ferramentas/modelo/sistema_construtivo.json", "ferramentas/documentos/*.py",
+                 "ferramentas/configurador/*.py")
 
 
 def corre(*cmd, cwd=None, captura=False, env=None):
@@ -67,6 +71,22 @@ def main():
     html = pagina.read_text(encoding="utf-8")
     html = html.replace("<head>", "<head>\n" + PORTA, 1)
     pagina.write_text(html, encoding="utf-8")
+
+    # public/gerador/: the document generator page + the engine it runs (Pyodide shared with the configurator)
+    gerador = CLONE / "public" / "gerador"
+    shutil.rmtree(gerador, ignore_errors=True)
+    shutil.copytree(RAIZ / "gerador" / "web", gerador)
+    lista = []
+    for padrao in MOTOR_GERADOR:
+        for f in sorted(RAIZ.glob(padrao)):
+            rel = f.relative_to(RAIZ).as_posix()
+            (gerador / "motor" / rel).parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(f, gerador / "motor" / rel)
+            lista.append(rel)
+    (gerador / "motor" / "lista.json").write_text(json.dumps(lista, indent=1), encoding="utf-8")
+    pagina = gerador / "index.html"
+    pagina.write_text(pagina.read_text(encoding="utf-8").replace("<head>", "<head>\n" + PORTA, 1), encoding="utf-8")
+    print(f"public/gerador/: page + {len(lista)} engine files")
 
     git_design("add", "-A")
     if not git_design("status", "--porcelain", captura=True):
