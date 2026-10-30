@@ -373,8 +373,14 @@ def malha(nome, pecas):
 
 for o in G.get("estrutura_extra", []):  # tie beams, ceiling beams, posts, purlins (estrutura_dc.py)
     me, c = malha(o["nome"], o["pecas"])
-    sec_o = o["props"]["seccao"]
-    add(o["nome"], me, CID[o["colecao"]], None, c, MAT.get(sec_o, MAT["osb"] if sec_o.startswith("OSB") else MAT["160x80"]), o["props"])
+    sec_o = o["props"].get("seccao", "")
+    if not sec_o and K and o.get("material") in K["materiais"]:  # hardware, e.g. a pergola post's steel base
+        km = K["materiais"][o["material"]]
+        MAT.setdefault(o["material"], material(o["material"], km["cor"], km.get("rug", 0.8)))
+        mat_o = MAT[o["material"]]
+    else:
+        mat_o = MAT.get(sec_o, MAT["osb"] if sec_o.startswith("OSB") else MAT["160x80"])
+    add(o["nome"], me, CID[o["colecao"]], None, c, mat_o, o["props"])
     N["pecas"] += 1
 
 if K:

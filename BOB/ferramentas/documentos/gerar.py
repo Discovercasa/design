@@ -458,10 +458,11 @@ def doc_cobertura(casa, info, caminho):
         for l in lams:
             ret_planta(pg, V, l["pecas"][0], esp=0.1, cor=clarear(cores[round(l["props"]["comprimento_m"], 2)], 0.5))
         for t in telh:
-            if "canal" not in t:
-                continue
+            if "canal" not in t or "caleira_de" in t:
+                continue  # (strips side by side on one wall share the first one's gutter)
             ya, yb = t["canal"]
-            (pa, qa), (pb, qb) = V.p(t["x0"], ya), V.p(t["x1"], yb)
+            xa_t, xb_t = t.get("caleira_x", (t["x0"], t["x1"]))
+            (pa, qa), (pb, qb) = V.p(xa_t, ya), V.p(xb_t, yb)
             pg.ret(pa, qa, pb - pa, qb - qa, esp=0.15, cor=AZUL, preench=AZUL_CLARO)
             fd = t.get("fundo") or []
             if fd:
@@ -1197,6 +1198,11 @@ def linhas_material(casa):
     for (g, sec), (n, L, vol) in sorted(madeira.items(), key=lambda kv: (kv[0][0], ordem_secoes(kv[0][1]))):
         cap = "8" if "érgola" in g else "1"
         out.append((cap if cap == "1" else "8m", g, f"Madeira {seccao(sec)}", n, L, 0.0, vol, "", ""))
+    ferr = defaultdict(int)
+    for g, tp, prod, n in casa.ferragens():
+        ferr[(g, tp, prod)] += n
+    for (g, tp, prod), n in sorted(ferr.items()):
+        out.append(("8" if "érgola" in g else "1", tp, prod, n, 0.0, 0.0, 0.0, n, "un"))
     for (col, cam), t in sorted(casa.camadas_totais().items(), key=lambda kv: [int(x) if x.isdigit() else 0 for x in kv[0][0].split(".")]):
         cap = col.split(".")[0]
         if cap == "9":
@@ -1244,6 +1250,7 @@ def doc_listagem(casa, info, caminho_pdf, caminho_csv):
             tab.append([d, p, str(n) if n else "", fmt(L, 1) if L else "", fmt(A, 1) if A else "", fmt(Vv, 3) if Vv else "",
                         f"{q} {u}" if q != "" else ""])
         if cap in ("1",):
+            sel = [l for l in sel if l[2].startswith("Madeira")]  # not the hardware
             tab.append(["Total madeira", "", str(sum(l[3] for l in sel)), fmt(sum(l[4] for l in sel), 1), "",
                         fmt(sum(l[6] for l in sel), 2), ""])
     corte = casa.lista_corte(False)

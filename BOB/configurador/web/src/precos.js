@@ -17,6 +17,7 @@ export const PRECOS_EXEMPLO = {
   porta_interior_un: 450,
   pavimento_por_m2: { vinilico: 35, ceramico_pav: 45 },
   cobertura_por_m2: { escondida: 95, duas_aguas: 85, misto: 92 }, // per m² of base (exposed: × 1 / cos of the slope)
+  pergola_por_m2: 160,                   // a pergola (width × projection), step 7
   teto_por_m2: 32,                       // the false ceiling, with every roof (user 2026-10-22: "Quando se aplica a
                                          // cobertura automaticamente o teto falso já entra também")
 };
@@ -56,7 +57,7 @@ export function orcamento(casa, P = PRECOS_EXEMPLO) {
   }
   if (cobertura && area > 0) {
     const k = cobertura.tipo === "escondida" ? 1 : Math.hypot(1, cobertura.inclinacao / 100); // the slope in %
-    const nome = cobertura.tipo === "escondida" ? "escondida" : `à vista: ${(cobertura.nome || cobertura.tipo).toLowerCase()}`;
+    const nome = cobertura.tipo === "escondida" ? "oculta" : `à vista: ${(cobertura.nome || cobertura.tipo).toLowerCase()}`;
     linhas.push({ rotulo: `Cobertura ${nome}`, valor: area * k * P.cobertura_por_m2[cobertura.tipo] });
     const ateto = divisoes.length ? divisoes.reduce((s, d) => s + d.area, 0) : area;
     linhas.push({ rotulo: `Teto falso em gesso cartonado (${ateto.toFixed(1).replace(".", ",")} m²)`, valor: ateto * P.teto_por_m2 });

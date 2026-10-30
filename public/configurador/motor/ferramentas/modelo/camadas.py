@@ -690,9 +690,13 @@ def exterior(casa, S, out, resumo):
                 rect = [(s0, z_base), (s1, z_base), (s1, z_cob + 5), (s0, z_cob + 5)]
                 regioes = clip_telhado(rect, f, z_cob, casa, w1)
             cortes = [(tq["x"][0] - 0.01, tq["x"][1] + 0.01, tq["z"][0] - 0.01, tq["z"][1]) for tq in tubos
-                      if f["o"] == "y" and abs(f["c"] - tq["y_fora"]) < 0.01 and f["n"] == tq["n"]] \
-                if cam.get("tipo") == "ripas" else []
+                      if f["o"] == "y" and abs(f["c"] - tq["y_fora"]) < 0.01 and f["n"] == tq["n"]
+                      and w0 < tq["w"][1] - 1e-6 and w1 > tq["w"][0] + 1e-6]  # every layer the pipe reaches into
             vaos = f["aberturas"]
+            if cortes and cam.get("tipo") == "tabuas":  # never a hole in the visible boards (tubos_queda keeps the
+                cortes = []                            # pipe behind them)
+            elif cortes and cam.get("tipo") != "ripas":  # an insulation / render layer behind which the cavity is
+                vaos, cortes = list(vaos) + cortes, []  # shallower than the pipe: a local recess round it (cork, ETICS)
             for pf in (casa.G.get("pergola") or {}).get("faces", []):  # the boards stop round the pergola's
                 # ledgers and beam ends
                 if cam.get("tipo") == "tabuas" and f["o"] == "y" and abs(f["c"] - pf["y_fora"]) < 0.01 and f["n"] == pf["n"]:
@@ -1318,6 +1322,27 @@ def cobertura_faces(casa, S, out, resumo):
     tots = {}
     z_top = esp / ct + 0.002
     tubos = []
+    # where a ridge / hip cap meets another cap or a valley at an angle, each cap runs on over the point by its
+    # flange's width, the two overlapping (user 2026-10-29: "a proteção da cumeeira fica ali não unida a outra
+    # proteção" — each had stopped square on the point, a triangle open between)
+    nos = {}
+    for ln in G["linhas"]:
+        if ln["tipo"] in ("cumeeira", "rincao", "laro"):
+            for k_e in ("p0", "p1"):
+                nos.setdefault((round(ln[k_e][0], 3), round(ln[k_e][1], 3)), []).append((ln, k_e))
+
+    def em_angulo(ln, k_e):
+        q, r_ = (ln["p0"], ln["p1"]) if k_e == "p0" else (ln["p1"], ln["p0"])
+        d0 = (r_[0] - q[0], r_[1] - q[1])
+        for o, ko in nos.get((round(q[0], 3), round(q[1], 3)), []):
+            if o is ln:
+                continue
+            ro = o["p1"] if ko == "p0" else o["p0"]
+            d1 = (ro[0] - q[0], ro[1] - q[1])
+            n0, n1 = math.hypot(*d0), math.hypot(*d1)
+            if n0 > 1e-6 and n1 > 1e-6 and abs(d0[0] * d1[1] - d0[1] * d1[0]) / (n0 * n1) > 0.05:
+                return True
+        return False
     for k, ln in enumerate(G["linhas"], 1):
         (x0, y0, z0), (x1, y1, z1) = ln["p0"], ln["p1"]
         L = math.hypot(x1 - x0, y1 - y0)
@@ -1327,6 +1352,11 @@ def cobertura_faces(casa, S, out, resumo):
         nx, ny = -uy, ux
         comp = math.hypot(L, z1 - z0)
         tipo = ln["tipo"]
+        if tipo in ("cumeeira", "rincao"):
+            dzl = (z1 - z0) / L
+            e0, e1 = (0.20 if em_angulo(ln, "p0") else 0.0), (0.20 if em_angulo(ln, "p1") else 0.0)
+            x0, y0, z0 = x0 - ux * e0, y0 - uy * e0, z0 - dzl * e0
+            x1, y1, z1 = x1 + ux * e1, y1 + uy * e1, z1 + dzl * e1
 
         def faixa(meia, dz0, dz1, desloc=0.0):
             c0 = (x0 + nx * desloc, y0 + ny * desloc)
@@ -1358,20 +1388,10 @@ def cobertura_faces(casa, S, out, resumo):
         elif tipo == "encosto":  # on the lower roof's slope (its flange) and up the gable's cladding (its leg)
             pc = [f for f in dobrada(0.10) if f["b"][1][2] < f["b"][0][2] + 1e-6][:1]
             nome, pc = "Remate de encosto", pc + [faixa(0.003, z_top, z_top + 0.10)] if pc else [faixa(0.10, z_top, z_top + 0.005)]
-        else:  # beirado: the exterior gutter under the panels' edge, out from the eave line
-            nome = "Caleira"
-            d = 1.0  # the outside is to the right of the face's counter-clockwise edge
-            e, w_, h_ = 0.004, cl["largura"], cl["altura"]
-            zt = z0 - 0.02
-            pc = []
-            for a0, a1, c0, c1 in ((0.0, w_, zt - h_, zt - h_ + e), (0.0, e, zt - h_, zt), (w_ - e, w_, zt - h_, zt)):
-                q = [(x0 - nx * d * a0 - nx * 0.0, y0 - ny * d * a0, c0), (x0 - nx * d * a1, y0 - ny * d * a1, c0),
-                     (x0 - nx * d * a1, y0 - ny * d * a1, c1), (x0 - nx * d * a0, y0 - ny * d * a0, c1)]
-                q = [(px + nx * w_ / 2, py + ny * w_ / 2, pz) for px, py, pz in q]  # centred under the panels' edge
-                pc.append(prisma([[R(c) for c in p] for p in q], (R(x1 - x0), R(y1 - y0), 0)))
-            tubos.append(((x0, y0), (x1, y1), zt - h_, (nx, ny)))
-        out.objeto(f"{nome} {k:02d}", "6.3", cl["material"] if nome == "Caleira" else rm, pc,
-                   {"camada": nome, "comprimento_m": round(comp, 3)})
+        else:  # beirado: the exterior gutter under the panels' edge — drawn below, one per straight run
+            tubos.append(((x0, y0), (x1, y1), z0 - 0.02 - cl["altura"], (nx, ny)))
+            continue
+        out.objeto(f"{nome} {k:02d}", "6.3", rm, pc, {"camada": nome, "comprimento_m": round(comp, 3)})
         tots[nome] = tots.get(nome, 0.0) + comp
     # downpipes: two per gutter run (rulebook E8), at its ends, down to 5 cm above the base, against the cladding
     # (the swan-neck from the gutter back to the façade drawn as a short level piece — assumed)
@@ -1398,6 +1418,46 @@ def cobertura_faces(casa, S, out, resumo):
                 break
             if junta:
                 break
+    # the exterior gutters: one per straight run, centred under the panels' edge (n = into the roof, the outside
+    # to the right); where two runs meet at a corner each plate is cut on the mitre (user 2026-10-29: "umas caleiras
+    # todas bugadas" — each eave piece had been its own square-ended gutter, crossing the next one at a corner)
+    e_c, w_, h_ = 0.004, cl["largura"], cl["altura"]
+
+    def mitra(c, K, u0, n0, z):
+        """At the run end K (direction u0 away from... along the run, normal n0): for the offset c across (along
+        n0), how far along u0 from K the plate's edge runs to meet the next run's (0 when none meets there)."""
+        for o in corridas:
+            for Q, sgo in ((o["a"], 1), (o["b"], -1)):
+                if math.dist(Q, K) > 0.02 or abs(o["z"] - z) > 1e-3:
+                    continue
+                L_o = math.dist(o["a"], o["b"])
+                u1 = ((o["b"][0] - o["a"][0]) / L_o, (o["b"][1] - o["a"][1]) / L_o)
+                n1 = o["n"]
+                if abs(u0[0] * u1[1] - u0[1] * u1[0]) < 1e-6:
+                    continue  # in line (not a corner)
+                # K + c n0 + t u0 = K + c n1 + s u1
+                r_ = (c * (n1[0] - n0[0]), c * (n1[1] - n0[1]))
+                det = u0[0] * (-u1[1]) - (-u1[0]) * u0[1]
+                return (r_[0] * (-u1[1]) - (-u1[0]) * r_[1]) / det
+        return 0.0
+    for k_c, c in enumerate(corridas, 1):
+        L = math.dist(c["a"], c["b"])
+        if L < 0.05:
+            continue
+        ux, uy = (c["b"][0] - c["a"][0]) / L, (c["b"][1] - c["a"][1]) / L
+        nx, ny = c["n"]
+        zb = c["z"]
+        pc = []
+        for c_lo, c_hi, za, zc_ in ((-w_ / 2, w_ / 2, zb, zb + e_c), (w_ / 2 - e_c, w_ / 2, zb, zb + h_),
+                                    (-w_ / 2, -w_ / 2 + e_c, zb, zb + h_)):
+            cant = []
+            for cc, fim in ((c_lo, 0), (c_lo, 1), (c_hi, 1), (c_hi, 0)):
+                K = c["b"] if fim else c["a"]
+                tt = (L + mitra(cc, K, (ux, uy), (nx, ny), zb)) if fim else mitra(cc, K, (ux, uy), (nx, ny), zb)
+                cant.append((c["a"][0] + ux * tt + nx * cc, c["a"][1] + uy * tt + ny * cc, za))
+            pc.append(prisma([[R(v) for v in p] for p in cant], (0, 0, R(zc_ - za))))
+        out.objeto(f"Caleira {k_c:02d}", "6.3", cl["material"], pc, {"camada": "Caleira", "comprimento_m": round(L, 3)})
+        tots["Caleira"] = tots.get("Caleira", 0.0) + L
     n_tubos = 0
     be = casa.G["cobertura"].get("beirado", C["beirado"])
     for c in corridas:
@@ -1406,7 +1466,23 @@ def cobertura_faces(casa, S, out, resumo):
             continue
         ux, uy = (c["b"][0] - c["a"][0]) / L, (c["b"][1] - c["a"][1]) / L
         nx, ny = c["n"]
-        for t in (0.30, L - 0.30 - tb):  # 0,30 from the run's ends (rulebook E8)
+        # two per gutter, 0,30 from its ends (rulebook E8) — one on a small gutter (user 2026-10-30: "vamos com dois
+        # tubos por caleira a não ser que a caleira seja pequena") — and more, evenly between, for the area its slopes
+        # drain (1 cm² of pipe per m², general practice; "distribui como achares melhor")
+        to_ = S["cobertura"]["caleira_oculta"].get("tubo", {})
+        pequena = L <= to_.get("caleira_pequena", 4.0)
+
+        def na_corrida(f, c=c, ux=ux, uy=uy, L=L):  # a slope whose edge lies on this run
+            pts = f["pts"]
+            for (ax_, ay_), (bx_, by_) in zip(pts, pts[1:] + pts[:1]):
+                if all(abs((qx - c["a"][0]) * uy - (qy - c["a"][1]) * ux) < 0.02 for qx, qy in ((ax_, ay_), (bx_, by_))):
+                    ta_, tb2 = sorted(((ax_ - c["a"][0]) * ux + (ay_ - c["a"][1]) * uy, (bx_ - c["a"][0]) * ux + (by_ - c["a"][1]) * uy))
+                    if min(tb2, L) - max(ta_, 0.0) > 0.05:
+                        return True
+            return False
+        area_c = sum(area(f["pts"]) for f in casa.faces if na_corrida(f)) / math.cos(math.radians(G["inclinacao"]))
+        n_c = max(1 if pequena else 2, math.ceil(area_c / (tb * tb * 1e4 * to_.get("m2_por_cm2", 1.0)) - 1e-9))
+        for t in ((0.30,) if n_c == 1 else [0.30 + (L - 0.60 - tb) * k_ / (n_c - 1) for k_ in range(n_c)]):
             px, py = c["a"][0] + ux * t, c["a"][1] + uy * t
             fx, fy = px + nx * (be - 0.10), py + ny * (be - 0.10)  # back against the cladding
             q = [(fx, fy, base_z), (fx + ux * tb, fy + uy * tb, base_z), (fx + ux * tb - nx * tb, fy + uy * tb - ny * tb, base_z),
@@ -1482,10 +1558,12 @@ def cobertura_platibanda(casa, S, out, resumo):
             tpn["area"] += w * comp
             tpn["comp"] += comp
             tpn["n"] += 1
-        if "y_fora" not in t:
-            continue
+        if "y_fora" not in t or "caleira_de" in t:
+            continue  # (a strip beside another on the same low wall: their one gutter is drawn with the first's)
         # hidden gutter (caleira oculta) inside the parapet: aluminium lining of the channel (bottom, parapet face up
-        # to the rufo, upright face); downpipes inside the exterior cladding, hidden by the Tremolo (user 2026-10-16)
+        # to the rufo, upright face); downpipes inside the exterior cladding, hidden by the Tremolo (user 2026-10-16);
+        # along the whole run of strips on its wall (casa_planta "caleira_x")
+        x0, x1 = t.get("caleira_x", (x0, x1))
         sg = 1 if t["lado"] == "N" else -1
         ya_c, yb_c = t["canal"]
         zb_c, zt_c = t["z_canal"]
@@ -1499,34 +1577,46 @@ def cobertura_platibanda(casa, S, out, resumo):
             zm = t["z_madre"]
             aba = cl.get("aba", 0.10)
             pecas_c = []
-            for (xa, za), (xb, zb) in zip(fd, fd[1:]):
-                pecas_c.append(prisma([(xa, ya_c, za), (xb, ya_c, zb), (xb, ya_c, zb + 0.002), (xa, ya_c, za + 0.002)],
-                                      (0, yb_c - ya_c, 0)))
+
             def z_fundo(x):
                 for (xa, za), (xb, zb) in zip(fd, fd[1:]):
                     if xa - 1e-9 <= x <= xb + 1e-9:
                         return za + (zb - za) * (x - xa) / ((xb - xa) or 1.0)
                 return fd[0][1] if x < fd[0][0] else fd[-1][1]
 
-            # the outlets: a hole in the lining where each downpipe's stub goes through the parapet (user
-            # 2026-10-20: "um erro que esta presente é nas caleiras nao existem os buracos par agua escoar para os tubos de queda")
-            furos = sorted((max(tq["x"][0], fd[0][0]), min(tq["x"][1], fd[-1][0]), tq["furo_z"][1])
+            # the outlets: a hole in the gutter's bottom against the parapet over each downpipe, the outlet (bocal) under
+            # it and its stub through the parapet to the pipe in the cladding — they had been holes in the parapet-side
+            # plate, unseen from above (user 2026-10-20: "nas caleiras nao existem os buracos par agua escoar para os
+            # tubos de queda"; again 2026-10-29: "estão em falta os buracos para os tubos de queda"); the outlet's type
+            # and size: to confirm
+            # the outlet (bocal) the pipe's own section, over it (user 2026-10-30: "usa o bocal ideal para esse tubo")
+            tb_ = cl.get("tubo", {}).get("largura", 0.08)
+            tp_ = cl.get("tubo", {}).get("profundidade", tb_)
+            furos = sorted((max((tq["x"][0] + tq["x"][1]) / 2 - tb_ / 2, fd[0][0]), min((tq["x"][0] + tq["x"][1]) / 2 + tb_ / 2, fd[-1][0]))
                            for tq in tubos if tq.get("telhado") == t_idx)
-            for y_l, z_top in ((y_par, zp), (y_md, zm)):
-                d_ = -sg * 0.002 if y_l == y_par else sg * 0.002
-                if y_l != y_par or not furos:
-                    poly = [(x, y_l, z_) for x, z_ in fd] + [(fd[-1][0], y_l, z_top), (fd[0][0], y_l, z_top)]
-                    pecas_c.append(prisma(poly, (0, d_, 0)))
+            yh0, yh1 = sorted((y_par, y_par - sg * tp_))  # across: from the parapet's face, the pipe's depth in
+            resto = (yh1, yb_c) if yh0 == y_par else (ya_c, yh0)
+            cortes_x = sorted({x for x, _z in fd} | {v for a_, b_ in furos for v in (a_, b_)})
+            for a_, b_ in zip(cortes_x, cortes_x[1:]):
+                if b_ - a_ < 1e-4:
                     continue
-                cortes_x = [fd[0][0]] + [v for a_, b_, _z in furos for v in (a_, b_)] + [fd[-1][0]]
-                for a_, b_ in zip(cortes_x[0::2], cortes_x[1::2]):  # the plate between the holes
-                    if b_ - a_ < 0.002:
-                        continue
-                    base = [(a_, z_fundo(a_))] + [(x, z_) for x, z_ in fd if a_ < x < b_] + [(b_, z_fundo(b_))]
-                    poly = [(x, y_l, z_) for x, z_ in base] + [(b_, y_l, z_top), (a_, y_l, z_top)]
-                    pecas_c.append(prisma(poly, (0, d_, 0)))
-                for a_, b_, zh in furos:  # over each hole
-                    pecas_c.append(prisma([(a_, y_l, zh), (b_, y_l, zh), (b_, y_l, z_top), (a_, y_l, z_top)], (0, d_, 0)))
+                em_furo = any(f0 - 1e-6 <= (a_ + b_) / 2 <= f1 + 1e-6 for f0, f1 in furos)
+                y0_, y1_ = resto if em_furo else (ya_c, yb_c)
+                za, zb = z_fundo(a_), z_fundo(b_)
+                pecas_c.append(prisma([(a_, y0_, za), (b_, y0_, zb), (b_, y0_, zb + 0.002), (a_, y0_, za + 0.002)],
+                                      (0, y1_ - y0_, 0)))
+            bocais = [caixa(f0, f1, yh0, yh1, z_fundo((f0 + f1) / 2) - 0.12, z_fundo((f0 + f1) / 2) - 0.004)
+                      for f0, f1 in furos if f1 - f0 > 0.01]
+            if bocais:
+                out.objeto(f"Saída da caleira {t['lado']} {x0:.1f}", "6.3", "Saída de caleira", bocais,
+                           {"camada": "Saída da caleira oculta (bocal)", "unidades": len(bocais),
+                            "produto": "Bocal de saída no fundo da caleira oculta, para o tubo de queda (tipo e medida a confirmar)"})
+            # the parapet side up to the top (or into the parapet's cladding: forro_caleira_ate), the madre side
+            zp_f = min(zp, t["z_borda"] + cl.get("forro_sobre", 0.10)) if zp - t["z_borda"] > cl.get("forro_ate_topo", 0.50) else zp
+            for y_l, z_top in ((y_par, zp_f), (y_md, zm)):
+                d_ = -sg * 0.002 if y_l == y_par else sg * 0.002
+                poly = [(x, y_l, z_) for x, z_ in fd] + [(fd[-1][0], y_l, z_top), (fd[0][0], y_l, z_top)]
+                pecas_c.append(prisma(poly, (0, d_, 0)))
             pecas_c.append(caixa(x0, x1, min(y_md, y_md - sg * aba), max(y_md, y_md - sg * aba), zm, zm + 0.002))
             for (xe, ze), fim, dx in ((fd[0], t.get("fins_caleira", ["parede"] * 2)[0], 0.002),
                                       (fd[-1], t.get("fins_caleira", ["parede"] * 2)[1], -0.002)):
@@ -1543,24 +1633,26 @@ def cobertura_platibanda(casa, S, out, resumo):
                     z_rf = t["z_cume"] - t["inclinacao"] * abs(y_par - t["y_cume"]) + e
                     xa_, xb_ = (xe - esp_f, xe) if dx > 0 else (xe, xe + esp_f)
                     pecas_c.append(caixa(xa_, xb_, min(y_par, y_par - sg * 0.002), max(y_par, y_par - sg * 0.002), z_rf, zp))
-            out.objeto(f"Caleira oculta {t['lado']} {x0:.1f}", "6.3", "Caleira", pecas_c,
+            out.objeto(f"Caleira oculta {t['lado']} {x0:.1f}", "6.3", cl.get("material", "Caleira"), pecas_c,
                        {"camada": cl["nome"], "produto": cl["produto"], "comprimento_m": round(x1 - x0, 3),
                         "queda_m": round(max(z_ for _x, z_ in fd) - min(z_ for _x, z_ in fd), 3)})
             continue
+        zb_t = t.get("z_borda", zt_c)  # (a tall parapet: lined into its cladding only, as above)
+        zp_l = zp - 0.02 if zp - zb_t <= cl.get("forro_ate_topo", 0.50) else min(zp - 0.02, zb_t + cl.get("forro_sobre", 0.10))
         lam = [caixa(x0, x1, ya_c, yb_c, zb_c, zb_c + 0.002),
-               caixa(x0, x1, min(y_par, y_par - sg * 0.002), max(y_par, y_par - sg * 0.002), zb_c, zp - 0.02),
+               caixa(x0, x1, min(y_par, y_par - sg * 0.002), max(y_par, y_par - sg * 0.002), zb_c, zp_l),
                caixa(x0, x1, min(y_up_face, y_up_face + sg * 0.002), max(y_up_face, y_up_face + sg * 0.002), zb_c, zt_c),
                # end caps against the side parapets (up to the panel top)
                caixa(x0, x0 + 0.002, ya_c, yb_c, zb_c, t["z_borda"]),
                caixa(x1 - 0.002, x1, ya_c, yb_c, zb_c, t["z_borda"])]
-        out.objeto(f"Caleira oculta {t['lado']} {x0:.1f}", "6.3", "Caleira", lam,
+        out.objeto(f"Caleira oculta {t['lado']} {x0:.1f}", "6.3", cl.get("material", "Caleira"), lam,
                    {"camada": cl["nome"], "produto": cl["produto"], "comprimento_m": round(x1 - x0, 3)})
     # downpipes inside the exterior cladding, hidden by the Tremolo (user 2026-10-16), ending a little above the
     # foundation base so the water can leave the pipe (user 2026-10-16: "tem de estar ligeiramente acima")
     for tq in tubos:
         out.objeto(tq["nome"], "6.3", "Caleira", tq["pecas"],
                    {"camada": "Tubo de queda (no revestimento)", "comprimento_m": round(tq["z"][1] - tq["z"][0], 3),
-                    "produto": "Tubo de queda dentro do revestimento exterior, escondido pelo Tremolo (secção a confirmar)"})
+                    "produto": "Tubo de queda 100 x 50 dentro do revestimento exterior, escondido pelo Tremolo"})
     esp_int = sum(c["espessura"] for c in camadas_platibanda(S))
     # a ridge cap where two slopes meet (a slope whose high side stands against a parapet has none), between the
     # parapets' roof-side cladding
@@ -1581,23 +1673,37 @@ def cobertura_platibanda(casa, S, out, resumo):
                    [prisma([(x0, yc, zq), (x0, y_, zq - cai), (x0, y_, zq - cai + 0.004), (x0, yc, zq + 0.004)], (x1 - x0, 0, 0))
                     for y_ in (yc - 0.15, yc + 0.15)],
                    {"camada": "Cumeeira", "comprimento_m": round(x1 - x0, 3)})
-    # one slope: its high end against the parapet — a top flashing over the panels' end and up the parapet's
-    # cladding (no ridge cap; ours, as the abutment flashings of the exposed roof)
+    # one slope: its high end against the parapet — no gutter there (user 2026-10-29: "como neste caso só tem uma água
+    # nós apenas precisamos de ter caleiras no lado para o qual o painel fica inclinado"); the panels' top end closed as
+    # his detail (user 2026-10-30, configurador/docs/revisao/2026-10-30_remate_topo_paineis.png: "leva uma placa
+    # impermeável basicamente que drobra e leva o remate em metal"): a waterproof sheet folded from the panels up the
+    # parapet's face, and over it the metal flashing from the parapet's face down onto the panels (sizes ours)
+    rt = C.get("remate_topo", {})
     for t in Gc["telhados"]:
         if not t.get("uma_agua"):
             continue
         sg = 1 if t["lado"] == "N" else -1  # down the slope
         y_f = t["y_cume"] + sg * esp_int          # face of the parapet's roof-side cladding
-        zt_ = t["z_cume"] - t["inclinacao"] * esp_int + e / math.cos(math.atan(t["inclinacao"]))
-        y_a, y_b = sorted((y_f, y_f + sg * 0.12))
-        # its leg stops under the chapéu's inner leg (the parapet stands only ~5 cm over the plane's top there)
-        zp_ = casa.nv.get("platibanda") or (zt_ + 0.12)
-        alto = max(0.02, min(0.10, zp_ - C["chapeu"].get("descida", 0.02) - 0.002 - zt_))
+        tn = t["inclinacao"]
+        zt_ = t["z_cume"] - tn * esp_int + e / math.cos(math.atan(tn))  # panel top at that face
+        zp_ = casa.nv.get("platibanda") or (zt_ + 0.15)
+        # up the parapet as far as there is room under the chapéu's inner leg (it stands only ~5 cm over a one-água
+        # roof's high point), at most remate_topo.altura
+        alto = max(0.02, min(rt.get("altura", 0.12), zp_ - C["chapeu"].get("descida", 0.02) - 0.004 - zt_))
+        aba_ = rt.get("aba", 0.20)                # its reach down the slope
+        xa_, xb_ = t["x0"] + esp_int, t["x1"] - esp_int
+        y_d, y_m = y_f + sg * aba_, y_f + sg * rt.get("placa_aba", 0.15)
+        out.objeto(f"Placa impermeável de topo {t['x0']:.1f}", "6.3", rt.get("material_placa", "Membrana de topo"),
+                   [prisma([(xa_, y_f, zt_ + 0.001), (xa_, y_m, zt_ - tn * abs(y_m - y_f) + 0.001),
+                            (xa_, y_m, zt_ - tn * abs(y_m - y_f) + 0.003), (xa_, y_f, zt_ + 0.003)], (xb_ - xa_, 0, 0)),
+                    caixa(xa_, xb_, min(y_f, y_f + sg * 0.002), max(y_f, y_f + sg * 0.002), zt_, zt_ + alto)],
+                   {"camada": "Placa impermeável de topo", "comprimento_m": round(xb_ - xa_, 3),
+                    "produto": rt.get("produto_placa", "Placa impermeável dobrada, do painel à face da platibanda (a confirmar)")})
         out.objeto(f"Remate de topo {t['x0']:.1f}", "6.3", C["remates"]["material"],
-                   [caixa(t["x0"] + esp_int, t["x1"] - esp_int, y_a, y_b, zt_, zt_ + 0.002),
-                    caixa(t["x0"] + esp_int, t["x1"] - esp_int, min(y_f, y_f + sg * 0.002), max(y_f, y_f + sg * 0.002),
-                          zt_, zt_ + alto)],
-                   {"camada": "Remate de topo", "comprimento_m": round(t["x1"] - t["x0"] - 2 * esp_int, 3)})
+                   [prisma([(xa_, y_f + sg * 0.004, zt_ + alto), (xa_, y_d, zt_ - tn * aba_ + 0.004),
+                            (xa_, y_d, zt_ - tn * aba_ + 0.006), (xa_, y_f + sg * 0.004, zt_ + alto + 0.002)], (xb_ - xa_, 0, 0))],
+                   {"camada": "Remate de topo", "comprimento_m": round(xb_ - xa_, 3),
+                    "produto": "Remate metálico na cor do painel, da face da platibanda para o painel"})
     chapeus(casa, S, out, resumo)
     resumo.append(("6.2", po["nome"], tpn))
     platibanda_interior(casa, S, out, resumo)
@@ -1607,28 +1713,38 @@ def cobertura_platibanda(casa, S, out, resumo):
 def tubos_queda(casa, S):
     """Downpipes of the hidden gutters: two per gutter, in the batten cavity of the facade below it (outer face of
     the frame + OSB + membrane, behind the Tremolo), 0,45 from the gutter ends and >= 0,15 clear of the openings,
-    from a little above the foundation base (tubo.folga_base) up to the outlet through the parapet."""
+    from a little above the foundation base (tubo.folga_base) up to the outlet through the parapet. The section is
+    tubo.largura x tubo.profundidade (100 x 50, user 2026-10-30): a finish with a shallower cavity is recessed round it
+    (cork, ETICS); behind boards (Tremolo) the pipe cannot be deeper than the battens' cavity — a warning then."""
     ext = S["exterior"]
-    op = ext["opcoes"][ext.get("opcao_visivel", "A")]
     cl = S["cobertura"]["caleira_oculta"]
-    prof_cav = 0.0  # depth of the batten cavity behind the cladding (where the downpipes run)
+    tb = cl.get("tubo", {}).get("largura", 0.10)
+    tp = cl.get("tubo", {}).get("profundidade", 0.05)
+    op = ext["opcoes"][ext.get("opcao_visivel", "A")]
+    prof_cav = 0.0  # depth of the batten cavity behind the cladding
     for c in op["camadas"]:
         if c.get("tipo") != "ripas":
+            if c.get("tipo") == "tabuas" and prof_cav - 0.002 < tp:
+                print(f"aviso: tubo de queda {tb * 1000:.0f} x {tp * 1000:.0f} não cabe na caixa de ar de "
+                      f"{prof_cav * 1000:.0f} mm atrás do {c.get('nome', 'forro')} (falta o contra-ripado): "
+                      f"tubo com {max(prof_cav - 0.002, 0.02) * 1000:.0f} mm")
+                tp = max(prof_cav - 0.002, 0.02)
             break
         prof_cav += c["espessura"]
-    tb = cl.get("tubo", {}).get("largura", 0.08)
+    w_m = ext["osb"]["espessura"] + ext["membrana"]["espessura"]
+    w_t = (w_m, w_m + tp)  # the pipe's inner and outer faces, from the frame's
     z0 = ext.get("cota_base", 0.0) + cl.get("tubo", {}).get("folga_base", 0.05)
     res = []
     for it, t in enumerate(casa.G["cobertura"].get("telhados", [])):
-        if "y_fora" not in t:
+        if "y_fora" not in t or "caleira_de" in t:
             continue
         sg = 1 if t["lado"] == "N" else -1
         zb_c = t["z_canal"][0]
         y_par = t["y_parede"]
         y_cav0 = t["y_fora"] + sg * (ext["osb"]["espessura"] + ext["membrana"]["espessura"])
-        y_cav1 = y_cav0 + sg * max(prof_cav - 0.002, 0.02)
+        y_cav1 = y_cav0 + sg * tp
         pa, pb = t["parede_s"]
-        x0, x1 = t["x0"], t["x1"]
+        x0, x1 = t.get("caleira_x", (t["x0"], t["x1"]))
         vaos = t.get("aberturas_parede", [])
         if "saidas" in t:  # outlets fixed by the gutter (its low points), the pipe inside the gutter's length
             locais = [(str(i), min(max(xs, x0 + 0.02), x1 - tb - 0.02), 0.0) for i, xs in enumerate(t["saidas"], 1)]
@@ -1641,15 +1757,16 @@ def tubos_queda(casa, S):
                 n_ += 1
             ys_ = sorted((y_cav0, y_cav1))
             yo = sorted((y_par, y_cav1))
-            z1 = zb_c + 0.06
-            e_ = 0.003  # the outlet stub through the parapet is hollow: the hole in the gutter shows into it
-            res.append({"nome": f"Tubo de queda {t['lado']} {x0:.1f} {nm}", "y_fora": t["y_fora"], "n": sg,
-                        "x": (xx, xx + tb), "z": (z0, z1), "telhado": it, "furo_z": (zb_c, z1),
+            # the pipe up to the stub that comes through the parapet from the outlet under the gutter's bottom
+            zs0, z1 = zb_c - 0.12, zb_c - 0.04
+            e_ = 0.003
+            res.append({"nome": f"Tubo de queda {t['lado']} {x0:.1f} {nm}", "y_fora": t["y_fora"], "n": sg, "w": w_t,
+                        "x": (xx, xx + tb), "z": (z0, z1), "telhado": it, "furo_z": (zs0, z1),
                         "pecas": [caixa(xx, xx + tb, ys_[0], ys_[1], z0, z1),
-                                  caixa(xx, xx + tb, yo[0], yo[1], zb_c - 0.01, zb_c - 0.01 + e_),
+                                  caixa(xx, xx + tb, yo[0], yo[1], zs0, zs0 + e_),
                                   caixa(xx, xx + tb, yo[0], yo[1], z1 - e_, z1),
-                                  caixa(xx, xx + e_, yo[0], yo[1], zb_c - 0.01, z1),
-                                  caixa(xx + tb - e_, xx + tb, yo[0], yo[1], zb_c - 0.01, z1)]})
+                                  caixa(xx, xx + e_, yo[0], yo[1], zs0, z1),
+                                  caixa(xx + tb - e_, xx + tb, yo[0], yo[1], zs0, z1)]})
     return res
 
 
@@ -1668,6 +1785,21 @@ def face_caleira(casa, d, fim):
             if best is None or gap < abs(best - s_):
                 best = t["y_parede"]
     return best
+
+
+def forro_caleira_ate(casa, S, nome, zp):
+    """How high the hidden gutter's sheet lines the parapet of its wall: to the top under the chapéu where the parapet
+    stands at most `forro_ate_topo` (0,50) over the panels' ends (D2503, TV 0,32 / 0,47: "sobe até ao topo"), else `sobre` over
+    them, behind the parapet's cladding (ours: the 0,80 sheet's wall side is 0,30 — user 2026-10-29, the one-água
+    gutter wall's parapet ~0,7 over the panels lined to its top read as "a parte de dentro da platibanda fica com a
+    cor do painel sandwich")."""
+    cl = S["cobertura"]["caleira_oculta"]
+    pid = nome.split()[-1].split(".")[0] if nome else ""
+    zs = [t["z_borda"] for t in casa.G["cobertura"]["telhados"] if "z_borda" in t and t.get("parede") == pid]
+    if not zs:
+        return zp
+    zb = min(zs)
+    return zp if zp - zb <= cl.get("forro_ate_topo", 0.50) else min(zp, zb + cl.get("forro_sobre", 0.10))
 
 
 def platibandas(casa, S):
@@ -1717,8 +1849,10 @@ def platibandas(casa, S):
                 fins.append("livre")
             else:
                 fins.append("junta")
-        # roof side: clad (OSB 15 ... Tremolo), or lined by the gutter on the gutter walls (D2503)
-        forrada = tipo.get(P.nome) == "alta" or pi_.get("paredes_com_caleira", True)
+        # roof side: clad (OSB 15 ... Tremolo), or lined by the gutter on the gutter walls (D2503) — where the parapet
+        # stands low over the panels' ends; a taller one (one água, its low side) is clad above the lining
+        forrada = tipo.get(P.nome) == "alta" or pi_.get("paredes_com_caleira", True) or \
+            (tipo.get(P.nome) == "calha" and forro_caleira_ate(casa, S, P.nome, P.oz + P.hf) < P.oz + P.hf - 1e-6)
         res.append({"P": P, "eixo": ax, "s": sp, "f_out": f_out, "f_in": f_in, "n_in": n_in, "fins": fins,
                     "zp": P.oz + P.hf, "forrada": forrada,
                     "esp_int": esp_forro if forrada else S["cobertura"]["caleira_oculta"].get("espessura_forro", 0.002)})

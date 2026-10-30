@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 760" font-family="Segoe UI, Arial, sans-serif" font-size="15">
+  <!-- Questions for the user, 2026-10-29: how the top purlins meet at a ridge (Q A1) and how a purlin meets a hip /
+       valley member (Q A2). Sections across the ridge; plan at the hip. -->
+  <rect width="1200" height="760" fill="#fff"/>
+  <text x="30" y="38" font-size="22" font-weight="700">Coberturas à vista: uniões (perguntas A1 e A2)</text>
+
+  <text x="30" y="80" font-size="17" font-weight="700">A1. Cumeeira: como se unem as madres de topo das duas águas? (corte transversal)</text>
+  <g transform="translate(40,110)" stroke="#333" stroke-width="1.5">
+    <text x="0" y="0" stroke="none" font-weight="700">a) Topo a topo, cortadas à inclinação</text>
+    <text x="0" y="20" stroke="none" fill="#a0521d">(é o que o configurador faz hoje)</text>
+    <line x1="10" y1="200" x2="170" y2="80" stroke="#9A4F33" stroke-width="10"/>
+    <line x1="330" y1="200" x2="170" y2="80" stroke="#9A4F33" stroke-width="10"/>
+    <polygon points="152,96 170,82 170,112 152,112" fill="#E8A66B"/>
+    <polygon points="188,96 170,82 170,112 188,112" fill="#E8A66B"/>
+    <rect x="160" y="112" width="20" height="90" fill="#D9B07A"/>
+    <text x="190" y="170" stroke="none" font-size="13">prumo</text>
+    <text x="196" y="105" stroke="none" font-size="13">madres 110×75</text>
+  </g>
+  <g transform="translate(420,110)" stroke="#333" stroke-width="1.5">
+    <text x="0" y="0" stroke="none" font-weight="700">b) Sobre uma tábua / viga de cumeeira</text>
+    <line x1="10" y1="200" x2="170" y2="80" stroke="#9A4F33" stroke-width="10"/>
+    <line x1="330" y1="200" x2="170" y2="80" stroke="#9A4F33" stroke-width="10"/>
+    <rect x="160" y="88" width="20" height="40" fill="#C98D4E"/>
+    <polygon points="140,104 158,104 158,118 140,118" fill="#E8A66B"/>
+    <polygon points="182,104 200,104 200,118 182,118" fill="#E8A66B"/>
+    <rect x="160" y="128" width="20" height="74" fill="#D9B07A"/>
+    <text x="190" y="140" stroke="none" font-size="13">viga de cumeeira</text>
+  </g>
+  <g transform="translate(800,110)" stroke="#333" stroke-width="1.5">
+    <text x="0" y="0" stroke="none" font-weight="700">c) Outra (descrever / foto)</text>
+    <rect x="30" y="60" width="300" height="140" fill="none" stroke-dasharray="6 5"/>
+    <text x="80" y="135" stroke="none" fill="#777">ex.: sobrepostas, chapa metálica…</text>
+  </g>
+
+  <text x="30" y="370" font-size="17" font-weight="700">A2. Rincão / laró: como encontram as madres a peça do rincão? (planta, vista de cima)</text>
+  <g transform="translate(40,400)" stroke="#333" stroke-width="1.5">
+    <text x="0" y="0" stroke="none" font-weight="700">a) Madres cortadas em diagonal, encostadas</text>
+    <text x="0" y="20" stroke="none" fill="#a0521d">ao lado do rincão (hoje, desde a tua imagem 4)</text>
+    <polygon points="20,330 330,30 352,52 42,352" fill="#C98D4E"/>
+    <text x="250" y="150" stroke="none" font-size="13">rincão 110×75 ao alto</text>
+    <polygon points="0,250 104,250 92,262 0,262" fill="#9A4F33" opacity="0.9"/>
+    <polygon points="0,190 166,190 154,202 0,202" fill="#9A4F33" opacity="0.9"/>
+    <polygon points="0,130 228,130 216,142 0,142" fill="#9A4F33" opacity="0.9"/>
+    <polygon points="0,70 290,70 278,82 0,82" fill="#9A4F33" opacity="0.9"/>
+    <text x="0" y="300" stroke="none" font-size="13">madres</text>
+  </g>
+  <g transform="translate(420,400)" stroke="#333" stroke-width="1.5">
+    <text x="0" y="0" stroke="none" font-weight="700">b) Madres por cima do rincão,</text>
+    <text x="0" y="20" stroke="none" font-weight="700">cortadas na linha do rincão</text>
+    <polygon points="20,330 330,30 352,52 42,352" fill="#C98D4E" opacity="0.55"/>
+    <polygon points="0,250 115,250 103,262 0,262" fill="#9A4F33"/>
+    <polygon points="0,190 177,190 165,202 0,202" fill="#9A4F33"/>
+    <polygon points="0,130 239,130 227,142 0,142" fill="#9A4F33"/>
+    <polygon points="0,70 301,70 289,82 0,82" fill="#9A4F33"/>
+    <text x="250" y="150" stroke="none" font-size="13">rincão por baixo</text>
+  </g>
+  <g transform="translate(800,400)" stroke="#333" stroke-width="1.5">
+    <text x="0" y="0" stroke="none" font-weight="700">c) Outra: fixação com estribo</text>
+    <text x="0" y="20" stroke="none" font-weight="700">inclinado / parafuso? (foto)</text>
+    <rect x="30" y="60" width="300" height="270" fill="none" stroke-dasharray="6 5"/>
+  </g>
+</svg>

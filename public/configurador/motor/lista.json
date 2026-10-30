@@ -8,6 +8,7 @@
  "ferramentas/modelo/estrutura_dc.py",
  "ferramentas/modelo/geometria2d.py",
  "ferramentas/modelo/paineis.py",
+ "ferramentas/modelo/pergola.py",
  "ferramentas/modelo/telhado.py",
  "ferramentas/modelo/telhado_estrutura.py",
  "ferramentas/modelo/sistema_construtivo.json",

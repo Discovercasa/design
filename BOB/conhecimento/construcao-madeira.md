@@ -107,6 +107,14 @@ Sources: STA Advice Note 4 part 2 "Sole plate tolerances"; NHBC Standards 2025 c
   ≥ ≈ 10 %; clay ≈ 0,4–0,6 kN/m² plus wind uplift (open on three sides) → beams, ledger fixing and hold-down bases
   designed; an abutment flashing at the wall; an exposed gutter with a fall, the downpipe into the drain, never onto a deck
   at the wall foot; a covered terrace adds built area and shades the rooms behind — check the licence and daylight.
+- **A garage or annex attached to the house** (configurator step 7, 2026-10-29; general knowledge — to confirm with the
+  thermal and fire-safety engineers, not a company rule): an unheated garage is a "espaço não útil" in the thermal
+  calculation (REH) → the wall between it and the house is insulated and airtight like an exterior wall, not a plain
+  interior partition; for fire (RT-SCIE) a garage beside a dwelling is usually its own compartment → a separating wall
+  and ceiling with a fire resistance rating, a fire-rated self-closing door, penetrations (ducts, cables) sealed, the
+  linings in fire-rated Pladur, no opening straight into a bedroom (fumes). A **separate** building: a distance to the
+  house and the boundary (fire spread), and the licensing / area limits (RJUE, PDM — small annexes and pergolas may be
+  exempt, by size and municipality) — show the client a note, our price does not include the licence.
 - **Hips and valleys (rincões, larós) on sandwich-panel roofs**: (1) a valley or hip at a 90° plan corner between faces of
   slope s falls at **s ÷ √2** (faces 15 % → ≈ 10,6 % ≈ 6,1°); the panel's own minimum is checked on its face, the valley
   gutter and hip caps along the line at s ÷ √2; (2) every panel at a hip or valley is cut on the bias — triangular
@@ -136,7 +144,10 @@ member deep enough for the nails' edge distances (a header ≥ the hanger height
 good practice). **Purlin ends against a rincão / laró member are also fixed with estribos** ("estribos.", 2026-10-28).
 General practice: there the purlin meets the member at 45° in plan and the member slopes → skewed (and sloped)
 hangers, or square hangers on a bevelled purlin end with packing — a square face-mount hanger does not seat on a skewed
-joint; which product the company uses: not asked.
+joint; which product the company uses: not asked. He allows the diagonal cut — "no máximo podemos cortar a vigas com a
+diagonal necessária para encaixar as vigas umas na outras mas desta forma [com gaps] não pode ficar" (2026-10-29 night):
+purlins cut on the skew against the member's side, hip / valley members mitred where they meet, never a gap between
+members; the fixing of a skew-cut end (inclined hanger / screw) is asked (A2).
 
 ## 7. Glossary PT → EN
 **General**: montante stud · prumo post · travessa inferior bottom plate · soleira sole plate (also: door threshold) ·
@@ -174,7 +185,7 @@ chincharel trimmer (standard PT, not used by the user — check before using).
   rip lengthwise (75×35 → two 37,5×35) · pilar post / column · zona escadas stair opening · Piso R.C / rés do chão ground
   floor, Piso 1 first floor ("vigas de apoio ao teto Piso R.C" on 3_Vigamento = the floor joists of Piso 1) · caleira
   interior internal gutter · laser (para verificar) laser level.
-- Roof: cobertura escondida / sem estar à vista hidden roof (behind a parapet) · cobertura / telhado à vista exposed roof
+- Roof: cobertura oculta (the client-facing name since 2026-10-29) = cobertura escondida / sem estar à vista hidden roof (behind a parapet) · cobertura / telhado à vista exposed roof
   · duas águas / várias águas (with or without empenas à vista — in the configurator only "com empenas à vista") · chapéu
   (de platibanda) DiscoverCasa's parapet coping (= rufo de platibanda; "rufu / rufus" his spelling) — wraps the wall top
   round the whole hidden roof, legs ≈ 2 cm (2026-10-28; was 2–3 cm) · uma água mono-pitch (single slope) — the usual

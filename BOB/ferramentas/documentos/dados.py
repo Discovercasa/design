@@ -157,14 +157,22 @@ class Casa:
                 "Paredes exteriores (módulos)" if m.exterior else "Paredes interiores (módulos)")
             for mb in m.membros:
                 out.append((g, mb["section"], comprimento_membro(mb), area_membro(mb) * m.t, mb["tipo"]))
-        nomes = self.G.get("colecoes_estrutura", {})
         for e in self.extra:
             pr = e["props"]
-            g = nomes.get(e["colecao"], e["colecao"])
-            g = g.split(" ", 1)[1] if g[:1].isdigit() and " " in g else g
-            g = g.split(" (")[0]
-            out.append((g, pr["seccao"], pr.get("comprimento_m", 0.0), pr.get("volume_m3", 0.0), pr.get("tipo", "")))
+            if "seccao" in pr:
+                out.append((self._grupo(e), pr["seccao"], pr.get("comprimento_m", 0.0), pr.get("volume_m3", 0.0), pr.get("tipo", "")))
         return out
+
+    def _grupo(self, e):
+        g = self.G.get("colecoes_estrutura", {}).get(e["colecao"], e["colecao"])
+        g = g.split(" ", 1)[1] if g[:1].isdigit() and " " in g else g
+        return g.split(" (")[0]
+
+    def ferragens(self):
+        """The structure's hardware (extras with no timber section, e.g. a pergola post's steel base):
+        (group, kind, product, units)."""
+        return [(self._grupo(e), e["props"].get("tipo", e["nome"]), e["props"].get("produto", ""), e["props"].get("unidades", 1))
+                for e in self.extra if "seccao" not in e["props"]]
 
     def lista_corte(self, so_modulos=True):
         """{section: {length (cm): count}} of the module members (as cut; the gable triangles are modules too)."""
@@ -175,7 +183,7 @@ class Casa:
         if not so_modulos:
             for e in self.extra:
                 pr = e["props"]
-                if pr.get("tipo", "").startswith("Ripado"):
+                if pr.get("tipo", "").startswith("Ripado") or "seccao" not in pr:
                     continue
                 res[pr["seccao"]][round(pr.get("comprimento_m", 0.0) * 100)] += 1
         return res

@@ -42,7 +42,9 @@ No module drawings: the walls come from the plan, everything else from the Disco
    <plan.svg>` prints the faces / lines and draws the plan), `telhado_estrutura.py` its timber (beams per wing down the
    slopes, headers where a wing opens, edge beams, purlins, prumos, rincão / laró members, empenas), `camadas.
    cobertura_faces` the panels, caps, gutters and downpipes, the façades cut by the roof profile (`sob_faces`); no
-   parapet, exterior modules to pé direito − 0,05; validation against the roof faces. Where two roofs share a plane
+   parapet, exterior modules to pé direito − 0,05; validation against the roof faces. The two top purlins of a ridge
+   meet on it; prumos turn with their beam and are cut to the member above; an empena starts past the eave purlin
+   (2026-10-29). After any roof change run `python ferramentas/configurador/auditar_cobertura.py --formas`. Where two roofs share a plane
    (a wing flush with the main body's eave) the earlier roof keeps the overlap (a constant half-plane in the
    subtraction — fixed 2026-10-22: a duplicate piece had hidden the eave line and doubled ≈ 8 m² of panels on the
    4-água L); check a roof's plan area = the outline with its overhangs. One slope = one plane: purlins
@@ -109,7 +111,10 @@ No module drawings: the walls come from the plan, everything else from the Disco
    the facades facing the pergola on the finished outline (`desloca`), puts one ledger on each over the battens,
    runs every beam to its facade, the slats to the finished faces (collection 1.10; the Tremolo is cut round the
    ledgers and beam ends); `camadas.py` `pergola_cobertura` lays the tiles, the exposed gutter and the downpipes
-   (collection 8). Validation skips the footprint check for 1.10.
+   (collection 8). Validation skips the footprint check for 1.10. A configured house's pergolas (step 7, 2026-10-29):
+   `config.json` "pergolas" [{lado, s0, s1, projecao, altura}] against any side, built by `ferramentas/modelo/
+   pergola.py` with the JSON `pergola` (TV's sections; beams at the facade ≤ the ring's top + 0,10, and under an
+   exposed roof clear of the eave and gutter — `G["pergolas_max"]`), slatted, collection 1.10.
 8. **Chapéus**: every corner top is covered once — at an end where a wall stands across, the chapéu runs to that
    wall's far edge (X chapéus cover the corner, Y chapéus stop against them), whichever frame runs through. After
    changing `chapeus()` check the tops for overlaps and gaps (user 2026-10-20: they "não podem deixar o topo

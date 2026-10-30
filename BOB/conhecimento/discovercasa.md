@@ -21,7 +21,11 @@ shutters, painel liso doors (`sistema-construtivo.md` §3b); certified installat
 Why Claude learns the method; "vamos passo a passo" — an overall idea, then an implementation plan per item.
 1. **Builder** in "o nosso software": as soon as a client has a finished project, the house is ready in the builder
    (structure, layers, quantities). Pieces: `ferramentas/modelo/planta_arquitetura.py` (walls and openings from an
-   architecture plan), `casa_planta.py`, the module divider `divisor_modulos.py`; first test `Construção Torres Vedras/`.
+   architecture plan), `casa_planta.py`, the module divider `divisor_modulos.py`; first test `Construção Torres Vedras/`
+   (2026-10-30, later still, on a note about the panel's coating for coastal air: "Sim já foi verificado e torres vedras
+   foi um projeto usado para tu aprenderes sobre nós e nós irmos também avaliando as tuas sugestões" → TV is where
+   Claude learns the company **and** where the company evaluates our suggestions — a suggestion is judged against what
+   TV did and they say "já foi verificado" where they have already covered it).
    Settings panel wished ("Futuramente"): "um painel onde podemos definir este tipo de coisas, comprimentos dos módulos
    e a sua composição" — today in `sistema_construtivo.json` (`estrutura.divisor`) and each `config.json`.
    **Production documents for every new project** (2026-10-16 night): "quero que sejas capaz de desenvolver um
@@ -42,7 +46,10 @@ Why Claude learns the method; "vamos passo a passo" — an overall idea, then an
    problema de transparência"). Developed since 2026-10-20 in its own session (worktree `BOB Claude - configurador`,
    branch `configurador`; brief `sessao-implementacao.md`) — current state, requests and history:
    `configurador/docs/especificacao.md`. (The 2026-10-15 wording "neste caso módulo a módulo" and "the m² first" were
-   superseded 2026-10-20.)
+   superseded 2026-10-20.) 2026-10-29: after the openings a **step 7** — his "menu de Pérgolas e Garagens e Espaços
+   exteriores que seja necessário construção por exemplo um anexo" (the screen's title "Pérgolas, garagens e anexos" is
+   ours): (a pergola; a garage or an annex, attached under the house's roof or separate with its own) — `sistema-construtivo.md`
+   §3d; the DISCOVERCASA brand returns to the shape (step 1) — spec §2. "Online builder" is his term for it too.
 - **Validation**: model houses already built and compare with the materials really used ("se os valores de materiais
   gastos estão perto do que nós realmente usamos") — Torres Vedras; its company drawings D2503 (roof, modules) received
   2026-10-16; the real materials list: pending.
@@ -61,7 +68,16 @@ Why Claude learns the method; "vamos passo a passo" — an overall idea, then an
 - The company's own names win: "Os Rufos da platibanda na realidade nós chamamos de Chapéus" → **chapéu**; janela de
   correr (not "sliding door"); "roof" in his early English also meant the ceiling ("fake roof" = teto falso).
 - "de encontro a" in his writing = "ao encontro de" (in line with): "os modulos vão de encontro ao tamanho da casa".
-- "o builder" = the configurator ("O testo falso ainda não aparece no builder", 2026-10-28; "testo" = teto).
+- "o builder" = the configurator ("O testo falso ainda não aparece no builder", 2026-10-28; "testo" = teto); "online
+  builder" too (2026-10-29).
+- **Client-facing names are chosen for a professional look**: "Oculta" instead of "escondida" on the screen ("sendo que
+  ambas são a mesma coisa mas é para ficar mais profissional no online builder", 2026-10-29) — same thing, only the
+  label changes; the engine keys stay. Ask him for the client-facing word when a screen label is new.
+- **Client-facing screen text: short, and the first visit explained** (configurator, 2026-10-29): "Otimiza também as
+  descrições da secção de interiores e pavimentos, estão demasiado extensas"; "Para ser mais user friendly no início de
+  tudo adiciona um pop-up no meio de ecrã que explica como o cliente navega pela casa" (left button rotates, wheel zoom,
+  pan …) → write every new screen text short; a first-time hint where a control is not obvious. The camera must stay
+  where the client left it ("quero que continue na câmara que o cliente estava anteriormente"). Spec §11.
 - "ele" / "o outro chat" = the other Claude session (2026-10-20) — say which session is meant in a log.
 
 **What he wants from us**
@@ -109,12 +125,29 @@ Why Claude learns the method; "vamos passo a passo" — an overall idea, then an
 - He answers by number, attaches evidence (a print, a site photo, a photo marked in blue — "percebeste a lógica?") and
   expects the work to go on ("continua já te respondi as questões") — open points do not block it.
 - **How sure he is**: "acho que", "diria que sim", "não sei ao certo", "não me relembro do nome" → tentative; confirm with
-  a document before it becomes a rule.
+  a document before it becomes a rule. He may change his mind inside one message ("Mas pensando bem faz mais sentido …
+  3 metros", then "pelo menos 2 metros" two paragraphs later, 2026-10-30) → record both figures, do not pick the later
+  silently, ask. He defers whole questions ("esta pergunta depois eu respondo-te quando abordar as questões todas das
+  coberturas", 2026-10-30) and promises material ("vou-te fornecer uma imagem") → pending items, nothing modelled before.
+  A figure said from memory ("acredita que o máximo de comprimento seja 25 metros") can be corrected a message later
+  ("afinal o máximo do painel é 15 metros", 2026-10-30 later) → log both, use the last, never the first; he hands over
+  the data sheet itself (a PDF) and the detail drawing (an image) → save both in the repo (`conhecimento/fontes/`,
+  `configurador/docs/revisao/`) the moment they arrive.
 - **Promises and reminders**: "Posso te responder a isso depois", "isso depois eu digo", "lembra-me mais tarde para te
   confirmar o que leva" → a pending item (`sistema-construtivo.md` Pending, the project's `estado.md` ▶); raise it in the
   next message that fits; do not model the answer before he gives it.
+- **"Faz todas as questões que precisares"** (2026-10-29 night, on the roofs: "pareces ter muitas dúvidas de momento faz
+  todas as questões que precisares para começarmos a fazer as coberturas sem falhas algumas!!") → when he sees many
+  doubts, he wants **every** question in one go, not drip by drip: one numbered questionnaire (codes A1…E8, each with
+  its sketch and the current default), no re-asking of what he settled ("estribos.", 2026-10-28). Sent 2026-10-29 night,
+  unanswered; he may answer by code. Spec §13 Roofs.
 
 **How he reviews**
+- **The screen must look like a real finished house**: "O teto falso dá para ver as linhas, numa obra real isso não se
+  vê portanto faz com que seja liso também" (2026-10-30; also "não corresponde à realidade", 2026-10-22) → no
+  construction lines, joints or profiles drawn where a real building shows none; he also tests behaviour by using it ("aconteceu-me
+  adicionar uma garagem e as paredes interiores algumas desapareceram") → after each new element, check that what was
+  already drawn is unchanged.
 - **Visually**: Blender / configurator screenshots with the problem circled in red, hand sketches with named views,
   site photos of how it was built; he opens the `.blend` in his own Blender before answering ("dá-me o ficheiro e eu mal
   consiga abrir no meu blender eu respondo-te às questões") → send the file with a guide. He catches what a DiscoverCasa
@@ -125,6 +158,14 @@ Why Claude learns the method; "vamos passo a passo" — an overall idea, then an
   to the gutters, chapéus not round the whole roof, caps floating over the panels, a façade finish not on the whole
   house) → before showing a roof: every m² covered, every downpipe joined, every cap / flashing on the panels, one
   façade finish all round, and things he already said ("como eu já te havia dito") checked against the docs.
+  Again 2026-10-29: the gutter's outlet holes (asked 2026-10-20, now "estão em falta os buracos para os tubos de queda"),
+  the roof colour ("Mais uma vez quero a cor original … e não cinzenta"), "Revê isso mais uma vez", a chapéu not
+  covering the whole parapet → before showing: grep his earlier words on the thing, and look at the model from above and
+  from the side (a hole in a face seen edge-on is a hole nobody can see). Again 2026-10-29 night: "as caleiras na parte
+  mais alta da cobertura oculta continuam lá" (the high-side fault of the same day, still seen — we had only recoloured
+  the top flashing), flashings "que têm de ser da cor da cobertura", two roofs "desalinhados" → when he reports a fault,
+  look at what he can see on the screen (a flicker between two faces, a shape that reads as a gutter), not only at the
+  engine's parts; and after a fix, re-check the same screenshot's view.
 - **Company drawings win over descriptions from memory**: "arranjei o documento exato … eu disse-te mal como seriam as
   aguas" (2026-10-16) → for a built house ask first for the company's production drawings.
 - **Finished-house photos** win over construction-stage photos and the licensed plan, but a stage photo is not wrong —
@@ -135,7 +176,14 @@ Why Claude learns the method; "vamos passo a passo" — an overall idea, then an
   2026-10-15 — "este não é o mesmo projeto mas é para perceberes como operamos") → company standard
   (`sistema-construtivo.md`), files in `fontes/`.
 - He audits the knowledge agents ("diz-me se o nosso agente de detalhes … anotou tudo o que era importante e percebeu a
-  lógica") → answer with a comparison of what was filed against the source.
+  lógica") → answer with a comparison of what was filed against the source. 2026-10-29, on token cost: "perguntar sobre
+  otimização dos nossos tokens, se o guardião,mestre estão a anotar toda a informação ou a filtrar aquilo que apontam"
+  → asked in the reply; **his decision on any change: pending**. How they work (the keeper's own account): the log
+  keeps his words verbatim, in full; the topic docs get each fact in short form; the keeper sees only what the caller
+  passes, so a summarised message reaches it already filtered; the rulebook keeps the current rule + source, not the
+  history. Where tokens went: reading `metodo-construtivo.md` (≈ 1 800 lines) and the 700-line log on every run.
+  **Decided 2026-10-29** ("Sim, divide o livro do método por temas"): the rulebook is an index + topic files in
+  `conhecimento/metodo/` — each run reads the index and only the topic it needs.
 
 **Keepers of the knowledge** (2026-10-15: "Quero que cries um agente que a função dele é guardar pontos chave e toda a
 informação de como construir uma casa como nós"): `guardiao-detalhes` logs his words and files each fact in the topic
@@ -150,8 +198,22 @@ decisions stay (the history is in git).
 - He works from more than one PC (2026-10-21, a PC whose user folder is "PC"; this one "DiscoverCasa1") → run
   instructions say how to get the code there (a clone of the branch), the folder to run from, and that `localhost` is
   only the PC where the server runs; push first.
+- 2026-10-30: "antes de mais fornece-me acesso ao local host e os comandos necessários para dar git pull se necessário" →
+  start the reply with the exact commands for his PC (`git pull origin configurador`, `npm install --prefix
+  configurador/web`, `npm run dev --prefix configurador/web`, open http://localhost:5173; spec §9) and say that
+  `localhost` is only the PC where the server runs — a cloud session cannot expose it to him; push first.
+- 2026-10-30 (later still): `npm run dev` failed with "Port 5173 is already in use" (screenshot; he wrote "está-me a
+  dar erro e aproveito e já te respondo a isso") — a dev server was already running on his PC (another window or an
+  earlier start); `package.json` starts vite with `--strictPort` on purpose, so it never moves to another port. He may
+  run it from more than one window → the run instructions say: close the old window (Ctrl+C) or end its node process,
+  then start again (spec §9). He answered our numbered points in the same message as the error report.
 - Tokens: the 2026-10-09 "stop with enough tokens … to push" was that moment's wish, "not a rule"; leave a restart point
   ("▶ Where we stopped" in the project's `estado.md`).
+- 2026-10-29: "A outra sessão estava pesado, vamos recomeçar aqui já que na outra sessão disse que guardou os
+  screenshots enviados" → a heavy session is restarted from the repo, and he expects the screenshots he sent to be saved;
+  `_trabalho/` is git-ignored, so a new session (another device, the cloud) never sees them — they were lost this time.
+  Save review screenshots in the repo (configurator: `configurador/docs/revisao/`, generic designs, no client data; TV:
+  `revisao-modelo/` does it already) and say in the log where (our suggestion, 2026-10-29 — to put to him; no reply yet).
 - 2026-10-29: the agents `guardiao-detalhes` and `mestre-construtor` run on the Sonnet model (`model: sonnet` in
   `.claude/agents/`, was `inherit`) to spend fewer tokens — "Sim passa" to our "Passo o guardião e o mestre para o
   modelo Sonnet, que gasta muito menos?".

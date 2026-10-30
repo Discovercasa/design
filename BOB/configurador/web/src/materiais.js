@@ -1,7 +1,7 @@
 // The finishes the client sees: each with its name, a texture drawn here (procedural, in metres) and a 3D preview on
 // a sphere (as ambientCG) — placeholders until the house gets photo-real materials (user 2026-10-21: "mais tarde vamos
 // tornar ultra-realista o aspeto da casa"). Colours from sistema_construtivo.json `materiais` where the standard has
-// the product (Douglas marron, Reboco branco, Cortiça, Vinílico, Pladur N, Alumínio RAL 7016).
+// the product (Douglas marron, Reboco branco, Cortiça, Vinílico, Pladur N, Alumínio RAL 7016, Munditelha).
 import * as THREE from "three";
 
 // grupo: exterior (the cladding options A / B / C), interior (the faces of interior walls — rulebook §9), pavimento,
@@ -15,7 +15,9 @@ export const MATERIAIS = {
   ceramico: { grupo: "interior", nome: "Cerâmico", nota: "Azulejo 30 × 60 (WC e cozinha)", base: "#F1F1EE", tile: [0.6, 0.6], desenho: "azulejo", peca: [0.3, 0.6], rejunte: "#CFCFC9" },
   vinilico: { grupo: "pavimento", nome: "Vinílico", nota: "Régua vinílica imitação carvalho", padrao: "Vinílico", base: "#B8966C", tile: [1.2, 1.2], desenho: "reguas", regua: [1.2, 0.2] },
   ceramico_pav: { grupo: "pavimento", nome: "Cerâmico", nota: "Mosaico 60 × 60", base: "#D8D6D0", tile: [1.2, 1.2], desenho: "azulejo", peca: [0.6, 0.6], rejunte: "#BDBBB4" },
-  sandwich: { grupo: "cobertura", nome: "Painel sandwich", nota: "Cinza RAL 7016", padrao: "Painel sandwich RAL 7016", base: "#4A5055", tile: [1, 1], desenho: "nervuras" },
+  // the Munditelha's own colour, not grey (user 2026-10-29: "Mais uma vez quero a cor original do painel de sandwich
+  // (mundiperfil painel sandwich) e não cinzenta a cobertura")
+  sandwich: { grupo: "cobertura", nome: "Painel sandwich Munditelha", nota: "Mundiperfil, cor telha RAL 8004", padrao: "Painel sandwich Munditelha", base: "#8F4E35", tile: [1, 0.7], desenho: "telha", onda: 0.2, fiada: 0.35 },
 };
 export const daGrupo = (g) => Object.entries(MATERIAIS).filter(([, m]) => m.grupo === g).map(([id, m]) => ({ id, ...m }));
 
@@ -113,6 +115,25 @@ function desenhar(m, cor) {
       g.fillStyle = tom(cor, -0.25);
       g.fillRect(i * PX / 4 + 10, 0, 4, PX);
     }
+  } else if (m.desenho === "telha") { // a tile-effect panel (Munditelha): waves up the slope, a step every tile row
+    const ondas = Math.round(tw / m.onda), w = PX / ondas, fiadas = Math.round(th / m.fiada), h = PX / fiadas;
+    for (let i = 0; i < ondas; i++) {
+      const grad = g.createLinearGradient(i * w, 0, (i + 1) * w, 0); // a round wave: lit on one side
+      grad.addColorStop(0, tom(cor, -0.28));
+      grad.addColorStop(0.35, tom(cor, 0.18));
+      grad.addColorStop(0.7, cor);
+      grad.addColorStop(1, tom(cor, -0.3));
+      g.fillStyle = grad;
+      g.fillRect(i * w, 0, w, PX);
+    }
+    for (let j = 0; j < fiadas; j++) { // the step's shadow under each row
+      const grad = g.createLinearGradient(0, j * h, 0, j * h + h * 0.18);
+      grad.addColorStop(0, "rgba(0,0,0,0.38)");
+      grad.addColorStop(1, "rgba(0,0,0,0)");
+      g.fillStyle = grad;
+      g.fillRect(0, j * h, PX, h * 0.18);
+    }
+    ruido(9000, 0.05, 2);
   }
   return cv;
 }

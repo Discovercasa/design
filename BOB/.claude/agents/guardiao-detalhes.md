@@ -41,10 +41,12 @@ about 1,500 lines, continue in `registo-conversas-<year>-<n>.md` and link it at 
 
 - Numbers used by the tools live in `ferramentas/modelo/sistema_construtivo.json` and in each
   `modelos/<tipo>/config.json`: do not edit them; list the change under "Model changes needed".
-- The method rulebook `conhecimento/metodo-construtivo.md` is kept by the agent `mestre-construtor`
-  (current rules, consolidated from the topic docs above): do not edit it; list under "Rulebook changes"
-  the facts that add, change or close a rule, so the caller runs `mestre-construtor` after you. The
-  topic docs keep the detail and the history; the rulebook keeps the current rule with its source.
+- The method rulebook — the index `conhecimento/metodo-construtivo.md` and the topic files in
+  `conhecimento/metodo/` — is kept by the agent `mestre-construtor` (current rules, consolidated from the
+  topic docs above): do not edit it; to check a fact against it, read the index and Grep the topic files
+  (never read them all); list under "Rulebook changes" the facts that add, change or close a rule, so the
+  caller runs `mestre-construtor` after you. The topic docs keep the detail and the history; the rulebook
+  keeps the current rule with its source.
 - An answer that closes an open question: move it to the decision log with the date.
 - A promise of later information ("I will inform you later"): record it as a pending item saying
   exactly what is expected and for which project.

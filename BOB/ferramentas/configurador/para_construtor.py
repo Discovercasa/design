@@ -27,6 +27,9 @@ Configured house:
       "inclinacao_pct": 15 (at least 15 % — user 2026-10-21), "beirado": 0.25} exposed in sandwich panel
   "acabamentos": {"exterior": "A" | "B" | "C", "contra_ripado": true, "interior": "pladur" | "madeira" | "ceramico",
       "pavimento": "vinilico" | "ceramico"}  (interior and floor kept in the config; the layers still use Pladur / vinyl)
+  "exteriores": {"pergolas": [{"lado": i, "s0", "s1" (along side i), "projecao" (from the finished facade),
+      "altura" (the beams' underside at the facade; none = the highest allowed)}]}   step 7 (user 2026-10-29); a
+      separate garage / annex is a configured house of its own (the configurator keeps it with its place)
   "pe_direito": 2.50   the clear height, the client's choice (user 2026-10-21: "A altura não temos fixa o cliente
       pode escolher a vontade o que preferir"); 2,50 = the default (Torres Vedras); not below 2,40 (RGEU)
 """
@@ -271,7 +274,10 @@ def converter(casa, S):
             beirado = min(max(beirado, b_min), b_max)
         cobertura = {"tipo": "a_vista", "forma": cob_in["tipo"], "inclinacao_pct": round(pct, 3),
                      "inclinacao_graus": round(math.degrees(math.atan(pct / 100.0)), 4),
-                     "beirado": beirado, "empena": S["cobertura"]["empena"],
+                     # the verges overhang as the eaves: where a gable meets a wing's eave the two edges meet in
+                     # one corner (user 2026-10-29: "o beirado do triângulo nao coincide com o beirado da outra
+                     # cobertura... não vais ter dois telhados desalinhados um com o outro") — was 0,12
+                     "beirado": beirado, "empena": beirado,
                      "painel_espessura": round(S["cobertura"]["painel"]["nucleo"] + S["cobertura"]["painel"].get("relevo", 0.0), 4),
                      "_doc": "Cobertura à vista em painel sandwich (user 2026-10-21: 2 águas a regra, 4 águas opção, "
                              "várias águas em L / T / U; mínimo 15 %; beirado 0,25 por defeito)."}
@@ -338,7 +344,7 @@ def cobertura_escondida(casa, cont, prof, notas, S=None):
             zonas[-1][1] = x1
         else:
             zonas.append([x0, x1, y0, y1])
-    comp_max = ((S or {}).get("cobertura", {}).get("painel_oculto", {}) or {}).get("comprimento_max", 13.5)
+    comp_max = ((S or {}).get("cobertura", {}).get("painel_oculto", {}) or {}).get("comprimento_max", 15.0)
     retos = [lado for lado, k in (("S", 2), ("N", 3)) if all(abs(f[k] - fx[0][k]) < 1e-6 for f in fx)]
     if retos and max(f[3] - f[2] for f in fx) <= comp_max + 1e-6:
         # both straight (a rectangle): the client chooses the gutter's side (user 2026-10-29 "Podes deixar o cliente
@@ -410,6 +416,22 @@ def _config(casa, cont, paredes, por_parede, cobertura, camadas, ac, notas):
                      "glb": "Casa_Configurada_Estrutura.glb", "glb_completa": "Casa_Configurada_Completa.glb"},
            "documentos": {"obra": casa.get("obra", "CFG"), "projeto": nome, "local": "Configurador DiscoverCasa"},
            "configurador": {"acabamentos": ac}}
+    # pergolas against the facades (step 7, user 2026-10-29): the side, the stretch along it, the projection and the
+    # height of the beams at the facade (casa_planta builds them with pergola.py; the height kept under its maximum)
+    ls = {l["i"]: l for l in lados(cont)}
+    pgs = []
+    for k, pg in enumerate((casa.get("exteriores") or {}).get("pergolas", [])):
+        l = ls.get(pg.get("lado"))
+        if l is None:
+            raise Erro(f"pérgola {k}: lado {pg.get('lado')} não existe")
+        comp = l["s1"] - l["s0"]
+        s0, s1 = max(0.0, float(pg["s0"])), min(comp, float(pg["s1"]))
+        if s1 - s0 < 0.5:
+            raise Erro(f"pérgola {k}: não cabe no lado {pg['lado']}")
+        pgs.append({"lado": l["i"], "s0": round(s0, 4), "s1": round(s1, 4), "projecao": float(pg.get("projecao", 3.0)),
+                    "altura": float(pg["altura"]) if pg.get("altura") is not None else None})
+    if pgs:
+        cfg["pergolas"] = pgs
     for w in paredes:
         w.pop("_lado", None)
     planta = {"origem": "configurador", "contorno": [0.0, X, 0.0, Y], "paredes": paredes}

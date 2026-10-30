@@ -15,7 +15,8 @@ header {
   display: flex; align-items: center; justify-content: space-between;
   padding: 10px 16px; border-bottom: 1px solid var(--linha); gap: 12px;
 }
-.marca { font-weight: 700; letter-spacing: 0.12em; color: #b8862b; }
+.marca { font: inherit; font-weight: 700; letter-spacing: 0.12em; color: #b8862b; background: none; border: 0; padding: 0; cursor: pointer; }
+.marca:hover { color: #96691c; }
 .marca span { font-weight: 400; letter-spacing: 0; color: var(--suave); margin-left: 8px; }
 .total {
   border: 0; background: var(--acento); color: #fff; border-radius: 999px; padding: 8px 16px;
@@ -152,3 +153,23 @@ label.caixa { display: flex; align-items: center; gap: 6px; font-size: 13px; mar
   #vista { min-height: 52vh; }
   .marca span { display: none; }
 }
+
+/* step 7: the list of what was added */
+.lista7 { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
+.lista7 .escolha { text-align: left; }
+
+/* how to move round the house: a pop-up at the start, again from the ? button */
+.ajuda { position: fixed; inset: 0; background: rgba(29, 31, 33, 0.45); display: flex; align-items: center; justify-content: center; z-index: 50; padding: 16px; }
+.ajuda[hidden] { display: none; }
+.ajuda-caixa { background: var(--fundo); border-radius: 14px; padding: 22px 24px; max-width: 520px; width: 100%; box-shadow: 0 18px 50px rgba(0, 0, 0, 0.25); }
+.ajuda-caixa h2 { margin: 0 0 14px; font-size: 19px; }
+.ajuda-grelha { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.ajuda-item { display: flex; align-items: center; gap: 12px; border: 1px solid var(--linha); border-radius: 10px; padding: 10px 12px; }
+.ajuda-item svg { width: 30px; height: 42px; flex: none; fill: none; stroke: var(--texto); stroke-width: 2; stroke-linejoin: round; }
+.ajuda-item svg .on { fill: #e2a43a; stroke: #b8862b; }
+.ajuda-item strong { display: block; font-size: 14px; }
+.ajuda-item span { font-size: 12.5px; color: var(--suave); }
+.ajuda-caixa .info { margin: 14px 0 0; font-size: 12.5px; color: var(--suave); line-height: 1.45; }
+.ajuda-fim { display: flex; justify-content: space-between; align-items: center; margin-top: 16px; gap: 12px; }
+.ajuda-fim label.caixa { margin: 0; }
+@media (max-width: 480px) { .ajuda-grelha { grid-template-columns: 1fr; } }

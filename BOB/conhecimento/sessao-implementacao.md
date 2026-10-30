@@ -15,8 +15,9 @@ Commit there; push the branch when a task is finished; ask before merging into `
 ## 2. Read (then only what each task needs)
 1. `CLAUDE.md` (working rules, map).
 2. `conhecimento/discovercasa.md` → "Product vision" (the 4 items) and "Working with the user".
-3. `conhecimento/metodo-construtivo.md` (the METHOD rulebook, v6.4+): header, §0, §0a, §15; the rest on demand.
-   Its keeper is the agent `mestre-construtor`.
+3. `conhecimento/metodo-construtivo.md` (the METHOD rulebook, split by topic; index with the § → file map), then
+   `metodo/01-principios.md` (§0, §0a) and `metodo/10-pontos-abertos.md` (§15); the other topic files in
+   `conhecimento/metodo/` on demand (Grep a rule ID). Its keeper is the agent `mestre-construtor`.
 4. `conhecimento/sistema-construtivo.md` (how DiscoverCasa builds: modules, layers, products, quantities, purchase
    units) and `conhecimento/perguntas-por-obra.md` (what varies per house, with defaults).
 5. `Construção Torres Vedras/docs/estado.md` ("▶ Where we stopped"), `docs/modelos.md`, `docs/materiais.md`: the

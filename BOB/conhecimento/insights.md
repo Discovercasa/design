@@ -135,3 +135,129 @@ he answers (`metodo-construtivo.md`). Condensed 2026-10-28 (history in git).
 - **2026-10-29** — the client chooses a rectangle's hidden-roof gutter side ("Podes deixar o cliente escolher"): the
   gutter side sets where the parapet is tallest (the high wall = cércea, neighbours' light) and where the downpipes
   land (drainage at the base) → show both in step 5 and check the cércea per lot (ours) — spec §8, §11.
+- **2026-10-29** — the engine sizes one hidden-roof downpipe per 50 m² (JSON `caleira_oculta.tubo.area_max_m2`, "≈ 1 cm²
+  per m²") but the pipe in the cladding is 80 mm × the ripado's depth ≈ 80×35 ≈ 28 cm² (`construcao-madeira.md` §4:
+  "a 35 mm cavity rarely gives enough"; `sistema-construtivo.md` §6: two such pipes serve ≈ 50 m²) → a one-água U of
+  175 m² gets 4 pipes where 7 are needed, or each pipe needs ≈ 50 cm² (a local recess, or a round ø80) → set
+  `area_max_m2` to ≈ 28, or deepen the cavity at the pipe — not yet told. Update 2026-10-29, later: set to 37 m² per
+  pipe from Torres Vedras as built (2 for ≈ 74 m²; the U → 5); still above the 80×35 pipe's ≈ 28 m² — to ask.
+  **Update 2026-10-30: he dropped the 37 m² rule** ("dois tubos por caleira a nao ser que a caleira seja pequena",
+  "Normalmente 10cm de bocal mas pode ser maior") → see the 2026-10-30 entry below (2 pipes per gutter on a big roof).
+- **2026-10-29** — an attached garage (step 7) is built with an ordinary interior wall and door; a garage is an unheated
+  space and a fire-risk neighbour → an insulated airtight wall (REH, "espaço não útil") and a fire-rated door (RT-SCIE)
+  — `construcao-madeira.md` §4, `sistema-construtivo.md` §3d — **open**, to ask; not yet told. (2026-10-30: he calls
+  the shared wall "a parede interior … partilhada com a casa" — not an answer to the thermal / fire question.)
+- **2026-10-29** — the engine's pergola posts start at `z_base` 0,0 (`ferramentas/modelo/pergola.py`) — if z = 0 is the
+  ground / deck, the end grain touches it, against our own rule (steel post bases, end grain ≥ ≈ 150 mm above, a
+  pergola on the ground bolted to the house is a termite bridge — `construcao-madeira.md` §4) → check what z = 0 is in
+  the house model and lift the posts onto bases (≈ 0,15) — not yet told.
+- **2026-10-29** — the hidden gutter's lining is drawn dark grey (JSON material "Caleira" #3A3F43) but the company's is
+  "painel de alumínio cor telha de 80 cm" (`fontes/execucao-tecnica-obra_2026-09-24.md` line 120) and at TV a red sheet
+  (`cobertura-D2503.md` line 89) → draw it in the tile colour (Munditelha's) now that the roof is; the exposed gutter
+  colour is not said — not yet told. (2026-10-30: the panel is RAL 8004; the lining's colour still not answered —
+  assumed = the panel's.)
+- **2026-10-29** — step 7 grows the outline under the house's roof; the sweep checked a rectangle + garage (L, T) only
+  → add a U + garage, a garage on a re-entrant wall, two annexes, and a garage that makes the shape something other
+  than L / T / U (a roof, gutter side and parapet height still choose one slope per case) — ours, to run; not yet told.
+- **2026-10-29** — separate garages / annexes and pergolas have licensing and distance limits (RJUE, PDM, fire spread) →
+  a short note beside the price ("licenciamento não incluído / a confirmar"); his answer on which to show: pending.
+- **2026-10-29** — the review screenshots lived in `_trabalho/` (git-ignored) and were lost to the new session → save
+  them (generic designs, no client data) in `configurador/docs/revisao/` — `discovercasa.md` Working with the user —
+  not yet told. Again 2026-10-29, later still: his step-4 screenshot (a wall run too long past a T) is only in the chat.
+- **2026-10-29** — step 4 now allows a room standing free in the middle of the house (four walls touching no outside
+  wall): they are held only by their corners, the floor and the ceiling beams — fine for partitions, but ceiling beams
+  that cross an interior wall bear on it (`sistema-construtivo.md` §2, 2026-10-19) and the base under it must be level
+  (laser, `metodo/02`), so a free room under a beam makes its walls (and the concrete under them) load-bearing →
+  tell him; ask whether any must carry anything; engineer per house — spec §11, §13.
+- **2026-10-29** — a wall from an inner corner is flush with the outside wall's finished inner face (0,095 from the
+  outline — ours), while D2503 puts interior walls on the plan's centre lines (± 1 cm, `sistema-construtivo.md` §2b item
+  7) → two placement rules; ask which he expects at corners (flush, to keep the room faces in plane, or centred) —
+  spec §13; not yet told.
+- **2026-10-29 (night)** — hidden roof, gutter wall taller than ≈ 0,50 over the panels (one água: ≈ 0,7): his 2026-10-20
+  "revestimento da caleira até ao topo" (red lining to the chapéu) and his 2026-10-28 "o capoto tem que ficar na casa toda"
+  clash on an ETICS house — he reported the lined face as a bug (screenshot 1) → we now line to 0,50 and clad above
+  (ours); the D2503 sheet is 0,80 with only 0,30 up the parapet side, so a lining to the top of a 0,47 parapet is not
+  that sheet either → ask which rule wins (E4 / E7) and show a section of the junction (lining lap behind the Traspir,
+  façade finish over it, chapéu leg over both) — spec §12 / §13; asked, not answered.
+- **2026-10-29 (night)** — the high-side "caleiras" were reported twice (2026-10-29 and again on screenshot 1); we only
+  recoloured the remate de topo (a 12 cm flat shelf + a 10 cm upstand, taller than the parapet's ≈ 5 cm over the panels —
+  `metodo/06` line 94) → a flat shelf reads as a gutter; better: a folded flashing that follows the panel's profile
+  and tucks under the chapéu, with no horizontal shelf wider than the lap — to be shown with E3 (the way they close the
+  panels' top end); not yet told.
+- **2026-10-29 (night)** — verges = eaves (up to 0,50): the purlins then cantilever up to 0,50 past each gable and the
+  roof's edge zone takes the highest wind suction (EN 1991-1-4, zones F / G) → the maker's rules for the panel's side
+  overhang and the edge fixings (closer Turbosharp spacing) belong in B1 / B3 before the 0,50 verge is built; the 0,12
+  verge was safe by default — not yet told.
+- **2026-10-30** — "dois tubos por caleira a não ser que a caleira seja pequena", bocal "normalmente 10cm … pode ser maior
+  dependendo da zona": on a one-água roof the whole roof drains into ONE gutter (his U 175 m²: ≈ 87 m² per pipe) while
+  the pipe in the cladding is 80 mm × the ripado's depth ≈ 28 cm² ≈ 28 m² at ≈ 1 cm² per m² (`construcao-madeira.md` §4;
+  EN 12056-3 / DR 23/95), and a 10 cm bocal is wider than the pipe it feeds → the pipe (and the outlet's flow) limits,
+  not the bocal; the 37 m² rule we had was safer. Better: keep "2 pipes, 1 on a small gutter" as the default, but size
+  the pipe by the area each drains (a local recess in the ripado or a round ø100 where the roof is large) and add a pipe
+  — or ask him what "maior" means (bocal and pipe together?); a one-água hidden roof is where it bites — spec §13 (E5);
+  not yet told. **Told and accepted 2026-10-30 (later)**: "então usa o bocal ideal para esse tubo e distribui como
+  achares melhor" → the outlet = the pipe's section, more pipes evenly spaced for ≈ 1 cm² per m² (his L's hidden
+  gutter: 7); closed — the pipe's depth in the cladding (35 mm) stays the thing to check per house. **2026-10-30
+  (later still) — the pipe's section: our suggestion** (a 100 × 50 pipe in a local recess rather than many 80 × 35 pipes
+  or fixing 2: his L 7 pipes, TV 3 against 2 built) **accepted: "1. Sim usa de 100x50"** → built (hidden pipe 100 × 50
+  ≈ 50 m² per pipe, his L 4 pipes; the recess in cork / ETICS boards, none in the Tremolo boards, a warning where the
+  cavity is too shallow, as TV) — closed. **New (ours, not yet told)**: the count uses the nominal 50 cm², the clear
+  section is ≈ 44 cm² (≈ 0,9 cm² per m² on 4 pipes for his L — still within the usual rule of thumb); in ETICS the
+  recess is the pipe's whole depth (XPS 60 − 50 ≈ 10 mm left: a thermal bridge the wall's height) and a pipe
+  plastered over has no cleaning access (EN 12056-3; `construcao-madeira.md` §4) → on an ETICS house prefer a vertical
+  channel closed by a removable cover strip (or a cleaning point at the foot), not a pipe plastered over; the
+  horizontal ripado every 35 cm is cut 100 mm at every crossing → short blocking each side so the Tremolo boards stay
+  supported; show it on the screen and ask him per house — not yet told.
+- **2026-10-30** — garage gate "respeitando as nossas regras estruturais": step 6's cap is the rough top ≤ pé direito −
+  0,10, but a sectional door needs ≈ 0,30 above the opening for its track and springs (TV 2,20 gate under a 2,50
+  ceiling, `sistema-construtivo.md` §3b ⚠ (4)) and a gate wider than ≈ 3,0 m is a verga exception (TV's 11×7,5 over
+  3,00 was engineer-approved, `metodo/03`; the usual 22×7,5 from 2,8 m, threshold OPEN) → cap the gate's height at the
+  pé direito − ≈ 0,30 (or warn) and its width by the verga rule (glulam / engineer beyond it); say so on the screen —
+  not yet told. **Told and accepted 2026-10-30 (later)**: "sim exatamente" (the 0,30 cap); the width by the verga rule
+  stays ours (not asked).
+- **2026-10-30** — two figures for the separation of a separate garage / annex in one message (3 m "pelo menos" and 2 m
+  "pelo menos"); the minimum between buildings on a real lot comes from fire spread (RT-SCIE), the PDM and the plot's
+  setbacks, not from the product → whichever he picks is a default; show "a confirmar com o PDM / licenciamento" beside it
+  (the 2026-10-29 licensing note) and ask which — spec §13; asked, **answered 2026-10-30 (later): "pode ficar 2
+  metros"** — the "a confirmar com o PDM / licenciamento" note beside it stays (not told that yet).
+- **2026-10-30** — the pergola "até há altura máxima do PISO 0": if that line is the parapet's top (TV 3,49) the ledger
+  would be bolted into the parapet frame — OSB + studs cantilevered above the ring, not the ring (`construcao-madeira.md`
+  §4) → a pergola's top may reach the ground floor's top, but its **fixing line** (ledger) should stay on the ring
+  (ring top + ≈ 0,10) or at the upper floor's joists on a two-storey house; ask which line he means before raising the
+  limit; on a two-storey house also an abutment flashing under the upper floor's cladding (rufo de encosto, behind the
+  Traspir) and a window sill above the pergola's top — not yet told.
+- **2026-10-30** — adding a garage / annex made interior walls vanish ("algumas desapareceram") and an interior wall inside
+  a SEPARATE block cannot be drawn (step 4 edits the house's outline) → either step 4 learns to edit a separate
+  building (a second outline) or a separate garage / annex keeps no inside walls until then (the note must not send
+  the client back to step 4 for it); test: every interior wall before and after each add / remove / move of a block, same
+  walls, same ends — ours, to run; not yet told. **2026-10-30 (later)**: he chose the second option — "Não deixa apenas
+  ficar ser possível ficar com paredes quando são junto a casa" (a separate block keeps no inside walls); the
+  before / after test for attached blocks stays. **2026-10-30 (later still)**: our reading ("interior walls only in
+  blocks attached to the house") put back to him as our point 5 → "5. Depois quando abrir o configurador e testar
+  digo-te mas parece-me bem" — not confirmed yet: he will say after testing (pending, `sistema-construtivo.md` (12)).
+- **2026-10-30** — a smooth false ceiling is right for the look (taped joints), but continuous Pladur needs movement joints
+  on long runs (maker's rule, ≈ every 10–15 m, general practice) and over structural changes (a wing / glulam change) — not
+  shown on the screen; per house — not yet told.
+- **2026-10-30** — his image of the panels' top end (promised) will be a photo / drawing sent in the chat → save it in
+  `configurador/docs/revisao/` the moment it arrives (the same loss as 2026-10-29's screenshots), then redo the remate de
+  topo from it — `sistema-construtivo.md` §6 Hidden roof. **Done 2026-10-30 (later)**: the image arrived and was saved
+  at `configurador/docs/revisao/2026-10-30_remate_topo_paineis.png`; the remate de topo was redone from it.
+- **2026-10-30 (later)** — the hidden panel's maximum length 15 m (his "afinal … 15 metros", after "25"): a 15 m
+  panel is longer than a standard 13,6 m trailer and a 15 m steel-skin panel moves ≈ 13–15 mm with temperature (dark
+  colour) → before a house relies on 15 m, confirm with Mundiperfil how it is delivered (special transport, crane,
+  lifting beams, no sag) and how the fixings allow for the expansion; keep 13,5 as the "easy" length if the lot's
+  access is tight (per house; PO Q14). **Told 2026-10-30 (later still), accepted**: "2. Sim tranquilo já agora usamos
+  os de 80mm" — no objection to the transport / ≈ 13–15 mm movement points; nothing said about asking Mundiperfil
+  (keep the per-house note); "usamos os de 80mm" = the sandwich panels are 80 mm (our reading; the hidden panel's
+  80 mm confirmed — whether the Munditelha too: asked, the sheet's "médias 40 - 60 mm" suggests not).
+- **2026-10-30 (later)** — the MC 1000/5 data sheet: PUR is reaction-to-fire F, PIR B-s2,d0 (optional) → for a roof
+  near a neighbour / a garage / a lot boundary prefer PIR (check RT-SCIE's roof rules); the standard polyester is "not
+  for marine / aggressive environments" (TV lies near the Atlantic coast; any coastal house) → ask per house and use the
+  maker's coating for the air (PO Q15); minimum slope 6 % is only "without longitudinal laps" and cut ends must be cut
+  cold and treated (a corner panel cut in an L, as TV, is a corrosion risk if cut with a grinder); an annual inspection
+  is a maintenance instruction to hand to the client (manual). **Told 2026-10-30 (later still)**: aggressive air —
+  "3. Sim já foi verificado e torres vedras foi um projeto usado para tu aprenderes sobre nós e nós irmos também
+  avaliando as tuas sugestões" (the coastal check was done for TV — what it found is not said; TV is where we learn the
+  company and where the company evaluates our suggestions, `discovercasa.md`; the coating stays per house, PO Q15);
+  PUR vs PIR — "4. Ok tranquilo" (noted: PIR near a neighbour / garage, per house, no decision); the minimum slope with
+  laps, the cold cut and the annual inspection: not answered (not asked).
