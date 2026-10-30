@@ -61,9 +61,37 @@ def cobertura_casa(casa_json):
     obj = [{"nome": o["nome"], "material": o["material"], "pecas": o["pecas"]} for o in out.objetos
            if o["colecao"] in ("6.3", fim_) or (o["colecao"] == "6.2" and C.platibanda)]
     Cc = cfg["cobertura"]  # the hidden roof's gutter side and the sides the client may choose (one água)
-    return json.dumps({"objetos": obj, "z_platibanda": G["niveis"].get("platibanda"),
+    # each side's parapet as built: from the base edge (the frame's outer face) in to its roof-side face — the
+    # cladding there, or only the gutter's lining on a gutter wall — so the screen draws it as wide as the chapéu
+    # covers (user 2026-10-29: "o chapéu não esta a cobrir a largura toda")
+    plat = {}
+    if C.platibanda:
+        for d in CM.platibandas(C, S):
+            try:
+                k = int(d["P"].nome.split()[-1][1:].split(".")[0]) - 1
+            except ValueError:
+                continue
+            plat[k] = round(max(plat.get(k, 0.0), abs(d["f_in"] - d["f_out"]) + d["esp_int"]), 4)
+    # the pergolas (step 7): the engine's pieces (pergola.py), one list per pergola in the client's order; the top of the
+    # ring for their highest beams
+    pgs = {}
+    for o in G["estrutura_extra"]:
+        if o["colecao"] == "1.10" and o["nome"].startswith("Pérgola "):
+            k = int(o["nome"].split()[1]) - 1
+            pgs.setdefault(k, []).append({"nome": o["nome"], "material": o["material"], "pecas": o["pecas"]})
+    return json.dumps({"objetos": obj, "z_platibanda": G["niveis"].get("platibanda"), "platibandas": plat,
+                       "pergolas": [pgs.get(k, []) for k in range(len(cfg.get("pergolas") or []))],
+                       "pergolas_max": G.get("pergolas_max", []),
+                       "pergola_max": round(G["niveis"]["topo_vigas_teto"] - S["pergola"]["vigas"]["altura"] - S["pergola"]["ripas"]["espessura"], 3)
+                                      if G["niveis"].get("topo_vigas_teto") and S.get("pergola") else None,
                        "rodada": bool(casa.get("_rodada")) or any("rodada" in n for n in notas),
                        "uma_agua": bool(Cc.get("uma_agua")), "caleira": Cc.get("lado_caleira"), "caleiras": Cc.get("lados_caleira", [])})
+
+def edificio_casa(casa_json):
+    # a separate garage / annex (step 7): a configured house of its own — its roof's faces (exposed) and its roof as built
+    t = json.loads(telhado_casa(casa_json))
+    c = json.loads(cobertura_casa(casa_json))
+    return json.dumps({**c, "faces": t["faces"], "z_beirado": t.get("z_beirado")})
 
 def teto_casa(casa_json):
     # the false ceiling as built (camadas.tetos, the builder's own layers): each room's Pladur on its steel profiles and
@@ -82,6 +110,9 @@ def teto_casa(casa_json):
     out, res = CM.Saida(), []
     CM.tetos(C, S, out, res)
     obj = [{"nome": o["nome"], "material": o["material"], "pecas": o["pecas"]} for o in out.objetos
-           if o["colecao"] in ("5.2", "5.3", "5.4")]  # perfis, cantoneira, Pladur (not the réguas or the wool above)
+           if o["colecao"] == "5.4"]  # the Pladur only: the profiles and the angle above it showed as lines (2026-10-30)
     return json.dumps({"objetos": obj, "rodada": bool(casa.get("_rodada")) or any("rodada" in n for n in notas)})
-`),performance.now()-t}self.onmessage=async n=>{let r=n.data;try{if(r.tipo===`carregar`){let n=await t();self.postMessage({tipo:`pronto`,ms:n,materiais:JSON.parse(e.runPython(`json.dumps(S0['materiais'])`)),regras:JSON.parse(e.runPython(`json.dumps({'inclinacao_min_avista_pct': S0['cobertura'].get('inclinacao_min_avista_pct', 15)})`))})}else if(r.tipo===`construir`){e||await t();let n=performance.now(),i=e.globals.get(`construir_casa`)(JSON.stringify(r.casa));self.postMessage({tipo:`estrutura`,dados:i,ms:performance.now()-n,pedido:r.pedido})}else if(r.tipo===`telhado`){e||await t();try{let t=JSON.parse(e.globals.get(`telhado_casa`)(JSON.stringify(r.casa)));self.postMessage({tipo:`telhado`,pedido:r.pedido,faces:t.faces,zBeirado:t.z_beirado,zMax:t.z_max})}catch(e){self.postMessage({tipo:`erro`,msg:e&&e.message?e.message:String(e),pedido:-r.pedido})}}else if(r.tipo===`cobertura`){e||await t();try{let t=JSON.parse(e.globals.get(`cobertura_casa`)(JSON.stringify(r.casa)));self.postMessage({tipo:`cobertura`,pedido:r.pedido,...t})}catch(e){self.postMessage({tipo:`erro`,msg:e&&e.message?e.message:String(e),pedido:-1e6-r.pedido})}}else if(r.tipo===`teto`){e||await t();try{let t=JSON.parse(e.globals.get(`teto_casa`)(JSON.stringify(r.casa)));self.postMessage({tipo:`teto`,pedido:r.pedido,...t})}catch(e){self.postMessage({tipo:`erro`,msg:e&&e.message?e.message:String(e),pedido:-2e6-r.pedido})}}}catch(e){let t=e&&e.message?e.message:e&&e.code?`erro de ficheiros (${e.code})`:JSON.stringify(e);self.postMessage({tipo:`erro`,msg:t,pedido:r.pedido})}};
+`),performance.now()-t}self.onmessage=async n=>{let r=n.data;try{if(r.tipo===`carregar`){let n=await t();self.postMessage({tipo:`pronto`,ms:n,materiais:JSON.parse(e.runPython(`json.dumps(S0['materiais'])`)),regras:JSON.parse(e.runPython(`json.dumps({'inclinacao_min_avista_pct': S0['cobertura'].get('inclinacao_min_avista_pct', 15),
+          'fora': {k: round(S0['exterior']['osb']['espessura'] + S0['exterior']['membrana']['espessura'] + sum(c['espessura'] for c in op['camadas']), 4)
+                   for k, op in S0['exterior']['opcoes'].items()},
+          'pergola': {k: S0['pergola'][k] for k in ('altura_min', 'projecao', 'largura_min', 'acima_do_anel', 'inclinacao')}})`))})}else if(r.tipo===`construir`){e||await t();let n=performance.now(),i=e.globals.get(`construir_casa`)(JSON.stringify(r.casa));self.postMessage({tipo:`estrutura`,dados:i,ms:performance.now()-n,pedido:r.pedido})}else if(r.tipo===`telhado`){e||await t();try{let t=JSON.parse(e.globals.get(`telhado_casa`)(JSON.stringify(r.casa)));self.postMessage({tipo:`telhado`,pedido:r.pedido,faces:t.faces,zBeirado:t.z_beirado,zMax:t.z_max})}catch(e){self.postMessage({tipo:`erro`,msg:e&&e.message?e.message:String(e),pedido:-r.pedido})}}else if(r.tipo===`cobertura`){e||await t();try{let t=JSON.parse(e.globals.get(`cobertura_casa`)(JSON.stringify(r.casa)));self.postMessage({tipo:`cobertura`,pedido:r.pedido,...t})}catch(e){self.postMessage({tipo:`erro`,msg:e&&e.message?e.message:String(e),pedido:-1e6-r.pedido})}}else if(r.tipo===`edificio`){e||await t();try{let t=JSON.parse(e.globals.get(`edificio_casa`)(JSON.stringify(r.casa)));self.postMessage({tipo:`edificio`,id:r.id,pedido:r.pedido,...t})}catch(e){self.postMessage({tipo:`erro_edificio`,id:r.id,pedido:r.pedido,msg:e&&e.message?e.message:String(e)})}}else if(r.tipo===`teto`){e||await t();try{let t=JSON.parse(e.globals.get(`teto_casa`)(JSON.stringify(r.casa)));self.postMessage({tipo:`teto`,pedido:r.pedido,...t})}catch(e){self.postMessage({tipo:`erro`,msg:e&&e.message?e.message:String(e),pedido:-2e6-r.pedido})}}}catch(e){let t=e&&e.message?e.message:e&&e.code?`erro de ficheiros (${e.code})`:JSON.stringify(e);self.postMessage({tipo:`erro`,msg:t,pedido:r.pedido})}};

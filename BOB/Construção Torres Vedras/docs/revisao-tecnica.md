@@ -86,7 +86,9 @@ the garage), "nós achamos que por dentro é mais correto e fica melhor"; the gu
 the end (photo 2026-10-19). Model v6.4: an outlet hole in the lining at each downpipe ("nas caleiras nao existem os
 buracos par agua escoar" — fixed), a side outlet through the parapet into the cavity. Open: the outlet type and bocal —
 promised ("isso depois eu digo"); the section — the 80 × 35 cavity pipe (≈ 26 cm²) is small for ≈ 37 m² per pipe (north
-gutter) and ≈ 45–46 m² (P01 east, P03 west) at ≈ 1 cm² per m² → a local recess for a ø80 / 100×50 or two pipes; sealed
+gutter) and ≈ 45–46 m² (P01 east, P03 west) at ≈ 1 cm² per m² → a local recess for a ø80 / 100×50 or two pipes
+(**2026-10-30 later still: the company's hidden pipe is 100 × 50 — "Sim usa de 100x50"; TV's cavity (ripado 35, no
+contra-ripado) is too shallow, the engine warns and limits the pipe to ≈ 33 mm**); sealed
 or jointless; a sealed sleeve through the parapet, the Traspir taped round it, studs clear of it; a leaf guard and a
 cleaning access; the foot — a shoe onto a splash block / gravel strip falling away, or a gully (never onto the sole plate
 zone); the overflow (#4 (g)); the pipe stubs and the "ladders" of battens in the site photo; how TV's bottom outlet

@@ -80,9 +80,37 @@ def cobertura_casa(casa_json):
     obj = [{"nome": o["nome"], "material": o["material"], "pecas": o["pecas"]} for o in out.objetos
            if o["colecao"] in ("6.3", fim_) or (o["colecao"] == "6.2" and C.platibanda)]
     Cc = cfg["cobertura"]  # the hidden roof's gutter side and the sides the client may choose (one água)
-    return json.dumps({"objetos": obj, "z_platibanda": G["niveis"].get("platibanda"),
+    # each side's parapet as built: from the base edge (the frame's outer face) in to its roof-side face — the
+    # cladding there, or only the gutter's lining on a gutter wall — so the screen draws it as wide as the chapéu
+    # covers (user 2026-10-29: "o chapéu não esta a cobrir a largura toda")
+    plat = {}
+    if C.platibanda:
+        for d in CM.platibandas(C, S):
+            try:
+                k = int(d["P"].nome.split()[-1][1:].split(".")[0]) - 1
+            except ValueError:
+                continue
+            plat[k] = round(max(plat.get(k, 0.0), abs(d["f_in"] - d["f_out"]) + d["esp_int"]), 4)
+    # the pergolas (step 7): the engine's pieces (pergola.py), one list per pergola in the client's order; the top of the
+    # ring for their highest beams
+    pgs = {}
+    for o in G["estrutura_extra"]:
+        if o["colecao"] == "1.10" and o["nome"].startswith("Pérgola "):
+            k = int(o["nome"].split()[1]) - 1
+            pgs.setdefault(k, []).append({"nome": o["nome"], "material": o["material"], "pecas": o["pecas"]})
+    return json.dumps({"objetos": obj, "z_platibanda": G["niveis"].get("platibanda"), "platibandas": plat,
+                       "pergolas": [pgs.get(k, []) for k in range(len(cfg.get("pergolas") or []))],
+                       "pergolas_max": G.get("pergolas_max", []),
+                       "pergola_max": round(G["niveis"]["topo_vigas_teto"] - S["pergola"]["vigas"]["altura"] - S["pergola"]["ripas"]["espessura"], 3)
+                                      if G["niveis"].get("topo_vigas_teto") and S.get("pergola") else None,
                        "rodada": bool(casa.get("_rodada")) or any("rodada" in n for n in notas),
                        "uma_agua": bool(Cc.get("uma_agua")), "caleira": Cc.get("lado_caleira"), "caleiras": Cc.get("lados_caleira", [])})
+
+def edificio_casa(casa_json):
+    # a separate garage / annex (step 7): a configured house of its own — its roof's faces (exposed) and its roof as built
+    t = json.loads(telhado_casa(casa_json))
+    c = json.loads(cobertura_casa(casa_json))
+    return json.dumps({**c, "faces": t["faces"], "z_beirado": t.get("z_beirado")})
 
 def teto_casa(casa_json):
     # the false ceiling as built (camadas.tetos, the builder's own layers): each room's Pladur on its steel profiles and
@@ -101,7 +129,7 @@ def teto_casa(casa_json):
     out, res = CM.Saida(), []
     CM.tetos(C, S, out, res)
     obj = [{"nome": o["nome"], "material": o["material"], "pecas": o["pecas"]} for o in out.objetos
-           if o["colecao"] in ("5.2", "5.3", "5.4")]  # perfis, cantoneira, Pladur (not the réguas or the wool above)
+           if o["colecao"] == "5.4"]  # the Pladur only: the profiles and the angle above it showed as lines (2026-10-30)
     return json.dumps({"objetos": obj, "rodada": bool(casa.get("_rodada")) or any("rodada" in n for n in notas)})
 `);
   return performance.now() - t0;
@@ -113,7 +141,10 @@ self.onmessage = async (ev) => {
     if (m.tipo === "carregar") {
       const ms = await carregar();  // the materials' colours from the standard (the finishes in 3D)
       self.postMessage({ tipo: "pronto", ms, materiais: JSON.parse(pyodide.runPython("json.dumps(S0['materiais'])")),
-        regras: JSON.parse(pyodide.runPython("json.dumps({'inclinacao_min_avista_pct': S0['cobertura'].get('inclinacao_min_avista_pct', 15)})")) });
+        regras: JSON.parse(pyodide.runPython(`json.dumps({'inclinacao_min_avista_pct': S0['cobertura'].get('inclinacao_min_avista_pct', 15),
+          'fora': {k: round(S0['exterior']['osb']['espessura'] + S0['exterior']['membrana']['espessura'] + sum(c['espessura'] for c in op['camadas']), 4)
+                   for k, op in S0['exterior']['opcoes'].items()},
+          'pergola': {k: S0['pergola'][k] for k in ('altura_min', 'projecao', 'largura_min', 'acima_do_anel', 'inclinacao')}})`)) });
     } else if (m.tipo === "construir") {
       if (!pyodide) await carregar();
       const t0 = performance.now();
@@ -134,6 +165,14 @@ self.onmessage = async (ev) => {
         self.postMessage({ tipo: "cobertura", pedido: m.pedido, ...d });
       } catch (e) {
         self.postMessage({ tipo: "erro", msg: e && e.message ? e.message : String(e), pedido: -1e6 - m.pedido });
+      }
+    } else if (m.tipo === "edificio") {
+      if (!pyodide) await carregar();
+      try {
+        const d = JSON.parse(pyodide.globals.get("edificio_casa")(JSON.stringify(m.casa)));
+        self.postMessage({ tipo: "edificio", id: m.id, pedido: m.pedido, ...d });
+      } catch (e) {
+        self.postMessage({ tipo: "erro_edificio", id: m.id, pedido: m.pedido, msg: e && e.message ? e.message : String(e) });
       }
     } else if (m.tipo === "teto") {
       if (!pyodide) await carregar();

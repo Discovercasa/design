@@ -706,3 +706,299 @@ When this file passes about 1 500 lines, continue in `registo-conversas-<year>-<
   `sistema-construtivo.md` §6 Hidden roof, `perguntas-por-obra.md` Q14, spec §8 (format, converter), §11 step 5, §12,
   §13 (closed), `insights.md` 2026-10-29; `configurador/CLAUDE.md` status (by the caller). Rulebook: for
   `mestre-construtor`.
+
+### 2026-10-29 — Review 4 in a new session: "Oculta", the gutter only on the low side, outlet holes again, exposed-roof timber (ridge, prumos, empenas), the Munditelha colour, a step 7 for pergolas / garages / annexes, the brand button, the agents' token question [geral — configurador]
+> A outra sessão estava pesado, vamos recomeçar aqui já que na outra sessão disse que guardou os screenshots enviados.
+> Erros nas coberturas ocultas(muda o nome para este termo "Oculta" em vez de escondida, sendo que ambas são a mesma coisa mas é para ficar mais profissional no online builder), como neste caso só tem uma água nós apenas precisamos de ter caleiras no lado para o qual o painel fica inclinado, não faz sentido ter no lado que fica mais alta a cobertura.
+> Há um dos lados na cobertura oculta em que o chapéu não esta a cobrir a largura toda.
+> também neste modelo que podes ver (screenshot 1) tinha uma peça aleatória no meio das caleiras e estão em falta os buracos para os tubos de queda.
+> Nas coberturas dos screenshots 2 e 5 duas águas e várias águas existem alguns bugs. A estrutura de ambas as coberturas parece-me errada também junto as cumeeiras as vigas não encaixam nas cumeeiras estão simplesmente retas e próximas das cumeeiras o que não é suposto, junto a parte onde se forma o L também as vigas que dão a inclinação que se encontram na vertical apenas tem uma viga pousada a metade da sua largura e a viga nem encaixa totalmente nessa peça vertical que referia. Revê isso mais uma vez. Na cobertura de duas águas há também vigas a sobreporem-se umas as outras nos cantos do triângulo da empena.
+> Mais uma vez quero a cor original do painel de sandwich(mundiperfil painel sandwich) e não cinzenta a cobertura
+> Acrescentar depois do menu de portas e janelas um menu de Pérgolas e Garagens e Espaços exteriores que seja necessário construção por exemplo um anexo.Pérgolas o cliente deve poder escolher a largura e onde quer colocar a pérgola dando snap para o sítio no forro exterior, a altura tem de ter um máximo como sabes. Garagens deve indicar os metros quadrados, cobertura, se quer junto à casa ou separado, se for junto neste caso com ligação para a casa deves juntar a nossa estrutura o espaço a mais e a cobertura tem de ser a mesma que escolheu para a casa, se for separado pode escolher a cobertura que quiser. Mesma lógica das garagens para anexos.
+> Botão da discovercasa deve levar para o menu inicial dos de escolher a forma da base de fundação.
+> perguntar sobre otimização dos nossos tokens, se o guardião,mestre estão a anotar toda a informação ou a filtrar aquilo que apontam.
+- Context: a new cloud session on branch `configurador`; the previous one ("DiscovercasaBuilder", his PC) was "pesado". It
+  was review 4 of the configurator: 3 screenshots (1 a hidden-roof house, 2 a "duas águas" roof, 5 a "várias águas"
+  roof) saved by the other session on his PC in `_trabalho/configurador/revisao4/` (git-ignored, never pushed) —
+  **not seen here**; everything was reproduced from his text and the engine. Our readings (ours): "Oculta" = the same roof
+  as "escondida", a screen name only (engine and saved designs keep the key `escondida`); the "caleira" on the high side =
+  the one-água hidden roof's "remate de topo" (a flat 12 cm shelf + a 10 cm upstand) that looked like a gutter — there was
+  no gutter there; "o chapéu não esta a cobrir a largura toda" = the screen drew every parapet 0,16 deep inside while the
+  engine's gutter-wall parapet is frame + the gutter's lining (≈ 0,112), and each cladding's depth outside (A 0,0865, B
+  0,0755, C 0,1095) differs from the 0,09 drawn; "peça aleatória no meio das caleiras" = on a one-água L / T / U every
+  strip had its own gutter (end caps, a lining plate up to the parapet top, two downpipes side by side where two strips
+  met); "buracos para os tubos de queda" = the outlet holes sat in the parapet-side plate, invisible from above (he asked
+  for them 2026-10-20: "nas caleiras nao existem os buracos par agua escoar para os tubos de queda" — the second time);
+  "vigas que dão a inclinação que se encontram na vertical" = the prumos; "apenas tem uma viga pousada a metade da sua
+  largura" = the prumos kept one orientation in every wing (75 along x, 110 along y), so in a wing whose beams run along
+  x they stood half off the beam and the purlin bore on part of them, their tops flat under sloping members; "as vigas
+  não encaixam nas cumeeiras … retas e próximas" = the two top purlins stood 0,05 off the ridge line (a 0,10 gap) — what
+  "encaixar" means as a joint (butt, bevel, lap, a ridge piece) is not said; "vigas a sobreporem-se … nos cantos do
+  triângulo da empena" = the eave purlin ran 3,5 cm through the gable frame's bottom plate and its end members dipped into
+  the edge beam (also a valley's foot through the gable at an L); "cor original … Mais uma vez" = the Munditelha's own
+  colour (tile red) — we used ≈ RAL 8004 (barro / cor telha), the exact reference to confirm; no earlier message about the
+  colour is in this log ("mais uma vez" may refer to the other session — the caller to check there); mundiperfil.pt was
+  not reachable. "a altura tem de ter um máximo como sabes": no maximum was recorded before (Grep: none) — our reading:
+  the pergola's ledger is bolted to the wall's solid framing (the ring), so the beams at the façade ≤ ring top + 0,10 (as
+  TV: ring top 2,653, ledger top 2,75), under an exposed roof also clear of the eave and its gutter. The last line =
+  our "token" answer in the reply (how the agents work); his decision on any change: pending.
+- Built the same day (ours): see `configurador/docs/especificacao.md` §11, §12, §13 (by the caller) — screen "Oculta"
+  everywhere; the brand = a button back to step 1; roof panels in the Munditelha colour (#9A4F33) instead of grey (the
+  hidden 5-ondas panel too — to confirm); the hidden roof: one continuous gutter per straight low wall, outlet = a hole in
+  the gutter's bottom against the parapet over each downpipe + bocal + a stub through the parapet, downpipes by drained
+  area (2 at the ends, more past 2 × 50 m²), the top flashing on the high side lying on the panels, the parapet drawn as
+  wide as built; the exposed roof's timber (top purlins meet on the ridge, prumos turned with their beam and cut to the
+  member above, empenas starting past the eave purlin with a wedge packing, a lower wing's purlins on over the first beam
+  under the higher gable); step 7 "Pérgolas, garagens e anexos" (pergola by snapping to a wall; garage / annex "junto à
+  casa" grows the outline under the house's roof, "separada" a building of its own ≥ 1,00 m away with its own roof;
+  defaults garage 3,70 × 6,00, annex 3,00 × 4,00; pergola priced 160 €/m², placeholder).
+- Filed in: `sistema-construtivo.md` §6 Exposed roof (panel colour superseded; review-4 timber faults), §6 Hidden roof
+  (name "Oculta"; gutter only on the low side; one gutter per low wall; downpipes by area; the top flashing; outlet holes
+  again; chapéu full width; panel colour), new §3d (pergolas / garages / annexes in the configurator), Pending;
+  `perguntas-por-obra.md` Q14, Q15, Q21, Q22; `discovercasa.md` Product vision 4, Working with the user (words, repeated
+  faults, restart / screenshots, audit of the agents); `construcao-madeira.md` §4 (attached garage, separate buildings),
+  glossary (oculta); `insights.md` 2026-10-29 (7 entries); Sobral `docs/estado.md` (roof colour). Spec / `configurador/
+  CLAUDE.md`, JSON, rulebook: by the caller / `mestre-construtor`.
+
+### 2026-10-29 — "Sim, divide o livro do método por temas"; review 5 of step 4 (a wall run too long past a T): interior doors as real doors, walls from the house's corners, camera kept, a free room with a closing snap, a wall's piece selected, shorter texts, a navigation pop-up; his other answers promised [geral — configurador]
+> Sim, divide o livro do método por temas
+> Vai trabalhando nestes pontos enquanto eu preparo a resposta as outras perguntas: Portas interiores estão com um gap dos lados e na parte de cima e não tem um aspeto de porta interior, estão apenas um retângulo.
+> Não me está a deixar iniciar paredes interiores nos cantos da casa e isso deve ser possível por exemplo numa estrutura em L ou em U ou em T.
+> Quando mudamos para o menu de construção de paredes interiores a câmara muda para uma posição que está fixed, quero que continue na câmara que o cliente estava anteriormente.
+> Quando o cliente está a finalizar por exemplo uma secção interior ou seja imaginemos que ele quer fazer quatro paredes no meio da casa isso não é possível e quero que seja possível e para além disso quando está a fechar uma secção desse tipo deve haver um snap que alinha a ultima parede com o canto da primeira parede criada, não um snap obrigatório mas apenas como sugestão e possibilidade de fechar essa secção. Há também outra coisa que quero que adiciones por exemplo quando o cliente faz uma parede demasiado comprida tal como no screenshot deve ser possível selecionar apenas esse "pedaço" de parede interior.
+> Otimiza também as descrições da secção de interiores e pavimentos, estão demasiado extensas.
+> Para ser mais user friendly no início de tudo adiciona um pop-up no meio de ecrã que explica como o cliente navega pela casa, com sito quero dizer os comandos básicos de premir o botão do lado esquerdo do rato para roda, o zoom, o pan etc
+- Context: the reply of the same day to review 4. "Sim, divide…" answers our token proposal (split the rulebook by topic;
+  run `mestre-construtor` only when a rule changes; terse "Filed in") — he answered the first option only; the other two
+  not explicitly. "Vai trabalhando… enquanto eu preparo a resposta as outras perguntas" = a **promise**: he will answer
+  the open questions of our previous reply later. Screenshot of step 4 (an L-ish house: an interior wall drawn too long,
+  its end sticking out past the T where another wall meets it, circled in red) — described by the caller; not seen here
+  and not in the repo.
+- Our readings (ours, not his): the door "gap" = his own clearance rule (3 cm on top, 3,5 cm each side, 2026-10-09) drawn
+  as an empty gap; "cantos da casa" = the house's inner corners (second time — on 2026-10-28 he reported the interior
+  walls' own corners refused); "uma posição que está fixed" = the camera set on entering step 4; "esse pedaço" = the
+  part of a wall between the walls that meet it; "descrições … extensas" = the step-4 texts (rooms / floors).
+- Done the same day (ours): see `configurador/docs/especificacao.md` §11, §12 (door with frame, architraves and handle,
+  walls from inner corners, camera kept, free room + closing snap within 0,40, piece selected / "Eliminar troço", short
+  texts, "Como navegar pela casa" pop-up).
+- Filed in: rulebook split → `discovercasa.md` Working with the user (already, "Decided 2026-10-29"); promise → spec §13
+  "Promised answers", `sistema-construtivo.md` Pending (9); door frame assumption → `sistema-construtivo.md` §2 Interior
+  doors; flush line + free room's support → spec §13 Interior walls, `sistema-construtivo.md` OPEN, `insights.md`
+  2026-10-29 (2); short texts / first-time pop-up → `discovercasa.md` Working with the user; screenshot not in the repo →
+  spec §13 Screenshots; the UI items themselves → spec §11, §12 (by the caller). Rulebook: small (see report).
+
+### 2026-10-29 (night) — Review 6 on an L in the three roofs (5 screenshots): the hidden roof's parapet colour and "caleiras" on the high side, the exposed roofs' gutters / grey / caps / gaps between beams / the verge not on the eave line; "faz todas as questões" for the roofs [geral — configurador]
+> no screenshot 1 como consegues ver está acontecer um bug visual qualquer em que a parte de dentro da platibanda fica co a cor do painel sandwich, as caleiras na parte mais alta da cobertura oculta continuam lá, de resto mais nada a apontar.
+> No screenshot 2 como consegues ver está umas caleiras todas bugadas nem eu consigo perceber o que se passa depois tens uma parte a cinzento escuro também à volta do triângulo da cobertura que não é suposto.
+> No screenshot 3 tens de dar fix aquelas proteções das cumeeiras que têm de ser da cor da cobertura. E como podes ver a zona que eu rodeei a proteção da cumeeira fica ali não unida a outra proteção
+> No screenshot 4 ccomo podes verificar existem ainda gaps entre as vigas, no máximo podemos cortar a vigas com a diagonal necessária para encaixar as vigas umas na outras mas desta forma não pode ficar 
+> No screenshot 5 na cobertura de duas águas como podes verificar no screenshot o beirado do triângulo nao coincide com o beirado da outra cobertura... isso não deve acontecer não vais ter dois telhados desalinhados um com o outro ainda por cima quando a água de um deles é escoada pela caleira do outro.
+> Em relação as coberturas pareces ter muitas dúvidas de momento faz todas as questões que precisares para começarmos a fazer as coberturas sem falhas algumas!!
+- Context: his review of an L house 12,35 × 11,90 + 8,05 × 6,10 in step 5, five screenshots (1 "Oculta" with ETICS; 2 "duas águas"
+  at the junction of the two parts, seen from below; 3 "várias águas (misto)" from above, the ridge-cap gap circled; 4 "várias
+  águas" timber, "Ver como a construímos"; 5 "duas águas" at 31 % at the north junction) — described by the caller; not seen
+  here and not in the repo. The last paragraph is an **instruction**: ask every roof question we need ("faz todas as
+  questões que precisares") — we asked them in one questionnaire (codes A1–E8, below and spec §13); **he has not answered
+  it yet**.
+- Our readings (ours, not his): (1) "bug visual … a parte de dentro da platibanda fica com a cor do painel sandwich" = the
+  gutter wall's parapet face and the gutter lining on one plane (screen z-fight) **and** the lining ("Chapa cor telha")
+  going up to the parapet's top; "de resto mais nada a apontar" = nothing else wrong on that screenshot (not a formal
+  approval of the hidden roof). "as caleiras na parte mais alta … continuam lá" = a **repeat** of his 2026-10-29 fault
+  (the high side has no gutter) — we read the "gutters" as the top flashing (remate de topo, dark RAL 7016), which we
+  only **recoloured** to the panel's; whether it is the colour or its shape (a flat shelf + an upstand reading as a
+  gutter) he objects to is not said → question E3. (2) "caleiras todas bugadas" = each eave piece had its own square
+  gutter crossing the next; "cinzento escuro à volta do triângulo" = the gables' remate lateral in RAL 7016. (3) "proteções
+  das cumeeiras que têm de ser da cor da cobertura" = a **rule** (all roof flashings / caps in the roof colour);
+  "não unida a outra proteção" = two caps meeting at an angle with no overlap. (4) "no máximo podemos cortar a vigas com a
+  diagonal necessária …" = cutting purlins on the diagonal (skew) against a hip / valley member, and mitring hip / valley
+  members, is acceptable; "desta forma não pode ficar" = the gaps cannot stay. (5) the **rule**: the gable's edge and the
+  neighbouring roof's eave edge coincide (one corner, one height) — and the gable's water runs into the other roof's
+  gutter; how (verges overhang as much as the eaves) is ours.
+- Done the same day (ours): `configurador/docs/especificacao.md` §12 "2026-10-29, night" (lining rule ≤ 0,50 lined to the
+  top, taller = 0,10 lap + the façade finish; flashings / caps in "Remate cor da cobertura" #9A4F33; verges = eaves;
+  eave gutters one per straight run, mitred; purlins skew-cut, hip / valley members mitred; audit 0 clashes). The
+  questionnaire (PT, sent in the reply; sketch `configurador/docs/perguntas_coberturas_unioes.svg`): **A** timber — A1 ridge
+  joint of the top purlins (a butted, cut to the slope — now / b on a ridge board-beam / c other); A2 purlin to hip /
+  valley (a skew cut against its side — now / b over it / c other; fixing: inclined hanger, screw); A3 purlins 110×75 flat
+  ≤ 1,20 apart, joints over beams, pieces ≤ 3,67; A4 prumos 75×110 on the ceiling beams every ≤ 1,00 on beam lines; A5
+  glulam over the whole house past 8 m or only there; A6 ceiling beams across each wing. **B** exposed roof — B1 Munditelha
+  thickness / core / skin / RAL; B2 flashings in the panel colour and Mundiperfil's pieces; B3 verge = eave overhang; B4 how
+  the eave line is closed underneath; B5 a maximum slope, one slope for the whole house. **C** gutters — C1 eave gutter
+  model / size (125 × 90 now) / colour (dark grey now); C2 exposed downpipes outside the cladding or inside, 2 per run or 1
+  per 37 m², one at an inner corner instead of two; C3 valley gutter 0,50 wide in the panel colour, emptying into the eave
+  gutter's corner. **D** shapes — D1 "Duas águas" on an L = each part its own ridge with gables and valleys (his
+  screenshot 5) and on his L the main ridge on the 12,35 × 11,90 block (N / S gables) vs along the 20,40; D2 ridges at
+  different heights (same slope) vs one height (different slopes); D3 "várias águas" body hipped, wings gabled — a nearly
+  square body gives an almost-pyramid (his screenshot 3) — acceptable?; D4 default roof card on L / T / U. **E** Oculta —
+  E1 hidden 5-ondas panel colour; E2 the panel's maximum length (13,5 now); E3 how the panels' top end is closed at the high
+  side; E4 the gutter lining's height rule (above) and colour; E5 outlet type / size, 1 downpipe per 37 m², overflow; E6
+  what goes under the chapéus (promise (5)); E7 parapet roof side OSB 15 + Traspir + façade finish; E8 a minimum parapet
+  height over the panel (now ~5 cm at the high point plus the chapéu). These **supersede the scattered roof questions**
+  where they are the same (listed in `sistema-construtivo.md` OPEN Roof / Hidden roof).
+- Filed in: his rules → `sistema-construtivo.md` §6 Exposed roof (flashing colour; verges = eaves; edges coincide; eave
+  gutters mitred; purlin / hip joints) and Hidden roof (lining height rule — ours, conflict noted; the high-side "caleiras"
+  repeated; screenshot 1 "nada mais a apontar"); questionnaire → spec §13 Roofs (new block, by the keeper) and
+  `sistema-construtivo.md` OPEN (superseded questions marked); `perguntas-por-obra.md` Q14 (verges); `discovercasa.md` How
+  to ask him (his "faz todas as questões"); `insights.md` 2026-10-29 night (3 entries). Screenshots: not in the repo
+  (spec §13 Screenshots). Rulebook (`mestre-construtor`): see report. No answer to the questionnaire yet — nothing closed.
+
+### 2026-10-30 — Answers 1–6 to our questions (ridge deferred, panel end closing, outlet / downpipes, RAL 8004, pergola height, garage / annex), step 6 ruler, smooth false ceiling, step 7 rules, adjustable garage gate; localhost + git pull [geral — configurador]
+> antes de mais fornece-me acesso ao local host e os comandos necessários para dar git pull se necessário
+>
+> Estas são respostas a perguntas anteriores que tinhas feito, em relação ás perguntas das coberturas eu irei responder a tudo direitinho e fornecer-te esta informação.
+>
+> 1-esta pergunta depois eu respondo-te quando abordar as questões todas das coberturas
+> 2-vou-te fornecer uma imagem que demonstra como fechamos a ponta dos painéis, mas leva uma placa impermeável basicamente que drobra e leva o remate em metal
+> 3-Normalmente 10cm de bocal mas pode ser maior dependendo da zona, isso depende da inclinação e da dimensão da cobertura mas vamos com dois tubos por caleira a nao ser que a caleira seja pequena
+> 4- é o ral 8004 e sim é o painel de 5 ondas imitação cor telha, o cinzento foi apenas para sobral. Comprimento do painel é váriavel a largura é de um metro e nós encaixamos um painel no outro, eles já são produzidos de forma a isto ser possível fazer sem problemas.
+> 5-A pérgola pode ir até há altura máxima do PISO 0 ou seja do PISO TÉRREO, se existirem casas de dois andares o ponto mais alto da pérgola pode ficar alinhado com a altura máxima desse piso térreo
+> 6- O objetivo é o cliente poder escolher se quer adicionar uma garagem ou um anexo a qualquer sítio da casa. Mas pensando bem faz mais sentido ficar separado da casa, dá um espaçamento de 3 metros pelo menos.
+>
+> No menu de portas e janelas é necessário haver uma régua tipo a das paredes interiores que quando a pessoa está a colocar a janela que lhe diz a distância a que está do eixo mais próximo.
+>
+> O teto falso dá para ver as linhas, numa obra real isso não se vê portanto faz com que seja liso também.
+>
+> Menu das Pérgolas, garagens e anexos vamos fazer com que este menu apenas deixe colocar as pérgolas, garagens e anexos junto a casa tudo como está neste momento mas no caso das garagens e anexos a parede interior destas divisões que fica partilhada com a casa em si tem de ficar alinha com as paredes ao seu lado porque agora está a ficar mais dentro das paredes que~são criadas e para além disto ao dicionar estas divisões à casa em si não deve mexer com a geometria das paredes interiores já criadas, porque aconteceu-me adicionar uma garagem e as paredes interiores algumas desapareceram. Se o cliente desejar que seja um compartimento independente neste caso o cliente poderia colocar onde quisesse a garagem e anexo menos se colidir com algo que já está placed ou seja com a casa ou uma pérgola etc e deve ter pelo menos 2 metros de distância da casa. Se o cliente quiser construir paredes dentro do anexo ou garagem deve poder fazê-lo, deixa apenas uma indicação sobre isto que tem de voltar ao menu de paredes interiores e construir as paredes que desejar dentro do anexo. Ajusta o texto para estas alterações e otimiza-o também.
+>
+> Colocar a porta da garagem ajustável de forma ao cliente poder escolher a largura e altura respeitando as nossas regras estruturais(tal como no menu de portas e janelas).
+- Context: (the caller's words) the numbers 1–6 answer OUR reply's six questions of 2026-10-29 (later): 1 the ridge joint of the
+  exposed roof's top purlins (= roof questionnaire A1); 2 how the panels' top end is closed at a one-água hidden roof's high
+  side (= E3); 3 the hidden gutter's outlet type / size and whether one downpipe per 37 m² is a company rule (= E5 / C2);
+  4 the colours — Munditelha's RAL, the hidden 5-ondas panel, the gutter lining, Sobral's grey (= B1 colour, E1, E2); 5 the
+  pergola's maximum height; 6 the attached garage's wall / door, the separation of separate buildings (ours ≥ 1 m), pé
+  direito, licensing. The rest answers his own review of step 6 / the ceiling / step 7 (built the same day, spec §12
+  "2026-10-30"). The roof questionnaire A1–E8 (2026-10-29 night) is still to be answered "a tudo direitinho" — a promise.
+- Our readings (ours, not his): (1) A1 deferred, nothing said about the joint. (2) "placa impermeável … que dobra" = a
+  waterproof sheet / board folded up the parapet + a metal flashing over it ("remate em metal"); "placa" is not "membrana" —
+  which one: to see in the promised image; nothing modelled from it yet. (3) "10cm de bocal" = the outlet's size (diameter?
+  length?) — not said which; "dois tubos por caleira a não ser que a caleira seja pequena" replaces our one-per-37 m² (TV
+  as built) — what is "pequena" is not said (4,0 m = ours). (4) "é o ral 8004" = Munditelha; "e sim é o painel de 5 ondas
+  imitação cor telha" = the hidden panel is the tile colour — taken as the same RAL 8004 (ours; not stated "RAL 8004" for it);
+  the gutter lining's colour not answered (still assumed = the panel's); Sobral's grey confirmed as Sobral's own; the
+  panel's length "variável" — no number, so the 13,5 m maximum stays ours; 1 m wide; panels interlock ("encaixamos um
+  painel no outro"). (5) "o ponto mais alto da pérgola pode ficar alinhado com a altura máxima desse piso térreo" =
+  the pergola's highest point up to the top of the ground floor; which line that is (ring top / ceiling-beam top /
+  parapet top) and "highest point" vs the beams' underside is not said — built: the top of the ground floor's ceiling
+  beams (ours). (6) **conflict 3 m vs 2 m** in one message: "dá um espaçamento de 3 metros pelo menos" (answer 6) vs "deve
+  ter pelo menos 2 metros de distância da casa" (the step 7 paragraph); built 2,00 — ask. Also "apenas deixe colocar …
+  junto a casa tudo como está" vs "Se o cliente desejar que seja um compartimento independente … onde quisesse": read as
+  both kept (attached as now; separate as an option). "a parede interior destas divisões que fica partilhada com a
+  casa" = he calls the shared wall an interior wall (the insulated / fire-door question is not answered). "tem de ficar
+  alinha com as paredes ao seu lado" = its faces flush with the walls beside it (built: 0,095 in from the old outline).
+  "eixo mais próximo" (ruler) = the nearest axis (a base corner or an interior wall meeting the side) — from the opening's
+  edge or its centre is not said. Interior walls inside a SEPARATE building: not supported yet (step 4 edits the house's
+  outline) — to tell him. "Ajusta o texto … e otimiza-o" = shorter texts (instruction, done). Garage gate: width and height
+  chosen by the client "respeitando as nossas regras estruturais" (step 6's limits).
+- Filed in: answers → spec §13 (step 7, roof questionnaire, Roof finish, Promised answers, Openings, Ours — closed),
+  `sistema-construtivo.md` §3b / §3d / §5 / §6 + Pending (RAL 8004; hidden colour; outlet / downpipes; panel; the high-side
+  closing; pergola; garage / annex; false ceiling), `perguntas-por-obra.md` Q12 / Q15 / Q16 / Q21, `insights.md` 2026-10-30
+  (7 entries), `discovercasa.md` Working with the user (localhost / git pull; thinks twice mid-message; defers answers),
+  `Construção Sobral/docs/estado.md` (Sobral's grey confirmed). The localhost / git pull commands → already in spec §9.
+  The UI items → spec §11, §12 (by the caller). Pending: the image of the panels' top end; the roof questionnaire.
+
+### 2026-10-30 (later) — Answers 1–7 to our seven questions: separate buildings 2 m, interior walls only in attached blocks, outlet = the pipe, the panels' top-end detail (image) and the panel's data sheet (PDF), maximum length 25 m [geral — configurador]
+> 1. pode ficar 2 metros
+> 2. Não deixa apenas ficar ser possível ficar com paredes quando são junto a casa
+> 3. então usa o bocal ideal para esse tubo e distribui como achares melhor
+> 4. sim exatamente 
+> 5. Já te mandei foto do pormenor que fica no topo dos painéis e sim está bem.
+> 6. está perfeito
+> 7. Tens aí a ficha técnica do painel mas acredita que o máximo de comprimento seja 25 metros
+- Context: (the caller's words) the numbers answer OUR seven questions of the reply to the entry above: 1 separation of a
+  separate garage / annex — 3 m or 2 m?; 2 interior walls inside a SEPARATE garage / annex?; 3 the 10 cm bocal does not fit
+  the 80 × 35 pipe inside the cladding, and two pipes are few for a big one-água roof; 4 the garage gate limit at pé direito
+  − 0,30 (a sectional door's mechanism); 5 "caleira pequena" ≤ 4,0 m, plus the detail of the panels' top end; 6 the step-6
+  ruler from the opening's edge; 7 the panel's maximum length (ours 13,5). Attached: an image (CAD section, saved as
+  `configurador/docs/revisao/2026-10-30_remate_topo_paineis.png`) and a PDF (Mundiperfil "MC 1000/5" data sheet, saved as
+  `conhecimento/fontes/ficha_MC_1000-5_PUR_PIR.pdf`).
+- Our readings (ours, not his): (1) closes the 3 m vs 2 m conflict of the entry above → 2 m. (2) "Não deixa apenas ficar
+  ser possível ficar com paredes quando são junto a casa" — the sentence is garbled ("deixa" / "ficar" repeated); read as
+  "walls only possible when the block is attached to the house", i.e. a separate one gets none (it matches our question's
+  "no"); the reading to be checked by the model's behaviour, not by asking. (3) "o bocal ideal para esse tubo" = the outlet
+  sized to the pipe (80 × 35, ours), "distribui" = the number / places of the downpipes are ours → two per gutter, one on
+  a small gutter, more, evenly spaced, for ≈ 1 cm² of pipe per m² drained (general practice, ours; his L's hidden roof:
+  7). (4) "sim exatamente" = the garage gate's height capped at pé direito − 0,30 (our proposal in the question). (5)
+  "pormenor que fica no topo dos painéis e sim está bem" = the detail image sent and "yes" to the small gutter ≤ 4,0 m
+  (one "sim" for both of our sub-questions — it may only mean the detail is right: the 4,0 m is then still ours);
+  the image: the covering on battens rising to the parapet, a magenta metal flashing from the parapet's face (under the
+  chapéu) down onto the covering; a waterproof sheet folded up the parapet under the flashing is his words 2026-10-30
+  ("placa impermeável … que dobra") — the image itself shows the flashing and the covering lines, not a labelled sheet; it
+  also draws a tile-profile covering on battens — read as the sandwich panel's profile (to be sure: it is not labelled).
+  (6) "está perfeito" = the ruler from the opening's EDGE is right (closes our "edge or centre" question). (7) "acredita"
+  = a figure from memory, "25 metros" — tentative (see the next entry); the data sheet gives the profile and no
+  maximum length (variable).
+- Filed in: closed → spec §13 (step 7, openings, roof questionnaire E2 / E3 / E5, promised answers (a)),
+  `sistema-construtivo.md` §3d (separation 2 m; interior walls; gate), §6 hidden roof (outlet / downpipes, top end,
+  panel) + Pending (10), OPEN lists; `perguntas-por-obra.md` Q16 / Q21; `insights.md` 2026-10-30 (statuses). The data
+  sheet's facts → see the next entry.
+
+### 2026-10-30 (later still) — Correction: the panel's maximum is 15 m, not 25 m [geral — configurador]
+> afinal o máximo do painel é 15 metros
+- Context: corrects question 7's "acredita que o máximo de comprimento seja 25 metros" of the previous entry (minutes
+  later) — the hidden roof panel's maximum length (ours was 13,5, a truck's length).
+- Our reading: one-piece panel up to **15 m**; the previous figure (25) is superseded. The 15 m is his word, not the data
+  sheet's (the sheet says "comprimento variável"); whether 15 m is the maker's limit or the company's practical limit
+  (transport, handling) is not said. Hidden roof: one água while every strip's panel ≤ 15 m, else two (JSON
+  `cobertura.painel_oculto.comprimento_max` 15, built by the caller).
+- Data sheet (Mundiperfil "MC 1000/5", painel cobertura 5 ondas PUR / PIR, Jan 2025, read by the caller): thicknesses
+  30–40–50–60–80–100 mm; useful width 1000, 5 ribs at 250, rib 35 mm; faces steel 0,30–0,60 (top) / 0,30–0,50 (bottom)
+  S250GD+Z, polyester 25 µm; PUR λ 0,0224 reaction to fire F; PIR λ 0,0218 B-s2,d0 (optional); U 0,60 / 0,46 / 0,37 /
+  0,32 / 0,25 / 0,20 W/m²K by thickness; 12,45 kg/m² at 80 mm with 0,5 / 0,5 sheets; minimum slope 6 % without
+  longitudinal laps; recommended longitudinal lap 300 mm over a support; supports ≤ 1,50 m; cut cold (no grinder), treat
+  cut ends against corrosion; not for marine / aggressive environments with the standard polyester; annual inspection;
+  length tolerance ± 10 mm.
+- Filed in: `sistema-construtivo.md` §6 hidden roof (maximum length 15; the data sheet) + OPEN / Pending; spec §13 (E2
+  closed); `perguntas-por-obra.md` Q14 / Q15; `discovercasa.md` (a remembered figure, then a correction); `insights.md`
+  2026-10-30 (later: 15 m transport, aggressive environment, PUR vs PIR).
+
+### 2026-10-30 (later still, 2) — Answers 1–5 to our five points: downpipe 100 × 50, 15 m panel "tranquilo" + "usamos os de 80mm", TV's purpose, PIR, the interior-walls reading to be confirmed after his test; a "Port 5173 is already in use" error [geral — configurador]
+> está-me a dar erro e aproveito e já te respondo a isso:
+>
+> 1. Sim usa de 100x50
+> 2. Sim tranquilo já agora usamos os de 80mm
+> 3. Sim já foi verificado e torres vedras foi um projeto usado para tu aprenderes sobre nós e nós irmos também avaliando as tuas sugestões
+> 4. Ok tranquilo
+> 5. Depois quando abrir o configurador e testar digo-te mas parece-me bem
+- Context: (the caller's words) the numbers answer the five points that looked off in OUR previous reply: 1 downpipes —
+  our rule (1 cm² of pipe per m² drained) gave 7 pipes of 80 × 35 on his L's hidden gutter (≈ 196 m²) and 3 at TV (built
+  with 2) → we suggested a bigger pipe, e.g. 100 × 50 in a local recess, rather than many pipes or fixing 2; 2 a 15 m
+  panel exceeds a normal 13,6 m truck (check transport with Mundiperfil) and moves ≈ 13–15 mm thermally (fixing); 3 the
+  data sheet says the standard coating is not for marine / aggressive air and TV is near the coast (per house); 4 PUR vs
+  PIR — PIR reacts better to fire (near neighbours / a garage); 5 our reading of his earlier answer 2 ("Não deixa
+  apenas ficar ser possível ficar com paredes quando são junto a casa") as "interior walls only in blocks attached to
+  the house". Attached to the message: a screenshot of `npm run dev` failing with "Port 5173 is already in use" (not
+  saved in the repo — a generic dev-server error, no design; nothing to keep).
+- Our readings (ours, not his): (1) "Sim usa de 100x50" = yes, the downpipe is 100 × 50 (the hidden roof's pipe inside
+  the cladding; ≈ 50 cm² → ≈ 50 m² per pipe; his L 4 pipes, was 7) — built, commit 0528d1b (JSON
+  `cobertura.caleira_oculta.tubo` 0,10 × 0,05; `camadas.py` `tubos_queda` + the façade layer loop): ≥ 2 per gutter, 1 on a
+  gutter ≤ 4,0 m, more by area; the outlet (bocal) = the pipe's section, now 100 × 50; fits the standard Tremolo cavity
+  (contra-ripado 20 + ripado 35 = 55 mm); cork (cavity 40) and ETICS (none): a local recess in the cork / XPS boards;
+  the visible Tremolo boards never get a hole; TV as built (ripado 35 only) → a warning, the pipe limited to the cavity
+  (33 mm). He did not say whether the exposed roofs' downpipes (80 × 80, assumed) change — the point concerned the
+  hidden gutter; they stay. (2) "Sim tranquilo" = accepts the transport / movement points (no sign that Mundiperfil
+  was or will be consulted); "já agora usamos os de 80mm" — "já agora" = by the way — our reading: the sandwich panels
+  are 80 mm thick = the JSON's hidden panel `painel_oculto.espessura` 0,08 ("Painel sandwich 5 ondas 80 mm"), now
+  confirmed by him. **Ambiguous**: whether "os de 80mm" also covers the exposed roof's Munditelha (the JSON's 40 mm
+  core, `cobertura.painel.nucleo` 0,04, "a confirmar"; the maker's sheet quotes "espessuras médias 40 - 60 mm") — we
+  are asking him; the Munditelha value is NOT changed, marked asked 2026-10-30. (3) "Sim já foi verificado" = the
+  coastal / aggressive-air check was already done (for TV; what it found — the coating, the distance to the sea — is
+  not said); "torres vedras foi um projeto usado para tu aprenderes sobre nós e nós irmos também avaliando as tuas
+  sugestões" = TV's purpose: Claude learns the company from it and the company evaluates our suggestions through it
+  (earlier: model it, compare with the real materials — 2026-10-15). The coating stays a per-house question. (4) "Ok
+  tranquilo" = PUR / PIR noted, per house, no decision. (5) "mas parece-me bem" = he finds the reading plausible but
+  will say after testing the configurator — not confirmed; our reading stands, pending his test. The port error: a dev
+  server was already running on his PC on 5173 (another window or an earlier start; `package.json` runs vite with
+  `--strictPort`); we told him how to close it.
+- Filed in: (1) `sistema-construtivo.md` §6 Hidden roof (new bullet "Downpipe section 100 × 50", the recess rule, the
+  superseded 80 × 35 marked) + §6 "Downpipes inside the cladding", "Outlet holes", keeper ⚠ + OPEN list; spec §11, §12
+  (new entry "2026-10-30, later still"), §13 (E5 closed); `perguntas-por-obra.md` Q16 (default 100 × 50) + Rules;
+  `insights.md` (the pipe-section entry: accepted, plus our new ETICS / clear-section note); `Construção Torres
+  Vedras/docs/estado.md` + `revisao-tecnica.md` #9 (TV's shallow cavity → warning). (2) `sistema-construtivo.md` §6 panel
+  (80 mm confirmed; 15 m accepted) + §6 Exposed roof (Munditelha asked) + Pending (13); `perguntas-por-obra.md` Q15
+  (80 mm default; Munditelha asked); `insights.md` (15 m entry: accepted); spec §12, §13 (B1). (3) `sistema-construtivo.md`
+  §6 panel (coastal check done for TV) + OPEN; `perguntas-por-obra.md` Q15 (coating per house); `insights.md` (PUR /
+  PIR / coating entry: told); `discovercasa.md` Product vision 1 (TV's purpose, his words). (4) the same entries (PIR
+  noted, per house). (5) `sistema-construtivo.md` Pending (12); spec §13 (step 7 — reading stays ours, his test
+  pending; "Promised answers" (c)); `insights.md` (the interior-walls entry). The port error: `discovercasa.md`
+  Practical; spec §9 (one troubleshooting line). Pending: his test of the interior-walls reading; his answer on the
+  Munditelha's thickness; the roof questionnaire (still promised). Rulebook (`mestre-construtor`): see report.

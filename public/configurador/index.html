@@ -4,12 +4,12 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Configurador DiscoverCasa</title>
-  <script type="module" crossorigin src="/configurador/assets/index-CCacLKui.js"></script>
-  <link rel="stylesheet" crossorigin href="/configurador/assets/index-BWkuSWEn.css">
+  <script type="module" crossorigin src="/configurador/assets/index-rQZcpNFt.js"></script>
+  <link rel="stylesheet" crossorigin href="/configurador/assets/index-BRRyN9gt.css">
 </head>
 <body>
   <header>
-    <div class="marca">DISCOVERCASA <span>Configurador · protótipo</span></div>
+    <button class="marca" id="marca" title="Voltar ao início: escolher a forma da casa">DISCOVERCASA <span>Configurador · protótipo</span></button>
     <div class="topo">
       <button class="ligacao" id="desfazer" title="Desfazer a última alteração (Ctrl+Z)" disabled>Desfazer</button>
       <button class="ligacao" id="refazer" title="Refazer (Ctrl+Y)" disabled>Refazer</button>
@@ -37,11 +37,36 @@
         <button data-mostrar="cobertura" class="ativo" hidden>Cobertura</button>
         <button data-mostrar="teto" hidden title="O teto falso: gesso cartonado nos perfis, ao pé direito">Teto</button>
         <button data-mostrar="estrutura" class="ativo">Estrutura</button>
+        <span class="sep"></span>
+        <button id="ver-ajuda" title="Como navegar pela casa">?</button>
       </div>
       <div id="hud" class="hud" hidden></div>
       <div id="estado" class="estado">A preparar o motor…</div>
     </section>
   </main>
   <div id="fantasma" class="fantasma" hidden></div>
+  <!-- how to move round the house, at the start (user 2026-10-29: "no início de tudo adiciona um pop-up no meio de ecrã
+       que explica como o cliente navega pela casa") -->
+  <div id="ajuda" class="ajuda" hidden>
+    <div class="ajuda-caixa" role="dialog" aria-modal="true" aria-labelledby="ajuda-titulo">
+      <h2 id="ajuda-titulo">Como navegar pela casa</h2>
+      <div class="ajuda-grelha">
+        <div class="ajuda-item"><svg viewBox="0 0 40 56"><rect x="4" y="4" width="32" height="48" rx="16"/><path class="on" d="M20 4A16 16 0 0 0 4 20V22H20Z"/><path d="M20 4V22M4 22H36"/></svg>
+          <div><strong>Rodar</strong><span>Botão esquerdo e arraste</span></div></div>
+        <div class="ajuda-item"><svg viewBox="0 0 40 56"><rect x="4" y="4" width="32" height="48" rx="16"/><path d="M20 4V22M4 22H36"/><rect class="on" x="17" y="8" width="6" height="11" rx="3"/></svg>
+          <div><strong>Aproximar e afastar</strong><span>Roda do rato</span></div></div>
+        <div class="ajuda-item"><svg viewBox="0 0 40 56"><rect x="4" y="4" width="32" height="48" rx="16"/><path class="on" d="M20 4A16 16 0 0 1 36 20V22H20Z"/><path d="M20 4V22M4 22H36"/></svg>
+          <div><strong>Deslocar</strong><span>Botão direito e arraste</span></div></div>
+        <div class="ajuda-item"><svg viewBox="0 0 40 56"><path class="on" d="M14 30V12a3 3 0 0 1 6 0v14h1V24a3 3 0 0 1 6 0v3a3 3 0 0 1 6 0v9c0 8-5 14-12 14s-12-5-14-10l-3-7a3 3 0 0 1 5-3l5 6Z"/></svg>
+          <div><strong>Escolher e mover</strong><span>Clique e arraste uma peça</span></div></div>
+      </div>
+      <p class="info">No telemóvel ou tablet: um dedo roda, dois dedos aproximam e deslocam. Os botões <strong>3D</strong> e
+        <strong>Vista de cima</strong> voltam a enquadrar a casa. Esc cancela, Ctrl+Z desfaz. Esta ajuda está no botão <strong>?</strong>.</p>
+      <div class="ajuda-fim">
+        <label class="caixa"><input type="checkbox" id="ajuda-nao"> Não voltar a mostrar</label>
+        <button class="btn cheio" id="ajuda-ok">Começar</button>
+      </div>
+    </div>
+  </div>
 </body>
 </html>

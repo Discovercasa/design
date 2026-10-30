@@ -51,20 +51,38 @@ export const IMAGENS = {
     <path d="M80 52 l8 3 m-3 -5 l3 5 l-5 2" fill="none" stroke="#e2a43a" stroke-width="2"/>`),
   // roofs: hidden behind the parapet; exposed with 2 slopes (gables) or 4 slopes (hips)
   escondida: svg(`<rect width="96" height="72" fill="#eef0f2"/>
-    <polygon points="12,34 52,22 84,32 44,46" fill="#5b6166"/>
+    <polygon points="12,34 52,22 84,32 44,46" fill="#b0603f"/>
     <polygon points="12,30 52,18 84,28 44,42 44,64 12,52" fill="none"/>
     <polygon points="12,30 44,42 44,64 12,52" fill="#7a573b"/><polygon points="44,42 84,28 84,50 44,64" fill="#6e4b31"/>
     <polygon points="12,30 52,18 84,28 44,42 44,45 81,32 52,21.5 15,32.5" fill="#8a6545"/>`),
   duas_aguas: svg(`<rect width="96" height="72" fill="#eef0f2"/>
     <polygon points="14,40 44,50 44,66 14,56" fill="#7a573b"/><polygon points="44,50 84,36 84,52 44,66" fill="#6e4b31"/>
     <polygon points="14,40 29,22 44,50" fill="#8a6545"/>
-    <polygon points="29,22 69,8 84,36 44,50" fill="#4a5055"/><polygon points="10,41 29,19 31,21 14,43" fill="#383e42"/>`),
+    <polygon points="29,22 69,8 84,36 44,50" fill="#8f4e35"/><polygon points="10,41 29,19 31,21 14,43" fill="#383e42"/>`),
   // várias águas with empenas (L / T / U): the hipped body and a wing ending in a gable
   misto: svg(`<rect width="96" height="72" fill="#eef0f2"/>
     <polygon points="10,40 40,50 40,64 10,54" fill="#7a573b"/><polygon points="40,50 80,36 80,50 40,64" fill="#6e4b31"/>
-    <polygon points="10,40 32,28 40,50" fill="#5b6166"/><polygon points="32,28 60,18 80,36 40,50" fill="#4a5055"/>
-    <polygon points="60,18 80,36 72,22" fill="#3f4549"/>
+    <polygon points="10,40 32,28 40,50" fill="#b0603f"/><polygon points="32,28 60,18 80,36 40,50" fill="#8f4e35"/>
+    <polygon points="60,18 80,36 72,22" fill="#80402a"/>
     <polygon points="58,43.7 73,48.7 73,62.7 58,57.7" fill="#7a573b"/><polygon points="73,48.7 87,43.8 87,57.8 73,62.7" fill="#6e4b31"/>
     <polygon points="73,48.7 80,36.3 87,43.8" fill="#8a6545"/>
-    <polygon points="80,36.3 65,31.3 72,38.8 87,43.8" fill="#3f4549"/><polygon points="80,36.3 65,31.3 58,43.7 73,48.7" fill="#5b6166"/>`),
+    <polygon points="80,36.3 65,31.3 72,38.8 87,43.8" fill="#80402a"/><polygon points="80,36.3 65,31.3 58,43.7 73,48.7" fill="#b0603f"/>`),
+  // step 7 (user 2026-10-29): a pergola against the facade, a garage, an annex
+  pergola: svg(`<rect width="96" height="72" fill="#eef0f2"/>
+    <polygon points="8,26 40,14 40,62 8,70" fill="#6e4b31"/>
+    <path d="M40 28 L88 40 M40 31 L88 43" stroke="#a9834f" stroke-width="3"/>
+    <rect x="80" y="41" width="4" height="27" fill="#b88d55"/><rect x="58" y="36" width="4" height="27" fill="#b88d55"/>
+    <path d="M44 27 L60 31 M50 26 L66 30 M56 25 L72 29 M62 24 L78 28 M68 23 L84 27 M74 22 L88 25" stroke="#c9a06a" stroke-width="2"/>
+    <path d="M40 22 L88 34 L88 37 L40 25 Z" fill="#c9a06a"/>`),
+  garagem: svg(`<rect width="96" height="72" fill="#eef0f2"/>
+    <polygon points="10,30 46,40 46,66 10,56" fill="#7a573b"/><polygon points="46,40 86,28 86,54 46,66" fill="#6e4b31"/>
+    <polygon points="10,30 50,18 86,28 46,40" fill="#8f4e35"/>
+    <polygon points="16,40 40,47 40,63 16,56" fill="#43494d"/>
+    <path d="M16 44 L40 51 M16 48 L40 55 M16 52 L40 59" stroke="#5c6267" stroke-width="1"/>`),
+  anexo: svg(`<rect width="96" height="72" fill="#eef0f2"/>
+    <polygon points="6,34 34,42 34,66 6,58" fill="#7a573b"/><polygon points="34,42 60,34 60,58 34,66" fill="#6e4b31"/>
+    <polygon points="6,34 32,26 60,34 34,42" fill="#8f4e35"/>
+    <polygon points="66,44 80,48 80,64 66,60" fill="#7a573b"/><polygon points="80,48 92,44 92,60 80,64" fill="#6e4b31"/>
+    <polygon points="66,44 78,40 92,44 80,48" fill="#8f4e35"/>
+    <rect x="70" y="50" width="5" height="11" fill="#383e42" transform="skewY(16) translate(0,-20)"/>`),
 };

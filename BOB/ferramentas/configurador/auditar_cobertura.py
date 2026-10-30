@@ -2,13 +2,15 @@
 via casa_planta.py): members through one another (one convex piece inside another by more than 8 mm), purlins / hips /
 valleys bearing on nothing for more than 1,30 (1,45 for a hip or valley, which crosses the beams at 45°; 0,75 at a free
 end, a hip / valley tail over the overhang the eave's diagonal + 0,12 — an end fixed to the side of a hip or valley
-bears on it), prumos standing on no beam, and slope areas where a panel spans more than 1,30 between purlins or ends
-more than 0,25 short of the ridge / 0,70 past the eave purlin.
+bears on it), prumos standing on no beam or past its edge, the empenas' members against the roof timber (2026-10-29),
+and slope areas where a panel spans more than 1,30 between purlins or ends more than 0,25 short of the ridge / 0,70 past
+the eave purlin.
 Written after the user's screenshots of 2026-10-28 ("parecem haver vigas em falta e nas junções umas vigas passam em
 cima das outras").
 
     python ferramentas/configurador/auditar_cobertura.py <casa.json> [--tipo misto] [--pct 40] [--beirado 0.4] [-v]
-    python ferramentas/configurador/auditar_cobertura.py --formas [duas_aguas misto]   (L / T / U / rectangle sweep)
+    python ferramentas/configurador/auditar_cobertura.py --formas [duas_aguas misto]   (L / T / U / rectangle / with a
+    garage sweep)
 """
 import argparse
 import json
@@ -130,13 +132,17 @@ def auditar(casa, a):
             s.update({"nome": o["nome"], "tipo": k})
             pecas.append(s)
     print(f"{cob.get('tipo')}: {len(pecas)} roof pieces; types {dict(Counter(p['tipo'] for p in pecas))}")
-    # ------------------------------------------------------------ clashes
+    # ------------------------------------------------------------ clashes (the empenas' members too: the eave purlin and
+    # a valley's foot had run through the gable's plates — user 2026-10-29 "vigas a sobreporem-se umas as outras nos
+    # cantos do triângulo da empena")
     choques = []
-    pecas.sort(key=lambda s: s["lo"][0])
-    for i, s1 in enumerate(pecas):
-        for s2 in pecas[i + 1:]:
+    todas = sorted(pecas + empenas_solidos(G), key=lambda s: s["lo"][0])
+    for i, s1 in enumerate(todas):
+        for s2 in todas[i + 1:]:
             if s2["lo"][0] > s1["hi"][0] - a.tol:
                 break
+            if s1["tipo"] == s2["tipo"] == "Empena" and s1["nome"] == s2["nome"]:
+                continue  # the members of one gable frame touch by design
             if any(s1["lo"][k] > s2["hi"][k] - a.tol or s2["lo"][k] > s1["hi"][k] - a.tol for k in (1, 2)):
                 continue
             p = penetracao(s1, s2)
@@ -153,9 +159,30 @@ def auditar(casa, a):
         for p, s1, s2 in lst[: (12 if a.v else 3)]:
             c = [(s1["lo"][k] + s1["hi"][k]) / 2 for k in range(3)]
             print(f"     {p * 100:5.1f} cm  {s1['nome']}  <>  {s2['nome']}  near ({c[0]:.2f}, {c[1]:.2f}, {c[2]:.2f})")
+    prumos_na_viga(pecas, a.v)
     apoio_suporte(G, pecas, a.v)
     if a.v:
         print("notas:", "; ".join(notas))
+
+
+def prumos_na_viga(pecas, verbose):
+    """Every prumo / calço stands within the width of the beam under it (they had kept one orientation in every wing,
+    half off a beam running the other way — user 2026-10-29 "apenas tem uma viga pousada a metade da sua largura")."""
+    vigas = [s for s in pecas if s["tipo"] in ("Viga de apoio ao teto", "Lamelada", "Viga de bordadura", "Viga de bordo")]
+    maus = []
+    for s in pecas:
+        if s["tipo"] not in ("Prumo", "Calço"):
+            continue
+        zb = s["lo"][2]
+        sob = [v for v in vigas if abs(v["hi"][2] - zb) < 0.01 and
+               v["lo"][0] - 0.003 <= (s["lo"][0] + s["hi"][0]) / 2 <= v["hi"][0] + 0.003 and
+               v["lo"][1] - 0.003 <= (s["lo"][1] + s["hi"][1]) / 2 <= v["hi"][1] + 0.003]
+        if sob and not any(v["lo"][0] - 0.003 <= s["lo"][0] and s["hi"][0] <= v["hi"][0] + 0.003 and
+                           v["lo"][1] - 0.003 <= s["lo"][1] and s["hi"][1] <= v["hi"][1] + 0.003 for v in sob):
+            maus.append(s)
+    print(f"prumos over the edge of their beam: {len(maus)}")
+    for s in maus[: (12 if verbose else 3)]:
+        print(f"     {s['nome']} x {s['lo'][0]:.3f}-{s['hi'][0]:.3f} y {s['lo'][1]:.3f}-{s['hi'][1]:.3f}")
 
 
 def semiespacos(s):
@@ -229,8 +256,9 @@ def apoio_suporte(G, pecas, verbose):
                        and dentro_s(o, p, 0.006) for o in todos):
                 falhas["prumo sem viga por baixo"].append((s["nome"], p))
             continue
-        # the long axis: from the base to the top face; the bottom line = the lowest edge of the base
-        e = sub(t[0], b[0])
+        # the long axis: from the base to the top face (centre to centre: a mitred end's corners stand at different
+        # places along it); the bottom line = the lowest edge of the base
+        e = sub([sum(v[k] for v in t) / n4 for k in range(3)], [sum(v[k] for v in b) / n4 for k in range(3)])
         L = math.sqrt(sum(c * c for c in e))
         zmin = min(v[2] for v in b)
         lows = sorted(b, key=lambda v: v[2])[:2]
@@ -423,7 +451,11 @@ def formas(tipos):
              ("T 150", contorno("T", 150), 15, 0.25),
              ("U 175", contorno("U", 175.5), 15, 0.25),
              ("U 25x10 patio 11x5", [[0, 0], [25, 0], [25, 10], [18, 10], [18, 5], [7, 5], [7, 10], [0, 10]], 15, 0.25),
-             ("U 25x10 patio 5x7 40%", [[0, 0], [25, 0], [25, 10], [15, 10], [15, 3], [10, 3], [10, 10], [0, 10]], 40, 0.4)]
+             ("U 25x10 patio 5x7 40%", [[0, 0], [25, 0], [25, 10], [15, 10], [15, 3], [10, 3], [10, 10], [0, 10]], 40, 0.4),
+             # a garage attached to a rectangle (step 7, 2026-10-29): flush with a corner (an L with a shallow wing) and
+             # mid side (a T)
+             ("R + garagem (L)", [[0, 0], [19.85, 0], [19.85, 3.7], [13.85, 3.7], [13.85, 8.65], [0, 8.65]], 15, 0.25),
+             ("R + garagem (T)", [[0, 0], [13.85, 0], [13.85, 8.65], [8.8, 8.65], [8.8, 14.65], [5.1, 14.65], [5.1, 8.65], [0, 8.65]], 15, 0.25)]
     for nome, cont, pct, beir in casos:
         for tipo in tipos:
             casa = {"formato": "discovercasa-configurador/1", "nome": nome, "obra": "CFG", "base": {"contorno": cont},
@@ -438,6 +470,9 @@ def formas(tipos):
             ls = buf.getvalue().splitlines()
             ch = next((ln for ln in ls if ln.startswith("clashes")), ":?").split(":")[-1].strip()
             sup = [ln.strip() for ln in ls if "sem apoio" in ln or "sem viga" in ln]
+            pv = next((ln for ln in ls if ln.startswith("prumos over")), ": ?").split(":")[-1].strip()
+            if pv != "0":
+                sup.append(f"{pv} prumos off their beam")
             cov = next((ln for ln in ls if ln.startswith("slope coverage")), ": ? ").split(":")[1].split("sample")[0].strip()
             print(f"{nome:24s} {tipo:12s} {ch} clashes | {'; '.join(sup) or 'supports ok'} | {cov} slope points bare")
 

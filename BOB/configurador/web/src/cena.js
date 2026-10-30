@@ -6,15 +6,17 @@ import { CSS2DObject, CSS2DRenderer } from "three/addons/renderers/CSS2DRenderer
 
 const COR = {
   base: 0xb9b6ae, parede: 0x6e4b31, destaque: 0x9a6a44, caixilho: 0x383e42, vidro: 0x9fc3d6, fosco: 0xdfe7ea,
-  interior: 0xf1efe9, porta: 0xd9cdb8, telhado: 0x55595e, realce: 0xe2a43a, chao: 0xc9b79c,
+  interior: 0xf1efe9, porta: 0xd9cdb8, aro: 0xcdbfa8, telhado: 0x55595e, realce: 0xe2a43a, chao: 0xc9b79c,
 };
-const FORA = 0.09, DENTRO = 0.16, ESP_INT = 0.13; // finished walls: cladding outside the base edge, frame inside
+// finished walls: cladding outside the base edge (until the engine gives the chosen cladding's — Cena.fora), frame
+// and lining inside
+const FORA = 0.09, DENTRO = 0.16, ESP_INT = 0.13;
 const MEIA_PORTA = 0.435, ALTURA_PORTA = 2.03;     // interior door rough opening 0,87 x 2,03 (method)
 const FOLHAS = { janela_correr: 2, janela_correr_3: 3, janela_correr_4: 4 }; // the leaves of the sliding windows
 // the shutter box over a frame (the rough opening above it, para_construtor: + 0,20 over a window to the floor, + 0,15
 // over a window less the 2,5 cm clearance)
 export const caixaEstore = (v) => (v.estore ? (v.z0 > 0.01 ? 0.125 : 0.2) : 0);
-const GRUPOS = ["base", "chao", "paredes", "empenas", "vaos", "interiores", "telhado", "teto", "previa", "medidas", "estrutura", "cotas", "realce"];
+const GRUPOS = ["base", "chao", "paredes", "empenas", "vaos", "interiores", "telhado", "teto", "exteriores", "previa", "medidas", "estrutura", "cotas", "realce"];
 const cor = (c) => (typeof c === "string" ? new THREE.Color(c) : c);
 
 // the engine's pieces — convex prisms {b: base polygon, e: extrusion | t: top polygon}, plan metres, z up — as one
@@ -24,7 +26,7 @@ function prismas(mapear = (x, y) => [x, y]) {
   const v3 = ([x, y, z]) => { const [a, b] = mapear(x, y); return [a, z, -b]; };
   const tri = (c, t) => { if (!porCor.has(c)) porCor.set(c, []); porCor.get(c).push(...t); };
   return {
-    add(c, pecas) {
+    add(c, pecas, lados = true) { // lados false: only the faces top and bottom (a surface of pieces, no joints seen)
       for (const pc of pecas) {
         const topo = pc.t || pc.b.map(([x, y, z]) => [x + pc.e[0], y + pc.e[1], z + pc.e[2]]);
         const B = pc.b.map(v3), T = topo.map(v3), n = B.length;
@@ -32,7 +34,7 @@ function prismas(mapear = (x, y) => [x, y]) {
           tri(c, [...B[0], ...B[i + 1], ...B[i]]);
           tri(c, [...T[0], ...T[i], ...T[i + 1]]);
         }
-        for (let i = 0; i < n; i++) {
+        for (let i = 0; lados && i < n; i++) {
           const j = (i + 1) % n;
           tri(c, [...B[i], ...B[j], ...T[j]]);
           tri(c, [...B[i], ...T[j], ...T[i]]);
@@ -71,6 +73,7 @@ export class Cena {
     chao.rotation.x = -Math.PI / 2;
     chao.position.y = -0.201;
     this.scene.add(chao);
+    this.fora = FORA; // the cladding's depth outside the base edge: the engine's, for the cladding chosen
     this.grupos = {};
     for (const g of GRUPOS) {
       this.grupos[g] = new THREE.Group();
@@ -191,7 +194,7 @@ export class Cena {
   info(e) {
     const chao = this.pontoNoChao(e);
     const objs = [];
-    for (const g of ["vaos", "interiores", "paredes", "chao"]) if (this.grupos[g].visible) objs.push(...this.grupos[g].children.filter((o) => o.isMesh));
+    for (const g of ["vaos", "interiores", "paredes", "chao", "exteriores"]) if (this.grupos[g].visible) objs.push(...this.grupos[g].children.filter((o) => o.isMesh));
     const h = this.raio.intersectObjects(objs, false).find((x) => x.object.userData && Object.keys(x.object.userData).length);
     return { chao, alvo: h ? h.object.userData : null, ponto: h ? [h.point.x, -h.point.z, h.point.y] : null, evento: e };
   }
@@ -404,7 +407,7 @@ export class Cena {
     for (let i = 0; i < n; i++) {
       const p0 = cont[i], p1 = cont[(i + 1) % n];
       const L = Math.hypot(p1[0] - p0[0], p1[1] - p0[1]), u = [(p1[0] - p0[0]) / L, (p1[1] - p0[1]) / L];
-      const fora = [u[1], -u[0]], d = FORA * 0.5; // on the cladding's middle
+      const fora = [u[1], -u[0]], d = this.fora * 0.5; // on the cladding's middle
       const P = (s) => [p0[0] + u[0] * s + fora[0] * d, p0[1] + u[1] * s + fora[1] * d];
       const cortes = new Set([0, L]);
       for (const f of faces) for (let k = 0; k < f.pts.length; k++) { // where the side crosses a face's edge
@@ -427,7 +430,7 @@ export class Cena {
         const za = zf(f, ...P(sa)), zb = zf(f, ...P(sb));
         if (Math.max(za, zb) <= zE + 0.005) continue;
         // a prism with a sloped top: a box from zE to the higher end, its top corners moved down to the profile
-        const m = this.caixa("empenas", p0, u, sa, sb, -FORA, DENTRO, zE - 0.002, Math.max(za, zb), material, { lado: i });
+        const m = this.caixa("empenas", p0, u, sa, sb, -this.fora, DENTRO, zE - 0.002, Math.max(za, zb), material, { lado: i });
         const pos = m.geometry.attributes.position;
         const H = Math.max(za, zb) - (zE - 0.002);
         for (let v = 0; v < pos.count; v++) {
@@ -443,7 +446,9 @@ export class Cena {
   }
 
   // the client's walls (3 m blocks) on the base edge, with the holes of the doors and windows; the last placed lighter
-  // opc: {altura, material (the cladding), ultima, vaos: [{lado, s0, s1, z0, z1}] rough openings}
+  // opc: {altura, material (the cladding), ultima, vaos: [{lado, s0, s1, z0, z1}] rough openings, parapeito (z from
+  // which a hidden roof's parapet stands), dentroPlat(lado) (the parapet's roof-side face from the base edge, as the
+  // engine builds it: its cladding, or only the gutter's lining — the chapéu covers exactly that width)}
   paredes(cont, paredes, opc = {}) {
     this.limpar("paredes");
     const H = opc.altura || 3.0;
@@ -472,17 +477,23 @@ export class Cena {
       // the walls joined, no joint between the client's 3 m blocks (user 2026-10-21: "as paredes devem estar unidas");
       // each side closes the corner at its end: past an outside corner by the cladding, past an inside one by the
       // frame + lining (the other side's wall starts at the corner), 0,5 mm short so no two faces fight
-      let a = p.s0, b = p.s1;
+      const dentroP = (k) => (opc.dentroPlat && opc.dentroPlat(k)) || DENTRO;
+      let a = p.s0, b = p.s1, bP = p.s1;
       if (Math.abs(p.s1 - L) < 1e-6) {
         const [vx, vy] = dir((p.lado + 1) % n), convexo = ux * vy - uy * vx > 0;
-        b += (convexo ? FORA : DENTRO) - 0.0005;
+        b += (convexo ? this.fora : DENTRO) - 0.0005;
+        bP += (convexo ? this.fora : dentroP((p.lado + 1) % n)) - 0.0005;
       }
-      // a parapet's roof side (hidden roof, the roof shown) in the facade's cladding (camadas.platibanda_interior)
-      const zc = opc.parapeito, fora = m[0];
+      // a parapet's roof side (hidden roof, the roof shown) in the facade's cladding (camadas.platibanda_interior), as
+      // wide as the engine builds it
+      const zc = opc.parapeito, fora = m[0], dP = dentroP(p.lado);
       const bloco = (s0, s1, z0, z1) => {
-        if (!zc || zc >= z1) return this.caixa("paredes", p0, u, s0, s1, -FORA, DENTRO, z0, z1, m, dados);
-        if (zc > z0) this.caixa("paredes", p0, u, s0, s1, -FORA, DENTRO, z0, zc, m, dados);
-        this.caixa("paredes", p0, u, s0, s1, -FORA, DENTRO, Math.max(z0, zc), z1, fora, dados);
+        if (!zc || zc >= z1) return this.caixa("paredes", p0, u, s0, s1, -this.fora, DENTRO, z0, z1, m, dados);
+        if (zc > z0) this.caixa("paredes", p0, u, s0, s1, -this.fora, DENTRO, z0, zc, m, dados);
+        // 3 mm short of the roof-side face: that face is the engine's (its cladding, or the gutter's lining on a
+        // gutter wall) — drawn on the same plane the two fought (user 2026-10-29: "a parte de dentro da platibanda
+        // fica com a cor do painel sandwich")
+        this.caixa("paredes", p0, u, s0, s1 === b ? bP : s1, -this.fora, dP - 0.003, Math.max(z0, zc), z1, fora, dados);
       };
       let s = a;
       const vs = (opc.vaos || []).filter((v) => v.lado === p.lado && v.s1 > a && v.s0 < b).sort((x, y) => x.s0 - y.s0);
@@ -525,7 +536,7 @@ export class Cena {
       }
       // the exterior shutter's box over the frame, in the rough opening (+0,15 over a window, +0,20 over a window to the
       // floor — why the opening in the structure is taller than the window, user 2026-10-22)
-      if (v.estore) this.caixa("vaos", p0, u, v.s0 - 0.025, v.s1 + 0.025, -FORA + 0.005, 0.10, v.z1, v.z1 + caixaEstore(v), m, d);
+      if (v.estore) this.caixa("vaos", p0, u, v.s0 - 0.025, v.s1 + 0.025, -this.fora + 0.005, 0.10, v.z1, v.z1 + caixaEstore(v), m, d);
     }
   }
 
@@ -538,6 +549,8 @@ export class Cena {
     const liso = new THREE.MeshStandardMaterial({ color: COR.interior, roughness: 0.9 });
     const porta = new THREE.MeshStandardMaterial({ color: COR.porta, roughness: 0.7 });
     const portaS = new THREE.MeshStandardMaterial({ color: COR.realce, roughness: 0.7 });
+    const aro = new THREE.MeshStandardMaterial({ color: COR.aro, roughness: 0.7 });
+    const metal = new THREE.MeshStandardMaterial({ color: 0xc3c7cb, metalness: 0.5, roughness: 0.35 });
     const aceso = (m, forte) => { const c = m.clone(); c.emissive = new THREE.Color(forte ? 0x6a4a12 : 0x2e2008); return c; };
     const porId = new Map(lista.map((q) => [q.id, q]));
     // a face of wall w in its finish, lit when w is selected (that face, or both — "ambas")
@@ -586,8 +599,8 @@ export class Cena {
         canto(this.caixa("interiores", p0, u, s, d0, -ESP_INT / 2, ESP_INT / 2, 0, pe, mats(ini, false), d), ini, false);
         ini = false;
         this.caixa("interiores", p0, u, d0, d1, -ESP_INT / 2, ESP_INT / 2, ALTURA_PORTA, pe, mats(false, false), d);
-        const pm = sel && sel.tipo === "porta" && sel.id === pt.id ? portaS : porta;
-        this.caixa("interiores", p0, u, d0 + 0.035, d1 - 0.035, -0.02, 0.02, 0, ALTURA_PORTA - 0.03, pm, { porta: pt.id, interior: r.id });
+        const sp = sel && sel.tipo === "porta" && sel.id === pt.id;
+        this.portaInterior(p0, u, d0, d1, sp ? portaS : aro, sp ? portaS : porta, metal, { porta: pt.id, interior: r.id });
         s = d1;
       }
       canto(this.caixa("interiores", p0, u, s, b, -ESP_INT / 2, ESP_INT / 2, 0, pe, mats(ini, true), d), ini, true);
@@ -601,8 +614,37 @@ export class Cena {
           this.grupos.interiores.add(pega);
         }
         this.rotuloParede(r, pe);
+        if (sel.troco) { // the piece chosen (between the walls that meet it): a lit sleeve over it
+          const [t0, t1] = [Math.max(sel.troco[0], a), Math.min(sel.troco[1], b)];
+          const luva = new THREE.MeshBasicMaterial({ color: COR.realce, transparent: true, opacity: 0.4, depthWrite: false });
+          this.caixa("interiores", p0, u, t0, t1, -ESP_INT / 2 - 0.015, ESP_INT / 2 + 0.015, 0, pe + 0.015, luva, d);
+        }
       }
     }
+  }
+
+  // an interior door in its rough opening d0..d1 (0,87 x 2,03 — the 80 x 200 leaf): the frame lining the reveals
+  // (3,5 cm at the jambs, 3 cm at the head, the wall's depth), the architraves on both faces, the leaf and a lever
+  // handle on each side (user 2026-10-29: "estão com um gap dos lados e na parte de cima e não tem um aspeto de porta
+  // interior, estão apenas um retângulo")
+  portaInterior(p0, u, d0, d1, mAro, mFolha, metal, dados) {
+    const H = ALTURA_PORTA, e = ESP_INT / 2, a = 0.035, at = 0.03, g = 0.07, eg = 0.012;
+    const k = (s0, s1, w0, w1, z0, z1, m) => this.caixa("interiores", p0, u, s0, s1, w0, w1, z0, z1, m, dados);
+    k(d0, d0 + a, -e, e, 0, H, mAro);                                       // the frame
+    k(d1 - a, d1, -e, e, 0, H, mAro);
+    k(d0 + a, d1 - a, -e, e, H - at, H, mAro);
+    const ls = d1 - a - 0.065;                                               // the lock side
+    for (const f of [1, -1]) {
+      const w = (x0, x1) => (f > 0 ? [x0, x1] : [-x1, -x0]);
+      const gi0 = d0 + a - 0.005, gi1 = d1 - a + 0.005, gz = H - at + 0.005; // the architraves, 5 mm of frame showing
+      k(gi0 - g, gi0, ...w(e, e + eg), 0, gz, mAro);
+      k(gi1, gi1 + g, ...w(e, e + eg), 0, gz, mAro);
+      k(gi0 - g, gi1 + g, ...w(e, e + eg), gz, gz + g, mAro);
+      k(ls - 0.022, ls + 0.022, ...w(0.02, 0.028), 1.028, 1.072, metal);     // the rose, the spindle, the lever
+      k(ls - 0.008, ls + 0.008, ...w(0.028, 0.052), 1.042, 1.058, metal);
+      k(ls - 0.13, ls + 0.008, ...w(0.048, 0.064), 1.041, 1.059, metal);
+    }
+    k(d0 + a + 0.002, d1 - a - 0.002, -0.02, 0.02, 0.008, H - at - 0.002, mFolha); // the leaf
   }
 
   // the length of a wall over its middle (while placed, stretched or selected)
@@ -624,7 +666,9 @@ export class Cena {
     if (p.tipo === "vao") {
       const p0 = p.cont[p.lado], p1 = p.cont[(p.lado + 1) % p.cont.length];
       const L = Math.hypot(p1[0] - p0[0], p1[1] - p0[1]), u = [(p1[0] - p0[0]) / L, (p1[1] - p0[1]) / L];
-      this.caixa("previa", p0, u, p.s0, p.s1, -FORA - 0.02, DENTRO + 0.02, p.z0, p.z1, mat);
+      this.caixa("previa", p0, u, p.s0, p.s1, -this.fora - 0.02, DENTRO + 0.02, p.z0, p.z1, mat);
+    } else if (p.tipo === "caixa") { // a block on the plan {x0, x1, y0, y1, z0, z1} (a garage, an annex, a pergola)
+      this.caixa("previa", [p.x0, p.y0], [1, 0], 0, p.x1 - p.x0, 0, p.y1 - p.y0, p.z0, p.z1, mat);
     } else if (p.tipo === "porta") { // an interior door on interior wall {o, c} at s
       const u = p.o === "h" ? [1, 0] : [0, 1], p0 = p.o === "h" ? [0, p.c] : [p.c, 0];
       this.caixa("previa", p0, u, p.s - MEIA_PORTA, p.s + MEIA_PORTA, -ESP_INT / 2 - 0.02, ESP_INT / 2 + 0.02, 0, ALTURA_PORTA, mat);
@@ -638,6 +682,15 @@ export class Cena {
       const [x, y] = p.o === "h" ? [m, p.c] : [p.c, m];
       o.position.set(x, p.pe + 0.35, -y);
       this.grupos.previa.add(o);
+      if (p.guia) { // to the first point of the walls being drawn: the next wall closes the room (dashed, on the floor)
+        const [[x0, y0], [x1, y1]] = p.guia, L = Math.hypot(x1 - x0, y1 - y0);
+        const traco = new THREE.MeshBasicMaterial({ color: COR.realce, depthTest: false, transparent: true, opacity: 0.95 });
+        if (L > 0.05) for (let t = 0; t < L; t += 0.25) this.caixa("previa", [x0, y0], [(x1 - x0) / L, (y1 - y0) / L], t, Math.min(t + 0.15, L), -0.03, 0.03, 0.02, 0.03, traco);
+        const alvo = new THREE.Mesh(new THREE.RingGeometry(0.1, 0.17, 28), traco);
+        alvo.rotation.x = -Math.PI / 2;
+        alvo.position.set(x1, 0.03, -y1);
+        this.grupos.previa.add(alvo);
+      }
     }
   }
 
@@ -685,9 +738,11 @@ export class Cena {
     this.tetoDe = objetos;
     this.limpar("teto");
     if (!objetos) return;
+    // smooth, as a finished ceiling is (user 2026-10-30: "O teto falso dá para ver as linhas, numa obra real isso não
+    // se vê"): the boards' faces only, no joints between them
     const P = prismas(mapear);
-    for (const o of objetos) P.add((materiais[o.material] && materiais[o.material].cor) || "#e9e9e5", o.pecas);
-    for (const m of P.meshes(0.9)) this.grupos.teto.add(m);
+    for (const o of objetos) P.add((materiais[o.material] && materiais[o.material].cor) || "#e9e9e5", o.pecas, false);
+    for (const m of P.meshes(0.9)) { m.material.flatShading = false; this.grupos.teto.add(m); }
   }
 
   // the structure built by the engine: wall framing (panels) and the pieces on top (beams, purlins, posts)
@@ -720,5 +775,52 @@ export class Cena {
 
   mostrar(nome, sim) {
     this.grupos[nome].visible = sim;
+    for (const e of (this.edificios || new Map()).values()) e.grupos[nome].visible = sim; // separate buildings too
+  }
+
+  // the pergolas (step 7) as the engine builds them (pergola.py): [{id, objetos}], each pickable ({pergola: id}), the
+  // selected one lit
+  pergolas(lista, materiais, mapear, selId = null) {
+    this.limpar("exteriores");
+    for (const pg of lista || []) {
+      const P = prismas(mapear);
+      for (const o of pg.objetos) P.add((materiais[o.material] && materiais[o.material].cor) || "#c9a06a", o.pecas);
+      for (const m of P.meshes(0.75)) {
+        if (pg.id === selId) m.material.emissive = new THREE.Color(0x5a3e10);
+        m.userData = { pergola: pg.id };
+        this.grupos.exteriores.add(m);
+      }
+    }
+  }
+
+  // a separate building (a garage, an annex — step 7) drawn by the same methods into groups of its own, turned rot ×
+  // 90° and moved to x, y (plan): emEdificio(id, {x, y, rot}, () => { this.base(...); this.paredes(...); ... })
+  emEdificio(id, pos, desenhar) {
+    if (!this.edificios) this.edificios = new Map();
+    if (!this.edificios.has(id)) {
+      const raiz = new THREE.Group(), grupos = {};
+      for (const g of GRUPOS) { grupos[g] = new THREE.Group(); grupos[g].visible = this.grupos[g].visible; raiz.add(grupos[g]); }
+      this.scene.add(raiz);
+      this.edificios.set(id, { raiz, grupos });
+    }
+    const e = this.edificios.get(id);
+    e.raiz.position.set(pos.x, 0, -pos.y);
+    e.raiz.rotation.y = ((pos.rot || 0) * Math.PI) / 2;
+    const g0 = this.grupos;
+    this.grupos = e.grupos;
+    try { desenhar(); } finally { this.grupos = g0; }
+  }
+
+  // the separate buildings still in the design stay; the others go
+  edificiosVivos(ids) {
+    for (const [id, e] of this.edificios || new Map()) {
+      if (ids.includes(id)) continue;
+      const g0 = this.grupos;
+      this.grupos = e.grupos;
+      for (const g of GRUPOS) this.limpar(g);
+      this.grupos = g0;
+      this.scene.remove(e.raiz);
+      this.edificios.delete(id);
+    }
   }
 }

@@ -39,7 +39,7 @@ from ferramentas.comum import pasta_trabalho  # noqa: E402
 from ferramentas.modelo.camadas import R, fundir, prisma, teto_sob_anel  # noqa: E402
 from ferramentas.modelo.divisor_modulos import dividir, juntas as juntas_divisor, parametros as parametros_divisor  # noqa: E402
 from ferramentas.modelo.estrutura_dc import emoldurar, membro, ret  # noqa: E402
-from ferramentas.modelo import telhado as telhado_avista, telhado_estrutura  # noqa: E402
+from ferramentas.modelo import pergola, telhado as telhado_avista, telhado_estrutura  # noqa: E402
 
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
@@ -861,24 +861,50 @@ def construir(cfg, S, E, planta):
         gcfg = Cc.get("caleiras", {})
         tb = cl.get("tubo", {}).get("largura", 0.08)
         x_grelha = max(a["x1"] for a in aguas)
-        telhados = []
-        for k_t, ag in enumerate(aguas, 1):
+        # strips side by side on one low wall (a one-água L / T / U) share ONE gutter: one run, one fall, the outlets at
+        # its ends — each had its own, with end caps, a lining plate up to the parapet top and two downpipes side by side
+        # where two strips met (user 2026-10-29: "tinha uma peça aleatória no meio das caleiras")
+        corridas = []
+        for i in sorted(range(len(aguas)), key=lambda i: (aguas[i]["lado"], round(aguas[i]["y_lo"], 3), aguas[i]["x0"])):
+            ag, c = aguas[i], (corridas[-1] if corridas else None)
+            p_ = aguas[c[-1]] if c else None
+            if p_ and p_["lado"] == ag["lado"] and abs(p_["y_lo"] - ag["y_lo"]) < 0.01 and \
+                    abs(p_["y_gf"] - ag["y_gf"]) < 0.01 and abs(ag["x0"] - p_["x1"]) < 0.02:
+                c.append(i)
+            else:
+                corridas.append([i])
+        calhas_ = {}  # the run's first strip -> its gutter
+        for c in corridas:
+            ag = aguas[c[0]]
             sg = 1 if ag["lado"] == "N" else -1
-            x0_, x1_ = ag["x0"], ag["x1"]
+            x0_, x1_ = ag["x0"], aguas[c[-1]]["x1"]
             zt_g = topo_madre(ag["g"])
             h_madre = zt_g - hm - z_vig
             parede = next((w for w in exts if w["eixo"] == "x" and abs((w["f0"] if sg > 0 else w["f1"]) - ag["y_lo"]) < 0.01
                            and min(w["b"], x1_) - max(w["a"], x0_) > 0.3), None)
             gc = gcfg.get(parede["id"], {}) if parede else {}
             vaos = [(o["s0"], o["s1"]) for o in parede["aberturas"]] if parede else []
+            # the outlets: two per gutter at its ends, one on a small one (user 2026-10-30: "vamos com dois tubos por
+            # caleira a não ser que a caleira seja pequena" — up to 4,0 m, "sim está bem"), and as many more, evenly
+            # between, as the roof it drains needs for the pipe's section — 1 cm² of pipe per m² of roof (general
+            # practice; "usa o bocal ideal para esse tubo e distribui como achares melhor", 2026-10-30)
+            tubo_ = cl.get("tubo", {})
+            pequena = (x1_ - x0_) <= tubo_.get("caleira_pequena", 4.0)
+            area_d = sum((aguas[i]["x1"] - aguas[i]["x0"]) * abs(aguas[i].get("y_hi", yr) - aguas[i]["y_lo"]) for i in c)
+            seccao_cm2 = tubo_.get("largura", 0.08) * tubo_.get("profundidade", 0.035) * 1e4
+            n_s = max(1 if pequena else 2, math.ceil(area_d / (seccao_cm2 * tubo_.get("m2_por_cm2", 1.0)) - 1e-9))
             xs_out = []
-            for sd in gc.get("saidas", ["inicio", "fim"]):
-                xo, dx = (x0_ - tb / 2, 0.05) if sd == "inicio" else (x1_ - tb / 2, -0.05)
+            for sd in gc.get("saidas", ["inicio"] if n_s == 1 else ["inicio", "fim"] + [k_ / (n_s - 1) for k_ in range(1, n_s - 1)]):
+                if isinstance(sd, (int, float)):  # between the ends (a fraction of the run)
+                    xo, dx = (x0_ + (x1_ - x0_) * sd - tb / 2, 0.05)
+                else:
+                    xo, dx = (x0_ - tb / 2, 0.05) if sd == "inicio" else (x1_ - tb / 2, -0.05)
                 n_ = 0
                 while any(v0 - 0.10 < xo + tb and xo < v1 + 0.10 for v0, v1 in vaos) and n_ < 400:
                     xo += dx
                     n_ += 1
                 xs_out.append(round(xo, 4))
+            xs_out.sort()
             centros = [xo + tb / 2 for xo in xs_out]
 
             def dist(x, centros=centros):
@@ -900,15 +926,23 @@ def construir(cfg, S, E, planta):
                     if hh < 0.005:
                         continue
                     c0_, c1_ = sorted((c0_, c1_))
-                    peca(f"Calço da caleira A{k_t} x{xv:.2f} ({nome_c})", "1.9", pr["seccao"], "Calço da caleira",
+                    peca(f"Calço da caleira A{c[0] + 1} x{xv:.2f} ({nome_c})", "1.9", pr["seccao"], "Calço da caleira",
                          [caixa(xv - wl / 2, xv + wl / 2, c0_, c1_, z_vig, z_vig + hh)], c1_ - c0_, (c1_ - c0_) * wl * hh)
-            z_borda = topo_madre(ag["y_pe"]) + pn_esp
             fins = []
             for x_e in (x0_, x1_):  # gutter end against a parapet (lined up to its top) or open to a lower roof
                 contra = any(w["eixo"] == "y" and min(abs(w["f0"] - x_e), abs(w["f1"] - x_e)) < 0.01 and
                              w["a"] - 0.01 <= min(ag["y_lo"], ag["y_gf"]) and max(ag["y_lo"], ag["y_gf"]) <= w["b"] + 0.01
                              for w in exts)
                 fins.append("parede" if contra else "livre")
+            calhas_[c[0]] = {"fundo": fundo, "saidas": xs_out, "fins_caleira": fins, "z_madre": round(zt_g, 4),
+                             "z_canal": [round(min(z for _x, z in fundo), 4), round(zt_g, 4)],
+                             **({"caleira_x": [round(x0_, 4), round(x1_, 4)]} if len(c) > 1 else {})}
+            for i in c[1:]:
+                calhas_[i] = {"caleira_de": c[0], "z_madre": round(zt_g, 4), "z_canal": calhas_[c[0]]["z_canal"]}
+        telhados = []
+        for k_t, ag in enumerate(aguas, 1):
+            x0_, x1_ = ag["x0"], ag["x1"]
+            z_borda = topo_madre(ag["y_pe"]) + pn_esp
             y_c = ag["y_hi"] if uma_agua else yr  # one slope: the panels end against the high wall
             telhados.append({"x0": round(x0_, 4), "x1": round(x1_, 4), "lado": ag["lado"],
                              "y_baixo": round(ag["y_pe"], 4), "y_cume": round(y_c, 4),
@@ -916,9 +950,7 @@ def construir(cfg, S, E, planta):
                              **({"uma_agua": True} if uma_agua else {}),
                              "inclinacao": tan, "y_parede": round(ag["y_lo"], 4), "y_caleira": round(ag["y_gf"], 4),
                              "canal": [round(min(ag["y_lo"], ag["y_gf"]), 4), round(max(ag["y_lo"], ag["y_gf"]), 4)],
-                             "z_canal": [round(min(z for _x, z in fundo), 4), round(zt_g, 4)], "fundo": fundo,
-                             "z_madre": round(zt_g, 4), "saidas": xs_out, "fins_caleira": fins,
-                             "z_borda": round(z_borda, 4), "grelha_x": round(x_grelha, 4)})
+                             **calhas_[k_t - 1], "z_borda": round(z_borda, 4), "grelha_x": round(x_grelha, 4)})
         z_topo_max = z_cume + pn_esp
     else:
         vigas_pav, vigas, n_prumos, n_madres = [], [], 0, 0
@@ -1265,6 +1297,43 @@ def construir(cfg, S, E, planta):
                    "pilares": pilares, "pilar_largura": pil["largura"],
                    "telha": pg.get("telha"), "caleira": pg.get("caleira")}
 
+    # the configurator's pergolas (step 7, user 2026-10-29): against the side the client chose, built as Torres Vedras'
+    # (pergola.py, JSON pergola); its highest point never above the ground floor's top (pergola.maximo, 2026-10-30)
+    pgs_c = cfg.get("pergolas") or []
+    pergolas_max = []  # each one's highest beams at the facade (the screen's limit)
+    if pgs_c and cont and S.get("pergola"):
+        ex_ = S["exterior"]
+        op = ex_["opcoes"][ex_.get("opcao_visivel", "A")]
+        esp_rev = ex_["osb"]["espessura"] + ex_["membrana"]["espessura"] + sum(c["espessura"] for c in op["camadas"])
+        esp_rip = ex_["osb"]["espessura"] + ex_["membrana"]["espessura"] + \
+            sum(c["espessura"] for c in op["camadas"] if c.get("tipo") == "ripas")
+        Pg = S["pergola"]
+        for k_pg, pc in enumerate(pgs_c, 1):
+            (ax_, ay_), (bx_, by_) = cont[pc["lado"]], cont[(pc["lado"] + 1) % len(cont)]
+            L_ = math.hypot(bx_ - ax_, by_ - ay_)
+            u_ = ((bx_ - ax_) / L_, (by_ - ay_) / L_)
+            alt_max = pergola.maximo(z_vig, Pg)
+            if avista and T_av:  # under an exposed roof's overhang (and its gutter on an eave): its top clear of them
+                zs = []
+                for i_ in range(int((pc["s1"] - pc["s0"]) / 0.25) + 2):
+                    a_ = min(pc["s0"] + i_ * 0.25, pc["s1"])
+                    for b_ in (esp_rev + 0.02 + j_ * 0.1 for j_ in range(int((Cc.get("beirado", 0.25) + 0.3) / 0.1) + 1)):
+                        x_, y_ = ax_ + u_[0] * a_ + u_[1] * b_, ay_ + u_[1] * a_ - u_[0] * b_
+                        zr = telhado_estrutura.z_telhado(T_av, x_, y_)
+                        if zr is not None:
+                            zs.append(z_e + zr)
+                if zs:
+                    beira = any(ln["tipo"] == "beirado" and abs((ln["p0"][0] - ax_) * u_[1] - (ln["p0"][1] - ay_) * u_[0]) < 1.0 and
+                                abs((ln["p1"][0] - ax_) * u_[1] - (ln["p1"][1] - ay_) * u_[0]) < 1.0 for ln in T_av["linhas"])
+                    folga_ = (S["cobertura"].get("caleira", {}).get("altura", 0.09) + 0.03 if beira else 0.0) + 0.03
+                    alt_max = min(alt_max, round(min(zs) - folga_ - Pg["vigas"]["altura"] - Pg["ripas"]["espessura"], 3))
+            pergolas_max.append(alt_max)
+            alt = min(pc.get("altura") or alt_max, alt_max)
+            itens = pergola.construir({"p0": (ax_, ay_), "u": u_, "n": (u_[1], -u_[0])}, pc["s0"], pc["s1"],
+                                      pc.get("projecao", 3.0), alt, S["pergola"], esp_rev, esp_rip, nome=f"Pérgola {k_pg}")
+            extra.extend(itens)
+            n_pg += len(itens)
+
     # ------------------------------------------------------------------ geometry
     G = {"nome": cfg["nome"], "descricao": cfg.get("descricao", ""),
          "origem_desenhos": planta.get("origem_desenho", {}).get("dwfx", ""),
@@ -1298,6 +1367,9 @@ def construir(cfg, S, E, planta):
     if pg:
         G.setdefault("colecoes_estrutura", {})["1.10"] = pg.get("colecao", "1.10 Pérgola")
         G["pergola"] = pg_info
+    elif pgs_c:
+        G.setdefault("colecoes_estrutura", {})["1.10"] = "1.10 Pérgolas (lameladas autoclave; secções assumidas)"
+        G["pergolas_max"] = pergolas_max
     if cfg.get("fundacao"):
         G["fundacao"] = cfg["fundacao"]
     if avisos_div:

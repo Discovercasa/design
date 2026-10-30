@@ -10,7 +10,7 @@ Developed in its own session and git branch `configurador` (worktree `../BOB Cla
   `ferramentas/configurador/` (`formas.py` shapes from the m², `para_construtor.py` → the builder's inputs).
 
 Rules that matter here: the client never sees the word "módulo"; the build rules come only from
-`conhecimento/metodo-construtivo.md` and `ferramentas/modelo/sistema_construtivo.json` (the engine is the repo's
+`conhecimento/metodo-construtivo.md` (index; rules in `conhecimento/metodo/`) and `ferramentas/modelo/sistema_construtivo.json` (the engine is the repo's
 Python, run in the browser — never a copy of the rules); nothing goes online without the user's OK (client data);
 prices are placeholders until the price list exists (Product vision 2).
 
@@ -44,3 +44,11 @@ the façade finish on the parapets' roof side), hidden roofs in one água per ho
 step-6 fixes, the "Teto" toggle — spec §11, §12, §13.
 2026-10-29: interior walls take doors only ("por norma ninguém usa janelas nas paredes interiores"); the client
 chooses the hidden roof's gutter side where two sides are straight (`cobertura.lado_caleira`, step 5) — spec §8, §13.
+2026-10-29, later (new cloud session; his screenshots stayed on the PC): "Oculta" on screen; hidden roof — one gutter
+per low wall, outlets in its bottom, top flashing on the panels, parapet as wide as the chapéu; exposed roof — top
+purlins meet on the ridge, prumos turned with their beam, empenas clear of the eave purlin; Munditelha colour; brand →
+step 1; **step 7 Pérgolas, garagens e anexos** (`web/src/exteriores.js`, engine `ferramentas/modelo/pergola.py`) — spec
+§2, §8, §11, §13. Run `python ferramentas/configurador/auditar_cobertura.py --formas` after every roof change.
+2026-10-29, later still: step 4 — walls from the house's inner corners, rooms in the middle of the house (closing
+snap), a wall's piece selected / removed, a real interior door, the camera kept between steps, the navigation pop-up —
+spec §11, §12.

@@ -122,7 +122,9 @@ faz-me essas perguntas", and on a missing answer "senão vai com o default de 2,
 **Q12 · Caixilharia: padrão e portão** — always
 > 12. A caixilharia segue o padrão atual (alumínio RAL 7016 com rotura térmica, vidro duplo, estore exterior automático, portas em painel liso)? E o portão da garagem é seccionado automático? (default: o padrão; portão seccionado)
 - Default: the standard "para já" ("São o nosso padrão para já mas estamos a pensar mudar") — check first whether he
-  announced the change; estores on windows only (a rule); garage door sectional automatic as at TV (assumed).
+  announced the change; estores on windows only (a rule); garage door sectional automatic as at TV (assumed). In the
+  configurator the garage gate's width and height are the client's choice "respeitando as nossas regras estruturais
+  (tal como no menu de portas e janelas)" (2026-10-30); on a real house the size of the gate = the table / the order.
 - Feeds: §3 "Caixilharia — the company standard 'para já'"; §11. Answer → JSON `caixilharia` / cfg
   `camadas.caixilharia`.
 
@@ -145,10 +147,11 @@ faz-me essas perguntas", and on a missing answer "senão vai com o default de 2,
 ## E. Roof (cobertura)
 
 **Q14 · Tipo de cobertura** — always
-> 14. A cobertura é escondida atrás de platibanda ou à vista? Se for escondida: uma só água (o habitual) — para que lado cai, onde fica a caleira? Se for à vista e a nossa estrutura a subir, mantemos a inclinação ou a cota da cumeeira? (default: como no projeto; escondida numa água com a inclinação mínima do painel)
+> 14. A cobertura é oculta (escondida) atrás de platibanda ou à vista? Se for escondida: uma só água (o habitual) — para que lado cai, onde fica a caleira? Se for à vista e a nossa estrutura a subir, mantemos a inclinação ou a cota da cumeeira? (default: como no projeto; escondida numa água com a inclinação mínima do painel)
 - Default: the type from the architecture; hidden is the usual roof ("nós tentamos sempre só fazer uma água e sempre
-  coberturas ocultas", 2026-10-28). Hidden → **one água where it works**, two only when the panels would be too long
-  (> 13,5 assumed) or no side is straight — "Aqui depende do caso … Não quero que assumas um padrão mas sim a solução
+  coberturas ocultas", 2026-10-28; say "Oculta" in client-facing texts — "muda o nome para este termo "Oculta" em vez de
+  escondida", 2026-10-29; the gutter only on the low side of a one-água roof, none on the high side). Hidden → **one água where it works**, two only when the panels would be too long
+  (> 15 m — his "afinal o máximo do painel é 15 metros", 2026-10-30 later; 13,5 before, ours) or no side is straight — "Aqui depende do caso … Não quero que assumas um padrão mas sim a solução
   mais eficaz e inteligente para cada caso" (2026-10-28) → choose per house and say why; the gutter side per house
   (default ours: the side where every strip ends on one straight line; a rectangle: south, or the client's choice —
   "Podes deixar o cliente escolher", 2026-10-29); the lowest slope the panel
@@ -159,30 +162,60 @@ faz-me essas perguntas", and on a missing answer "senão vai com o default de 2,
   duas águas e várias águas apenas com empenas á vista", 2026-10-28; misto kept, "Tranquilo depois se necessário
   removemos essa opção"); beirado 0,25, range 0,20–**0,50** ("Beirado vamos definir um máximo de 50 cm se vires que é
   problemático em algum dos modelos podemos dimnuir nesse modelo", 2026-10-28 — a lower maximum per house allowed);
-  the verges (0,12): to ask. Sobral: keep pitch or ridge undecided ("para ja ainda nao vou tomar essa decisão"). A house
+  the verges: = the eaves in the configurator since 2026-10-29 night (his "não vais ter dois telhados desalinhados"; ours,
+  B3 asked; 0,12 only where the drawings fix it, [SB]). Sobral: keep pitch or ridge undecided ("para ja ainda nao vou tomar essa decisão"). A house
   with a project keeps its roof.
 - Feeds: §7; L6, L17, L23. Answer → cfg `cobertura` (`tipo`, `inclinacao_pct`, `cumeeira_y`, `aguas`),
   `estrutura.cobertura_manter`, `platibanda`.
 
 **Q15 · Painel e cores** — always
-> 15. Que painel sanduíche leva (marca/modelo, espessura e cor) e de que cor são os chapéus e remates? (default: escondida 5 ondas 80 mm; à vista Munditelha (Mundiperfil) cinza escuro; chapéus RAL 7016)
+> 15. Que painel sanduíche leva (marca/modelo, espessura, núcleo PUR ou PIR e cor; a obra fica perto do mar ou em ambiente agressivo?) e de que cor são os chapéus e remates? (default: oculta 5 ondas 80 mm; à vista Munditelha (Mundiperfil) na cor original do fabricante (cor telha); chapéus RAL 7016)
 - Default: always sandwich panel; telha only at the client's request ("a não ser que seja um pedido do cliente") → ask
   "o cliente pediu telha ou outro revestimento?" only then. Hidden 5-rib 80 mm (draft, D2503); exposed **Munditelha
-  (Mundiperfil)** 40–60 mm ("utilizamos o munditelha da mundiperfil", 2026-10-22) — ask thickness and colour (dark grey /
-  RAL 7016 provisional); chapéus and roof remates RAL 7016 (assumed). What goes under the chapéus: promised (reminder of
-  2026-10-20) — add it here when he says.
+  (Mundiperfil)** 40–60 mm ("utilizamos o munditelha da mundiperfil", 2026-10-22) — ask thickness and the colour
+  reference: the colour is **the maker's original, not grey** ("Mais uma vez quero a cor original do painel de sandwich
+  … e não cinzenta a cobertura", 2026-10-29; the dark grey / RAL 7016 default superseded; **RAL 8004 confirmed
+  2026-10-30 — "é o ral 8004 e sim é o painel de 5 ondas imitação cor telha, o cinzento foi apenas para sobral"** — the
+  Munditelha and the hidden 5-ondas panel; a house whose project says grey, as Sobral Tipo 1 — "dark grey", 2026-09-24 —
+  keeps it); the **roof flashings and caps in the roof colour** (L69); chapéus RAL 7016 (assumed, not said — the
+  chapéus are wall copings, not roof flashings: ask when it comes). Panels: 1 m wide, length per roof ("variável"),
+  interlocking (2026-10-30). **Hidden panel = Mundiperfil MC 1000/5** (data sheet given 2026-10-30 later; see
+  `sistema-construtivo.md` §6): 30–100 mm, 80 mm = U 0,25; PUR (fire F) or PIR (B-s2,d0, optional — ask which per house;
+  PIR near a neighbour / garage, ours); maximum length **15 m**; minimum slope 6 % without laps; lap 300 mm; supports ≤
+  1,50; **standard polyester is not for marine / aggressive environments** → ask per house the distance to the sea /
+  the air (a coastal house: a different coating — ask the maker); annual inspection handed to the client. **2026-10-30
+  (later still): thickness — "usamos os de 80mm" → default 80 mm for the hidden 5-ondas panel (confirmed; the Munditelha's
+  thickness: asked, still 40 mm "a confirmar"); the coastal check — "Sim já foi verificado" (for TV, whose purpose he
+  describes as learning about the company and evaluating our suggestions) → still a per-house question (the coating
+  follows the house's air; the data sheet's standard polyester is not for marine / aggressive air); PUR / PIR — "Ok tranquilo" → per
+  house, PIR suggested near a neighbour / garage; 15 m panels — "Sim tranquilo".** What goes
+  under the chapéus: promised (reminder of 2026-10-20) — add it here when he says.
 - Feeds: §7 "Covering", "Chapéu"; §13 Panels. Answer → cfg `cobertura.painel_oculto` / `cobertura.painel`,
   `cobertura.chapeu`.
 
 **Q16 · Caleiras e tubos de queda** — always
-> 16. Caleira oculta com 31 cm de largura como em Torres Vedras, ou outra? A saída da caleira para cada tubo de queda é lateral (um furo no forro do lado da platibanda, para dentro do revestimento) ou um furo no fundo da caleira (como em Torres Vedras)? Que bocal e com que medida? Os tubos de queda vão por dentro do revestimento (o nosso método — em Torres Vedras ficaram por fora): que secção usam? Cada caleira leva ladrão (descarga / gárgula de emergência pela platibanda, uns cm acima do fundo da caleira, para a água sair à vista se o tubo entupir) — de que tipo e a que altura? No fundo dos tubos a água vai para onde (terreno, gravilha, caixa de pluviais)? (default: 31 cm; saída lateral pela platibanda, um furo à largura do tubo no ponto baixo da caleira em cada tubo de queda; tubos por dentro do revestimento com secção pela área da cobertura (≈ 1 cm² por m²) num rebaixo do ripado; sem ladrão no modelo, assinalado na entrega — recomendamos um por caleira, abaixo do topo da madre; a acabar 5 cm acima da base)
+> 16. Caleira oculta com 31 cm de largura como em Torres Vedras, ou outra? A saída da caleira para cada tubo de queda é lateral (um furo no forro do lado da platibanda, para dentro do revestimento) ou um furo no fundo da caleira (como em Torres Vedras)? Que bocal e com que medida? Os tubos de queda vão por dentro do revestimento (o nosso método — em Torres Vedras ficaram por fora): que secção usam? Cada caleira leva ladrão (descarga / gárgula de emergência pela platibanda, uns cm acima do fundo da caleira, para a água sair à vista se o tubo entupir) — de que tipo e a que altura? No fundo dos tubos a água vai para onde (terreno, gravilha, caixa de pluviais)? (default: 31 cm; saída lateral pela platibanda, um furo à largura do tubo no ponto baixo da caleira em cada tubo de queda; tubos por dentro do revestimento, 100 × 50 (≈ 50 m² por tubo, 1 cm² por m²; a resposta dele de 2026-10-30), com rebaixo local nas placas de cortiça / capoto e só até à caixa de ar onde esta é rasa; sem ladrão no modelo, assinalado na entrega — recomendamos um por caleira, abaixo do topo da madre; a acabar 5 cm acima da base)
 - Default: caleira oculta 0,31 clear, fall ≈ 2 % on calços, outlets at the low ends, lining 0,80 tile colour (D2503);
   downpipes inside the façade cladding — the method ("é a forma correta"; "achamos que por dentro é mais correto e fica
   melhor"; TV as built had them outside) — ending ≈ 5 cm above the base. Exposed roof: exterior gutter 125×90,
   downpipes 80 (assumed). Outlet holes at every downpipe are fixed (L43); the outlet **type** and bocal: promised ("isso
-  depois eu digo") — default the side outlet, flagged "a confirmar". **Ladrão**: "explica-me o que é um ladrao mas penso
+  depois eu digo") — default the side outlet, flagged "a confirmar". **2026-10-30**: "Normalmente 10cm de bocal mas pode
+  ser maior dependendo da zona, isso depende da inclinação e da dimensão da cobertura mas vamos com dois tubos por
+  caleira a nao ser que a caleira seja pequena" → bocal 10 cm by default (larger by zone / slope / roof size), **2
+  downpipes per gutter, one on a small gutter** (the 37 m² per pipe rule is dropped); ask per house the bocal's size if
+  the roof is large or steep and what the 10 cm measures. **2026-10-30 later**: "usa o bocal ideal para esse tubo e
+  distribui como achares melhor" → the outlet = the pipe's section (80 × 35 in the cladding; **100 × 50 since 2026-10-30
+  later still, "Sim usa de 100x50"**), the downpipes: 2 per gutter,
+  1 on a gutter ≤ 4,0 m ("sim está bem"), more, evenly spaced, for ≈ 1 cm² of pipe per m² drained (ours, general
+  practice) — nothing to ask per house but the outlet type. **Ladrão**: "explica-me o que é um ladrao mas penso
   que não" — tentatively none; explain the term when asking; default "sem ladrão no modelo", flagged. Section: our advice
-  ≈ 1 cm² per m² (the tools' 80 × 35 cavity ≈ 26 cm² is too small for ≈ 37–46 m²).
+  ≈ 1 cm² per m² (the tools' 80 × 35 cavity ≈ 26 cm² is too small for ≈ 37–46 m²) →
+  **2026-10-30 (later still): his "Sim usa de 100x50"** → default pipe **100 × 50** (≈ 50 m² each; his L: 4 pipes, was 7);
+  fits the Tremolo cavity (contra-ripado 20 + ripado 35 = 55 mm); cork (cavity 40) and ETICS (none): a local recess in
+  the cork / XPS boards round the pipe; the Tremolo boards never get a hole; a house with a shallower cavity (TV: ripado
+  only) → the engine warns and limits the pipe to the cavity (33 mm) — **nothing to ask about the section any more**;
+  say, per house, the façade's cavity depth and that an ETICS / cork recess leaves little board (`sistema-construtivo.md`
+  §6). Exposed roofs: 80 × 80 (assumed).
 - Feeds: §7 gutters, downpipes, outlets, overflow; §12; §13; L40, L43. Answer → JSON `cobertura.caleira_oculta` / cfg
   `cobertura.caleiras` (`saidas`, falls); outlet type and overflow: no key yet.
 
@@ -220,11 +253,20 @@ faz-me essas perguntas", and on a missing answer "senão vai com o default de 2,
   dou-te essa informação"). TV as finished: from just east of the garage to the east end, ceramic tiles, an exposed
   gutter with 2 downpipes, 6 posts, a deck — find both ends in a photo or ask (L39). Ceramic ≥ ≈ 30 % or a continuous
   sub-roof; a covered pergola → engineer; downpipes ≈ 1 cm² per m², feet into a drain, never onto the deck by the wall.
+- Configurator step 7 (2026-10-29, `sistema-construtivo.md` §3d): the client's pergola has a **maximum height** —
+  2026-10-30: "até há altura máxima do PISO 0 ou seja do PISO TÉRREO … o ponto mais alto da pérgola pode ficar alinhado
+  com a altura máxima desse piso térreo" (a two-storey house too); for a real house, check the pergola's top against that
+  line (ring top / ceiling-beam top / parapet top: to confirm) and the eave. Garages and annexes **junto à casa** (our
+  structure grows, the house's roof) or **separado** (own roof; distance **2 m** — "pode ficar 2 metros", 2026-10-30 later, after his
+  3 m / 2 m; interior walls only in attached blocks; a real lot: RT-SCIE / PDM may ask more): ask the wall between house and garage (interior or insulated + fire-rated
+  door — he calls it "parede interior") and whether an annex is heated; the garage gate's width / height by the
+  structural limits (2026-10-30).
 - Feeds: §8 pergolas; §13; L35, L39. Answer → cfg `pergola`; `docs/estado.md`.
 
 **Q22 · Deck e outros elementos** — always
-> 22. Deck, muros, telheiros, escadas exteriores ou outros elementos encostados à casa entram no nosso trabalho? A que cota fica o deck em relação ao pavimento interior? (default: não modelados, listados na entrega)
-- Default: not modelled, listed as "not in the model" (L35); the deck level checked against the timber's clearance (TV
+> 22. Deck, muros, telheiros, escadas exteriores, garagens ou anexos (junto à casa ou separados) ou outros elementos encostados à casa entram no nosso trabalho? A que cota fica o deck em relação ao pavimento interior? (default: não modelados, listados na entrega)
+- Default: not modelled, listed as "not in the model" (L35) — except what the configurator's step 7 builds since
+  2026-10-29 (pergola, garage / annex: `sistema-construtivo.md` §3d); the deck level checked against the timber's clearance (TV
   deck 117,48 vs floor 117,50 — TV #5; ≥ 150 mm). Feeds: §1; §0a; L35. Answer → `docs/estado.md`.
 
 ## Rules — do not ask every time
@@ -252,7 +294,8 @@ nosso método é …, confirmas?":
   sandwich panels in **the house's own façade finish** — wool, OSB 15, Traspir, then the façade build-up ("o capoto tem
   que ficar na casa toda", 2026-10-28; TV's ripado + Tremolo is TV's façade); every parapet end closed (§7).
 - Downpipes inside the exterior cladding, never in a room or across an opening, ending just above the base; every
-  hidden gutter has its outlet hole at each downpipe (§7, L43); section, outlet type and overflow asked (Q16).
+  hidden gutter has its outlet hole at each downpipe (§7, L43); the hidden pipe is 100 × 50 (2026-10-30 later still);
+  outlet type and overflow asked (Q16).
 - Outside: OSB 9, Traspir 95 lapped 20 cm, then the finish; wood: ripado 37,5×35 horizontal every 35 cm from the
   bottom, Tremolo vertical, battens round every opening except the floor side, a vertical batten at every corner on
   both faces (§8).

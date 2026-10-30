@@ -129,3 +129,10 @@ gutters; document generator first run) · v6.5 to rebuild (beams inside).
   usually does a hidden roof in **one água** ("nós tentamos sempre só fazer uma água"); this house's two slopes (D2503)
   stay in its config — why two here (cércea, look?): to ask. Its parapet roof side in ripado + Tremolo stays (this house's
   façade); for other houses the roof side takes their own façade finish ("o capoto tem que ficar na casa toda").
+- 2026-10-30 (later still; said on the configurator) — The company's hidden downpipe is now **100 × 50** ("Sim usa de
+  100x50"; the rule 1 cm² per m² with the 80 × 35 pipe would have given TV 3 where 2 were built — the caller's figure,
+  which gutter not recorded). This house
+  has ripado 35 only, no contra-ripado, so the cavity (≈ 33 mm) is too shallow: the engine **warns** and limits the pipe to
+  the cavity — to see on the next rebuild (v6.5); the Tremolo never gets a hole. The coastal / aggressive-air check of the
+  roof panel's coating "já foi verificado" for this house (what it found: not said); his words on this house: "torres
+  vedras foi um projeto usado para tu aprenderes sobre nós e nós irmos também avaliando as tuas sugestões".

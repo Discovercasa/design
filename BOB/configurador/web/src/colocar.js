@@ -45,9 +45,13 @@ export const meia = (v) => v.largura / 2 + FOLGA;   // half the rough opening, a
 // raises the exterior modules when the lintel over it needs it (para_construtor, a note); the boxes as para_construtor:
 // +0,20 over a window to the floor, +0,15 over a window
 export const semEstore = (tipo) => tipo === "porta" || tipo === "portao";
+// a garage gate keeps 0,30 under the ceiling for its mechanism (a sectional door — user 2026-10-30, to "Um portão
+// seccionado precisa de cerca de 30 cm por cima para o mecanismo. Ponho o limite em pé-direito − 0,30?": "sim exatamente")
+export const FOLGA_PORTAO = 0.30;
 export function topoMax(v, pe, escondida = true) { // eslint-disable-line no-unused-vars
   const c = CATALOGO[v.tipo];
-  return Math.floor((pe - (v.estore && !semEstore(v.tipo) ? (c.chao ? 0.2 : 0.125) : FOLGA)) * 100 + 1e-6) / 100;
+  const folga = v.tipo === "portao" ? FOLGA_PORTAO : v.estore && !semEstore(v.tipo) ? (c.chao ? 0.2 : 0.125) : FOLGA;
+  return Math.floor((pe - folga) * 100 + 1e-6) / 100;
 }
 
 // the opening with its sizes inside the limits (a copy); notes in `avisos`

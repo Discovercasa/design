@@ -50,8 +50,10 @@ storeys (upper floor Z 3,117, +0,139) · 2026-10-15 central floor beam removed; 
 - Ceiling products: what the perforated angle does (hanger or corner bead); perfil section (47×17 assumed) and bar
   length; régua model and length; prumo section (110×75 assumed).
 - ETICS: XPS or a vapour-open board (#19).
-- The roof panel for Sobral: Munditelha (company, 2026-10-22) — thickness and colour not said (model 40 mm, dark grey
-  RAL 7016, provisional); the verge 0,12 vs the 0,20 beirado minimum (`sistema-construtivo.md` §6).
+- The roof panel for Sobral: Munditelha (company, 2026-10-22) — thickness not said (model 40 mm, provisional); colour:
+  the user's 2026-09-24 "dark grey" is Sobral's own (kept, RAL 7016), while for the configurator he asked for the maker's
+  original colour, not grey (2026-10-29, `sistema-construtivo.md` §6) — **confirmed 2026-10-30: "é o ral 8004 … o
+  cinzento foi apenas para sobral"** (Sobral's grey stands, a project fact; the house standard is RAL 8004 tile colour); the verge 0,12 vs the 0,20 beirado minimum (`sistema-construtivo.md` §6).
 - The licensed projects (REH, acoustic, stability) must follow the DiscoverCasa build-ups; the visible changes (zinc →
   sandwich panel, ridge above +7,00) need the architect (#22, #26). Is there a "memória descritiva e justificativa"
   (timber grades, loads, seismic data)?
