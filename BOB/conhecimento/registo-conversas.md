@@ -1027,3 +1027,15 @@ When this file passes about 1 500 lines, continue in `registo-conversas-<year>-<
 - Filed in: `discovercasa.md` → rule "repo is public: never write NIF, addresses, phones, engineer IDs, personal names".
   Removed 2026-10-30 from the records (by the caller). Open: main still holds the old records (not merged); old remote
   VascoCoelho still `origin` (archive?); the configurator is public without the Hub login — ask if it should be behind it.
+
+### 2026-10-30 — Configurator behind the Design login [geral]
+> o que significa ficar atras do login e ficar aberto isso afeta os meus commits no chat contigo ? Nada muda certo?
+
+> Para já atrás do login então
+- Answered: the choice only decides who can open the page; commits and publishing are unchanged.
+- Done: `design.discovercasa.pt/configurador/` now needs a Design session (Hub account). Without one it goes to the
+  home page (`/?voltar=/configurador/`), which returns to the configurator after entering; the home page's app screen
+  links "Abrir o Configurador". Gate = `public/js/porta.js` in the Design repo; `ferramentas/publicar_design.py`
+  adds it to the configurator page. Client-side gate: hides the page, the code itself is public on GitHub anyway.
+  "Para já" → may open to clients later.
+- Filed in: `conhecimento/discovercasa.md` (Design site line).
