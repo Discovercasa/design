@@ -3,7 +3,8 @@
 - BOB/                  = the committed files of the current branch (git archive), WITHOUT client drawings
                           (*.dwfx, *.pdf): they carry personal data and stay on this PC only.
 - public/configurador/  = the configurator build; Cloudflare Pages publishes only public/, so the
-                          configurator is the only part of BOB visible on design.discovercasa.pt.
+                          configurator is the only part of BOB visible on design.discovercasa.pt, and only
+                          after the Hub login (public/js/porta.js, kept in the Design repo).
 
 Usage:  python ferramentas/publicar_design.py [--sem-push]
 Needs:  git, gh logged in as DinisDiscover, Node/npm (configurator build). Clone kept in _trabalho/design/.
@@ -16,6 +17,9 @@ CLONE = RAIZ / "_trabalho" / "design"
 URL = "https://github.com/Discovercasa/design.git"
 CONTA = "DinisDiscover"
 EXCLUIR = (".dwfx", ".pdf")
+PORTA = ('  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>\n'
+         '  <script src="/js/design-core.js"></script>\n'
+         '  <script src="/js/porta.js"></script>')
 
 
 def corre(*cmd, cwd=None, captura=False, env=None):
@@ -58,6 +62,11 @@ def main():
     saida = CLONE / "public" / "configurador"
     corre("npm", "run", "motor", cwd=web)
     corre("npx", "vite", "build", "--base=/configurador/", "--outDir", str(saida), "--emptyOutDir", cwd=web)
+    # behind the Design login (user 2026-10-30): the site's own gate (public/js/porta.js) runs before the app
+    pagina = saida / "index.html"
+    html = pagina.read_text(encoding="utf-8")
+    html = html.replace("<head>", "<head>\n" + PORTA, 1)
+    pagina.write_text(html, encoding="utf-8")
 
     git_design("add", "-A")
     if not git_design("status", "--porcelain", captura=True):
