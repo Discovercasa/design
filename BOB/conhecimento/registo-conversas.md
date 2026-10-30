@@ -1039,3 +1039,12 @@ When this file passes about 1 500 lines, continue in `registo-conversas-<year>-<
   adds it to the configurator page. Client-side gate: hides the page, the code itself is public on GitHub anyway.
   "Para já" → may open to clients later.
 - Filed in: `conhecimento/discovercasa.md` (Design site line).
+
+### 2026-10-30 — Tools panel on the Design home page [geral]
+> ok na página do design quero que cries uma interface onde vamos ter as diferentes coisas que dizemos que iamos construir, ajuda-me a relembrar quais eram. Era o builder, o configurador, o gerador de documentos e o VR/AR certo?
+- Reminded: the 2026-10-15 Product vision had 4 items (Builder, Orçamentação, Plataforma do cliente VR/AR,
+  Configurador); the document generator came later as part of the Builder. User chose "5 cartões".
+- Done: design.discovercasa.pt home (after login) shows 5 cards with status — Configurador (Protótipo, opens
+  /configurador/), Builder and Gerador de documentos (Em desenvolvimento), Orçamentação and Plataforma do cliente
+  (Planeado). Lives in the Design repo `public/index.html` (not in BOB).
+- Filed in: `conhecimento/discovercasa.md` (Design site line).
