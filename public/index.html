@@ -4,6 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Discovercasa Design</title>
+<!-- instalar como app (manifest, ícones e service worker) -->
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" href="/img/favicon.png">
+<link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
+<meta name="theme-color" content="#2a2a29">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Design">
 <style>
   :root { --fundo: #f4f4f2; --cartao: #fff; --texto: #222; --suave: #666; --linha: #ddd; --botao: #1f4e79; --erro: #b3261e; }
   @media (prefers-color-scheme: dark) { :root { --fundo: #161616; --cartao: #222; --texto: #eee; --suave: #aaa; --linha: #333; --botao: #4f8fd6; --erro: #ff8a80; } }
@@ -24,6 +31,7 @@
 <header>
   <h1>Discovercasa · Design</h1><span class="espaco"></span>
   <span id="quem" class="ajuda"></span>
+  <button id="instalar" class="secundario" type="button" hidden>Instalar app</button>
   <button id="sair" class="secundario" type="button" hidden>Sair</button>
 </header>
 <main>
@@ -70,6 +78,18 @@
     catch (e) { $('entrar-msg').className = 'erro'; $('entrar-msg').textContent = e.message; }
   });
   $('sair').addEventListener('click', async () => { await sb.auth.signOut(); mostrar(null); });
+
+  // instalar como app: o browser avisa quando se pode (Chrome/Edge); no iPhone é "Partilhar → Adicionar ao ecrã principal"
+  if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js').catch(() => {});
+  let pedidoInstalar = null;
+  window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); pedidoInstalar = e; $('instalar').hidden = false; });
+  window.addEventListener('appinstalled', () => { pedidoInstalar = null; $('instalar').hidden = true; });
+  $('instalar').addEventListener('click', async () => {
+    if (!pedidoInstalar) return;
+    pedidoInstalar.prompt();
+    try { await pedidoInstalar.userChoice; } catch (_) {}
+    pedidoInstalar = null; $('instalar').hidden = true;
+  });
 </script>
 </body>
 </html>
