@@ -229,7 +229,7 @@ decisions stay (the history is in git).
   `VascoCoelho/DiscoverCasa-Claude-BOB` (still the git `origin`; consider archiving). Site `design.discovercasa.pt` =
   Cloudflare Pages publishing only `public/` on push to `main`, behind the Hub login; the Design repo has its own
   `CLAUDE.md` rules (Supabase publishable key only, RLS, do not touch the Hub login). Only visible part: the configurator
-  build at `public/configurador/` → https://design.discovercasa.pt/configurador/ (verified live 2026-10-30; worker
+  build at `public/configurador/` → https://design.discovercasa.pt/configurador/ (verified live 2026-10-30; behind the Design/Hub login since 2026-10-30, "Para já atrás do login" — gate public/js/porta.js; worker
   paths follow Vite `BASE_URL`). Publish with `python ferramentas/publicar_design.py` (clone in `_trabalho/design`;
   `--sem-push` = dry run), run from branch `configurador` (main still holds the old records with personal data —
   publish only from configurador or after merging). Supabase: connector (MCP) connected to project "Design", ref
