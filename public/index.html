@@ -37,6 +37,20 @@
   .estado { align-self: flex-start; font-size: .75rem; padding: .15rem .55rem; border-radius: 99px; border: 1px solid var(--linha); color: var(--suave); }
   .estado.pronto { background: var(--botao); border-color: var(--botao); color: #fff; }
   .abrir { color: var(--botao); font-weight: 600; font-size: .9rem; }
+  /* sugestões */
+  #sugestoes { margin-top: 2rem; }
+  #sugestoes h2 { margin: 0 0 .3rem; }
+  .sug-form { display: grid; gap: .6rem; margin-top: .8rem; }
+  .sug-form textarea { font: inherit; min-height: 5rem; padding: .6rem; border-radius: 8px; border: 1px solid var(--linha); background: var(--cartao); color: var(--texto); resize: vertical; }
+  .sug-linha { display: flex; gap: .6rem; align-items: center; flex-wrap: wrap; }
+  .sug-linha select, .sug select { font: inherit; padding: .4rem .5rem; border-radius: 6px; border: 1px solid var(--linha); background: var(--cartao); color: var(--texto); }
+  .sug-lista { display: grid; gap: .6rem; margin-top: 1rem; }
+  .sug { background: var(--cartao); border: 1px solid var(--linha); border-radius: 10px; padding: .9rem 1rem; }
+  .sug p { margin: .35rem 0 0; white-space: pre-wrap; }
+  .sug .meta { display: flex; gap: .5rem; align-items: center; flex-wrap: wrap; font-size: .8rem; color: var(--suave); }
+  .sug .estado.feita { background: #1e7d4f; border-color: #1e7d4f; color: #fff; }
+  .sug .estado.em_analise { border-color: var(--botao); color: var(--botao); }
+  .sug .estado.recusada { text-decoration: line-through; }
 </style>
 </head>
 <body>
@@ -59,9 +73,9 @@
     <h2>Ferramentas</h2>
     <p class="ajuda">O que estamos a construir sobre o método construtivo Discovercasa.</p>
     <div class="ferramentas">
-      <a class="ferramenta" href="/configurador/">
+      <a class="ferramenta" href="/build-your-house/">
         <span class="estado pronto">Protótipo</span>
-        <h3>Configurador</h3>
+        <h3>Build Your House</h3>
         <p class="ajuda">O cliente escolhe a forma e o tamanho e monta a casa parede a parede, a ver o preço em direto.</p>
         <span class="abrir">Abrir →</span>
       </a>
@@ -87,6 +101,27 @@
         <p class="ajuda">Área do cliente para ver a sua casa em 360°, óculos VR e realidade aumentada no telemóvel, sem Enscape nem Chaos Cloud.</p>
       </div>
     </div>
+
+    <section id="sugestoes">
+      <h2>Sugestões</h2>
+      <p class="ajuda">Uma ideia, um erro que encontraste, algo que falta? Escreve aqui; toda a equipa vê.</p>
+      <form class="sug-form" id="sug-form">
+        <textarea id="sug-texto" maxlength="2000" placeholder="A tua sugestão…" required></textarea>
+        <div class="sug-linha">
+          <select id="sug-ferramenta" aria-label="Sobre">
+            <option value="geral">Geral</option>
+            <option value="build_your_house">Build Your House</option>
+            <option value="builder">Builder</option>
+            <option value="gerador">Gerador de documentos</option>
+            <option value="orcamentacao">Orçamentação</option>
+            <option value="plataforma_cliente">Plataforma do cliente</option>
+          </select>
+          <button type="submit">Enviar sugestão</button>
+          <span id="sug-msg" class="ajuda" role="status"></span>
+        </div>
+      </form>
+      <div class="sug-lista" id="sug-lista"></div>
+    </section>
   </section>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
@@ -102,7 +137,8 @@
     $('quem').textContent = ok ? `${sessao.user.user_metadata.nome || ''} · ${NIVEIS[nivel(sessao)]}` : '';
     // veio de uma página interna (porta.js): depois de entrar, volta para lá
     const voltar = new URLSearchParams(location.search).get('voltar');
-    if (ok && voltar && /^\/configurador\//.test(voltar)) location.replace(voltar);
+    if (ok && voltar && /^\/(build-your-house|gerador)\//.test(voltar)) location.replace(voltar);
+    if (ok) carregarSugestoes();
   }
   async function entrarComCodigo() {
     try { mostrar(await Design.esperarCodigo()); }
@@ -121,6 +157,39 @@
     try { entrarComCodigo(); Design.entrarPeloHub(); $('entrar-msg').className = 'ajuda'; $('entrar-msg').textContent = 'A entrar com a conta do Hub…'; }
     catch (e) { $('entrar-msg').className = 'erro'; $('entrar-msg').textContent = e.message; }
   });
+  // sugestões (tabela public.sugestoes, RLS: quem vê sugere; quem edita muda o estado)
+  const FERRAMENTAS = { geral: 'Geral', build_your_house: 'Build Your House', builder: 'Builder', gerador: 'Gerador de documentos', orcamentacao: 'Orçamentação', plataforma_cliente: 'Plataforma do cliente' };
+  const ESTADOS = { nova: 'Nova', em_analise: 'Em análise', feita: 'Feita', recusada: 'Recusada' };
+  const esc = (t) => String(t).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  async function carregarSugestoes() {
+    const { data: { session } } = await sb.auth.getSession();
+    const editar = session && nivel(session) === 'editar';
+    const { data, error } = await sb.from('sugestoes').select('id, texto, ferramenta, estado, autor_nome, criada_em').order('criada_em', { ascending: false }).limit(200);
+    const lista = $('sug-lista');
+    if (error) { lista.innerHTML = `<p class="erro">Não consegui carregar as sugestões: ${esc(error.message)}</p>`; return; }
+    if (!data.length) { lista.innerHTML = '<p class="ajuda">Ainda não há sugestões.</p>'; return; }
+    lista.innerHTML = data.map((g) => `<article class="sug">
+      <div class="meta"><span class="estado ${g.estado}">${ESTADOS[g.estado]}</span><span>${esc(FERRAMENTAS[g.ferramenta] || g.ferramenta)}</span>
+        <span>· ${esc(g.autor_nome || 'Alguém')} · ${new Date(g.criada_em).toLocaleDateString('pt-PT')}</span>
+        ${editar ? `<select data-id="${g.id}" aria-label="Estado">${Object.entries(ESTADOS).map(([k, v]) => `<option value="${k}"${k === g.estado ? ' selected' : ''}>${v}</option>`).join('')}</select>` : ''}</div>
+      <p>${esc(g.texto)}</p></article>`).join('');
+    lista.querySelectorAll('select[data-id]').forEach((sel) => sel.addEventListener('change', async () => {
+      const { error } = await sb.from('sugestoes').update({ estado: sel.value }).eq('id', Number(sel.dataset.id));
+      if (error) alert('Não foi possível mudar o estado: ' + error.message); else carregarSugestoes();
+    }));
+  }
+  $('sug-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const texto = $('sug-texto').value.trim();
+    if (texto.length < 3) return;
+    const { data: { session } } = await sb.auth.getSession();
+    $('sug-msg').className = 'ajuda'; $('sug-msg').textContent = 'A enviar…';
+    const { error } = await sb.from('sugestoes').insert({ texto, ferramenta: $('sug-ferramenta').value, autor_nome: (session && session.user.user_metadata.nome) || '' });
+    if (error) { $('sug-msg').className = 'erro'; $('sug-msg').textContent = 'Não foi enviada: ' + error.message; return; }
+    $('sug-texto').value = ''; $('sug-msg').textContent = 'Obrigado! Sugestão enviada.';
+    carregarSugestoes();
+  });
+
   $('sair').addEventListener('click', async () => { await sb.auth.signOut(); mostrar(null); });
 
   // instalar como app: o browser avisa quando se pode (Chrome/Edge); no iPhone é "Partilhar → Adicionar ao ecrã principal"
