@@ -1,8 +1,8 @@
 // Ligação ao projeto Supabase do Design (outro projeto, noutra organização: não é o do Hub).
 // Só a chave PÚBLICA (publishable) pode estar aqui. Nunca a chave de serviço, nem nada do Hub.
 (function () {
-  const URL = 'https://DESIGN_REF.supabase.co';          // preenchido quando o projeto for criado
-  const CHAVE_PUBLICA = 'sb_publishable_DESIGN';         // idem
+  const URL = 'https://uuofvywhouhffmfqojoc.supabase.co';
+  const CHAVE_PUBLICA = 'sb_publishable_kmMtb5iL4rGxmBz6vQ7H_w_vX-PHrxp';
   const HUB = 'https://hub.discovercasa.pt';
 
   const sb = window.supabase.createClient(URL, CHAVE_PUBLICA);
