@@ -1048,3 +1048,24 @@ When this file passes about 1 500 lines, continue in `registo-conversas-<year>-<
   /configurador/), Builder and Gerador de documentos (Em desenvolvimento), Orçamentação and Plataforma do cliente
   (Planeado). Lives in the Design repo `public/index.html` (not in BOB).
 - Filed in: `conhecimento/discovercasa.md` (Design site line).
+
+### 2026-10-30 — Document generator online, from the architecture drawing [geral]
+> Ok avança com o gerador de documentos a partir das plantas ou dos documentos pdf ou dwfx ou dwg.
+> Queria que quando se abrisse o gerador de documentos automaticamente tivesse um sítio para dar drop aos documentos e depois de submetidos o gerador de documento funcionava e gerava os documentos baseado em tudo o que aprendeste.
+> O builder é uma tarefa grande por causa do blender porquê ? Explica-me por favor
+- Done: https://design.discovercasa.pt/gerador/ (behind the Hub login; card "Gerador de documentos" on the home panel).
+  Drop a DWFx → `ferramentas/documentos/de_desenhos.py` finds the floor plans by itself (red wall strokes clustered per
+  sheet, scale deduced from 1:50/1:100/1:200 by plausible walls — these sheets have their texts as lines, the title
+  block can't be read) → the user confirms the plan (SVG preview) and the choices the plan doesn't give (obra, name,
+  roof, clear height, exterior finish A/B/C) → configured house → para_construtor.converter → casa_planta → camadas
+  → gerar.py → Módulos, Cobertura, Listagem de material (PDF + CSV) to download. Runs in the browser (Pyodide, the
+  file never leaves the computer); same engine as the PC. Defaults: windows 1,20 high at 1,00, doors 2,20, a door
+  opening ≥ 1,60 = sliding door to the floor. `planta_arquitetura.py` main split into `ler_planta()` (output unchanged).
+- Test Torres Vedras plan: found folha 1 at 1:200 automatically (17,50 × 11,00 m, 18 walls); structure timber 9,57 m³
+  vs 10,43 m³ of the hand-made TV model (≈ 8 % less: exterior module studs 351 m vs 478 m — the TV config has
+  project-specific parts the plan alone does not give). Short interior wall stubs (e.g. P13.1) to check against the plan.
+- Not yet: PDF and DWG (DWG is a closed Autodesk format with no reader in pure Python; vector PDF possible later).
+  The page asks for a DWFx export (AutoCAD: Publicar → DWFx).
+- Builder vs Blender: explained (Blender is a desktop program, can't run in a browser; the builder's Python already
+  does the house without it — Blender only makes the 3D file, renders and checks).
+- Filed in: `conhecimento/discovercasa.md` (Product vision 1, production documents; Design site line).
