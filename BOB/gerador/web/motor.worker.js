@@ -4,8 +4,8 @@ let py = null;
 
 async function iniciar() {
   const base = new URL("./", self.location.href);
-  const { loadPyodide } = await import(new URL("/configurador/pyodide/pyodide.mjs", self.location.origin).href);
-  py = await loadPyodide({ indexURL: new URL("/configurador/pyodide/", self.location.origin).href });
+  const { loadPyodide } = await import(new URL("/build-your-house/pyodide/pyodide.mjs", self.location.origin).href);
+  py = await loadPyodide({ indexURL: new URL("/build-your-house/pyodide/", self.location.origin).href });
   const lista = await (await fetch(new URL("motor/lista.json", base))).json();
   for (const f of lista) {
     const txt = await (await fetch(new URL(`motor/${f}`, base))).text();

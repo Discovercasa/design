@@ -1081,3 +1081,14 @@ When this file passes about 1 500 lines, continue in `registo-conversas-<year>-<
 - Limits: a scanned / photographed PDF is an image (no lines) → the page says so. DWG still not (closed format):
   export PDF or DWFx from AutoCAD.
 - Filed in: `conhecimento/discovercasa.md` (Design site line).
+
+### 2026-10-30 — How reliable are the generated documents; more finished works later [geral]
+> o meu problema é quão fidedigna esta geração de documentos é sem visualizares o modelo no builder porque como disseste pode haver vigas a passar umas no meio das outras etc
+> Eu também pretendo futuramente dar-te mais obras terminadas de forma a perceberes ainda melhor como fazemos os módulos e coberturas e como construimos
+- Answered: the Blender validation (`blender/validar.py`) only checks envelopes (structure under the roof, layers on
+  the right side); member clashes are checked in pure Python by `configurador/auditar_cobertura.py` (exposed roofs only).
+  Run on the generator's Torres Vedras house (2 and 4 águas): 0 clashes, all supports OK. Not yet checked anywhere:
+  clashes in the hidden roof and in the walls/modules. Proposed: Python checks inside the generator + a 3D view on
+  the page + each finished work as a calibration test (generated vs real).
+- PROMISED (user): more finished works later, to learn how DiscoverCasa makes modules and roofs → each one becomes a
+  comparison case (like Torres Vedras).
