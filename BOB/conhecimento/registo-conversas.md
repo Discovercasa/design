@@ -1092,3 +1092,28 @@ When this file passes about 1 500 lines, continue in `registo-conversas-<year>-<
   the page + each finished work as a calibration test (generated vs real).
 - PROMISED (user): more finished works later, to learn how DiscoverCasa makes modules and roofs → each one becomes a
   comparison case (like Torres Vedras).
+
+### 2026-10-30 — "Build Your House", suggestions section, checks + 3D in the generator [geral]
+> Não gosto do nome Configurador muda para um nome que se aproprie mais ao que o produto é tipo DiscovercasaBuildYourHouse.
+> Adiciona também uma secção de sugestões a nossa página da DiscoverDesign
+> E avança com o Verificações+3D
+- Name: the configurator is now **"Build Your House"** on the site (card, page title, header "Build Your House ·
+  protótipo"), at `/build-your-house/`; `/configurador/` redirects (301, `public/_redirects`). The code folder and
+  branch keep the name `configurador`.
+- Suggestions: Design home page section "Sugestões" (text + which tool; list with status Nova / Em análise / Feita /
+  Recusada). Supabase table `public.sugestoes` (migration `supabase/migrations/0002_sugestoes.sql` in the Design repo):
+  RLS — anyone with "ver" reads and suggests (as themselves, status "nova"); only "editar" changes status or deletes.
+  Supabase security advisor: nothing new (only "leaked password protection", irrelevant: login comes from the Hub).
+- Checks: `ferramentas/modelo/verificar.py` (pure Python) — every timber piece (module members placed in 3D, ring,
+  lameladas, purlins, prumos, packers…) as a convex solid: clashes > 8 mm (separating axes) and pieces below the base or
+  outside the outline (roof overhangs and pergola allowed). Runs in the generator; the page shows "N problemas" + the
+  list, and a **3D view** of the timber (three.js, the configurator's copy, self-hosted) with the problem pieces red.
+- First results (generator's Torres Vedras house, 669 pieces: 25; hand-made TV model, 734 pieces: 43) — real engine
+  issues to fix, not yet fixed:
+  1. ring beams (amarração) of two walls overlap 7,5 cm at every corner / T (both run to the corner; the joint is not
+     modelled — the cut list counts the overlap twice). How the ring meets at corners: not in the rulebook → ask.
+  2. cripples above a 22×7,5 lintel start at the lintel's underside and run through it (estrutura_dc.emoldurar +
+     casa_planta.continuar) — 7 on P03 — their cut length is 22 cm too long.
+  3. TV model only: 18 prumos in pairs 10 cm apart overlapping 1 cm (y 6,70 / 6,80, hidden roof).
+  4. two interior modules (P08.2 / P13.3) overlapping 1 cm at their junction.
+- Filed in: `conhecimento/discovercasa.md` (Design site line).

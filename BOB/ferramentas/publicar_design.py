@@ -83,6 +83,11 @@ def main():
             (gerador / "motor" / rel).parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(f, gerador / "motor" / rel)
             lista.append(rel)
+    vendor = gerador / "vendor"  # three.js for the 3D view: the configurator's own copy (same version), self-hosted
+    vendor.mkdir(exist_ok=True)
+    tres = web / "node_modules" / "three"
+    for f in ("build/three.module.js", "build/three.core.js", "examples/jsm/controls/OrbitControls.js"):
+        shutil.copy2(tres / f, vendor / Path(f).name)
     (gerador / "motor" / "lista.json").write_text(json.dumps(lista, indent=1), encoding="utf-8")
     pagina = gerador / "index.html"
     pagina.write_text(pagina.read_text(encoding="utf-8").replace("<head>", "<head>\n" + PORTA, 1), encoding="utf-8")

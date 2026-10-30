@@ -18,6 +18,7 @@
  "ferramentas/modelo/planta_arquitetura.py",
  "ferramentas/modelo/telhado.py",
  "ferramentas/modelo/telhado_estrutura.py",
+ "ferramentas/modelo/verificar.py",
  "ferramentas/modelo/sistema_construtivo.json",
  "ferramentas/documentos/__init__.py",
  "ferramentas/documentos/dados.py",
