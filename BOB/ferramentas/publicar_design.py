@@ -2,7 +2,7 @@
 
 - BOB/                  = the committed files of the current branch (git archive), WITHOUT client drawings
                           (*.dwfx, *.pdf): they carry personal data and stay on this PC only.
-- public/configurador/  = the configurator build; Cloudflare Pages publishes only public/, so the
+- public/build-your-house/ = the configurator build ("Build Your House", user 2026-10-30); Cloudflare Pages publishes only public/, so the
                           configurator is the only part of BOB visible on design.discovercasa.pt, and only
                           after the Hub login (public/js/porta.js, kept in the Design repo).
 
@@ -59,13 +59,13 @@ def main():
         t.extractall(destino, members=membros, filter="data")
     print(f"BOB/: {sum(m.isfile() for m in membros)} files (drawings *.dwfx/*.pdf left out)")
 
-    # public/configurador/: the configurator, built for that path
+    # public/build-your-house/: the configurator, built for that path
     web = RAIZ / "configurador" / "web"
     if not (web / "node_modules").exists():
         corre("npm", "ci", cwd=web)
-    saida = CLONE / "public" / "configurador"
+    saida = CLONE / "public" / "build-your-house"
     corre("npm", "run", "motor", cwd=web)
-    corre("npx", "vite", "build", "--base=/configurador/", "--outDir", str(saida), "--emptyOutDir", cwd=web)
+    corre("npx", "vite", "build", "--base=/build-your-house/", "--outDir", str(saida), "--emptyOutDir", cwd=web)
     # behind the Design login (user 2026-10-30): the site's own gate (public/js/porta.js) runs before the app
     pagina = saida / "index.html"
     html = pagina.read_text(encoding="utf-8")
@@ -96,7 +96,7 @@ def main():
     if sem_push:
         print("Committed in _trabalho/design (not pushed)."); return
     git_design("push", "origin", "main")
-    print("Pushed to Discovercasa/design (site: https://design.discovercasa.pt/configurador/).")
+    print("Pushed to Discovercasa/design (site: https://design.discovercasa.pt/).")
 
 
 if __name__ == "__main__":
