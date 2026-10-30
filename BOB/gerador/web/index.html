@@ -50,7 +50,7 @@
     <p class="ajuda">Larga aqui o projeto de arquitetura. O gerador procura sozinho a planta (paredes a construir a vermelho) e a escala.</p>
     <div id="largar" tabindex="0" role="button">
       <strong>Larga aqui o ficheiro ou clica para escolher</strong>
-      <span class="ajuda">DWFx · PDF e DWG ainda não (ver abaixo)</span>
+      <span class="ajuda">DWFx ou PDF (exportado do AutoCAD) · DWG ainda não</span>
     </div>
     <input type="file" id="ficheiro" accept=".dwfx,.pdf,.dwg" hidden>
     <p id="estado" class="ajuda" role="status">A preparar o motor…</p>
@@ -102,7 +102,8 @@
     <p class="ajuda">O ficheiro é lido aqui, no teu browser: não é enviado para nenhum servidor. As paredes e os vãos vêm da planta;
       a estrutura, os módulos, as camadas e a cobertura seguem o método Discovercasa (o mesmo motor do Builder).
       As janelas entram com 1,20 m de altura a 1,00 m do chão e as portas com 2,20 m; um vão de porta com 1,60 m ou mais é uma porta de correr.</p>
-    <p class="ajuda"><strong>PDF e DWG:</strong> ainda não são lidos. No AutoCAD, exporta a planta em DWFx (Publicar → DWFx) e larga esse ficheiro.</p>
+    <p class="ajuda"><strong>PDF:</strong> tem de ser o PDF exportado do AutoCAD (com linhas). Um PDF digitalizado ou fotografado é só uma imagem e não tem paredes para ler.</p>
+    <p class="ajuda"><strong>DWG:</strong> ainda não é lido (formato fechado da Autodesk). No AutoCAD, exporta a planta em PDF ou DWFx (Publicar) e larga esse ficheiro.</p>
   </section>
 </main>
 <script type="module" src="./gerador.js"></script>

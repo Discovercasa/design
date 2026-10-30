@@ -21,11 +21,11 @@ motor.postMessage({ tipo: "estado" });
 function abrir(f) {
   if (!f) return;
   const ext = f.name.toLowerCase().split(".").pop();
-  if (ext === "pdf" || ext === "dwg") {
-    estado(`${ext.toUpperCase()} ainda não é lido. No AutoCAD exporta a planta em DWFx (Publicar → DWFx) e larga esse ficheiro.`, true);
+  if (ext === "dwg") {
+    estado("DWG ainda não é lido. No AutoCAD exporta a planta em PDF ou DWFx (Publicar) e larga esse ficheiro.", true);
     return;
   }
-  if (ext !== "dwfx") { estado("Escolhe um ficheiro DWFx do projeto de arquitetura.", true); return; }
+  if (ext !== "dwfx" && ext !== "pdf") { estado("Escolhe um ficheiro DWFx ou PDF do projeto de arquitetura.", true); return; }
   if (!pronto) { estado("O motor ainda está a arrancar, tenta daqui a uns segundos.", true); return; }
   ["passo-planta", "passo-escolhas", "passo-docs"].forEach((id) => { $(id).hidden = true; });
   estado(`A ler ${f.name}…`);
@@ -43,7 +43,10 @@ zona.addEventListener("drop", (e) => { e.preventDefault(); zona.classList.remove
 const m2 = (v) => v.toFixed(2).replace(".", ",");
 
 function mostrarPlantas(cs) {
-  if (!cs.length) { estado("Não encontrei nenhuma planta com paredes a vermelho neste ficheiro.", true); return; }
+  if (!cs.length) {
+    estado("Não encontrei nenhuma planta com paredes a vermelho neste ficheiro. Se for um PDF digitalizado (uma imagem), não tem linhas para ler: usa o PDF ou o DWFx exportado do AutoCAD.", true);
+    return;
+  }
   estado(`${cs.length === 1 ? "Encontrei 1 planta" : `Encontrei ${cs.length} plantas`}. A primeira é a mais provável.`);
   const box = $("plantas");
   box.innerHTML = "";

@@ -1,6 +1,6 @@
-"""Production documents straight from an architecture drawing (DWFx). Pure Python, runs in the browser too (Pyodide).
+"""Production documents straight from an architecture drawing (DWFx, or a vector PDF plotted from AutoCAD). Pure Python, runs in the browser too (Pyodide).
 
-    python ferramentas/documentos/de_desenhos.py "<plan>.dwfx" [--candidato N] [--escolhas escolhas.json] --saida DIR
+    python ferramentas/documentos/de_desenhos.py "<plan>.dwfx|.pdf" [--candidato N] [--escolhas escolhas.json] --saida DIR
 
 1. candidatos(): finds the floor plans on every sheet by themselves — the walls to build are red strokes (licensing
    convention, planta_arquitetura.py); each cluster of red lines is tried at 1:50 / 1:100 / 1:200 and the scale that
@@ -25,6 +25,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 from ferramentas.configurador.para_construtor import converter  # noqa: E402
 from ferramentas.dwfx.leitor import Dwfx  # noqa: E402
+from ferramentas.dwfx.leitor_pdf import Pdf  # noqa: E402
 from ferramentas.modelo.planta_arquitetura import ler_planta  # noqa: E402
 
 if hasattr(sys.stdout, "reconfigure"):
@@ -89,7 +90,7 @@ def _nota(doc):
 
 def candidatos(caminho):
     """The floor plans found in the drawing, best first: [{folha, nome, regiao, escala, nota, planta}]."""
-    d = Dwfx(caminho)
+    d = Pdf(caminho) if str(caminho).lower().endswith(".pdf") else Dwfx(caminho)
     info = {i["folha"]: i for i in d.info()}
     out = []
     for folha in range(1, len(d.pages) + 1):
@@ -291,7 +292,7 @@ def main():
     a = ap.parse_args()
     cs = candidatos(a.dwfx)
     if not cs:
-        raise SystemExit("nenhuma planta encontrada (paredes a vermelho)")
+        raise SystemExit("nenhuma planta encontrada (paredes a vermelho; um PDF digitalizado não tem linhas)")
     for k, c in enumerate(cs):
         ps = c["planta"]["paredes"]
         print(f"[{k}] folha {c['folha']} {c['nome']}  1:{c['escala']}  {c['planta']['contorno'][1]:.2f} x "
