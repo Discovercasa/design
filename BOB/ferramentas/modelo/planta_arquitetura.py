@@ -230,22 +230,14 @@ def segmentos_livres(paths, regiao, cor, k):
     return pts
 
 
-def main():
-    ap = argparse.ArgumentParser()
-    ap.add_argument("dwfx")
-    ap.add_argument("--folha", type=int, default=1)
-    ap.add_argument("--regiao", type=float, nargs=4, required=True, help="sheet mm X0 Y0 X1 Y1")
-    ap.add_argument("--escala", type=float, required=True, help="1:N")
-    ap.add_argument("--cor", default="#FF0000")
-    ap.add_argument("--saida")
-    ap.add_argument("--svg")
-    a = ap.parse_args()
-    k = a.escala / 1000.0
-    d = Dwfx(a.dwfx)
-    paths = d.paths(a.folha)
-    segs = segmentos(paths, a.regiao, a.cor, k)
+def ler_planta(paths, regiao, escala, cor="#FF0000", origem=None):
+    """The walls document (see the module docstring) from one sheet's paths; None when no wall is found."""
+    k = escala / 1000.0
+    segs = segmentos(paths, regiao, cor, k)
     ws = paredes(segs)
-    classificar(ws, paths, a.regiao, k)
+    if not ws:
+        return None
+    classificar(ws, paths, regiao, k)
     xs = [v for w in ws for v in ((w["s0"], w["s1"]) if w["eixo"] == "x" else (w["c0"], w["c1"]))]
     ys = [v for w in ws for v in ((w["c0"], w["c1"]) if w["eixo"] == "x" else (w["s0"], w["s1"]))]
     ox, oy = min(xs), min(ys)
@@ -299,9 +291,26 @@ def main():
                     "lado_exterior": w["fora"],
                     "aberturas": [{"s0": round(o["s0"] - ds, 3), "s1": round(o["s1"] - ds, 3), "tipo": o["tipo"]}
                                   for o in w["aberturas"]]})
-    doc = {"origem_desenho": {"dwfx": Path(a.dwfx).name, "folha": a.folha, "regiao": a.regiao, "escala": a.escala,
-                              "origem_m": [round(ox, 3), round(oy, 3)]},
-           "contorno": [0.0, round(L, 3), 0.0, round(D, 3)], "paredes": out}
+    return {"origem_desenho": dict(origem or {}, regiao=list(regiao), escala=escala, origem_m=[round(ox, 3), round(oy, 3)]),
+            "contorno": [0.0, round(L, 3), 0.0, round(D, 3)], "paredes": out}
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("dwfx")
+    ap.add_argument("--folha", type=int, default=1)
+    ap.add_argument("--regiao", type=float, nargs=4, required=True, help="sheet mm X0 Y0 X1 Y1")
+    ap.add_argument("--escala", type=float, required=True, help="1:N")
+    ap.add_argument("--cor", default="#FF0000")
+    ap.add_argument("--saida")
+    ap.add_argument("--svg")
+    a = ap.parse_args()
+    doc = ler_planta(Dwfx(a.dwfx).paths(a.folha), a.regiao, a.escala, a.cor,
+                     {"dwfx": Path(a.dwfx).name, "folha": a.folha})
+    if doc is None:
+        raise SystemExit("nenhuma parede encontrada na região")
+    out = doc["paredes"]
+    L, D = doc["contorno"][1], doc["contorno"][3]
     for w in out:
         ab = ", ".join(f"{o['tipo']} {o['s1'] - o['s0']:.2f}@{o['s0']:.2f}" for o in w["aberturas"])
         print(f"{w['id']} {w['eixo']} c={w['c']:.3f} t={w['espessura']:.3f} {w['s0']:.3f}-{w['s1']:.3f}"
