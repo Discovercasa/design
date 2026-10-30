@@ -1,0 +1,2 @@
+- [OASIUM project](oasium-project.md) — repo VascoCoelho/OASIUM is the source of truth; build + grilling running, pull first
+- [OASIUM legal feedback](oasium-legal-feedback.md) — don't over-caveat legal; company lawyer reviews

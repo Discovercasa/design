@@ -1,0 +1,47 @@
+colecao;seccao_ou_camada;pecas;comprimento_m;volume_m3;area_m2;unidade_compra;quantidade_compra
+1.1 Piso 0 | Paredes exteriores;110x35;91;223.0;0.859;;;
+1.1 Piso 0 | Paredes exteriores;110x75;27;61.8;0.514;;;
+1.1 Piso 0 | Paredes exteriores;75x35;10;19.0;0.05;;;
+1.2 Piso 0 | Paredes interiores;110x75;11;23.0;0.177;;;
+1.2 Piso 0 | Paredes interiores;75x35;83;162.6;0.427;;;
+1.3 Piso 1 | Estrutura do pavimento;110x75;12;104.8;0.864;;;
+1.3 Piso 1 | Estrutura do pavimento;220x75;21;115.8;1.911;;;
+1.4 Piso 1 | Paredes exteriores;110x35;100;210.9;0.812;;;
+1.4 Piso 1 | Paredes exteriores;110x75;32;58.3;0.482;;;
+1.5 Piso 1 | Paredes interiores;110x75;17;30.5;0.246;;;
+1.5 Piso 1 | Paredes interiores;75x35;96;183.1;0.48;;;
+1.6 Vigas de amarração e afinação;110x35;4;31.5;0.121;;;
+1.6 Vigas de amarração e afinação;110x75;20;58.1;0.48;;;
+1.7 Vigas de apoio ao teto 220x75;220x75;11;67.2;1.109;;;
+1.8 Empenas (triângulos sobre a amarração);110x35;32;50.1;0.192;;;
+1.8 Empenas (triângulos sobre a amarração);110x75;4;1.0;0.007;;;
+1.9 Prumos e vigas de apoio à cobertura 110x75;110x75;74;146.6;1.21;;;
+TOTAL madeira;;645;1547.3;9.94;;;
+2.1 OSB 9 mm;OSB 9 mm;130;;;173.8;placa 1250x2500;62
+2.2 Membrana Traspir 95;Membrana Traspir 95;32;;;174.1;rolo 1,5 x 50 m;3
+2.3.1 Contra-ripado 30x20 (A);Contra-ripado 30x20 (A);120;580.5;;;;
+2.3.2 Ripado 37,5x35 (A);Ripado 37,5x35 (A);161;413.7;;;;
+2.3.3 Forro Tremolo 22x135 (A);Forro Tremolo 22x135 (A);588;1428.1;;176.4;tábua 4,0 m;393
+2.4.1 XPS 60 mm (B);XPS 60 mm (B);462;;;174.9;placa 1250x600;245
+2.4.2 Reboco armado + acabamento branco (B);Reboco armado + acabamento branco (B);32;;;176.4;;
+2.5.1 Contra-ripado 30x20 (C);Contra-ripado 30x20 (C);120;580.5;;;;
+2.5.2 Ripado 30x20 (C);Ripado 30x20 (C);207;525.2;;;;
+2.5.3 Cortiça 1000x500x60 (C);Cortiça 1000x500x60 (C);648;;;176.4;placa 1000x500;381
+3.1 Lã mineral Volcalis Comfort;Lã mineral Volcalis Comfort;262;;14.147;197.6;;
+3.2 OSB 15 mm;OSB 15 mm;373;;;334.0;placa 1250x2500;118
+3.3 Pladur 13 mm;Pladur 13 mm;275;;;322.3;placa 1200x2600;114
+4.1 Piso 0 | XPS 60 mm (pavimento);XPS 60 mm (pavimento);5;;3.311;55.2;;
+4.2 Piso 0 | Betonilha;Betonilha;5;;5.241;55.2;;
+4.3 Piso 1 | OSB 22 mm (estrutural);OSB 22 mm (pavimento estrutural);4;;;56.4;;
+4.4 Revestimento de piso | Vinílico;Vinílico;12;;;101.9;;
+5.1 Réguas de suspensão;Réguas de suspensão;343;49.4;;;;
+5.2 Perfis de teto;Perfis de teto;128;241.7;;;;
+5.3 Cantoneira perimetral 30x30;Cantoneira perimetral 30x30;88;153.8;;;barra 3 m;52
+5.4 Pladur 13 mm (teto);Pladur 13 mm (teto);181;;;103.9;placa 1200x2600;37
+5.5 Lã mineral Volcalis 100 mm (teto);Lã mineral Volcalis 100 mm (teto);58;;4.923;49.2;;
+5.6 Lã mineral 100 mm (pavimento entre pisos);Lã mineral 100 mm (pavimento entre pisos);119;;4.372;43.7;;
+6.2 Painel sandwich imitação telha (RAL 7016);Painel sandwich imitação telha;22;80.9;;74.3;;
+6.3 Cumeeira, remates, caleiras e tubos de queda;Caleira exterior;2;20.2;;;;
+6.3 Cumeeira, remates, caleiras e tubos de queda;Cumeeira;1;10.1;;;;
+6.3 Cumeeira, remates, caleiras e tubos de queda;Remate lateral;4;14.7;;;;
+6.3 Cumeeira, remates, caleiras e tubos de queda;Tubo de queda;4;22.6;;;;

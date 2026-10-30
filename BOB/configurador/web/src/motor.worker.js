@@ -1,0 +1,151 @@
+// The engine in the browser: the repo's own Python (ferramentas/, standard library only) in Pyodide, in a worker so
+// the page never freezes. The same code as the builder: para_construtor (the client's house -> the builder's inputs)
+// and casa_planta (the DiscoverCasa structure, the modules by divisor_modulos).
+let pyodide = null;
+
+async function carregar() {
+  const t0 = performance.now();
+  const { loadPyodide } = await import(/* @vite-ignore */ new URL(`${import.meta.env.BASE_URL}pyodide/pyodide.mjs`, self.location.origin).href);
+  pyodide = await loadPyodide({ indexURL: new URL(`${import.meta.env.BASE_URL}pyodide/`, self.location.origin).href });
+  const lista = await (await fetch(`${import.meta.env.BASE_URL}motor/lista.json`)).json();
+  try { pyodide.FS.mkdir("/motor"); } catch { /* exists */ }
+  for (const f of lista) {
+    const txt = await (await fetch(`${import.meta.env.BASE_URL}motor/${f}`)).text();
+    const partes = f.split("/");
+    let dir = "/motor";
+    for (const p of partes.slice(0, -1)) {
+      dir += `/${p}`;
+      try { pyodide.FS.mkdir(dir); } catch { /* exists */ }
+    }
+    pyodide.FS.writeFile(`/motor/${f}`, txt);
+  }
+  pyodide.runPython(`
+import sys, json
+sys.path.insert(0, "/motor")
+from ferramentas.configurador.para_construtor import converter, lados as lados_conv
+from ferramentas.modelo.casa_planta import construir, niveis_teto
+from ferramentas.modelo.camadas import fundir, teto_sob_anel
+from ferramentas.modelo import camadas as CM
+from ferramentas.modelo import telhado as TL
+S0 = json.load(open("/motor/ferramentas/modelo/sistema_construtivo.json", encoding="utf-8"))
+
+def telhado_casa(casa_json):
+    # the exposed roof's faces at their heights, quick (no structure): the same telhado.py the builder uses
+    casa = json.loads(casa_json)
+    planta, cfg, notas = converter(casa, S0)
+    C = cfg["cobertura"]
+    if C.get("tipo") != "a_vista":
+        return json.dumps({"faces": None})
+    S = teto_sob_anel(fundir(S0, cfg.get("camadas") or {}), cfg)
+    E = fundir(S["estrutura"], {k: v for k, v in (cfg.get("estrutura") or {}).items() if k != "sistema"})
+    z_e = niveis_teto(cfg, S, E)[4]
+    T = TL.telhado(cfg["fundacao"]["contorno"], C["forma"], C["inclinacao_graus"], C["beirado"], C["empena"])
+    faces = [{"pts": f["pts"], "z0": f["z0"] + z_e, "gx": f["gx"], "gy": f["gy"], "subida": f["subida"]} for f in T["faces"]]
+    return json.dumps({"faces": faces, "z_beirado": z_e, "z_max": z_e + T["z_max"]})
+
+def construir_casa(casa_json):
+    casa = json.loads(casa_json)
+    planta, cfg, notas = converter(casa, S0)
+    S = teto_sob_anel(fundir(S0, cfg.get("camadas") or {}), cfg)
+    E = fundir(S["estrutura"], {k: v for k, v in (cfg.get("estrutura") or {}).items() if k != "sistema"})
+    G, resumo = construir(cfg, S, E, planta)
+    # the openings the divider moved (a pier between two windows), back in the client's terms: side, centre
+    ls = lados_conv(cfg["fundacao"]["contorno"])
+    movidas = []
+    for m in G.get("aberturas_movidas", []):
+        k = int(m["parede"][1:]) - 1
+        if k >= len(ls):
+            continue  # an interior wall's door
+        l = ls[k]
+        p0 = l["p0"][0] if l["eixo"] == "x" else l["p0"][1]
+        movidas.append({"lado": k, "de": round((sum(m["de"]) / 2 - p0) * l["sentido"], 4),
+                        "para": round((sum(m["para"]) / 2 - p0) * l["sentido"], 4)})
+    return json.dumps({"G": G, "resumo": resumo, "notas": notas, "rodada": bool(casa.get("_rodada")) or any("rodada" in n for n in notas),
+                       "materiais": S0["materiais"], "movidas": movidas}, ensure_ascii=False)
+
+def cobertura_casa(casa_json):
+    # the roof as built (camadas.py, the builder's own layers): the hidden roof's slopes, gutters, downpipes, caps and
+    # the parapets' top; the exposed roof's gutters, downpipes and trims (its panels: the quick faces above)
+    casa = json.loads(casa_json)
+    planta, cfg, notas = converter(casa, S0)
+    S = teto_sob_anel(fundir(S0, cfg.get("camadas") or {}), cfg)
+    E = fundir(S["estrutura"], {k: v for k, v in (cfg.get("estrutura") or {}).items() if k != "sistema"})
+    G, resumo = construir(cfg, S, E, planta)
+    C = CM.Casa(G)
+    out, res = CM.Saida(), []
+    (CM.cobertura_platibanda if C.platibanda else CM.cobertura_faces)(C, S, out, res)
+    # the exposed panels are the quick faces (6.2); of the parapets' roof-side cladding (6.4.k) only its finish, the
+    # last layer — the chapéus wrap it as built
+    fim_ = f"6.4.{len(CM.camadas_platibanda(S))}"
+    obj = [{"nome": o["nome"], "material": o["material"], "pecas": o["pecas"]} for o in out.objetos
+           if o["colecao"] in ("6.3", fim_) or (o["colecao"] == "6.2" and C.platibanda)]
+    Cc = cfg["cobertura"]  # the hidden roof's gutter side and the sides the client may choose (one água)
+    return json.dumps({"objetos": obj, "z_platibanda": G["niveis"].get("platibanda"),
+                       "rodada": bool(casa.get("_rodada")) or any("rodada" in n for n in notas),
+                       "uma_agua": bool(Cc.get("uma_agua")), "caleira": Cc.get("lado_caleira"), "caleiras": Cc.get("lados_caleira", [])})
+
+def teto_casa(casa_json):
+    # the false ceiling as built (camadas.tetos, the builder's own layers): each room's Pladur on its steel profiles and
+    # the perimeter angle, hung under the ceiling beams at the pé direito (user 2026-10-28: "O testo falso ainda não
+    # aparece no builder e quero que isso seja possível de aparecer")
+    casa = json.loads(casa_json)
+    planta, cfg, notas = converter(casa, S0)
+    S = teto_sob_anel(fundir(S0, cfg.get("camadas") or {}), cfg)
+    E = fundir(S["estrutura"], {k: v for k, v in (cfg.get("estrutura") or {}).items() if k != "sistema"})
+    G, resumo = construir(cfg, S, E, planta)
+    C = CM.Casa(G)
+    C.salas = {}
+    for p in C.pisos:  # the rooms, as camadas.interior finds them
+        grid, _pan, lista = CM.salas(C, p, S)
+        C.salas[p] = (grid, lista)
+    out, res = CM.Saida(), []
+    CM.tetos(C, S, out, res)
+    obj = [{"nome": o["nome"], "material": o["material"], "pecas": o["pecas"]} for o in out.objetos
+           if o["colecao"] in ("5.2", "5.3", "5.4")]  # perfis, cantoneira, Pladur (not the réguas or the wool above)
+    return json.dumps({"objetos": obj, "rodada": bool(casa.get("_rodada")) or any("rodada" in n for n in notas)})
+`);
+  return performance.now() - t0;
+}
+
+self.onmessage = async (ev) => {
+  const m = ev.data;
+  try {
+    if (m.tipo === "carregar") {
+      const ms = await carregar();  // the materials' colours from the standard (the finishes in 3D)
+      self.postMessage({ tipo: "pronto", ms, materiais: JSON.parse(pyodide.runPython("json.dumps(S0['materiais'])")),
+        regras: JSON.parse(pyodide.runPython("json.dumps({'inclinacao_min_avista_pct': S0['cobertura'].get('inclinacao_min_avista_pct', 15)})")) });
+    } else if (m.tipo === "construir") {
+      if (!pyodide) await carregar();
+      const t0 = performance.now();
+      const out = pyodide.globals.get("construir_casa")(JSON.stringify(m.casa));
+      self.postMessage({ tipo: "estrutura", dados: out, ms: performance.now() - t0, pedido: m.pedido });
+    } else if (m.tipo === "telhado") {
+      if (!pyodide) await carregar();
+      try {
+        const d = JSON.parse(pyodide.globals.get("telhado_casa")(JSON.stringify(m.casa)));
+        self.postMessage({ tipo: "telhado", pedido: m.pedido, faces: d.faces, zBeirado: d.z_beirado, zMax: d.z_max });
+      } catch (e) {
+        self.postMessage({ tipo: "erro", msg: e && e.message ? e.message : String(e), pedido: -m.pedido });
+      }
+    } else if (m.tipo === "cobertura") {
+      if (!pyodide) await carregar();
+      try {
+        const d = JSON.parse(pyodide.globals.get("cobertura_casa")(JSON.stringify(m.casa)));
+        self.postMessage({ tipo: "cobertura", pedido: m.pedido, ...d });
+      } catch (e) {
+        self.postMessage({ tipo: "erro", msg: e && e.message ? e.message : String(e), pedido: -1e6 - m.pedido });
+      }
+    } else if (m.tipo === "teto") {
+      if (!pyodide) await carregar();
+      try {
+        const d = JSON.parse(pyodide.globals.get("teto_casa")(JSON.stringify(m.casa)));
+        self.postMessage({ tipo: "teto", pedido: m.pedido, ...d });
+      } catch (e) {
+        self.postMessage({ tipo: "erro", msg: e && e.message ? e.message : String(e), pedido: -2e6 - m.pedido });
+      }
+    }
+  } catch (e) {  // Pyodide's file-system errors are objects without a message
+    const msg = e && e.message ? e.message : (e && e.code ? `erro de ficheiros (${e.code})` : JSON.stringify(e));
+    self.postMessage({ tipo: "erro", msg, pedido: m.pedido });
+  }
+};

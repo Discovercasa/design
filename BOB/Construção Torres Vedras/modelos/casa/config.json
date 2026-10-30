@@ -1,0 +1,475 @@
+{
+  "nome": "Casa Torres Vedras",
+  "descricao": "Moradia térrea T3 com garagem (Torres Vedras), já construída. Modelo DiscoverCasa a partir da planta de arquitetura (estudo prévio 1:200).",
+  "planta": "planta_paredes.json",
+  "_planta_doc": "Paredes e vãos tirados da planta por ferramentas/modelo/planta_arquitetura.py (comando no CLAUDE.md do projeto). Eixos: X para a direita da folha, Y para cima; origem no canto inferior esquerdo das paredes.",
+  "casa": {
+    "comprimento": 17.501,
+    "profundidade": 11.0
+  },
+  "niveis": {
+    "pe_direito": 2.5,
+    "teto_estrutura": 2.653,
+    "_doc": "Como construída (desenho D2503, secções 1:50): teto a 2,50 do pavimento ('2,5'), amarração 2,543-2,653, lameladas 2,653-2,853, módulos exteriores até 3,4915 (platibanda.topo 3,50: o chapéu); módulos interiores à medida da amarração, 2,543 (modulos_reais). A arquitetura dizia 2,60."
+  },
+  "modulos": {
+    "comprimento_max": 3.0,
+    "_doc": "(Superseded 2026-10-16 by modulos_reais: D2503 Módulos — no 3 m module; plain modules of whole 40 cm-grid bays 2,21 / 1,78 / 2,65, factory maximum ≈ 2,64 / 2,72, M1 3,82 built on site.) comprimento_max only applies when the builder makes its own modules."
+  },
+  "aberturas": {
+    "_doc": "Alturas acima do pavimento acabado. Portas e portas de correr exteriores 2,20 (alçados); janelas pequenas peitoril ≈ 1,00 e topo ≈ 1,75 (alçados / corte A, a confirmar). Portas interiores: vão DiscoverCasa 0,87 x 2,03 centrado na porta do arquiteto.",
+    "porta_exterior": {
+      "altura": 2.2
+    },
+    "janela": {
+      "peitoril": 1.0,
+      "topo": 1.75
+    },
+    "por_parede": {
+      "P01": [
+        {
+          "i": 0,
+          "tipo": "porta",
+          "_doc": "porta de correr do quarto 01 (alçado sudeste)"
+        }
+      ],
+      "P14": [
+        {
+          "i": 0,
+          "tipo": "janela",
+          "_doc": "janela basculante do WC (alçado sudoeste)"
+        }
+      ],
+      "P18": [
+        {
+          "i": 0,
+          "tipo": "porta"
+        },
+        {
+          "i": 1,
+          "tipo": "porta",
+          "_doc": "portas de correr dos quartos 03 e 02 (alçado nordeste)"
+        }
+      ],
+      "P03": [
+        {
+          "i": 0,
+          "tipo": "porta",
+          "_doc": "portão da garagem 3,00"
+        }
+      ]
+    }
+  },
+  "cobertura": {
+    "tipo": "platibanda",
+    "estrutura": "lameladas",
+    "inclinacao_pct": 6.0,
+    "painel_espessura": 0.08,
+    "cumeeira_y": 6.749,
+    "_doc": "Como construída: desenho DiscoverCasa D2503 (Construção Torres Vedras/docs/cobertura-D2503.md), dado pelo utilizador em 2026-10-16 ('eu disse-te mal como seriam as águas'). Cumeeira a meio do bloco principal, ao longo da casa; duas águas a 6 %: norte até à caleira da P11; sul até à caleira da P03 (x < 10,9) e, por cima da ala, até à caleira da P01. Lameladas 20x10 a 0,915, madres 11x7,5 em prumos, caleiras ocultas em calços com pendente para as saídas nas pontas, painéis 3,94 / 6,44. Sem claraboias.",
+    "vigas_teto": [
+      [
+        0.0,
+        10.85,
+        2.498,
+        11.0
+      ],
+      [
+        10.85,
+        17.501,
+        0.0,
+        11.0
+      ]
+    ],
+    "_vigas_teto_doc": "Zonas das lameladas: A 8,5 m (bloco principal) e B 11 m (onde está a ala, x > 11).",
+    "aguas": [
+      {
+        "x": [
+          0.0,
+          17.501
+        ],
+        "lado": "N",
+        "y_fim": 11.0
+      },
+      {
+        "x": [
+          0.0,
+          10.893
+        ],
+        "lado": "S",
+        "y_fim": 2.498
+      },
+      {
+        "x": [
+          10.893,
+          17.501
+        ],
+        "lado": "S",
+        "y_fim": 0.0
+      }
+    ],
+    "caleiras": {
+      "P11": {
+        "saidas": [
+          "inicio",
+          "fim"
+        ],
+        "queda": 0.17
+      },
+      "P03": {
+        "saidas": [
+          "inicio"
+        ],
+        "queda": 0.22
+      },
+      "P01": {
+        "saidas": [
+          "fim"
+        ],
+        "queda": 0.06
+      },
+      "_doc": "D2503 'Pendente da caleira': norte de 0 a 0,17 (ponto alto a meio, 2 x 8,61, saídas nas duas pontas); sul do bloco principal de 0 a 0,22 (saída a poente); ala de 0 a 0,06 (saída a nascente)."
+    }
+  },
+  "platibanda": {
+    "topo": 3.5,
+    "_doc": "D2503 Módulos: módulos exteriores 3,50 (L x 3,50), de uma peça até ao topo da platibanda."
+  },
+  "fundacao": {
+    "contorno": [
+      [
+        0.0,
+        2.498
+      ],
+      [
+        0.0,
+        11.0
+      ],
+      [
+        17.501,
+        11.0
+      ],
+      [
+        17.501,
+        0.0
+      ],
+      [
+        10.778,
+        0.0
+      ],
+      [
+        10.778,
+        2.498
+      ]
+    ],
+    "espessura_laje": 0.2,
+    "nota": "Base de fundação DiscoverCasa — o utilizador vai explicar como a fazem; aqui só indicativa (laje 20 cm sob a casa)."
+  },
+  "estrutura": {
+    "sistema": "discovercasa"
+  },
+  "camadas": {
+    "_nota": "Método DiscoverCasa (user 2026-10-15): paredes exteriores OSB 9 + Traspir + ripado horizontal 37,5x35 a 35 cm (sem contra-ripado nesta casa) + Tremolo vertical (opção A do padrão); pavimento vinílico sobre a base de fundação; lã 100 mm no teto (casa térrea).",
+    "exterior": {
+      "opcao_visivel": "A",
+      "opcoes": {
+        "B": null,
+        "C": null,
+        "A": {
+          "_doc": "Torres Vedras levou só o ripado horizontal, sem contra-ripado (user 2026-10-15: 'Nesta casa só levou ripado na horizontal e não levou o contra-ripado').",
+          "camadas": [
+            {
+              "id": "ripado",
+              "nome": "Ripado 37,5x35",
+              "tipo": "ripas",
+              "direcao": "horizontal",
+              "largura": 0.0375,
+              "espessura": 0.035,
+              "espacamento": 0.35,
+              "material": "Ripa casquinha",
+              "produto": "Ripa 37,5x35 (viga 75x35 cortada ao meio no comprimento), horizontal de 35 em 35 cm a partir de baixo; à volta de todos os vãos (em cima e em baixo, exceto junto ao chão) e na vertical nos cantos, dos dois lados",
+              "contorno_vaos": {
+                "ombreiras": true,
+                "padieira": true,
+                "peitoril": true,
+                "cantos": true,
+                "_doc": "User 2026-10-16 (foto da obra): ripado de 35 em 35 cm de baixo para cima; todos os vãos rodeados por ripado exceto quando em contacto com o chão (janelas em cima e em baixo); os cantos exteriores levam um ripado na vertical, dos dois lados."
+              }
+            },
+            {
+              "id": "forro",
+              "nome": "Forro Tremolo 22x135",
+              "tipo": "tabuas",
+              "direcao": "vertical",
+              "largura": 0.135,
+              "espessura": 0.022,
+              "junta": 0.006,
+              "comprimento_max": 4.0,
+              "material": "Douglas marron",
+              "produto": "Piveteau TREMOLO Douglas classe 3.2 marron 22x135x4000 (macho-fêmea)",
+              "unidade": "tábua 4,0 m",
+              "comprimento_unidade_m": 4.0,
+              "desperdicio": 0.1
+            }
+          ]
+        }
+      }
+    },
+    "pavimentos": {
+      "piso0": {
+        "acabado_z": 0.005,
+        "camadas": []
+      }
+    },
+    "tetos": {
+      "la": {
+        "pisos": [
+          0
+        ],
+        "produto": "Lã mineral Volcalis 100 mm sobre o teto falso (casa térrea), entre as vigas de apoio ao teto"
+      },
+      "la_pavimento": {
+        "pisos": []
+      },
+      "suspensao": {
+        "folga": 0.1185,
+        "_doc": "Teto a 2,50 (D2503) sob as lameladas a 2,653: 2,653 - 0,005 - 2,50 - 0,017 - 0,0125."
+      }
+    },
+    "caixilharia": {
+      "_doc": "Tabela 'PROJETO APROVADO' (RAL 7016) dada pelo utilizador em 2026-10-19: 11 vãos, 31,06 m². Cada item no seu módulo do D2503 Módulos (vão em bruto do desenho). Estore exterior automático onde a tabela o indica.",
+      "itens": [
+        {
+          "modulo": "M24",
+          "divisao": "Despensa",
+          "tipo": "basculante",
+          "largura": 0.8,
+          "altura": 0.8,
+          "vidro": "transparente",
+          "estore": true,
+          "descricao": "Basculante em alumínio lacado de cor cinza rato e rotura térmica + vidro duplo térmico transparente",
+          "descricao_curta": "Basculante",
+          "observacoes": ""
+        },
+        {
+          "modulo": "M23",
+          "divisao": "Despensa",
+          "tipo": "porta",
+          "largura": 0.94,
+          "altura": 2.2,
+          "vidro": "",
+          "estore": false,
+          "descricao": "Painel liso em alumínio lacado de cor cinza rato com rotura térmica (a escolher de acordo com o catálogo)",
+          "descricao_curta": "Porta painel liso",
+          "observacoes": "Abertura para a direita. Enche o vão de 0,94 como a porta principal (user 2026-10-20: \"sim coloca a encher o vão como na principal\"); a tabela diz 0,8",
+          "largura_tabela": 0.8
+        },
+        {
+          "modulo": "M20",
+          "divisao": "Cozinha",
+          "tipo": "fixo",
+          "largura": 1.5,
+          "altura": 0.8,
+          "vidro": "transparente",
+          "estore": true,
+          "descricao": "Vidro fixo em alumínio lacado de cor cinza rato e rotura térmica + vidro duplo térmico transparente",
+          "descricao_curta": "Vidro fixo",
+          "observacoes": ""
+        },
+        {
+          "modulo": "M18",
+          "divisao": "WC",
+          "tipo": "basculante",
+          "largura": 0.8,
+          "altura": 0.8,
+          "vidro": "fosco",
+          "estore": false,
+          "descricao": "Basculante em alumínio lacado de cor cinza rato e rotura térmica + vidro duplo térmico transparente",
+          "descricao_curta": "Basculante",
+          "observacoes": "Fosco"
+        },
+        {
+          "modulo": "M12",
+          "divisao": "Quarto 1 e 2",
+          "tipo": "correr",
+          "largura": 2.0,
+          "altura": 2.2,
+          "vidro": "transparente",
+          "estore": true,
+          "descricao": "Janela de correr 2 folhas em alumínio lacado de cor cinza rato e rotura térmica + vidro duplo térmico transparente",
+          "descricao_curta": "Janela de correr",
+          "observacoes": ""
+        },
+        {
+          "modulo": "M14",
+          "divisao": "Quarto 1 e 2",
+          "tipo": "correr",
+          "largura": 2.0,
+          "altura": 2.2,
+          "vidro": "transparente",
+          "estore": true,
+          "descricao": "Janela de correr 2 folhas em alumínio lacado de cor cinza rato e rotura térmica + vidro duplo térmico transparente",
+          "descricao_curta": "Janela de correr",
+          "observacoes": ""
+        },
+        {
+          "modulo": "M9",
+          "divisao": "Quarto Suite",
+          "tipo": "correr",
+          "largura": 2.0,
+          "altura": 2.2,
+          "vidro": "transparente",
+          "estore": true,
+          "descricao": "Janela de correr 2 folhas em alumínio lacado de cor cinza rato e rotura térmica + vidro duplo térmico transparente",
+          "descricao_curta": "Janela de correr",
+          "observacoes": ""
+        },
+        {
+          "modulo": "M6",
+          "divisao": "WC Suite",
+          "tipo": "basculante",
+          "largura": 0.8,
+          "altura": 0.8,
+          "vidro": "fosco",
+          "estore": false,
+          "descricao": "Basculante em alumínio lacado de cor cinza rato e rotura térmica + vidro duplo térmico fosco",
+          "descricao_curta": "Basculante",
+          "observacoes": "Fosco"
+        },
+        {
+          "modulo": "M5",
+          "divisao": "Sala / Entrada",
+          "tipo": "porta",
+          "largura": 1.04,
+          "altura": 2.2,
+          "vidro": "",
+          "estore": false,
+          "descricao": "Painel liso em alumínio lacado de cor cinza rato com rotura térmica (a escolher de acordo com o catálogo)",
+          "descricao_curta": "Porta painel liso",
+          "observacoes": "Abertura para a direita. Porta maior e mais robusta que enche o vão de 1,04 (user 2026-10-19: \"neste caso é uma porta maior e mais robusta que cabe naquele espaço\"); a tabela diz 0,9",
+          "largura_tabela": 0.9
+        },
+        {
+          "modulo": "M3",
+          "divisao": "Sala / Entrada",
+          "tipo": "correr",
+          "largura": 2.0,
+          "altura": 2.2,
+          "vidro": "transparente",
+          "estore": true,
+          "descricao": "Janela de correr 2 folhas em alumínio lacado de cor cinza rato e rotura térmica + vidro duplo térmico transparente",
+          "descricao_curta": "Janela de correr",
+          "observacoes": ""
+        },
+        {
+          "modulo": "M1",
+          "divisao": "Garagem",
+          "tipo": "seccionado",
+          "largura": 3.0,
+          "altura": 2.2,
+          "vidro": "",
+          "estore": false,
+          "descricao": "Portão de garagem seccionado automático",
+          "descricao_curta": "Portão seccionado",
+          "observacoes": "Abertura para cima"
+        }
+      ]
+    }
+  },
+  "saida": {
+    "geometria": "casa_geometria.json",
+    "blend": "Casa_TorresVedras.blend",
+    "glb": "Casa_TorresVedras_Estrutura.glb",
+    "glb_completa": "Casa_TorresVedras_Completa.glb"
+  },
+  "paredes": {
+    "exterior": "face_exterior",
+    "_doc": "D2503 'Dimensão da fundação e módulos': a face exterior dos módulos está na linha da fundação = face exterior das paredes da arquitetura (17,5 x 11); o revestimento fica por fora."
+  },
+  "modulos_reais": {
+    "ficheiro": "modulos_D2503.json",
+    "_doc": "Módulos como foram feitos (desenho DiscoverCasa D2503 Módulos, lido por ferramentas/modelo/modulos_dc.py): 27 exteriores 3,50 de altura, 23 interiores 2,53; peças e vãos tal como desenhados.",
+    "interior_a_medida_da_amarracao": true,
+    "_interior_doc": "User 2026-10-19 (resposta à pergunta dos 12,3 cm): 'Nós fazemos os módulos de forma a ficarem à medida certa das vigas amarração' -> módulo interior + amarração 11x7,5 = face inferior das lameladas (2,543 + 0,11 = 2,653), sem calço; o D2503 desenha 2,53 (montantes 2,46): o modelo sobe a travessa superior 1,3 cm (a confirmar)."
+  },
+  "pergola": {
+    "_doc": "User 2026-10-19/20 (fotos da casa terminada): a pérgola vai da garagem (x 3,63, a garagem fica de fora — foto do portão) até ao fim da casa a nascente, com telha CERÂMICA e caleira à vista em toda a frente; dois tubos de queda: no pilar em frente à parede poente da ala (foto) e no pilar do canto nascente ('Um no lado oposto ao que se vê na foto'). Vigas a 1,40 (planta, origem 3,707), pousadas na viga frontal e numa viga de encosto aparafusada sobre o ripado de cada fachada; lameladas com tratamento autoclave. ASSUMIDO: inclinação 15 % (a telha cerâmica pede mais, mas a platibanda a 3,49 limita a ~18 %), secções 16x16, encosto 7,5x16, ripas 7x3 a 0,15, 6 pilares, caleira 12x10.",
+    "colecao": "1.10 Pérgola (lameladas autoclave; secções e inclinação assumidas)",
+    "x0": 3.627,
+    "x1": "casa",
+    "y_frente": -2.009,
+    "pilares_x": [
+      3.707,
+      7.207,
+      10.707,
+      13.0,
+      15.3,
+      17.6
+    ],
+    "z_base": 0.0,
+    "z_vigas": 2.45,
+    "pilar": {
+      "seccao": "160x160",
+      "largura": 0.16
+    },
+    "viga_frontal": {
+      "seccao": "160x160",
+      "largura": 0.16,
+      "altura": 0.16
+    },
+    "viga_encosto": {
+      "seccao": "160x75",
+      "espessura": 0.075,
+      "altura": 0.16
+    },
+    "vigas": {
+      "seccao": "160x160",
+      "largura": 0.16,
+      "altura": 0.16
+    },
+    "ripas": {
+      "seccao": "70x30",
+      "largura": 0.07,
+      "espessura": 0.03,
+      "espacamento": 0.15
+    },
+    "produto": "Madeira lamelada com tratamento autoclave para exterior (user 2026-10-19; nome do tratamento a confirmar)",
+    "vigas_origem": 3.707,
+    "vigas_espacamento": 1.4,
+    "inclinacao": 0.15,
+    "telha": {
+      "espessura": 0.05,
+      "beiral": 0.1,
+      "fiada": 0.4,
+      "material": "Telha",
+      "produto": "Telha cerâmica (user 2026-10-20: 'É cerâmica'; modelo e subtelha a confirmar)"
+    },
+    "caleira": {
+      "largura": 0.12,
+      "altura": 0.1,
+      "material": "Remate RAL 7016",
+      "tubos_queda_pilares": [
+        3,
+        6
+      ],
+      "tubo": {
+        "largura": 0.08,
+        "folga_base": 0.05
+      },
+      "produto": "Caleira à vista em todo o comprimento da pérgola (secção a confirmar)"
+    }
+  },
+  "documentos": {
+    "_doc": "Folhas de produção geradas pelo BOB (ferramentas/documentos/gerar.py) no padrão do D2503: Módulos, Cobertura, Listagem de material.",
+    "obra": "D2503",
+    "projeto": "Habitação Unifamiliar LA",
+    "local": "Torres Vedras",
+    "revisoes": [
+      [
+        "A",
+        "26/10/20",
+        "Gerado pelo BOB a partir do modelo v6.3 (comparar com o D2503)"
+      ]
+    ]
+  }
+}

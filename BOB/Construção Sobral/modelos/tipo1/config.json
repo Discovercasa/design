@@ -1,0 +1,338 @@
+{
+  "nome": "Casa Tipo 1",
+  "descricao": "Loteamento Sobral - Habitação tipo I, frações A B C D E K L M N O P (11 casas)",
+  "dwfx": "../../desenhos/PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+  "escala": 50,
+  "folhas": {
+    "estrutura": 1,
+    "paredes": 2
+  },
+  "casa": {
+    "comprimento": 9.86,
+    "profundidade": 6.11,
+    "espessura_exterior": 0.16
+  },
+  "paredes": {
+    "prefixos": [
+      "PE",
+      "PI"
+    ],
+    "regiao_alcados": [
+      0,
+      0,
+      580,
+      594
+    ],
+    "plantas": {
+      "0": [
+        585,
+        20,
+        812,
+        170
+      ],
+      "1": [
+        585,
+        176,
+        812,
+        326
+      ]
+    },
+    "rotulo_offsets": {
+      "0": -0.6,
+      "-90": -0.5,
+      "90": 0.65
+    },
+    "alias": {
+      "PI2.10": "PI2.09",
+      "PI2.12": "PI2.11",
+      "PI2.13": "PI2.11",
+      "PI2.15": "PI2.14"
+    },
+    "rotulos_errados": [
+      {
+        "rotulo": "PE2.07",
+        "piso": 1,
+        "angulo": 0,
+        "alcado": "PI2.07"
+      },
+      {
+        "rotulo": "PE2.08",
+        "piso": 1,
+        "angulo": 0,
+        "alcado": "PI2.08"
+      }
+    ],
+    "forcar_sentido": {
+      "PE2.12": [
+        -1,
+        0
+      ],
+      "PE2.13": [
+        -1,
+        0
+      ]
+    },
+    "correcoes": {
+      "PI1.06": {
+        "origem_x": 1.489,
+        "nota": "label position; its 3 middle studs differ 80 mm between plan and elevation (elevation followed)"
+      },
+      "PI2.09": {
+        "origem": [
+          9.2345,
+          3.439
+        ],
+        "sentido": [
+          0,
+          1
+        ],
+        "espessura": 0.08,
+        "nota": "0.25 m partition, studs laid flat (80 mm thick)"
+      },
+      "PI2.10": {
+        "origem": [
+          9.6595,
+          3.439
+        ],
+        "sentido": [
+          0,
+          1
+        ],
+        "espessura": 0.08,
+        "nota": "same elevation as PI2.09"
+      }
+    }
+  },
+  "niveis": {
+    "piso0": 0.0,
+    "piso1_exterior": 2.96,
+    "piso1_interior": 2.978,
+    "topo_paredes_piso0": 2.8,
+    "topo_vigas_pavimento": 2.96,
+    "osb_pavimento": 0.018
+  },
+  "pavimento": {
+    "regiao": [
+      40,
+      272,
+      302,
+      418
+    ],
+    "abertura_escada": [
+      3.3403,
+      7.0497,
+      4.9045,
+      5.9502
+    ]
+  },
+  "cobertura": {
+    "regiao": [
+      40,
+      418,
+      302,
+      578
+    ],
+    "planta_verdadeira_grandeza": true,
+    "cumeeira_y": 3.055,
+    "cumeeira_z": 6.9645,
+    "inclinacao": 26.37,
+    "altura_viga": 0.16,
+    "apoio_z": {
+      "N": 5.48,
+      "S": 5.491
+    },
+    "tarugos_s": [
+      0.088,
+      0.124
+    ],
+    "frechais": [
+      {
+        "lado": "N",
+        "x": [
+          0.079,
+          9.7
+        ],
+        "y": [
+          6.03,
+          6.11
+        ],
+        "z": 5.32
+      },
+      {
+        "lado": "S",
+        "x": [
+          0.16,
+          9.704
+        ],
+        "y": [
+          0.0,
+          0.08
+        ],
+        "z": 5.331
+      }
+    ]
+  },
+  "fundacao": {
+    "contorno": [
+      [
+        -1.37,
+        -3.069
+      ],
+      [
+        10.131,
+        -3.069
+      ],
+      [
+        10.131,
+        3.056
+      ],
+      [
+        11.729,
+        3.056
+      ],
+      [
+        11.729,
+        6.181
+      ],
+      [
+        9.931,
+        6.181
+      ],
+      [
+        9.931,
+        8.18
+      ],
+      [
+        -1.37,
+        8.18
+      ]
+    ],
+    "espessura_laje": 0.2,
+    "muro": {
+      "largura": 0.2,
+      "base_z": -0.6
+    },
+    "sapata": {
+      "largura": 0.65,
+      "altura": 0.4,
+      "base_z": -1.0,
+      "fora": 0.225
+    },
+    "nota": "Laje 20 cm C25/30 XC2 S3, A400NR, malha dupla Ø8//30; muro 0.20 (altura variável) + sapata 0.65x0.40, 6Ø10. Indicativa."
+  },
+  "saida": {
+    "geometria": "tipo1_geometria.json",
+    "blend": "Casa_Tipo1_Estrutura_Madeira.blend",
+    "glb": "Casa_Tipo1_Estrutura_Madeira.glb",
+    "glb_completa": "Casa_Tipo1_Completa.glb"
+  },
+  "estrutura": {
+    "sistema": "discovercasa",
+    "_nota": "Utilizador 2026-09-30: mesmas dimensões da casa com a madeira DiscoverCasa (110x35 exterior, 75x35 interior, 110x75 nos cantos e vãos) e teto falso plano no piso 1 à altura da viga de amarração. 'desenhos' = estrutura do engenheiro.",
+    "cobertura_manter": "inclinacao",
+    "remover_paineis": [
+      "PI2.09",
+      "PI2.10"
+    ],
+    "_remover_doc": "Conduta PI2.09/PI2.10 retirada: 'it will not exist' (user 2026-10-09, arquitetura SMA_012).",
+    "paredes_extra": [
+      {
+        "nome": "PD1.01",
+        "piso": 0,
+        "de": [
+          7.2316,
+          4.863
+        ],
+        "ate": [
+          7.2316,
+          6.0
+        ],
+        "portas": [
+          [
+            0.067,
+            0.937
+          ]
+        ],
+        "_doc": "WC 0.6 (inst. sanitária): parede nascente com porta 0,87 para a entrada (arquitetura SMA_012 f.17)."
+      },
+      {
+        "nome": "PD2.01",
+        "piso": 1,
+        "de": [
+          9.19,
+          3.4866
+        ],
+        "ate": [
+          9.75,
+          3.4866
+        ],
+        "_doc": "Continuação de PI2.08 até à fachada nascente, sem a conduta PI2.09/PI2.10 (user 2026-10-09)."
+      }
+    ],
+    "portas_extra": [
+      {
+        "piso": 0,
+        "de": [
+          1.4561,
+          3.4949
+        ],
+        "ate": [
+          1.4561,
+          4.9001
+        ],
+        "_doc": "Lavandaria 0.5: lado nascente aberto em 1,4 m com porta (de correr?) — bandeira por cima (arquitetura SMA_012 f.17)."
+      }
+    ],
+    "aberturas_alterar": {
+      "PE2.08": {
+        "tipo": "janela",
+        "z": [
+          4.05,
+          5.04
+        ],
+        "_doc": "Janela da casa de banho 1.2 no alçado nascente (arquitetura SMA_012 f.18: topo +4,88 = Z 5,04, cerca de 0,47 x 0,99 m); nos desenhos do engenheiro era uma abertura alta."
+      }
+    }
+  },
+  "camadas": {
+    "_nota": "Sistema construtivo DiscoverCasa (ferramentas/modelo/sistema_construtivo.json). Aqui so o que e especifico da obra.",
+    "exterior": {
+      "opcao_visivel": "B",
+      "_nota": "Sobral: ETICS / capoto branco (utilizador, 2026-09-24)"
+    },
+    "pavimentos": {
+      "piso0": {
+        "acabado_z": 0.16
+      }
+    },
+    "cobertura": {
+      "beirado": 0.25,
+      "empena": 0.12
+    },
+    "divisoes": {
+      "passagens_abertas": [
+        {
+          "piso": 1,
+          "rect": [
+            2.2,
+            3.3,
+            3.0,
+            3.56
+          ],
+          "_doc": "Passagem dentro do quarto 1.5 (arquitetura: quarto em L de 14 m²): sem porta nem bandeira."
+        }
+      ]
+    }
+  },
+  "notas_modelo": [
+    "Paredes copiadas dos alcados PE/PI e colocadas pelas plantas de paredes (posicao e sentido confirmados pelos montantes).",
+    "As cotas '0,40' dos desenhos sao o vao livre entre pecas: afastamento real ~0,48 m entre eixos.",
+    "Planta da cobertura desenhada em verdadeira grandeza (rebatida): vigas 80x160, inclinacao 26,4 graus, sem beirado estrutural.",
+    "Cotas: +-0,00 do projeto = Z 0,16 (topo da dupla travessa inferior); piso 1 (+2,88) = Z 3,04; cumeeira Z 6,96.",
+    "Paredes exteriores do piso 1 assentam no lintel (Z 2,96) e as interiores sobre o OSB 18 mm (Z 2,978), como no corte FF'.",
+    "Vaos (portas/janelas) deduzidos da estrutura: vaos >= 0,55 m entre montantes inteiros; peitoril/padieira pelas travessas e montantes curtos. Confirmar com a arquitetura.",
+    "PI2.07/PI2.08 aparecem na planta como PE2.07/PE2.08; PI2.10, PI2.12/13, PI2.15 repetem os alcados PI2.09, PI2.11, PI2.14.",
+    "Camadas (OSB 9, Traspir 95, acabamentos A/B/C, la mineral, OSB 15, Pladur, pavimentos, tetos, cobertura) pelo sistema DiscoverCasa; beirado 0,25 m e empena 0,12 m medidos nos cortes FF'/EE'.",
+    "Fundacao apenas indicativa. Nao modelado: escada, ferragens, caixilharia, instalacoes."
+  ]
+}

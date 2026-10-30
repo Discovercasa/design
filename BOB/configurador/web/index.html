@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Configurador DiscoverCasa</title>
+  <link rel="stylesheet" href="/src/estilo.css" />
+</head>
+<body>
+  <header>
+    <div class="marca">DISCOVERCASA <span>Configurador · protótipo</span></div>
+    <div class="topo">
+      <button class="ligacao" id="desfazer" title="Desfazer a última alteração (Ctrl+Z)" disabled>Desfazer</button>
+      <button class="ligacao" id="refazer" title="Refazer (Ctrl+Y)" disabled>Refazer</button>
+      <button class="ligacao" id="guardar" title="Guardar o projeto num ficheiro">Guardar</button>
+      <button class="ligacao" id="abrir" title="Abrir um projeto guardado">Abrir</button>
+      <button class="ligacao" id="recomecar" title="Começar uma casa nova">Recomeçar</button>
+      <input type="file" id="ficheiro" accept=".json,application/json" hidden />
+      <button id="total" class="total" title="Ver a lista">Total <strong id="total-valor">0 €</strong></button>
+    </div>
+  </header>
+  <div id="lista" class="lista" hidden>
+    <h3>Lista</h3>
+    <ul id="lista-linhas"></ul>
+    <p class="aviso" id="lista-aviso"></p>
+  </div>
+  <main>
+    <aside id="painel"></aside>
+    <section id="vista">
+      <div id="tela"></div>
+      <div class="barra">
+        <button data-vista="3d" class="ativo">3D</button>
+        <button data-vista="cima">Vista de cima</button>
+        <span class="sep"></span>
+        <button data-mostrar="paredes" class="ativo">Exterior</button>
+        <button data-mostrar="cobertura" class="ativo" hidden>Cobertura</button>
+        <button data-mostrar="teto" hidden title="O teto falso: gesso cartonado nos perfis, ao pé direito">Teto</button>
+        <button data-mostrar="estrutura" class="ativo">Estrutura</button>
+      </div>
+      <div id="hud" class="hud" hidden></div>
+      <div id="estado" class="estado">A preparar o motor…</div>
+    </section>
+  </main>
+  <div id="fantasma" class="fantasma" hidden></div>
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

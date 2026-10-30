@@ -1,0 +1,9 @@
+- [DiscoverCasa company](discovercasa-company.md) — user's company: Penafiel builder of turnkey timber-structure houses on concrete foundations
+- [Sobral project → repo](project-wood-structure-analysis.md) — project knowledge now lives in the repo (Construção Sobral/); update docs/estado.md, not memory
+- [Repo & git setup](repo-git-setup.md) — private repo VascoCoelho/DiscoverCasa-Claude-BOB (user's preferred account); origin points there; pushes as VascoDiscovercasa; gh default stays VascoCoelho
+- [Ask when in doubt](ask-when-in-doubt.md) — user explicitly welcomes clarifying questions; ask rather than assume
+- [Record every detail](record-every-detail.md) — log user's words verbatim in repo conhecimento/registo-conversas.md + file facts in docs (agent guardiao-detalhes) before a task ends
+- [Flag issues with suggestions](flag-issues-with-suggestions.md) — always say what looks off/improvable: issue, why, better option (user asked 2026-09-24)
+- [Timber frame references](timber-frame-references.md) — STA/NHBC sole-plate rules, PT Eurocode decree, termites, grading (also in repo conhecimento/)
+- [Reading DWFx files](dwfx-reading-method.md) — use ferramentas/dwfx/dwfx.py (skill ler-dwfx); Autodesk connector can't open files
+- [Conversa em português](language-portuguese.md) — talk to the user in PT-PT since 2026-10-09 (company terms, not English trade words); docs stay English
