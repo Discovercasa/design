@@ -1002,3 +1002,28 @@ When this file passes about 1 500 lines, continue in `registo-conversas-<year>-<
   pending; "Promised answers" (c)); `insights.md` (the interior-walls entry). The port error: `discovercasa.md`
   Practical; spec §9 (one troubleshooting line). Pending: his test of the interior-walls reading; his answer on the
   Munditelha's thickness; the roof questionnaire (still promised). Rulebook (`mestre-construtor`): see report.
+
+### 2026-10-30 — Connect a different GitHub account and a new Supabase [geral]
+> Queria conectar uma conta do github diferente e uma supabase nova também
+- Context: new request (caller's words).
+- Filed in: `discovercasa.md` → Practical, GitHub entry 2026-10-30.
+
+### 2026-10-30 — The repo Design; BOB in a folder BOB/; Supabase via the connector [geral]
+> Nesta nova conta do github já tenho um repositório com o nome Design e pretendo colocar o BOB(e os pushes todos deste PC) lá dentro
+- Context: answers to our questions on where BOB goes and how to connect Supabase; also (as relayed by the caller, not
+  verbatim): Supabase through the Supabase connector (MCP); BOB in a folder `BOB/` inside Design.
+- Filed in: `discovercasa.md` → GitHub entry 2026-10-30 (account DinisDiscover, `Discovercasa/design`, Supabase project).
+
+### 2026-10-30 — Push BOB to Design, only the configurator visible on the site [geral]
+> O repositório Design ja está disponivel, confirma se está a funcionar se estiver a funcionar da push ao nosso Configurador builder para lá. Quero que dês push ao repositório BOB todo mas deixa só o configurador visível na página web da Discovercasa Design
+- Context: after the connection set-up. Done: BOB published in `BOB/` (fresh history, no *.dwfx / *.pdf), configurator at
+  `public/configurador/` → design.discovercasa.pt/configurador/ (live 2026-10-30); tool `ferramentas/publicar_design.py`.
+- Filed in: `discovercasa.md` → GitHub entry 2026-10-30.
+
+### 2026-10-30 — Delete personal data from the records, go ahead with the push [geral]
+> Tudo o que seja esse tipo de informações podes eliminar dos nossos registos visto que são fúteis para nós e prossegue com o push
+- Context: we warned that `Discovercasa/design` is PUBLIC and the records hold personal data (NIF, OET ID, addresses,
+  process number, names, an email).
+- Filed in: `discovercasa.md` → rule "repo is public: never write NIF, addresses, phones, engineer IDs, personal names".
+  Removed 2026-10-30 from the records (by the caller). Open: main still holds the old records (not merged); old remote
+  VascoCoelho still `origin` (archive?); the configurator is public without the Hub login — ask if it should be behind it.

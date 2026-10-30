@@ -221,4 +221,20 @@ decisions stay (the history is in git).
 - GitHub: `VascoCoelho/DiscoverCasa-Claude-BOB` (private; moved from `VascoDiscovercasa` 2026-09-26, which keeps write
   access). "you can push to VascoCoelho i prefer there since i use more that github account than the other"
   (2026-09-30); this PC's `origin` points there but commits / pushes as `VascoDiscovercasa` (switching not decided).
-  Tools run locally (Python + Blender); no cloud services needed.
+  Tools run locally (Python + Blender); no cloud services needed. (Partly superseded 2026-10-30, see below and registo.)
+- 2026-10-30 — new GitHub + Supabase: "pretendo colocar o BOB(e os pushes todos deste PC) lá dentro". GitHub account
+  `DinisDiscover` (logged into `gh` on this PC, now gh's active account). Repo `Discovercasa/design` — **PUBLIC**, org
+  `Discovercasa`; DinisDiscover has push, not admin. BOB lives in its folder `BOB/`, published with a fresh history
+  WITHOUT `*.dwfx` / `*.pdf` (client drawings stay on this PC only); the old history stays private at
+  `VascoCoelho/DiscoverCasa-Claude-BOB` (still the git `origin`; consider archiving). Site `design.discovercasa.pt` =
+  Cloudflare Pages publishing only `public/` on push to `main`, behind the Hub login; the Design repo has its own
+  `CLAUDE.md` rules (Supabase publishable key only, RLS, do not touch the Hub login). Only visible part: the configurator
+  build at `public/configurador/` → https://design.discovercasa.pt/configurador/ (verified live 2026-10-30; worker
+  paths follow Vite `BASE_URL`). Publish with `python ferramentas/publicar_design.py` (clone in `_trabalho/design`;
+  `--sem-push` = dry run), run from branch `configurador` (main still holds the old records with personal data —
+  publish only from configurador or after merging). Supabase: connector (MCP) connected to project "Design", ref
+  `uuofvywhouhffmfqojoc`, eu-west-1, Postgres 17.
+- 2026-10-30 — **the repo is public: never write NIF, addresses, phones, engineer IDs or personal names in it.** Personal
+  data were removed from the records that day (company NIF, engineer OET ID, site addresses, licensing process number,
+  architects' / client's names, a personal email) — "Tudo o que seja esse tipo de informações podes eliminar dos nossos
+  registos visto que são fúteis para nós".
