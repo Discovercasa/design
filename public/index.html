@@ -25,6 +25,18 @@
   button.secundario { background: transparent; color: var(--texto); border: 1px solid var(--linha); }
   .ajuda { color: var(--suave); font-size: .9rem; }
   .erro { color: var(--erro); }
+  /* painel das ferramentas */
+  #ecra-app { background: none; border: 0; padding: 0; }
+  #ecra-app > h2 { margin: 0 0 .3rem; }
+  .ferramentas { display: grid; grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr)); gap: 1rem; margin-top: 1.2rem; }
+  .ferramenta { display: flex; flex-direction: column; gap: .5rem; background: var(--cartao); border: 1px solid var(--linha);
+    border-radius: 10px; padding: 1.2rem; color: inherit; text-decoration: none; }
+  a.ferramenta:hover { border-color: var(--botao); }
+  .ferramenta h3 { margin: 0; font-size: 1.05rem; }
+  .ferramenta p { margin: 0; flex: 1; }
+  .estado { align-self: flex-start; font-size: .75rem; padding: .15rem .55rem; border-radius: 99px; border: 1px solid var(--linha); color: var(--suave); }
+  .estado.pronto { background: var(--botao); border-color: var(--botao); color: #fff; }
+  .abrir { color: var(--botao); font-weight: 600; font-size: .9rem; }
 </style>
 </head>
 <body>
@@ -42,10 +54,38 @@
     <button id="entrar" type="button">Entrar com a conta do Hub</button>
     <p id="entrar-msg" class="ajuda" role="status"></p>
   </section>
-  <!-- com sessão: o Design (por construir) -->
-  <section id="ecra-app" class="cartao" hidden>
-    <h2>Design</h2>
-    <p><a href="/configurador/">Abrir o Configurador</a></p>
+  <!-- com sessão: as ferramentas que estamos a construir (visão do produto, 2026-10-15) -->
+  <section id="ecra-app" hidden>
+    <h2>Ferramentas</h2>
+    <p class="ajuda">O que estamos a construir sobre o método construtivo Discovercasa.</p>
+    <div class="ferramentas">
+      <a class="ferramenta" href="/configurador/">
+        <span class="estado pronto">Protótipo</span>
+        <h3>Configurador</h3>
+        <p class="ajuda">O cliente escolhe a forma e o tamanho e monta a casa parede a parede, a ver o preço em direto.</p>
+        <span class="abrir">Abrir →</span>
+      </a>
+      <div class="ferramenta">
+        <span class="estado">Em desenvolvimento</span>
+        <h3>Builder</h3>
+        <p class="ajuda">Do projeto de arquitetura à casa pronta: estrutura, camadas e quantidades, como nós construímos.</p>
+      </div>
+      <div class="ferramenta">
+        <span class="estado">Em desenvolvimento</span>
+        <h3>Gerador de documentos</h3>
+        <p class="ajuda">Módulos, Cobertura e Listagem de material de cada obra, gerados a partir do modelo.</p>
+      </div>
+      <div class="ferramenta">
+        <span class="estado">Planeado</span>
+        <h3>Orçamentação</h3>
+        <p class="ajuda">Preço de cada material e fornecedor, com as contas à vista até ao preço final da casa.</p>
+      </div>
+      <div class="ferramenta">
+        <span class="estado">Planeado</span>
+        <h3>Plataforma do cliente (VR/AR)</h3>
+        <p class="ajuda">Área do cliente para ver a sua casa em 360°, óculos VR e realidade aumentada no telemóvel, sem Enscape nem Chaos Cloud.</p>
+      </div>
+    </div>
   </section>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
