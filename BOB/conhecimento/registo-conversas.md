@@ -1069,3 +1069,15 @@ When this file passes about 1 500 lines, continue in `registo-conversas-<year>-<
 - Builder vs Blender: explained (Blender is a desktop program, can't run in a browser; the builder's Python already
   does the house without it — Blender only makes the 3D file, renders and checks).
 - Filed in: `conhecimento/discovercasa.md` (Product vision 1, production documents; Design site line).
+
+### 2026-10-30 — Document generator reads PDF plans [geral]
+> Avança com a leitura de plantas em PDF no gerador de documentos.
+- Done: `ferramentas/dwfx/leitor_pdf.py` (pure Python) reads vector PDFs (AutoCAD plots) into the same paths as the
+  DWFx reader (sheet mm, y down): page tree, FlateDecode, q/Q/cm, RGB/grey/CMYK/ICC/indexed colours, paths, Form
+  XObjects, rotation; text and images skipped. `de_desenhos.py` and the web page take `.pdf` as well as `.dwfx`.
+- Test: Torres Vedras architecture PDF → same plan as the DWFx (folha 1, 1:200, walls identical) and the same documents,
+  also in the browser. Site plan, survey and walls PDFs correctly give "no plan"; engineer module PDFs, the 8-page
+  location PDF and our own D2503 PDFs read without errors (≤ 2 s).
+- Limits: a scanned / photographed PDF is an image (no lines) → the page says so. DWG still not (closed format):
+  export PDF or DWFx from AutoCAD.
+- Filed in: `conhecimento/discovercasa.md` (Design site line).

@@ -3,6 +3,7 @@
  "ferramentas/comum.py",
  "ferramentas/dwfx/__init__.py",
  "ferramentas/dwfx/leitor.py",
+ "ferramentas/dwfx/leitor_pdf.py",
  "ferramentas/modelo/__init__.py",
  "ferramentas/modelo/camadas.py",
  "ferramentas/modelo/casa_planta.py",
