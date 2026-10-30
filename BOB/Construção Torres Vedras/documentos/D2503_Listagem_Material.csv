@@ -1,0 +1,54 @@
+﻿capitulo;descricao;produto;pecas;comprimento_m;area_m2;volume_m3;quantidade_compra;unidade_compra
+Estrutura de madeira;Amarração 11x7,5;Madeira 11x7,5;18;103.52;;0.854;;
+Estrutura de madeira;Lameladas 200x100;Madeira 20x10;18;170.49;;3.41;;
+Estrutura de madeira;Madres;Madeira 22x7,5;4;12.7;;0.21;;
+Estrutura de madeira;Madres;Madeira 11x7,5;227;187.71;;1.588;;
+Estrutura de madeira;Paredes exteriores (módulos);Madeira 11x7,5;50;140.53;;1.152;;
+Estrutura de madeira;Paredes exteriores (módulos);Madeira 11x3,5;228;478.35;;1.845;;
+Estrutura de madeira;Paredes interiores (módulos);Madeira 11x7,5;24;46.53;;0.383;;
+Estrutura de madeira;Paredes interiores (módulos);Madeira 7,5x3,5;207;375.72;;0.986;;
+Pérgola - cobertura (madeira);Pérgola;Madeira 16x16;18;64.7;;1.646;;
+Pérgola - cobertura (madeira);Pérgola;Madeira 16x7,5;2;13.94;;0.167;;
+Pérgola - cobertura (madeira);Pérgola;Madeira 7x3;1;301.78;;0.634;;
+Paredes - camadas exteriores;OSB 9 mm;OSB3 9 mm 2500x1250;151;;165.97;;59;placa 1250x2500
+Paredes - camadas exteriores;Membrana Traspir 95;Rothoblaas TRASPIR 95 (T95), rolo 1,5 x 50 m, sobreposição 20 cm;34;;166.1;;3;rolo 1,5 x 50 m
+Paredes - camadas exteriores;Ripado 37,5x35 (A);"Ripa 37,5x35 (viga 75x35 cortada ao meio no comprimento), horizontal de 35 em 35 cm a partir de baixo; à volta de todos os vãos (em cima e em baixo, exceto junto ao chão) e na vertical nos cantos, dos dois lados";198;555.24;;;;
+Paredes - camadas exteriores;Forro Tremolo 22x135 (A);Piveteau TREMOLO Douglas classe 3.2 marron 22x135x4000 (macho-fêmea);631;1342.57;164.81;;370;tábua 4,0 m
+Paredes - isolamento e camadas interiores;Lã mineral Volcalis Comfort;Volcalis COMFORT (rolo, lambda 0,037) 60-80 mm entre montantes;330;;226.03;16.306;;
+Paredes - isolamento e camadas interiores;OSB 15 mm;OSB3 15 mm 2500x1250;493;;318.92;;113;placa 1250x2500
+Paredes - isolamento e camadas interiores;Pladur 13 mm;Pladur N 13 (H1 hidrófugo em WC/cozinha, F ignífugo junto a fontes de calor);257;;311.02;;110;placa 1200x2600
+Pavimentos;Vinílico;Pavimento vinílico em régua (escolha do cliente);8;;151.63;;;
+Tetos;Réguas de suspensão;"Régua (calha) de suspensão de teto falso em aço, aparafusada na vertical à face da viga; uma por perfil em cada viga (comprimento e modelo a confirmar)";385;90.67;;;;
+Tetos;Perfis de teto;Perfil de teto em aço galvanizado (~47x17, a confirmar) a 40 cm;87;361.29;;;;
+Tetos;Cantoneira perimetral 30x30;Perfil cantoneira 30x30x0,5 mm em barras de 3 m, aparafusada à parede em todo o perímetro (ref. do utilizador: Pertecno, Leroy Merlin 15953000);54;148.22;;;50;barra 3 m
+Tetos;Pladur 13 mm (teto);Pladur N 13 aparafusado aos perfis;188;;153.49;;55;placa 1200x2600
+Tetos;Lã mineral Volcalis 100 mm (teto);Lã mineral Volcalis 100 mm sobre o teto falso (casa térrea), entre as vigas de apoio ao teto;152;;137.05;13.706;;
+Cobertura;Painel sandwich 5 ondas 80 mm;Painel sandwich 5 ondas 80 mm, largura útil 1000 mm, Turbosharp 6x160, fita vedante;37;163.19;152.32;;;
+Cobertura;Caleira oculta;"Caleira oculta em chapa de alumínio, perfil 0,30 + 0,30 + 0,10 + 0,10 (desenvolvimento 0,80, D2503), sobre calços com pendente; membrana líquida, Flexiband, saídas";3;34.56;;;;
+Cobertura;Tubo de queda (no revestimento);Tubo de queda dentro do revestimento exterior, escondido pelo Tremolo (secção a confirmar);4;11.45;;;;
+Cobertura;Cumeeira;;1;17.13;;;;
+Cobertura;Chapéu de platibanda;Chapéu em chapa lacada que envolve o topo da platibanda (abas de ~3 cm por dentro e por fora);27;56.88;;;;
+Cobertura;OSB 15 mm;OSB3 15 mm 2500x1250;19;;4.98;;2;placa 1250x2500
+Cobertura;Membrana Traspir 95;Rothoblaas TRASPIR 95;11;;4.98;;1;rolo 1,5 x 50 m
+Cobertura;Ripado 37,5x35;Ripa 37,5x35 horizontal de 35 em 35 cm;13;11.21;;;;
+Cobertura;Forro Tremolo 22x135;Piveteau TREMOLO Douglas 22x135x4000, vertical;156;38.35;4.99;;11;tábua 4,0 m
+Caixilharia e remates;Aros e folhas (alumínio);Basculante em alumínio lacado de cor cinza rato e rotura térmica + vidro duplo térmico transparente;11;;31.68;;;
+Caixilharia e remates;Vidros;Basculante em alumínio lacado de cor cinza rato e rotura térmica + vidro duplo térmico transparente;8;;20.72;;;
+Caixilharia e remates;Estores exteriores;Basculante em alumínio lacado de cor cinza rato e rotura térmica + vidro duplo térmico transparente;6;;19.44;;;
+Caixilharia e remates;Portas e portão;Painel liso em alumínio lacado de cor cinza rato com rotura térmica (a escolher de acordo com o catálogo);3;;10.96;;;
+Caixilharia e remates;Remates exteriores dos vãos;Remate de vão em alumínio quinado RAL 7016 (assumido);11;59.68;;;;
+Caixilharia e remates;Remates interiores dos vãos;Forro interior do vão em Pladur (assumido);11;59.68;;;;
+Pérgola - cobertura;Telha da pérgola;"Telha cerâmica (user 2026-10-20: 'É cerâmica'; modelo e subtelha a confirmar)";1;;46.42;;;
+Pérgola - cobertura;Caleira à vista da pérgola;Caleira à vista em todo o comprimento da pérgola (secção a confirmar);1;13.94;;;;
+Pérgola - cobertura;Tubo de queda da pérgola;;2;4.93;;;;
+Caixilharia e remates (itens);M24 Despensa - Basculante;Basculante em alumínio lacado de cor cinza rato e rotura térmica + vidro duplo térmico transparente;1;;0.64;;1;0,8x0,8 + estore
+Caixilharia e remates (itens);M23 Despensa - Porta painel liso;Painel liso em alumínio lacado de cor cinza rato com rotura térmica (a escolher de acordo com o catálogo);1;;2.068;;1;0,94x2,2
+Caixilharia e remates (itens);M20 Cozinha - Vidro fixo;Vidro fixo em alumínio lacado de cor cinza rato e rotura térmica + vidro duplo térmico transparente;1;;1.2;;1;1,5x0,8 + estore
+Caixilharia e remates (itens);M18 WC - Basculante;Basculante em alumínio lacado de cor cinza rato e rotura térmica + vidro duplo térmico transparente;1;;0.64;;1;0,8x0,8
+Caixilharia e remates (itens);M12 Quarto 1 e 2 - Janela de correr;Janela de correr 2 folhas em alumínio lacado de cor cinza rato e rotura térmica + vidro duplo térmico transparente;1;;4.4;;1;2x2,2 + estore
+Caixilharia e remates (itens);M14 Quarto 1 e 2 - Janela de correr;Janela de correr 2 folhas em alumínio lacado de cor cinza rato e rotura térmica + vidro duplo térmico transparente;1;;4.4;;1;2x2,2 + estore
+Caixilharia e remates (itens);M9 Quarto Suite - Janela de correr;Janela de correr 2 folhas em alumínio lacado de cor cinza rato e rotura térmica + vidro duplo térmico transparente;1;;4.4;;1;2x2,2 + estore
+Caixilharia e remates (itens);M6 WC Suite - Basculante;Basculante em alumínio lacado de cor cinza rato e rotura térmica + vidro duplo térmico fosco;1;;0.64;;1;0,8x0,8
+Caixilharia e remates (itens);M5 Sala / Entrada - Porta painel liso;Painel liso em alumínio lacado de cor cinza rato com rotura térmica (a escolher de acordo com o catálogo);1;;2.288;;1;1,04x2,2
+Caixilharia e remates (itens);M3 Sala / Entrada - Janela de correr;Janela de correr 2 folhas em alumínio lacado de cor cinza rato e rotura térmica + vidro duplo térmico transparente;1;;4.4;;1;2x2,2 + estore
+Caixilharia e remates (itens);M1 Garagem - Portão seccionado;Portão de garagem seccionado automático;1;;6.6;;1;3x2,2

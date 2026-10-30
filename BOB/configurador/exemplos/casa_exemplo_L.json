@@ -1,0 +1,35 @@
+{
+ "formato": "discovercasa-configurador/1",
+ "_doc": "Casa de exemplo (genérica, não é de nenhum cliente): uma casa em L de 97 m² de base montada como o cliente a montaria no configurador — forma, paredes de 3 m, vãos, paredes interiores. Lados do contorno: 0 sul (9 m), 1 nascente do recorte (3 m), 2 sul da ala (5 m), 3 nascente (5 m), 4 norte (14 m, de nascente para poente), 5 poente (8 m, de norte para sul).",
+ "nome": "Casa exemplo L (configurador)",
+ "obra": "CFG-001",
+ "base": {"forma": "L", "contorno": [[0, 0], [9, 0], [9, 3], [14, 3], [14, 8], [0, 8]]},
+ "paredes_exteriores": [
+  {"lado": 0, "s0": 0, "s1": 3}, {"lado": 0, "s0": 3, "s1": 6}, {"lado": 0, "s0": 6, "s1": 9},
+  {"lado": 1, "s0": 0, "s1": 3},
+  {"lado": 2, "s0": 0, "s1": 3}, {"lado": 2, "s0": 3, "s1": 5},
+  {"lado": 3, "s0": 0, "s1": 3}, {"lado": 3, "s0": 3, "s1": 5},
+  {"lado": 4, "s0": 0, "s1": 3}, {"lado": 4, "s0": 3, "s1": 6}, {"lado": 4, "s0": 6, "s1": 9},
+  {"lado": 4, "s0": 9, "s1": 12}, {"lado": 4, "s0": 12, "s1": 14},
+  {"lado": 5, "s0": 0, "s1": 3}, {"lado": 5, "s0": 3, "s1": 6}, {"lado": 5, "s0": 6, "s1": 8}
+ ],
+ "vaos": [
+  {"lado": 0, "tipo": "janela_correr", "centro": 2.5, "largura": 2.0, "altura": 2.2, "estore": true, "divisao": "Sala"},
+  {"lado": 0, "tipo": "porta", "centro": 6.5, "largura": 1.0, "altura": 2.2, "divisao": "Entrada"},
+  {"lado": 2, "tipo": "janela_correr", "centro": 2.5, "largura": 2.0, "altura": 2.2, "estore": true, "divisao": "Quarto 1"},
+  {"lado": 3, "tipo": "janela", "centro": 1.25, "largura": 1.2, "altura": 1.2, "peitoril": 1.0, "estore": true, "divisao": "Quarto 1"},
+  {"lado": 4, "tipo": "janela", "centro": 2.5, "largura": 1.2, "altura": 1.2, "peitoril": 1.0, "estore": true, "divisao": "Quarto 2"},
+  {"lado": 4, "tipo": "janela", "centro": 8.0, "largura": 1.5, "altura": 1.2, "peitoril": 1.0, "estore": true, "divisao": "Cozinha"},
+  {"lado": 4, "tipo": "basculante", "centro": 12.5, "largura": 0.8, "altura": 0.8, "peitoril": 1.4, "vidro": "fosco", "divisao": "WC"},
+  {"lado": 5, "tipo": "janela", "centro": 5.0, "largura": 1.2, "altura": 1.2, "peitoril": 1.0, "estore": true, "divisao": "Sala"}
+ ],
+ "paredes_interiores": [
+  {"de": [9.1, 3.0], "ate": [9.1, 8.0], "portas": [{"centro": 1.5}, {"centro": 4.0}]},
+  {"de": [9.1, 5.5], "ate": [14.0, 5.5]},
+  {"de": [3.0, 8.0], "ate": [3.0, 5.5], "portas": [{"centro": 1.25}]},
+  {"de": [0.0, 5.5], "ate": [3.0, 5.5]}
+ ],
+ "cobertura": {"tipo": "escondida"},
+ "acabamentos": {"exterior": "A", "contra_ripado": true},
+ "pe_direito": 2.5
+}

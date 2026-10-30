@@ -1,0 +1,1 @@
+- [Skills do GSAP no repo](gsap-skills-no-repo.md) — as skills oficiais do GSAP viajam com o repositório; o resto do `.claude/` não.
