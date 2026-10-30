@@ -36,6 +36,14 @@
   .docs a { display: flex; justify-content: space-between; padding: .7rem .9rem; border: 1px solid var(--linha); border-radius: 8px; color: inherit; text-decoration: none; }
   .docs a:hover { border-color: var(--botao); }
   .ok { color: var(--ok); }
+  #vista { width: 100%; height: 26rem; border-radius: 8px; background: #eceae4; display: block; touch-action: none; }
+  .ver-res { display: flex; gap: .6rem; align-items: center; flex-wrap: wrap; margin: .2rem 0 .6rem; }
+  .selo { font-size: .8rem; padding: .2rem .65rem; border-radius: 99px; color: #fff; background: var(--ok); }
+  .selo.mau { background: var(--erro); }
+  .ver-lista { font-size: .85rem; margin: .6rem 0 0; padding-left: 1.2rem; max-height: 14rem; overflow: auto; }
+  .ver-lista li { margin: .15rem 0; }
+  .legenda { display: flex; gap: .9rem; flex-wrap: wrap; font-size: .8rem; color: var(--suave); margin-top: .5rem; }
+  .legenda i { display: inline-block; width: .8rem; height: .8rem; border-radius: 2px; margin-right: .3rem; vertical-align: -1px; }
   ul.notas { margin: .5rem 0 0; padding-left: 1.2rem; font-size: .85rem; color: var(--suave); }
 </style>
 </head>
@@ -91,8 +99,20 @@
     </div>
   </section>
 
+  <section class="cartao" id="passo-ver" hidden>
+    <h2>4. Verificação e modelo 3D</h2>
+    <div class="ver-res"><span class="selo" id="selo"></span><span class="ajuda" id="ver-resumo"></span></div>
+    <canvas id="vista" aria-label="Modelo 3D da estrutura de madeira"></canvas>
+    <div class="legenda">
+      <span><i style="background:#c9a36b"></i>Módulos</span><span><i style="background:#8d6e4a"></i>Amarração, vigas e lameladas</span>
+      <span><i style="background:#b8b0a0"></i>Madres, prumos e calços</span><span><i style="background:#d62828"></i>Peças com problema</span>
+      <span>Rodar: arrastar · Aproximar: roda do rato · Deslocar: botão direito</span>
+    </div>
+    <ul class="ver-lista" id="ver-lista"></ul>
+  </section>
+
   <section class="cartao" id="passo-docs" hidden>
-    <h2>4. Documentos</h2>
+    <h2>5. Documentos</h2>
     <div class="docs" id="docs"></div>
     <ul class="notas" id="notas"></ul>
   </section>
@@ -106,6 +126,7 @@
     <p class="ajuda"><strong>DWG:</strong> ainda não é lido (formato fechado da Autodesk). No AutoCAD, exporta a planta em PDF ou DWFx (Publicar) e larga esse ficheiro.</p>
   </section>
 </main>
+<script type="importmap">{ "imports": { "three": "./vendor/three.module.js" } }</script>
 <script type="module" src="./gerador.js"></script>
 </body>
 </html>

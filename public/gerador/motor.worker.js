@@ -38,8 +38,8 @@ def gerar(indice, escolhas_json):
     casa, avisos = DD.planta_para_casa(CANDIDATOS[indice]["planta"], escolhas)
     saida = Path("/saida")
     shutil.rmtree(saida, ignore_errors=True)
-    fich, notas = DD.gerar(casa, saida, escolhas)
-    return json.dumps({"ficheiros": fich, "notas": notas, "avisos": avisos}, ensure_ascii=False)
+    fich, notas, ver = DD.gerar(casa, saida, escolhas)
+    return json.dumps({"ficheiros": fich, "notas": notas, "avisos": avisos, **ver}, ensure_ascii=False)
 `);
 }
 
@@ -57,7 +57,8 @@ self.onmessage = async ({ data }) => {
     } else if (data.tipo === "gerar") {
       const r = JSON.parse(py.globals.get("gerar")(data.indice, JSON.stringify(data.escolhas)));
       const ficheiros = r.ficheiros.map((f) => ({ nome: f.split("/").pop(), bytes: py.FS.readFile(f) }));
-      self.postMessage({ tipo: "documentos", ficheiros, notas: r.notas, avisos: r.avisos });
+      self.postMessage({ tipo: "documentos", ficheiros, notas: r.notas, avisos: r.avisos,
+        verificacao: r.verificacao, pecas: r.pecas, contorno: r.contorno });
     } else if (data.tipo === "estado") {
       self.postMessage({ tipo: "pronto" });
     }

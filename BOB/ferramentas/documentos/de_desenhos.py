@@ -26,7 +26,10 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 from ferramentas.configurador.para_construtor import converter  # noqa: E402
 from ferramentas.dwfx.leitor import Dwfx  # noqa: E402
 from ferramentas.dwfx.leitor_pdf import Pdf  # noqa: E402
+from ferramentas.modelo.camadas import fundir, teto_sob_anel  # noqa: E402
+from ferramentas.modelo.casa_planta import construir  # noqa: E402
 from ferramentas.modelo.planta_arquitetura import ler_planta  # noqa: E402
+from ferramentas.modelo.verificar import pecas_madeira, verificar  # noqa: E402
 
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
@@ -260,8 +263,25 @@ def _correr_aqui(cmd, capture_output=False, text=False, **_kw):
     return subprocess.CompletedProcess(cmd, codigo, buf.getvalue() if capture_output else None, "")
 
 
+def verificacao(cfg, planta, S0):
+    """The checks (modelo/verificar.py) and the timber pieces for the 3D view: {"verificacao", "pecas"}."""
+    S = teto_sob_anel(fundir(json.loads(json.dumps(S0)), cfg.get("camadas") or {}), cfg)
+    E = fundir(S["estrutura"], {k: v for k, v in (cfg.get("estrutura") or {}).items() if k != "sistema"})
+    buf = io.StringIO()
+    with redirect_stdout(buf):
+        G, _ = construir(json.loads(json.dumps(cfg)), S, E, planta)
+    r = verificar(G)
+    marcadas = {c["a"] for c in r["choques"]} | {c["b"] for c in r["choques"]} | {f["peca"] for f in r["fora"]}
+    pecas = []
+    for s in pecas_madeira(G):
+        n = len(s["V"]) // 2
+        pecas.append({"b": [[round(v, 4) for v in p] for p in s["V"][:n]], "t": [[round(v, 4) for v in p] for p in s["V"][n:]],
+                      "tipo": s["tipo"], "nome": s["nome"], "erro": s["nome"] in marcadas})
+    return {"verificacao": r, "pecas": pecas, "contorno": G.get("contorno_estrutura") or cfg["fundacao"]["contorno"]}
+
+
 def gerar(casa, saida, escolhas=None):
-    """Writes planta_paredes.json, config.json and the documents (documentos/) to `saida`; returns (files, notes)."""
+    """Writes planta_paredes.json, config.json and the documents (documentos/) to `saida`; returns (files, notes, checks)."""
     E = dict(ESCOLHAS, **(escolhas or {}))
     S = json.load(open(RAIZ / "ferramentas" / "modelo" / "sistema_construtivo.json", encoding="utf-8"))
     planta, cfg, notas = converter(casa, S)
@@ -280,7 +300,7 @@ def gerar(casa, saida, escolhas=None):
         subprocess.run = real
     if r.returncode:
         raise RuntimeError(f"gerar.py falhou: {(r.stdout or '')[-1500:]}")
-    return sorted(str(p) for p in (saida / "documentos").iterdir()), notas
+    return sorted(str(p) for p in (saida / "documentos").iterdir()), notas, verificacao(cfg, planta, S)
 
 
 def main():
@@ -303,9 +323,13 @@ def main():
     (Path(a.saida) / "casa.json").write_text(json.dumps(casa, ensure_ascii=False, indent=1), encoding="utf-8")
     for t in avisos:
         print("  aviso:", t)
-    fich, notas = gerar(casa, a.saida, esc)
+    fich, notas, ver = gerar(casa, a.saida, esc)
     for t in notas:
         print("  nota:", t)
+    v = ver["verificacao"]
+    print(f"  verificação: {v['pecas']} peças, {len(v['choques'])} choques, {len(v['fora'])} fora do sítio")
+    for c in v["choques"][:10]:
+        print(f"    {c['cm']} cm  {c['a']}  <>  {c['b']}")
     for f in fich:
         print(" ", f)
 
