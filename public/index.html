@@ -45,7 +45,7 @@
   <!-- com sessão: o Design (por construir) -->
   <section id="ecra-app" class="cartao" hidden>
     <h2>Design</h2>
-    <p class="ajuda">Em construção.</p>
+    <p><a href="/configurador/">Abrir o Configurador</a></p>
   </section>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
@@ -59,6 +59,9 @@
     const ok = sessao && nivel(sessao) !== 'sem';
     $('ecra-entrar').hidden = ok; $('ecra-app').hidden = !ok; $('sair').hidden = !ok;
     $('quem').textContent = ok ? `${sessao.user.user_metadata.nome || ''} · ${NIVEIS[nivel(sessao)]}` : '';
+    // veio de uma página interna (porta.js): depois de entrar, volta para lá
+    const voltar = new URLSearchParams(location.search).get('voltar');
+    if (ok && voltar && /^\/configurador\//.test(voltar)) location.replace(voltar);
   }
   async function entrarComCodigo() {
     try { mostrar(await Design.esperarCodigo()); }
