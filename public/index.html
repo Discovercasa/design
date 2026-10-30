@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Discovercasa Design</title>
+<style>
+  :root { --fundo: #f4f4f2; --cartao: #fff; --texto: #222; --suave: #666; --linha: #ddd; --botao: #1f4e79; --erro: #b3261e; }
+  @media (prefers-color-scheme: dark) { :root { --fundo: #161616; --cartao: #222; --texto: #eee; --suave: #aaa; --linha: #333; --botao: #4f8fd6; --erro: #ff8a80; } }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: system-ui, -apple-system, "Segoe UI", sans-serif; background: var(--fundo); color: var(--texto); }
+  header { display: flex; align-items: center; gap: 1rem; padding: .8rem 1rem; background: var(--cartao); border-bottom: 1px solid var(--linha); }
+  header h1 { font-size: 1.1rem; margin: 0; }
+  header .espaco { flex: 1; }
+  main { max-width: 60rem; margin: 2rem auto; padding: 0 1rem; }
+  .cartao { background: var(--cartao); border: 1px solid var(--linha); border-radius: 10px; padding: 1.5rem; }
+  button { font: inherit; padding: .55rem 1rem; border-radius: 8px; border: 0; background: var(--botao); color: #fff; cursor: pointer; }
+  button.secundario { background: transparent; color: var(--texto); border: 1px solid var(--linha); }
+  .ajuda { color: var(--suave); font-size: .9rem; }
+  .erro { color: var(--erro); }
+</style>
+</head>
+<body>
+<header>
+  <h1>Discovercasa · Design</h1><span class="espaco"></span>
+  <span id="quem" class="ajuda"></span>
+  <button id="sair" class="secundario" type="button" hidden>Sair</button>
+</header>
+<main>
+  <!-- sem sessão: entra-se com a conta do Hub -->
+  <section id="ecra-entrar" class="cartao" hidden>
+    <h2>Entrar</h2>
+    <p>O Design usa a conta do Hub. Só entra quem tem a permissão "Design".</p>
+    <button id="entrar" type="button">Entrar com a conta do Hub</button>
+    <p id="entrar-msg" class="ajuda" role="status"></p>
+  </section>
+  <!-- com sessão: o Design (por construir) -->
+  <section id="ecra-app" class="cartao" hidden>
+    <h2>Design</h2>
+    <p class="ajuda">Em construção.</p>
+  </section>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script src="/js/design-core.js"></script>
+<script>
+  const { sb, nivel } = Design;
+  const $ = (id) => document.getElementById(id);
+  const NIVEIS = { ver: 'Ver', editar: 'Editar' };
+
+  function mostrar(sessao) {
+    const ok = sessao && nivel(sessao) !== 'sem';
+    $('ecra-entrar').hidden = ok; $('ecra-app').hidden = !ok; $('sair').hidden = !ok;
+    $('quem').textContent = ok ? `${sessao.user.user_metadata.nome || ''} · ${NIVEIS[nivel(sessao)]}` : '';
+  }
+  async function entrarComCodigo() {
+    try { mostrar(await Design.esperarCodigo()); }
+    catch (e) { $('entrar-msg').className = 'erro'; $('entrar-msg').textContent = e.message; mostrar(null); }
+  }
+
+  (async () => {
+    const { data: { session } } = await sb.auth.getSession();
+    if (session) return mostrar(session);
+    mostrar(null);
+    // aberto pelo Hub: primeiro fica à espera do código, depois avisa que está pronto
+    if (window.opener && window.name === 'hub-design') { $('entrar-msg').textContent = 'A entrar com a conta do Hub…'; entrarComCodigo(); Design.avisarHub(); }
+  })();
+
+  $('entrar').addEventListener('click', () => {
+    try { entrarComCodigo(); Design.entrarPeloHub(); $('entrar-msg').className = 'ajuda'; $('entrar-msg').textContent = 'A entrar com a conta do Hub…'; }
+    catch (e) { $('entrar-msg').className = 'erro'; $('entrar-msg').textContent = e.message; }
+  });
+  $('sair').addEventListener('click', async () => { await sb.auth.signOut(); mostrar(null); });
+</script>
+</body>
+</html>
