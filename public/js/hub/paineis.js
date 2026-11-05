@@ -32,22 +32,33 @@ export function htmlPerfil(novidadeNova) {
 }
 
 // ---------------------------------------------------------------- acrescentar / editar
-export function dlgAcrescentar(projetoId, cpId) {
+// posição de um checkpoint novo (1..n+1, por defeito no fim) ou de um que já existe (1..n)
+export function opcoesPosicao(pid, atualId) {
+  const cps = checkpointsDe(pid).filter((c) => c.id !== atualId);
+  const atualPos = atualId ? checkpointsDe(pid).findIndex((c) => c.id === atualId) + 1 : cps.length + 1;
+  const ops = cps.map((c, i) => `<option value="${i + 1}"${i + 1 === atualPos ? ' selected' : ''}>${i + 1} · antes de «${esc(c.titulo)}»</option>`);
+  ops.push(`<option value="${cps.length + 1}"${cps.length + 1 === atualPos ? ' selected' : ''}>${cps.length + 1} · no fim</option>`);
+  return ops.join('');
+}
+
+export function dlgAcrescentar(projetoId, cpId, tipoInicial) {
   const pid = projetoId || E.projetos[0].id;
+  const tarefa = tipoInicial ? tipoInicial === 'tarefa' : !!cpId;
   return `<form data-form="acrescentar">${cabeca('Acrescentar', 'Um checkpoint é uma meta do projeto; uma tarefa é um passo pequeno dentro de um checkpoint.')}
     <div class="dlg-corpo">
       <div class="segmentado" role="group" aria-label="O que acrescentar">
-        <button type="button" data-acao="tipo-novo" data-valor="tarefa" aria-pressed="${cpId ? 'true' : 'false'}">Tarefa</button>
-        <button type="button" data-acao="tipo-novo" data-valor="checkpoint" aria-pressed="${cpId ? 'false' : 'true'}">Checkpoint</button>
+        <button type="button" data-acao="tipo-novo" data-valor="tarefa" aria-pressed="${tarefa}">Tarefa</button>
+        <button type="button" data-acao="tipo-novo" data-valor="checkpoint" aria-pressed="${!tarefa}">Checkpoint</button>
       </div>
-      <input type="hidden" name="tipo" value="${cpId ? 'tarefa' : 'checkpoint'}">
+      <input type="hidden" name="tipo" value="${tarefa ? 'tarefa' : 'checkpoint'}">
       <div class="grelha-campos">
         <label class="campo-grupo"><span>Projeto</span><select class="campo" name="projeto" data-acao="projeto-novo">${opcoesProjetos(pid)}</select></label>
-        <label class="campo-grupo so-tarefa"${cpId ? '' : ' hidden'}><span>Checkpoint</span><select class="campo" name="checkpoint">${opcoesCheckpoints(pid, cpId)}</select></label>
+        <label class="campo-grupo so-tarefa"${tarefa ? '' : ' hidden'}><span>Checkpoint</span><select class="campo" name="checkpoint">${opcoesCheckpoints(pid, cpId)}</select></label>
+        <label class="campo-grupo so-checkpoint"${tarefa ? ' hidden' : ''}><span>Posição no workflow</span><select class="campo" name="posicao">${opcoesPosicao(pid)}</select></label>
       </div>
       <label class="campo-grupo"><span>Título</span><input class="campo" name="titulo" maxlength="200" required autocomplete="off"></label>
       <label class="campo-grupo"><span>Descrição <small>(opcional)</small></span><textarea class="campo" name="descricao" maxlength="4000"></textarea></label>
-      <div class="grelha-campos so-tarefa"${cpId ? '' : ' hidden'}>
+      <div class="grelha-campos so-tarefa"${tarefa ? '' : ' hidden'}>
         <label class="campo-grupo"><span>Responsável</span><select class="campo" name="responsavel">${opcoesPessoas(null)}</select></label>
         <label class="campo-grupo"><span>App sugerida <small>(se poupa tempo)</small></span><select class="campo" name="app">${opcoesProjetos(null, 'Nenhuma')}</select></label>
         <label class="campo-grupo"><span>Custo <small>(opcional)</small></span><input class="campo" name="custo" maxlength="300" placeholder="ex.: ≈ 0,79 €/h"></label>
@@ -94,7 +105,7 @@ export function dlgEditarCheckpoint(c) {
       <label class="campo-grupo"><span>Descrição</span><textarea class="campo" name="descricao" maxlength="4000">${esc(c.descricao)}</textarea></label>
       <div class="grelha-campos">
         <label class="campo-grupo"><span>Estado</span><select class="campo" name="estado">${opcoes(ESTADOS_C, c.estado)}</select></label>
-        <label class="campo-grupo"><span>Ordem</span><input class="campo num" type="number" name="ordem" min="0" max="999" value="${c.ordem}"></label>
+        <label class="campo-grupo"><span>Posição no workflow</span><select class="campo" name="posicao">${opcoesPosicao(c.projeto, c.id)}</select></label>
       </div>
       <p class="erro-msg pequeno" role="alert"></p>
     </div>
@@ -207,5 +218,24 @@ export function htmlGaveta(sep, sugestoes, abertas, erro) {
       <button type="button" role="tab" data-acao="sug-sep" data-valor="checklist" aria-selected="${sep === 'checklist'}">Checklist</button>
     </div>
     <div class="gaveta-corpo">${corpo}</div></div>`;
+}
+// carregar documentos (um ou vários ficheiros de uma vez)
+export function dlgDocumento(projetoId) {
+  return `<form data-form="documento" data-projeto="${projetoId}">${cabeca('Acrescentar documento', esc(nomeProjeto(projetoId)) + ' · fica guardado em privado, só para quem entra no Design.')}
+    <div class="dlg-corpo">
+      <div class="segmentado" role="group" aria-label="Tipo de documento">
+        <button type="button" data-acao="tipo-doc" data-valor="informativo" aria-pressed="true">Informativo</button>
+        <button type="button" data-acao="tipo-doc" data-valor="adicional" aria-pressed="false">Adicional</button>
+      </div>
+      <input type="hidden" name="tipo" value="informativo">
+      <p class="fraco mini" data-explica>Informativo: o que o projeto é (especificações, planos). Adicional: conhecimento extra (desenhos de obras, fichas, fotografias).</p>
+      <label class="campo-grupo"><span>Ficheiros</span><input class="campo" type="file" name="ficheiros" multiple required></label>
+      <ul class="ficheiros-escolhidos" data-escolhidos></ul>
+      <label class="campo-grupo"><span>Título <small>(se for um só ficheiro; vazio = o nome do ficheiro)</small></span><input class="campo" name="titulo" maxlength="200"></label>
+      <label class="campo-grupo"><span>Descrição <small>(opcional)</small></span><textarea class="campo" name="descricao" maxlength="2000" style="min-height:64px"></textarea></label>
+      <p class="erro-msg pequeno" role="alert"></p>
+    </div>
+    <div class="dlg-rodape"><button class="btn texto" type="button" data-acao="fechar-dlg">Cancelar</button><button class="btn primario" type="submit">Carregar</button></div>
+  </form>`;
 }
 export { abrirDialogo, projeto };

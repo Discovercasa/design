@@ -1,5 +1,5 @@
 // As páginas do hub, desenhadas a partir do estado E (dados.js). Os botões levam data-acao; o app.js trata dos cliques.
-import { E, projeto, nomeProjeto, checkpointsDe, tarefasDe, decisaoDaTarefa, decisoesDe, resumo, feitosDe, chave } from './dados.js';
+import { E, projeto, nomeProjeto, checkpointsDe, tarefasDe, decisaoDaTarefa, decisoesDe, resumo, feitosDe, chave, documentosDe } from './dados.js';
 import { ic, esc, dia, diaCurto, iniciais, euros } from './util.js';
 
 const ROTULO = { por_fazer: 'Por fazer', em_curso: 'Em curso', bloqueada: 'Bloqueada', concluida: 'Concluída', concluido: 'Concluído' };
@@ -114,10 +114,12 @@ export function paginaProjeto(p) {
       <section aria-labelledby="t-workflow">
         <div class="seccao-cabeca">
           <div><h2 id="t-workflow">Workflow</h2><p>Os checkpoints por ordem e as tarefas para chegar a cada um. <span class="num">${r.feitos} de ${r.total}</span> concluídos.</p></div>
-          ${E.eu.editar ? `<button class="btn" type="button" data-acao="acrescentar" data-projeto="${p.id}">${ic('mais')}Checkpoint</button>` : ''}
+          ${E.eu.editar ? `<div class="botoes"><button class="btn" type="button" data-acao="acrescentar" data-projeto="${p.id}" data-tipo="checkpoint">${ic('mais')}Checkpoint</button>
+            <button class="btn" type="button" data-acao="acrescentar" data-projeto="${p.id}" data-tipo="tarefa"${cps.length ? '' : ' disabled title="Acrescenta primeiro um checkpoint"'}>${ic('mais')}Tarefa</button></div>` : ''}
         </div>
         ${cps.length ? `<ol class="workflow">${cps.map((c, i) => passo(c, i)).join('')}</ol>` : '<p class="vazio">Ainda sem checkpoints. Acrescenta o primeiro objetivo deste projeto.</p>'}
       </section>
+      ${documentos(p)}
       ${p.pipeline ? pipeline(p) : ''}
     </div>
 
@@ -125,6 +127,7 @@ export function paginaProjeto(p) {
       <section class="bloco-lateral"><h3>Próximos passos</h3>
         ${proximos.length ? `<ul class="lista-simples">${proximos.map((t) => `<li>${ic('alvo', 'ic-sm')}<a href="#/projeto/${p.slug}/t-${t.id}" class="pequeno" style="color:inherit">${esc(t.titulo)}</a></li>`).join('')}</ul>` : '<p class="suave pequeno">Nada em aberto.</p>'}
       </section>
+      ${pedidos(p)}
       <section class="bloco-lateral"><h3>Objetivos</h3><ul class="lista-simples">${(p.objetivos || []).map((o) => `<li>${ic('certo', 'ic-sm')}<span class="pequeno">${esc(o)}</span></li>`).join('')}</ul></section>
       <section class="bloco-lateral"><h3>Futuro</h3><ul class="lista-simples">${(p.futuro || []).map((o) => `<li>${ic('seta', 'ic-sm')}<span class="pequeno">${esc(o)}</span></li>`).join('')}</ul></section>
       <section class="bloco-lateral"><h3>Decisões</h3>
@@ -191,6 +194,49 @@ function tarefa(t) {
       ${E.eu.editar ? `<button class="icone-botao" type="button" data-acao="editar-tarefa" data-id="${t.id}" aria-label="Editar tarefa" title="Editar">${ic('editar', 'ic-sm')}</button>` : ''}
     </div>
   </div>`;
+}
+
+// ---------------------------------------------------------------- documentos do projeto (informativos e adicionais)
+const tamanho = (b) => (b >= 1e6 ? `${(b / 1e6).toLocaleString('pt-PT', { maximumFractionDigits: 1 })} MB` : `${Math.max(1, Math.round(b / 1e3))} kB`);
+const extensao = (nome) => (String(nome).split('.').pop() || '').toUpperCase().slice(0, 4);
+function linhaDoc(d) {
+  const titulo = d.titulo.includes(' · ') ? d.titulo.split(' · ').slice(1).join(' · ') : d.titulo;
+  return `<li class="doc" id="doc-${d.id}">
+    <span class="doc-tipo" aria-hidden="true">${esc(extensao(d.nome_ficheiro))}</span>
+    <div class="doc-corpo"><p class="doc-titulo">${esc(titulo)} ${novo('documento', d.id)}</p>
+      <p class="doc-meta">${esc(d.nome_ficheiro)} · ${tamanho(d.tamanho)} · ${dia(d.criado_em)} · ${esc(d.criado_por_nome || 'Equipa')}</p>
+      ${d.descricao ? `<p class="doc-desc">${esc(d.descricao)}</p>` : ''}</div>
+    <div class="doc-acoes"><button class="btn pequeno" type="button" data-acao="abrir-doc" data-id="${d.id}">${ic('abrir', 'ic-sm')}Abrir</button>
+      ${E.eu.editar ? `<button class="icone-botao" type="button" data-acao="apagar-doc" data-id="${d.id}" aria-label="Apagar ${esc(titulo)}" title="Apagar">${ic('apagar', 'ic-sm')}</button>` : ''}</div>
+  </li>`;
+}
+function grupoDocs(tipo, titulo, explica, p) {
+  const docs = documentosDe(p.id, tipo);
+  const grupos = new Map();   // "Torres Vedras · …" agrupa por obra / origem
+  for (const d of docs) { const g = d.titulo.includes(' · ') ? d.titulo.split(' · ')[0] : ''; if (!grupos.has(g)) grupos.set(g, []); grupos.get(g).push(d); }
+  const corpo = !docs.length ? `<p class="vazio pequeno">Ainda sem documentos ${tipo === 'informativo' ? 'informativos' : 'adicionais'}.</p>`
+    : [...grupos].map(([g, lista]) => g
+      ? `<details class="doc-grupo"${lista.length <= 4 ? ' open' : ''}><summary>${esc(g)} <span class="fraco num">${lista.length}</span></summary><ul class="docs-lista">${lista.map(linhaDoc).join('')}</ul></details>`
+      : `<ul class="docs-lista">${lista.map(linhaDoc).join('')}</ul>`).join('');
+  return `<div class="docs-tipo"><div class="docs-tipo-cabeca"><h3>${titulo} <span class="fraco num">${docs.length}</span></h3><p class="fraco mini">${explica}</p></div>${corpo}</div>`;
+}
+function documentos(p) {
+  return `<section class="seccao" id="documentos" aria-labelledby="t-docs">
+    <div class="seccao-cabeca"><div><h2 id="t-docs">Documentos</h2><p>Tudo o que foi partilhado com este projeto. Ficam guardados em privado: só quem entra no Design os abre.</p></div>
+      ${E.eu.editar ? `<button class="btn" type="button" data-acao="acrescentar-doc" data-projeto="${p.id}">${ic('mais')}Documento</button>` : ''}</div>
+    <div class="docs-grelha">
+      ${grupoDocs('informativo', 'Documentos informativos', 'O que o projeto é: especificações, planos, decisões escritas.', p)}
+      ${grupoDocs('adicional', 'Documentos adicionais', 'Conhecimento extra para o projeto: desenhos de obras, fichas, fotografias.', p)}
+    </div>
+  </section>`;
+}
+// tarefas de outros projetos que sugerem usar esta app: aparecem também aqui
+function pedidos(p) {
+  const lista = E.tarefas.filter((t) => t.app_sugerida === p.id && t.projeto !== p.id && t.estado !== 'concluida');
+  if (!lista.length) return '';
+  return `<section class="bloco-lateral"><h3>Pedidos de outros projetos <span class="fraco num">${lista.length}</span></h3>
+    <p class="fraco mini" style="margin:-6px 0 10px">Tarefas noutros projetos que sugerem usar o ${esc(p.nome)}.</p>
+    <ul class="lista-simples">${lista.slice(0, 8).map((t) => `<li>${ic('app', 'ic-sm')}<span class="pequeno"><a href="#/projeto/${projeto(t.projeto).slug}/t-${t.id}" style="color:inherit">${esc(t.titulo)}</a><br><span class="fraco mini">${esc(nomeProjeto(t.projeto))} · ${ROTULO[t.estado]}</span></span></li>`).join('')}</ul></section>`;
 }
 
 // ---------------------------------------------------------------- Step Inside: pipeline com custos e calculadora

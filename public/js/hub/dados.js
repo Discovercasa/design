@@ -7,7 +7,7 @@ export const E = {
   eu: { id: null, nome: '', editar: false },
   perfil: null,            // a minha linha em perfis
   projetos: [],            // JSON de cada projeto
-  checkpoints: [], tarefas: [], decisoes: [], perfis: [], notificacoes: [],
+  checkpoints: [], tarefas: [], decisoes: [], perfis: [], notificacoes: [], documentos: [],
   vistos: new Set(),       // "tarefa:12"
   novos: new Set(),        // o que é novo para mim nesta visita (mostra a etiqueta "Novo")
   erro: null,
@@ -49,11 +49,13 @@ export async function carregarTudo() {
     sb().from('perfis').select('id, nome'),
     sb().from('vistos').select('tipo, ref_id'),
   ]);
+  const docs = await sb().from('documentos').select('*').order('criado_em');   // à parte: sem esta tabela o resto continua
   const falha = r.find((x) => x.error);
   if (falha) throw falha.error;
   [E.checkpoints, E.tarefas, E.decisoes, E.perfis] = r.map((x) => x.data);
   E.decisoes.forEach((d) => (d.decisoes_opcoes || []).sort((a, b) => a.ordem - b.ordem || a.id - b.id));
   E.vistos = new Set(r[4].data.map((v) => chave(v.tipo, v.ref_id)));
+  E.documentos = docs.error ? [] : docs.data;
   E.erro = null;
 }
 
@@ -65,6 +67,7 @@ export function porVer() {
     ...E.checkpoints.filter((x) => novo('checkpoint', x)).map((x) => ({ tipo: 'checkpoint', x })),
     ...E.tarefas.filter((x) => novo('tarefa', x)).map((x) => ({ tipo: 'tarefa', x })),
     ...E.decisoes.filter((x) => novo('decisao', x)).map((x) => ({ tipo: 'decisao', x })),
+    ...E.documentos.filter((x) => novo('documento', x)).map((x) => ({ tipo: 'documento', x })),
   ];
 }
 export async function marcarVistos(itens) {
@@ -100,7 +103,9 @@ export async function mudarNome(nome) {
 
 // escrita: cada função devolve o erro (ou null) e volta a carregar
 async function feito(p) { const { error } = await p; if (error) throw error; await carregarTudo(); }
-export const criarCheckpoint = (c) => feito(sb().from('checkpoints').insert(c));
+// checkpoints entram na posição escolhida (1 = primeiro); os outros são renumerados na base de dados
+export const criarCheckpoint = (c, posicao) => feito(sb().rpc('inserir_checkpoint', { p_projeto: c.projeto, p_titulo: c.titulo, p_descricao: c.descricao || '', p_posicao: posicao }));
+export const moverCheckpoint = (id, posicao) => feito(sb().rpc('mover_checkpoint', { p_id: id, p_posicao: posicao }));
 export const mudarCheckpoint = (id, campos) => feito(sb().from('checkpoints').update(campos).eq('id', id));
 export const apagarCheckpoint = (id) => feito(sb().from('checkpoints').delete().eq('id', id));
 export const criarTarefa = (t) => feito(sb().from('tarefas').insert(t));
@@ -135,4 +140,40 @@ export function feitosDe(id) {
   const d = E.decisoes.filter((x) => (!id || x.projeto === id) && x.estado === 'decidida' && x.decidida_em)
     .map((x) => ({ dia: x.decidida_em, texto: `Decidido: ${x.pergunta}`, projeto: x.projeto, tipo: 'decisao', id: x.id }));
   return [...t, ...d].sort((a, b) => (a.dia < b.dia ? 1 : a.dia > b.dia ? -1 : b.id - a.id));
+}
+
+// ---------------------------------------------------------------- documentos (armazenamento privado "documentos")
+export const documentosDe = (id, tipo) => E.documentos.filter((d) => d.projeto === id && (!tipo || d.tipo === tipo));
+const chaveFicheiro = (nome) => nome.normalize('NFKD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9._-]+/g, '-').replace(/-{2,}/g, '-').replace(/^[-.]+|[-.]+$/g, '') || 'ficheiro';
+const MIMES = { pdf: 'application/pdf', md: 'text/plain; charset=utf-8', txt: 'text/plain; charset=utf-8', csv: 'text/csv', png: 'image/png', jpg: 'image/jpeg', jpeg: 'image/jpeg', webp: 'image/webp' };
+export async function carregarDocumento(projetoId, tipo, ficheiro, titulo, descricao) {
+  const ext = (ficheiro.name.split('.').pop() || '').toLowerCase();
+  const mime = MIMES[ext] || ficheiro.type || 'application/octet-stream';
+  const caminho = `${projetoId}/${tipo}/${Date.now().toString(36)}__${chaveFicheiro(ficheiro.name)}`;
+  const up = await sb().storage.from('documentos').upload(caminho, ficheiro, { contentType: mime, upsert: false });
+  if (up.error) throw up.error;
+  const { error } = await sb().from('documentos').insert({ projeto: projetoId, tipo, titulo: titulo || ficheiro.name, descricao: descricao || '',
+    caminho, nome_ficheiro: ficheiro.name, tamanho: ficheiro.size, mime });
+  if (error) { await sb().storage.from('documentos').remove([caminho]); throw error; }
+}
+export async function urlDocumento(doc) {
+  const descarregar = !/^(application\/pdf|text\/|image\/)/.test(doc.mime || '');
+  const { data, error } = await sb().storage.from('documentos').createSignedUrl(doc.caminho, 300, descarregar ? { download: doc.nome_ficheiro } : undefined);
+  if (error) throw error;
+  return data.signedUrl;
+}
+export async function apagarDocumento(doc) {
+  const { error } = await sb().from('documentos').delete().eq('id', doc.id);
+  if (error) throw error;
+  await sb().storage.from('documentos').remove([doc.caminho]);
+  await carregarTudo();
+}
+
+// ---------------------------------------------------------------- em direto: qualquer mudança chega a quem tem o hub aberto
+export function ouvirMudancas(aoMudar) {
+  const canal = sb().channel('hub-mudancas');
+  for (const t of ['checkpoints', 'tarefas', 'decisoes', 'decisoes_opcoes', 'documentos', 'notificacoes'])
+    canal.on('postgres_changes', { event: '*', schema: 'public', table: t }, () => aoMudar(t));
+  canal.subscribe();
+  return canal;
 }

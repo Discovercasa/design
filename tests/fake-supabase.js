@@ -11,7 +11,7 @@
     projetos: [['build_your_house', 'Build Your House'], ['builder', 'Builder'], ['gerador', 'Gerador de documentos'], ['orcamentacao', 'Orçamentação'], ['plataforma_cliente', 'Step Inside']].map(([id, nome], i) => ({ id, nome, ordem: i + 1 })),
     perfis: [{ id: OUTRO.id, nome: OUTRO.nome, criado_em: '2026-11-01T00:00:00Z', notificacoes_vistas_em: '2026-11-01T00:00:00Z' }],
     checkpoints: fx.checkpoints || [], tarefas: fx.tarefas || [], decisoes: fx.decisoes || [], decisoes_opcoes: fx.decisoes_opcoes || [],
-    notificacoes: [], vistos: [],
+    documentos: fx.documentos || [], notificacoes: [], vistos: [],
     sugestoes: [{ id: 1, texto: 'Pôr um modo escuro no hub.', ferramenta: 'geral', estado: 'nova', autor_id: OUTRO.id, autor_nome: OUTRO.nome, criada_em: '2026-11-04T09:00:00Z', na_checklist: false, checklist_em: null }],
     sugestoes_comentarios: [],
   };
@@ -22,6 +22,7 @@
   const nomeAtual = () => pnome(ator.id) || ator.nome || 'Alguém';
   function notificar(projeto, tipo, texto, ref_tipo, ref_id) {
     db.notificacoes.push({ id: ++seq.notificacoes, projeto, tipo, texto, ator_id: ator.id, ator_nome: nomeAtual(), destinatario_id: null, ref_tipo, ref_id, criada_em: agora() });
+    if (typeof avisar === 'function') avisar('notificacoes');
   }
   const antes = {
     checkpoints(n, o) {
@@ -62,6 +63,13 @@
       }
     },
   };
+  depois.documentos = (n, o) => { if (!o) notificar(n.projeto, 'documento_novo', `${nomeAtual()} acrescentou o documento «${n.titulo}» (${n.tipo})`, 'documento', n.id); };
+  antes.documentos = (n, o) => { if (!o) Object.assign(n, { criado_por: ator.id, criado_por_nome: nomeAtual(), criado_em: agora(), descricao: n.descricao ?? '' }); };
+  // em direto: cada escrita avisa os canais abertos (como o Supabase Realtime)
+  const ouvintes = [];
+  const avisar = (t) => setTimeout(() => ouvintes.filter((o) => o.tabela === t).forEach((o) => o.cb({ table: t })), 30);
+  // armazenamento privado: guarda só os nomes e os tamanhos
+  const ficheiros = new Map((fx.documentos || []).map((d) => [d.caminho, d.tamanho]));
   const FILHOS = { decisoes_opcoes: ['decisoes', 'decisao_id'], sugestoes_comentarios: ['sugestoes', 'sugestao_id'] };
   const copia = (o) => JSON.parse(JSON.stringify(o));
 
@@ -120,6 +128,7 @@
             return c;
           });
         }
+        if (this.op !== 'select' && linhas.length) avisar(this.t);
         let data = this.op === 'select' || this.ret ? copia(linhas) : null;
         if (this.um) { if (this.um === 'single' && data.length !== 1) return { data: null, error: { message: 'JSON object requested, multiple (or no) rows returned' } }; data = data[0] || null; }
         return { data, error: null };
@@ -131,6 +140,34 @@
   window.supabase = {
     createClient: () => ({
       from: (t) => new Q(t),
+      rpc: async (fn, a) => {
+        const renumerar = (pr, semId, pos) => db.checkpoints.filter((c) => c.projeto === pr && c.id !== semId).sort((x, y) => x.ordem - y.ordem || x.id - y.id)
+          .forEach((c, i) => { c.ordem = i + 1 >= pos ? i + 2 : i + 1; });
+        if (fn === 'inserir_checkpoint') {
+          const n = db.checkpoints.filter((c) => c.projeto === a.p_projeto).length;
+          const pos = Math.max(1, Math.min(a.p_posicao || n + 1, n + 1));
+          renumerar(a.p_projeto, null, pos);
+          const r = await new Q('checkpoints').insert({ projeto: a.p_projeto, titulo: a.p_titulo, descricao: a.p_descricao, ordem: pos }).select().single();
+          return { data: r.data && r.data.id, error: r.error };
+        }
+        if (fn === 'mover_checkpoint') {
+          const c = db.checkpoints.find((x) => x.id === a.p_id);
+          const n = db.checkpoints.filter((x) => x.projeto === c.projeto).length;
+          const pos = Math.max(1, Math.min(a.p_posicao, n));
+          renumerar(c.projeto, c.id, pos); c.ordem = pos; avisar('checkpoints');
+          return { data: null, error: null };
+        }
+        return { data: null, error: { message: `function ${fn} does not exist` } };
+      },
+      storage: { from: () => ({
+        upload: async (caminho, f) => { if (ficheiros.has(caminho)) return { data: null, error: { message: 'The resource already exists' } }; ficheiros.set(caminho, f.size); return { data: { path: caminho }, error: null }; },
+        createSignedUrl: async (caminho, s, o) => (ficheiros.has(caminho) ? { data: { signedUrl: `/__ficheiro?c=${encodeURIComponent(caminho)}${o && o.download ? '&download' : ''}` }, error: null } : { data: null, error: { message: 'Object not found' } }),
+        remove: async (lista) => { lista.forEach((c) => ficheiros.delete(c)); return { data: lista, error: null }; },
+      }) },
+      channel: () => {
+        const canal = { on: (_, filtro, cb) => { ouvintes.push({ tabela: filtro.table, cb }); return canal; }, subscribe: () => canal };
+        return canal;
+      },
       auth: {
         getSession: async () => ({ data: { session: ligado ? sessao : null } }),
         signOut: async () => { ligado = false; sessionStorage.setItem('fake-saiu', '1'); return { error: null }; },
@@ -140,7 +177,7 @@
   };
   // nos testes: agir como outra pessoa (acrescentar, concluir…) e ver a base
   window.__fake = {
-    db, OUTRO,
+    db, OUTRO, ficheiros,
     async comoOutro(fn) { ator = OUTRO; try { return await fn(new Proxy({}, { get: (_, t) => new Q(t) })); } finally { ator = U; } },
   };
 })();

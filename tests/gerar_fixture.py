@@ -1,4 +1,4 @@
-"""Lê supabase/migrations/0005_hub_conteudo_inicial.sql e escreve tests/fixture.json com as mesmas linhas
+"""Lê as migrações 0005, 0007 e 0008 e escreve tests/fixture.json com as mesmas linhas
 (checkpoints, tarefas, decisões, opções) para a base simulada dos testes. Também confirma que cada chamada tem
 argumentos válidos (uma gralha no SQL aparece aqui antes de chegar ao Supabase).
 
@@ -8,7 +8,7 @@ import json, re, sys
 from pathlib import Path
 
 RAIZ = Path(__file__).resolve().parents[1]
-SQL = (RAIZ / "supabase" / "migrations" / "0005_hub_conteudo_inicial.sql").read_text(encoding="utf-8")
+MIG = RAIZ / "supabase" / "migrations"
 
 
 def partir(texto, sep):
@@ -31,6 +31,7 @@ def partir(texto, sep):
 
 def valor(a):
     a = a.strip()
+    if a == "p": return "build_your_house"
     if a.lower() == "null": return None
     if a.startswith("'"): return a[1:-1].replace("''", "'")
     if re.fullmatch(r"-?\d+", a): return int(a)
@@ -38,19 +39,29 @@ def valor(a):
     raise ValueError(f"argumento inesperado: {a!r}")
 
 
-corpo = SQL[SQL.index("do $$"):]
-corpo = corpo[corpo.index("begin") + 5: corpo.rindex("end $$")]
-corpo = "\n".join(l for l in corpo.splitlines() if not l.strip().startswith("--"))
-db = {"checkpoints": [], "tarefas": [], "decisoes": [], "decisoes_opcoes": []}
+def corpo_do(sql):
+    c = sql[sql.index("do $$"):]
+    c = c[c.index("begin") + 5: c.rindex("end $$")]
+    c = "\n".join(l for l in c.splitlines() if not l.strip().startswith("--"))
+    return re.sub(r"declare[^;]*;", "", c) if c.lstrip().startswith("declare") else c
+
+
+db = {"checkpoints": [], "tarefas": [], "decisoes": [], "decisoes_opcoes": [], "documentos": []}
 var = {}
 CRIADO = "2026-11-05T10:00:00Z"
-for st in partir(corpo, ";"):
+v7 = False   # as funções de 0007 têm outra assinatura
+def correr(corpo):
+  for st in partir(corpo, ";"):
     st = st.strip()
     if not st: continue
+    if st.startswith("p constant"): continue
     m = re.fullmatch(r"(?:([ctd])\s*:=\s*)?(?:perform\s+)?pg_temp\.(cp|tf|dc|op)\((.*)\)", st, re.S)
     if not m: sys.exit(f"instrução não reconhecida: {st[:80]}")
     alvo, fn, args = m.group(1), m.group(2), [valor(a) for a in partir(m.group(3), ",")]
     args = [var[a[1]] if isinstance(a, tuple) else a for a in args]
+    if v7 and fn == "cp": args = args[:4] + ["por_fazer"]
+    if v7 and fn == "tf": args = [args[0], args[1], "por_fazer", None] + args[2:]
+    if v7 and fn == "op": args = args[:5]
     if fn == "cp":
         p, titulo, desc, ordem, estado, *resto = args
         assert estado in ("por_fazer", "em_curso", "concluido"), estado
@@ -84,5 +95,28 @@ for st in partir(corpo, ";"):
         db["decisoes_opcoes"].append(novo)
     if alvo: var[alvo] = novo["id"]
 
+correr(corpo_do((MIG / "0005_hub_conteudo_inicial.sql").read_text(encoding="utf-8")))
+# 0007: abre espaço (Preços reais 5 → 6, Pronto para clientes 6 → 7) e junta as fases do Smart Land / Interiores
+for c in db["checkpoints"]:
+    if c["projeto"] == "build_your_house" and c["ordem"] >= 5: c["ordem"] += 1
+v7 = True
+correr(corpo_do((MIG / "0007_byh_smart_land_interiores.sql").read_text(encoding="utf-8")))
+# 0008: as linhas dos documentos
+sql8 = (MIG / "0008_documentos_iniciais.sql").read_text(encoding="utf-8")
+valores = sql8[sql8.index("values") + 6:].strip().rstrip(";")
+linhas, nivel, atual, dentro = [], 0, [], False
+for ch in valores:
+    if ch == "'": dentro = not dentro
+    if not dentro and ch == "(":
+        nivel += 1
+        if nivel == 1: atual = []; continue
+    if not dentro and ch == ")":
+        nivel -= 1
+        if nivel == 0: linhas.append("".join(atual)); continue
+    if nivel >= 1: atual.append(ch)
+for l in linhas:
+    a = [valor(x) for x in partir(l, ",")]
+    db["documentos"].append({"id": len(db["documentos"]) + 1, "projeto": a[0], "tipo": a[1], "titulo": a[2], "descricao": a[3], "caminho": a[4],
+        "nome_ficheiro": a[5], "tamanho": a[6], "mime": a[7], "criado_por": None, "criado_por_nome": a[8], "criado_em": a[9]})
 (RAIZ / "tests" / "fixture.json").write_text(json.dumps(db, ensure_ascii=False, indent=1), encoding="utf-8")
 print({k: len(v) for k, v in db.items()})

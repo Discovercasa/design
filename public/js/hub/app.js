@@ -56,7 +56,8 @@ async function arrancar(sessao) {
   desenhar(true);
   if (!E.erro) mostrarNovos();
   clearInterval(relogio);
-  relogio = setInterval(atualizar, 60000);
+  relogio = setInterval(atualizar, 60000);   // reserva, se a ligação em direto cair
+  if (!E.erro) D.ouvirMudancas(emDireto);
   document.addEventListener('visibilitychange', () => { if (!document.hidden) atualizar(); });
 }
 
@@ -96,10 +97,11 @@ function desenhar(mudouRota) {
   } else window.scrollTo(0, y);
 }
 function irPara(alvo) {
-  const m = /^(t|cp)-(\d+)$/.exec(alvo || '');
+  const m = /^(t|cp|doc)-(\d+)$/.exec(alvo || '');
   if (!m) return;
   const id = Number(m[2]);
-  const cpId = m[1] === 't' ? (E.tarefas.find((t) => t.id === id) || {}).checkpoint_id : id;
+  if (m[1] === 'doc') { const g = document.getElementById(alvo); const det = g && g.closest('details'); if (det) det.open = true; }
+  const cpId = m[1] === 't' ? (E.tarefas.find((t) => t.id === id) || {}).checkpoint_id : m[1] === 'cp' ? id : null;
   if (cpId && !V.abertos.has(cpId)) { V.abertos.add(cpId); desenhar(false); }
   const el = document.getElementById(alvo);
   if (!el) return;
@@ -162,12 +164,30 @@ async function atualizar() {
     mostrarNovos();
   } catch (_) { /* sem rede: tenta no próximo minuto */ }
 }
+// em direto: uma mudança feita por qualquer pessoa (ou noutra janela) atualiza já todos os sítios onde aparece
+let emDiretoEspera = null, mudouNotificacoes = false;
+function emDireto(tabela) {
+  if (tabela === 'notificacoes') mudouNotificacoes = true;
+  clearTimeout(emDiretoEspera);
+  emDiretoEspera = setTimeout(async () => {
+    try {
+      const novas = mudouNotificacoes ? await D.carregarNotificacoes() : [];
+      mudouNotificacoes = false;
+      await D.carregarTudo();
+      novas.slice(0, 3).forEach((n) => aviso(esc(n.texto), { icone: 'sino', acoes: [{ rotulo: 'Ver', fazer: () => irNotif(n.projeto, n.ref_tipo, n.ref_id) }] }));
+      atualizarContador();
+      if (!dlg.open && !document.activeElement.matches('input, textarea, select')) desenhar(false);
+      mostrarNovos();
+    } catch (_) { /* tenta na próxima mudança ou no relógio */ }
+  }, 350);
+}
+
 // pop-up na primeira vez que vejo um checkpoint, tarefa ou decisão acrescentados por outra pessoa
 function mostrarNovos() {
   const itens = D.porVer();
   if (!itens.length) return;
   itens.forEach((i) => E.novos.add(D.chave(i.tipo, i.x.id)));
-  const nomeTipo = { checkpoint: 'Novo checkpoint', tarefa: 'Nova tarefa', decisao: 'Nova decisão' };
+  const nomeTipo = { checkpoint: 'Novo checkpoint', tarefa: 'Nova tarefa', decisao: 'Nova decisão', documento: 'Novo documento' };
   const ir = (i) => irNotif(i.x.projeto, i.tipo, i.x.id);
   if (itens.length > 3) {
     aviso(`<b>${itens.length} novidades nos projetos</b><br>${itens.slice(0, 4).map((i) => `${nomeTipo[i.tipo]} em ${esc(D.nomeProjeto(i.x.projeto))}: «${esc(i.x.titulo || i.x.pergunta)}»`).join('<br>')}${itens.length > 4 ? '<br>…' : ''}`,
@@ -186,7 +206,7 @@ function irNotif(projetoId, tipo, id) {
     if (d) setTimeout(() => abrirDialogo(dlg, P.dlgDecisao(d)), 50);
     return;
   }
-  location.hash = `#/projeto/${p.slug}/${tipo === 'checkpoint' ? 'cp' : 't'}-${id}`;
+  location.hash = `#/projeto/${p.slug}/${tipo === 'checkpoint' ? 'cp' : tipo === 'documento' ? 'doc' : 't'}-${id}`;
 }
 
 // ---------------------------------------------------------------- popovers (notificações e perfil)
@@ -262,12 +282,32 @@ document.addEventListener('click', async (e) => {
       if (abrir && mov()) gsap.from(det, { autoAlpha: 0, y: -4, duration: 0.25, ease: 'expo.out', clearProps: 'all' });
       return;
     }
-    case 'acrescentar': return abrirDialogo(dlg, P.dlgAcrescentar(el.dataset.projeto || (rota().p || {}).id, null));
+    case 'acrescentar': return abrirDialogo(dlg, P.dlgAcrescentar(el.dataset.projeto || (rota().p || {}).id, null, el.dataset.tipo));
+    case 'acrescentar-doc': return abrirDialogo(dlg, P.dlgDocumento(el.dataset.projeto), { estreito: true });
+    case 'tipo-doc': {
+      const f = el.closest('form'); f.elements.tipo.value = el.dataset.valor;
+      $$('[data-acao="tipo-doc"]', f).forEach((b) => b.setAttribute('aria-pressed', b === el));
+      return;
+    }
+    case 'abrir-doc': {
+      const d = E.documentos.find((x) => x.id === id);
+      const janela = window.open('about:blank', '_blank');  // já, para o browser não bloquear a janela
+      try { const url = await D.urlDocumento(d); if (janela) janela.location.href = url; else location.href = url; }
+      catch (err) { if (janela) janela.close(); aviso('Não foi possível abrir o documento: ' + esc(err.message || err), { icone: 'atencao' }); }
+      return;
+    }
+    case 'apagar-doc': {
+      const d = E.documentos.find((x) => x.id === id);
+      if (!confirm(`Apagar o documento «${d.titulo}»? O ficheiro deixa de estar disponível para a equipa.`)) return;
+      if (await tentar(() => D.apagarDocumento(d))) depois();
+      return;
+    }
     case 'tipo-novo': {
       const f = el.closest('form'), t = el.dataset.valor;
       f.elements.tipo.value = t;
       $$('[data-acao="tipo-novo"]', f).forEach((b) => b.setAttribute('aria-pressed', b === el));
       $$('.so-tarefa', f).forEach((x) => (x.hidden = t !== 'tarefa'));
+      $$('.so-checkpoint', f).forEach((x) => (x.hidden = t !== 'checkpoint'));
       return;
     }
     case 'editar-tarefa': return abrirDialogo(dlg, P.dlgEditarTarefa(E.tarefas.find((t) => t.id === id)));
@@ -356,7 +396,13 @@ document.addEventListener('change', async (e) => {
     }
     case 'estado-tarefa': if (await tentar(() => D.mudarTarefa(id, { estado: el.value }))) depois(); return;
     case 'estado-cp': if (await tentar(() => D.mudarCheckpoint(id, { estado: el.value }))) depois(); return;
-    case 'projeto-novo': { const f = el.closest('form'); f.elements.checkpoint.innerHTML = P.opcoesCheckpoints(el.value); return; }
+    case 'projeto-novo': { const f = el.closest('form'); f.elements.checkpoint.innerHTML = P.opcoesCheckpoints(el.value); f.elements.posicao.innerHTML = P.opcoesPosicao(el.value); return; }
+    case undefined:
+      if (el.name === 'ficheiros') {
+        const lista = el.closest('form').querySelector('[data-escolhidos]');
+        lista.innerHTML = [...el.files].map((x) => `<li>${esc(x.name)} · ${(x.size / 1e6).toLocaleString('pt-PT', { maximumFractionDigits: 1 })} MB</li>`).join('');
+      }
+      return;
     case 'sug-estado': return mudarSugestao(id, { estado: el.value });
     case 'sug-concluir': return mudarSugestao(id, { estado: el.checked ? 'feita' : 'em_analise' });
   }
@@ -384,7 +430,7 @@ document.addEventListener('submit', async (e) => {
       case 'acrescentar': {
         const projetoId = v('projeto');
         if (v('tipo') === 'checkpoint') {
-          ok = await tentar(() => D.criarCheckpoint({ projeto: projetoId, titulo: v('titulo'), descricao: v('descricao'), ordem: D.checkpointsDe(projetoId).length + 1 }), f);
+          ok = await tentar(() => D.criarCheckpoint({ projeto: projetoId, titulo: v('titulo'), descricao: v('descricao') }, Number(v('posicao')) || null), f);
         } else {
           const cp = Number(v('checkpoint'));
           if (!cp) { $('.erro-msg', f).textContent = 'Este projeto ainda não tem checkpoints: acrescenta primeiro um checkpoint.'; return; }
@@ -401,7 +447,12 @@ document.addEventListener('submit', async (e) => {
         if (ok) { fecharDialogo(dlg); depois(); }
         return;
       case 'editar-cp':
-        ok = await tentar(() => D.mudarCheckpoint(Number(f.dataset.id), { titulo: v('titulo'), descricao: v('descricao'), estado: v('estado'), ordem: Number(v('ordem')) || 0 }), f);
+        ok = await tentar(async () => {
+          const id = Number(f.dataset.id), c = E.checkpoints.find((x) => x.id === id);
+          const antes = D.checkpointsDe(c.projeto).findIndex((x) => x.id === id) + 1, depoisPos = Number(v('posicao'));
+          await D.mudarCheckpoint(id, { titulo: v('titulo'), descricao: v('descricao'), estado: v('estado') });
+          if (depoisPos && depoisPos !== antes) await D.moverCheckpoint(id, depoisPos);
+        }, f);
         if (ok) { fecharDialogo(dlg); depois(); }
         return;
       case 'decidir': {
@@ -418,6 +469,20 @@ document.addEventListener('submit', async (e) => {
         if (opcoes.length < 2) { $('.erro-msg', f).textContent = 'Uma decisão precisa de pelo menos duas opções.'; return; }
         ok = await tentar(() => D.criarDecisao({ projeto: f.dataset.projeto, tarefa_id: Number(f.dataset.tarefa) || null, pergunta: v('pergunta'), contexto: v('contexto') }, opcoes), f);
         if (ok) { fecharDialogo(dlg); depois(); }
+        return;
+      }
+      case 'documento': {
+        const ficheiros = [...f.elements.ficheiros.files];
+        if (!ficheiros.length) return;
+        const grandes = ficheiros.filter((x) => x.size > 50 * 1024 * 1024);
+        if (grandes.length) { $('.erro-msg', f).textContent = `Demasiado grande (máximo 50 MB): ${grandes.map((x) => x.name).join(', ')}`; return; }
+        if (botao) botao.textContent = 'A carregar…';
+        ok = await tentar(async () => {
+          for (const x of ficheiros) await D.carregarDocumento(f.dataset.projeto, v('tipo'), x, ficheiros.length === 1 ? v('titulo') : '', v('descricao'));
+          await D.carregarTudo();
+        }, f);
+        if (botao) botao.textContent = 'Carregar';
+        if (ok) { fecharDialogo(dlg); aviso(ficheiros.length === 1 ? 'Documento carregado.' : `${ficheiros.length} documentos carregados.`, { icone: 'certo', duracao: 3 }); depois(); }
         return;
       }
       case 'nome':

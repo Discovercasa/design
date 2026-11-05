@@ -37,14 +37,14 @@ test('Início: barra de navegação, projetos, ligações, decisões e feito', a
   const linhas = page.locator('.projeto-linha');
   await expect(linhas).toHaveCount(5);
   await expect(linhas.nth(0)).toContainText('Protótipo publicado');
-  await expect(linhas.nth(0)).toContainText('3 de 6 checkpoints');
+  await expect(linhas.nth(0)).toContainText('3 de 15 checkpoints');
   await expect(linhas.nth(0)).toContainText('Respostas pendentes');
   await expect(linhas.nth(4)).toContainText('Step Inside');
   await expect(linhas.nth(4)).toContainText('0 de 10 checkpoints');
   await expect(page.getByRole('heading', { name: 'Como os projetos se ligam' })).toBeVisible();
   await expect(page.locator('.nota').first()).toContainText('Cada aplicação funciona sozinha');
   await expect(page.locator('.ligacao')).toHaveCount(10);
-  await expect(page.locator('#decisoes-abertas .decisao-pill')).toHaveCount(8);
+  await expect(page.locator('#decisoes-abertas .decisao-pill')).toHaveCount(10);
   await expect(page.locator('.tempo li').first()).toContainText('2026');
   for (const b of ['Sugestões', 'Notificações', 'Perfil']) await expect(page.getByRole('button', { name: b })).toBeVisible();
   await captura(page, 'inicio');
@@ -64,7 +64,7 @@ test('página do Build Your House: primeiro o estado, depois o botão para a app
   await expect(passo.locator('.passo-topo')).toHaveAttribute('aria-expanded', 'true');
   await expect(passo.locator('.tarefa')).toHaveCount(4);
   await expect(passo.locator('.decisao-pill')).toHaveCount(2);
-  await expect(page.locator('.passo').nth(4).locator('.chip.app').first()).toContainText('Sugerido: usar Orçamentação');
+  await expect(page.locator('.passo').nth(5).locator('.chip.app').first()).toContainText('Sugerido: usar Orçamentação');
   await expect(page.locator('.organizacao')).toContainText('build-your-house/<tarefa>');
   await captura(page, 'build-your-house');
 });
@@ -303,4 +303,100 @@ test('Abrir o Gerador: abre noutra janela, com o novo aspeto, e o motor arranca'
   expect(largo).toBeLessThanOrEqual(0);
   await nova.screenshot({ path: fileURLToPath(new URL(`./capturas/gerador-${test.info().project.name}.png`, import.meta.url)), fullPage: true });
   expect(erros).toEqual([]);
+});
+
+
+test('projeto: acrescentar tarefa e checkpoint na posição escolhida; mover um checkpoint', async ({ page }) => {
+  await abrir(page, { rota: '/#/projeto/gerador' });
+  const dlg = page.locator('#dlg');
+  // tarefa a partir da página do projeto
+  await page.locator('#vista').getByRole('button', { name: 'Tarefa', exact: true }).click();
+  await expect(dlg.getByRole('button', { name: 'Tarefa' })).toHaveAttribute('aria-pressed', 'true');
+  await expect(dlg.getByLabel('Checkpoint')).toHaveValue(String(15));            // o checkpoint em curso
+  await dlg.getByLabel('Título').fill('Pedir a revisão por email');
+  await dlg.getByRole('button', { name: 'Acrescentar', exact: true }).click();
+  await expect(page.locator('.passo.em_curso .tarefa', { hasText: 'Pedir a revisão por email' })).toBeVisible();
+  // checkpoint na posição 2
+  await page.locator('#vista').getByRole('button', { name: 'Checkpoint', exact: true }).click();
+  await expect(dlg.getByLabel('Posição no workflow')).toHaveValue('5');           // por defeito no fim (4 + 1)
+  await dlg.getByLabel('Posição no workflow').selectOption('2');
+  await dlg.getByLabel('Título').fill('Ler plantas de dois pisos');
+  await dlg.getByRole('button', { name: 'Acrescentar', exact: true }).click();
+  await expect(page.locator('.passo').nth(1)).toContainText('Ler plantas de dois pisos');
+  await expect(page.locator('.passo').nth(1).locator('.marco')).toHaveText('2');
+  await expect(page.locator('.passo').nth(2)).toContainText('Gerador online');      // os outros desceram
+  await expect(page.locator('.passo')).toHaveCount(5);
+  // mover o último checkpoint para primeiro
+  await page.locator('.passo').nth(4).locator('.passo-topo').click();
+  await page.locator('.passo').nth(4).getByRole('button', { name: 'Editar checkpoint' }).click();
+  await dlg.getByLabel('Posição no workflow').selectOption('1');
+  await dlg.getByRole('button', { name: 'Guardar' }).click();
+  await expect(page.locator('.passo').nth(0)).toContainText('Mais formatos de entrada');
+  const ordens = await db(page, () => window.__fake.db.checkpoints.filter((c) => c.projeto === 'gerador').sort((a, b) => a.ordem - b.ordem).map((c) => c.ordem));
+  expect(ordens).toEqual([1, 2, 3, 4, 5]);
+});
+
+test('Build Your House: as fases do Smart Land e Interiores na ordem certa, com decisões', async ({ page }) => {
+  await abrir(page, { rota: '/#/projeto/build-your-house' });
+  const titulos = await page.locator('.passo .passo-topo h3').allTextContents();
+  expect(titulos.map((t) => t.trim())).toEqual([
+    'Motor do configurador', 'Protótipo no browser', 'Publicado no Design', 'Respostas pendentes',
+    'Fase 0 · Auditoria para Smart Land, Interiores e Conformidade', 'Preços reais', 'Pronto para clientes',
+    'Smart Land · Fase 1 · Terreno mínimo', 'Smart Land · Fase 2 · Importação geográfica alargada', 'Smart Land · Fase 3 · Terreno 3D',
+    'Implantação · Fase 4 · Implantação geométrica', 'Conformidade · Fase 5 · Piloto municipal', 'Smart Interiors · Fase 6 · Base',
+    'Smart Interiors · Fase 7 · Posicionamento e decoração automática', 'Conformidade · Fase 8 · Expansão municipal e técnica']);
+  await expect(page.locator('.bloco-lateral .decisao-pill')).toHaveCount(4);
+  await expect(page.locator('#documentos')).toContainText('Especificação Smart Land, Smart Interiors e Conformidade');
+});
+
+test('documentos: informativos e adicionais, abrir noutra janela, carregar e apagar', async ({ page, context }) => {
+  await abrir(page, { rota: '/#/projeto/step-inside' });
+  const sec = page.locator('#documentos');
+  await expect(sec.getByRole('heading', { name: /Documentos informativos/ })).toContainText('2');
+  await expect(sec.locator('.doc', { hasText: 'Plano técnico, revisão v2 (PDF)' })).toBeVisible();
+  const [nova] = await Promise.all([context.waitForEvent('page'), sec.locator('.doc', { hasText: 'Plano técnico' }).getByRole('button', { name: 'Abrir' }).click()]);
+  await expect(nova).toHaveURL(/__ficheiro\?c=plataforma_cliente%2Finformativo%2Fplano__discovercasa_plano_tecnico_revisao_v2\.pdf$/);
+  await nova.close();
+  // carregar um documento adicional
+  await sec.getByRole('button', { name: 'Documento' }).click();
+  const dlg = page.locator('#dlg');
+  await dlg.getByRole('button', { name: 'Adicional' }).click();
+  await dlg.getByLabel('Ficheiros').setInputFiles({ name: 'Orçamento GPU.pdf', mimeType: 'application/pdf', buffer: Buffer.from('%PDF-1.4 teste') });
+  await expect(dlg.locator('[data-escolhidos] li')).toContainText('Orçamento GPU.pdf');
+  await dlg.getByLabel(/Título/).fill('Orçamento de GPU');
+  await dlg.getByRole('button', { name: 'Carregar' }).click();
+  await expect(dlg).toBeHidden();
+  const doc = sec.locator('.doc', { hasText: 'Orçamento de GPU' });
+  await expect(doc).toContainText('Orçamento GPU.pdf');
+  const caminho = await db(page, () => window.__fake.db.documentos.at(-1).caminho);
+  expect(caminho).toMatch(/^plataforma_cliente\/adicional\/[a-z0-9]+__orcamento-gpu\.pdf$/);
+  page.once('dialog', (d) => d.accept());
+  await doc.getByRole('button', { name: /Apagar/ }).click();
+  await expect(doc).toHaveCount(0);
+  expect(await db(page, (c) => window.__fake.ficheiros.has(c), caminho)).toBe(false);
+});
+
+test('Builder: desenhos de Torres Vedras e Sobral agrupados nos adicionais', async ({ page }) => {
+  await abrir(page, { rota: '/#/projeto/builder' });
+  const sec = page.locator('#documentos');
+  await expect(sec.getByRole('heading', { name: /Documentos adicionais/ })).toContainText('35');
+  await expect(sec.locator('details.doc-grupo summary')).toHaveText([/Torres Vedras\s*15/, /Sobral\s*4/, /Método\s*16/]);
+  await sec.locator('summary', { hasText: 'Torres Vedras' }).click();
+  await expect(sec.locator('.doc', { hasText: 'projeto de arquitetura geral' }).first()).toBeVisible();
+  // pedidos de outros projetos que sugerem usar o Builder
+  await expect(page.locator('.bloco-lateral', { hasText: 'Pedidos de outros projetos' })).toContainText('Documentar a pipeline PDF/DWFx');
+  await captura(page, 'builder-documentos');
+});
+
+test('em direto: o que outra pessoa muda aparece sem recarregar, em todos os sítios', async ({ page }) => {
+  await abrir(page, { rota: '/#/projeto/builder' });
+  // outra pessoa acrescenta uma tarefa ao Build Your House que sugere usar o Builder
+  await db(page, () => window.__fake.comoOutro((x) => x.tarefas.insert({ checkpoint_id: 4, titulo: 'Rever o divisor de módulos', app_sugerida: 'builder' })));
+  await expect(page.locator('.bloco-lateral', { hasText: 'Pedidos de outros projetos' })).toContainText('Rever o divisor de módulos');   // sem visibilitychange
+  await expect(page.locator('.aviso', { hasText: 'Nova tarefa' })).toBeVisible();
+  // e no Início também
+  await page.getByRole('link', { name: 'Início', exact: true }).click();
+  await db(page, () => window.__fake.comoOutro((x) => x.checkpoints.update({ estado: 'concluido' }).eq('id', 4)));
+  await expect(page.locator('.projeto-linha').nth(0)).toContainText('4 de 15 checkpoints');
+  await expect(page.locator('#contador')).not.toBeHidden();
 });

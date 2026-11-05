@@ -480,3 +480,31 @@ dialog.gaveta::backdrop { background: oklch(0.2 0.01 85 / 0.25); }
 :root[data-movimento="reduzido"] *, :root[data-movimento="reduzido"] *::before, :root[data-movimento="reduzido"] *::after {
   transition-duration: 0.01ms !important; animation-duration: 0.01ms !important;
 }
+
+/* ---------- documentos do projeto ---------- */
+.botoes { display: flex; flex-wrap: wrap; gap: 8px; }
+.docs-grelha { display: grid; gap: 24px; }
+.docs-tipo { display: grid; gap: 10px; }
+.docs-tipo-cabeca { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; }
+.docs-tipo-cabeca h3 { font-size: 1rem; }
+.docs-lista { list-style: none; margin: 0; padding: 0; border: 1px solid var(--linha); border-radius: var(--r2); background: var(--superficie); overflow: hidden; }
+.doc { display: grid; grid-template-columns: 44px minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 12px 14px; border-bottom: 1px solid var(--linha); }
+.doc:last-child { border-bottom: 0; }
+.doc.alvo { animation: alvo 2.4s var(--ease); }
+.doc-tipo {
+  display: grid; place-items: center; height: 44px; border-radius: var(--r1); background: var(--lateral); border: 1px solid var(--linha);
+  font-size: 0.6875rem; font-weight: 600; color: var(--tinta-2); letter-spacing: 0.02em;
+}
+.doc-titulo { font-size: 0.9375rem; font-weight: 500; overflow-wrap: anywhere; }
+.doc-meta { font-size: 0.8125rem; color: var(--tinta-3); overflow-wrap: anywhere; }
+.doc-desc { font-size: 0.8125rem; color: var(--tinta-2); margin-top: 2px; }
+.doc-acoes { display: flex; align-items: center; gap: 4px; }
+.doc-grupo { display: grid; gap: 8px; }
+.doc-grupo summary { cursor: pointer; font-size: 0.9375rem; font-weight: 500; padding: 4px 0; }
+.doc-grupo[open] summary { margin-bottom: 8px; }
+.ficheiros-escolhidos { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; font-size: 0.875rem; color: var(--tinta-2); }
+@media (max-width: 560px) {
+  .doc { grid-template-columns: 36px minmax(0, 1fr); }
+  .doc-tipo { height: 36px; }
+  .doc-acoes { grid-column: 2; }
+}
