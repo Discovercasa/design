@@ -83,10 +83,10 @@ Why Claude learns the method; "vamos passo a passo" — an overall idea, then an
   keep it as it is but have that in mind").
 - **Organisation (ours)**: each project has a code folder, a published folder and a branch prefix
   (build-your-house/, builder/, gerador/, orcamentacao/, step-inside/), documented in `PROJETOS.md` (repo root).
-- **Status**: hub built on branch `hub/inicio-projetos` (not on main, not live); migrations 0004/0005 written, NOT
-  applied to production Supabase; Playwright 28/28 (simulated database). The user asked for design inspiration from
+- **Status** (2026-11-05): LIVE on design.discovercasa.pt (`hub/inicio-projetos` merged into main); migrations
+  0004/0005 applied to the Design Supabase after the user's "Sim, aplica"; Playwright 28/28 (simulated database). The user asked for design inspiration from
   GSAP skills, React Bits, taste-skill and impeccable, and a final Playwright check with feedback.
-- **Pending with the user**: OK to apply migrations 0004/0005 to Supabase, then merge to main; confirm the name Step Inside.
+- **Pending with the user**: confirm the name Step Inside (migrations applied and hub published 2026-11-05).
 
 ## Working with the user
 **Language and words**
