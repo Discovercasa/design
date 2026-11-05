@@ -1214,3 +1214,16 @@ When this file passes about 1 500 lines, continue in `registo-conversas-<year>-<
 - Status of the six points: (1) done, (2) done via gitignore, (3) done, (4) skills OK / agents unverified from root, (5) done, (6) pending.
 - Pending: user runs `/web-setup`; this PC moves to a Design clone; old private BOB kept as history only.
 - Filed in: `conhecimento/discovercasa.md` → GitHub/Design entry (publish line superseded; six points with status; new 2026-11-05 note).
+
+### 2026-11-05 — what is Quick setup needed for [geral]
+> o quick setup é necessário para que ? visto que eu já tenho sessão inciada na web com a conta certa ?
+- Context: `/web-setup` gave "Unknown command" in the CLI because the plan is Claude Team and Quick setup is off.
+- Answer given: what decides the push is the GitHub account connected to the Claude account, not the Claude login. Quick setup is only needed for `/web-setup`. Suggested test: a new cloud session started ON Discovercasa/design (not on the private BOB repo, where Design was not attached), creating branch `teste-push` and pushing an empty commit.
+- Filed in: `conhecimento/discovercasa.md` → GitHub/Design entry (resolution note).
+
+### 2026-11-05 — cloud push works; will local/cloud push run automatically [geral]
+> ok já esta a funcionar, se eu te pedir um push local ou na nuvem automaticamente já o vai executar certo?
+- Context: the test of the previous entry worked. Branch `teste-push` exists on Discovercasa/design, so a cloud session (environment "Discovercasa Nest", repo chosen with the "Repositório" button) CAN push to Discovercasa/design with the GitHub connection the Claude account already has. `/web-setup` and Quick setup are NOT needed.
+- Answer given: yes for local sessions opened in the folder "Discovercasa Design" (git set to push as DinisDiscover); yes for cloud sessions started on Discovercasa/design. Pushing to `main` publishes the site at once (Cloudflare Pages): branch for work in progress, `main` when the user wants it live. After app changes run `BOB/ferramentas/construir_site.py`; not yet verified that the cloud environment has Node/npm for it. The old "BOB Claude" folder still pushes to the private BOB (history only).
+- Pending: delete test branch `teste-push` (offered to the user).
+- Filed in: `conhecimento/discovercasa.md` → GitHub/Design entry (item "/web-setup pending" marked RESOLVED 2026-11-05, old text kept; new "how pushes work now" note).

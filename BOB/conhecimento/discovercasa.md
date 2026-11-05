@@ -250,7 +250,7 @@ decisions stay (the history is in git).
   Claude GitHub App needed), then start cloud sessions on `Discovercasa/design`. If `/web-setup` is missing
   (Team/Enterprise) an Owner enables "Quick setup" (Organization settings > Claude Code). Alternative: reconnect in the
   browser as DinisDiscover (likely needs the Claude GitHub App approved on the org). Cloud sessions can no longer open
-  the private BOB repo (accepted). **Pending: user runs `/web-setup`** (not confirmed). Open points flagged 2026-11-05 (status after the user's go-ahead "Sim, prepara", same day):
+  the private BOB repo (accepted). **Pending: user runs `/web-setup`** (not confirmed) — **RESOLVED 2026-11-05, see registo: `/web-setup` and Quick setup are NOT needed.** The cloud push to `Discovercasa/design` worked with the GitHub connection the Claude account already has (test: branch `teste-push` exists on Design, pushed from a cloud session, environment "Discovercasa Nest"). The plan is Claude Team with Quick setup off (`/web-setup` = "Unknown command"); what decides the push is the GitHub account connected to the Claude account, not the Claude login. Next time: in claude.ai/code pick the repo with the "Repositório" button → `Discovercasa/design`. Pending: delete test branch `teste-push`. Open points flagged 2026-11-05 (status after the user's go-ahead "Sim, prepara", same day):
   (1) `ferramentas/publicar_design.py` would erase work done in Design: DONE, removed from Design (blocked in the private BOB);
   (2) client drawings (`*.dwfx` / `*.pdf`) never go to Design (public): DONE via `.gitignore` (`BOB/.gitignore` ignores
   `*.dwfx`, `*.pdf`; root ignores `_trabalho/`, `*.dwfx`, `.claude/settings.local.json`); work needing drawings stays on
@@ -266,7 +266,13 @@ decisions stay (the history is in git).
   `public/gerador/` (page, engine files, three.js): `python BOB/ferramentas/construir_site.py [--so configurador|gerador]`,
   then commit and push (tested: same output as the old script apart from line endings). Root `.claude/launch.json` added
   (`npm run dev --prefix BOB/configurador/web`, port 5173). The old private BOB is kept as history only. Still pending:
-  user runs `/web-setup` (cloud sessions push as DinisDiscover); this PC moves to a Design clone.
+  user runs `/web-setup` (cloud sessions push as DinisDiscover); this PC moves to a Design clone. (`/web-setup` item
+  RESOLVED 2026-11-05: not needed, see the note above and registo.)
+- 2026-11-05 — how pushes work now (answer to the user): local sessions opened in the folder "Discovercasa Design" push
+  as DinisDiscover (git configured so); cloud sessions started on `Discovercasa/design` push too. Pushing to `main`
+  publishes the site at once (Cloudflare Pages): use a branch for work in progress, `main` when the user wants it live.
+  After app changes run `BOB/ferramentas/construir_site.py`; not yet verified that the cloud environment has Node/npm for
+  it. The old "BOB Claude" folder still pushes to the private BOB (history only).
 - 2026-10-30 — **the repo is public: never write NIF, addresses, phones, engineer IDs or personal names in it.** Personal
   data were removed from the records that day (company NIF, engineer OET ID, site addresses, licensing process number,
   architects' / client's names, a personal email) — "Tudo o que seja esse tipo de informações podes eliminar dos nossos
