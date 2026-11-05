@@ -44,7 +44,8 @@ export async function carregarTudo() {
   const r = await Promise.all([
     sb().from('checkpoints').select('*').order('ordem'),
     sb().from('tarefas').select('*').order('ordem'),
-    sb().from('decisoes').select('*, decisoes_opcoes(*)').order('criado_em'),
+    // duas ligações entre as tabelas (opção → decisão e decisão → opção escolhida): dizer qual se quer
+    sb().from('decisoes').select('*, decisoes_opcoes!decisoes_opcoes_decisao_id_fkey(*)').order('criado_em'),
     sb().from('perfis').select('id, nome'),
     sb().from('vistos').select('tipo, ref_id'),
   ]);

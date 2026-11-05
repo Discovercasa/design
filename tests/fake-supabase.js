@@ -107,13 +107,16 @@
           if (this.t === 'decisoes') db.decisoes_opcoes = db.decisoes_opcoes.filter((o) => !fora.some((d) => d.id === o.decisao_id));
           linhas = fora;
         } else {
+          // como o PostgREST: decisoes ↔ decisoes_opcoes têm duas chaves estrangeiras, o embed sem "!<fk>" falha
+          if (this.t === 'decisoes' && /decisoes_opcoes\s*\(/.test(this.cols))
+            return { data: null, error: { message: "Could not embed because more than one relationship was found for 'decisoes' and 'decisoes_opcoes'" } };
           linhas = tab.filter((r) => this.f.every((f) => f(r)));
           if (this.t === 'vistos') linhas = linhas.filter((r) => r.utilizador_id === ator.id);
           if (this.ord) { const [c, asc] = this.ord; linhas = [...linhas].sort((a, b) => (a[c] < b[c] ? -1 : a[c] > b[c] ? 1 : 0) * (asc ? 1 : -1)); }
           if (this.lim) linhas = linhas.slice(0, this.lim);
           linhas = linhas.map((r) => {
             const c = copia(r);
-            for (const [filho, [pai, fk]] of Object.entries(FILHOS)) if (pai === this.t && new RegExp(filho + '\\s*\\(').test(this.cols)) c[filho] = copia(db[filho].filter((x) => x[fk] === r.id));
+            for (const [filho, [pai, fk]] of Object.entries(FILHOS)) if (pai === this.t && new RegExp(filho + '(![a-z_]+)?\\s*\\(').test(this.cols)) c[filho] = copia(db[filho].filter((x) => x[fk] === r.id));
             return c;
           });
         }
