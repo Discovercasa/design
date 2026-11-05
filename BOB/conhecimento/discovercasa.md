@@ -40,6 +40,17 @@ Why Claude learns the method; "vamos passo a passo" — an overall idea, then an
 3. **Client platform instead of Enscape + Chaos Cloud**. Today SketchUp → Enscape (VR tours, AR on mobile, 360 renders)
    → Chaos Cloud Virtual Tours shared with clients. Goal: a client area on the website where each client sees their
    house or project whenever they want.
+   **Named "Step Inside" (2026-11-05, our naming at the user's request: "more of a name you would give to a project
+   that will be for commercial use, a service we will sell"; internal id stays `plataforma_cliente`; the user may still
+   rename it; no alternatives chosen).** The user supplied a technical spec dated 2026-11-05
+   (`Discovercasa_Especificacao_Tecnica_Claude_Code_v2.md` + `Discovercasa_Plano_Tecnico_Revisao_v2.pdf`, same content;
+   kept locally, not in Git). Key points only: pipeline documents → Claude Code parsers → Blender → exports
+   FBX/GLB/USDZ → Unreal build → Cloudflare R2 → Supabase + GPU runtime with Pixel Streaming → hub → client 3D/AR/VR;
+   phases 0–9, starting with Phase 0 (audit). Rules: no paid cloud resources, GPUs, buckets, DNS or production changes
+   without explicit human approval; never invent dimensions (mark NEEDS_HUMAN_REVIEW). Reference costs (to show per
+   workflow component in the hub): RunPod RTX 4090 Secure 0.89 USD/h, Community 0.34 USD/h; R2 0.015 USD/GB-month, 10 GB
+   free, no egress; 1 USD = 0.89131 EUR on 2026-11-05; 8–15 GB per house. VR risk: Lumen does not support VR, Pixel
+   Streaming VR is experimental. Decisions for DiscoverCasa are listed in the spec's §16.1 (become "decisão" tasks in the hub).
 4. **Configurator** like IKEA Builder / Kreativ — "DiscovercasaBuilder" (his name, 2026-10-21): the client picks the
    shape, then the m² and the pé direito, sees the base with its price, builds with 3 m walls ("Estilo como se construía
    no jogo SIMS"), never sees "módulo", the price live; prices predefined before any launch ("não temos qualquer tipo de
@@ -55,6 +66,27 @@ Why Claude learns the method; "vamos passo a passo" — an overall idea, then an
   2026-10-16; the real materials list: pending.
 - Not defined (not asked): what "o nosso software" is; the website's platform. Items 3–4 mean publishing on the web —
   the repo is private (client data).
+
+## Design hub and project organisation (user 2026-11-05)
+- **Goal of the hub**: a way of working where someone who knows nothing about a project can open it and see what it
+  is, its goals, phase, what was done and on which day (day only), future goals and steps, and how projects connect.
+  "Início" = clean, precise, some detail, not cluttered. Every page opens with a detailed step-by-step workflow to the
+  next checkpoint. Anyone can add checkpoints/small tasks (on the project page or on Início); new ones are flagged as
+  "added" the first time they are seen (small pop-up). Navbar: Início + one page per project; profile menu (Área
+  pessoal, Definições, Novidades, Sair); Sugestões icon (anyone suggests hub changes); notifications bell ("User x task
+  x is concluded": assigned, concluded, state changed). Build Your House page: describe first, then a button to the app.
+- **Decisions in tasks**: a task that needs a decision shows a "decisão" pop-up with all options, pros/cons and costs;
+  every decision is recorded as "we chose X instead of Y" with the other options kept.
+- **App independence rule**: the apps are connected but independent, usable without each other; they help each other
+  only when it saves time and tokens, shown as "Sugerido: usar <app>" (also explained on Início). Builder and Build
+  Your House follow the DiscoverCasa method for now; later they should also work for non-DiscoverCasa work ("for now
+  keep it as it is but have that in mind").
+- **Organisation (ours)**: each project has a code folder, a published folder and a branch prefix
+  (build-your-house/, builder/, gerador/, orcamentacao/, step-inside/), documented in `PROJETOS.md` (repo root).
+- **Status**: hub built on branch `hub/inicio-projetos` (not on main, not live); migrations 0004/0005 written, NOT
+  applied to production Supabase; Playwright 28/28 (simulated database). The user asked for design inspiration from
+  GSAP skills, React Bits, taste-skill and impeccable, and a final Playwright check with feedback.
+- **Pending with the user**: OK to apply migrations 0004/0005 to Supabase, then merge to main; confirm the name Step Inside.
 
 ## Working with the user
 **Language and words**
