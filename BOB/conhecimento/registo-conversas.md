@@ -1259,3 +1259,29 @@ When this file passes about 1 500 lines, continue in `registo-conversas-<year>-<
 - Noticed (not changed): on Torres Vedras' architecture plan the generator's check reports 25 problems, all 7,5 cm
   Amarração crossings at corners / interior ring beams — to look at in the engine (Builder) or the check's tolerance.
 - Filed in: this log only (UI work; no construction facts).
+
+## 2026-11-05 (later still) — Design hub: tasks per project, checkpoint position, Documents, live updates; BYH Smart Land spec
+> para já deixa passar depois vamos testar as aplicações e adicionando tarefas.
+- (About the 25 Torres Vedras check problems: left for later.)
+> @"...\Downloads\ESPECIFICACAO_CLAUDE_SMART_LAND_INTERIORES_CONFORMIDADE_PT.md" @"...\Downloads\ESPECIFICACAO_CLAUDE_SMART_LAND_INTERIORES_CONFORMIDADE_PT.pdf"
+> Adiciona dentro de cada projeto ser possivel adicionar não só checkpoints mas tarefas também.
+> Quando adicionamos um checkpoint deve ser possível escolher em que ordem entra esse chekpoint se em 2 ou 3 ou 4 tu percebeste a lógica
+> Quero também que cries uma secção dentro de cada projeto aliado ao workflow chamada documentos e deve conter todos os documentos partilhados até agora com esse projeto. Por exemplo no Step Inside o documento PDF que partilhei contigo deve estar lá disponível. Dentro desta secção haverá dois tipos de documentos : Documentos Informativos, Documentos Adicionais (isto são documentos que seriam documentos que te dou para te alimentar com mais conhecimento em relação a cada projeto por exemplo os documentos de torres vedras).
+> Sempre que há uma mudança nas tarefas ou checkpoints os outros sítios onde estão presentes esses checkpoints ou tarefas devem ser atualizados também com as alterações ou com o que foi adicionado.
+> Este ficheiro MD que te estou a dar contém várias informações em relação ao build your house e cria tarefas em relação aos passos adicionais, vê a ordem que estas devem ser feitas em concordância com o que já temos de tarefas e checkpoints no HUB
+> Sim avança
+- The spec (2026-11-05, "Smart Land, Smart Interiors e Conformidade da Construção"): evolves Build Your House into a
+  preliminary design platform — land (cadastre, BUPi KML, LiDAR/MDT), siting of L/U houses, municipal compliance in levels
+  0–5 (no fictitious rules; CRUS is not a licensing rule; SEM_DADOS / POR_CONFIRMAR), Smart Interiors (8 styles, 3
+  variants, object states), phases 0–8, Phase 0 audit first; no paid permanent services without measured need.
+- Done: migrations 0006 (checkpoint position RPCs, documentos table + private Storage bucket "documentos", Realtime),
+  0007 (BYH: Fase 0 audit at position 5, then Preços reais 6, Pronto para clientes 7, Fases 1–8 at 8–15 — our order:
+  the base configurator opens to clients before the extensions; 2 decisions: DWG reading, 3D model sources), 0008 (41
+  documents: Step Inside spec md+pdf, BYH Smart Land spec md+pdf, Builder Torres Vedras 15 + Sobral 4 + method sources
+  16, Gerador TV plan 2). Files uploaded to private storage via a temporary Edge Function (disabled right after; the
+  client drawings were put online in private storage with the user's "Sim avança"). Hub: + Tarefa / + Checkpoint with
+  position, move a checkpoint, Documents section (upload, open in a new window, delete), "Pedidos de outros projetos",
+  live updates for every change. Playwright 42/42; checked on the real database (rolled-back transaction).
+- Not included: "Discovercasa_Custos_Externos_Plataforma_3D_AR_VR_v2.pdf" (Downloads, 2026-10-30) — never shared in this
+  conversation; ask the user if it belongs to Step Inside.
+- Filed in: this log; `PROJETOS.md` (documents rule).

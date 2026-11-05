@@ -1,6 +1,19 @@
 [
   {
     "dia": "2026-11-05",
+    "titulo": "Documentos, posições e atualização em direto",
+    "itens": [
+      "Cada projeto tem a secção Documentos: informativos (o que o projeto é) e adicionais (conhecimento extra, como os desenhos das obras).",
+      "Os documentos ficam guardados em privado: só quem entra no Design os abre, e abrem noutra janela.",
+      "Na página de cada projeto acrescentam-se checkpoints e tarefas; o checkpoint entra na posição que escolheres.",
+      "As mudanças de qualquer pessoa aparecem logo em todos os sítios, sem recarregar.",
+      "Cada projeto mostra os pedidos de outros projetos que sugerem usá-lo.",
+      "O Gerador de documentos tem o aspeto novo do hub; o Build Your House e o Gerador abrem noutra janela.",
+      "Build Your House: as fases do Smart Land, Smart Interiors e Conformidade no workflow."
+    ]
+  },
+  {
+    "dia": "2026-11-05",
     "titulo": "Novo hub de projetos",
     "itens": [
       "Barra de navegação com o Início e uma página por projeto.",
@@ -15,11 +28,18 @@
   {
     "dia": "2026-11-03",
     "titulo": "Sugestões melhoradas",
-    "itens": ["Apagar e comentar sugestões.", "Checklist com as sugestões que escolhemos fazer, com a cor do estado."]
+    "itens": [
+      "Apagar e comentar sugestões.",
+      "Checklist com as sugestões que escolhemos fazer, com a cor do estado."
+    ]
   },
   {
     "dia": "2026-10-30",
     "titulo": "Primeiras aplicações no Design",
-    "itens": ["Build Your House publicado.", "Gerador de documentos publicado.", "Entrada com a conta do Hub."]
+    "itens": [
+      "Build Your House publicado.",
+      "Gerador de documentos publicado.",
+      "Entrada com a conta do Hub."
+    ]
   }
 ]

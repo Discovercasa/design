@@ -23,5 +23,8 @@ uma página (`#/projeto/<slug>`), um ficheiro de dados, uma pasta de código e u
   edita-se no próprio hub.
 - **Aplicações independentes**: cada uma funciona sozinha. Só se usam juntas quando isso poupa tempo e tokens; nesse caso
   a tarefa leva "App sugerida" e o hub mostra "Sugerido: usar <app>".
+- **Documentos de cada projeto** (secção Documentos do hub): *informativos* = o que o projeto é (especificações, planos);
+  *adicionais* = conhecimento extra (desenhos de obras, fichas, fotografias). Os ficheiros ficam no armazenamento privado
+  `documentos` do Supabase (caminho `<id>/<tipo>/<nome>`), nunca no Git; carregam-se no próprio hub.
 - **Base de dados**: cada mudança é uma migração nova em `supabase/migrations/NNNN_nome.sql` (nunca editar uma já aplicada).
 - **Testes**: `cd tests && npm install && npx playwright install chromium && npm test` (base simulada, não toca na produção).
