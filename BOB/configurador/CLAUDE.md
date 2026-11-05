@@ -1,7 +1,8 @@
 # Configurador — the client's IKEA-style house builder (Product vision item 4)
 
-Developed in its own session and git branch `configurador` (worktree `../BOB Claude - configurador`); brief
-`conhecimento/sessao-implementacao.md`. Merge into `main` only with the user's OK, bringing `main` in first.
+Developed in the Discovercasa/design repo since 2026-11-05 (before: branch `configurador` of the private BOB); brief
+`conhecimento/sessao-implementacao.md`. The site serves the build in `public/build-your-house/`: after a change here run
+`python BOB/ferramentas/construir_site.py --so configurador` (from the repo root) and commit its output too.
 
 - `docs/especificacao.md` — **the spec**: what the user asked (verbatim), the client's steps, how the walls become
   modules, the price, the architecture, the plan, open questions. Start here.
@@ -18,7 +19,7 @@ Status (2026-10-20): spec v0.1 written; phase 1 done — the module divider `fer
 (checked against TV D2503; the user's answers of 2026-10-20 night applied — remainder ours, exterior ≤ 3 m; spec §3, §7);
 phase 2 done — the configured-house format and `para_construtor.py` (the example builds, validates with 0 issues and
 gets its documents; spec §8); phase 3 built — the browser prototype `web/` (run: `npm run dev --prefix
-configurador/web`, open http://localhost:5173; spec §9 — on another PC first a clone of the `configurador` branch), the
+configurador/web`, open http://localhost:5173; spec §9 — on another PC first a clone of the repo), the
 user's first try failed only because it ran on another PC outside the repo (2026-10-21); the user's feedback of
 2026-10-21 applied — each base side typed or dragged (the panel keeps only the total area), roof beams inside against
 the modules (never through them), continuous madres / roof purlins over an L; phase 4 built 2026-10-21 — the pé

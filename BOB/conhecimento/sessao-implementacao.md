@@ -7,10 +7,14 @@ uma discovercasa"). **First implementation: item 4, the configurator in the IKEA
 subsessão vamos começar a criar o 4 ponto o configurador estilo IKEA"). The user opens the session and gives the
 exact brief in their first prompt ("depois lá eu dou-te o contexto do que quero direitinho").
 
-## 1. Work in your own folder (before editing anything)
-Another session works in this checkout on `main` (house models). Start by moving to your own worktree and branch:
-the `EnterWorktree` tool, or `git worktree add "../BOB Claude - configurador" -b configurador` and work there.
-Commit there; push the branch when a task is finished; ask before merging into `main` (bring `main` in first).
+## 1. Where to work (before editing anything)
+Since 2026-11-05 the working repo for every application is **Discovercasa/design** (PUBLIC; BOB in its folder `BOB/`,
+the site in `public/`) — user: "A partir de agora o repositório que vai ser utilizado para realizar mudanças em todas
+as aplicações que temos em desenvolvimento vai ser o Discovercasa/Design". The old private repo and its branch
+`configurador` are history only. Commit to Design; a push to `main` publishes `public/` (Cloudflare Pages), so after
+changing `BOB/configurador/web`, `BOB/gerador/web` or the engine run `python BOB/ferramentas/construir_site.py` and
+commit its output with the change. Work on a branch and merge into `main` when the user wants it live; ask before
+pushing to `main` if unsure. Read the repo root `CLAUDE.md` (Design rules: Supabase, RLS, the Hub login) too.
 
 ## 2. Read (then only what each task needs)
 1. `CLAUDE.md` (working rules, map).
@@ -59,14 +63,15 @@ answered, see registo and `conhecimento/discovercasa.md` → Product vision 4; t
   and files it; method facts then go to `mestre-construtor`. Both sessions share these files — keep entries in date
   order when merging.
 - Flag what looks off with a better option; build with the DiscoverCasa method; ask when in doubt.
-- The repo is PRIVATE (client data). Nothing goes online (a web configurator, models, prices) without the user's
-  explicit OK on what and where. There is another local project of the company's website
+- The repo is PUBLIC (since 2026-10-30): never personal data (NIF, addresses, phones, engineer IDs, personal names),
+  never client drawings (`*.dwfx` / `*.pdf` are git-ignored; they stay on the PC). Nothing new goes online (models,
+  prices) without the user's explicit OK on what and where. There is another local project of the company's website
   (`C:\Users\DiscoverCasa1\Desktop\DiscoverCasa site`, its own session "DiscoverCasa site") — ask before touching
   it or linking the configurator to it.
 - Never open bulky/binary files directly (`*.dwfx`, `*.blend`, `*.glb`, `*_geometria.json`); scratch in `_trabalho/`.
 - Commit messages short, in English, ending with "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>".
-  Git: origin is the private repo VascoCoelho/DiscoverCasa-Claude-BOB; pushes authenticate as VascoDiscovercasa via
-  the repo-local credential helper (do not change accounts).
+  Git: origin is Discovercasa/design; pushes need a GitHub account with write there (DinisDiscover; cloud sessions:
+  the account connected with `/web-setup`).
 
 ## 6. Open with the user (from the modelling session, 2026-10-20)
 Remind them what goes under the chapéus (they asked); the hidden-gutter outlet type and bocal size (they will say);

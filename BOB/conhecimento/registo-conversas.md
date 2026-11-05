@@ -1206,3 +1206,11 @@ When this file passes about 1 500 lines, continue in `registo-conversas-<year>-<
 - Consequences flagged to the user (open, pending the user's go-ahead to prepare Design as the working repo): see
   `conhecimento/discovercasa.md` → GitHub/Design entry, points 1-6.
 - Filed in: `conhecimento/discovercasa.md` → GitHub/Design entry (decision; A/B marked superseded; open points).
+
+### 2026-11-05 — "Sim, prepara": Design prepared as the working repo [geral]
+> Sim, prepara
+- Context: answers "Preparo o Design para ser o repositório de trabalho?", after the decision that Discovercasa/design is the working repo for all applications.
+- Done: final sync of private BOB (a095e7b) into Design (commit "BOB: sync from a095e7b"; dropped stale `public/build-your-house/motor/_cobertura.html`, `_telhados.html`); new `BOB/ferramentas/construir_site.py` (builds `public/build-your-house/` and `public/gerador/` in place; `[--so configurador|gerador]`); `publicar_design.py` removed from Design (to be blocked in private BOB); `.gitignore` for `*.dwfx`, `*.pdf`, `_trabalho/`, `.claude/settings.local.json`; rules updated (root `CLAUDE.md` section "Aplicações e BOB", `BOB/CLAUDE.md`, `sessao-implementacao.md` §1/§5/git, `configurador/CLAUDE.md`); root `.claude/launch.json` (port 5173).
+- Status of the six points: (1) done, (2) done via gitignore, (3) done, (4) skills OK / agents unverified from root, (5) done, (6) pending.
+- Pending: user runs `/web-setup`; this PC moves to a Design clone; old private BOB kept as history only.
+- Filed in: `conhecimento/discovercasa.md` → GitHub/Design entry (publish line superseded; six points with status; new 2026-11-05 note).

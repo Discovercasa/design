@@ -24,7 +24,9 @@ DiscoverCasa projects from any device.
 - Never open binary or bulky generated files directly (`*.dwfx`, `*.blend`, `*.glb`,
   `*_geometria.json`): use the tools, which print only what is needed.
 - **Implementation sessions** (configurator, budgeting, client platform, builder): read
-  `conhecimento/sessao-implementacao.md` first and work in your own worktree/branch (user 2026-10-20).
+  `conhecimento/sessao-implementacao.md` first (user 2026-10-20). Since 2026-11-05 every application is changed in
+  this repo, Discovercasa/design (user); after changing an app run `python BOB/ferramentas/construir_site.py`.
+- Paths in BOB's docs, skills and agents are relative to `BOB/`: run BOB's tools from `BOB/` (`cd BOB`).
 - **Every new project: ask the per-project questions** of `conhecimento/perguntas-por-obra.md` (what
   changes from house to house; use the stated default when unanswered) — the user asked for it 2026-10-20.
 - The repo is public (Discovercasa/design, folder `BOB/`): never write NIF, addresses, phone numbers,
@@ -41,7 +43,7 @@ DiscoverCasa projects from any device.
 | `conhecimento/insights.md` | our technical insights and suggestions to the user, dated, with status (user 2026-10-21) | before advising; add each new insight |
 | `Construção Sobral/` | Loteamento Sobral project (16 houses + warehouse), has its own `CLAUDE.md` (paused 2026-10-15; two-storey houses, "estará para avançar brevemente" — 2026-10-20) | any work on that project |
 | `Construção Torres Vedras/` | house already built — model it from the architecture and compare with the real materials (current focus) | any work on that project |
-| `configurador/` | the client's IKEA-style house configurator (Product vision 4; branch `configurador`): spec, Kreativ study | configurator work |
+| `configurador/` | the client's IKEA-style house configurator (Product vision 4; built into `public/build-your-house/`): spec, Kreativ study | configurator work |
 | `ferramentas/` | Python / PowerShell / Blender tools | via the skills below |
 | skill `ler-dwfx` | read, render, zoom and measure DWFx drawings | a .dwfx must be read |
 | skill `modelo-blender-madeira` | build/update Blender models from drawings (structure + build-up layers); production documents (Módulos, Cobertura, Listagem de material: `ferramentas/documentos/gerar.py`) | 3D modelling work; documents for a house |

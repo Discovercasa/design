@@ -16,3 +16,16 @@ Projeto Design da Discovercasa (`design.discovercasa.pt`). Responder em portugu�
 
 ## Publicação
 - Cloudflare Pages (projeto `design`): publica a pasta `public/` a cada push para `main`.
+
+## Aplicações e BOB (desde 2026-11-05)
+- Este é o repositório onde se fazem as mudanças a **todas as aplicações em desenvolvimento** (Build Your House,
+  gerador de documentos, orçamentação, plataforma do cliente, construtor). O antigo repositório privado do BOB já não se usa.
+- O conhecimento e as ferramentas da DiscoverCasa estão em `BOB/`. **Para qualquer trabalho de aplicações ou de casas, ler
+  primeiro `BOB/CLAUDE.md`** (regras, mapa, registo de cada detalhe). Os caminhos nos documentos do BOB são relativos a `BOB/`.
+- Os agentes `guardiao-detalhes` e `mestre-construtor` estão em `BOB/.claude/agents/`. Se não aparecerem como agentes,
+  lançar um agente geral com o conteúdo desse ficheiro como instruções.
+- O site serve versões compiladas: depois de mudar `BOB/configurador/web`, `BOB/gerador/web` ou o motor
+  (`BOB/ferramentas/`), correr `python BOB/ferramentas/construir_site.py` e fazer commit do resultado
+  (`public/build-your-house/`, `public/gerador/`) junto com a mudança.
+- **Repositório público**: nunca dados pessoais nem desenhos de clientes (`*.dwfx`, `*.pdf` estão no `.gitignore`;
+  ficam só no PC).

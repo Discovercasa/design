@@ -230,11 +230,10 @@ decisions stay (the history is in git).
   Cloudflare Pages publishing only `public/` on push to `main`, behind the Hub login; the Design repo has its own
   `CLAUDE.md` rules (Supabase publishable key only, RLS, do not touch the Hub login). Only visible part: the configurator
   build at `public/configurador/` → https://design.discovercasa.pt/configurador/ (verified live 2026-10-30; behind the Design/Hub login since 2026-10-30, "Para já atrás do login" — gate public/js/porta.js; configurator shown as "Build Your House" at /build-your-house/ (2026-10-30); home page = panel of 5 tool cards + Sugestões (table sugestoes) with status (2026-10-30); Sugestões: delete, comments, Checklist coloured by status (2026-11-03; migration 0003 applied; page pushed 2026-11-05 (053ebe0), live); document generator at /gerador/ (drop a DWFx or vector PDF → documents, in the browser; ferramentas/documentos/de_desenhos.py + dwfx/leitor_pdf.py; checks (modelo/verificar.py) + 3D view of the timber; DWG not yet); worker
-  paths follow Vite `BASE_URL`). Publish with `python ferramentas/publicar_design.py` (clone in `_trabalho/design`;
-  `--sem-push` = dry run), run from branch `configurador` (main still holds the old records with personal data —
-  publish only from configurador or after merging) (superseded 2026-11-05, see registo: BOB `main` = `configurador`
-  since the push e52b188, so publishing from `main` is fine; suggestion pending the user's answer: always publish from
-  `main`, or merge into `main` right after publishing). (A/B below superseded 2026-11-05, see the DECISION after them
+  paths follow Vite `BASE_URL`). ~~Publish with `python ferramentas/publicar_design.py` (clone in `_trabalho/design`;
+  `--sem-push` = dry run), run from branch `configurador`~~ (superseded 2026-11-05, see registo: the script was removed
+  from Design; new flow: work in Design and run `python BOB/ferramentas/construir_site.py [--so configurador|gerador]`,
+  then commit and push; see the 2026-11-05 "Sim, prepara" note below). (A/B below superseded 2026-11-05, see the DECISION after them
   and registo.) 2026-11-05 — pending the user's choice, how cloud sessions
   (claude.ai/code, phone) can push to `Discovercasa/design`: a cloud session uses ONE GitHub connection per claude.ai
   account; `/web-setup` (in a `claude` terminal) sends the local gh token and replaces the browser connection.
@@ -251,17 +250,23 @@ decisions stay (the history is in git).
   Claude GitHub App needed), then start cloud sessions on `Discovercasa/design`. If `/web-setup` is missing
   (Team/Enterprise) an Owner enables "Quick setup" (Organization settings > Claude Code). Alternative: reconnect in the
   browser as DinisDiscover (likely needs the Claude GitHub App approved on the org). Cloud sessions can no longer open
-  the private BOB repo (accepted). **Pending: user runs `/web-setup`** (not confirmed). Open points, pending the user's
-  go-ahead to prepare Design as the working repo: (1) `ferramentas/publicar_design.py` deletes and rewrites `BOB/`,
-  `public/build-your-house/`, `public/gerador/` in Design from the private BOB: running it after changes in Design would
-  ERASE them, so retire or invert it; (2) client drawings (`*.dwfx` / `*.pdf`) never go to Design (public): work that
-  needs them (models, documents from drawings) stays on this PC, drawings outside git; (3) `Design/BOB/` has the
-  configurator source but the site serves a Vite build in `public/build-your-house/` (Design login gate injected by the
-  publish script): a build step inside Design is needed for changes to reach the site; (4) skills and agents sit in
-  `BOB/.claude/`, not at Design's root: check cloud sessions started at Design's root find them; (5) reconcile
-  `BOB/CLAUDE.md` (private, client data) with Design's `CLAUDE.md` (PT-PT, public repo, no personal data, Supabase
-  publishable key only, RLS, do not touch the Hub login, talk to Sebastião before changing the entry); (6) this PC should
-  then work in a clone of Design too.
+  the private BOB repo (accepted). **Pending: user runs `/web-setup`** (not confirmed). Open points flagged 2026-11-05 (status after the user's go-ahead "Sim, prepara", same day):
+  (1) `ferramentas/publicar_design.py` would erase work done in Design: DONE, removed from Design (blocked in the private BOB);
+  (2) client drawings (`*.dwfx` / `*.pdf`) never go to Design (public): DONE via `.gitignore` (`BOB/.gitignore` ignores
+  `*.dwfx`, `*.pdf`; root ignores `_trabalho/`, `*.dwfx`, `.claude/settings.local.json`); work needing drawings stays on
+  this PC; (3) build step inside Design: DONE, `BOB/ferramentas/construir_site.py` (see below); (4) skills and agents in
+  `BOB/.claude/`: skills OK (found as directory-scoped skills under `BOB/`), agents NOT VERIFIED from Design's root
+  (fallback written in root `CLAUDE.md`); (5) reconcile `BOB/CLAUDE.md` with Design's `CLAUDE.md`: DONE (root section
+  "Aplicações e BOB"; BOB/CLAUDE.md, `sessao-implementacao.md` §1/§5/git line and `configurador/CLAUDE.md` updated);
+  (6) this PC works in a Design clone: PENDING (being done 2026-11-05).
+- 2026-11-05 — user "Sim, prepara" (to "Preparo o Design para ser o repositório de trabalho?"). Done: final sync of the
+  private BOB (a095e7b) into Design with the old script (Design commit "BOB: sync from a095e7b"; it also dropped the stale
+  debug pages `public/build-your-house/motor/_cobertura.html` and `_telhados.html`). New `BOB/ferramentas/construir_site.py`
+  builds in place `public/build-your-house/` (Vite build of `BOB/configurador/web` + Design login gate) and
+  `public/gerador/` (page, engine files, three.js): `python BOB/ferramentas/construir_site.py [--so configurador|gerador]`,
+  then commit and push (tested: same output as the old script apart from line endings). Root `.claude/launch.json` added
+  (`npm run dev --prefix BOB/configurador/web`, port 5173). The old private BOB is kept as history only. Still pending:
+  user runs `/web-setup` (cloud sessions push as DinisDiscover); this PC moves to a Design clone.
 - 2026-10-30 — **the repo is public: never write NIF, addresses, phones, engineer IDs or personal names in it.** Personal
   data were removed from the records that day (company NIF, engineer OET ID, site addresses, licensing process number,
   architects' / client's names, a personal email) — "Tudo o que seja esse tipo de informações podes eliminar dos nossos

@@ -27,3 +27,7 @@ configurador/web/node_modules/
 configurador/web/dist/
 configurador/web/public/pyodide/
 configurador/web/public/motor/
+
+# client drawings and source PDFs: this repo is PUBLIC, they stay on the PC only (user 2026-10-30, 2026-11-05)
+*.dwfx
+*.pdf
