@@ -58,6 +58,7 @@ test('página do Build Your House: primeiro o estado, depois o botão para a app
   await expect(page.getByRole('heading', { level: 1, name: 'Build Your House' })).toBeVisible();
   const botao = page.getByRole('link', { name: /Abrir o Build Your House/ });
   await expect(botao).toHaveAttribute('href', '/build-your-house/');
+  await expect(botao).toHaveAttribute('target', '_blank');   // abre noutra janela/separador
   // o checkpoint em curso abre sozinho e mostra as tarefas, com a decisão e a app sugerida
   const passo = page.locator('.passo.em_curso');
   await expect(passo.locator('.passo-topo')).toHaveAttribute('aria-expanded', 'true');
@@ -282,4 +283,24 @@ test('logótipo: volta ao Início e atualiza o hub', async ({ page }) => {
   await page.getByRole('link', { name: /Discovercasa Design/ }).click();
   await expect(page.locator('#contador')).toHaveText('2');   // o checkpoint novo e a tarefa concluída
   await expect(page.locator('.tempo li').first()).toContainText('Rever o documento Cobertura');
+});
+
+test('Abrir o Gerador: abre noutra janela, com o novo aspeto, e o motor arranca', async ({ page, context }) => {
+  test.setTimeout(120000);
+  const erros = await abrir(page, { rota: '/#/projeto/gerador' });
+  await context.route('**/@supabase/supabase-js@*/**', (r) => r.fulfill({ contentType: 'text/javascript', body: FAKE }));
+  await context.addInitScript(() => { window.__UTILIZADOR = { id: 'u-eu', nome: 'Teste Hub', nivel: 'editar' }; });
+  const [nova] = await Promise.all([context.waitForEvent('page'), page.getByRole('link', { name: /Abrir o Gerador/ }).click()]);
+  await nova.waitForLoadState();
+  await expect(nova).toHaveURL(/\/gerador\/$/);
+  await expect(page).toHaveURL(/#\/projeto\/gerador$/);              // o hub continua aberto na sua janela
+  await expect(nova.getByRole('heading', { level: 1, name: 'Gerador de documentos' })).toBeVisible();
+  await expect(nova.locator('.g-passos li')).toHaveCount(5);
+  await expect(nova.getByRole('button', { name: /Larga aqui o ficheiro/ })).toBeVisible();
+  await expect(nova.getByRole('link', { name: /voltar ao hub/ })).toHaveAttribute('href', '/');
+  await expect(nova.locator('#estado')).toContainText('Pronto', { timeout: 90000 });   // Pyodide + o motor do BOB
+  const largo = await nova.evaluate(() => Math.max(document.documentElement.scrollWidth, window.innerWidth)) - nova.viewportSize().width;
+  expect(largo).toBeLessThanOrEqual(0);
+  await nova.screenshot({ path: fileURLToPath(new URL(`./capturas/gerador-${test.info().project.name}.png`, import.meta.url)), fullPage: true });
+  expect(erros).toEqual([]);
 });

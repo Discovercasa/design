@@ -1,0 +1,129 @@
+/* Gerador de documentos: usa os tokens, a barra de topo e os botões do hub (/css/hub.css); aqui só o que é desta app. */
+
+.g-app { font-weight: 500; color: var(--tinta); padding-left: 16px; border-left: 1px solid var(--linha-forte); white-space: nowrap; }
+.g-espaco { flex: 1; }
+.g-main { max-width: 1120px; }
+.g-cabeca { display: grid; gap: 8px; margin-bottom: 32px; max-width: 68ch; }
+.g-grelha { display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: 48px; align-items: start; }
+
+/* passos: o estado vem das secções visíveis (sem JavaScript) */
+.g-passos { position: sticky; top: 92px; display: grid; gap: 24px; }
+.g-passos ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; position: relative; }
+.g-passos li { display: flex; align-items: center; gap: 12px; padding: 6px 0; color: var(--tinta-3); font-size: 0.9375rem; position: relative; }
+.g-passos li:not(:last-child)::after { content: ""; position: absolute; left: 13px; top: 34px; height: 12px; width: 2px; background: var(--linha); border-radius: 2px; }
+.g-marco {
+  width: 28px; height: 28px; flex: none; border-radius: 50%; display: grid; place-items: center; font-size: 0.8125rem; font-weight: 600;
+  border: 2px solid var(--linha-forte); background: var(--superficie); color: var(--tinta-2); font-variant-numeric: tabular-nums;
+  transition: background-color .2s, border-color .2s, color .2s;
+}
+.g-passos li[data-passo="1"] { color: var(--tinta); }
+.g-passos li[data-passo="1"] .g-marco { border-color: var(--acao); color: var(--acao); }
+body:has(#passo-planta:not([hidden])) .g-passos li[data-passo="1"] .g-marco,
+body:has(#passo-docs:not([hidden])) .g-passos li .g-marco { background: var(--ok); border-color: var(--ok); color: var(--superficie); }
+body:has(#passo-planta:not([hidden])) .g-passos li:is([data-passo="2"], [data-passo="3"]) { color: var(--tinta); }
+body:has(#passo-planta:not([hidden])) .g-passos li:is([data-passo="2"], [data-passo="3"]) .g-marco { border-color: var(--acao); color: var(--acao); }
+body:has(#passo-docs:not([hidden])) .g-passos li { color: var(--tinta); }
+/* tudo feito: vem depois e com a mesma força, para ganhar às regras dos passos 2 e 3 */
+body:has(#passo-docs:not([hidden])) .g-passos li[data-passo] .g-marco { background: var(--ok); border-color: var(--ok); color: var(--superficie); }
+.g-privado { display: flex; gap: 8px; font-size: 0.8125rem; color: var(--tinta-2); padding: 12px; border-radius: var(--r2); background: var(--lateral); border: 1px solid var(--linha); }
+.g-privado .ic { margin-top: 2px; }
+
+/* cartões dos passos */
+.g-conteudo { display: grid; gap: 24px; min-width: 0; }
+.g-cartao { background: var(--superficie); border: 1px solid var(--linha); border-radius: var(--r2); padding: 24px; display: grid; gap: 16px; min-width: 0; }
+.g-cartao-cabeca { display: grid; gap: 6px; }
+.g-cartao-cabeca p { font-size: 0.9375rem; }
+
+/* zona de largar o ficheiro */
+#largar {
+  display: grid; justify-items: center; gap: 10px; padding: 40px 16px; text-align: center; cursor: pointer;
+  border: 1.5px dashed var(--linha-forte); border-radius: var(--r2); background: var(--canvas);
+  transition: border-color .15s, background-color .15s;
+}
+#largar:hover, #largar:focus-visible { border-color: var(--acao); }
+#largar.sobre { border-color: var(--acao); background: var(--acao-suave); }
+#largar strong { font-weight: 500; font-size: 1.0625rem; }
+.g-largar-ic { width: 32px; height: 32px; stroke: var(--tinta-2); fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.g-formatos { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; }
+.g-formatos .g-nao { text-decoration: line-through; text-decoration-color: var(--linha-forte); }
+
+/* mensagens (o gerador.js usa as classes ajuda / erro / ok / ocupado) */
+.ajuda { color: var(--tinta-2); font-size: 0.9375rem; margin: 0; }
+.erro { color: var(--erro); white-space: pre-wrap; font-size: 0.9375rem; margin: 0; }
+.ok { color: var(--ok); font-weight: 500; }
+.ocupado { display: flex; align-items: center; gap: 10px; }
+.ocupado::before { content: ""; width: 14px; height: 14px; flex: none; border-radius: 50%; border: 2px solid var(--linha-forte); border-top-color: var(--acao); animation: g-roda .8s linear infinite; }
+@keyframes g-roda { to { transform: rotate(360deg); } }
+
+/* plantas encontradas */
+.plantas { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
+.planta {
+  position: relative; display: grid; gap: 6px; padding: 12px; border: 1.5px solid var(--linha); border-radius: var(--r2);
+  background: var(--superficie); cursor: pointer; transition: border-color .15s, box-shadow .15s;
+}
+.planta:hover { border-color: var(--linha-forte); }
+.planta.escolhida { border-color: var(--acao); box-shadow: 0 0 0 3px var(--acao-suave); }
+.planta.escolhida::after {
+  content: "Escolhida"; position: absolute; top: 20px; right: 20px; padding: 2px 9px; border-radius: 99px;
+  background: var(--acao); color: var(--acao-tinta); font-size: 0.75rem; font-weight: 600;
+}
+.planta svg { width: 100%; height: auto; max-height: 180px; background: #fff; border-radius: var(--r1); border: 1px solid var(--linha); display: block; }
+.planta p { margin: 0; font-size: 0.875rem; }
+.planta p.ajuda { font-size: 0.8125rem; }
+.g-legenda { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 0.8125rem; color: var(--tinta-2); }
+.g-legenda i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; }
+
+/* escolhas */
+.g-campos { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; }
+.g-campos .campo { min-height: 40px; font-size: 0.9375rem; }
+.g-acoes { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; padding-top: 16px; border-top: 1px solid var(--linha); }
+
+/* verificação e 3D */
+.ver-res { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.selo { display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 99px; font-size: 0.8125rem; font-weight: 600; background: var(--ok-suave); color: var(--tinta); border: 1px solid color-mix(in oklch, var(--ok) 40%, transparent); }
+.selo::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--ok); }
+.selo.mau { background: var(--erro-suave); border-color: color-mix(in oklch, var(--erro) 40%, transparent); }
+.selo.mau::before { background: var(--erro); }
+#vista { width: 100%; height: 440px; border-radius: var(--r2); border: 1px solid var(--linha); background: #eceae4; display: block; touch-action: none; }
+.ver-lista { margin: 0; padding-left: 18px; font-size: 0.875rem; color: var(--tinta-2); max-height: 224px; overflow: auto; display: grid; gap: 4px; }
+.ver-lista:empty { display: none; }
+
+/* documentos */
+.docs { display: grid; gap: 0; border: 1px solid var(--linha); border-radius: var(--r2); overflow: hidden; }
+.docs a {
+  display: grid; grid-template-columns: auto 1fr auto auto; gap: 12px; align-items: center; padding: 14px 16px;
+  border-bottom: 1px solid var(--linha); color: inherit; text-decoration: none; transition: background-color .15s;
+}
+.docs a:last-child { border-bottom: 0; }
+.docs a:hover { background: var(--lateral); }
+.docs a::before {
+  content: ""; width: 20px; height: 20px; background: var(--tinta-2);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z'/%3E%3Cpath d='M14 2v4a2 2 0 0 0 2 2h4'/%3E%3C/svg%3E") center / contain no-repeat;
+          mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z'/%3E%3Cpath d='M14 2v4a2 2 0 0 0 2 2h4'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+.g-doc-nome { font-weight: 500; font-size: 0.9375rem; word-break: break-word; }
+.g-doc-meta { font-size: 0.8125rem; color: var(--tinta-3); font-variant-numeric: tabular-nums; }
+ul.notas { margin: 0; padding-left: 18px; font-size: 0.875rem; color: var(--tinta-2); display: grid; gap: 4px; }
+ul.notas:empty { display: none; }
+
+/* como funciona */
+.g-como { border: 1px solid var(--linha); border-radius: var(--r2); background: var(--superficie); }
+.g-como summary { cursor: pointer; padding: 16px 24px; font-weight: 500; }
+.g-como > div { padding: 0 24px 20px; display: grid; gap: 10px; color: var(--tinta-2); font-size: 0.9375rem; max-width: 76ch; }
+
+@media (max-width: 860px) {
+  .g-grelha { grid-template-columns: minmax(0, 1fr); gap: 24px; }
+  .g-passos { position: static; }
+  .g-passos ol { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px; }
+  .g-passos li { flex: none; font-size: 0.8125rem; gap: 6px; }
+  .g-passos li span:last-child { white-space: nowrap; }
+  .g-passos li::after { display: none; }
+  .g-passos li:not(:last-child) { padding-right: 10px; border-right: 1px solid var(--linha); }
+}
+@media (max-width: 720px) {
+  .g-app { display: none; }
+  .g-cartao { padding: 18px; }
+  #vista { height: 320px; }
+  .docs a { grid-template-columns: auto 1fr; }
+  .docs a .btn { grid-column: 2; justify-self: start; }
+}

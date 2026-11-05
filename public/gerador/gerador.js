@@ -8,14 +8,14 @@ let escolhida = 0;
 let pronto = false;
 let urls = [];
 
-function estado(txt, erro = false) { $("estado").textContent = txt; $("estado").className = erro ? "erro" : "ajuda"; }
+function estado(txt, erro = false, ocupado = false) { $("estado").textContent = txt; $("estado").className = erro ? "erro" : "ajuda" + (ocupado ? " ocupado" : ""); }
 
 motor.onmessage = ({ data }) => {
   if (data.tipo === "pronto") { pronto = true; estado("Pronto. Larga a planta de arquitetura."); }
   else if (data.tipo === "candidatos") mostrarPlantas(data.candidatos);
   else if (data.tipo === "documentos") { mostrarDocs(data); mostrarVerificacao(data); }
   else if (data.tipo === "erro") {
-    $("gerar").disabled = false; $("gerar-estado").textContent = "";
+    $("gerar").disabled = false; $("gerar-estado").textContent = ""; $("gerar-estado").className = "ajuda";
     estado("Não foi possível: " + data.erro, true);
   }
 };
@@ -31,7 +31,7 @@ function abrir(f) {
   if (ext !== "dwfx" && ext !== "pdf") { estado("Escolhe um ficheiro DWFx ou PDF do projeto de arquitetura.", true); return; }
   if (!pronto) { estado("O motor ainda está a arrancar, tenta daqui a uns segundos.", true); return; }
   ["passo-planta", "passo-escolhas", "passo-ver", "passo-docs"].forEach((id) => { $(id).hidden = true; });
-  estado(`A ler ${f.name}…`);
+  estado(`A ler ${f.name}…`, false, true);
   f.arrayBuffer().then((bytes) => motor.postMessage({ tipo: "analisar", nome: f.name, bytes }, [bytes]));
 }
 
@@ -76,11 +76,13 @@ $("gerar").addEventListener("click", () => {
   escolhas.pe_direito = parseFloat(escolhas.pe_direito) || 2.5;
   $("gerar").disabled = true;
   $("gerar-estado").textContent = "A construir a casa e a desenhar os documentos…";
+  $("gerar-estado").className = "ajuda ocupado";
   motor.postMessage({ tipo: "gerar", indice: escolhida, escolhas });
 });
 
 function mostrarDocs({ ficheiros, notas, avisos }) {
   $("gerar").disabled = false;
+  $("gerar-estado").className = "ajuda";
   $("gerar-estado").innerHTML = '<span class="ok">Documentos prontos.</span>';
   urls.forEach((u) => URL.revokeObjectURL(u));
   urls = [];
@@ -93,7 +95,7 @@ function mostrarDocs({ ficheiros, notas, avisos }) {
     urls.push(url);
     const a = document.createElement("a");
     a.href = url; a.download = nome; a.target = "_blank";
-    a.innerHTML = `<span>${nome}</span><span class="ajuda">${(bytes.length / 1024).toFixed(0)} kB · descarregar</span>`;
+    a.innerHTML = `<span class="g-doc-nome">${esc(nome)}</span><span class="g-doc-meta">${(bytes.length / 1024).toFixed(0)} kB</span><span class="btn pequeno">Descarregar</span>`;
     box.appendChild(a);
   });
   $("notas").innerHTML = [...(avisos || []), ...(notas || [])].map((t) => `<li>${t.replace(/</g, "&lt;")}</li>`).join("");
@@ -135,7 +137,10 @@ function desenhar(pecas, contorno) {
     const controls = new OrbitControls(camera, canvas);
     controls.enableDamping = true;
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0xeceae4);
+    // fundo do 3D a acompanhar o tema (claro / escuro, do sistema ou das Definições do hub)
+    const escuro = document.documentElement.dataset.theme === "dark" || (document.documentElement.dataset.theme !== "light" && matchMedia("(prefers-color-scheme: dark)").matches);
+    scene.background = new THREE.Color(escuro ? 0x2b2a27 : 0xeceae4);
+    canvas.style.background = escuro ? "#2b2a27" : "#eceae4";
     scene.add(new THREE.HemisphereLight(0xffffff, 0x8a8170, 1.6));
     const sol = new THREE.DirectionalLight(0xffffff, 1.6);
     sol.position.set(20, 30, 15);

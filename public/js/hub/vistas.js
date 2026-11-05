@@ -107,7 +107,7 @@ export function paginaProjeto(p) {
     <p class="suave pequeno">${esc(p.fase_detalhe)}</p>
   </div>
   ${p.app ? `<div class="cta-app"><div><h3>${esc(p.nome)} está online</h3><p>Lê primeiro em que ponto está e o próximo passo; depois abre a aplicação.</p></div>
-    <a class="btn primario grande" href="${esc(p.app.url)}">${esc(p.app.rotulo)}${ic('seta')}</a></div>` : ''}
+    <a class="btn primario grande" href="${esc(p.app.url)}" target="_blank" rel="noopener" title="Abre noutra janela">${esc(p.app.rotulo)}${ic('abrir')}<span class="so-leitor"> (abre noutra janela)</span></a></div>` : ''}
 
   <div class="grelha-2">
     <div>

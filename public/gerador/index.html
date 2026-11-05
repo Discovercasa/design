@@ -6,128 +6,130 @@
   <script src="/js/porta.js"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Gerador de documentos · Discovercasa</title>
+<title>Gerador de documentos · Discovercasa Design</title>
 <link rel="icon" href="/img/favicon.png">
-<style>
-  :root { --fundo: #f4f4f2; --cartao: #fff; --texto: #222; --suave: #666; --linha: #ddd; --botao: #1f4e79; --erro: #b3261e; --ok: #1e7d4f; }
-  @media (prefers-color-scheme: dark) { :root { --fundo: #161616; --cartao: #222; --texto: #eee; --suave: #aaa; --linha: #333; --botao: #4f8fd6; --erro: #ff8a80; --ok: #6fd3a0; } }
-  * { box-sizing: border-box; }
-  body { margin: 0; font-family: system-ui, -apple-system, "Segoe UI", sans-serif; background: var(--fundo); color: var(--texto); }
-  header { display: flex; align-items: center; gap: 1rem; padding: .8rem 1rem; background: var(--cartao); border-bottom: 1px solid var(--linha); }
-  header h1 { font-size: 1.1rem; margin: 0; }
-  header a { color: var(--suave); text-decoration: none; font-size: .9rem; }
-  main { max-width: 60rem; margin: 1.5rem auto; padding: 0 1rem; display: grid; gap: 1rem; }
-  .cartao { background: var(--cartao); border: 1px solid var(--linha); border-radius: 10px; padding: 1.3rem; }
-  h2 { margin: 0 0 .4rem; font-size: 1.05rem; }
-  .ajuda { color: var(--suave); font-size: .9rem; margin: .2rem 0; }
-  .erro { color: var(--erro); white-space: pre-wrap; }
-  button { font: inherit; padding: .55rem 1rem; border-radius: 8px; border: 0; background: var(--botao); color: #fff; cursor: pointer; }
-  button:disabled { opacity: .5; cursor: default; }
-  #largar { border: 2px dashed var(--linha); border-radius: 10px; padding: 2.5rem 1rem; text-align: center; cursor: pointer; transition: border-color .15s, background .15s; }
-  #largar.sobre { border-color: var(--botao); background: color-mix(in srgb, var(--botao) 8%, transparent); }
-  #largar strong { display: block; font-size: 1.05rem; margin-bottom: .3rem; }
-  .plantas { display: grid; grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr)); gap: .8rem; margin-top: .8rem; }
-  .planta { border: 2px solid var(--linha); border-radius: 8px; padding: .7rem; cursor: pointer; background: var(--cartao); }
-  .planta.escolhida { border-color: var(--botao); }
-  .planta svg { width: 100%; height: auto; max-height: 11rem; background: #fff; border-radius: 4px; display: block; }
-  .planta p { margin: .4rem 0 0; font-size: .85rem; }
-  form { display: grid; grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr)); gap: .8rem 1rem; margin-top: .8rem; }
-  label { display: grid; gap: .25rem; font-size: .85rem; color: var(--suave); }
-  input, select { font: inherit; padding: .45rem .55rem; border-radius: 6px; border: 1px solid var(--linha); background: var(--fundo); color: var(--texto); }
-  .acoes { display: flex; gap: .8rem; align-items: center; margin-top: 1rem; flex-wrap: wrap; }
-  .docs { display: grid; gap: .5rem; margin-top: .8rem; }
-  .docs a { display: flex; justify-content: space-between; padding: .7rem .9rem; border: 1px solid var(--linha); border-radius: 8px; color: inherit; text-decoration: none; }
-  .docs a:hover { border-color: var(--botao); }
-  .ok { color: var(--ok); }
-  #vista { width: 100%; height: 26rem; border-radius: 8px; background: #eceae4; display: block; touch-action: none; }
-  .ver-res { display: flex; gap: .6rem; align-items: center; flex-wrap: wrap; margin: .2rem 0 .6rem; }
-  .selo { font-size: .8rem; padding: .2rem .65rem; border-radius: 99px; color: #fff; background: var(--ok); }
-  .selo.mau { background: var(--erro); }
-  .ver-lista { font-size: .85rem; margin: .6rem 0 0; padding-left: 1.2rem; max-height: 14rem; overflow: auto; }
-  .ver-lista li { margin: .15rem 0; }
-  .legenda { display: flex; gap: .9rem; flex-wrap: wrap; font-size: .8rem; color: var(--suave); margin-top: .5rem; }
-  .legenda i { display: inline-block; width: .8rem; height: .8rem; border-radius: 2px; margin-right: .3rem; vertical-align: -1px; }
-  ul.notas { margin: .5rem 0 0; padding-left: 1.2rem; font-size: .85rem; color: var(--suave); }
-</style>
+<meta name="theme-color" content="#2a2a29">
+<!-- o tema escolhido nas Definições do hub vale aqui também -->
+<script>
+  try {
+    const t = localStorage.getItem('hub-tema'); if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    if (localStorage.getItem('hub-movimento') === 'reduzido') document.documentElement.dataset.movimento = 'reduzido';
+  } catch (_) {}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="/css/hub.css">
+<link rel="stylesheet" href="./gerador.css">
 </head>
 <body>
-<header>
-  <a href="/">← Ferramentas</a>
-  <h1>Gerador de documentos</h1>
+<header class="topo">
+  <div class="topo-linha">
+    <a class="marca" href="/" aria-label="Discovercasa Design, voltar ao hub" title="Voltar ao hub"><img src="/img/icone-192.png" alt="" width="26" height="26">Discovercasa <span>Design</span></a>
+    <span class="g-app" aria-hidden="true">Gerador de documentos</span>
+    <span class="g-espaco"></span>
+    <a class="btn pequeno texto" href="/#/projeto/gerador">Estado do projeto</a>
+  </div>
 </header>
-<main>
-  <section class="cartao">
-    <h2>1. Planta de arquitetura</h2>
-    <p class="ajuda">Larga aqui o projeto de arquitetura. O gerador procura sozinho a planta (paredes a construir a vermelho) e a escala.</p>
-    <div id="largar" tabindex="0" role="button">
-      <strong>Larga aqui o ficheiro ou clica para escolher</strong>
-      <span class="ajuda">DWFx ou PDF (exportado do AutoCAD) · DWG ainda não</span>
+
+<main class="g-main">
+  <div class="g-cabeca">
+    <h1>Gerador de documentos</h1>
+    <p class="suave">Da planta de arquitetura aos documentos de produção da obra: Módulos, Cobertura e Listagem de material.</p>
+  </div>
+
+  <div class="g-grelha">
+    <nav class="g-passos" aria-label="Passos">
+      <ol>
+        <li data-passo="1"><span class="g-marco">1</span><span>Planta de arquitetura</span></li>
+        <li data-passo="2"><span class="g-marco">2</span><span>Confirmar a planta</span></li>
+        <li data-passo="3"><span class="g-marco">3</span><span>O que a planta não diz</span></li>
+        <li data-passo="4"><span class="g-marco">4</span><span>Verificação e 3D</span></li>
+        <li data-passo="5"><span class="g-marco">5</span><span>Documentos</span></li>
+      </ol>
+      <p class="g-privado"><svg class="ic ic-sm" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>O ficheiro é lido no teu browser e não sai deste computador.</p>
+    </nav>
+
+    <div class="g-conteudo">
+      <section class="g-cartao" aria-labelledby="t1">
+        <div class="g-cartao-cabeca"><h2 id="t1">Planta de arquitetura</h2>
+          <p class="suave">O gerador procura sozinho a planta (paredes a construir a vermelho) e a escala.</p></div>
+        <div id="largar" tabindex="0" role="button" aria-describedby="formatos">
+          <svg class="g-largar-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m17 8-5-5-5 5"/><path d="M12 3v12"/></svg>
+          <strong>Larga aqui o ficheiro ou clica para escolher</strong>
+          <span id="formatos" class="g-formatos"><span class="chip">DWFx</span><span class="chip">PDF exportado do AutoCAD</span><span class="chip g-nao">DWG ainda não</span></span>
+        </div>
+        <input type="file" id="ficheiro" accept=".dwfx,.pdf,.dwg" hidden>
+        <p id="estado" class="ajuda ocupado" role="status">A preparar o motor…</p>
+      </section>
+
+      <section class="g-cartao" id="passo-planta" aria-labelledby="t2" hidden>
+        <div class="g-cartao-cabeca"><h2 id="t2">Confirma a planta</h2>
+          <p class="suave">Escolhe a planta certa. A primeira é a mais provável.</p></div>
+        <div class="g-legenda"><span><i style="background:#c0392b"></i>Paredes exteriores</span><span><i style="background:#e67e22"></i>Interiores</span>
+          <span><i style="background:#2e86de"></i>Janelas</span><span><i style="background:#27ae60"></i>Portas</span></div>
+        <div class="plantas" id="plantas"></div>
+      </section>
+
+      <section class="g-cartao" id="passo-escolhas" aria-labelledby="t3" hidden>
+        <div class="g-cartao-cabeca"><h2 id="t3">O que a planta não diz</h2>
+          <p class="suave">Vale o padrão Discovercasa; muda só o que esta obra tiver diferente.</p></div>
+        <form id="escolhas" class="g-campos" onsubmit="return false">
+          <label class="campo-grupo"><span>Código da obra</span><input class="campo" name="obra" placeholder="ex.: D2601" maxlength="20"></label>
+          <label class="campo-grupo"><span>Nome do projeto</span><input class="campo" name="projeto" placeholder="ex.: Habitação unifamiliar" maxlength="60"></label>
+          <label class="campo-grupo"><span>Cobertura</span>
+            <select class="campo" name="cobertura">
+              <option value="escondida">Oculta (platibanda)</option>
+              <option value="duas_aguas">À vista, duas águas</option>
+              <option value="quatro_aguas">À vista, quatro águas</option>
+              <option value="misto">À vista, mista (L / T / U)</option>
+            </select>
+          </label>
+          <label class="campo-grupo"><span>Pé direito (m)</span><input class="campo num" name="pe_direito" type="number" min="2.4" max="3.5" step="0.05" value="2.50"></label>
+          <label class="campo-grupo"><span>Acabamento exterior</span>
+            <select class="campo" name="exterior">
+              <option value="A">A · Tremolo</option>
+              <option value="B">B · Capoto (ETICS)</option>
+              <option value="C">C · Cortiça</option>
+            </select>
+          </label>
+        </form>
+        <div class="g-acoes">
+          <button id="gerar" class="btn primario grande" type="button">Gerar documentos</button>
+          <span id="gerar-estado" class="ajuda" role="status"></span>
+        </div>
+      </section>
+
+      <section class="g-cartao" id="passo-ver" aria-labelledby="t4" hidden>
+        <div class="g-cartao-cabeca"><h2 id="t4">Verificação e modelo 3D</h2>
+          <div class="ver-res"><span class="selo" id="selo"></span><span class="suave pequeno" id="ver-resumo"></span></div></div>
+        <canvas id="vista" aria-label="Modelo 3D da estrutura de madeira"></canvas>
+        <div class="g-legenda">
+          <span><i style="background:#c9a36b"></i>Módulos</span><span><i style="background:#8d6e4a"></i>Amarração, vigas e lameladas</span>
+          <span><i style="background:#b8b0a0"></i>Madres, prumos e calços</span><span><i style="background:#d62828"></i>Peças com problema</span>
+        </div>
+        <p class="fraco mini">Rodar: arrastar · Aproximar: roda do rato · Deslocar: botão direito</p>
+        <ul class="ver-lista" id="ver-lista"></ul>
+      </section>
+
+      <section class="g-cartao" id="passo-docs" aria-labelledby="t5" hidden>
+        <div class="g-cartao-cabeca"><h2 id="t5">Documentos</h2>
+          <p class="suave">Prontos a descarregar. Se mudares as escolhas acima, gera outra vez.</p></div>
+        <div class="docs" id="docs"></div>
+        <ul class="notas" id="notas"></ul>
+      </section>
+
+      <details class="g-como">
+        <summary>Como funciona e que ficheiros aceita</summary>
+        <div>
+          <p>As paredes e os vãos vêm da planta; a estrutura, os módulos, as camadas e a cobertura seguem o método Discovercasa (o mesmo motor do Builder).
+            As janelas entram com 1,20 m de altura a 1,00 m do chão e as portas com 2,20 m; um vão de porta com 1,60 m ou mais é uma porta de correr.</p>
+          <p><b>PDF:</b> tem de ser o PDF exportado do AutoCAD (com linhas). Um PDF digitalizado ou fotografado é só uma imagem e não tem paredes para ler.</p>
+          <p><b>DWG:</b> ainda não é lido (formato fechado da Autodesk). No AutoCAD, exporta a planta em PDF ou DWFx (Publicar) e larga esse ficheiro.</p>
+        </div>
+      </details>
     </div>
-    <input type="file" id="ficheiro" accept=".dwfx,.pdf,.dwg" hidden>
-    <p id="estado" class="ajuda" role="status">A preparar o motor…</p>
-  </section>
-
-  <section class="cartao" id="passo-planta" hidden>
-    <h2>2. Confirma a planta</h2>
-    <p class="ajuda">Vermelho = paredes exteriores, laranja = interiores, azul = janelas, verde = portas. Escolhe a planta certa.</p>
-    <div class="plantas" id="plantas"></div>
-  </section>
-
-  <section class="cartao" id="passo-escolhas" hidden>
-    <h2>3. O que a planta não diz</h2>
-    <p class="ajuda">Vale o padrão Discovercasa; muda só o que esta obra tiver diferente.</p>
-    <form id="escolhas" onsubmit="return false">
-      <label>Código da obra <input name="obra" placeholder="ex.: D2601" maxlength="20"></label>
-      <label>Nome do projeto <input name="projeto" placeholder="ex.: Habitação unifamiliar" maxlength="60"></label>
-      <label>Cobertura
-        <select name="cobertura">
-          <option value="escondida">Escondida (platibanda)</option>
-          <option value="duas_aguas">À vista, duas águas</option>
-          <option value="quatro_aguas">À vista, quatro águas</option>
-          <option value="misto">À vista, mista (L / T / U)</option>
-        </select>
-      </label>
-      <label>Pé direito (m) <input name="pe_direito" type="number" min="2.4" max="3.5" step="0.05" value="2.50"></label>
-      <label>Acabamento exterior
-        <select name="exterior">
-          <option value="A">A · Tremolo</option>
-          <option value="B">B · Capoto (ETICS)</option>
-          <option value="C">C · Cortiça</option>
-        </select>
-      </label>
-    </form>
-    <div class="acoes">
-      <button id="gerar" type="button">Gerar documentos</button>
-      <span id="gerar-estado" class="ajuda" role="status"></span>
-    </div>
-  </section>
-
-  <section class="cartao" id="passo-ver" hidden>
-    <h2>4. Verificação e modelo 3D</h2>
-    <div class="ver-res"><span class="selo" id="selo"></span><span class="ajuda" id="ver-resumo"></span></div>
-    <canvas id="vista" aria-label="Modelo 3D da estrutura de madeira"></canvas>
-    <div class="legenda">
-      <span><i style="background:#c9a36b"></i>Módulos</span><span><i style="background:#8d6e4a"></i>Amarração, vigas e lameladas</span>
-      <span><i style="background:#b8b0a0"></i>Madres, prumos e calços</span><span><i style="background:#d62828"></i>Peças com problema</span>
-      <span>Rodar: arrastar · Aproximar: roda do rato · Deslocar: botão direito</span>
-    </div>
-    <ul class="ver-lista" id="ver-lista"></ul>
-  </section>
-
-  <section class="cartao" id="passo-docs" hidden>
-    <h2>5. Documentos</h2>
-    <div class="docs" id="docs"></div>
-    <ul class="notas" id="notas"></ul>
-  </section>
-
-  <section class="cartao">
-    <h2>Como funciona</h2>
-    <p class="ajuda">O ficheiro é lido aqui, no teu browser: não é enviado para nenhum servidor. As paredes e os vãos vêm da planta;
-      a estrutura, os módulos, as camadas e a cobertura seguem o método Discovercasa (o mesmo motor do Builder).
-      As janelas entram com 1,20 m de altura a 1,00 m do chão e as portas com 2,20 m; um vão de porta com 1,60 m ou mais é uma porta de correr.</p>
-    <p class="ajuda"><strong>PDF:</strong> tem de ser o PDF exportado do AutoCAD (com linhas). Um PDF digitalizado ou fotografado é só uma imagem e não tem paredes para ler.</p>
-    <p class="ajuda"><strong>DWG:</strong> ainda não é lido (formato fechado da Autodesk). No AutoCAD, exporta a planta em PDF ou DWFx (Publicar) e larga esse ficheiro.</p>
-  </section>
+  </div>
 </main>
 <script type="importmap">{ "imports": { "three": "./vendor/three.module.js" } }</script>
 <script type="module" src="./gerador.js"></script>

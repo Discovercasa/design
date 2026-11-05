@@ -1245,3 +1245,17 @@ When this file passes about 1 500 lines, continue in `registo-conversas-<year>-<
   5 projects, 29 checkpoints, 93 tasks, 8 decisions with 23 options; triggers tested on the real database inside a
   rolled-back transaction (editor concludes → day stamped + notification; "ver" cannot edit); no new security advisories.
   Then "Sim, publica" → branch `hub/inicio-projetos` fast-forwarded into `main` and pushed (live on design.discovercasa.pt).
+
+## 2026-11-05 (later) — Design hub: the generator's look, apps in another window
+> pequena mudança ao clicar no icone Discovercasa Design deve atualizar o hub e levar para a página de inicio
+- Done: the logo goes to Início and reloads the hub's data (no page reload).
+> arranja o aspeto e o design do gerador de documentos aqui quero dizer da app em si quando clciamos em abrir gerador de documentos
+> e tanto o gerador de documentos como o Build Your House quando abrimos devem abrir num separador diferente ou neste caso como estou a usar a app de desktop do Design abrir uma pagina diferente
+- Done: the generator page (`BOB/gerador/web/`, built into `public/gerador/`) redesigned on the hub's design system (tokens,
+  light/dark incl. the hub's theme setting, Geist, top bar back to the hub, side stepper, cards, file rows, 3D background
+  by theme); same engine and IDs. Its roof option now reads "Oculta (platibanda)" (the company's client-facing word, 2026-10-29).
+  The hub's "Abrir …" buttons open the app in a new tab / window (`target="_blank"`). Playwright 32/32 + the full flow with
+  a local Torres Vedras plan (not in Git).
+- Noticed (not changed): on Torres Vedras' architecture plan the generator's check reports 25 problems, all 7,5 cm
+  Amarração crossings at corners / interior ring beams — to look at in the engine (Builder) or the check's tolerance.
+- Filed in: this log only (UI work; no construction facts).
