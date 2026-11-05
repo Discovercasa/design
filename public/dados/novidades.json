@@ -1,0 +1,25 @@
+[
+  {
+    "dia": "2026-11-05",
+    "titulo": "Novo hub de projetos",
+    "itens": [
+      "Barra de navegação com o Início e uma página por projeto.",
+      "Checkpoints e tarefas em cada projeto, com responsável, estado e a app sugerida.",
+      "Decisões com todas as opções, vantagens, desvantagens e custos; a escolha fica registada.",
+      "Notificações quando uma tarefa é atribuída, muda de estado ou é concluída.",
+      "Pop-up \"Novo\" na primeira vez que vês um checkpoint ou tarefa de outra pessoa.",
+      "A plataforma VR/AR passa a chamar-se Step Inside, com a pipeline e os custos de cada etapa.",
+      "Área pessoal, definições (tema, animações, o teu nome) e estas novidades."
+    ]
+  },
+  {
+    "dia": "2026-11-03",
+    "titulo": "Sugestões melhoradas",
+    "itens": ["Apagar e comentar sugestões.", "Checklist com as sugestões que escolhemos fazer, com a cor do estado."]
+  },
+  {
+    "dia": "2026-10-30",
+    "titulo": "Primeiras aplicações no Design",
+    "itens": ["Build Your House publicado.", "Gerador de documentos publicado.", "Entrada com a conta do Hub."]
+  }
+]

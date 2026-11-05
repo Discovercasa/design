@@ -1,0 +1,23 @@
+{
+  "id": "orcamentacao",
+  "slug": "orcamentacao",
+  "nome": "Orçamentação",
+  "resumo": "O preço de cada material e fornecedor, com as contas à vista até ao preço final da casa.",
+  "descricao": "A partir da Listagem de material de cada casa e da lista de preços de materiais e fornecedores, calcula o preço final: materiais, mão de obra, fundação, caixilharia, especialidades, instalações e pré-instalações, licenciamento e IVA, mostrando como se chega a cada valor.",
+  "fase": "Planeado",
+  "fase_detalhe": "À espera da lista de materiais e fornecedores com preços.",
+  "objetivos": [
+    "Preço final de qualquer casa em minutos.",
+    "Contas transparentes, parcela a parcela."
+  ],
+  "futuro": [
+    "Receber a lista de preços.",
+    "Ligar ao Build Your House para o preço em direto."
+  ],
+  "metodo": "Usa as quantidades do método Discovercasa.",
+  "app": null,
+  "organizacao": { "codigo": "ainda por criar (BOB/orcamentacao/)", "publicado": "ainda sem página própria", "ramo": "orcamentacao/<tarefa>" },
+  "ligacoes": [
+    { "com": "build_your_house", "texto": "Dá os preços reais ao configurador." }
+  ]
+}

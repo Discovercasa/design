@@ -1,0 +1,26 @@
+{
+  "id": "build_your_house",
+  "slug": "build-your-house",
+  "nome": "Build Your House",
+  "resumo": "O cliente desenha a sua casa online, parede a parede, e vê o preço em direto.",
+  "descricao": "Configurador online ao estilo do IKEA Kreativ. O cliente escolhe a forma, os m² e o pé direito, monta a casa com paredes de 3 m, acrescenta portas, janelas, paredes interiores, acabamentos, cobertura e pérgolas, e vê o preço a mudar. Por trás, o motor divide as paredes em módulos com as regras de construção da Discovercasa (o cliente nunca vê a palavra módulo).",
+  "fase": "Protótipo publicado",
+  "fase_detalhe": "Online no Design desde 2026-10-30, só para a equipa. Faltam respostas da Discovercasa e os preços reais.",
+  "objetivos": [
+    "O cliente monta a casa sozinho, sem ajuda, num telemóvel ou computador.",
+    "Cada casa configurada sai pronta para o Builder: estrutura, camadas e quantidades.",
+    "Preço transparente, com as contas à vista."
+  ],
+  "futuro": [
+    "Preços reais da Orçamentação em vez dos provisórios.",
+    "Abrir a clientes, depois da aprovação da Discovercasa.",
+    "Funcionar também fora do método Discovercasa (hoje segue o nosso método; fica assim por agora)."
+  ],
+  "metodo": "Segue o método construtivo Discovercasa. No futuro deve funcionar também com outros métodos.",
+  "app": { "url": "/build-your-house/", "rotulo": "Abrir o Build Your House" },
+  "organizacao": { "codigo": "BOB/configurador/", "publicado": "public/build-your-house/", "ramo": "build-your-house/<tarefa>" },
+  "ligacoes": [
+    { "com": "builder", "texto": "A casa configurada converte-se nos dados do Builder (estrutura, camadas, quantidades)." },
+    { "com": "orcamentacao", "texto": "Vai receber os preços reais da Orçamentação." }
+  ]
+}

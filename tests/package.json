@@ -1,0 +1,7 @@
+{
+  "name": "design-hub-testes",
+  "private": true,
+  "description": "Testes Playwright do hub do Design (base de dados simulada; nada toca na produção).",
+  "scripts": { "test": "python gerar_fixture.py && playwright test" },
+  "devDependencies": { "@playwright/test": "1.64.1" }
+}

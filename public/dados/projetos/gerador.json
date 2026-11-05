@@ -1,0 +1,24 @@
+{
+  "id": "gerador",
+  "slug": "gerador",
+  "nome": "Gerador de documentos",
+  "resumo": "Larga a planta de arquitetura e recebe os documentos de produção da obra.",
+  "descricao": "Recebe a planta de arquitetura (DWFx ou PDF vetorial), encontra sozinho as plantas, monta a casa com o motor do Builder e devolve três documentos: Módulos, Cobertura e Listagem de material, com uma vista 3D. Corre tudo no browser.",
+  "fase": "Protótipo publicado",
+  "fase_detalhe": "Online desde 2026-10-30. O documento Módulos está aprovado; Cobertura e Listagem de material à espera de revisão.",
+  "objetivos": [
+    "Documentos de produção para cada obra nova, sem trabalho manual.",
+    "Ler os formatos que os projetistas nos mandam."
+  ],
+  "futuro": [
+    "Revisão da Cobertura e da Listagem de material.",
+    "Ler DXF e IFC (os mesmos leitores servem o Step Inside)."
+  ],
+  "metodo": "Usa o motor e as regras do Builder.",
+  "app": { "url": "/gerador/", "rotulo": "Abrir o Gerador" },
+  "organizacao": { "codigo": "BOB/gerador/web/ e BOB/ferramentas/documentos/", "publicado": "public/gerador/", "ramo": "gerador/<tarefa>" },
+  "ligacoes": [
+    { "com": "orcamentacao", "texto": "A Listagem de material é a base do preço." },
+    { "com": "plataforma_cliente", "texto": "Os leitores de DWFx e PDF servem a interpretação dos documentos." }
+  ]
+}

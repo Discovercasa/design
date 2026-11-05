@@ -1,0 +1,293 @@
+// As páginas do hub, desenhadas a partir do estado E (dados.js). Os botões levam data-acao; o app.js trata dos cliques.
+import { E, projeto, nomeProjeto, checkpointsDe, tarefasDe, decisaoDaTarefa, decisoesDe, resumo, feitosDe, chave } from './dados.js';
+import { ic, esc, dia, diaCurto, iniciais, euros } from './util.js';
+
+const ROTULO = { por_fazer: 'Por fazer', em_curso: 'Em curso', bloqueada: 'Bloqueada', concluida: 'Concluída', concluido: 'Concluído' };
+export const abertos = new Set();   // checkpoints abertos (ficam abertos ao redesenhar)
+let abertosIniciados = new Set();   // projetos cujos checkpoints "em curso" já abrimos por defeito
+
+const saudacao = () => { const h = new Date().getHours(); return h < 6 ? 'Boa noite' : h < 13 ? 'Bom dia' : h < 20 ? 'Boa tarde' : 'Boa noite'; };
+const novo = (tipo, id) => (E.novos.has(chave(tipo, id)) ? '<span class="chip novo">Novo</span>' : '');
+const linkProjeto = (id) => `#/projeto/${(projeto(id) || {}).slug || id}`;
+const appChip = (id) => (id ? `<a class="chip app" href="${linkProjeto(id)}" title="Esta tarefa poupa tempo com outra aplicação">${ic('app', 'ic-sm')}Sugerido: usar ${esc(nomeProjeto(id))}</a>` : '');
+const custoChip = (c) => (c ? `<span class="chip custo">${ic('custo', 'ic-sm')}${esc(c)}</span>` : '');
+const pillDecisao = (d) => (d ? `<button type="button" class="decisao-pill ${d.estado}" data-acao="ver-decisao" data-id="${d.id}">${ic('decisao', 'ic-sm')}${d.estado === 'aberta' ? 'Decisão' : 'Decidido'}</button>` : '');
+
+// ---------------------------------------------------------------- Início
+export function inicio() {
+  const minhas = E.tarefas.filter((t) => t.responsavel_id === E.eu.id && t.estado !== 'concluida');
+  const abertas = E.decisoes.filter((d) => d.estado === 'aberta');
+  const feitos = feitosDe().slice(0, 8);
+  const ligacoes = E.projetos.flatMap((p) => (p.ligacoes || []).map((l) => ({ de: p.id, ...l })));
+
+  return `
+  <div class="cabeca-pagina">
+    <div class="saudacao">
+      <h1>${saudacao()}${E.eu.nome ? ', ' + esc(E.eu.nome.split(' ')[0]) : ''}</h1>
+      <p class="suave">Cada projeto da Discovercasa num só sítio: o que é, em que fase está, o que já foi feito e o que vem a seguir.</p>
+      <div class="para-ti">
+        <a class="chip" href="#/pessoal">${ic('pessoa', 'ic-sm')}<span class="num">${minhas.length}</span> ${minhas.length === 1 ? 'tarefa tua' : 'tarefas tuas'}</a>
+        <a class="chip" href="#decisoes-abertas">${ic('decisao', 'ic-sm')}<span class="num">${abertas.length}</span> ${abertas.length === 1 ? 'decisão em aberto' : 'decisões em aberto'}</a>
+      </div>
+    </div>
+    ${E.eu.editar ? `<button class="btn primario grande" type="button" data-acao="acrescentar">${ic('mais')}Acrescentar checkpoint ou tarefa</button>` : ''}
+  </div>
+
+  <section aria-labelledby="t-projetos">
+    <div class="seccao-cabeca"><h2 id="t-projetos">Projetos</h2></div>
+    <div class="projetos" id="lista-projetos">
+      ${E.projetos.map((p) => {
+        const r = resumo(p.id);
+        return `<a class="projeto-linha" href="${linkProjeto(p.id)}">
+          <div><h3>${esc(p.nome)}</h3><p class="suave pequeno">${esc(p.resumo)}</p></div>
+          <div class="progresso">
+            <div class="linha-topo"><span class="fase">${esc(p.fase)}</span><span class="num suave">${r.feitos} de ${r.total} checkpoints</span></div>
+            <div class="barra${r.total && r.feitos === r.total ? ' ok' : ''}" role="img" aria-label="${r.feitos} de ${r.total} checkpoints concluídos"><i data-p="${r.total ? r.feitos / r.total : 0}"></i></div>
+          </div>
+          <div class="agora">
+            ${r.atual ? `<span><span class="fraco">Agora</span> <b>${esc(r.atual.titulo)}</b></span>` : '<span class="fraco">Sem checkpoints em aberto</span>'}
+            ${r.proxima ? `<span class="suave">Próximo passo: ${esc(r.proxima.titulo)}</span>` : ''}
+            ${r.ultimo ? `<span class="fraco">Último feito a ${diaCurto(r.ultimo.dia)}: ${esc(r.ultimo.texto)}</span>` : ''}
+          </div>
+          <span class="seta">${ic('seta')}</span>
+        </a>`;
+      }).join('')}
+    </div>
+  </section>
+
+  <section class="seccao" aria-labelledby="t-objetivos">
+    <div class="seccao-cabeca"><h2 id="t-objetivos">Objetivos e o que vem a seguir</h2></div>
+    <div class="rolar-x"><table class="tabela">
+      <thead><tr><th>Projeto</th><th>Objetivo principal</th><th>A seguir</th></tr></thead>
+      <tbody>${E.projetos.map((p) => `<tr><td><a href="${linkProjeto(p.id)}">${esc(p.nome)}</a></td><td>${esc((p.objetivos || [])[0] || '')}</td><td class="suave">${esc((p.futuro || [])[0] || '')}</td></tr>`).join('')}</tbody>
+    </table></div>
+  </section>
+
+  <div class="grelha-2 seccao">
+    <section aria-labelledby="t-ligacoes">
+      <div class="seccao-cabeca"><h2 id="t-ligacoes">Como os projetos se ligam</h2></div>
+      <div class="nota" style="margin-bottom:16px">${ic('info')}<p>Cada aplicação funciona sozinha: podes usar uma sem as outras. Só as juntamos quando isso poupa tempo e tokens; nesses casos a tarefa mostra <span class="chip app">${ic('app', 'ic-sm')}Sugerido: usar …</span>. O Build Your House e o Builder seguem hoje o método Discovercasa; no futuro devem servir também outros métodos.</p></div>
+      <div class="ligacoes">
+        ${ligacoes.map((l) => `<div class="ligacao"><a class="de" href="${linkProjeto(l.de)}">${esc(nomeProjeto(l.de))}</a>${ic('seta', 'ic-sm')}<a class="para" href="${linkProjeto(l.com)}">${esc(nomeProjeto(l.com))}</a><p>${esc(l.texto)}</p></div>`).join('')}
+      </div>
+    </section>
+    <aside class="lateral">
+      <section class="bloco-lateral" id="decisoes-abertas" aria-labelledby="t-dec">
+        <h3 id="t-dec">Decisões em aberto</h3>
+        ${abertas.length ? `<ul class="lista-simples">${abertas.map((d) => `<li><span>${pillDecisao(d)}</span><span><span class="pequeno">${esc(d.pergunta)}</span><br><span class="fraco mini">${esc(nomeProjeto(d.projeto))}</span></span></li>`).join('')}</ul>`
+          : '<p class="suave pequeno">Nenhuma decisão à espera.</p>'}
+      </section>
+      <section class="bloco-lateral" aria-labelledby="t-feito">
+        <h3 id="t-feito">Feito recentemente</h3>
+        ${feitos.length ? `<ol class="tempo">${feitos.map((f) => `<li><time datetime="${f.dia}">${dia(f.dia)}</time><span>${esc(f.texto)}<br><span class="proj">${esc(nomeProjeto(f.projeto))}</span></span></li>`).join('')}</ol>`
+          : '<p class="suave pequeno">Ainda nada concluído.</p>'}
+      </section>
+    </aside>
+  </div>`;
+}
+
+// ---------------------------------------------------------------- página de um projeto
+export function paginaProjeto(p) {
+  const cps = checkpointsDe(p.id);
+  if (!abertosIniciados.has(p.id)) {  // à primeira, abre o checkpoint em curso (ou o primeiro por fazer)
+    abertosIniciados.add(p.id);
+    const atual = cps.find((c) => c.estado === 'em_curso') || cps.find((c) => c.estado === 'por_fazer');
+    if (atual) abertos.add(atual.id);
+  }
+  const r = resumo(p.id);
+  const proximos = cps.filter((c) => c.estado !== 'concluido').flatMap((c) => tarefasDe(c.id).filter((t) => t.estado !== 'concluida')).slice(0, 4);
+  const feitos = feitosDe(p.id);
+  const decs = decisoesDe(p.id);
+
+  return `
+  <div class="projeto-cabeca">
+    <div class="linha"><h1>${esc(p.nome)}</h1><span class="fase">${esc(p.fase)}</span></div>
+    ${p.nome_antigo ? `<p class="fraco pequeno">Antes: ${esc(p.nome_antigo)}</p>` : ''}
+    <p class="descricao">${esc(p.descricao)}</p>
+    <p class="suave pequeno">${esc(p.fase_detalhe)}</p>
+  </div>
+  ${p.app ? `<div class="cta-app"><div><h3>${esc(p.nome)} está online</h3><p>Lê primeiro em que ponto está e o próximo passo; depois abre a aplicação.</p></div>
+    <a class="btn primario grande" href="${esc(p.app.url)}">${esc(p.app.rotulo)}${ic('seta')}</a></div>` : ''}
+
+  <div class="grelha-2">
+    <div>
+      <section aria-labelledby="t-workflow">
+        <div class="seccao-cabeca">
+          <div><h2 id="t-workflow">Workflow</h2><p>Os checkpoints por ordem e as tarefas para chegar a cada um. <span class="num">${r.feitos} de ${r.total}</span> concluídos.</p></div>
+          ${E.eu.editar ? `<button class="btn" type="button" data-acao="acrescentar" data-projeto="${p.id}">${ic('mais')}Checkpoint</button>` : ''}
+        </div>
+        ${cps.length ? `<ol class="workflow">${cps.map((c, i) => passo(c, i)).join('')}</ol>` : '<p class="vazio">Ainda sem checkpoints. Acrescenta o primeiro objetivo deste projeto.</p>'}
+      </section>
+      ${p.pipeline ? pipeline(p) : ''}
+    </div>
+
+    <aside class="lateral">
+      <section class="bloco-lateral"><h3>Próximos passos</h3>
+        ${proximos.length ? `<ul class="lista-simples">${proximos.map((t) => `<li>${ic('alvo', 'ic-sm')}<a href="#/projeto/${p.slug}/t-${t.id}" class="pequeno" style="color:inherit">${esc(t.titulo)}</a></li>`).join('')}</ul>` : '<p class="suave pequeno">Nada em aberto.</p>'}
+      </section>
+      <section class="bloco-lateral"><h3>Objetivos</h3><ul class="lista-simples">${(p.objetivos || []).map((o) => `<li>${ic('certo', 'ic-sm')}<span class="pequeno">${esc(o)}</span></li>`).join('')}</ul></section>
+      <section class="bloco-lateral"><h3>Futuro</h3><ul class="lista-simples">${(p.futuro || []).map((o) => `<li>${ic('seta', 'ic-sm')}<span class="pequeno">${esc(o)}</span></li>`).join('')}</ul></section>
+      <section class="bloco-lateral"><h3>Decisões</h3>
+        ${decs.length ? `<ul class="lista-simples">${decs.map((d) => `<li><span>${pillDecisao(d)}</span><span class="pequeno">${esc(d.pergunta)}</span></li>`).join('')}</ul>` : '<p class="suave pequeno">Nenhuma decisão registada.</p>'}
+      </section>
+      <section class="bloco-lateral"><h3>Feito</h3>
+        ${feitos.length ? `<ol class="tempo">${feitos.slice(0, 10).map((f) => `<li><time datetime="${f.dia}">${dia(f.dia)}</time><span class="pequeno">${esc(f.texto)}</span></li>`).join('')}</ol>` : '<p class="suave pequeno">Ainda nada concluído.</p>'}
+      </section>
+      <section class="bloco-lateral"><h3>Ligações</h3>
+        <ul class="lista-simples">${(p.ligacoes || []).map((l) => `<li>${ic('ligacao', 'ic-sm')}<span class="pequeno"><a href="${linkProjeto(l.com)}">${esc(nomeProjeto(l.com))}</a>: ${esc(l.texto)}</span></li>`).join('')}</ul>
+        <p class="fraco mini" style="margin-top:10px">${esc(p.metodo || '')}</p>
+      </section>
+      <section class="bloco-lateral"><h3>Organização</h3>
+        <dl class="organizacao"><dt>Código</dt><dd>${esc(p.organizacao.codigo)}</dd><dt>Publicado</dt><dd>${esc(p.organizacao.publicado)}</dd><dt>Ramo</dt><dd>${esc(p.organizacao.ramo)}</dd></dl>
+      </section>
+    </aside>
+  </div>`;
+}
+
+function passo(c, i) {
+  const ts = tarefasDe(c.id), feitas = ts.filter((t) => t.estado === 'concluida').length, aberto = abertos.has(c.id);
+  return `<li class="passo ${c.estado}${aberto ? ' aberto' : ''}" id="cp-${c.id}">
+    <div class="marco">${c.estado === 'concluido' ? ic('certo', 'ic-sm') : i + 1}</div>
+    <div class="passo-corpo">
+      <button class="passo-topo" type="button" data-acao="alternar-cp" data-id="${c.id}" aria-expanded="${aberto}" aria-controls="cpd-${c.id}">
+        <div><h3>${esc(c.titulo)} ${novo('checkpoint', c.id)}</h3>
+          <div class="meta"><span class="estado ${c.estado}">${ROTULO[c.estado]}</span><span class="num">${feitas}/${ts.length} tarefas</span>${c.concluido_em ? `<span>Concluído a ${dia(c.concluido_em)}</span>` : ''}</div></div>
+        <span class="chev">${ic('baixo')}</span>
+      </button>
+      <div class="passo-detalhe" id="cpd-${c.id}"${aberto ? '' : ' hidden'}>
+        ${c.descricao ? `<p class="passo-descricao">${esc(c.descricao)}</p>` : ''}
+        <div class="passo-tarefas">
+          ${ts.map(tarefa).join('') || '<p class="suave pequeno" style="padding:14px 16px">Ainda sem tarefas.</p>'}
+          ${E.eu.editar ? `<form class="form-linha" data-form="nova-tarefa" data-cp="${c.id}">
+            <input class="campo" name="titulo" maxlength="300" placeholder="Nova tarefa…" aria-label="Nova tarefa neste checkpoint" required>
+            <button class="btn" type="submit">${ic('mais', 'ic-sm')}Acrescentar</button></form>` : ''}
+        </div>
+        ${E.eu.editar ? `<div class="passo-acoes">
+          <select class="seletor" data-acao="estado-cp" data-id="${c.id}" aria-label="Estado do checkpoint">${['por_fazer', 'em_curso', 'concluido'].map((e) => `<option value="${e}"${e === c.estado ? ' selected' : ''}>${ROTULO[e]}</option>`).join('')}</select>
+          <button class="btn pequeno texto" type="button" data-acao="editar-cp" data-id="${c.id}">${ic('editar', 'ic-sm')}Editar checkpoint</button>
+        </div>` : ''}
+      </div>
+    </div>
+  </li>`;
+}
+
+function tarefa(t) {
+  const d = decisaoDaTarefa(t.id);
+  const posso = E.eu.editar || t.responsavel_id === E.eu.id;
+  return `<div class="tarefa ${t.estado}" id="t-${t.id}">
+    <input type="checkbox" class="visto" data-acao="concluir" data-id="${t.id}" aria-label="Concluída: ${esc(t.titulo)}"${t.estado === 'concluida' ? ' checked' : ''}${posso ? '' : ' disabled'}>
+    <div>
+      <p class="titulo">${esc(t.titulo)} ${novo('tarefa', t.id)}</p>
+      ${t.descricao ? `<p class="descricao">${esc(t.descricao)}</p>` : ''}
+      <div class="meta">
+        <span class="estado ${t.estado}">${ROTULO[t.estado]}${t.concluida_em ? ' a ' + diaCurto(t.concluida_em) : ''}</span>
+        ${t.responsavel_id ? `<span class="chip"><span class="avatar pequeno">${esc(iniciais(t.responsavel_nome))}</span>${esc(t.responsavel_nome)}</span>` : ''}
+        ${appChip(t.app_sugerida)}${custoChip(t.custo)}
+      </div>
+    </div>
+    <div class="direita">
+      ${pillDecisao(d)}
+      ${posso ? `<select class="seletor" data-acao="estado-tarefa" data-id="${t.id}" aria-label="Estado da tarefa">${['por_fazer', 'em_curso', 'bloqueada', 'concluida'].map((e) => `<option value="${e}"${e === t.estado ? ' selected' : ''}>${ROTULO[e]}</option>`).join('')}</select>` : ''}
+      ${E.eu.editar ? `<button class="icone-botao" type="button" data-acao="editar-tarefa" data-id="${t.id}" aria-label="Editar tarefa" title="Editar">${ic('editar', 'ic-sm')}</button>` : ''}
+    </div>
+  </div>`;
+}
+
+// ---------------------------------------------------------------- Step Inside: pipeline com custos e calculadora
+function pipeline(p) {
+  return `
+  <section class="seccao" id="pipeline" aria-labelledby="t-pipeline">
+    <div class="seccao-cabeca"><div><h2 id="t-pipeline">Pipeline e custos</h2><p>Do documento ao cliente, etapa a etapa: o que faz, quanto custa e o que ter em conta. Câmbio 1 USD = ${p.cambio.usd_eur.toLocaleString('pt-PT')} € (${dia(p.cambio.dia)}); preços sem IVA, a confirmar antes de contratar.</p></div></div>
+    <ol class="pipeline">${p.pipeline.map((e) => `<li class="etapa"><div class="marco"></div><div class="etapa-corpo">
+      <div class="linha"><h3>${esc(e.nome)}</h3>${appChip(e.app)}</div>
+      <p class="suave pequeno">${esc(e.faz)}</p>
+      <div class="linha">${custoChip(e.custo)}${e.espaco ? `<span class="chip">${ic('pasta', 'ic-sm')}${esc(e.espaco)}</span>` : ''}</div>
+      <ul>${e.atencao.map((a) => `<li>${esc(a)}</li>`).join('')}</ul>
+    </div></li>`).join('')}</ol>
+  </section>
+
+  <section class="seccao" id="calculadora" aria-labelledby="t-calc">
+    <div class="seccao-cabeca"><div><h2 id="t-calc">Quanto custa por mês</h2><p>GPU e armazenamento R2. ${esc(p.custos_excluidos)}</p></div></div>
+    <form class="painel painel-pad" data-form="calculadora" onsubmit="return false">
+      <div class="calculadora">
+        <label>Sessões por mês<input class="campo num" type="number" name="sessoes" min="0" max="100000" value="50"></label>
+        <label>Minutos por sessão<input class="campo num" type="number" name="minutos" min="1" max="600" value="30"></label>
+        <label>Minutos extra faturados (arranque, espera)<input class="campo num" type="number" name="extra" min="0" max="120" value="0"></label>
+        <label>GPU<select class="campo" name="tarifa"><option value="0.89">RTX 4090 Secure · 0,89 USD/h</option><option value="0.34">RTX 4090 Community · 0,34 USD/h</option></select></label>
+        <label>Casas guardadas<input class="campo num" type="number" name="casas" min="0" max="10000" value="10"></label>
+        <label>GB por casa<input class="campo num" type="number" name="gb" min="1" max="100" value="12"></label>
+      </div>
+      <div class="resultado" id="calc-resultado" aria-live="polite"></div>
+    </form>
+    <div class="rolar-x" style="margin-top:24px"><table class="tabela">
+      <caption class="so-leitor">Cenários de referência da especificação</caption>
+      <thead><tr><th>Cenário</th><th>Pressupostos</th><th class="num">GPU</th><th class="num">R2</th><th class="num">Subtotal</th></tr></thead>
+      <tbody>${p.cenarios.map((c) => `<tr><td>${esc(c.nome)}</td><td class="suave">${esc(c.pressupostos)}</td><td class="num">${esc(c.gpu)}</td><td class="num">${esc(c.r2)}</td><td class="num">${esc(c.total)}</td></tr>`).join('')}</tbody>
+    </table></div>
+  </section>`;
+}
+export function calcular(form, cambio) {
+  const v = (n) => Math.max(0, Number(form.elements[n].value) || 0);
+  const horas = (v('sessoes') * (v('minutos') + v('extra'))) / 60;
+  const gpu = horas * v('tarifa') * cambio;
+  const gbTotal = v('casas') * v('gb');
+  const r2 = Math.max(0, gbTotal - 10) * 0.015 * cambio;
+  const porSessao = v('sessoes') ? gpu / v('sessoes') : 0;
+  form.querySelector('#calc-resultado').innerHTML = `
+    <div><span>Horas de GPU</span><b>${horas.toLocaleString('pt-PT', { maximumFractionDigits: 1 })} h</b></div>
+    <div><span>GPU por mês</span><b>${euros(gpu)}</b></div>
+    <div><span>Por sessão</span><b>${euros(porSessao)}</b></div>
+    <div><span>R2 (${gbTotal.toLocaleString('pt-PT')} GB)</span><b>${euros(r2)}</b></div>
+    <div><span>Subtotal conhecido</span><b>${euros(gpu + r2)}</b></div>`;
+}
+
+// ---------------------------------------------------------------- área pessoal
+export function pessoal() {
+  const minhas = E.tarefas.filter((t) => t.responsavel_id === E.eu.id);
+  const grupo = (titulo, lista) => `<section class="bloco-lateral"><h3>${titulo} <span class="fraco num">${lista.length}</span></h3>
+    ${lista.length ? `<ul class="lista-simples">${lista.map((t) => `<li>${ic('alvo', 'ic-sm')}<span class="pequeno"><a href="#/projeto/${projeto(t.projeto).slug}/t-${t.id}" style="color:inherit">${esc(t.titulo)}</a><br><span class="fraco mini">${esc(nomeProjeto(t.projeto))}</span></span></li>`).join('')}</ul>` : '<p class="suave pequeno">Nada aqui.</p>'}</section>`;
+  const decididas = E.decisoes.filter((d) => d.decidida_por === E.eu.id);
+  return `
+  <div class="cabeca-pagina"><div class="texto"><h1>Área pessoal</h1><p class="suave">As tarefas atribuídas a ti, em todos os projetos, e as decisões que tomaste.</p></div></div>
+  <div class="cartoes-pessoal">
+    ${grupo('Em curso', minhas.filter((t) => t.estado === 'em_curso'))}
+    ${grupo('Por fazer', minhas.filter((t) => t.estado === 'por_fazer'))}
+    ${grupo('Bloqueadas', minhas.filter((t) => t.estado === 'bloqueada'))}
+    ${grupo('Concluídas', minhas.filter((t) => t.estado === 'concluida'))}
+  </div>
+  <section class="seccao"><div class="seccao-cabeca"><h2>Decisões que tomaste</h2></div>
+    ${decididas.length ? `<ul class="lista-simples">${decididas.map((d) => `<li>${pillDecisao(d)}<span class="pequeno">${esc(d.pergunta)} <span class="fraco">· ${dia(d.decidida_em)}</span></span></li>`).join('')}</ul>` : '<p class="vazio">Ainda não tomaste nenhuma decisão.</p>'}
+  </section>`;
+}
+
+// ---------------------------------------------------------------- definições
+export function definicoes(podeInstalar) {
+  const tema = (localStorage.getItem('hub-tema') || 'sistema');
+  const movimento = localStorage.getItem('hub-movimento') || 'normal';
+  const seg = (nome, valor, opcoes) => `<div class="segmentado" role="group">${opcoes.map(([v, r]) => `<button type="button" data-acao="${nome}" data-valor="${v}" aria-pressed="${v === valor}">${r}</button>`).join('')}</div>`;
+  return `
+  <div class="cabeca-pagina"><div class="texto"><h1>Definições</h1><p class="suave">O teu nome na equipa e o aspeto do hub neste aparelho.</p></div></div>
+  <div style="max-width:720px">
+    <form class="definicao" data-form="nome">
+      <div><h3>O teu nome</h3><p>É o nome que a equipa vê nas tarefas, decisões e notificações.</p>
+        <input class="campo" name="nome" maxlength="120" value="${esc(E.eu.nome)}" style="margin-top:10px;max-width:320px" aria-label="O teu nome" required></div>
+      <button class="btn" type="submit">Guardar nome</button>
+    </form>
+    <div class="definicao"><div><h3>Tema</h3><p>Claro, escuro ou o do sistema.</p></div>${seg('tema', tema, [['sistema', 'Sistema'], ['light', 'Claro'], ['dark', 'Escuro']])}</div>
+    <div class="definicao"><div><h3>Animações</h3><p>Reduzidas: o hub muda sem movimento.</p></div>${seg('movimento', movimento, [['normal', 'Normais'], ['reduzido', 'Reduzidas']])}</div>
+    <div class="definicao"><div><h3>Acesso</h3><p>Decidido no Hub (permissão "Design").</p></div><span class="fase">${E.eu.editar ? 'Editar' : 'Ver'}</span></div>
+    ${podeInstalar ? `<div class="definicao"><div><h3>Instalar como app</h3><p>Abre o Design como uma aplicação neste aparelho.</p></div><button class="btn" type="button" data-acao="instalar">${ic('instalar', 'ic-sm')}Instalar</button></div>` : ''}
+  </div>`;
+}
+
+// ---------------------------------------------------------------- novidades
+export function novidades(lista) {
+  return `
+  <div class="cabeca-pagina"><div class="texto"><h1>Novidades</h1><p class="suave">O que mudou no hub do Design.</p></div></div>
+  <div style="max-width:820px">${lista.map((n) => `<article class="novidade"><time class="fraco pequeno num" datetime="${n.dia}">${dia(n.dia)}</time>
+    <div><h3>${esc(n.titulo)}</h3><ul>${n.itens.map((i) => `<li>${esc(i)}</li>`).join('')}</ul></div></article>`).join('')}</div>`;
+}
+
+export function esqueleto() {
+  return `<div class="cabeca-pagina"><div class="texto"><div class="esqueleto" style="width:320px;height:40px"></div></div></div>${'<div class="esqueleto"></div>'.repeat(5)}`;
+}

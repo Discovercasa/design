@@ -4,358 +4,62 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Discovercasa Design</title>
-<!-- instalar como app (manifest, ícones e service worker) -->
+<meta name="description" content="Hub dos projetos Discovercasa: o que é cada projeto, em que fase está, o que foi feito e o que vem a seguir.">
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="icon" href="/img/favicon.png">
 <link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
 <meta name="theme-color" content="#2a2a29">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Design">
-<style>
-  :root { --fundo: #f4f4f2; --cartao: #fff; --texto: #222; --suave: #666; --linha: #ddd; --botao: #1f4e79; --erro: #b3261e;
-    --feita: #dcf1e3; --feita-borda: #1e7d4f; --analise: #fff3c4; --analise-borda: #b38f00; --recusada: #fbe0de; --recusada-borda: #b3261e; }
-  @media (prefers-color-scheme: dark) { :root { --fundo: #161616; --cartao: #222; --texto: #eee; --suave: #aaa; --linha: #333; --botao: #4f8fd6; --erro: #ff8a80;
-    --feita: #16392a; --feita-borda: #3fb27f; --analise: #3f3510; --analise-borda: #e0c040; --recusada: #451c1a; --recusada-borda: #ff8a80; } }
-  * { box-sizing: border-box; }
-  body { margin: 0; font-family: system-ui, -apple-system, "Segoe UI", sans-serif; background: var(--fundo); color: var(--texto); }
-  header { display: flex; align-items: center; gap: 1rem; padding: .8rem 1rem; background: var(--cartao); border-bottom: 1px solid var(--linha); }
-  header h1 { font-size: 1.1rem; margin: 0; }
-  header .espaco { flex: 1; }
-  main { max-width: 60rem; margin: 2rem auto; padding: 0 1rem; }
-  .cartao { background: var(--cartao); border: 1px solid var(--linha); border-radius: 10px; padding: 1.5rem; }
-  button { font: inherit; padding: .55rem 1rem; border-radius: 8px; border: 0; background: var(--botao); color: #fff; cursor: pointer; }
-  button.secundario { background: transparent; color: var(--texto); border: 1px solid var(--linha); }
-  .ajuda { color: var(--suave); font-size: .9rem; }
-  .erro { color: var(--erro); }
-  /* painel das ferramentas */
-  #ecra-app { background: none; border: 0; padding: 0; }
-  #ecra-app > h2 { margin: 0 0 .3rem; }
-  .ferramentas { display: grid; grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr)); gap: 1rem; margin-top: 1.2rem; }
-  .ferramenta { display: flex; flex-direction: column; gap: .5rem; background: var(--cartao); border: 1px solid var(--linha);
-    border-radius: 10px; padding: 1.2rem; color: inherit; text-decoration: none; }
-  a.ferramenta:hover { border-color: var(--botao); }
-  .ferramenta h3 { margin: 0; font-size: 1.05rem; }
-  .ferramenta p { margin: 0; flex: 1; }
-  .estado { align-self: flex-start; font-size: .75rem; padding: .15rem .55rem; border-radius: 99px; border: 1px solid var(--linha); color: var(--suave); }
-  .estado.pronto { background: var(--botao); border-color: var(--botao); color: #fff; }
-  .abrir { color: var(--botao); font-weight: 600; font-size: .9rem; }
-  /* sugestões */
-  #sugestoes { margin-top: 2rem; }
-  #sugestoes h2 { margin: 0 0 .3rem; }
-  .sug-form { display: grid; gap: .6rem; margin-top: .8rem; }
-  .sug-form textarea { font: inherit; min-height: 5rem; padding: .6rem; border-radius: 8px; border: 1px solid var(--linha); background: var(--cartao); color: var(--texto); resize: vertical; }
-  .sug-linha { display: flex; gap: .6rem; align-items: center; flex-wrap: wrap; }
-  .sug-linha select, .sug select { font: inherit; padding: .4rem .5rem; border-radius: 6px; border: 1px solid var(--linha); background: var(--cartao); color: var(--texto); }
-  .sug-lista { display: grid; gap: .6rem; margin-top: 1rem; }
-  .sug { background: var(--cartao); border: 1px solid var(--linha); border-radius: 10px; padding: .9rem 1rem; }
-  .sug p { margin: .35rem 0 0; white-space: pre-wrap; }
-  .sug .meta { display: flex; gap: .5rem; align-items: center; flex-wrap: wrap; font-size: .8rem; color: var(--suave); }
-  .sug .estado.feita { background: #1e7d4f; border-color: #1e7d4f; color: #fff; }
-  .sug .estado.em_analise { border-color: var(--botao); color: var(--botao); }
-  .sug .estado.recusada { text-decoration: line-through; }
-  button.mini { font-size: .8rem; padding: .25rem .65rem; }
-  button.perigo { background: transparent; color: var(--erro); border: 1px solid var(--linha); }
-  .acoes { display: flex; gap: .5rem; align-items: center; flex-wrap: wrap; margin-top: .6rem; }
-  .etiqueta { font-size: .75rem; color: var(--suave); }
-  /* comentários */
-  .comentarios { margin-top: .6rem; padding-top: .6rem; border-top: 1px solid var(--linha); display: grid; gap: .5rem; }
-  .comentario { font-size: .9rem; }
-  .comentario .meta { font-size: .75rem; }
-  .comentario p { margin: .15rem 0 0; }
-  .com-form { display: flex; gap: .5rem; align-items: flex-end; }
-  .com-form textarea { flex: 1; font: inherit; font-size: .9rem; min-height: 2.4rem; padding: .45rem; border-radius: 8px; border: 1px solid var(--linha); background: var(--cartao); color: var(--texto); resize: vertical; }
-  /* checklist: a cor de fundo é o estado da tarefa */
-  #checklist { margin-top: 2rem; }
-  #checklist h2 { margin: 0 0 .3rem; }
-  .check-lista { display: grid; gap: .5rem; margin-top: 1rem; }
-  .tarefa { display: flex; gap: .7rem; align-items: flex-start; padding: .75rem 1rem; border-radius: 10px;
-    background: var(--cartao); border: 1px solid var(--linha); border-left-width: 5px; }
-  .tarefa.feita { background: var(--feita); border-color: var(--feita-borda); }
-  .tarefa.em_analise, .tarefa.nova { background: var(--analise); border-color: var(--analise-borda); }
-  .tarefa.recusada { background: var(--recusada); border-color: var(--recusada-borda); }
-  .tarefa.feita .texto { text-decoration: line-through; opacity: .8; }
-  .tarefa input[type=checkbox] { width: 1.15rem; height: 1.15rem; margin-top: .15rem; accent-color: var(--feita-borda); }
-  .tarefa .corpo { flex: 1; min-width: 0; }
-  .tarefa .texto { margin: 0; white-space: pre-wrap; }
-  .tarefa .meta { display: flex; gap: .5rem; align-items: center; flex-wrap: wrap; font-size: .8rem; color: var(--suave); margin-top: .35rem; }
-  .tarefa select { font: inherit; font-size: .8rem; padding: .25rem .4rem; border-radius: 6px; border: 1px solid var(--linha); background: var(--cartao); color: var(--texto); }
-  .legenda { display: flex; gap: .8rem; flex-wrap: wrap; font-size: .8rem; color: var(--suave); }
-  .legenda span::before { content: ""; display: inline-block; width: .8rem; height: .8rem; border-radius: 3px; margin-right: .3rem; vertical-align: -1px; border: 1px solid; }
-  .legenda .l-feita::before { background: var(--feita); border-color: var(--feita-borda); }
-  .legenda .l-analise::before { background: var(--analise); border-color: var(--analise-borda); }
-  .legenda .l-recusada::before { background: var(--recusada); border-color: var(--recusada-borda); }
-</style>
+<!-- tema escolhido nas Definições, antes de desenhar (evita o piscar) -->
+<script>
+  try {
+    const t = localStorage.getItem('hub-tema'); if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    if (localStorage.getItem('hub-movimento') === 'reduzido') document.documentElement.dataset.movimento = 'reduzido';
+  } catch (_) {}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="/css/hub.css">
 </head>
 <body>
-<header>
-  <h1>Discovercasa · Design</h1><span class="espaco"></span>
-  <span id="quem" class="ajuda"></span>
-  <button id="instalar" class="secundario" type="button" hidden>Instalar app</button>
-  <button id="sair" class="secundario" type="button" hidden>Sair</button>
-</header>
-<main>
-  <!-- sem sessão: entra-se com a conta do Hub -->
-  <section id="ecra-entrar" class="cartao" hidden>
-    <h2>Entrar</h2>
-    <p>O Design usa a conta do Hub. Só entra quem tem a permissão "Design".</p>
-    <button id="entrar" type="button">Entrar com a conta do Hub</button>
-    <p id="entrar-msg" class="ajuda" role="status"></p>
-  </section>
-  <!-- com sessão: as ferramentas que estamos a construir (visão do produto, 2026-10-15) -->
-  <section id="ecra-app" hidden>
-    <h2>Ferramentas</h2>
-    <p class="ajuda">O que estamos a construir sobre o método construtivo Discovercasa.</p>
-    <div class="ferramentas">
-      <a class="ferramenta" href="/build-your-house/">
-        <span class="estado pronto">Protótipo</span>
-        <h3>Build Your House</h3>
-        <p class="ajuda">O cliente escolhe a forma e o tamanho e monta a casa parede a parede, a ver o preço em direto.</p>
-        <span class="abrir">Abrir →</span>
-      </a>
-      <div class="ferramenta">
-        <span class="estado">Em desenvolvimento</span>
-        <h3>Builder</h3>
-        <p class="ajuda">Do projeto de arquitetura à casa pronta: estrutura, camadas e quantidades, como nós construímos.</p>
-      </div>
-      <a class="ferramenta" href="/gerador/">
-        <span class="estado pronto">Protótipo</span>
-        <h3>Gerador de documentos</h3>
-        <p class="ajuda">Larga a planta de arquitetura (DWFx) e recebe Módulos, Cobertura e Listagem de material da obra.</p>
-        <span class="abrir">Abrir →</span>
-      </a>
-      <div class="ferramenta">
-        <span class="estado">Planeado</span>
-        <h3>Orçamentação</h3>
-        <p class="ajuda">Preço de cada material e fornecedor, com as contas à vista até ao preço final da casa.</p>
-      </div>
-      <div class="ferramenta">
-        <span class="estado">Planeado</span>
-        <h3>Plataforma do cliente (VR/AR)</h3>
-        <p class="ajuda">Área do cliente para ver a sua casa em 360°, óculos VR e realidade aumentada no telemóvel, sem Enscape nem Chaos Cloud.</p>
-      </div>
+<a class="so-leitor" href="#vista">Saltar para o conteúdo</a>
+
+<header class="topo" id="topo" hidden>
+  <div class="topo-linha">
+    <a class="marca" href="#/"><img src="/img/icone-192.png" alt="" width="26" height="26">Discovercasa <span>Design</span></a>
+    <nav class="nav" id="nav" aria-label="Projetos"></nav>
+    <div class="topo-acoes">
+      <button class="icone-botao" id="b-sugestoes" type="button" aria-label="Sugestões" title="Sugestões"></button>
+      <button class="icone-botao" id="b-notificacoes" type="button" aria-label="Notificações" title="Notificações" aria-expanded="false" aria-controls="pop-notificacoes"></button>
+      <button class="botao-perfil" id="b-perfil" type="button" aria-label="Perfil" aria-expanded="false" aria-controls="pop-perfil"><span class="avatar" id="avatar"></span></button>
     </div>
+  </div>
+</header>
 
-    <section id="checklist">
-      <h2>Checklist</h2>
-      <p class="ajuda">As sugestões que escolhemos fazer. <span id="check-progresso"></span></p>
-      <div class="legenda"><span class="l-analise">Em análise</span><span class="l-feita">Concluída</span><span class="l-recusada">Recusada</span></div>
-      <div class="check-lista" id="check-lista"></div>
-    </section>
+<!-- sem sessão: entra-se com a conta do Hub -->
+<section class="entrar" id="ecra-entrar" hidden>
+  <div class="painel">
+    <h1>Entrar no Design</h1>
+    <p class="suave">O Design usa a conta do Hub. Só entra quem tem a permissão "Design".</p>
+    <button class="btn primario grande" id="entrar" type="button">Entrar com a conta do Hub</button>
+    <p id="entrar-msg" class="suave pequeno" role="status"></p>
+  </div>
+</section>
 
-    <section id="sugestoes">
-      <h2>Sugestões</h2>
-      <p class="ajuda">Uma ideia, um erro que encontraste, algo que falta? Escreve aqui; toda a equipa vê e pode comentar.</p>
-      <form class="sug-form" id="sug-form">
-        <textarea id="sug-texto" maxlength="2000" placeholder="A tua sugestão…" required></textarea>
-        <div class="sug-linha">
-          <select id="sug-ferramenta" aria-label="Sobre">
-            <option value="geral">Geral</option>
-            <option value="build_your_house">Build Your House</option>
-            <option value="builder">Builder</option>
-            <option value="gerador">Gerador de documentos</option>
-            <option value="orcamentacao">Orçamentação</option>
-            <option value="plataforma_cliente">Plataforma do cliente</option>
-          </select>
-          <button type="submit">Enviar sugestão</button>
-          <span id="sug-msg" class="ajuda" role="status"></span>
-        </div>
-      </form>
-      <div class="sug-lista" id="sug-lista"></div>
-    </section>
-  </section>
-</main>
+<main id="vista" tabindex="-1" hidden></main>
+
+<div class="pop" id="pop-notificacoes" role="dialog" aria-label="Notificações" hidden></div>
+<div class="pop" id="pop-perfil" role="menu" aria-label="Perfil" hidden></div>
+<dialog class="dialogo" id="dlg"></dialog>
+<dialog class="gaveta" id="gaveta" aria-label="Sugestões"></dialog>
+<div class="avisos" id="avisos" aria-live="polite"></div>
+
+<!-- Supabase (cliente público) e GSAP (animações; todos os plugins são gratuitos) -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
 <script src="/js/design-core.js"></script>
-<script>
-  const { sb, nivel } = Design;
-  const $ = (id) => document.getElementById(id);
-  const NIVEIS = { ver: 'Ver', editar: 'Editar' };
-
-  function mostrar(sessao) {
-    const ok = sessao && nivel(sessao) !== 'sem';
-    $('ecra-entrar').hidden = ok; $('ecra-app').hidden = !ok; $('sair').hidden = !ok;
-    $('quem').textContent = ok ? `${sessao.user.user_metadata.nome || ''} · ${NIVEIS[nivel(sessao)]}` : '';
-    // veio de uma página interna (porta.js): depois de entrar, volta para lá
-    const voltar = new URLSearchParams(location.search).get('voltar');
-    if (ok && voltar && /^\/(build-your-house|gerador)\//.test(voltar)) location.replace(voltar);
-    if (ok) carregarSugestoes();
-  }
-  async function entrarComCodigo() {
-    try { mostrar(await Design.esperarCodigo()); }
-    catch (e) { $('entrar-msg').className = 'erro'; $('entrar-msg').textContent = e.message; mostrar(null); }
-  }
-
-  (async () => {
-    const { data: { session } } = await sb.auth.getSession();
-    if (session) return mostrar(session);
-    mostrar(null);
-    // aberto pelo Hub: primeiro fica à espera do código, depois avisa que está pronto
-    if (window.opener && window.name === 'hub-design') { $('entrar-msg').textContent = 'A entrar com a conta do Hub…'; entrarComCodigo(); Design.avisarHub(); }
-  })();
-
-  $('entrar').addEventListener('click', () => {
-    try { entrarComCodigo(); Design.entrarPeloHub(); $('entrar-msg').className = 'ajuda'; $('entrar-msg').textContent = 'A entrar com a conta do Hub…'; }
-    catch (e) { $('entrar-msg').className = 'erro'; $('entrar-msg').textContent = e.message; }
-  });
-  // sugestões (tabela public.sugestoes, RLS: quem vê sugere, comenta e apaga as suas; quem edita muda o estado, gere a
-  // checklist e apaga qualquer uma) e os seus comentários (public.sugestoes_comentarios)
-  const FERRAMENTAS = { geral: 'Geral', build_your_house: 'Build Your House', builder: 'Builder', gerador: 'Gerador de documentos', orcamentacao: 'Orçamentação', plataforma_cliente: 'Plataforma do cliente' };
-  const ESTADOS = { nova: 'Nova', em_analise: 'Em análise', feita: 'Concluída', recusada: 'Recusada' };
-  const ESTADOS_TAREFA = { em_analise: 'Em análise', feita: 'Concluída', recusada: 'Recusada' };
-  const esc = (t) => String(t).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-  const data_ = (d) => new Date(d).toLocaleDateString('pt-PT');
-  const abertos = new Set();  // sugestões com os comentários abertos (ficam abertas ao recarregar)
-  let eu = { id: null, nome: '', editar: false }, sugestoes = [];
-
-  const opcoes = (estados, atual) => Object.entries(estados).map(([k, v]) => `<option value="${k}"${k === atual ? ' selected' : ''}>${v}</option>`).join('');
-  const podeApagar = (g) => eu.editar || (g.autor_id === eu.id && !g.na_checklist);
-
-  function htmlComentarios(g) {
-    const cs = g.sugestoes_comentarios || [];
-    return `<div class="comentarios">
-      ${cs.length ? cs.map((c) => `<div class="comentario">
-        <div class="meta"><span>${esc(c.autor_nome || 'Alguém')} · ${data_(c.criado_em)}</span>
-          ${eu.editar || c.autor_id === eu.id ? `<button type="button" class="mini perigo" data-acao="apagar-comentario" data-id="${c.id}">Apagar</button>` : ''}</div>
-        <p>${esc(c.texto)}</p></div>`).join('') : '<p class="ajuda">Ainda sem comentários.</p>'}
-      <form class="com-form" data-id="${g.id}">
-        <textarea maxlength="2000" placeholder="Escreve um comentário…" aria-label="Comentário" required></textarea>
-        <button type="submit" class="mini">Comentar</button>
-      </form></div>`;
-  }
-
-  function desenharSugestoes() {
-    const lista = $('sug-lista');
-    if (!sugestoes.length) { lista.innerHTML = '<p class="ajuda">Ainda não há sugestões.</p>'; return; }
-    lista.innerHTML = sugestoes.map((g) => {
-      const n = (g.sugestoes_comentarios || []).length;
-      return `<article class="sug">
-      <div class="meta"><span class="estado ${g.estado}">${ESTADOS[g.estado]}</span><span>${esc(FERRAMENTAS[g.ferramenta] || g.ferramenta)}</span>
-        <span>· ${esc(g.autor_nome || 'Alguém')} · ${data_(g.criada_em)}</span>
-        ${eu.editar ? `<select data-acao="estado" data-id="${g.id}" aria-label="Estado">${opcoes(ESTADOS, g.estado)}</select>` : ''}</div>
-      <p>${esc(g.texto)}</p>
-      <div class="acoes">
-        <button type="button" class="mini secundario" data-acao="comentarios" data-id="${g.id}" aria-expanded="${abertos.has(g.id)}">Comentários (${n})</button>
-        ${g.na_checklist ? '<span class="etiqueta">✓ Na checklist</span>'
-          : eu.editar ? `<button type="button" class="mini secundario" data-acao="checklist" data-id="${g.id}">Adicionar à checklist</button>` : ''}
-        ${podeApagar(g) ? `<button type="button" class="mini perigo" data-acao="apagar" data-id="${g.id}">Eliminar</button>` : ''}
-      </div>
-      ${abertos.has(g.id) ? htmlComentarios(g) : ''}</article>`;
-    }).join('');
-  }
-
-  function desenharChecklist() {
-    const tarefas = sugestoes.filter((g) => g.na_checklist).sort((a, b) => new Date(a.checklist_em) - new Date(b.checklist_em));
-    const feitas = tarefas.filter((g) => g.estado === 'feita').length;
-    $('check-progresso').textContent = tarefas.length ? `${feitas} de ${tarefas.length} concluídas.` : '';
-    const lista = $('check-lista');
-    if (!tarefas.length) {
-      lista.innerHTML = `<p class="ajuda">${eu.editar ? 'Ainda não há tarefas: em cada sugestão, "Adicionar à checklist".' : 'Ainda não há tarefas. Quem tem permissão de editar escolhe as sugestões que entram aqui.'}</p>`;
-      return;
-    }
-    lista.innerHTML = tarefas.map((g) => `<div class="tarefa ${g.estado}">
-      <input type="checkbox" data-acao="concluir" data-id="${g.id}" aria-label="Concluída"${g.estado === 'feita' ? ' checked' : ''}${eu.editar ? '' : ' disabled'}>
-      <div class="corpo"><p class="texto">${esc(g.texto)}</p>
-        <div class="meta"><span>${esc(FERRAMENTAS[g.ferramenta] || g.ferramenta)} · ${esc(g.autor_nome || 'Alguém')}</span>
-          ${eu.editar ? `<select data-acao="estado" data-id="${g.id}" aria-label="Estado da tarefa">${opcoes(ESTADOS_TAREFA, g.estado === 'nova' ? 'em_analise' : g.estado)}</select>
-            <button type="button" class="mini secundario" data-acao="tirar" data-id="${g.id}">Tirar da checklist</button>`
-            : `<span>· ${ESTADOS[g.estado]}</span>`}</div></div></div>`).join('');
-  }
-
-  async function carregarSugestoes() {
-    const { data: { session } } = await sb.auth.getSession();
-    eu = { id: session && session.user.id, nome: (session && session.user.user_metadata.nome) || '', editar: !!session && nivel(session) === 'editar' };
-    const { data, error } = await sb.from('sugestoes')
-      .select('id, texto, ferramenta, estado, autor_id, autor_nome, criada_em, na_checklist, checklist_em, sugestoes_comentarios (id, texto, autor_id, autor_nome, criado_em)')
-      .order('criada_em', { ascending: false }).limit(200);
-    if (error) {
-      $('sug-lista').innerHTML = `<p class="erro">Não consegui carregar as sugestões: ${esc(error.message)}</p>`;
-      $('check-lista').innerHTML = '';
-      return;
-    }
-    data.forEach((g) => (g.sugestoes_comentarios || []).sort((a, b) => new Date(a.criado_em) - new Date(b.criado_em)));
-    sugestoes = data;
-    desenharChecklist();
-    desenharSugestoes();
-  }
-
-  async function mudar(id, campos, falhou) {
-    const { error } = await sb.from('sugestoes').update(campos).eq('id', id);
-    if (error) alert(falhou + ': ' + error.message);
-    carregarSugestoes();
-  }
-
-  // as ações das duas listas (os botões são desenhados de novo a cada carregamento)
-  async function acao(e) {
-    const el = e.target.closest('[data-acao]');
-    if (!el) return;
-    const id = Number(el.dataset.id), g = sugestoes.find((x) => x.id === id);
-    switch (el.dataset.acao) {
-      case 'estado':
-        return mudar(id, { estado: el.value }, 'Não foi possível mudar o estado');
-      case 'concluir':
-        return mudar(id, { estado: el.checked ? 'feita' : 'em_analise' }, 'Não foi possível mudar o estado');
-      case 'checklist':  // uma sugestão nova entra "em análise"
-        return mudar(id, { na_checklist: true, checklist_em: new Date().toISOString(), ...(g && g.estado === 'nova' ? { estado: 'em_analise' } : {}) },
-          'Não foi possível adicionar à checklist');
-      case 'tirar':
-        return mudar(id, { na_checklist: false, checklist_em: null }, 'Não foi possível tirar da checklist');
-      case 'comentarios':
-        if (abertos.has(id)) abertos.delete(id); else abertos.add(id);
-        return desenharSugestoes();
-      case 'apagar': {
-        if (!confirm('Eliminar esta sugestão e os seus comentários?')) return;
-        const { error } = await sb.from('sugestoes').delete().eq('id', id);
-        if (error) alert('Não foi possível eliminar: ' + error.message);
-        return carregarSugestoes();
-      }
-      case 'apagar-comentario': {
-        if (!confirm('Apagar este comentário?')) return;
-        const { error } = await sb.from('sugestoes_comentarios').delete().eq('id', id);
-        if (error) alert('Não foi possível apagar o comentário: ' + error.message);
-        return carregarSugestoes();
-      }
-    }
-  }
-  for (const lista of [$('sug-lista'), $('check-lista')]) {
-    lista.addEventListener('click', (e) => { if (e.target.closest('button[data-acao]')) acao(e); });
-    lista.addEventListener('change', (e) => { if (e.target.matches('select[data-acao], input[data-acao]')) acao(e); });
-  }
-  $('sug-lista').addEventListener('submit', async (e) => {
-    const f = e.target.closest('.com-form');
-    if (!f) return;
-    e.preventDefault();
-    const caixa = f.querySelector('textarea'), texto = caixa.value.trim();
-    if (!texto) return;
-    const botao = f.querySelector('button'); botao.disabled = true;
-    const { error } = await sb.from('sugestoes_comentarios').insert({ sugestao_id: Number(f.dataset.id), texto, autor_nome: eu.nome });
-    botao.disabled = false;
-    if (error) { alert('O comentário não foi enviado: ' + error.message); return; }
-    carregarSugestoes();
-  });
-  $('sug-form').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const texto = $('sug-texto').value.trim();
-    if (texto.length < 3) return;
-    $('sug-msg').className = 'ajuda'; $('sug-msg').textContent = 'A enviar…';
-    const { error } = await sb.from('sugestoes').insert({ texto, ferramenta: $('sug-ferramenta').value, autor_nome: eu.nome });
-    if (error) { $('sug-msg').className = 'erro'; $('sug-msg').textContent = 'Não foi enviada: ' + error.message; return; }
-    $('sug-texto').value = ''; $('sug-msg').textContent = 'Obrigado! Sugestão enviada.';
-    carregarSugestoes();
-  });
-
-  $('sair').addEventListener('click', async () => { await sb.auth.signOut(); mostrar(null); });
-
-  // instalar como app: o browser avisa quando se pode (Chrome/Edge); no iPhone é "Partilhar → Adicionar ao ecrã principal"
-  if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js').catch(() => {});
-  let pedidoInstalar = null;
-  window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); pedidoInstalar = e; $('instalar').hidden = false; });
-  window.addEventListener('appinstalled', () => { pedidoInstalar = null; $('instalar').hidden = true; });
-  $('instalar').addEventListener('click', async () => {
-    if (!pedidoInstalar) return;
-    pedidoInstalar.prompt();
-    try { await pedidoInstalar.userChoice; } catch (_) {}
-    pedidoInstalar = null; $('instalar').hidden = true;
-  });
-</script>
+<script type="module" src="/js/hub/app.js"></script>
 </body>
 </html>

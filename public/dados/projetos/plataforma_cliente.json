@@ -1,0 +1,119 @@
+{
+  "id": "plataforma_cliente",
+  "slug": "step-inside",
+  "nome": "Step Inside",
+  "nome_antigo": "Plataforma do cliente (VR/AR)",
+  "resumo": "O cliente entra na sua casa antes de ela existir: visita 3D por link, realidade aumentada no telemóvel e VR.",
+  "descricao": "Serviço comercial da Discovercasa que substitui o Enscape + Chaos Cloud. Os documentos do projeto passam a um modelo Blender, o Unreal Engine dá-lhe o aspeto final e o cliente explora a casa por um link privado: no browser (Pixel Streaming a partir de uma GPU na cloud), no telemóvel em realidade aumentada (modelo próprio, leve) ou num headset VR (depois de uma prova de conceito).",
+  "fase": "Fase 0 · Auditoria",
+  "fase_detalhe": "Especificação técnica aprovada para trabalho em 2026-11-05. Nada de serviços pagos, GPU, buckets ou produção sem autorização expressa.",
+  "objetivos": [
+    "Visita 3D fotorrealista por link, sem o cliente instalar nada.",
+    "AR no telemóvel com a casa à escala real.",
+    "VR confortável num headset de referência, se a prova de conceito passar.",
+    "Custos medidos por sessão e por casa antes de vender o serviço."
+  ],
+  "futuro": [
+    "Prova de conceito Pixel Streaming numa GPU cloud de teste.",
+    "AR em iPhone e Android reais.",
+    "Decisão escrita sobre a VR em produção.",
+    "Ideia nossa: o cliente vê em 3D a casa que configurou no Build Your House."
+  ],
+  "metodo": "Reutiliza os leitores e a geração Blender que já existem; nunca inventa cotas (NEEDS_HUMAN_REVIEW).",
+  "app": null,
+  "organizacao": { "codigo": "ainda por criar (BOB/step-inside/)", "publicado": "ainda sem página própria", "ramo": "step-inside/<fase>-<tarefa>" },
+  "ligacoes": [
+    { "com": "builder", "texto": "Sugerido usar o Builder: o seu modelo Blender é a geometria de partida." },
+    { "com": "gerador", "texto": "Sugerido usar o Gerador: os seus leitores de DWFx e PDF interpretam os documentos." },
+    { "com": "build_your_house", "texto": "Ideia: uma casa configurada pode ser vista em 3D ou AR." }
+  ],
+  "cambio": { "usd_eur": 0.89131, "dia": "2026-11-05" },
+  "pipeline": [
+    {
+      "nome": "Documentos do projeto",
+      "faz": "PDF, DWFx, DXF, IFC, mapas de vãos e acabamentos, topografia.",
+      "custo": "0 €",
+      "espaco": "0,1–0,5 GB por casa",
+      "atencao": ["Aceitar um ficheiro não é saber lê-lo: cada formato é DIRECT, CONVERT_REQUIRED, REFERENCE_ONLY ou UNSUPPORTED.", "Uma imagem aérea ou um PDF sem escala não é um levantamento topográfico."],
+      "app": "gerador"
+    },
+    {
+      "nome": "Interpretação",
+      "faz": "Claude Code e os leitores que já temos extraem cotas, níveis, paredes e vãos.",
+      "custo": "Ferramentas que já temos",
+      "espaco": "",
+      "atencao": ["Cada valor guarda a origem e a confiança: CONFIRMED, INFERRED, MISSING, NEEDS_HUMAN_REVIEW.", "Nunca preencher cotas por adivinhação."],
+      "app": "gerador"
+    },
+    {
+      "nome": "Blender",
+      "faz": "Fonte de verdade da geometria: estrutura, paredes, cobertura, vãos, terreno, materiais com IDs estáveis.",
+      "custo": "0 € (software gratuito)",
+      "espaco": "1,5–5 GB por casa",
+      "atencao": ["Collections com nomes previsíveis (SITE_TERRAIN, ARCH_WALLS, ARCH_ROOF…).", "Terreno rigoroso só com CRS, datum, unidades e cotas de controlo."],
+      "app": "builder"
+    },
+    {
+      "nome": "Exportação",
+      "faz": "FBX para o Unreal, GLB (Android) e USDZ (iPhone) para AR, manifest.json com SHA-256.",
+      "custo": "0 €",
+      "espaco": "0,5–2 GB + AR 0,05–0,3 GB",
+      "atencao": ["Texturas 2K na maioria, 4K só nas superfícies críticas, 8K só com teste.", "Não contar com a conversão perfeita de shaders: material IDs + master materials."],
+      "app": null
+    },
+    {
+      "nome": "Build Unreal",
+      "faz": "Importa, aplica os materiais, faz cook e package. No início corre na workstation.",
+      "custo": "0 € incremental + energia (kW × h × €/kWh)",
+      "espaco": "2–8 GB por casa",
+      "atencao": ["Licença Unreal gratuita abaixo de 1 M USD de receita anual: confirmar por escrito com a Epic antes de vender.", "Workstation: inventariar antes de comprar GPU (RTX 5070 Ti / 4090 / 5090, preço a cotar)."],
+      "app": null
+    },
+    {
+      "nome": "Cloudflare R2",
+      "faz": "Guarda originais, exports, conteúdo Unreal e AR, privados.",
+      "custo": "0,015 USD/GB-mês ≈ 0,0134 €/GB · 10 GB grátis · sem custo de saída",
+      "espaco": "8–15 GB por casa (até 30 GB nas pesadas)",
+      "atencao": ["Bucket privado; uploads e downloads por URLs assinados e temporários.", "Upload multipart que se retoma; checksum de cada ficheiro."],
+      "app": null
+    },
+    {
+      "nome": "Supabase",
+      "faz": "Fonte de verdade dos dados: projetos, versões, ficheiros, jobs, sessões, links, auditoria.",
+      "custo": "Já existe · Free: 500 MB de base de dados · Pro desde 25 USD/mês",
+      "espaco": "",
+      "atencao": ["Estender as tabelas que existem; nunca uma segunda base de dados.", "RLS em tudo; a chave service_role nunca no browser."],
+      "app": null
+    },
+    {
+      "nome": "GPU e Pixel Streaming",
+      "faz": "A aplicação Unreal corre numa GPU na cloud e envia vídeo para o browser do cliente.",
+      "custo": "0,89 USD/h ≈ 0,79 €/h (RTX 4090 Secure) · 0,34 USD/h na Community",
+      "espaco": "",
+      "atencao": ["Uma GPU por sessão no início; medir antes de prometer mais clientes por GPU.", "Contar arranque, preload e espera; libertar a GPU no fim.", "Tráfego WebRTC e TURN não estão incluídos: pedir preço ao fornecedor."],
+      "app": null
+    },
+    {
+      "nome": "Hub e link do cliente",
+      "faz": "Valida o link privado, pede a sessão, mostra o estado.",
+      "custo": "0 € dentro das quotas Cloudflare",
+      "espaco": "",
+      "atencao": ["Links com validade e revogáveis; o token de um projeto não abre outro.", "Cliente A nunca vê o projeto do cliente B."],
+      "app": null
+    },
+    {
+      "nome": "Cliente: 3D, AR e VR",
+      "faz": "3D no browser por link; AR com o modelo leve no próprio telemóvel; VR num headset validado.",
+      "custo": "3D: a GPU acima · AR: 0 € (corre no telemóvel) · VR: prova de conceito",
+      "espaco": "",
+      "atencao": ["AR: 30–50 mil triângulos, texturas até 2048, cerca de 10 MB.", "VR: o Lumen não suporta VR e o Pixel Streaming VR é experimental."],
+      "app": null
+    }
+  ],
+  "cenarios": [
+    { "nome": "Piloto", "pressupostos": "50 sessões de 30 min · 10 casas", "gpu": "19,83 €", "r2": "0,94–1,87 €", "total": "20,77–21,70 €" },
+    { "nome": "Moderado", "pressupostos": "200 sessões de 30 min · 50 casas", "gpu": "79,33 €", "r2": "5,21–9,89 €", "total": "84,54–89,22 €" },
+    { "nome": "Elevado", "pressupostos": "600 sessões de 30 min · 100 casas", "gpu": "237,98 €", "r2": "10,56–19,92 €", "total": "248,54–257,90 €" }
+  ],
+  "custos_excluidos": "Só GPU e R2. Ficam de fora: tráfego de vídeo da GPU, TURN, plano Supabase, Cloudflare acima das quotas, disco persistente da GPU, IVA, manutenção e hardware."
+}

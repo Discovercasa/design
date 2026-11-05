@@ -27,5 +27,9 @@ Projeto Design da Discovercasa (`design.discovercasa.pt`). Responder em portugu�
 - O site serve versões compiladas: depois de mudar `BOB/configurador/web`, `BOB/gerador/web` ou o motor
   (`BOB/ferramentas/`), correr `python BOB/ferramentas/construir_site.py` e fazer commit do resultado
   (`public/build-your-house/`, `public/gerador/`) junto com a mudança.
+- **Organização por projeto** (pasta, ramo `<projeto>/<tarefa>`, ficheiro de dados, id): `PROJETOS.md`. O hub
+  (`public/index.html` + `public/js/hub/`) lê o texto fixo de cada projeto em `public/dados/projetos/<id>.json` e os
+  checkpoints, tarefas e decisões do Supabase (migrações 0004/0005). Ao fazer uma entrega num projeto, atualizar o seu
+  JSON (fase, futuro) e marcar a tarefa no hub. Testes: `tests/` (Playwright, base simulada).
 - **Repositório público**: nunca dados pessoais nem desenhos de clientes (`*.dwfx`, `*.pdf` estão no `.gitignore`;
   ficam só no PC).

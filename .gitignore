@@ -6,3 +6,7 @@ node_modules/
 _trabalho/
 *.dwfx
 .claude/settings.local.json
+tests/node_modules/
+tests/test-results/
+tests/relatorio/
+tests/capturas/
