@@ -224,16 +224,44 @@ decisions stay (the history is in git).
   Tools run locally (Python + Blender); no cloud services needed. (Partly superseded 2026-10-30, see below and registo.)
 - 2026-10-30 — new GitHub + Supabase: "pretendo colocar o BOB(e os pushes todos deste PC) lá dentro". GitHub account
   `DinisDiscover` (logged into `gh` on this PC, now gh's active account). Repo `Discovercasa/design` — **PUBLIC**, org
-  `Discovercasa`; DinisDiscover has push, not admin. BOB lives in its folder `BOB/`, published with a fresh history
+  `Discovercasa`; DinisDiscover has push, not admin/maintain (outside collaborator, not an org member; cannot see the private BOB repo; checked 2026-11-05). BOB lives in its folder `BOB/`, published with a fresh history
   WITHOUT `*.dwfx` / `*.pdf` (client drawings stay on this PC only); the old history stays private at
   `VascoCoelho/DiscoverCasa-Claude-BOB` (still the git `origin`; consider archiving). Site `design.discovercasa.pt` =
   Cloudflare Pages publishing only `public/` on push to `main`, behind the Hub login; the Design repo has its own
   `CLAUDE.md` rules (Supabase publishable key only, RLS, do not touch the Hub login). Only visible part: the configurator
-  build at `public/configurador/` → https://design.discovercasa.pt/configurador/ (verified live 2026-10-30; behind the Design/Hub login since 2026-10-30, "Para já atrás do login" — gate public/js/porta.js; configurator shown as "Build Your House" at /build-your-house/ (2026-10-30); home page = panel of 5 tool cards + Sugestões (table sugestoes) with status (2026-10-30); document generator at /gerador/ (drop a DWFx or vector PDF → documents, in the browser; ferramentas/documentos/de_desenhos.py + dwfx/leitor_pdf.py; checks (modelo/verificar.py) + 3D view of the timber; DWG not yet); worker
+  build at `public/configurador/` → https://design.discovercasa.pt/configurador/ (verified live 2026-10-30; behind the Design/Hub login since 2026-10-30, "Para já atrás do login" — gate public/js/porta.js; configurator shown as "Build Your House" at /build-your-house/ (2026-10-30); home page = panel of 5 tool cards + Sugestões (table sugestoes) with status (2026-10-30); Sugestões: delete, comments, Checklist coloured by status (2026-11-03; migration 0003 applied; page pushed 2026-11-05 (053ebe0), live); document generator at /gerador/ (drop a DWFx or vector PDF → documents, in the browser; ferramentas/documentos/de_desenhos.py + dwfx/leitor_pdf.py; checks (modelo/verificar.py) + 3D view of the timber; DWG not yet); worker
   paths follow Vite `BASE_URL`). Publish with `python ferramentas/publicar_design.py` (clone in `_trabalho/design`;
   `--sem-push` = dry run), run from branch `configurador` (main still holds the old records with personal data —
-  publish only from configurador or after merging). Supabase: connector (MCP) connected to project "Design", ref
+  publish only from configurador or after merging) (superseded 2026-11-05, see registo: BOB `main` = `configurador`
+  since the push e52b188, so publishing from `main` is fine; suggestion pending the user's answer: always publish from
+  `main`, or merge into `main` right after publishing). (A/B below superseded 2026-11-05, see the DECISION after them
+  and registo.) 2026-11-05 — pending the user's choice, how cloud sessions
+  (claude.ai/code, phone) can push to `Discovercasa/design`: a cloud session uses ONE GitHub connection per claude.ai
+  account; `/web-setup` (in a `claude` terminal) sends the local gh token and replaces the browser connection.
+  (A) VascoCoelho invites DinisDiscover on the private BOB repo, then `/login` + `/web-setup` on this PC; sessions with
+  both repos attached push to both. (B) a Discovercasa org owner gives the GitHub account connected to Claude write
+  access on `Discovercasa/design` (maybe approve the Claude GitHub App on the org). On this PC pushing already works
+  (gh as DinisDiscover). Supabase: connector (MCP) connected to project "Design", ref
   `uuofvywhouhffmfqojoc`, eu-west-1, Postgres 17.
+- 2026-11-05 — **DECISION (user): `Discovercasa/design` is now the repo where changes to ALL applications in development
+  are made** (configurator / Build Your House, document generator, budgeting, client platform, builder); the private BOB
+  (`VascoCoelho/DiscoverCasa-Claude-BOB`) is no longer their working repo. Goal: cloud sessions (claude.ai/code) on the
+  user's Claude account can push to Design. Route (supersedes A/B above): in a `claude` terminal on this PC (gh active =
+  DinisDiscover) `/login` if asked, then `/web-setup` (replaces the GitHub connection; any repo the gh token reaches; no
+  Claude GitHub App needed), then start cloud sessions on `Discovercasa/design`. If `/web-setup` is missing
+  (Team/Enterprise) an Owner enables "Quick setup" (Organization settings > Claude Code). Alternative: reconnect in the
+  browser as DinisDiscover (likely needs the Claude GitHub App approved on the org). Cloud sessions can no longer open
+  the private BOB repo (accepted). **Pending: user runs `/web-setup`** (not confirmed). Open points, pending the user's
+  go-ahead to prepare Design as the working repo: (1) `ferramentas/publicar_design.py` deletes and rewrites `BOB/`,
+  `public/build-your-house/`, `public/gerador/` in Design from the private BOB: running it after changes in Design would
+  ERASE them, so retire or invert it; (2) client drawings (`*.dwfx` / `*.pdf`) never go to Design (public): work that
+  needs them (models, documents from drawings) stays on this PC, drawings outside git; (3) `Design/BOB/` has the
+  configurator source but the site serves a Vite build in `public/build-your-house/` (Design login gate injected by the
+  publish script): a build step inside Design is needed for changes to reach the site; (4) skills and agents sit in
+  `BOB/.claude/`, not at Design's root: check cloud sessions started at Design's root find them; (5) reconcile
+  `BOB/CLAUDE.md` (private, client data) with Design's `CLAUDE.md` (PT-PT, public repo, no personal data, Supabase
+  publishable key only, RLS, do not touch the Hub login, talk to Sebastião before changing the entry); (6) this PC should
+  then work in a clone of Design too.
 - 2026-10-30 — **the repo is public: never write NIF, addresses, phones, engineer IDs or personal names in it.** Personal
   data were removed from the records that day (company NIF, engineer OET ID, site addresses, licensing process number,
   architects' / client's names, a personal email) — "Tudo o que seja esse tipo de informações podes eliminar dos nossos

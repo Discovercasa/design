@@ -1117,3 +1117,92 @@ When this file passes about 1 500 lines, continue in `registo-conversas-<year>-<
   3. TV model only: 18 prumos in pairs 10 cm apart overlapping 1 cm (y 6,70 / 6,80, hidden roof).
   4. two interior modules (P08.2 / P13.3) overlapping 1 cm at their junction.
 - Filed in: `conhecimento/discovercasa.md` (Design site line).
+
+### 2026-11-03 — Design hub: delete / comment suggestions, coloured Checklist [geral]
+> no nosso hub de design quero que seja possível eliminar sugestões, comentar sugestões e adicionar sugestões a uma checklist. cria a checklist e dependendo do estado da tarefa ela deve apresentar uma cor de bg, se concluída a verde, em análise a amarelo, recusada a vermelho.
+- Context: request in the configurator session (branch `configurador`) on the Design site home page
+  (`design.discovercasa.pt`, repo `Discovercasa/design`, `public/index.html`), section "Sugestões" (table
+  `public.sugestoes`, see the 2026-10-30 entry "Build Your House, suggestions section…").
+- Done, database (Supabase project "Design"): migration `supabase/migrations/0003_sugestoes_comentarios_checklist.sql`,
+  APPLIED 2026-11-03 — `sugestoes.na_checklist` (boolean) + `checklist_em`; new table `public.sugestoes_comentarios`
+  (RLS: anyone with "ver" reads and comments as themselves; the author or an "editar" deletes; comments are not
+  edited). Delete rule on `sugestoes` now: "editar" deletes any; the author deletes their own while it is not in the
+  checklist. RLS checked in a rolled-back transaction (12 cases as intended); security advisor: nothing new.
+- Done, page: new section "Checklist" above "Sugestões" — suggestions put there by "editar" users (button "Adicionar à
+  checklist"; a "nova" one enters "em análise"), background by status: Concluída green, Em análise yellow, Recusada
+  red (dark-mode tints too); tick box to mark concluída, status select, "Tirar da checklist", "N de M concluídas".
+  Each suggestion: "Comentários (n)" (open/close, list, add, delete own) and "Eliminar" (confirm). Status label
+  "Feita" now shown as "Concluída" (database value stays `feita`). Tested in a browser with mock data (editar / ver /
+  dark mode).
+- NOT YET LIVE: this cloud session cannot push to `Discovercasa/design` (the GitHub account connected to Claude has no
+  push there). The commit is ready as a patch for the user to apply and push from his PC (`gh` logged in as the Design
+  account), or he connects that account to Claude. The database part is live and harmless to the current page.
+- Filed in: `conhecimento/discovercasa.md` → Design site line (Sugestões: delete, comments, Checklist). Not
+  construction info: nothing for the rulebook.
+- Update 2026-11-05: the patch was applied and pushed to `Discovercasa/design` `main` (commit 053ebe0): now live.
+  See the 2026-11-05 entries below.
+
+### 2026-11-05 — git pull configurador, apply patch 0003 to Design, push [geral]
+> Faz git pull origin configurador no BOB. Depois aplica o patch ferramentas/design_patches/0003-sugestoes-checklist.patch no repositório Discovercasa/design (clone em _trabalho/design, ou gh repo clone Discovercasa/design, com a conta DinisDiscover), confirma que só altera public/index.html e supabase/migrations/0003_sugestoes_comentarios_checklist.sql, e faz push para main. A migração 0003 já está aplicada no Supabase: não a voltes a correr.
+- Context: desktop app session on this PC; follow-up to the 2026-11-03 entry (patch left because the cloud session could not push).
+- Done: BOB `main`: `git pull origin configurador` fast-forwarded `main` to `configurador` (e52b188; 65 commits,
+  2026-10-20 to 11-05: configurator, roofs, rulebook v6.5 to v8.8, Design publishing). Design: cloned to `_trabalho/design`
+  as DinisDiscover; patch applied with `git am`; it changes only `public/index.html` (+175/-22) and the new
+  `supabase/migrations/0003_sugestoes_comentarios_checklist.sql`; pushed to `main` as 053ebe0 (author "Claude" from the
+  patch, committer VascoDiscovercasa). Migration NOT re-run. Sugestões delete/comments/Checklist is live on
+  design.discovercasa.pt.
+- Filed in: `conhecimento/discovercasa.md` → Design line ("pushed 2026-11-05 (053ebe0)"), publish-from-branch note updated.
+
+### 2026-11-05 — what are the 65 commits [geral]
+> este 65 commits resume brevemente o que são ? parecem-me imensos commits
+- Context: user saw "65 commits" in the pull.
+- Answer: BOB work from 2026-10-20 to 11-05 (configurator, roofs, rulebook v6.5 to v8.8, Design publishing), accumulated
+  on branch `configurador` while `main` stayed behind.
+- Filed in: nothing new (see the entry above).
+
+### 2026-11-05 — confusion: this is already on the Design hub [geral]
+> mas isto já se encontra no nosso hub de Design, agora fiquei confuso
+- Context: answer to the explanation above.
+- Answer: two repos. Private BOB (`VascoCoelho/DiscoverCasa-Claude-BOB`) is where the work happens; public
+  `Discovercasa/design` (the Hub) only gets a copy via `ferramentas/publicar_design.py`, which had been run from branch
+  `configurador`, so BOB `main` lagged. The Hub's `BOB/` folder holds the state of 227e855 (last sync 2026-10-30); the
+  last 3 BOB commits (suggestion logs, patch file) arrive at the next publish.
+- Suggestion put to the user (no answer yet): always publish from BOB `main`, or merge into `main` right after
+  publishing, so `main` is never behind the site.
+- Filed in: `conhecimento/discovercasa.md` → Design line (publish note).
+
+### 2026-11-05 — push BOB main; wants to push to Discovercasa/design [geral]
+> pronto podes fazer push para o BOB main mas eu quero é conseguir fazer push a coisas para o repositório da Discovercasa/Design
+- Context: OK to push BOB `main`; the real goal is being able to push to `Discovercasa/design` (cloud sessions could not on 2026-11-03).
+- Done: BOB `main` pushed to origin (VascoCoelho/DiscoverCasa-Claude-BOB), f14839d..e52b188; `main` = `configurador`
+  now, so the 2026-10-30 personal-data clean-up is in `main` too and publishing from `main` is fine.
+- Checked with gh: DinisDiscover has push (not admin/maintain) on `Discovercasa/design`; NOT an org member (membership
+  API 404), so an outside collaborator on that repo; cannot see the private BOB repo.
+- Checked in the Claude Code docs (claude-code-on-the-web, web-quickstart, cloud-environments): a cloud session uses ONE
+  GitHub connection per claude.ai account; `/web-setup` (interactive `claude` terminal) sends the local gh token, works
+  for any repo the token can access, and REPLACES the browser connection; a session can attach several repos; the proxy
+  does not limit branches (only GitHub branch protection); on Team/Enterprise `/web-setup` is hidden until an Owner
+  enables Quick setup.
+- Options put to the user, CHOICE PENDING: (A) VascoCoelho invites DinisDiscover as collaborator on private BOB; then in
+  a `claude` terminal on this PC (gh active = DinisDiscover) run `/login` + `/web-setup`; cloud sessions with both repos
+  attached can push to both. (B) A Discovercasa org owner gives the GitHub account connected to Claude write access on
+  `Discovercasa/design` (and possibly installs/approves the Claude GitHub App on the org).
+- Filed in: `conhecimento/discovercasa.md` → GitHub/Design entry (pending choice).
+
+### 2026-11-05 — Discovercasa/design becomes the working repo for all applications [geral]
+> eu estou genuinamente confuso, eu estava a trabalhar numa sessão da cloud nesta conta do claude e não consegui fazer push para o repositório da Discovercasa/Design e é apenas isso que eu quero que seja possível. A partir de agora o repositório que vai ser utilizado para realizar mudanças em todas as aplicações que temos em desenvolvimento vai ser o Discovercasa/Design
+- Context: answers the A/B options of the previous entry (2026-11-05, "push BOB main; wants to push to Discovercasa/design"); supersedes them.
+- DECISION (user): from now on `Discovercasa/design` is the repo where changes to ALL applications in development are made
+  (configurator / Build Your House, document generator, budgeting, client platform, builder). The private BOB
+  (`VascoCoelho/DiscoverCasa-Claude-BOB`) is no longer their working repo.
+- Goal: a cloud session (claude.ai/code) on the user's Claude account must be able to push to `Discovercasa/design`.
+- Answer given: the cloud pushes with the GitHub account connected to the Claude account, which has no write on Design;
+  DinisDiscover has write. Fix: in a `claude` terminal on this PC (gh active = DinisDiscover) run `/login` if asked, then
+  `/web-setup` (replaces the current GitHub connection; works on any repo the gh token reaches, without the Claude GitHub
+  App); then start cloud sessions on `Discovercasa/design`. If `/web-setup` is missing (Team/Enterprise), an Owner must
+  enable "Quick setup" (Organization settings > Claude Code). Alternative: reconnect in the browser as DinisDiscover
+  (likely needs the Claude GitHub App approved on the Discovercasa org by an org owner). After the switch cloud sessions
+  can no longer open the private BOB repo (accepted). PENDING: user runs `/web-setup` (not confirmed yet).
+- Consequences flagged to the user (open, pending the user's go-ahead to prepare Design as the working repo): see
+  `conhecimento/discovercasa.md` → GitHub/Design entry, points 1-6.
+- Filed in: `conhecimento/discovercasa.md` → GitHub/Design entry (decision; A/B marked superseded; open points).
