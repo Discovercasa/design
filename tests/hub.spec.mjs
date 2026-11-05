@@ -268,3 +268,18 @@ test('sem deslocamento horizontal e páginas a caber no ecrã', async ({ page })
   }
   if (ehTelemovel()) { await page.goto('/#/'); await captura(page, 'inicio-telemovel'); }
 });
+
+test('logótipo: volta ao Início e atualiza o hub', async ({ page }) => {
+  await abrir(page, { rota: '/#/projeto/step-inside' });
+  await expect(page.locator('.projeto-linha')).toHaveCount(0);
+  await db(page, () => window.__fake.comoOutro((x) => x.checkpoints.insert({ projeto: 'orcamentacao', titulo: 'Escolher o software de faturação', ordem: 4 })));
+  await page.getByRole('link', { name: /Discovercasa Design/ }).click();
+  await expect(page).toHaveURL(/#\/$/);
+  await expect(page.locator('.projeto-linha').nth(3)).toContainText('0 de 4 checkpoints');   // dado novo, sem recarregar a página
+  await expect(page.locator('.aviso', { hasText: 'Novo checkpoint' })).toContainText('Escolher o software de faturação');
+  // já no Início: clicar outra vez também atualiza
+  await db(page, () => window.__fake.comoOutro((x) => x.tarefas.update({ estado: 'concluida' }).eq('id', 36)));
+  await page.getByRole('link', { name: /Discovercasa Design/ }).click();
+  await expect(page.locator('#contador')).toHaveText('2');   // o checkpoint novo e a tarefa concluída
+  await expect(page.locator('.tempo li').first()).toContainText('Rever o documento Cobertura');
+});

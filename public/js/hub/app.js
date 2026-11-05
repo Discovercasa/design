@@ -119,6 +119,23 @@ window.addEventListener('hashchange', () => {
 rotaAnterior = (() => { const r = rota(); return r.nome + (r.p ? r.p.id : ''); })();
 luz($('#vista'));
 
+// o logótipo "Discovercasa Design": volta ao Início e atualiza o hub (dados e notificações)
+$('.marca').addEventListener('click', async (e) => {
+  e.preventDefault();
+  if (!E.eu.id) return;
+  fecharPops();
+  if (location.hash.replace(/^#\/?/, '')) location.hash = '#/';  // o hashchange desenha o Início
+  else desenhar(true);
+  try {
+    await D.carregarNotificacoes();
+    await D.carregarTudo();
+    E.erro = null;
+  } catch (err) { E.erro = err.message || String(err); }
+  atualizarContador();
+  desenhar(false);
+  if (!E.erro) mostrarNovos();
+});
+
 // âncoras dentro da página (ex.: #decisoes-abertas) não mudam a rota
 document.addEventListener('click', (e) => {
   const a = e.target.closest('a[href^="#"]:not([href^="#/"])');
