@@ -43,6 +43,15 @@ button.semana-vazia:hover { color: var(--acao); border-color: var(--acao); backg
 }
 .post-cartao:hover { border-color: var(--linha-forte); transform: translateY(-2px); box-shadow: 0 6px 18px oklch(0.2 0.01 85 / 0.08); }
 .post-cartao.alvo { animation: alvo 2.4s var(--ease); }
+.post-cartao.nao-feito { opacity: .6; border-style: dashed; }
+.post-cartao.nao-feito .post-fotos { filter: grayscale(1); }
+.post-cartao.nao-feito:hover { opacity: 1; }
+.chip.movido { justify-self: start; white-space: normal; font-size: 0.75rem; padding: 1px 8px; }
+.dlg-cabeca .chip.movido { vertical-align: 1px; }
+.semana .adiantar { justify-self: start; }
+.estado.p-nao_feito { text-decoration: line-through; text-decoration-color: var(--linha-forte); }
+.estado.p-nao_feito::before { border-color: var(--erro); }
+.ponto-estado.p-nao_feito { border-color: var(--erro); }
 .post-fotos { display: grid; gap: 2px; aspect-ratio: 4 / 3; background: var(--lateral); overflow: hidden; }
 .post-fotos.n2 { grid-template-columns: 1fr 1fr; }
 .post-fotos.n3 { grid-template-columns: 2fr 1fr; grid-template-rows: 1fr 1fr; }
@@ -171,6 +180,7 @@ textarea.campo.legenda { font-size: 0.9375rem; line-height: 1.55; min-height: 26
 .pe-carregar u { color: var(--acao); text-underline-offset: 3px; }
 .pe-carregar > .ic { width: 28px; height: 28px; color: var(--tinta-3); }
 .pe-progresso:empty { display: none; }
+.pe-fixo { display: grid; gap: 8px; padding: 0 12px; }
 .original { display: flex; gap: 8px; align-items: flex-start; font-size: 0.8125rem; color: var(--tinta-2); cursor: pointer; }
 .original input { accent-color: var(--acao); margin-top: 2px; }
 

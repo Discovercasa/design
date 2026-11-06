@@ -5,7 +5,11 @@ import { E } from './dados.js';
 const sb = () => window.Design.sb;
 const BALDE = 'social';
 
-export const ESTADOS_POST = { ideia: 'Ideia', rascunho: 'Rascunho', por_aprovar: 'Por aprovar', aprovado: 'Aprovado', publicado: 'Publicado' };
+export const ESTADOS_POST = { ideia: 'Ideia', rascunho: 'Rascunho', por_aprovar: 'Por aprovar', aprovado: 'Aprovado', publicado: 'Publicado', nao_feito: 'Não feito' };
+// ordem no calendário (mês + semana) e os posts que se podem adiantar para uma semana: os seguintes ainda por publicar
+export const posicao = (mes, semana) => `${mes}#${semana}`;
+export const candidatosAdiantar = (mes, semana) => E.posts.filter((p) => posicao(p.mes, p.semana) > posicao(mes, semana) && !['publicado', 'nao_feito'].includes(p.estado))
+  .sort((a, b) => (posicao(a.mes, a.semana) < posicao(b.mes, b.semana) ? -1 : 1) || a.id - b.id);
 export const TIPOS_POST = { carrossel: 'Carrossel', foto: 'Foto', video: 'Vídeo', reel: 'Reel', story: 'Story' };
 export const REDES = { instagram: 'Instagram', facebook: 'Facebook', linkedin: 'LinkedIn' };
 export const ESTADOS_FASE = { prevista: 'Prevista', em_curso: 'Em curso', concluida: 'Concluída' };

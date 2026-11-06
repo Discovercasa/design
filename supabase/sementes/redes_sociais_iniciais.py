@@ -152,7 +152,8 @@ def main():
         # estado: as semanas que já passaram com legenda ficam publicadas; as seguintes com legenda e fotos esperam aprovação
         fim_semana = date.fromisoformat(mes).replace(day=min(28, s_mes * 7))
         passou = fim_semana.isoformat() < hoje
-        estado = ("publicado" if passou else ("por_aprovar" if fotos else "rascunho")) if legenda else "ideia"
+        # as semanas que passaram sem legenda não foram feitas
+        estado = ("publicado" if passou else ("por_aprovar" if fotos else "rascunho")) if legenda else ("nao_feito" if passou else "ideia")
         notas = notas_extra.get(semana, [])
         if semana == 1 and alternativas:
             notas.append("Legendas alternativas que estavam no Excel:\n\n" + "\n\n— — —\n\n".join(alternativas))
@@ -161,7 +162,7 @@ def main():
         fx["posts"].append({"id": pid, "mes": mes, "semana": s_mes, "obra_id": obra_id.get(obra), "fase_id": fase_id.get((obra, fase)),
             "titulo": titulo, "tipo": tipo, "redes": ["instagram", "facebook"], "legenda": legenda, "notas": "\n".join(notas), "estado": estado,
             "legenda_aprovada": False, "legenda_aprovada_por_nome": "", "legenda_aprovada_em": None, "fotos_aprovadas": False,
-            "fotos_aprovadas_por_nome": "", "fotos_aprovadas_em": None, "publicar_em": None, "publicado_em": None,
+            "fotos_aprovadas_por_nome": "", "fotos_aprovadas_em": None, "publicar_em": None, "publicado_em": None, "mes_original": None, "semana_original": None,
             "criado_por": None, "criado_por_nome": "Equipa", "criado_em": CRIADO, "atualizado_em": CRIADO, "_obra": obra, "_fase": fase})
         for k, (r, media) in enumerate(fotos, 1):
             b = z.read(media)
@@ -189,7 +190,8 @@ def main():
     # ---------------------------------------------------------------- SQL
     L = ["-- Redes sociais: o planeamento que estava no Excel \"DiscoverCasa Post Mensal - publicações\" (folha \"Jul  Ago  Set 26\":",
          "-- julho a dezembro de 2026). Gerado por supabase/sementes/redes_sociais_iniciais.py; corre uma vez, depois de 0009.",
-         f"-- Estados: semanas já passadas com legenda = publicado; seguintes com legenda e fotos = por aprovar (hoje = {hoje}).",
+         f"-- Estados: semanas já passadas com legenda = publicado, sem legenda = não feito; seguintes com legenda e fotos = por",
+         f"-- aprovar (hoje = {hoje}).",
          "-- As fotos ficam no armazenamento privado \"social\" (carregadas à parte); aqui só as linhas.", ""]
     L.append("insert into public.obras (nome, descricao, ordem, criado_por_nome) values")
     L.append(",\n".join(f"  ({q(o['nome'])}, {q(o['descricao'])}, {o['ordem']}, 'Equipa')" for o in fx["obras"]) + ";")

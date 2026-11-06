@@ -88,6 +88,11 @@
     if (!o) { carimbo(n); Object.assign(n, { obra_id: n.obra_id ?? null, fase_id: n.fase_id ?? null, tipo: n.tipo ?? 'carrossel', redes: n.redes ?? ['instagram', 'facebook'], legenda: n.legenda ?? '', notas: n.notas ?? '',
       estado: n.estado ?? 'ideia', legenda_aprovada: n.legenda_aprovada ?? false, fotos_aprovadas: n.fotos_aprovadas ?? false, legenda_aprovada_por_nome: '', fotos_aprovadas_por_nome: '', legenda_aprovada_em: null, fotos_aprovadas_em: null, publicar_em: null, publicado_em: null }); }
     n.atualizado_em = agora();
+    if (!o) Object.assign(n, { mes_original: null, semana_original: null });
+    else if (n.mes !== o.mes || n.semana !== o.semana) {
+      Object.assign(n, o.mes_original ? { mes_original: o.mes_original, semana_original: o.semana_original } : { mes_original: o.mes, semana_original: o.semana });
+      if (n.mes === n.mes_original && n.semana === n.semana_original) Object.assign(n, { mes_original: null, semana_original: null });
+    } else Object.assign(n, { mes_original: o.mes_original, semana_original: o.semana_original });
     if (n.fase_id && !db.obras_fases.some((f) => f.id === n.fase_id && f.obra_id === n.obra_id)) n.fase_id = null;
     if (o && n.legenda !== o.legenda && o.legenda_aprovada && n.legenda_aprovada) n.legenda_aprovada = false;
     for (const k of ['legenda', 'fotos']) {

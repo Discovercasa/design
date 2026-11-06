@@ -27,7 +27,7 @@ uma página (`#/projeto/<slug>`), um ficheiro de dados, uma pasta de código e u
 - **Documentos de cada projeto** (secção Documentos do hub): *informativos* = o que o projeto é (especificações, planos);
   *adicionais* = conhecimento extra (desenhos de obras, fichas, fotografias). Os ficheiros ficam no armazenamento privado
   `documentos` do Supabase (caminho `<id>/<tipo>/<nome>`), nunca no Git; carregam-se no próprio hub.
-- **Redes sociais**: um post por semana (mês + semana 1–5); fotos e vídeos no armazenamento privado `social` (`posts/…`,
+- **Redes sociais**: um post por semana (mês + semana 1–5; um post não feito marca-se «Não feito» e adianta-se outro para essa semana, ficando registada a semana original); fotos e vídeos no armazenamento privado `social` (`posts/…`,
   miniaturas em `miniaturas/…`), nunca no Git. As fotos grandes reduzem-se a 2048 px ao carregar, salvo «Manter os
   originais». As fases das obras não se apagam (não há regra de apagar); as obras arquivam-se.
 - **Base de dados**: cada mudança é uma migração nova em `supabase/migrations/NNNN_nome.sql` (nunca editar uma já aplicada).

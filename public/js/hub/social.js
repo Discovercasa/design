@@ -9,6 +9,7 @@ let ctx = null;                 // { dlg, desenhar, depois, tentar }
 let filtroObra = '';            // '' = todas
 let sujo = false;               // o editor do post tem alterações por guardar
 let aba = 'fotos';              // no editor: fotos ou pré-visualização
+const detAbertos = new Set();   // <details> abertos (ficam abertos ao redesenhar)
 const EMOJIS = ['🏡', '🏠', '✨', '🏗️', '🚧', '🔨', '🛠️', '👷', '🧱', '🪵', '🌿', '🌱', '🌳', '☀️', '💚', '✅', '✔️', '👉', '➡️', '⬇️',
   '🌐', '📩', '📞', '📍', '📸', '🎥', '💡', '🔑', '📐', '⭐', '❤️', '🙌', '👏', '🤝', '😊', '🎉', '🎄', '🔥', '💬', '🗓️'];
 
@@ -19,6 +20,8 @@ const cabeca = (titulo, sub = '', fechar = 'fechar-dlg') => `<div class="dlg-cab
 const novo = (tipo, id) => (E.novos.has(chave(tipo, id)) ? '<span class="chip novo">Novo</span>' : '');
 const estadoPost = (e) => `<span class="estado p-${e}">${esc(S.ESTADOS_POST[e])}</span>`;
 const semanaRotulo = (p) => `Semana ${p.semana} · ${S.nomeMes(p.mes)}`;
+// mudou de semana: "Adiantado" (estava planeado mais tarde) ou "Adiado" (estava mais cedo)
+const movido = (p) => (p.mes_original ? `<span class="chip movido" title="Estava planeado para a semana ${p.semana_original} de ${esc(S.nomeMes(p.mes_original))}">${ic('calendario', 'ic-sm')}${S.posicao(p.mes_original, p.semana_original) > S.posicao(p.mes, p.semana) ? 'Adiantado' : 'Adiado'} · era semana ${p.semana_original} de ${esc(S.nomeMes(p.mes_original, false))}</span>` : '');
 const obraFase = (p) => [S.obra(p.obra_id), S.fase(p.fase_id)].filter(Boolean).map((x) => x.nome).join(' · ');
 const img = (caminho, alt = '', cls = '') => `<img${cls ? ` class="${cls}"` : ''} alt="${esc(alt)}" loading="lazy" decoding="async" data-cam="${esc(caminho)}"${S.urlEmCache(caminho) ? ` src="${esc(S.urlEmCache(caminho))}"` : ''}>`;
 const miniOuIcone = (m, cls = '') => (m.miniatura ? img(m.miniatura, m.nome_ficheiro, cls) : `<span class="sem-mini ${cls}">${ic(S.ehVideo(m) ? 'video' : 'imagem')}</span>`);
@@ -61,7 +64,7 @@ function planeamento() {
   const atual = S.mesDe(new Date());
   const meses = S.mesesVisiveis();
   const passados = meses.filter((m) => m < atual), seguintes = meses.filter((m) => m >= atual);
-  return `${passados.length ? `<details class="meses-passados"><summary>${ic('baixo', 'ic-sm')}Meses anteriores <span class="fraco num">(${passados.length})</span></summary>${passados.map(mes).join('')}</details>` : ''}
+  return `${passados.length ? `<details class="meses-passados" data-sdet="meses"${detAbertos.has('meses') ? ' open' : ''}><summary>${ic('baixo', 'ic-sm')}Meses anteriores <span class="fraco num">(${passados.length})</span></summary>${passados.map(mes).join('')}</details>` : ''}
     ${seguintes.map(mes).join('')}`;
 }
 function mes(m) {
@@ -81,6 +84,7 @@ function mes(m) {
         ${ps.map(cartao).join('')}
         ${outros.length ? `<a class="semana-vazia ocupada" href="#/social/post-${outros[0].id}">Já tem post: ${esc(outros[0].titulo)}</a>` : ''}
         ${!ps.length && !outros.length ? (E.eu.editar ? `<button type="button" class="semana-vazia" data-sacao="novo-post" data-mes="${m}" data-semana="${s}">${ic('mais', 'ic-sm')}Planear post</button>` : '<p class="semana-vazia">Sem post</p>') : ''}
+        ${E.eu.editar && !outros.length && ps.every((p) => p.estado === 'nao_feito') && S.candidatosAdiantar(m, s).length ? `<button type="button" class="btn pequeno texto adiantar" data-sacao="adiantar" data-mes="${m}" data-semana="${s}">${ic('esquerda', 'ic-sm')}Adiantar um post para aqui</button>` : ''}
       </li>`;
     }).join('')}</ol>
   </section>`;
@@ -89,12 +93,13 @@ function cartao(p) {
   const ms = S.mediaDe(p.id), cs = S.comentariosDe(p.id).filter((c) => !c.resolvido);
   const mostrar = ms.slice(0, 4);
   const primeira = (p.legenda || '').split('\n').find((l) => l.trim()) || '';
-  return `<a class="post-cartao" id="post-${p.id}" href="#/social/post-${p.id}">
+  return `<a class="post-cartao${p.estado === 'nao_feito' ? ' nao-feito' : ''}" id="post-${p.id}" href="#/social/post-${p.id}">
     <div class="post-fotos n${Math.min(4, mostrar.length)}">${mostrar.length ? mostrar.map((m, i) => `<span class="pf">${miniOuIcone(m)}${i === 3 && ms.length > 4 ? `<b class="mais-fotos">+${ms.length - 4}</b>` : ''}</span>`).join('')
       : `<span class="sem-fotos">${ic('camara')}<span>Sem fotos</span></span>`}</div>
     <div class="post-texto">
       ${obraFase(p) ? `<span class="post-obra">${esc(obraFase(p))}</span>` : ''}
       <h3>${esc(p.titulo)} ${novo('post', p.id)}</h3>
+      ${movido(p)}
       ${primeira ? `<p class="post-legenda">${esc(primeira.slice(0, 140))}</p>` : '<p class="post-legenda fraco">Sem legenda</p>'}
       <div class="post-meta">${estadoPost(p.estado)}
         <span class="aprov${p.legenda_aprovada ? ' ok' : ''}" title="Legenda ${p.legenda_aprovada ? 'aprovada' : 'por aprovar'}">${ic(p.legenda_aprovada ? 'certo' : 'menos', 'ic-sm')}Legenda</span>
@@ -125,7 +130,7 @@ function paginaObras() {
   <section class="seccao" aria-labelledby="t-obras">
     <div class="seccao-cabeca"><div><h2 id="t-obras">Obras</h2><p>As fases não se apagam: acrescentam-se e vão-se marcando.</p></div></div>
     ${ativas.length ? `<div class="obras-grelha">${ativas.map(cartaoObra).join('')}</div>` : '<p class="vazio">Ainda sem obras.</p>'}
-    ${arquivadas.length ? `<details class="meses-passados" style="margin-top:24px"><summary>${ic('arquivo', 'ic-sm')}Obras arquivadas <span class="fraco num">(${arquivadas.length})</span></summary><div class="obras-grelha">${arquivadas.map(cartaoObra).join('')}</div></details>` : ''}
+    ${arquivadas.length ? `<details class="meses-passados" data-sdet="arquivadas"${detAbertos.has('arquivadas') ? ' open' : ''} style="margin-top:24px"><summary>${ic('arquivo', 'ic-sm')}Obras arquivadas <span class="fraco num">(${arquivadas.length})</span></summary><div class="obras-grelha">${arquivadas.map(cartaoObra).join('')}</div></details>` : ''}
   </section>`;
 }
 function cartaoObra(o) {
@@ -206,7 +211,7 @@ function dlgNovoPost(mes, semana) {
 
 function htmlEditor(p) {
   const pode = E.eu.editar;
-  return `<form data-sform="post" data-id="${p.id}" class="editor-post">${cabeca(esc(p.titulo), `${esc(semanaRotulo(p))}${obraFase(p) ? ' · ' + esc(obraFase(p)) : ''} · ${estadoPost(p.estado)}`, 'fechar-post')}
+  return `<form data-sform="post" data-id="${p.id}" class="editor-post">${cabeca(esc(p.titulo), `${esc(semanaRotulo(p))}${obraFase(p) ? ' · ' + esc(obraFase(p)) : ''} · ${estadoPost(p.estado)} ${movido(p)}`, 'fechar-post')}
     <div class="dlg-corpo pe">
       <div class="pe-esquerda">
         <div class="segmentado" role="group" aria-label="Ver">
@@ -214,6 +219,10 @@ function htmlEditor(p) {
           <button type="button" data-sacao="pe-aba" data-valor="previa" aria-pressed="${aba === 'previa'}">${ic('camara', 'ic-sm')}Pré-visualizar</button>
         </div>
         <div id="pe-media"${aba === 'fotos' ? '' : ' hidden'}>${htmlMedia(p)}</div>
+        ${pode ? `<div id="pe-fixo" class="pe-fixo"${aba === 'fotos' ? '' : ' hidden'}>
+          <input type="file" id="pe-ficheiros" name="media" multiple accept="image/*,video/*,.heic" class="so-leitor" tabindex="-1">
+          <label class="original"><input type="checkbox" id="pe-original"> <span>Manter os originais <span class="fraco">(por defeito as fotos grandes ficam com 2048 px, que chega para o Instagram e poupa espaço)</span></span></label>
+          <p class="pe-progresso pequeno suave" role="status"></p></div>` : ''}
         <div id="pe-previa"${aba === 'previa' ? '' : ' hidden'}>${htmlPrevia(p, p.legenda)}</div>
       </div>
       <div class="pe-direita">
@@ -257,6 +266,7 @@ function htmlEditor(p) {
       ${pode ? `<button class="btn texto perigo" type="button" data-sacao="apagar-post" data-id="${p.id}" style="margin-right:auto">${ic('apagar', 'ic-sm')}Apagar post</button>` : ''}
       <button class="btn" type="button" data-sacao="fechar-post">Fechar</button>
       ${pode && ['ideia', 'rascunho'].includes(p.estado) ? `<button class="btn" type="button" data-sacao="pedir-aprovacao">Guardar e pedir aprovação</button>` : ''}
+      ${pode && !['publicado', 'nao_feito'].includes(p.estado) ? `<button class="btn" type="button" data-sacao="nao-feito" title="Não se publicou nesta semana; podes adiantar outro post para aqui">Não foi feito</button>` : ''}
       ${pode && p.estado === 'aprovado' ? `<button class="btn" type="button" data-sacao="marcar-publicado">Marcar como publicado</button>` : ''}
       ${pode ? '<button class="btn primario" type="submit">Guardar</button>' : ''}
     </div></form>`;
@@ -281,10 +291,7 @@ function htmlMedia(p) {
         ${pode ? `<button type="button" class="icone-botao" data-sacao="apagar-media" data-id="${m.id}" aria-label="Tirar ${esc(m.nome_ficheiro)}">${ic('apagar', 'ic-sm')}</button>` : ''}
       </div>
     </li>`).join('')}</ol>` : '<p class="fraco pequeno pe-sem">Ainda sem fotos.</p>'}
-    ${pode ? `<label class="pe-carregar">${ic('imagem')}<span><b>Arrasta fotos ou vídeos para aqui</b>, cola-os (Ctrl+V) ou <u>escolhe do computador</u>.<br><span class="fraco mini">Até 50 MB cada. Arrasta as fotos para mudar a ordem do carrossel.</span></span>
-      <input type="file" name="media" multiple accept="image/*,video/*,.heic" class="so-leitor"></label>
-      <label class="original"><input type="checkbox" id="pe-original"> <span>Manter os originais <span class="fraco">(por defeito as fotos grandes ficam com 2048 px, que chega para o Instagram e poupa espaço)</span></span></label>` : ''}
-    <p class="pe-progresso pequeno suave" role="status"></p>
+    ${pode ? `<label class="pe-carregar" for="pe-ficheiros">${ic('imagem')}<span><b>Arrasta fotos ou vídeos para aqui</b>, cola-os (Ctrl+V) ou <u>escolhe do computador</u>.<br><span class="fraco mini">Até 50 MB cada. Arrasta as fotos para mudar a ordem do carrossel.</span></span></label>` : ''}
     ${ms.length ? `<div class="botoes"><button class="btn pequeno" type="button" data-sacao="descarregar-todas">${ic('instalar', 'ic-sm')}Descarregar todas (${ms.length})</button>
       <span class="fraco mini" style="align-self:center">${tamanho(ms.reduce((a, m) => a + Number(m.tamanho || 0), 0))}</span></div>` : ''}
   </div>`;
@@ -352,6 +359,17 @@ function dlgFase(obraId, f) {
       <p class="erro-msg pequeno" role="alert"></p>
     </div>
     <div class="dlg-rodape"><button class="btn" type="button" data-acao="fechar-dlg">Cancelar</button><button class="btn primario" type="submit">${f ? 'Guardar' : 'Acrescentar fase'}</button></div></form>`;
+}
+function dlgAdiantar(mes, semana) {
+  const cs = S.candidatosAdiantar(mes, semana).slice(0, 10);
+  return `<form data-sform="adiantar" data-mes="${mes}" data-semana="${semana}">${cabeca('Adiantar um post', `Para a semana ${semana} de ${esc(S.nomeMes(mes))}. O post sai da semana onde estava (fica a indicação de onde vinha) e essa semana fica livre.`)}
+    <div class="dlg-corpo">
+      ${cs.length ? `<div class="opcoes">${cs.map((p, i) => `<label class="opcao"><input type="radio" name="post" value="${p.id}"${i ? '' : ' checked'}>
+        <h4>${esc(p.titulo)}</h4><p class="fraco mini">${esc(semanaRotulo(p))}${obraFase(p) ? ' · ' + esc(obraFase(p)) : ''} · ${esc(S.ESTADOS_POST[p.estado])} · ${S.mediaDe(p.id).length} fotos</p></label>`).join('')}</div>`
+        : '<p class="vazio">Não há posts por publicar nas semanas seguintes.</p>'}
+      <p class="erro-msg pequeno" role="alert"></p>
+    </div>
+    <div class="dlg-rodape"><button class="btn" type="button" data-acao="fechar-dlg">Cancelar</button>${cs.length ? '<button class="btn primario" type="submit">Adiantar</button>' : ''}</div></form>`;
 }
 function dlgVisita(f) {
   const amanha = new Date(Date.now() + 86400000).toISOString().slice(0, 10);
@@ -466,6 +484,7 @@ export function ligar(c) {
     const id = Number(el.dataset.id);
     switch (el.dataset.sacao) {
       case 'novo-post': return abrirDialogo(dlg, dlgNovoPost(el.dataset.mes, el.dataset.semana), { estreito: true });
+      case 'adiantar': return abrirDialogo(dlg, dlgAdiantar(el.dataset.mes, Number(el.dataset.semana)), { estreito: true });
       case 'so-por-aprovar': {
         e.preventDefault();
         const p = E.posts.find((x) => x.estado === 'por_aprovar');
@@ -486,6 +505,7 @@ export function ligar(c) {
         const f = el.closest('form');
         $$('[data-sacao="pe-aba"]', f).forEach((b) => b.setAttribute('aria-pressed', b === el));
         $('#pe-media', f).hidden = aba !== 'fotos'; $('#pe-previa', f).hidden = aba !== 'previa';
+        if ($('#pe-fixo', f)) $('#pe-fixo', f).hidden = aba !== 'fotos';
         if (aba === 'previa') { $('#pe-previa', f).innerHTML = htmlPrevia(S.post(Number(f.dataset.id)), f.elements.legenda.value); S.hidratar(f); }
         return;
       }
@@ -558,9 +578,9 @@ export function ligar(c) {
         if (await c.tentar(() => S.apagarPost(p))) { fecharEditor(true); aviso('Post apagado.', { icone: 'certo', duracao: 3 }); c.depois(); }
         return;
       }
-      case 'pedir-aprovacao': case 'marcar-publicado': {
+      case 'pedir-aprovacao': case 'marcar-publicado': case 'nao-feito': {
         const f = formPost();
-        f.elements.estado.value = el.dataset.sacao === 'pedir-aprovacao' ? 'por_aprovar' : 'publicado';
+        f.elements.estado.value = { 'pedir-aprovacao': 'por_aprovar', 'marcar-publicado': 'publicado', 'nao-feito': 'nao_feito' }[el.dataset.sacao];
         f.requestSubmit();
         return;
       }
@@ -596,6 +616,7 @@ export function ligar(c) {
   let arrastada = null;
   document.addEventListener('dragstart', (e) => { const li = e.target.closest && e.target.closest('.pe-foto'); if (li) { arrastada = li; li.classList.add('a-arrastar'); e.dataTransfer.effectAllowed = 'move'; } });
   document.addEventListener('dragend', () => { if (arrastada) arrastada.classList.remove('a-arrastar'); arrastada = null; $$('.pe-zona.sobre').forEach((z) => z.classList.remove('sobre')); });
+  document.addEventListener('toggle', (e) => { const d = e.target; if (d.dataset && d.dataset.sdet) { if (d.open) detAbertos.add(d.dataset.sdet); else detAbertos.delete(d.dataset.sdet); } }, true);
   document.addEventListener('dragover', (e) => {
     const zona = e.target.closest && e.target.closest('[data-sacao-zona]');
     if (!zona || !E.eu.editar) return;
@@ -655,6 +676,14 @@ export function ligar(c) {
           if (!ok) return;
           sujo = false;
           const depois = S.post(id);
+          if (depois.estado === 'nao_feito' && antes.estado !== 'nao_feito' && S.candidatosAdiantar(depois.mes, depois.semana).length) {
+            sujo = false;
+            dlg.classList.remove('largo');
+            abrirDialogo(dlg, dlgAdiantar(depois.mes, depois.semana), { estreito: true });
+            aviso('Marcado como não feito. Escolhe o post que passa para esta semana (ou cancela).', { icone: 'certo', duracao: 5 });
+            c.depois();
+            return;
+          }
           aviso(depois.estado !== antes.estado ? `Guardado. O post está agora «${S.ESTADOS_POST[depois.estado]}».` : 'Guardado.', { icone: 'certo', duracao: 3 });
           redesenharEditor();
           c.depois();
@@ -679,6 +708,14 @@ export function ligar(c) {
             if (Number(v('posicao')) !== antes) await S.moverFase(S.fase(id), Number(v('posicao')));
           }, f);
           if (ok) { fecharDialogo(dlg); c.depois(); }
+          return;
+        }
+        case 'adiantar': {
+          const escolhido = f.querySelector('input[name=post]:checked');
+          if (!escolhido) return;
+          const p = S.post(Number(escolhido.value));
+          const ok = await c.tentar(() => S.mudarPost(p.id, { mes: f.dataset.mes, semana: Number(f.dataset.semana) }), f);
+          if (ok) { fecharDialogo(dlg); aviso(`«${esc(p.titulo)}» passou para a semana ${f.dataset.semana} de ${esc(S.nomeMes(f.dataset.mes))}.`, { icone: 'certo', duracao: 4 }); c.depois(); }
           return;
         }
         case 'visita': {

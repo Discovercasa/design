@@ -1,6 +1,7 @@
 -- Redes sociais: o planeamento que estava no Excel "DiscoverCasa Post Mensal - publicações" (folha "Jul  Ago  Set 26":
 -- julho a dezembro de 2026). Gerado por supabase/sementes/redes_sociais_iniciais.py; corre uma vez, depois de 0009.
--- Estados: semanas já passadas com legenda = publicado; seguintes com legenda e fotos = por aprovar (hoje = 2026-11-06).
+-- Estados: semanas já passadas com legenda = publicado, sem legenda = não feito; seguintes com legenda e fotos = por
+-- aprovar (hoje = 2026-11-06).
 -- As fotos ficam no armazenamento privado "social" (carregadas à parte); aqui só as linhas.
 
 insert into public.obras (nome, descricao, ordem, criado_por_nome) values
@@ -191,11 +192,11 @@ Entre escavações, cofragens, ferro e betão, esta obra já passou da preparaç
 insert into public.posts (mes, semana, obra_id, fase_id, titulo, tipo, legenda, notas, estado, criado_por_nome) values
   ('2026-09-01', 2, (select id from public.obras where nome = 'Torres Vedras'), null, 'Torres Vedras - Testemunho', 'video',
   '',
-  'Foto 1: confirmação', 'ideia', 'Equipa');
+  'Foto 1: confirmação', 'nao_feito', 'Equipa');
 insert into public.posts (mes, semana, obra_id, fase_id, titulo, tipo, legenda, notas, estado, criado_por_nome) values
   ('2026-09-01', 3, (select id from public.obras where nome = 'Casa dos Cães'), null, 'Cães - Analisar 2', 'carrossel',
   '',
-  '', 'ideia', 'Equipa');
+  '', 'nao_feito', 'Equipa');
 insert into public.posts (mes, semana, obra_id, fase_id, titulo, tipo, legenda, notas, estado, criado_por_nome) values
   ('2026-09-01', 4, (select id from public.obras where nome = 'Matosinhos'), (select f.id from public.obras_fases f join public.obras o on o.id = f.obra_id where o.nome = 'Matosinhos' and f.nome = 'Base de fundação'), 'Matosinhos - BF', 'carrossel',
   '🏗️ 3.ª etapa - O Segundo Piso Começa a Ganhar Forma
@@ -214,11 +215,11 @@ Mais do que construir, é acompanhar cada fase e garantir que cada detalhe fica 
 insert into public.posts (mes, semana, obra_id, fase_id, titulo, tipo, legenda, notas, estado, criado_por_nome) values
   ('2026-10-01', 1, (select id from public.obras where nome = 'Ribamar'), (select f.id from public.obras_fases f join public.obras o on o.id = f.obra_id where o.nome = 'Ribamar' and f.nome = 'Projetos'), 'Ribamar - Testemunho projetos', 'video',
   '',
-  'Foto 1: confirmação', 'ideia', 'Equipa');
+  'Foto 1: confirmação', 'nao_feito', 'Equipa');
 insert into public.posts (mes, semana, obra_id, fase_id, titulo, tipo, legenda, notas, estado, criado_por_nome) values
   ('2026-10-01', 2, (select id from public.obras where nome = 'Casa dos Cães'), null, 'Cães - Analisar 3', 'carrossel',
   '',
-  '', 'ideia', 'Equipa');
+  '', 'nao_feito', 'Equipa');
 insert into public.posts (mes, semana, obra_id, fase_id, titulo, tipo, legenda, notas, estado, criado_por_nome) values
   ('2026-10-01', 3, (select id from public.obras where nome = 'Matosinhos'), (select f.id from public.obras_fases f join public.obras o on o.id = f.obra_id where o.nome = 'Matosinhos' and f.nome = 'Estrutura'), 'Matosinhos - Estrutura', 'carrossel',
   '🏗️ A estrutura começa a erguer-se e mais uma casa a ganhar forma.

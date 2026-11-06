@@ -263,3 +263,26 @@ test('mudar de página com o editor aberto fecha-o', async ({ page }) => {
   await expect(page.locator('#dlg')).toBeHidden();
   await expect(page.locator('#t-social')).toBeVisible();
 });
+
+test('post não feito: marcar e adiantar outro post para essa semana (fica a indicação de onde vinha)', async ({ page }) => {
+  const erros = await abrir(page, { rota: '/#/social/post-19' });   // Ribamar - BF, semana 3 de novembro
+  await editor(page).getByRole('button', { name: 'Não foi feito' }).click();
+  const f = page.locator('#dlg form[data-sform="adiantar"]');
+  await expect(f).toContainText('Para a semana 3 de novembro de 2026');
+  await f.locator('label.opcao', { hasText: 'Matosinhos - ???' }).click();
+  await f.getByRole('button', { name: 'Adiantar' }).click();
+  await expect(page.locator('.aviso', { hasText: 'passou para a semana 3' })).toBeVisible();
+  const p = await db(page, () => window.__fake.db.posts.find((x) => x.titulo === 'Matosinhos - ???'));
+  expect([p.mes, p.semana, p.mes_original, p.semana_original]).toEqual(['2026-11-01', 3, '2026-12-01', 3]);
+  expect(await db(page, () => window.__fake.db.posts.find((x) => x.id === 19).estado)).toBe('nao_feito');
+  const semana = page.locator('#mes-2026-11 .semana').nth(2);
+  await expect(semana.locator('.post-cartao.nao-feito')).toContainText('Ribamar - BF');
+  await expect(semana.locator('.post-cartao', { hasText: 'Matosinhos - ???' })).toContainText('Adiantado · era semana 3 de dezembro');
+  // uma semana que passou sem post (importada como "Não feito") também aceita um post adiantado
+  await page.locator('details.meses-passados summary').click();
+  const out = page.locator('#mes-2026-10 .semana').first();
+  await expect(out.locator('.post-cartao.nao-feito')).toContainText('Não feito');
+  await out.getByRole('button', { name: 'Adiantar um post para aqui' }).click();
+  await expect(page.locator('#dlg form[data-sform="adiantar"] label.opcao').first()).toBeVisible();
+  expect(erros).toEqual([]);
+});

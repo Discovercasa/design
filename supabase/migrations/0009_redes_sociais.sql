@@ -2,6 +2,8 @@
 -- Os posts são planeados antes (um por semana) para a legenda e as fotos serem aprovadas; as obras (Matosinhos, Casa dos
 -- Cães, Boelhe, Ribamar, Gaia…) têm fases que "não se apagam", só se acrescentam e se vão marcando, para saber quando ir
 -- ao local tirar fotos e extrair conteúdo.
+-- (mais tarde) "às vezes há posts que não são feitos … fazemos o post seguinte ou dois posts à frente": estado "Não feito"
+-- e mudar um post de semana (adiantar), guardando a semana em que estava planeado.
 
 -- ---------------------------------------------------------------- obras e fases
 create table public.obras (
@@ -48,7 +50,7 @@ create table public.posts (
   redes text[] not null default '{instagram,facebook}' check (redes <@ array['instagram', 'facebook', 'linkedin']::text[]),
   legenda text not null default '' check (char_length(legenda) <= 5000),
   notas text not null default '' check (char_length(notas) <= 4000),
-  estado text not null default 'ideia' check (estado in ('ideia', 'rascunho', 'por_aprovar', 'aprovado', 'publicado')),
+  estado text not null default 'ideia' check (estado in ('ideia', 'rascunho', 'por_aprovar', 'aprovado', 'publicado', 'nao_feito')),
   legenda_aprovada boolean not null default false,
   legenda_aprovada_por_nome text not null default '',
   legenda_aprovada_em date,
@@ -56,6 +58,8 @@ create table public.posts (
   fotos_aprovadas_por_nome text not null default '',
   fotos_aprovadas_em date,
   publicar_em date,                                                        -- dia previsto (opcional)
+  mes_original date,                                                       -- onde estava planeado antes de mudar de semana
+  semana_original int,
   publicado_em date,
   criado_por uuid default auth.uid(),
   criado_por_nome text not null default '' check (char_length(criado_por_nome) <= 120),
@@ -145,7 +149,7 @@ alter table public.vistos add constraint vistos_tipo_check check (tipo in ('chec
 
 create or replace function public.rotulo_post(e text) returns text language sql immutable set search_path = '' as $$
   select case e when 'ideia' then 'Ideia' when 'rascunho' then 'Rascunho' when 'por_aprovar' then 'Por aprovar'
-                when 'aprovado' then 'Aprovado' when 'publicado' then 'Publicado' else e end
+                when 'aprovado' then 'Aprovado' when 'publicado' then 'Publicado' when 'nao_feito' then 'Não feito' else e end
 $$;
 
 -- ---------------------------------------------------------------- triggers: carimbos, aprovação e notificações
@@ -216,6 +220,13 @@ begin
     new.criado_por := old.criado_por; new.criado_por_nome := old.criado_por_nome; new.criado_em := old.criado_em;
   end if;
   new.atualizado_em := now();
+  -- mudou de semana: guarda a primeira semana planeada (volta a limpar se regressar a ela)
+  if tg_op = 'UPDATE' and (new.mes, new.semana) is distinct from (old.mes, old.semana) then
+    if old.mes_original is null then new.mes_original := old.mes; new.semana_original := old.semana;
+    else new.mes_original := old.mes_original; new.semana_original := old.semana_original; end if;
+    if (new.mes, new.semana) = (new.mes_original, new.semana_original) then new.mes_original := null; new.semana_original := null; end if;
+  elsif tg_op = 'UPDATE' then new.mes_original := old.mes_original; new.semana_original := old.semana_original;
+  end if;
   -- a fase tem de ser da obra do post
   if new.fase_id is not null and not exists (select 1 from public.obras_fases f where f.id = new.fase_id and f.obra_id = new.obra_id) then
     new.fase_id := null;
