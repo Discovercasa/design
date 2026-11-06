@@ -575,7 +575,7 @@ def construir(cfg, S, E, planta):
                     loc.append([round(s0 - m0, 4), round(s1 - m0, 4), round(v0, 4), round(min(z1, topo), 4), kind])
             c0 = k == 1 and (w["id"], "a") in cantos
             c1 = k == len(pts) - 1 and (w["id"], "b") in cantos
-            ms = emoldurar(0.0, W, Hf, loc, cls, E, c0, c1)
+            ms = emoldurar(0.0, W, Hf, loc, cls, E, c0, c1, topo_montantes=H if (anel and w["exterior"]) else None)
             if anel and w["exterior"]:
                 ms = continuar(ms, W, H, Hf, m0, w, k)
             nome = f"{'PE' if w['exterior'] else 'PI'} {w['id']}.{k}"
