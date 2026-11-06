@@ -35,7 +35,7 @@
 ### Asked, answer pending
 - **"Usamos os de 80mm" (2026-10-30 later still) — is it the hidden 5-ondas panel only (80 mm confirmed there), or also the
   exposed roof's Munditelha?** Our reading: the hidden one — the Munditelha sheet gives 40–60 mm; JSON `cobertura.painel.nucleo`
-  stays 0,04 (assumed) until he answers (§7; B1, PO Q15; X11).
+  stays 0,04 (assumed) until the user answers (§7; B1, PO Q15; X11).
 - The **overflow (ladrão)** after our explanation — tentatively none ("penso que não"); "sem ladrão no modelo" flagged
   meanwhile (§7, PO Q16; E5).
 - His reply to our corrected answer on the [TV] frame sizes (sent 2026-10-20 night) (§3, TV #20).
@@ -45,7 +45,7 @@
 ### To ask now (one point per question, with the images / sketch named; §0)
 **Roof questionnaire, asked 2026-10-29 night** — his words "faz todas as questões que precisares para começarmos a fazer as
 coberturas sem falhas algumas!!"; he answers by the code; in brackets what the engine does now; replaces the earlier scattered
-roof items (old 1, 4, 5, 6, 8, 10, 11, 13, 15, 19, 20, 21; the other numbers below are kept). Each is ours until he answers.
+roof items (old 1, 4, 5, 6, 8, 10, 11, 13, 15, 19, 20, 21; the other numbers below are kept). Each is ours until the user answers.
 - **A — exposed-roof timber** (§7 E3–E5, §6):
   - **A1** Ridge joint of the two top purlins: butted, each cut to the slope (now) / on a ridge board-beam / other — sketch
     `configurador/docs/perguntas_coberturas_unioes.svg`.
@@ -141,6 +141,15 @@ Other items (numbers kept):
 24. **A wall from an inner corner**: one face flush with the outside wall's inner face (ours, 0,095 in) or on the outside
     wall's centre line as D2503's interior walls (§2).
 25. **The interior door's frame**: product, depth and the architrave size (drawn 3,5 / 3 frame + 7 cm architraves, ours) (§3).
+26. **Where the verga sits when a wide opening is lower than it** (found 2026-11-06, `verificar.py` follow-up): for an
+    opening ≥ `verga_grande.vao_min` (2,80) whose head is below the verga's underside, the strip between head and verga is
+    left unframed — [TV] P03.1 (builder without real modules): door head 2,205, verga 2,398 → 19 cm; configurator: a 3,00
+    garage door (head ≈ 2,225) beside a taller head (sliding window + shutter at 2,40) → ≈ 17–18 cm. The rulebook has the
+    verga "under the top plate, the two 110×75 posts stopping under it" (Casa CL; the configurator's modules rise so the
+    highest head fits under it, X1) but "in a full-height exterior module the lintel sits directly over the opening" (D2503).
+    **Our suggestion:** lower the verga onto the opening head, as the padieira does and as the D2503 full-height lintels do,
+    the posts stopping under it and cripples above it up to the top plate (module top in a hidden roof). Status: **OPEN —
+    ask the user**; the tools keep the verga under the top plate until answered (§3; L72).
 ### [TV] to ask, low priority (TV comparison)
 - The pergola: slope and what is under the ceramic tiles, tile battens, gutter section and material, where the 2 downpipes
   discharge, sections and post bases, the exterior glulam treatment's name (§8, TV #21, #22).
