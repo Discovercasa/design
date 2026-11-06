@@ -33,7 +33,7 @@ uma página (`#/projeto/<slug>`), um ficheiro de dados, uma pasta de código e u
 - **Imagens e notas**: as imagens de checkpoints, tarefas e notas de teste ficam no armazenamento privado `anexos`
   (nunca no Git), reduzidas a 2048 px. Uma tarefa de teste ou revisão (marca «Tarefa de teste ou revisão») tem a lista
   de notas (Bug / A mudar / A fazer / Nota); um bug maior passa a tarefa própria.
-- **Hierarquia (2026-11-07)**: cada aplicação funciona sozinha; cada capacidade tem um só dono (regras de construção no
+- **Hierarquia (2026-11-06)**: cada aplicação funciona sozinha; cada capacidade tem um só dono (regras de construção no
   Builder, preços na Orçamentação, leitura de ficheiros no Gerador, desenho do cliente e terreno no Build Your House,
   visita 3D no Step Inside). Uma tarefa técnica pertence a um só projeto; os outros têm a tarefa «integrar».
 - **Base de dados**: cada mudança é uma migração nova em `supabase/migrations/NNNN_nome.sql` (nunca editar uma já aplicada).

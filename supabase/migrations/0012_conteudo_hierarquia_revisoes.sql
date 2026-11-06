@@ -1,4 +1,4 @@
--- Conteúdo (2026-11-07), depois de 0011. Do documento de hierarquia e roadmap (aceite com as nossas reservas):
+-- Conteúdo (2026-11-06), depois de 0011. Do documento de hierarquia e roadmap (aceite com as nossas reservas):
 -- Builder · checkpoint para os defeitos geométricos conhecidos (avança sem a listagem de Torres Vedras); Gerador · política
 -- de libertação dos documentos; Orçamentação · modelo de dados com dados de teste e códigos de produto estáveis; 3 decisões
 -- novas; critério de saída nos checkpoints; Fase 0 conjunta do Build Your House e do Step Inside.
@@ -115,7 +115,7 @@ begin
 
   -- ------------------------------------------------------------ decisões novas
   d := pg_temp.dc('build_your_house', null, 'Vendemos o Build Your House e o Step Inside a outras empresas? Quando?',
-    'O documento de hierarquia (2026-11-07) desenha tudo para terceiros: várias organizações, isolamento entre clientes, métodos construtivos de outras empresas. As contas do Design vêm do Hub, por isso vender a terceiros obriga a repensar a entrada. Até decidir, não se constrói para terceiros, mas também não se fecham portas.');
+    'O documento de hierarquia (2026-11-06) desenha tudo para terceiros: várias organizações, isolamento entre clientes, métodos construtivos de outras empresas. As contas do Design vêm do Hub, por isso vender a terceiros obriga a repensar a entrada. Até decidir, não se constrói para terceiros, mas também não se fecham portas.');
   perform pg_temp.op(d, 'Só uso interno por agora', 'Sem trabalho extra; foco em abrir aos nossos clientes.', 'Decidir mais tarde pode obrigar a adaptar dados e contas.', '0 €');
   perform pg_temp.op(d, 'Primeiro o Build Your House a terceiros', 'É o produto mais avançado; receita mais cedo.', 'Exige contas próprias fora do Hub, isolamento por empresa, termos e preços por cliente.', 'Desenvolvimento a estimar');
   perform pg_temp.op(d, 'Os dois, com plataforma para várias organizações', 'Uma base comum para vender os dois.', 'Meses de infraestrutura antes de ter clientes externos.', 'Desenvolvimento a estimar; plano Supabase pago provável');

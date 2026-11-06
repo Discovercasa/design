@@ -4,7 +4,7 @@
 import { carregarSocial } from './social-dados.js';
 import { reduzir, fazerMiniatura, nomeBase } from './imagens.js';
 
-// ordem das abas e das listas (pedido de 2026-11-07)
+// ordem das abas e das listas (pedido de 2026-11-06)
 export const IDS = ['gerador', 'builder', 'orcamentacao', 'build_your_house', 'plataforma_cliente'];
 
 export const E = {

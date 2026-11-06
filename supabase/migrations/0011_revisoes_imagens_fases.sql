@@ -1,4 +1,4 @@
--- Hub (2026-11-07): "anexar imagens às descrições de tarefas/checkpoints"; "adicionar uma opção de decisão sem ser as que
+-- Hub (2026-11-06): "anexar imagens às descrições de tarefas/checkpoints"; "adicionar uma opção de decisão sem ser as que
 -- são apresentadas"; nas tarefas de teste ou revisão "uma lista onde podemos adicionar notas sobre essas revisões/testes"
 -- (bugs, coisas a mudar, coisas a fazer); nas obras "clicar no círculo que corresponde ao estado atual da obra … tanto
 -- isso como regredir"; abas por ordem Início · Gerador de documentos · Builder · Orçamentação · Build Your House · Step

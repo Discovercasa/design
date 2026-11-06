@@ -88,8 +88,8 @@ Why Claude learns the method; "vamos passo a passo" — an overall idea, then an
   GSAP skills, React Bits, taste-skill and impeccable, and a final Playwright check with feedback.
 - **Pending with the user**: confirm the name Step Inside (migrations applied and hub published 2026-11-05).
 
-## App hierarchy (user 2026-11-07)
-Agreed from the user-supplied "HIERARQUIA_E_ROADMAP_INTEGRADO_DISCOVERCASA" document (see registo 2026-11-07):
+## App hierarchy (user 2026-11-06)
+Agreed from the user-supplied "HIERARQUIA_E_ROADMAP_INTEGRADO_DISCOVERCASA" document (see registo 2026-11-06):
 - Each app works alone; each capability has one technical owner; one owner per technical task.
 - Data authority: prices only in Orçamentação; quantities from the Builder; configured design from Build Your House;
   terrain belongs to Smart Land (Build Your House and Step Inside only consume it).
@@ -116,6 +116,8 @@ Agreed from the user-supplied "HIERARQUIA_E_ROADMAP_INTEGRADO_DISCOVERCASA" docu
   daily plan) exist, not imported.
 - Hub tab "Redes sociais" (#/social) built and published 2026-11-06 (design.discovercasa.pt; migrations 0009/0010 applied).
 - Practice (user 2026-11-06): when a planned weekly post is not done, the team moves a later post (the next one, or two ahead) into that week; the hub allows it ("Não feito", "Adiantar um post").
+- Standing rule (user 2026-11-06): whenever we finish a hub task or a hub test/review note, mark it concluded/resolved in the Design hub in the same piece of work, with a notification to the team (rule also in the Design repo `CLAUDE.md`).
+- Hub notifications (user 2026-11-06): per-person seen state (hover 0.6 s, open, or tap the dot marks seen; own actions never unread; phones: tap, no hover). Details: Design repo `supabase/migrations/0014_notificacoes_lidas.sql`, `public/dados/novidades.json`. The Início page must show current data (e.g. a post published in Redes sociais shows "Publicado").
 - Import assumptions (past weeks with caption = Publicado; Nov with caption+photos = Por aprovar; no caption = Ideia, or "Não feito" for past weeks) not objected to by the user 2026-11-06.
 
 ## Working with the user

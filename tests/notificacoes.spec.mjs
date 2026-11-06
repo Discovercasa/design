@@ -1,4 +1,4 @@
-// Notificações vistas uma a uma (2026-11-07): por ver até se passar o rato (0,6 s), se abrir ou se tocar no ponto; as das
+// Notificações vistas uma a uma (2026-11-06): por ver até se passar o rato (0,6 s), se abrir ou se tocar no ponto; as das
 // minhas próprias ações contam como vistas. E o Início com os dados frescos ao mudar de página.
 import { test, expect } from '@playwright/test';
 import { readFileSync } from 'node:fs';

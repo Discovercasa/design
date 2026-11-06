@@ -1241,7 +1241,7 @@ def cobertura(casa, S, out, resumo):
             tpn["n"] += 1
             x += w
         # gutter + downpipes on this eave. No verge trim along the gables: "estás a colocar uma peça de metal ou da cor
-        # do telhado a acompanhar as testeiras dos triângulos e isso não acontece" (user 2026-11-07)
+        # do telhado a acompanhar as testeiras dos triângulos e isso não acontece" (user 2026-11-06)
         cl = C["caleira"]
         yo, yi = y_e + sg * cl["largura"] / 2, y_e - sg * cl["largura"] / 2
         zt = zu(y_e) - 0.02
@@ -1377,7 +1377,7 @@ def cobertura_faces(casa, S, out, resumo):
             nome, pc = ("Cumeeira" if tipo == "cumeeira" else "Remate de rincão"), dobrada(0.20)
         elif tipo == "laro":
             nome, pc = "Caleira de laró", [faixa(0.25, -0.004, 0.0)]
-        elif tipo == "empena":  # no trim along the gable's edge (user 2026-11-07: "isso não acontece")
+        elif tipo == "empena":  # no trim along the gable's edge (user 2026-11-06: "isso não acontece")
             continue
         elif tipo == "encosto":  # on the lower roof's slope (its flange) and up the gable's cladding (its leg)
             pc = [f for f in dobrada(0.10) if f["b"][1][2] < f["b"][0][2] + 1e-6][:1]

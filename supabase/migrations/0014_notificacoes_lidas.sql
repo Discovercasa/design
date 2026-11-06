@@ -1,4 +1,4 @@
--- Notificações vistas uma a uma (2026-11-07): "queria saber quais foram ou não vistas portanto a partir do momento que dão
+-- Notificações vistas uma a uma (2026-11-06): "queria saber quais foram ou não vistas portanto a partir do momento que dão
 -- hover ou clicam na notificação significa que já viram". Cada pessoa guarda as que já viu; as das suas próprias ações
 -- contam como vistas. (perfis.notificacoes_vistas_em continua a valer para "Marcar todas como vistas" das mais antigas.)
 

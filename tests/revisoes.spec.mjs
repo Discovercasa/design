@@ -1,4 +1,4 @@
-// Testes das mudanças de 2026-11-07: imagens nas tarefas e checkpoints, notas de teste/revisão, opção nova numa decisão,
+// Testes das mudanças de 2026-11-06: imagens nas tarefas e checkpoints, notas de teste/revisão, opção nova numa decisão,
 // critério de saída e a fase atual de uma obra com um clique (base simulada: fake-supabase.js + fixtures).
 import { test, expect } from '@playwright/test';
 import { readFileSync } from 'node:fs';

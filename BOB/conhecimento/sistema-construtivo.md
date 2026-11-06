@@ -537,12 +537,12 @@ Structure (confirmed 2026-09-30 / 10-09; photos `fontes/fotos-teto-cobertura/1_`
   battens + counter-battens, a sub-roof, the tile's slope (clay ≥ ≈ 30 % without a continuous sub-roof), its weight on
   the structure — OPEN.
 - **Exposed roof (cobertura à vista)**:
-  - **No trim along the gables (user 2026-11-07, BYH team test)**: on exposed (not hidden) roofs there is no metal or
+  - **No trim along the gables (user 2026-11-06, BYH team test)**: on exposed (not hidden) roofs there is no metal or
     roof-coloured piece along the gable ends ("testeiras dos triângulos") — "isso não acontece"; the user said it could
     be removed at once ("podes já tirar"), before the rest of the roof information. The configurator and the engine
-    (`camadas.py` "Remate lateral") placed one; removed 2026-11-07. Supersedes the 2026-10-29 wording in
+    (`camadas.py` "Remate lateral") placed one; removed 2026-11-06. Supersedes the 2026-10-29 wording in
     `sistema_construtivo.json` `cobertura.remates._doc` ("remates laterais (empenas)" in the roof colour; JSON already
-    corrected 2026-11-07) and the "remate lateral of the gables" in the roof-colour rule below.
+    corrected 2026-11-06) and the "remate lateral of the gables" in the roof-colour rule below.
   - **Panel = Munditelha® (Mundiperfil)** (confirmed 2026-10-22): "Sim exatamente, utilizamos o munditelha da mundiperfil
     tal como no segundo screenshot" — "PAINEL COBERTURA EM POLIURETANO (PUR ou PIR) — PAINEL MUNDITELHA® (Com chapa de Aço
     ou Alumínio lacada) — ESPESSURAS MÉDIAS: 40 - 60 mm", useful width **1000**, wave pitch **200**, relief **45** (mm),
@@ -655,7 +655,7 @@ Structure (confirmed 2026-09-30 / 10-09; photos `fontes/fotos-teto-cobertura/1_`
     sketch before detailing it.
   - **Review 6 (2026-10-29 night, an L in the three roofs; his words in the registo)**: (a) **Flashings and caps in the
     roof colour — a rule**: "aquelas proteções das cumeeiras que têm de ser da cor da cobertura"; the dark grey round the
-    gable "não é suposto" → cumeeira, rincão, laró, remate lateral of the gables (superseded 2026-11-07, see registo: no gable trim), encosto and remate de topo in the
+    gable "não é suposto" → cumeeira, rincão, laró, remate lateral of the gables (superseded 2026-11-06, see registo: no gable trim), encosto and remate de topo in the
     panel's colour (JSON material "Remate cor da cobertura" #8F4E35 since 2026-10-30, was #9A4F33; were RAL 7016); the RAL
     = the Munditelha's: **RAL 8004, confirmed 2026-10-30** ("é o ral 8004"); the flashing pieces Mundiperfil makes: OPEN, B2. Two caps meeting at an angle overlap (0,20 over the node) — "não unida a outra proteção" (a fault,
     the circled zone). (b) **Eave edges coincide**: a gable's verge and the neighbouring wing's eave end in one corner at
@@ -811,7 +811,7 @@ Structure (confirmed 2026-09-30 / 10-09; photos `fontes/fotos-teto-cobertura/1_`
     parapet's cladding and the façade finish goes above (JSON `caleira_oculta.forro_ate_topo` 0,50, `forro_sobre` 0,10).
     ⚠ It departs from his 2026-10-20 words above ("até ao topo") and rests on his 2026-10-28 "o capoto tem que ficar na
     casa toda" (§6, parapets without a gutter): the two rules clash on an ETICS house, and he has not said which wins on a
-    gutter wall taller than 0,50. **2026-11-07 (BYH team test, user)**: on a hidden roof the parapet's inner face that
+    gutter wall taller than 0,50. **2026-11-06 (BYH team test, user)**: on a hidden roof the parapet's inner face that
     stays visible must follow the exterior cladding when it is changed ("se a casa for de capoto o revestimento do
     interior da platibanda que fica à mostra também é de capoto") — the configurator did not update it (bug, to fix);
     consistent with the 2026-10-28 rule below; which lining/cladding applies on a gutter wall > 0,50 is still open. The D2503 sheet (0,80: 0,30 bottom + 0,30 parapet side + 0,10 + 0,10) gives only 0,30 up

@@ -1,4 +1,4 @@
--- Correção (2026-11-07): a regra "quem só vê muda apenas o estado da sua tarefa" (tarefas_antes) também se aplicava às
+-- Correção (2026-11-06): a regra "quem só vê muda apenas o estado da sua tarefa" (tarefas_antes) também se aplicava às
 -- migrações, que correm sem sessão; por isso a 0012 não conseguiu marcar as tarefas de teste/revisão nem mudar a
 -- descrição do teste do configurador. A regra passa a valer só para pessoas com sessão; e repetem-se essas mudanças.
 
