@@ -3,6 +3,7 @@
 // a parte do supabase-js que o hub usa. window.__fake permite agir como outra pessoa.
 (function () {
   const fx = window.__FIXTURE || {};
+  const fs = window.__FIXTURE_SOCIAL || {};   // redes sociais (migração 0010)
   const U = window.__UTILIZADOR || { id: 'u-eu', nome: 'Teste Hub', nivel: 'editar' };
   const OUTRO = { id: 'u-outro', nome: 'Colega Teste' };
   const agora = () => new Date().toISOString();
@@ -12,6 +13,7 @@
     perfis: [{ id: OUTRO.id, nome: OUTRO.nome, criado_em: '2026-11-01T00:00:00Z', notificacoes_vistas_em: '2026-11-01T00:00:00Z' }],
     checkpoints: fx.checkpoints || [], tarefas: fx.tarefas || [], decisoes: fx.decisoes || [], decisoes_opcoes: fx.decisoes_opcoes || [],
     documentos: fx.documentos || [], notificacoes: [], vistos: [],
+    obras: fs.obras || [], obras_fases: fs.obras_fases || [], posts: fs.posts || [], posts_media: fs.posts_media || [], posts_comentarios: fs.posts_comentarios || [],
     sugestoes: [{ id: 1, texto: 'Pôr um modo escuro no hub.', ferramenta: 'geral', estado: 'nova', autor_id: OUTRO.id, autor_nome: OUTRO.nome, criada_em: '2026-11-04T09:00:00Z', na_checklist: false, checklist_em: null }],
     sugestoes_comentarios: [],
   };
@@ -65,11 +67,60 @@
   };
   depois.documentos = (n, o) => { if (!o) notificar(n.projeto, 'documento_novo', `${nomeAtual()} acrescentou o documento «${n.titulo}» (${n.tipo})`, 'documento', n.id); };
   antes.documentos = (n, o) => { if (!o) Object.assign(n, { criado_por: ator.id, criado_por_nome: nomeAtual(), criado_em: agora(), descricao: n.descricao ?? '' }); };
+  // redes sociais (migração 0009): carimbos, aprovação e notificações
+  const carimbo = (n) => Object.assign(n, { criado_por: ator.id, criado_por_nome: nomeAtual(), criado_em: agora() });
+  antes.obras = (n, o) => { if (!o) { carimbo(n); n.descricao ??= ''; n.ativa ??= true; n.ordem ??= 0; } };
+  depois.obras = (n, o) => { if (!o) notificar(null, 'obra_nova', `${nomeAtual()} acrescentou a obra «${n.nome}»`, 'obra', n.id); };
+  antes.obras_fases = (n, o) => {
+    if (!o) { carimbo(n); Object.assign(n, { estado: n.estado ?? 'prevista', periodo: n.periodo ?? '', posts_previstos: n.posts_previstos ?? null, fotos: n.fotos ?? 'por_tirar', visita_em: n.visita_em ?? null, fotos_em: null, notas: n.notas ?? '', concluida_em: n.estado === 'concluida' ? hoje() : null }); }
+    else { n.obra_id = o.obra_id; if (n.estado !== o.estado) n.concluida_em = n.estado === 'concluida' ? hoje() : null; }
+    if (n.fotos === 'tiradas' && (!o || o.fotos !== 'tiradas') && !n.fotos_em) n.fotos_em = hoje();
+    if (n.fotos !== 'tiradas') n.fotos_em = null;
+    if (n.fotos === 'por_tirar') n.visita_em = null;
+  };
+  depois.obras_fases = (n, o) => {
+    const ob = (db.obras.find((x) => x.id === n.obra_id) || {}).nome;
+    if (!o) notificar(null, 'fase_nova', `${nomeAtual()} acrescentou a fase «${n.nome}» à obra ${ob}`, 'obra', n.obra_id);
+    else if (n.estado !== o.estado) notificar(null, 'fase_estado', `${nomeAtual()} marcou ${ob} · ${n.nome} como ${{ concluida: 'concluída', em_curso: 'em curso', prevista: 'prevista' }[n.estado]}`, 'obra', n.obra_id);
+    else if (n.fotos !== o.fotos && n.fotos !== 'por_tirar') notificar(null, 'fase_estado', n.fotos === 'tiradas' ? `${nomeAtual()} tirou as fotos de ${ob} · ${n.nome}` : `${nomeAtual()} marcou a visita para fotos a ${ob} · ${n.nome}`, 'obra', n.obra_id);
+  };
+  antes.posts = (n, o) => {
+    if (!o) { carimbo(n); Object.assign(n, { obra_id: n.obra_id ?? null, fase_id: n.fase_id ?? null, tipo: n.tipo ?? 'carrossel', redes: n.redes ?? ['instagram', 'facebook'], legenda: n.legenda ?? '', notas: n.notas ?? '',
+      estado: n.estado ?? 'ideia', legenda_aprovada: n.legenda_aprovada ?? false, fotos_aprovadas: n.fotos_aprovadas ?? false, legenda_aprovada_por_nome: '', fotos_aprovadas_por_nome: '', legenda_aprovada_em: null, fotos_aprovadas_em: null, publicar_em: null, publicado_em: null }); }
+    n.atualizado_em = agora();
+    if (n.fase_id && !db.obras_fases.some((f) => f.id === n.fase_id && f.obra_id === n.obra_id)) n.fase_id = null;
+    if (o && n.legenda !== o.legenda && o.legenda_aprovada && n.legenda_aprovada) n.legenda_aprovada = false;
+    for (const k of ['legenda', 'fotos']) {
+      if (n[k + '_aprovada' + (k === 'fotos' ? 's' : '')]) {
+        if (!o || !o[k + '_aprovada' + (k === 'fotos' ? 's' : '')]) { n[k + (k === 'fotos' ? '_aprovadas' : '_aprovada') + '_por_nome'] = nomeAtual(); n[k + (k === 'fotos' ? '_aprovadas' : '_aprovada') + '_em'] = hoje(); }
+      } else { n[k + (k === 'fotos' ? '_aprovadas' : '_aprovada') + '_por_nome'] = ''; n[k + (k === 'fotos' ? '_aprovadas' : '_aprovada') + '_em'] = null; }
+    }
+    if (n.legenda_aprovada && n.fotos_aprovadas && ['ideia', 'rascunho', 'por_aprovar'].includes(n.estado)) n.estado = 'aprovado';
+    else if (!(n.legenda_aprovada && n.fotos_aprovadas) && n.estado === 'aprovado') n.estado = 'por_aprovar';
+    if (n.estado === 'publicado') { if (!n.publicado_em && (!o || o.estado !== 'publicado')) n.publicado_em = hoje(); } else n.publicado_em = null;
+  };
+  const ROTP = { ideia: 'Ideia', rascunho: 'Rascunho', por_aprovar: 'Por aprovar', aprovado: 'Aprovado', publicado: 'Publicado' };
+  depois.posts = (n, o) => {
+    const t = `«${n.titulo}»`;
+    if (!o) return notificar(null, 'post_novo', `${nomeAtual()} planeou o post ${t}`, 'post', n.id);
+    if (n.legenda_aprovada && !o.legenda_aprovada && n.fotos_aprovadas && !o.fotos_aprovadas) notificar(null, 'post_aprovacao', `${nomeAtual()} aprovou a legenda e as fotos do post ${t}`, 'post', n.id);
+    else if (n.legenda_aprovada && !o.legenda_aprovada) notificar(null, 'post_aprovacao', `${nomeAtual()} aprovou a legenda do post ${t}`, 'post', n.id);
+    else if (n.fotos_aprovadas && !o.fotos_aprovadas) notificar(null, 'post_aprovacao', `${nomeAtual()} aprovou as fotos do post ${t}`, 'post', n.id);
+    if (n.estado !== o.estado) notificar(null, 'post_estado', n.estado === 'por_aprovar' ? `${nomeAtual()} pediu aprovação do post ${t}` : n.estado === 'publicado' ? `${nomeAtual()} publicou o post ${t}` : `${nomeAtual()} mudou o post ${t} para ${ROTP[n.estado]}`, 'post', n.id);
+  };
+  const desaprovarFotos = (postId) => { const p = db.posts.find((x) => x.id === postId); if (p && p.fotos_aprovadas) { const o = copia(p); p.fotos_aprovadas = false; antes.posts(p, o); depois.posts(p, o); } };
+  antes.posts_media = (n, o) => { if (!o) { carimbo(n); n.ordem ??= 0; } else { n.caminho = o.caminho; n.miniatura = o.miniatura; n.post_id = o.post_id; } };
+  depois.posts_media = (n, o) => { if (!o) desaprovarFotos(n.post_id); };
+  antes.posts_comentarios = (n, o) => { if (!o) Object.assign(n, { autor_id: ator.id, autor_nome: nomeAtual(), criado_em: agora(), resolvido: n.resolvido ?? false, media_id: n.media_id ?? null }); };
+  depois.posts_comentarios = (n, o) => { if (!o) notificar(null, 'post_comentario', `${nomeAtual()} comentou o post «${(db.posts.find((x) => x.id === n.post_id) || {}).titulo}»: ${n.texto.slice(0, 120)}`, 'post', n.post_id); };
   // em direto: cada escrita avisa os canais abertos (como o Supabase Realtime)
   const ouvintes = [];
   const avisar = (t) => setTimeout(() => ouvintes.filter((o) => o.tabela === t).forEach((o) => o.cb({ table: t })), 30);
   // armazenamento privado: guarda só os nomes e os tamanhos
   const ficheiros = new Map((fx.documentos || []).map((d) => [d.caminho, d.tamanho]));
+  // armazenamento "social": caminho → URL do ficheiro (os importados mostram uma imagem qualquer)
+  const social = new Map((fs.posts_media || []).flatMap((m) => [[m.caminho, null], [m.miniatura, null]]));
+  const urlSocial = (c) => social.get(c) || '/img/icone-192.png';
   const FILHOS = { decisoes_opcoes: ['decisoes', 'decisao_id'], sugestoes_comentarios: ['sugestoes', 'sugestao_id'] };
   const copia = (o) => JSON.parse(JSON.stringify(o));
 
@@ -113,6 +164,9 @@
           db[this.t] = tab.filter((r) => !fora.includes(r));
           if (this.t === 'checkpoints') db.tarefas = db.tarefas.filter((t) => !fora.some((c) => c.id === t.checkpoint_id));
           if (this.t === 'decisoes') db.decisoes_opcoes = db.decisoes_opcoes.filter((o) => !fora.some((d) => d.id === o.decisao_id));
+          if (this.t === 'posts') { db.posts_media = db.posts_media.filter((m) => !fora.some((p) => p.id === m.post_id)); db.posts_comentarios = db.posts_comentarios.filter((c) => !fora.some((p) => p.id === c.post_id)); }
+          if (this.t === 'posts_media') { fora.forEach((m) => desaprovarFotos(m.post_id)); db.posts_comentarios.forEach((c) => { if (fora.some((m) => m.id === c.media_id)) c.media_id = null; }); }
+          if (this.t === 'obras_fases' || this.t === 'obras') throw new Error('permission denied: as fases e as obras não se apagam');
           linhas = fora;
         } else {
           // como o PostgREST: decisoes ↔ decisoes_opcoes têm duas chaves estrangeiras, o embed sem "!<fk>" falha
@@ -159,7 +213,12 @@
         }
         return { data: null, error: { message: `function ${fn} does not exist` } };
       },
-      storage: { from: () => ({
+      storage: { from: (balde) => (balde === 'social' ? {
+        upload: async (c, f) => { if (social.has(c)) return { data: null, error: { message: 'The resource already exists' } }; social.set(c, URL.createObjectURL(f)); return { data: { path: c }, error: null }; },
+        createSignedUrls: async (cs) => ({ data: cs.map((c) => ({ path: c, signedUrl: social.has(c) ? urlSocial(c) : null, error: social.has(c) ? null : 'Object not found' })), error: null }),
+        createSignedUrl: async (c) => (social.has(c) ? { data: { signedUrl: urlSocial(c) }, error: null } : { data: null, error: { message: 'Object not found' } }),
+        remove: async (lista) => { lista.forEach((c) => social.delete(c)); return { data: lista, error: null }; },
+      } : {
         upload: async (caminho, f) => { if (ficheiros.has(caminho)) return { data: null, error: { message: 'The resource already exists' } }; ficheiros.set(caminho, f.size); return { data: { path: caminho }, error: null }; },
         createSignedUrl: async (caminho, s, o) => (ficheiros.has(caminho) ? { data: { signedUrl: `/__ficheiro?c=${encodeURIComponent(caminho)}${o && o.download ? '&download' : ''}` }, error: null } : { data: null, error: { message: 'Object not found' } }),
         remove: async (lista) => { lista.forEach((c) => ficheiros.delete(c)); return { data: lista, error: null }; },
@@ -177,7 +236,7 @@
   };
   // nos testes: agir como outra pessoa (acrescentar, concluir…) e ver a base
   window.__fake = {
-    db, OUTRO, ficheiros,
+    db, OUTRO, ficheiros, social,
     async comoOutro(fn) { ator = OUTRO; try { return await fn(new Proxy({}, { get: (_, t) => new Q(t) })); } finally { ator = U; } },
   };
 })();

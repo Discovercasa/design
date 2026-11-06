@@ -1,5 +1,7 @@
 // Dados do hub: o texto fixo de cada projeto (public/dados/projetos/<id>.json) e o que muda (Supabase: checkpoints,
 // tarefas, decisões, perfis, vistos, notificações; migrações 0004/0005). Tudo passa por aqui.
+// As redes sociais (obras, fases, posts) carregam-se em social-dados.js e ficam também em E.
+import { carregarSocial } from './social-dados.js';
 
 export const IDS = ['build_your_house', 'builder', 'gerador', 'orcamentacao', 'plataforma_cliente'];
 
@@ -8,6 +10,7 @@ export const E = {
   perfil: null,            // a minha linha em perfis
   projetos: [],            // JSON de cada projeto
   checkpoints: [], tarefas: [], decisoes: [], perfis: [], notificacoes: [], documentos: [],
+  obras: [], fases: [], posts: [], media: [], comentarios: [], socialErro: null,   // redes sociais
   vistos: new Set(),       // "tarefa:12"
   novos: new Set(),        // o que é novo para mim nesta visita (mostra a etiqueta "Novo")
   erro: null,
@@ -49,7 +52,10 @@ export async function carregarTudo() {
     sb().from('perfis').select('id, nome'),
     sb().from('vistos').select('tipo, ref_id'),
   ]);
-  const docs = await sb().from('documentos').select('*').order('criado_em');   // à parte: sem esta tabela o resto continua
+  const [docs] = await Promise.all([
+    sb().from('documentos').select('*').order('criado_em'),   // à parte: sem esta tabela o resto continua
+    carregarSocial(),                                          // idem (migração 0009)
+  ]);
   const falha = r.find((x) => x.error);
   if (falha) throw falha.error;
   [E.checkpoints, E.tarefas, E.decisoes, E.perfis] = r.map((x) => x.data);
@@ -68,6 +74,8 @@ export function porVer() {
     ...E.tarefas.filter((x) => novo('tarefa', x)).map((x) => ({ tipo: 'tarefa', x })),
     ...E.decisoes.filter((x) => novo('decisao', x)).map((x) => ({ tipo: 'decisao', x })),
     ...E.documentos.filter((x) => novo('documento', x)).map((x) => ({ tipo: 'documento', x })),
+    ...E.posts.filter((x) => novo('post', x)).map((x) => ({ tipo: 'post', x })),
+    ...E.obras.filter((x) => novo('obra', x)).map((x) => ({ tipo: 'obra', x })),
   ];
 }
 export async function marcarVistos(itens) {
@@ -172,7 +180,7 @@ export async function apagarDocumento(doc) {
 // ---------------------------------------------------------------- em direto: qualquer mudança chega a quem tem o hub aberto
 export function ouvirMudancas(aoMudar) {
   const canal = sb().channel('hub-mudancas');
-  for (const t of ['checkpoints', 'tarefas', 'decisoes', 'decisoes_opcoes', 'documentos', 'notificacoes'])
+  for (const t of ['checkpoints', 'tarefas', 'decisoes', 'decisoes_opcoes', 'documentos', 'notificacoes', 'obras', 'obras_fases', 'posts', 'posts_media', 'posts_comentarios'])
     canal.on('postgres_changes', { event: '*', schema: 'public', table: t }, () => aoMudar(t));
   canal.subscribe();
   return canal;

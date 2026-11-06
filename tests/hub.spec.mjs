@@ -5,6 +5,7 @@ import { readFileSync, mkdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
 const FIXTURE = readFileSync(new URL('./fixture.json', import.meta.url), 'utf8');
+const FIXTURE_SOCIAL = readFileSync(new URL('./fixture_social.json', import.meta.url), 'utf8');
 const FAKE = readFileSync(new URL('./fake-supabase.js', import.meta.url), 'utf8');
 mkdirSync(new URL('./capturas/', import.meta.url), { recursive: true });
 const captura = (page, nome) => page.screenshot({ path: fileURLToPath(new URL(`./capturas/${nome}-${test.info().project.name}.png`, import.meta.url)), fullPage: true });
@@ -13,7 +14,7 @@ async function abrir(page, { utilizador, semSessao = false, rota = '/' } = {}) {
   const erros = [];
   page.on('pageerror', (e) => erros.push(e.message));
   page.on('console', (m) => { if (m.type() === 'error' && !/fonts\.g|Failed to load resource/.test(m.text())) erros.push(m.text()); });
-  await page.addInitScript(([fx, u, s]) => { window.__FIXTURE = JSON.parse(fx); if (u) window.__UTILIZADOR = u; if (s) window.__SEM_SESSAO = true; }, [FIXTURE, utilizador || null, semSessao]);
+  await page.addInitScript(([fx, fs, u, s]) => { window.__FIXTURE = JSON.parse(fx); window.__FIXTURE_SOCIAL = JSON.parse(fs); if (u) window.__UTILIZADOR = u; if (s) window.__SEM_SESSAO = true; }, [FIXTURE, FIXTURE_SOCIAL, utilizador || null, semSessao]);
   await page.route('**/@supabase/supabase-js@*/**', (r) => r.fulfill({ contentType: 'text/javascript', body: FAKE }));
   await page.goto(rota);
   return erros;
@@ -30,8 +31,8 @@ test('sem sessão mostra a entrada com a conta do Hub', async ({ page }) => {
 
 test('Início: barra de navegação, projetos, ligações, decisões e feito', async ({ page }) => {
   const erros = await abrir(page);
-  const nav = page.getByRole('navigation', { name: 'Projetos' });
-  await expect(nav.getByRole('link')).toHaveText(['Início', 'Build Your House', 'Builder', 'Gerador de documentos', 'Orçamentação', 'Step Inside']);
+  const nav = page.getByRole('navigation', { name: 'Secções' });
+  await expect(nav.getByRole('link')).toHaveText(['Início', 'Build Your House', 'Builder', 'Gerador de documentos', 'Orçamentação', 'Step Inside', 'Redes sociais']);
   await expect(nav.getByRole('link', { name: 'Início' })).toHaveAttribute('aria-current', 'page');
   await expect(page.getByRole('heading', { level: 1 })).toContainText('Teste');
   const linhas = page.locator('.projeto-linha');
@@ -53,7 +54,7 @@ test('Início: barra de navegação, projetos, ligações, decisões e feito', a
 
 test('página do Build Your House: primeiro o estado, depois o botão para a app', async ({ page }) => {
   await abrir(page);
-  await page.getByRole('navigation', { name: 'Projetos' }).getByRole('link', { name: 'Build Your House' }).click();
+  await page.getByRole('navigation', { name: 'Secções' }).getByRole('link', { name: 'Build Your House' }).click();
   await expect(page).toHaveURL(/#\/projeto\/build-your-house$/);
   await expect(page.getByRole('heading', { level: 1, name: 'Build Your House' })).toBeVisible();
   const botao = page.getByRole('link', { name: /Abrir o Build Your House/ });
@@ -121,7 +122,7 @@ test('checkpoints e tarefas: acrescentar no Início e no projeto, concluir com a
   await dlg.getByLabel('Título').fill('Comparar dois fornecedores de OSB');
   await dlg.getByRole('button', { name: 'Acrescentar', exact: true }).click();
   await expect(dlg).toBeHidden();
-  await page.getByRole('navigation', { name: 'Projetos' }).getByRole('link', { name: 'Orçamentação' }).click();
+  await page.getByRole('navigation', { name: 'Secções' }).getByRole('link', { name: 'Orçamentação' }).click();
   const passo = page.locator('.passo', { hasText: 'Comparar dois fornecedores de OSB' });
   await passo.locator('.passo-topo').click();
   await passo.getByLabel('Nova tarefa neste checkpoint').fill('Pedir preço ao fornecedor A');
@@ -234,8 +235,8 @@ test('perfil: área pessoal, definições (nome, tema), novidades e sair', async
   await captura(page, 'inicio-escuro');
   await page.getByRole('button', { name: 'Perfil' }).click();
   await page.locator('#pop-perfil').getByRole('menuitem', { name: /Novidades/ }).click();
-  await expect(page.locator('.novidade').first()).toContainText('Documentos, posições e atualização em direto');
-  await expect(page.locator('.novidade').nth(1)).toContainText('Novo hub de projetos');
+  await expect(page.locator('.novidade').first()).toContainText('Redes sociais');
+  await expect(page.locator('.novidade').nth(1)).toContainText('Documentos, posições e atualização em direto');
   await page.getByRole('button', { name: 'Perfil' }).click();
   await page.locator('#pop-perfil').getByRole('menuitem', { name: 'Sair' }).click();
   await expect(page.getByRole('button', { name: 'Entrar com a conta do Hub' })).toBeVisible();
@@ -261,7 +262,7 @@ test('sem as tabelas novas: aviso claro e o resto do hub funciona', async ({ pag
 
 test('sem deslocamento horizontal e páginas a caber no ecrã', async ({ page }) => {
   await abrir(page);
-  for (const rota of ['/#/', '/#/projeto/step-inside', '/#/projeto/builder', '/#/projeto/gerador', '/#/projeto/orcamentacao', '/#/projeto/build-your-house', '/#/pessoal', '/#/definicoes', '/#/novidades']) {
+  for (const rota of ['/#/', '/#/projeto/step-inside', '/#/projeto/builder', '/#/projeto/gerador', '/#/projeto/orcamentacao', '/#/projeto/build-your-house', '/#/pessoal', '/#/definicoes', '/#/novidades', '/#/social', '/#/social/obras']) {
     await page.goto(rota);
     await page.waitForTimeout(150);
     // innerWidth cresce no telemóvel quando algo é largo demais: compara com a largura real do ecrã

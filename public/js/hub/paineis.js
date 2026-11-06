@@ -15,7 +15,7 @@ export function htmlNotificacoes() {
   const nl = new Set(naoLidas().map((n) => n.id));
   return `<div class="pop-cabeca"><h2>Notificações</h2>${nl.size ? '<button class="btn pequeno texto" type="button" data-acao="ler-todas">Marcar como lidas</button>' : ''}</div>
     <div class="pop-corpo">${E.notificacoes.length ? E.notificacoes.map((n) => `<button type="button" class="notif${nl.has(n.id) ? ' nao-lida' : ''}" data-acao="ir-notif" data-projeto="${esc(n.projeto || '')}" data-ref="${esc(n.ref_tipo || '')}" data-id="${n.ref_id || ''}">
-      <span class="ponto" aria-hidden="true"></span><span><p>${esc(n.texto)}</p><p class="quando">${esc(nomeProjeto(n.projeto))} · ${ha(n.criada_em)}${nl.has(n.id) ? ' · <span class="so-leitor">não lida</span>' : ''}</p></span></button>`).join('')
+      <span class="ponto" aria-hidden="true"></span><span><p>${esc(n.texto)}</p><p class="quando">${esc(n.projeto ? nomeProjeto(n.projeto) : 'Redes sociais')} · ${ha(n.criada_em)}${nl.has(n.id) ? ' · <span class="so-leitor">não lida</span>' : ''}</p></span></button>`).join('')
       : '<p class="suave pequeno" style="padding:16px">Sem notificações. Aparecem aqui quando alguém atribui, muda ou conclui uma tarefa.</p>'}</div>`;
 }
 
