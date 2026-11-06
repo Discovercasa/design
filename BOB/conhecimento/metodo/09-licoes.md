@@ -216,3 +216,12 @@ circled (`discovercasa.md`).
   the questionnaire, and the geometry that depends on it stays easy to change (a JSON key) → §7 (06, 11), §8, §11, §15; JSON
   `caleira_oculta.tubo` / `caleira_pequena`, `pergola.maximo`. (His reading of Torres Vedras, 2026-10-30 later still: a
   project "usado para tu aprenderes sobre nós e nós irmos também avaliando as tuas sugestões" — Legend, index.)
+- **L71** (configurator, 2026-11-07) Two roof details drawn wrongly. (a) **Gable trim on the exposed roof**: the engine added
+  a "Remate lateral" (metal or roof-coloured piece) along the testeiras of the triangles ("Quando é sem ser oculta estas a
+  colocar uma peça de metal ou da cor do telhado a acompanhar as testeiras dos triângulos e isso não acontece") → the
+  exposed sandwich roof has NO trim along the gables (E8, §7; supersedes the remates laterais of the draft / E7 / L69's trims)
+  → `camadas.cobertura` and `cobertura_faces` (removed), JSON `cobertura.remates._doc`. Rule: do not carry a piece from the
+  draft parts list into the model unless he has seen it built. (b) **Parapet's roof-side face in a fixed colour**: the
+  configurator painted the engine's parapet cladding pieces in one colour, so the face did not follow a change of façade
+  cladding (capoto house must show capoto there — "o capoto tem que ficar na casa toda", L52) → drawn in the façade's own
+  material (§7 Parapets, 06).

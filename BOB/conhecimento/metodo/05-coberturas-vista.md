@@ -20,7 +20,7 @@
   sentido tu sabes que elas estão "coladas" à cobertura" — confirmed (ridge caps) / ours (the others, the same detail) —
   `camadas.cobertura_faces` (`dobrada`), `camadas.cobertura_platibanda` (L55). "Coladas" to the eye: under the cap a
   profile closure / filler on the ribs, sealed — general practice (CM §4) — not in the tools.
-- **Every roof flashing and cap is in the roof's colour — cumeeira, rincão, laró, remate lateral, encosto, remate de topo —
+- **Every roof flashing and cap is in the roof's colour — cumeeira, rincão, laró, ~~remate lateral~~ (superseded 2026-11-07: no gable trim, E8), encosto, remate de topo —
   never grey** — user 2026-10-29 (night) "aquelas proteções das cumeeiras que têm de ser da cor da cobertura"; the grey
   round the empena's triangle "não é suposto" — confirmed (caps; the other pieces ours, the same detail) — JSON
   `cobertura.remates.material` "Remate cor da cobertura" (#8F4E35 = RAL 8004 since 2026-10-30, once he named the panel's RAL;
@@ -85,7 +85,8 @@
   apenas para sobral", 2026-10-30), never copied. From Mundiperfil's
   data sheet, still to read: minimum slope (vs 15 % faces, ≈ 10,6 % larós), purlin span (vs ≤ 1,2), overhang allowed (vs
   0,50), ridge / rincão / laró / verge pieces, closures — OPEN; the order unit missing (X11). Draft's parts kept: ridge
-  (2 slopes), sealing tape between panels, remates laterais, Turbosharp 6×160 — company document.
+  (2 slopes), sealing tape between panels, remates laterais (superseded 2026-11-07: none on the gables, E8), Turbosharp
+  6×160 — company document.
 - **Slope: by the look the client wants, minimum 15 % (≈ 8,5°)** — user 2026-10-21 "A inclinação mínima da cobertura à
   vista é 15 %"; "Depende do aspeto que o cliente queira" — confirmed — JSON **`cobertura.inclinacao_min_avista_pct` 15**
   (read by `para_construtor.py` — a note under it, not a refusal — and the configurator's `INCLINACAO_MIN`); our default =
@@ -170,7 +171,7 @@
   (cladding to the panel, a profile closure / comb filler, a vent with insect mesh for the cold attic): OPEN (§15 B4) — general
   practice: closures under the profile at eaves and ridge, the attic ventilated — not in the tools.
 - [cfgr] **The screen draws each roof as the engine builds it** — the exposed roof's gutters, downpipes, ridge / rincão caps,
-  caleiras de laró, verge trims, abutment flashings from `camadas.py` (worker `cobertura_casa`) — user 2026-10-28 "faltam
+  caleiras de laró, abutment flashings (verge trims removed 2026-11-07, E8) from `camadas.py` (worker `cobertura_casa`) — user 2026-10-28 "faltam
   calheiras, tubos de queda e esses elementos" — confirmed (they must show) — L48.
 
 ### Exposed roof — the build, in order
@@ -238,8 +239,12 @@ engineer's drawings by `estrutura_dc.py` + `camadas.cobertura`.
   ours (the build, the packing) — `telhado_estrutura.construir` ("Calço da empena"); `auditar_cobertura.py` checks the
   empenas' members against the roof timber (L60).
 - **E7 Panels**: Munditelha (above), **one length per slope** from the eave edge (frame face + beirado) to the ridge, laid
-  from one end, screwed to every purlin (Turbosharp 6×160), sealing tape between panels, remates laterais on every empena
-  — draft + user 2026-10-22 — company document / confirmed — `camadas.cobertura`. Closures under the profile at eaves and
+  from one end, screwed to every purlin (Turbosharp 6×160), sealing tape between panels, ~~remates laterais on every empena~~
+  (superseded 2026-11-07: NO trim along the gables, **E8**) — draft + user 2026-10-22 — company document / confirmed — `camadas.cobertura`.
+  **E8 (2026-11-07) No trim / flashing along the gables (testeiras dos triângulos) of the exposed sandwich roof** — user
+  2026-11-07 "Quando é sem ser oculta estas a colocar uma peça de metal ou da cor do telhado a acompanhar as testeiras dos
+  triângulos e isso não acontece." — confirmed — the engine's "Remate lateral" removed from `camadas.cobertura` and
+  `cobertura_faces`; JSON `cobertura.remates._doc` corrected (L71). Ridge, rincão, laró and abutment caps stay. Closures under the profile at eaves and
   caps — general practice — not in the tools. Engine: faces ✓; one area per face, no lengths, widths, waste or closures —
   X11.
 - **E8 Gutters and downpipes**: an **exterior gutter along every eave** under the panel edge (draft "Caleira exterior e

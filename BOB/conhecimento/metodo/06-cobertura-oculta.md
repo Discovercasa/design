@@ -152,7 +152,9 @@
   que ficar na casa toda a cobertura não tem um revestimento ou isolamento diferente" — confirmed (the façade finish on
   the roof side) / assumed (OSB 15 + Traspir under capoto / cork, from TV's list) — `camadas.camadas_platibanda` (OSB 15
   + Traspir of JSON `cobertura.platibanda_interior.camadas` + the layers of `exterior.opcoes[opcao_visivel]`),
-  `camadas.platibanda_interior`, [cfgr] worker `cobertura_casa` (L52). (was TV's Tremolo list on every house until
+  `camadas.platibanda_interior`, [cfgr] worker `cobertura_casa` (L52). **Reconfirmed 2026-11-07: the roof-side face that stays
+  visible takes the SAME cladding as the façade (capoto house → capoto there); the configurator's screen draws that face in
+  the façade's own material, not a fixed colour (L71).** (was TV's Tremolo list on every house until
   2026-10-28.) **What goes under the capoto there: OPEN** — ⚠ ours: with capoto both faces of the parapet are XPS (Sd
   ≈ 6–9 m each) under a metal chapéu → the frame and its wool cannot dry → a vapour-open board (wood fibre / cork) on the
   roof side, or no wool there; the capoto's foot over the panels / flashing on a starter track with a drip, its lowest

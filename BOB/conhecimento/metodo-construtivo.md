@@ -6,6 +6,8 @@ How DiscoverCasa builds a house, ordered like the work on site. Kept by the agen
 version, how to use the book, the section map and the legend; the rules are in `conhecimento/metodo/`, one file per topic,
 text unchanged, § numbers and rule IDs kept ("rulebook §7", "metodo-construtivo.md §13" resolve through the map below).
 
+**Version 8.9, 2026-11-07** — **no trim along the gables of the exposed roof** (E8, L71; supersedes the remates laterais) and the
+parapet's visible roof-side face is drawn in the façade's own cladding (06, L71).
 **Version 8.8, 2026-10-30 (later still)** — latest notes. **v8.8** (his answers to our five points): **the hidden-roof downpipe is
 100 × 50** ("Sim usa de 100x50": ≈ 50 m² per pipe, his L 4 pipes not 7, [TV] 2 = as built; fits the standard Tremolo cavity —
 contra-ripado 20 + ripado 35 —, a local recess in cork / XPS where shallower, never a hole in the visible boards: one more

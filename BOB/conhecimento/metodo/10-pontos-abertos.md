@@ -62,7 +62,7 @@ roof items (old 1, 4, 5, 6, 8, 10, 11, 13, 15, 19, 20, 21; the other numbers bel
     minimum slope (15 % faces, ≈ 10,6 % larós), purlin span (≤ 1,2), overhang (0,50) (PO Q15). **The RAL: ANSWERED
     2026-10-30 — RAL 8004** (#8F4E35; "é o ral 8004").
   - **B2** Flashings in the panel colour (done 2026-10-29 night; RAL 8004 since 2026-10-30) and Mundiperfil's own pieces
-    (cumeeira, rincão, laró, remate lateral); does the hidden roof's chapéu follow the colour?
+    (cumeeira, rincão, laró; remate lateral superseded 2026-11-07, E8); does the hidden roof's chapéu follow the colour?
   - **B3** Verge = eave overhang (done 2026-10-29 night): confirm, and any maximum for the verge.
   - **B4** The eave line closed underneath: cladding to the panel, a profile closure / comb filler, a vent with mesh.
   - **B5** A maximum slope; one slope per house (now: ≥ 15 %, the configurator's 100 % cap).

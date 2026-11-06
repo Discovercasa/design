@@ -537,9 +537,12 @@ Structure (confirmed 2026-09-30 / 10-09; photos `fontes/fotos-teto-cobertura/1_`
   battens + counter-battens, a sub-roof, the tile's slope (clay ≥ ≈ 30 % without a continuous sub-roof), its weight on
   the structure — OPEN.
 - **Exposed roof (cobertura à vista)**:
-  - **Gable-end flashing (user 2026-11-07, BYH team test)**: when the roof is not hidden, a metal piece (or in the roof
-    colour) runs along the gable ends ("testeiras dos triângulos") — the configurator did not draw it (bug, fixable now,
-    before the user gives all the roof information). Profile, size and name of the piece not yet given (OPEN; ask).
+  - **No trim along the gables (user 2026-11-07, BYH team test)**: on exposed (not hidden) roofs there is no metal or
+    roof-coloured piece along the gable ends ("testeiras dos triângulos") — "isso não acontece"; the user said it could
+    be removed at once ("podes já tirar"), before the rest of the roof information. The configurator and the engine
+    (`camadas.py` "Remate lateral") placed one; removed 2026-11-07. Supersedes the 2026-10-29 wording in
+    `sistema_construtivo.json` `cobertura.remates._doc` ("remates laterais (empenas)" in the roof colour; JSON already
+    corrected 2026-11-07) and the "remate lateral of the gables" in the roof-colour rule below.
   - **Panel = Munditelha® (Mundiperfil)** (confirmed 2026-10-22): "Sim exatamente, utilizamos o munditelha da mundiperfil
     tal como no segundo screenshot" — "PAINEL COBERTURA EM POLIURETANO (PUR ou PIR) — PAINEL MUNDITELHA® (Com chapa de Aço
     ou Alumínio lacada) — ESPESSURAS MÉDIAS: 40 - 60 mm", useful width **1000**, wave pitch **200**, relief **45** (mm),
@@ -652,7 +655,7 @@ Structure (confirmed 2026-09-30 / 10-09; photos `fontes/fotos-teto-cobertura/1_`
     sketch before detailing it.
   - **Review 6 (2026-10-29 night, an L in the three roofs; his words in the registo)**: (a) **Flashings and caps in the
     roof colour — a rule**: "aquelas proteções das cumeeiras que têm de ser da cor da cobertura"; the dark grey round the
-    gable "não é suposto" → cumeeira, rincão, laró, remate lateral of the gables, encosto and remate de topo in the
+    gable "não é suposto" → cumeeira, rincão, laró, remate lateral of the gables (superseded 2026-11-07, see registo: no gable trim), encosto and remate de topo in the
     panel's colour (JSON material "Remate cor da cobertura" #8F4E35 since 2026-10-30, was #9A4F33; were RAL 7016); the RAL
     = the Munditelha's: **RAL 8004, confirmed 2026-10-30** ("é o ral 8004"); the flashing pieces Mundiperfil makes: OPEN, B2. Two caps meeting at an angle overlap (0,20 over the node) — "não unida a outra proteção" (a fault,
     the circled zone). (b) **Eave edges coincide**: a gable's verge and the neighbouring wing's eave end in one corner at
