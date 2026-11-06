@@ -126,7 +126,18 @@ window.addEventListener('hashchange', () => {
   if (chaveRota === rotaAnterior && r.alvo) return irPara(r.alvo);
   rotaAnterior = chaveRota;
   desenhar(true);
+  refrescarAoMudar();
 });
+// os dados de novo a cada mudança de página; só redesenha se algo mudou (sem interromper a entrada da página)
+const assinatura = () => JSON.stringify([E.checkpoints, E.tarefas, E.decisoes, E.documentos, E.posts, E.fases, E.obras, E.notas, E.anexos].map((l) => l.length))
+  + JSON.stringify([E.tarefas, E.checkpoints, E.posts, E.fases, E.notas].map((l) => l.map((x) => x.estado ?? x.resolvida).join()));
+async function refrescarAoMudar() {
+  if (E.erro) return;
+  const antes = assinatura();
+  try { await D.carregarTudo(); await D.carregarNotificacoes(); } catch (_) { return; }
+  atualizarContador();
+  if (assinatura() !== antes && !dlg.open && !document.activeElement.matches('input, textarea, select')) desenhar(false);
+}
 rotaAnterior = (() => { const r = rota(); return r.nome + (r.p ? r.p.id : '') + (r.sub || ''); })();
 luz($('#vista'));
 SO.ligar({ dlg, desenhar, depois, tentar });
@@ -177,15 +188,17 @@ async function atualizar() {
 // em direto: uma mudança feita por qualquer pessoa (ou noutra janela) atualiza já todos os sítios onde aparece
 let emDiretoEspera = null, mudouNotificacoes = false;
 function emDireto(tabela) {
-  if (tabela === 'notificacoes') mudouNotificacoes = true;
+  if (tabela === 'notificacoes' || tabela === 'notificacoes_lidas') mudouNotificacoes = true;
   clearTimeout(emDiretoEspera);
   emDiretoEspera = setTimeout(async () => {
     try {
       const novas = mudouNotificacoes ? await D.carregarNotificacoes() : [];
       mudouNotificacoes = false;
       await D.carregarTudo();
-      novas.slice(0, 3).forEach((n) => aviso(esc(n.texto), { icone: 'sino', acoes: [{ rotulo: 'Ver', fazer: () => irNotif(n.projeto, n.ref_tipo, n.ref_id) }] }));
+      novas.slice(0, 3).forEach((n) => aviso(esc(n.texto), { icone: 'sino', acoes: [{ rotulo: 'Ver', fazer: () => { marcarNotif(n.id, true); irNotif(n.projeto, n.ref_tipo, n.ref_id); } }] }));
       atualizarContador();
+      const pop = $('#pop-notificacoes');
+      if (!pop.hidden && !pop.querySelector('[data-espera]')) pop.innerHTML = P.htmlNotificacoes();   // outra janela viu uma
       if (!dlg.open && !document.activeElement.matches('input, textarea, select')) desenhar(false);
       SO.aoMudar();
       refrescarAnexosDlg();
@@ -193,6 +206,27 @@ function emDireto(tabela) {
     } catch (_) { /* tenta na próxima mudança ou no relógio */ }
   }, 350);
 }
+
+// notificação vista (ou de novo por ver): a linha e o contador mudam já; a base de dados guarda-o
+async function marcarNotif(id, lida) {
+  if (!id) return;
+  try { await D.marcarLida(id, lida); } catch (_) { /* fica como estava */ }
+  const linha = document.querySelector(`#pop-notificacoes .notif[data-notif="${id}"]`), n = E.notificacoes.find((x) => x.id === id);
+  if (linha && n) linha.outerHTML = P.linhaNotif(n);
+  const resumo = $('#pop-notificacoes [data-por-ver]'), k = D.naoLidas().length;
+  if (resumo) resumo.textContent = k ? `${k} por ver` : 'Tudo visto';
+  atualizarContador();
+}
+// com o rato: vista depois de 0,6 s por cima (no telemóvel não há hover: abre-se ou toca-se no ponto)
+document.addEventListener('pointerover', (e) => {
+  if (e.pointerType !== 'mouse') return;
+  const linha = e.target.closest && e.target.closest('#pop-notificacoes .notif.nao-lida');
+  if (!linha || linha.dataset.espera) return;
+  linha.dataset.espera = '1';
+  const id = Number(linha.dataset.notif);
+  const t = setTimeout(() => { if (linha.isConnected && linha.matches(':hover')) marcarNotif(id, true); else delete linha.dataset.espera; }, 600);
+  linha.addEventListener('pointerleave', () => { clearTimeout(t); delete linha.dataset.espera; }, { once: true });
+});
 
 // pop-up na primeira vez que vejo um checkpoint, tarefa ou decisão acrescentados por outra pessoa
 function mostrarNovos() {
@@ -232,7 +266,11 @@ function abrirPop(botao, pop, html) {
   pop.innerHTML = html;
   const r = botao.getBoundingClientRect();
   pop.style.top = `${r.bottom + 8}px`;
-  pop.style.right = `${Math.max(16, window.innerWidth - r.right)}px`;
+  // encostada ao botão, mas sempre dentro do ecrã (no telemóvel o botão está perto da margem e a lista é larga)
+  const largura = Math.min(380, window.innerWidth - 32);
+  let direita = Math.max(16, window.innerWidth - r.right);
+  if (window.innerWidth - direita - largura < 16) direita = 16;
+  pop.style.right = `${direita}px`;
   pop.hidden = false;
   botao.setAttribute('aria-expanded', 'true');
   if (mov()) gsap.fromTo(pop, { autoAlpha: 0, y: -6 }, { autoAlpha: 1, y: 0, duration: 0.2, ease: 'expo.out', clearProps: 'transform' });
@@ -413,7 +451,8 @@ document.addEventListener('click', async (e) => {
       return;
     case 'fechar-dlg': return fecharDialogo(el.closest('dialog'));
     case 'ler-todas': await D.marcarNotificacoesLidas(); atualizarContador(); $('#pop-notificacoes').innerHTML = P.htmlNotificacoes(); return;
-    case 'ir-notif': fecharPops(); return irNotif(el.dataset.projeto, el.dataset.ref, el.dataset.id);
+    case 'ir-notif': fecharPops(); marcarNotif(Number(el.dataset.notif), true); return irNotif(el.dataset.projeto, el.dataset.ref, el.dataset.id);
+    case 'alternar-lida': return marcarNotif(id, !E.lidas.has(id) && D.ehPorVer(E.notificacoes.find((n) => n.id === id)));
     case 'sair': await sb.auth.signOut(); location.replace('/'); return;
     case 'tema': {
       const v = el.dataset.valor;

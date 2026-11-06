@@ -173,9 +173,9 @@ test('notificações: outra pessoa conclui uma tarefa → aviso, contador e list
   const pop = page.locator('#pop-notificacoes');
   await expect(pop.locator('.notif.nao-lida')).toHaveCount(1);
   await captura(page, 'notificacoes');
-  await pop.getByRole('button', { name: 'Marcar como lidas' }).click();
+  await pop.getByRole('button', { name: 'Marcar todas como vistas' }).click();
   await expect(page.locator('#contador')).toBeHidden();
-  await pop.locator('.notif').first().click();
+  await pop.locator('.notif-abrir').first().click();
   await expect(page).toHaveURL(/#\/projeto\/step-inside\/t-72$/);
   await expect(page.locator('#t-72')).toBeVisible();
 });
@@ -238,8 +238,8 @@ test('perfil: área pessoal, definições (nome, tema), novidades e sair', async
   await captura(page, 'inicio-escuro');
   await page.getByRole('button', { name: 'Perfil' }).click();
   await page.locator('#pop-perfil').getByRole('menuitem', { name: /Novidades/ }).click();
-  await expect(page.locator('.novidade').first()).toContainText('Imagens, notas de teste e fases das obras');
-  await expect(page.locator('.novidade').nth(1)).toContainText('Redes sociais');
+  await expect(page.locator('.novidade').first()).toContainText('Notificações por ver');
+  await expect(page.locator('.novidade').nth(1)).toContainText('Imagens, notas de teste e fases das obras');
   await page.getByRole('button', { name: 'Perfil' }).click();
   await page.locator('#pop-perfil').getByRole('menuitem', { name: 'Sair' }).click();
   await expect(page.getByRole('button', { name: 'Entrar com a conta do Hub' })).toBeVisible();

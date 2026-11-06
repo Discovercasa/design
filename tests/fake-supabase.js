@@ -13,7 +13,7 @@
     perfis: [{ id: OUTRO.id, nome: OUTRO.nome, criado_em: '2026-11-01T00:00:00Z', notificacoes_vistas_em: '2026-11-01T00:00:00Z' }],
     checkpoints: fx.checkpoints || [], tarefas: fx.tarefas || [], decisoes: fx.decisoes || [], decisoes_opcoes: fx.decisoes_opcoes || [],
     documentos: fx.documentos || [], notificacoes: [], vistos: [],
-    tarefas_notas: fx.tarefas_notas || [], anexos: [],
+    tarefas_notas: fx.tarefas_notas || [], anexos: [], notificacoes_lidas: [],
     obras: fs.obras || [], obras_fases: fs.obras_fases || [], posts: fs.posts || [], posts_media: fs.posts_media || [], posts_comentarios: fs.posts_comentarios || [],
     sugestoes: [{ id: 1, texto: 'Pôr um modo escuro no hub.', ferramenta: 'geral', estado: 'nova', autor_id: OUTRO.id, autor_nome: OUTRO.nome, criada_em: '2026-11-04T09:00:00Z', na_checklist: false, checklist_em: null }],
     sugestoes_comentarios: [],
@@ -176,6 +176,7 @@
             if (this.op === 'upsert' && n.id && tab.find((r) => r.id === n.id)) { const r = tab.find((x) => x.id === n.id); Object.assign(r, n); return r; }
             if (this.t === 'perfis') { n.criado_em = agora(); n.notificacoes_vistas_em = agora(); }
             else if (this.t === 'vistos') { n.utilizador_id = ator.id; if (tab.some((r) => r.utilizador_id === n.utilizador_id && r.tipo === n.tipo && r.ref_id === n.ref_id)) throw new Error('duplicate key'); }
+            else if (this.t === 'notificacoes_lidas') { Object.assign(n, { utilizador_id: ator.id, lida_em: agora() }); if (tab.some((r) => r.utilizador_id === n.utilizador_id && r.notificacao_id === n.notificacao_id)) throw new Error('duplicate key'); }
             else n.id = ++seq[this.t];
             if (this.t === 'sugestoes') Object.assign(n, { autor_id: ator.id, estado: 'nova', criada_em: agora(), na_checklist: false, checklist_em: null });
             if (this.t === 'sugestoes_comentarios') Object.assign(n, { autor_id: ator.id, criado_em: agora() });
@@ -213,7 +214,7 @@
           if (this.t === 'decisoes' && /decisoes_opcoes\s*\(/.test(this.cols))
             return { data: null, error: { message: "Could not embed because more than one relationship was found for 'decisoes' and 'decisoes_opcoes'" } };
           linhas = tab.filter((r) => this.f.every((f) => f(r)));
-          if (this.t === 'vistos') linhas = linhas.filter((r) => r.utilizador_id === ator.id);
+          if (this.t === 'vistos' || this.t === 'notificacoes_lidas') linhas = linhas.filter((r) => r.utilizador_id === ator.id);
           if (this.ord) { const [c, asc] = this.ord; linhas = [...linhas].sort((a, b) => (a[c] < b[c] ? -1 : a[c] > b[c] ? 1 : 0) * (asc ? 1 : -1)); }
           if (this.lim) linhas = linhas.slice(0, this.lim);
           linhas = linhas.map((r) => {
@@ -304,6 +305,7 @@
   // nos testes: agir como outra pessoa (acrescentar, concluir…) e ver a base
   window.__fake = {
     db, OUTRO, ficheiros, social,
+    comoEu: (fn) => fn(new Proxy({}, { get: (_, t) => new Q(t) })),
     async comoOutro(fn) { ator = OUTRO; try { return await fn(new Proxy({}, { get: (_, t) => new Q(t) })); } finally { ator = U; } },
   };
 })();

@@ -1,6 +1,17 @@
 [
   {
     "dia": "2026-11-07",
+    "titulo": "Notificações por ver",
+    "itens": [
+      "Cada notificação fica por ver (fundo azul e ponto) até lhe passares o rato, a abrires ou tocares no ponto; o ponto também a volta a pôr por ver.",
+      "No telemóvel: tocar na notificação abre-a e dá-a como vista; tocar no ponto marca sem abrir.",
+      "As notificações das tuas próprias ações aparecem como «feita por ti» e não contam.",
+      "O vista guarda-se na tua conta: vale no computador e no telemóvel.",
+      "Ao mudar de página o hub vai buscar os dados de novo (o Início mostra logo um post publicado noutro aparelho)."
+    ]
+  },
+  {
+    "dia": "2026-11-07",
     "titulo": "Imagens, notas de teste e fases das obras",
     "itens": [
       "Imagens nas tarefas e nos checkpoints: ao editar, arrasta, cola (Ctrl+V) ou escolhe; clicar numa miniatura abre-a em grande, com setas.",
