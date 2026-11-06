@@ -14,6 +14,7 @@ export const E = {
   checkpoints: [], tarefas: [], decisoes: [], perfis: [], notificacoes: [], documentos: [],
   obras: [], fases: [], posts: [], media: [], comentarios: [], socialErro: null,   // redes sociais
   notas: [], anexos: [],  // notas de teste/revisão e imagens anexadas (migração 0011)
+  lidas: new Set(),        // notificações que já vi (migração 0014)
   vistos: new Set(),       // "tarefa:12"
   novos: new Set(),        // o que é novo para mim nesta visita (mostra a etiqueta "Novo")
   erro: null,
@@ -99,14 +100,30 @@ export async function carregarNotificacoes() {
   const novas = notificacoesCarregadas ? data.filter((n) => !antes.has(n.id) && n.ator_id !== E.eu.id) : [];  // à 1.ª, nada é "nova"
   E.notificacoes = data;
   notificacoesCarregadas = true;
+  const l = await sb().from('notificacoes_lidas').select('notificacao_id').order('lida_em', { ascending: false }).limit(1000);
+  if (!l.error) E.lidas = new Set(l.data.map((x) => x.notificacao_id));   // sem a tabela (antes da 0014) fica como estava
   return novas;
 }
-export const naoLidas = () => {
+// por ver: de outra pessoa, ainda sem "visto" meu e depois de "Marcar todas como vistas"; as minhas próprias ações não contam
+export const propria = (n) => !!n.ator_id && n.ator_id === E.eu.id;
+export const ehPorVer = (n) => {
   const vistas = E.perfil ? new Date(E.perfil.notificacoes_vistas_em) : new Date(0);
-  return E.notificacoes.filter((n) => n.ator_id !== E.eu.id && new Date(n.criada_em) > vistas);
+  return !propria(n) && !E.lidas.has(n.id) && new Date(n.criada_em) > vistas;
 };
+export const naoLidas = () => E.notificacoes.filter(ehPorVer);
+// vista ao passar o rato (0,6 s), ao clicar ou ao tocar no ponto; o ponto também a volta a pôr por ver
+export async function marcarLida(id, lida = true) {
+  if (lida === E.lidas.has(id)) return;
+  if (lida) E.lidas.add(id); else E.lidas.delete(id);
+  const r = lida ? await sb().from('notificacoes_lidas').insert({ notificacao_id: id })
+    : await sb().from('notificacoes_lidas').delete().eq('notificacao_id', id).eq('utilizador_id', E.eu.id);
+  if (r.error && !/duplicate/i.test(r.error.message || '')) { if (lida) E.lidas.delete(id); else E.lidas.add(id); throw r.error; }
+}
 export async function marcarNotificacoesLidas() {
-  const agora = new Date().toISOString();
+  const por = naoLidas().map((n) => n.id);
+  por.forEach((id) => E.lidas.add(id));
+  if (por.length) await sb().from('notificacoes_lidas').insert(por.map((id) => ({ notificacao_id: id })));
+  const agora = new Date().toISOString();   // e as mais antigas, que não estão na lista
   E.perfil.notificacoes_vistas_em = agora;
   await sb().from('perfis').update({ notificacoes_vistas_em: agora }).eq('id', E.eu.id);
 }
@@ -204,7 +221,7 @@ export async function apagarDocumento(doc) {
 // ---------------------------------------------------------------- em direto: qualquer mudança chega a quem tem o hub aberto
 export function ouvirMudancas(aoMudar) {
   const canal = sb().channel('hub-mudancas');
-  for (const t of ['checkpoints', 'tarefas', 'decisoes', 'decisoes_opcoes', 'documentos', 'notificacoes', 'obras', 'obras_fases', 'posts', 'posts_media', 'posts_comentarios', 'tarefas_notas', 'anexos'])
+  for (const t of ['checkpoints', 'tarefas', 'decisoes', 'decisoes_opcoes', 'documentos', 'notificacoes', 'obras', 'obras_fases', 'posts', 'posts_media', 'posts_comentarios', 'tarefas_notas', 'anexos', 'notificacoes_lidas'])
     canal.on('postgres_changes', { event: '*', schema: 'public', table: t }, () => aoMudar(t));
   canal.subscribe();
   return canal;

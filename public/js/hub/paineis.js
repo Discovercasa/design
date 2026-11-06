@@ -1,5 +1,5 @@
 // Painéis e diálogos: notificações, menu do perfil, sugestões (gaveta), decisões, acrescentar/editar checkpoints e tarefas.
-import { E, projeto, nomeProjeto, checkpointsDe, naoLidas, anexosDe } from './dados.js';
+import { E, projeto, nomeProjeto, checkpointsDe, naoLidas, anexosDe, ehPorVer, propria } from './dados.js';
 import { img } from './imagens.js';
 import { ic, esc, dia, ha, iniciais, abrirDialogo } from './util.js';
 
@@ -13,11 +13,19 @@ const cabeca = (titulo, sub = '') => `<div class="dlg-cabeca"><div><h2>${titulo}
 
 // ---------------------------------------------------------------- notificações
 export function htmlNotificacoes() {
-  const nl = new Set(naoLidas().map((n) => n.id));
-  return `<div class="pop-cabeca"><h2>Notificações</h2>${nl.size ? '<button class="btn pequeno texto" type="button" data-acao="ler-todas">Marcar como lidas</button>' : ''}</div>
-    <div class="pop-corpo">${E.notificacoes.length ? E.notificacoes.map((n) => `<button type="button" class="notif${nl.has(n.id) ? ' nao-lida' : ''}" data-acao="ir-notif" data-projeto="${esc(n.projeto || '')}" data-ref="${esc(n.ref_tipo || '')}" data-id="${n.ref_id || ''}">
-      <span class="ponto" aria-hidden="true"></span><span><p>${esc(n.texto)}</p><p class="quando">${esc(n.projeto ? nomeProjeto(n.projeto) : 'Redes sociais')} · ${ha(n.criada_em)}${nl.has(n.id) ? ' · <span class="so-leitor">não lida</span>' : ''}</p></span></button>`).join('')
-      : '<p class="suave pequeno" style="padding:16px">Sem notificações. Aparecem aqui quando alguém atribui, muda ou conclui uma tarefa.</p>'}</div>`;
+  const n_ = naoLidas().length;
+  return `<div class="pop-cabeca"><div><h2>Notificações</h2><p class="fraco mini" data-por-ver>${n_ ? `${n_} por ver` : 'Tudo visto'}</p></div>${n_ ? '<button class="btn pequeno texto" type="button" data-acao="ler-todas">Marcar todas como vistas</button>' : ''}</div>
+    <div class="pop-corpo">${E.notificacoes.length ? E.notificacoes.map(linhaNotif).join('')
+      : '<p class="suave pequeno" style="padding:16px">Sem notificações. Aparecem aqui quando alguém atribui, muda ou conclui uma tarefa.</p>'}</div>
+    ${E.notificacoes.some((n) => !propria(n)) ? `<p class="pop-dica fraco mini">${matchMedia('(hover: hover)').matches ? 'Ficam vistas quando lhes passas o rato, as abres ou clicas no ponto' : 'Ficam vistas quando as abres ou tocas no ponto'} (o ponto também as volta a pôr por ver).</p>` : ''}`;
+}
+export function linhaNotif(n) {
+  const por = ehPorVer(n), minha = propria(n);
+  return `<div class="notif${por ? ' nao-lida' : ''}${minha ? ' propria' : ''}" data-notif="${n.id}">
+    <button type="button" class="notif-abrir" data-acao="ir-notif" data-notif="${n.id}" data-projeto="${esc(n.projeto || '')}" data-ref="${esc(n.ref_tipo || '')}" data-id="${n.ref_id || ''}">
+      <p>${esc(n.texto)}</p><p class="quando">${esc(n.projeto ? nomeProjeto(n.projeto) : 'Redes sociais')} · ${ha(n.criada_em)}${minha ? ' · feita por ti' : ''}${por ? '<span class="so-leitor"> · por ver</span>' : ''}</p></button>
+    ${minha || (!por && !E.lidas.has(n.id)) ? '' : `<button type="button" class="notif-marca" data-acao="alternar-lida" data-id="${n.id}" aria-label="${por ? 'Marcar como vista' : 'Marcar como por ver'}" title="${por ? 'Marcar como vista' : 'Marcar como por ver'}"><span class="ponto" aria-hidden="true"></span></button>`}
+  </div>`;
 }
 
 // ---------------------------------------------------------------- menu do perfil
