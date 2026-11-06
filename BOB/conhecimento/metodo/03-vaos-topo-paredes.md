@@ -25,13 +25,21 @@
   lintel alone ≈ 2,5–3,5× over; the ≈ 1,2 m of sheathed frame above with the ring acts as header) — keep the engineer's
   note and conditions (OSB fixings for shear, ring unjointed over the opening, deflection) in the project file (TV #17);
   per house **PO Q8** (with Q3). Whether the engineer also covered TV's 2,00 janelas de correr on P03 / P01: OPEN. Upper
-  verga limit: OPEN (widest seen 4,52).
+  verga limit: OPEN (widest seen 4,52). **The verga fills the wall from its underside up to the top plate** (ordinary
+  module) — no cripples over it (see the cripples rule) — our derived reading (2026-11-06). **OPEN (§15 item 26):** when an
+  opening ≥ `vao_min` has its head lower than the verga's underside, the strip between them stays unframed; we suggest
+  lowering the verga onto the opening head, as the padieira is.
 - **Vertical 7,5×3,5 pieces (cripples)** above every opening up to the top plate and below every window down to the bottom
   plate, "para dar estabilidade ao vão"; no horizontal pieces — user 2026-10-15 "por nroma só tem as 7,5x3,5 verticais",
   "os nossos módulos base não possuem esse vigamento de 7,5x3,5 na horizontal nos vão" — confirmed —
   `estrutura_dc.emoldurar` (Montante curto). On the stud grid, 11×3,5 in exterior modules (full depth) — D2503 Módulos
   (one house) — the tools use 110×35 at the stud spacing. (The horizontal pieces of a 2026-10-09 photo were a site
-  change — L14.)
+  change — L14.) **Over a padieira**: cripples from the padieira's top up to the top plate. **Over a verga (220×75) in an
+  ordinary module (exposed roof): none** — the verga fills the wall from its underside to the top plate, so a cripple there
+  would lie inside it. **Over a verga in a full-height module (hidden roof, no top plate, studs run on to the module
+  top)**: cripples from the verga's top up to the module top, never through the verga — our derived reading
+  (2026-11-06, no new user fact; L72) — `estrutura_dc.emoldurar` (argument `topo_montantes`, which `casa_planta` passes for
+  the exterior modules of a hidden roof). The verga's own open question: §15 item 26.
 - Doors: no bottom plate across the opening — Casa CL — `estrutura_dc.emoldurar`.
 - **Interior doors 2,00 × 0,80 → rough opening 0,87 × 2,03** above the finished floor (3 cm on top, 3,5 cm each side) —
   user 2026-10-09 "usually we use 2mx0,8m doors and we leabe 3cm on top and 3,5 cm on each side" — confirmed — JSON
@@ -150,7 +158,8 @@
 - **In a full-height exterior module (hidden roof) the lintel sits directly over the opening, the cripples run on the
   grid up to the module's top plate** (the ring on the inner face across them), jambs full height — D2503 Módulos [TV doors
   2,20 / 2,40 under a ring at 2,543] — company document; the same on 22×7,5 roofs — assumed. The builder without real
-  modules frames under the ring (`casa_planta` `continuar`).
+  modules frames under the ring (`casa_planta` `continuar`). ⚠ Tension with the verga rule above ("under the top plate"):
+  D2503 puts the lintel on the opening, the verga rule puts the 220×75 under the top plate — see §15 item 26.
 - An opening head is lowered so the padieira / verga fits under the top plate; a window sill ≥ bottom plate + peitoril +
   5 cm — assumed — `casa_planta.construir` ([SB] heads ≈ 3 cm lower, SB #21). (On exposed roofs superseded by "opção a",
   not yet in `casa_planta` — X1.)

@@ -225,3 +225,12 @@ circled (`discovercasa.md`).
   configurator painted the engine's parapet cladding pieces in one colour, so the face did not follow a change of façade
   cladding (capoto house must show capoto there — "o capoto tem que ficar na casa toda", L52) → drawn in the façade's own
   material (§7 Parapets, 06).
+- **L72** (configurator / builder, 2026-11-06; found by `verificar.py` on 2026-10-30, no. 2) Cripples ("Montante curto") over a
+  220×75 verga started at the verga's underside and ran through it. In an ordinary module (exposed roof) they lay entirely
+  inside the verga, which fills the wall up to the top plate: extra pieces (14 in a test house with a 3,00 garage door and
+  a 3,60 sliding window). In a full-height module (hidden roof, no top plate) they ran from the verga's underside to the
+  module top, 22 cm too long each ([TV] P03.1 framed without the real modules: 7 pieces). Rule: a cripple stands on the
+  member over the opening — nothing over a verga in an ordinary module, from the verga's top to the module top in a
+  full-height one, from the padieira's top to the top plate as before → §3 (cripples, verga) → `estrutura_dc.emoldurar`
+  (`topo_montantes`; `casa_planta` passes the module top for exterior modules of a hidden roof). Side finding, still open:
+  the strip between a lower opening head and the verga (§15 item 26).
