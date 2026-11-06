@@ -88,6 +88,19 @@ Why Claude learns the method; "vamos passo a passo" — an overall idea, then an
   GSAP skills, React Bits, taste-skill and impeccable, and a final Playwright check with feedback.
 - **Pending with the user**: confirm the name Step Inside (migrations applied and hub published 2026-11-05).
 
+## Social media (user 2026-11-06)
+- Instagram/Facebook posts are planned in advance in a Google Sheets workbook ("DiscoverCasa Post Mensal - publicações"):
+  one post per week, each month = 4 weeks (Semana 1-4); a post = title "<Obra> - <topic>" (e.g. "Boelhe - BF",
+  "Matosinhos - Estrutura", "Ribamar - Mov Terras"), up to 5 photos (Foto 1-5) and the caption with emojis and hashtags.
+  Caption and photos are approved before publishing (approval comments in the sheet).
+- Obras followed for content: Matosinhos, Casa dos Cães, Boelhe, Ribamar, Gaia, Oliveira de Azeméis, Lagos (plus Sobral and
+  Torres Vedras in posts). Content phases per obra: Projetos, Mov (movimento de terras), BF (base de fundação), Estrutura,
+  Acabamentos; Gaia "Aumento" (extension of a house DiscoverCasa built), Oliveira de Azeméis "Garantia" (client testimonial).
+  Matosinhos plan: 1 terras, 3 BF, 2 estrutura, 2+ acabamento posts. Older sheets (Maio 2025?... MarçoAbril, "Geral" with a
+  daily plan) exist, not imported.
+- Hub tab "Redes sociais" (#/social) built 2026-11-06 on branch hub/redes-sociais (not yet published or applied).
+- Pending: confirm import assumptions (past weeks with caption = Publicado; Nov with caption+photos = Por aprovar; no caption = Ideia).
+
 ## Working with the user
 **Language and words**
 - Talk in **Portuguese (PT-PT)** since 2026-10-09 ("from now on lets try to talk always in portuguese"); docs stay in

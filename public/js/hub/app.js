@@ -1,9 +1,10 @@
 // Hub do Design: entrada (conta do Hub), barra de navegação, rotas (#/, #/projeto/<slug>, #/pessoal, #/definicoes,
-// #/novidades), notificações, sugestões, decisões e o pop-up "Novo".
+// #/novidades, #/social), notificações, sugestões, decisões e o pop-up "Novo".
 import * as D from './dados.js';
 import { E } from './dados.js';
 import * as V from './vistas.js';
 import * as P from './paineis.js';
+import * as SO from './social.js';
 import { $, $$, ic, esc, iniciais, aviso, abrirDialogo, fecharDialogo, entrar, encherBarras, mov, luz } from './util.js';
 
 const { sb, nivel } = window.Design;
@@ -67,12 +68,14 @@ function rota() {
   const [a, b, c] = h.split('/');
   if (a === 'projeto') return { nome: 'projeto', p: D.projetoPorSlug(b), alvo: c };
   if (['pessoal', 'definicoes', 'novidades'].includes(a)) return { nome: a };
+  if (a === 'social') return { nome: 'social', sub: b === 'obras' ? 'obras' : 'planeamento', alvo: b === 'obras' ? c : b };
   return { nome: 'inicio' };
 }
 function desenharNav() {
   const r = rota();
   $('#nav').innerHTML = `<a href="#/"${r.nome === 'inicio' ? ' aria-current="page"' : ''}>Início</a>` +
-    E.projetos.map((p) => `<a href="#/projeto/${p.slug}"${r.nome === 'projeto' && r.p === p ? ' aria-current="page"' : ''}>${esc(p.nome)}</a>`).join('');
+    E.projetos.map((p) => `<a href="#/projeto/${p.slug}"${r.nome === 'projeto' && r.p === p ? ' aria-current="page"' : ''}>${esc(p.nome)}</a>`).join('') +
+    `<a class="nav-separada" href="#/social"${r.nome === 'social' ? ' aria-current="page"' : ''}>Redes sociais</a>`;
   const atual = $('#nav [aria-current]');
   if (atual) atual.scrollIntoView({ block: 'nearest', inline: 'nearest' });
 }
@@ -83,20 +86,23 @@ function desenhar(mudouRota) {
   if (r.nome === 'projeto' && r.p) { html = V.paginaProjeto(r.p); document.title = `${r.p.nome} · Discovercasa Design`; }
   else if (r.nome === 'pessoal') { html = V.pessoal(); document.title = 'Área pessoal · Discovercasa Design'; }
   else if (r.nome === 'definicoes') { html = V.definicoes(!!pedidoInstalar); document.title = 'Definições · Discovercasa Design'; }
+  else if (r.nome === 'social') { html = SO.pagina(r.sub); document.title = 'Redes sociais · Discovercasa Design'; }
   else if (r.nome === 'novidades') { html = V.novidades(novidades); document.title = 'Novidades · Discovercasa Design'; marcarNovidadesVistas(); }
   else { html = V.inicio(); document.title = 'Início · Discovercasa Design'; }
   const y = window.scrollY;
   v.innerHTML = aviso_ + html;
   encherBarras(v);
+  SO.depoisDeDesenhar(v);
   const calc = $('form[data-form="calculadora"]', v);
   if (calc) V.calcular(calc, r.p.cambio.usd_eur);
   if (mudouRota) {
     window.scrollTo(0, 0);
-    entrar($$('.projeto-linha, .passo, .cabeca-pagina, .projeto-cabeca, .cta-app, .bloco-lateral, .novidade, .cartoes-pessoal > *', v));
+    entrar($$('.projeto-linha, .passo, .cabeca-pagina, .projeto-cabeca, .cta-app, .bloco-lateral, .novidade, .cartoes-pessoal > *, .social-barra, .mes, .obra, .visita', v));
     if (r.alvo) irPara(r.alvo);
   } else window.scrollTo(0, y);
 }
 function irPara(alvo) {
+  if (/^(post|obra)-\d+$/.test(alvo || '')) return SO.irPara(alvo);
   const m = /^(t|cp|doc)-(\d+)$/.exec(alvo || '');
   if (!m) return;
   const id = Number(m[2]);
@@ -111,15 +117,16 @@ function irPara(alvo) {
 window.addEventListener('hashchange', () => {
   if (!E.eu.id) return;
   const r = rota();
-  const chaveRota = r.nome + (r.p ? r.p.id : '');
+  const chaveRota = r.nome + (r.p ? r.p.id : '') + (r.sub || '');
   fecharPops();
   desenharNav();
   if (chaveRota === rotaAnterior && r.alvo) return irPara(r.alvo);
   rotaAnterior = chaveRota;
   desenhar(true);
 });
-rotaAnterior = (() => { const r = rota(); return r.nome + (r.p ? r.p.id : ''); })();
+rotaAnterior = (() => { const r = rota(); return r.nome + (r.p ? r.p.id : '') + (r.sub || ''); })();
 luz($('#vista'));
+SO.ligar({ dlg, desenhar, depois, tentar });
 
 // o logótipo "Discovercasa Design": volta ao Início e atualiza o hub (dados e notificações)
 $('.marca').addEventListener('click', async (e) => {
@@ -177,6 +184,7 @@ function emDireto(tabela) {
       novas.slice(0, 3).forEach((n) => aviso(esc(n.texto), { icone: 'sino', acoes: [{ rotulo: 'Ver', fazer: () => irNotif(n.projeto, n.ref_tipo, n.ref_id) }] }));
       atualizarContador();
       if (!dlg.open && !document.activeElement.matches('input, textarea, select')) desenhar(false);
+      SO.aoMudar();
       mostrarNovos();
     } catch (_) { /* tenta na próxima mudança ou no relógio */ }
   }, 350);
@@ -187,17 +195,20 @@ function mostrarNovos() {
   const itens = D.porVer();
   if (!itens.length) return;
   itens.forEach((i) => E.novos.add(D.chave(i.tipo, i.x.id)));
-  const nomeTipo = { checkpoint: 'Novo checkpoint', tarefa: 'Nova tarefa', decisao: 'Nova decisão', documento: 'Novo documento' };
+  const nomeTipo = { checkpoint: 'Novo checkpoint', tarefa: 'Nova tarefa', decisao: 'Nova decisão', documento: 'Novo documento', post: 'Novo post', obra: 'Nova obra' };
+  const onde = (i) => (i.x.projeto ? D.nomeProjeto(i.x.projeto) : 'Redes sociais'), nome = (i) => i.x.titulo || i.x.pergunta || i.x.nome;
   const ir = (i) => irNotif(i.x.projeto, i.tipo, i.x.id);
   if (itens.length > 3) {
-    aviso(`<b>${itens.length} novidades nos projetos</b><br>${itens.slice(0, 4).map((i) => `${nomeTipo[i.tipo]} em ${esc(D.nomeProjeto(i.x.projeto))}: «${esc(i.x.titulo || i.x.pergunta)}»`).join('<br>')}${itens.length > 4 ? '<br>…' : ''}`,
+    aviso(`<b>${itens.length} novidades nos projetos</b><br>${itens.slice(0, 4).map((i) => `${nomeTipo[i.tipo]} em ${esc(onde(i))}: «${esc(nome(i))}»`).join('<br>')}${itens.length > 4 ? '<br>…' : ''}`,
       { icone: 'novo', duracao: 10, acoes: [{ rotulo: 'Ver a primeira', fazer: () => ir(itens[0]) }] });
-  } else itens.forEach((i) => aviso(`<b>${nomeTipo[i.tipo]}</b> em ${esc(D.nomeProjeto(i.x.projeto))}<br>«${esc(i.x.titulo || i.x.pergunta)}» · por ${esc(i.x.criado_por_nome || 'alguém')}`,
+  } else itens.forEach((i) => aviso(`<b>${nomeTipo[i.tipo]}</b> em ${esc(onde(i))}<br>«${esc(nome(i))}» · por ${esc(i.x.criado_por_nome || 'alguém')}`,
     { icone: 'novo', duracao: 10, acoes: [{ rotulo: 'Ver', fazer: () => ir(i) }] }));
   D.marcarVistos(itens).catch(() => {});
   desenhar(false);
 }
 function irNotif(projetoId, tipo, id) {
+  if (tipo === 'post') { location.hash = `#/social/post-${id}`; return; }
+  if (tipo === 'obra') { location.hash = `#/social/obras/obra-${id}`; return; }
   const p = D.projeto(projetoId);
   if (!p) return;
   if (tipo === 'decisao') {

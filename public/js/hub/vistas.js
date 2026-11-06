@@ -1,6 +1,7 @@
 // As páginas do hub, desenhadas a partir do estado E (dados.js). Os botões levam data-acao; o app.js trata dos cliques.
 import { E, projeto, nomeProjeto, checkpointsDe, tarefasDe, decisaoDaTarefa, decisoesDe, resumo, feitosDe, chave, documentosDe } from './dados.js';
 import { ic, esc, dia, diaCurto, iniciais, euros } from './util.js';
+import { resumoInicio } from './social.js';
 
 const ROTULO = { por_fazer: 'Por fazer', em_curso: 'Em curso', bloqueada: 'Bloqueada', concluida: 'Concluída', concluido: 'Concluído' };
 export const abertos = new Set();   // checkpoints abertos (ficam abertos ao redesenhar)
@@ -54,6 +55,8 @@ export function inicio() {
       }).join('')}
     </div>
   </section>
+
+  ${resumoInicio()}
 
   <section class="seccao" aria-labelledby="t-objetivos">
     <div class="seccao-cabeca"><h2 id="t-objetivos">Objetivos e o que vem a seguir</h2></div>

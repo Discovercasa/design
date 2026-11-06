@@ -11,6 +11,7 @@ uma página (`#/projeto/<slug>`), um ficheiro de dados, uma pasta de código e u
 | Orçamentação | `orcamentacao` | `#/projeto/orcamentacao` | `public/dados/projetos/orcamentacao.json` | `BOB/orcamentacao/` (a criar) | (ainda sem página) | `orcamentacao/<tarefa>` |
 | Step Inside (VR/AR) | `plataforma_cliente` | `#/projeto/step-inside` | `public/dados/projetos/plataforma_cliente.json` | `BOB/step-inside/` (a criar) | (ainda sem página) | `step-inside/<fase>-<tarefa>` |
 | Hub do Design | — | `#/` | `public/dados/novidades.json` | `public/index.html`, `public/js/hub/`, `public/css/hub.css` | `public/` | `hub/<tarefa>` |
+| Redes sociais (do hub) | — (tabelas `obras`, `obras_fases`, `posts`, `posts_media`, `posts_comentarios`) | `#/social`, `#/social/obras` | Supabase (migrações 0009/0010) | `public/js/hub/social*.js`, `public/css/social.css` | `public/` | `hub/<tarefa>` |
 
 ## Regras
 - **Um ramo por tarefa**, com o prefixo do projeto (ex.: `gerador/ler-dxf`). `main` = o que está online: um push para
@@ -26,5 +27,8 @@ uma página (`#/projeto/<slug>`), um ficheiro de dados, uma pasta de código e u
 - **Documentos de cada projeto** (secção Documentos do hub): *informativos* = o que o projeto é (especificações, planos);
   *adicionais* = conhecimento extra (desenhos de obras, fichas, fotografias). Os ficheiros ficam no armazenamento privado
   `documentos` do Supabase (caminho `<id>/<tipo>/<nome>`), nunca no Git; carregam-se no próprio hub.
+- **Redes sociais**: um post por semana (mês + semana 1–5; um post não feito marca-se «Não feito» e adianta-se outro para essa semana, ficando registada a semana original); fotos e vídeos no armazenamento privado `social` (`posts/…`,
+  miniaturas em `miniaturas/…`), nunca no Git. As fotos grandes reduzem-se a 2048 px ao carregar, salvo «Manter os
+  originais». As fases das obras não se apagam (não há regra de apagar); as obras arquivam-se.
 - **Base de dados**: cada mudança é uma migração nova em `supabase/migrations/NNNN_nome.sql` (nunca editar uma já aplicada).
 - **Testes**: `cd tests && npm install && npx playwright install chromium && npm test` (base simulada, não toca na produção).

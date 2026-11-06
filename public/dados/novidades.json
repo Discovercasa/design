@@ -1,5 +1,17 @@
 [
   {
+    "dia": "2026-11-06",
+    "titulo": "Redes sociais",
+    "itens": [
+      "Aba nova «Redes sociais»: o planeamento dos posts, um por semana em cada mês, como no Excel (julho a dezembro já lá estão, com as fotos e as legendas).",
+      "Cada post tem as fotos (arrastar, colar ou escolher; arrastar para mudar a ordem do carrossel), a legenda com emojis, contagem de caracteres e hashtags, e uma pré-visualização.",
+      "Aprovação: «Legenda aprovada» e «Fotos aprovadas»; com as duas, o post fica Aprovado. Mudar a legenda ou as fotos depois pede nova aprovação. Comentários sobre o post ou sobre uma foto.",
+      "Um post que não se fez marca-se «Não feito»; depois adianta-se o seguinte (ou outro) para essa semana, e o post mostra de que semana veio.",
+      "Obras com as suas fases (que não se apagam): marca-se a fase em curso, a visita para tirar fotos e quando as fotos foram tiradas.",
+      "No Início, um resumo: o post desta semana, o que espera aprovação e as visitas para fotos."
+    ]
+  },
+  {
     "dia": "2026-11-05",
     "titulo": "Documentos, posições e atualização em direto",
     "itens": [

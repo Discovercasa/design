@@ -31,5 +31,7 @@ Projeto Design da Discovercasa (`design.discovercasa.pt`). Responder em portugu�
   (`public/index.html` + `public/js/hub/`) lê o texto fixo de cada projeto em `public/dados/projetos/<id>.json` e os
   checkpoints, tarefas e decisões do Supabase (migrações 0004/0005). Ao fazer uma entrega num projeto, atualizar o seu
   JSON (fase, futuro) e marcar a tarefa no hub. Testes: `tests/` (Playwright, base simulada).
+- **Redes sociais** (aba do hub, `#/social`): planeamento dos posts, aprovação, obras e fases (migrações 0009/0010,
+  `public/js/hub/social*.js`). As fotos ficam no armazenamento privado `social`, nunca no Git.
 - **Repositório público**: nunca dados pessoais nem desenhos de clientes (`*.dwfx`, `*.pdf` estão no `.gitignore`;
   ficam só no PC).

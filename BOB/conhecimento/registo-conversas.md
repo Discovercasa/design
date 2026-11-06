@@ -1285,3 +1285,34 @@ When this file passes about 1 500 lines, continue in `registo-conversas-<year>-<
 - Not included: "Discovercasa_Custos_Externos_Plataforma_3D_AR_VR_v2.pdf" (Downloads, 2026-10-30) — never shared in this
   conversation; ask the user if it belongs to Step Inside.
 - Filed in: this log; `PROJETOS.md` (documents rule).
+
+## 2026-11-06 — Design hub: social media tab (posts planning, approval, obras and phases)
+> @"...\Downloads\DiscoverCasa Post Mensal - publicações .xlsx" @"...\Downloads\Jul   Ago   Set 26.html" @"...\Downloads\DiscoverCasa Post Mensal - publicações  - Jul _ Ago _ Set 26.csv"
+> ok mais uma aba que quero adicionar ao nosso Hub de Design: os nossos posts/social media.
+> Os nossos posts são planeados previamente de forma à descrição e as fotos serem aprovadas. Ou seja como podes ver no excel temos um post por semana de cada mês onde contém todas as imagens do post e a descrição respetiva de cada post. Quero que cries algo desse género mas dentro do nosso HUB. Deve ser possível introduzir as imagens facilmente e as descrições com emojis e tudo. Também pelo que podes perceber os nomes Matosinhos/Casa dos Cães/Boelhe/ Ribamar/Gaia são tudo nomes de obras e deve ser possível adicionar novas obras para fazer posts sobre e ir atualizando o estado em que a obra está, poder adicionar novos estados as obras e não apagar os antigos apenas ter uma listagem por obra de fases e ir marcando para saber quando ir ao local tirar fotos e extrair conteúdo.
+> Usa as mesmas skills que usamos para a criação do HUB
+- Context: new feature request for the Design hub (same skills as the hub's creation).
+- Facts (from the sheet): Instagram/Facebook posts planned in advance in a Google Sheets workbook, one post per week
+  (each month = 4 weeks, Semana 1-4), title "<Obra> - <topic>", up to 5 photos (Foto 1-5), caption with emojis and
+  hashtags; caption and photos approved before publishing (approval comments in the sheet). Obras: Matosinhos, Casa dos
+  Cães, Boelhe, Ribamar, Gaia, Oliveira de Azeméis, Lagos, plus Sobral and Torres Vedras in posts. Phases: Projetos, Mov,
+  BF, Estrutura, Acabamentos; Gaia "Aumento", Oliveira de Azeméis "Garantia". Matosinhos: 1 terras, 3 BF, 2 estrutura,
+  2+ acabamento. Older sheets (Maio 2025?... MarçoAbril, "Geral") not imported.
+- Done (Design repo, branch hub/redes-sociais, commit d2c43d3; NOT published nor applied to the database, awaiting
+  approval): tab "Redes sociais" (#/social): month x week planning with photo mosaic; status Ideia / Rascunho / Por
+  aprovar / Aprovado / Publicado; "Legenda aprovada" + "Fotos aprovadas" (both = Aprovado; changing either after
+  approval asks for new approval); comments on post or photo; editor with drag/paste/choose photos, reorder, preview,
+  emoji palette, counters (2200 characters / 30 hashtags) and warnings (markdown shown literally by Instagram,
+  "conosco" -> "connosco"); Obras page with phases that cannot be deleted (only added/marked); "Visitas para fotos"
+  (phase in progress without photos, visit date, photos taken); Início summary. Migrations 0009 (tables, RLS, private
+  bucket "social", realtime) and 0010 (import Jul-Dez 2026: 9 obras, 20 phases, 24 posts, 51 photos, 4 comments).
+  Photos downscaled to 2048 px on upload by default (Supabase free storage 1 GB, 54 MB used) with "Manter os originais".
+- Assumption to confirm: past weeks with caption imported as "Publicado"; Nov weeks with caption+photos "Por aprovar";
+  weeks without caption "Ideia".
+- Issues spotted in the sheet (pending, to tell the user): week 5 "Matosinhos - BF" caption is about earth moving (100
+  camiões de terra) = movimento de terras, not BF; week 12 "Matosinhos - BF" caption is about the second floor
+  (structure); week 9 caption has markdown (**...** and [www...](http...)) shown literally by Instagram; "conosco"
+  (Brazilian) instead of "connosco" (week 6); typo "noosas" (week 3); "Discovercasa" vs "DiscoverCasa" mixed. Excel
+  images are Google-Sheets copies (150-430 KB), lower quality than originals.
+- Filed in: this log; `conhecimento/discovercasa.md` (Social media); Design repo `PROJETOS.md`, `CLAUDE.md`,
+  `public/dados/novidades.json`.
