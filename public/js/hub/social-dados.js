@@ -1,6 +1,7 @@
 // Redes sociais — dados: obras e as suas fases, posts (um por semana), fotos/vídeos e comentários de aprovação
 // (Supabase, migração 0009; ficheiros no armazenamento privado "social"). O estado fica em E (dados.js).
 import { E } from './dados.js';
+import { chaveFicheiro, fazerMiniatura, reduzir } from './imagens.js';
 
 const sb = () => window.Design.sb;
 const BALDE = 'social';
@@ -101,6 +102,15 @@ export const criarObra = async (campos, fases) => {
 };
 export const mudarObra = (id, campos) => feito(sb().from('obras').update(campos).eq('id', id)).catch(nomeRepetido);
 export const mudarFase = (id, campos) => feito(sb().from('obras_fases').update(campos).eq('id', id));
+// a fase em que a obra está (clique no círculo): as anteriores ficam concluídas, as seguintes previstas; "concluir" dá
+// também a clicada como concluída. Devolve o estado anterior, para desfazer.
+export function estadosAoClicar(f, concluir) {
+  const fs = fasesDe(f.obra_id), i = fs.findIndex((x) => x.id === f.id);
+  return fs.map((x, j) => ({ id: x.id, estado: j < i || (j === i && concluir) ? 'concluida' : j === i ? 'em_curso' : 'prevista',
+    concluida_em: j < i || (j === i && concluir) ? x.concluida_em : null }));
+}
+export const estadosAtuais = (obraId) => fasesDe(obraId).map((x) => ({ id: x.id, estado: x.estado, concluida_em: x.concluida_em }));
+export const definirFases = (obraId, estados) => feito(sb().rpc('definir_fases', { p_obra: obraId, p_estados: estados }));
 // fase nova na posição escolhida (1 = primeira): as seguintes descem uma posição
 export async function criarFase(obraId, campos, posicao) {
   const fs = fasesDe(obraId);
@@ -122,53 +132,10 @@ export const mudarComentario = (id, campos) => feito(sb().from('posts_comentario
 export const apagarComentario = (id) => feito(sb().from('posts_comentarios').delete().eq('id', id));
 
 // ---------------------------------------------------------------- fotos e vídeos
-const chaveFicheiro = (nome) => nome.normalize('NFKD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9._-]+/g, '-').replace(/-{2,}/g, '-').replace(/^[-.]+|[-.]+$/g, '') || 'ficheiro';
 const MIMES = { jpg: 'image/jpeg', jpeg: 'image/jpeg', png: 'image/png', webp: 'image/webp', gif: 'image/gif', heic: 'image/heic', mp4: 'video/mp4', mov: 'video/quicktime', webm: 'video/webm' };
 export const ehVideo = (m) => /^video\//.test(m.mime || '');
 export const MAXIMO = 50 * 1024 * 1024;
-
-// miniatura (até 640 px, JPEG) feita no browser: as grelhas carregam depressa sem pedir as fotos originais
-async function fazerMiniatura(ficheiro) {
-  let fonte, largura, altura, limpar = () => {};
-  if (ficheiro.type.startsWith('image/')) {
-    fonte = await createImageBitmap(ficheiro);
-    largura = fonte.width; altura = fonte.height; limpar = () => fonte.close && fonte.close();
-  } else if (ficheiro.type.startsWith('video/')) {
-    const url = URL.createObjectURL(ficheiro);
-    const v = document.createElement('video');
-    v.muted = true; v.playsInline = true; v.preload = 'auto'; v.src = url;
-    await new Promise((ok, falha) => { v.onloadeddata = ok; v.onerror = falha; setTimeout(falha, 8000); });
-    v.currentTime = Math.min(0.5, (v.duration || 1) / 2);
-    await new Promise((ok) => { v.onseeked = ok; setTimeout(ok, 3000); });
-    fonte = v; largura = v.videoWidth; altura = v.videoHeight; limpar = () => URL.revokeObjectURL(url);
-  } else return null;
-  try {
-    const s = Math.min(1, 640 / Math.max(largura, altura));
-    const c = document.createElement('canvas');
-    c.width = Math.max(1, Math.round(largura * s)); c.height = Math.max(1, Math.round(altura * s));
-    c.getContext('2d').drawImage(fonte, 0, 0, c.width, c.height);
-    const blob = await new Promise((ok) => c.toBlob(ok, 'image/jpeg', 0.82));
-    return { blob, largura, altura };
-  } finally { limpar(); }
-}
-
-// fotos grandes reduzidas a 2048 px no lado maior (JPEG 90): o Instagram mostra até 1080 px e o armazenamento gratuito
-// do Supabase tem 1 GB; quem precisar do ficheiro original marca "Manter os originais"
-export const LADO_MAXIMO = 2048;
-async function reduzir(ficheiro) {
-  if (!/^image\/(jpeg|png|webp)$/.test(ficheiro.type)) return ficheiro;
-  const bmp = await createImageBitmap(ficheiro);
-  try {
-    const s = Math.min(1, LADO_MAXIMO / Math.max(bmp.width, bmp.height));
-    if (s === 1 && ficheiro.size < 1.5e6) return ficheiro;
-    const c = document.createElement('canvas');
-    c.width = Math.round(bmp.width * s); c.height = Math.round(bmp.height * s);
-    c.getContext('2d').drawImage(bmp, 0, 0, c.width, c.height);
-    const blob = await new Promise((ok) => c.toBlob(ok, 'image/jpeg', 0.9));
-    if (!blob || blob.size >= ficheiro.size) return ficheiro;
-    return new File([blob], ficheiro.name.replace(/\.[a-z0-9]+$/i, '') + '.jpg', { type: 'image/jpeg' });
-  } finally { bmp.close && bmp.close(); }
-}
+export { LADO_MAXIMO } from './imagens.js';
 
 export async function carregarMedia(postId, ficheiro, ordem, original = false) {
   if (!original) { try { ficheiro = await reduzir(ficheiro); } catch (_) { /* fica o original */ } }

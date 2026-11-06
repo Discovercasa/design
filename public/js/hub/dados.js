@@ -2,8 +2,10 @@
 // tarefas, decisões, perfis, vistos, notificações; migrações 0004/0005). Tudo passa por aqui.
 // As redes sociais (obras, fases, posts) carregam-se em social-dados.js e ficam também em E.
 import { carregarSocial } from './social-dados.js';
+import { reduzir, fazerMiniatura, nomeBase } from './imagens.js';
 
-export const IDS = ['build_your_house', 'builder', 'gerador', 'orcamentacao', 'plataforma_cliente'];
+// ordem das abas e das listas (pedido de 2026-11-07)
+export const IDS = ['gerador', 'builder', 'orcamentacao', 'build_your_house', 'plataforma_cliente'];
 
 export const E = {
   eu: { id: null, nome: '', editar: false },
@@ -11,6 +13,7 @@ export const E = {
   projetos: [],            // JSON de cada projeto
   checkpoints: [], tarefas: [], decisoes: [], perfis: [], notificacoes: [], documentos: [],
   obras: [], fases: [], posts: [], media: [], comentarios: [], socialErro: null,   // redes sociais
+  notas: [], anexos: [],  // notas de teste/revisão e imagens anexadas (migração 0011)
   vistos: new Set(),       // "tarefa:12"
   novos: new Set(),        // o que é novo para mim nesta visita (mostra a etiqueta "Novo")
   erro: null,
@@ -52,8 +55,10 @@ export async function carregarTudo() {
     sb().from('perfis').select('id, nome'),
     sb().from('vistos').select('tipo, ref_id'),
   ]);
-  const [docs] = await Promise.all([
+  const [docs, notas, anexos] = await Promise.all([
     sb().from('documentos').select('*').order('criado_em'),   // à parte: sem esta tabela o resto continua
+    sb().from('tarefas_notas').select('*').order('criado_em'), // idem (migração 0011)
+    sb().from('anexos').select('*').order('ordem'),
     carregarSocial(),                                          // idem (migração 0009)
   ]);
   const falha = r.find((x) => x.error);
@@ -62,6 +67,8 @@ export async function carregarTudo() {
   E.decisoes.forEach((d) => (d.decisoes_opcoes || []).sort((a, b) => a.ordem - b.ordem || a.id - b.id));
   E.vistos = new Set(r[4].data.map((v) => chave(v.tipo, v.ref_id)));
   E.documentos = docs.error ? [] : docs.data;
+  E.notas = notas.error ? [] : notas.data;
+  E.anexos = anexos.error ? [] : anexos.data;
   E.erro = null;
 }
 
@@ -112,13 +119,27 @@ export async function mudarNome(nome) {
 // escrita: cada função devolve o erro (ou null) e volta a carregar
 async function feito(p) { const { error } = await p; if (error) throw error; await carregarTudo(); }
 // checkpoints entram na posição escolhida (1 = primeiro); os outros são renumerados na base de dados
-export const criarCheckpoint = (c, posicao) => feito(sb().rpc('inserir_checkpoint', { p_projeto: c.projeto, p_titulo: c.titulo, p_descricao: c.descricao || '', p_posicao: posicao }));
+export async function criarCheckpoint(c, posicao) {
+  const { data, error } = await sb().rpc('inserir_checkpoint', { p_projeto: c.projeto, p_titulo: c.titulo, p_descricao: c.descricao || '', p_posicao: posicao });
+  if (error) throw error;
+  if (c.criterio_saida) { const r = await sb().from('checkpoints').update({ criterio_saida: c.criterio_saida }).eq('id', data); if (r.error) throw r.error; }
+  await carregarTudo();
+  return data;
+}
 export const moverCheckpoint = (id, posicao) => feito(sb().rpc('mover_checkpoint', { p_id: id, p_posicao: posicao }));
 export const mudarCheckpoint = (id, campos) => feito(sb().from('checkpoints').update(campos).eq('id', id));
-export const apagarCheckpoint = (id) => feito(sb().from('checkpoints').delete().eq('id', id));
+export async function apagarCheckpoint(id) {
+  const ficheiros = ficheirosDe('checkpoint', id);
+  await feito(sb().from('checkpoints').delete().eq('id', id));
+  apagarFicheiros(ficheiros);
+}
 export const criarTarefa = (t) => feito(sb().from('tarefas').insert(t));
 export const mudarTarefa = (id, campos) => feito(sb().from('tarefas').update(campos).eq('id', id));
-export const apagarTarefa = (id) => feito(sb().from('tarefas').delete().eq('id', id));
+export async function apagarTarefa(id) {
+  const ficheiros = ficheirosDe('tarefa', id);
+  await feito(sb().from('tarefas').delete().eq('id', id));
+  apagarFicheiros(ficheiros);
+}
 export async function criarDecisao(d, opcoes) {
   const { data, error } = await sb().from('decisoes').insert(d).select().single();
   if (error) throw error;
@@ -127,6 +148,9 @@ export async function criarDecisao(d, opcoes) {
   await carregarTudo();
 }
 export const decidir = (id, opcao, justificacao) => feito(sb().from('decisoes').update({ estado: 'decidida', opcao_escolhida: opcao, justificacao }).eq('id', id));
+// uma opção nova numa decisão em aberto (a base de dados avisa a equipa)
+export const acrescentarOpcao = (decisao, o) => feito(sb().rpc('acrescentar_opcao', { p_decisao: decisao, p_titulo: o.titulo, p_descricao: o.descricao || '',
+  p_vantagens: o.vantagens || '', p_desvantagens: o.desvantagens || '', p_custo: o.custo || '' }));
 export const reabrirDecisao = (id) => feito(sb().from('decisoes').update({ estado: 'aberta' }).eq('id', id));
 export const apagarDecisao = (id) => feito(sb().from('decisoes').delete().eq('id', id));
 
@@ -180,8 +204,78 @@ export async function apagarDocumento(doc) {
 // ---------------------------------------------------------------- em direto: qualquer mudança chega a quem tem o hub aberto
 export function ouvirMudancas(aoMudar) {
   const canal = sb().channel('hub-mudancas');
-  for (const t of ['checkpoints', 'tarefas', 'decisoes', 'decisoes_opcoes', 'documentos', 'notificacoes', 'obras', 'obras_fases', 'posts', 'posts_media', 'posts_comentarios'])
+  for (const t of ['checkpoints', 'tarefas', 'decisoes', 'decisoes_opcoes', 'documentos', 'notificacoes', 'obras', 'obras_fases', 'posts', 'posts_media', 'posts_comentarios', 'tarefas_notas', 'anexos'])
     canal.on('postgres_changes', { event: '*', schema: 'public', table: t }, () => aoMudar(t));
   canal.subscribe();
   return canal;
 }
+
+// ---------------------------------------------------------------- notas de teste/revisão (bugs, a mudar, a fazer)
+export const TIPOS_NOTA = { bug: 'Bug', mudar: 'A mudar', fazer: 'A fazer', nota: 'Nota' };
+export const notasDe = (tarefaId) => E.notas.filter((n) => n.tarefa_id === tarefaId)
+  .sort((a, b) => (a.resolvida - b.resolvida) || (new Date(a.criado_em) - new Date(b.criado_em)));
+export const podeMexerNota = (n) => E.eu.editar || n.autor_id === E.eu.id;
+export async function criarNota(tarefaId, tipo, texto, imagens = []) {
+  const { data, error } = await sb().from('tarefas_notas').insert({ tarefa_id: tarefaId, tipo, texto, autor_nome: E.eu.nome }).select().single();
+  if (error) throw error;
+  for (const [i, f] of imagens.entries()) await carregarAnexo('nota', data.id, f, i + 1);
+  await carregarTudo();
+  return data;
+}
+export const mudarNota = (id, campos) => feito(sb().from('tarefas_notas').update(campos).eq('id', id));
+export async function apagarNota(n) {
+  const ficheiros = ficheirosDe('nota', n.id);
+  await feito(sb().from('tarefas_notas').delete().eq('id', n.id));
+  apagarFicheiros(ficheiros);
+}
+// "Passar a tarefa": uma tarefa nova no mesmo checkpoint, com o texto da nota; a nota fica ligada a ela
+export async function passarNotaATarefa(n) {
+  const t = E.tarefas.find((x) => x.id === n.tarefa_id);
+  const titulo = (n.texto.split('\n')[0] || n.texto).slice(0, 140).trim() + (n.texto.length > 140 ? '…' : '');
+  const { data, error } = await sb().from('tarefas').insert({ checkpoint_id: t.checkpoint_id, projeto: t.projeto, titulo: titulo.length >= 2 ? titulo : 'Nota do teste',
+    descricao: `${TIPOS_NOTA[n.tipo]} encontrado em «${t.titulo}»:\n${n.texto}`, ordem: tarefasDe(t.checkpoint_id).length + 1 }).select().single();
+  if (error) throw error;
+  await feito(sb().from('tarefas_notas').update({ tarefa_criada_id: data.id }).eq('id', n.id));
+  return data;
+}
+
+// ---------------------------------------------------------------- imagens anexadas (armazenamento privado "anexos")
+export const anexosDe = (alvo, id) => E.anexos.filter((a) => a.alvo === alvo && a.ref_id === id).sort((a, b) => a.ordem - b.ordem || a.id - b.id);
+export const visorDe = (lista) => lista.map((a) => ({ balde: 'anexos', caminho: a.caminho, nome: a.nome_ficheiro }));
+export async function carregarAnexo(alvo, refId, ficheiro, ordem) {
+  try { ficheiro = await reduzir(ficheiro); } catch (_) { /* fica o original */ }
+  const nome = ficheiro.name && ficheiro.name !== 'image.png' ? ficheiro.name : `imagem-${new Date().toISOString().slice(0, 10)}.png`;
+  const base = nomeBase(nome);
+  const caminho = `${alvo}/${base}`;
+  let mini = null;
+  try { mini = await fazerMiniatura(ficheiro); } catch (_) { /* sem miniatura */ }
+  const up = await sb().storage.from('anexos').upload(caminho, ficheiro, { contentType: ficheiro.type || 'image/jpeg', upsert: false });
+  if (up.error) throw up.error;
+  let miniatura = null;
+  if (mini && mini.blob) {
+    miniatura = `miniaturas/${alvo}-${base.replace(/\.[a-z0-9]+$/, '')}.jpg`;
+    const um = await sb().storage.from('anexos').upload(miniatura, mini.blob, { contentType: 'image/jpeg', upsert: false });
+    if (um.error) miniatura = null;
+  }
+  const { error } = await sb().from('anexos').insert({ alvo, ref_id: refId, caminho, miniatura, nome_ficheiro: nome, mime: ficheiro.type || '',
+    tamanho: ficheiro.size, largura: mini ? mini.largura : null, altura: mini ? mini.altura : null, ordem: ordem || anexosDe(alvo, refId).length + 1 });
+  if (error) { await sb().storage.from('anexos').remove([caminho, miniatura].filter(Boolean)); throw error; }
+}
+export async function apagarAnexo(a) {
+  const { error } = await sb().from('anexos').delete().eq('id', a.id);
+  if (error) throw error;
+  apagarFicheiros([a.caminho, a.miniatura]);
+  await carregarTudo();
+}
+// os ficheiros de um checkpoint (e das suas tarefas e notas), de uma tarefa (e das suas notas) ou de uma nota
+function ficheirosDe(alvo, id) {
+  const tarefas = alvo === 'checkpoint' ? E.tarefas.filter((t) => t.checkpoint_id === id).map((t) => t.id) : alvo === 'tarefa' ? [id] : [];
+  const notas = alvo === 'nota' ? [id] : E.notas.filter((n) => tarefas.includes(n.tarefa_id)).map((n) => n.id);
+  return E.anexos.filter((a) => (a.alvo === 'checkpoint' && alvo === 'checkpoint' && a.ref_id === id) || (a.alvo === 'tarefa' && tarefas.includes(a.ref_id))
+    || (a.alvo === 'nota' && notas.includes(a.ref_id))).flatMap((a) => [a.caminho, a.miniatura]);
+}
+function apagarFicheiros(caminhos) {
+  const c = caminhos.filter(Boolean);
+  if (c.length) sb().storage.from('anexos').remove(c).catch(() => {});
+}
+

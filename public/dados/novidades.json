@@ -1,5 +1,19 @@
 [
   {
+    "dia": "2026-11-07",
+    "titulo": "Imagens, notas de teste e fases das obras",
+    "itens": [
+      "Imagens nas tarefas e nos checkpoints: ao editar, arrasta, cola (Ctrl+V) ou escolhe; clicar numa miniatura abre-a em grande, com setas.",
+      "Tarefas de teste ou revisão têm uma lista de notas: Bug, A mudar, A fazer ou Nota, com imagens. Marca-se como resolvida e um bug maior passa a tarefa com um clique.",
+      "Nas decisões em aberto há «Outra opção» para acrescentar uma alternativa que não estava na lista.",
+      "No Início, as decisões em aberto aparecem agrupadas por projeto.",
+      "Obras: clicar no círculo de uma fase diz que a obra está nessa fase (as anteriores ficam concluídas); dá para recuar e há «Desfazer».",
+      "Abas pela ordem: Início, Gerador de documentos, Builder, Orçamentação, Build Your House, Step Inside.",
+      "Checkpoints com «Critério de saída»: o que tem de ser verdade para se darem como concluídos.",
+      "Do documento de hierarquia: checkpoint do Builder para os defeitos conhecidos, política de libertação no Gerador, tarefas novas na Orçamentação e 3 decisões novas."
+    ]
+  },
+  {
     "dia": "2026-11-06",
     "titulo": "Redes sociais",
     "itens": [

@@ -19,11 +19,11 @@
     "Decisão escrita sobre a VR em produção.",
     "Ideia nossa: o cliente vê em 3D a casa que configurou no Build Your House."
   ],
-  "metodo": "Reutiliza os leitores e a geração Blender que já existem; nunca inventa cotas (NEEDS_HUMAN_REVIEW).",
+  "metodo": "Funciona com projetos de qualquer arquiteto ou construtor; reutiliza os leitores e a geração 3D que já existem; nunca inventa cotas (NEEDS_HUMAN_REVIEW).",
   "app": null,
   "organizacao": { "codigo": "ainda por criar (BOB/step-inside/)", "publicado": "ainda sem página própria", "ramo": "step-inside/<fase>-<tarefa>" },
   "ligacoes": [
-    { "com": "builder", "texto": "Sugerido usar o Builder: o seu modelo Blender é a geometria de partida." },
+    { "com": "builder", "texto": "Opcional: nas obras Discovercasa parte-se do modelo do Builder; os projetos de outros arquitetos entram diretamente." },
     { "com": "gerador", "texto": "Sugerido usar o Gerador: os seus leitores de DWFx e PDF interpretam os documentos." },
     { "com": "build_your_house", "texto": "Ideia: uma casa configurada pode ser vista em 3D ou AR." }
   ],

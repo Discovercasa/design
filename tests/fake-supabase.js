@@ -13,6 +13,7 @@
     perfis: [{ id: OUTRO.id, nome: OUTRO.nome, criado_em: '2026-11-01T00:00:00Z', notificacoes_vistas_em: '2026-11-01T00:00:00Z' }],
     checkpoints: fx.checkpoints || [], tarefas: fx.tarefas || [], decisoes: fx.decisoes || [], decisoes_opcoes: fx.decisoes_opcoes || [],
     documentos: fx.documentos || [], notificacoes: [], vistos: [],
+    tarefas_notas: fx.tarefas_notas || [], anexos: [],
     obras: fs.obras || [], obras_fases: fs.obras_fases || [], posts: fs.posts || [], posts_media: fs.posts_media || [], posts_comentarios: fs.posts_comentarios || [],
     sugestoes: [{ id: 1, texto: 'Pôr um modo escuro no hub.', ferramenta: 'geral', estado: 'nova', autor_id: OUTRO.id, autor_nome: OUTRO.nome, criada_em: '2026-11-04T09:00:00Z', na_checklist: false, checklist_em: null }],
     sugestoes_comentarios: [],
@@ -32,7 +33,7 @@
       else if (n.estado !== o.estado) n.concluido_em = n.estado === 'concluido' ? hoje() : null;
     },
     tarefas(n, o) {
-      if (!o) { Object.assign(n, { criado_por: ator.id, criado_por_nome: nomeAtual(), criado_em: agora() }); Object.assign(n, { descricao: n.descricao ?? '', estado: n.estado ?? 'por_fazer', custo: n.custo ?? '', app_sugerida: n.app_sugerida ?? null, responsavel_id: n.responsavel_id ?? null, ordem: n.ordem ?? 0, concluida_em: null }); }
+      if (!o) { Object.assign(n, { criado_por: ator.id, criado_por_nome: nomeAtual(), criado_em: agora() }); Object.assign(n, { descricao: n.descricao ?? '', estado: n.estado ?? 'por_fazer', custo: n.custo ?? '', app_sugerida: n.app_sugerida ?? null, responsavel_id: n.responsavel_id ?? null, ordem: n.ordem ?? 0, concluida_em: null, revisao: n.revisao ?? false }); }
       else if (n.estado !== o.estado) n.concluida_em = n.estado === 'concluida' ? hoje() : null;
       n.projeto = db.checkpoints.find((c) => c.id === n.checkpoint_id).projeto;
       n.responsavel_nome = n.responsavel_id ? pnome(n.responsavel_id) || 'Alguém' : '';
@@ -118,6 +119,28 @@
   depois.posts_media = (n, o) => { if (!o) desaprovarFotos(n.post_id); };
   antes.posts_comentarios = (n, o) => { if (!o) Object.assign(n, { autor_id: ator.id, autor_nome: nomeAtual(), criado_em: agora(), resolvido: n.resolvido ?? false, media_id: n.media_id ?? null }); };
   depois.posts_comentarios = (n, o) => { if (!o) notificar(null, 'post_comentario', `${nomeAtual()} comentou o post «${(db.posts.find((x) => x.id === n.post_id) || {}).titulo}»: ${n.texto.slice(0, 120)}`, 'post', n.post_id); };
+  // notas de teste/revisão e imagens anexadas (migração 0011)
+  const TIPOS_N = { bug: 'um bug', mudar: 'uma mudança', fazer: 'uma coisa a fazer', nota: 'uma nota' };
+  antes.tarefas_notas = (n, o) => {
+    if (!o) Object.assign(n, { autor_id: ator.id, autor_nome: nomeAtual(), criado_em: agora(), tipo: n.tipo ?? 'nota', resolvida: n.resolvida ?? false, tarefa_criada_id: n.tarefa_criada_id ?? null });
+    else Object.assign(n, { autor_id: o.autor_id, autor_nome: o.autor_nome, criado_em: o.criado_em, tarefa_id: o.tarefa_id });
+    n.projeto = (db.tarefas.find((t) => t.id === n.tarefa_id) || {}).projeto;
+    if (n.resolvida && (!o || !o.resolvida)) Object.assign(n, { resolvida_por_nome: nomeAtual(), resolvida_em: hoje() });
+    else if (!n.resolvida) Object.assign(n, { resolvida_por_nome: '', resolvida_em: null });
+  };
+  depois.tarefas_notas = (n, o) => {
+    const t = `«${(db.tarefas.find((x) => x.id === n.tarefa_id) || {}).titulo}»`;
+    if (!o) notificar(n.projeto, 'nota_nova', `${nomeAtual()} acrescentou ${TIPOS_N[n.tipo]} em ${t}: ${n.texto.slice(0, 120)}`, 'tarefa', n.tarefa_id);
+    else if (n.resolvida && !o.resolvida) notificar(n.projeto, 'nota_resolvida', `${nomeAtual()} resolveu em ${t}: ${n.texto.slice(0, 120)}`, 'tarefa', n.tarefa_id);
+  };
+  antes.anexos = (n, o) => {
+    if (o) return;
+    carimbo(n);
+    const tab = { checkpoint: db.checkpoints, tarefa: db.tarefas, nota: db.tarefas_notas }[n.alvo];
+    const ref = tab && tab.find((x) => x.id === n.ref_id);
+    if (!ref) throw new Error(`O ${n.alvo} ${n.ref_id} não existe.`);
+    n.projeto = ref.projeto; n.ordem ??= 0;
+  };
   // em direto: cada escrita avisa os canais abertos (como o Supabase Realtime)
   const ouvintes = [];
   const avisar = (t) => setTimeout(() => ouvintes.filter((o) => o.tabela === t).forEach((o) => o.cb({ table: t })), 30);
@@ -167,7 +190,19 @@
         } else if (this.op === 'delete') {
           const fora = tab.filter((r) => this.f.every((f) => f(r)));
           db[this.t] = tab.filter((r) => !fora.includes(r));
-          if (this.t === 'checkpoints') db.tarefas = db.tarefas.filter((t) => !fora.some((c) => c.id === t.checkpoint_id));
+          const semAnexos = (alvo, ids) => { db.anexos = db.anexos.filter((a) => !(a.alvo === alvo && ids.includes(a.ref_id))); };
+          if (this.t === 'checkpoints') {
+            const ts = db.tarefas.filter((t) => fora.some((c) => c.id === t.checkpoint_id)).map((t) => t.id);
+            const ns = db.tarefas_notas.filter((x) => ts.includes(x.tarefa_id)).map((x) => x.id);
+            db.tarefas = db.tarefas.filter((t) => !ts.includes(t.id)); db.tarefas_notas = db.tarefas_notas.filter((x) => !ns.includes(x.id));
+            semAnexos('checkpoint', fora.map((c) => c.id)); semAnexos('tarefa', ts); semAnexos('nota', ns);
+          }
+          if (this.t === 'tarefas') {
+            const ns = db.tarefas_notas.filter((x) => fora.some((t) => t.id === x.tarefa_id)).map((x) => x.id);
+            db.tarefas_notas = db.tarefas_notas.filter((x) => !ns.includes(x.id));
+            semAnexos('tarefa', fora.map((t) => t.id)); semAnexos('nota', ns);
+          }
+          if (this.t === 'tarefas_notas') semAnexos('nota', fora.map((x) => x.id));
           if (this.t === 'decisoes') db.decisoes_opcoes = db.decisoes_opcoes.filter((o) => !fora.some((d) => d.id === o.decisao_id));
           if (this.t === 'posts') { db.posts_media = db.posts_media.filter((m) => !fora.some((p) => p.id === m.post_id)); db.posts_comentarios = db.posts_comentarios.filter((c) => !fora.some((p) => p.id === c.post_id)); }
           if (this.t === 'posts_media') { fora.forEach((m) => desaprovarFotos(m.post_id)); db.posts_comentarios.forEach((c) => { if (fora.some((m) => m.id === c.media_id)) c.media_id = null; }); }
@@ -216,9 +251,36 @@
           renumerar(c.projeto, c.id, pos); c.ordem = pos; avisar('checkpoints');
           return { data: null, error: null };
         }
+        if (fn === 'acrescentar_opcao') {
+          if (ator.nivel === 'ver' || U.nivel === 'ver') return { data: null, error: { message: 'Sem permissão para editar.' } };
+          const d = db.decisoes.find((x) => x.id === a.p_decisao);
+          if (!d) return { data: null, error: { message: 'Decisão inexistente.' } };
+          if (d.estado !== 'aberta') return { data: null, error: { message: 'Reabre a decisão para lhe acrescentar opções.' } };
+          const ordem = 1 + Math.max(0, ...db.decisoes_opcoes.filter((o) => o.decisao_id === d.id).map((o) => o.ordem));
+          const o = { id: ++seq.decisoes_opcoes, decisao_id: d.id, titulo: a.p_titulo.trim(), descricao: a.p_descricao, vantagens: a.p_vantagens, desvantagens: a.p_desvantagens, custo: a.p_custo, ordem };
+          db.decisoes_opcoes.push(o); avisar('decisoes_opcoes');
+          notificar(d.projeto, 'decisao_opcao', `${nomeAtual()} acrescentou a opção «${o.titulo}» à decisão «${d.pergunta}»`, 'decisao', d.id);
+          return { data: o.id, error: null };
+        }
+        if (fn === 'definir_fases') {
+          if (U.nivel === 'ver') return { data: null, error: { message: 'Sem permissão para editar.' } };
+          const obra = db.obras.find((x) => x.id === a.p_obra);
+          for (const e of a.p_estados) {
+            const f = db.obras_fases.find((x) => x.id === e.id && x.obra_id === a.p_obra);
+            if (!f) return { data: null, error: { message: `A fase ${e.id} não é desta obra.` } };
+            if (f.estado !== e.estado) f.concluida_em = e.estado === 'concluida' ? (e.concluida_em || hoje()) : null;
+            else if (e.estado === 'concluida' && e.concluida_em) f.concluida_em = e.concluida_em;
+            f.estado = e.estado;
+          }
+          const atual = db.obras_fases.filter((x) => x.obra_id === a.p_obra && x.estado === 'em_curso').sort((x, y) => x.ordem - y.ordem)[0];
+          const todas = db.obras_fases.filter((x) => x.obra_id === a.p_obra).every((x) => x.estado === 'concluida');
+          notificar(null, 'fase_estado', `${nomeAtual()}${atual ? ` passou a obra ${obra.nome} para a fase «${atual.nome}»` : todas ? ` deu todas as fases da obra ${obra.nome} como concluídas` : ` atualizou as fases da obra ${obra.nome}`}`, 'obra', a.p_obra);
+          avisar('obras_fases');
+          return { data: null, error: null };
+        }
         return { data: null, error: { message: `function ${fn} does not exist` } };
       },
-      storage: { from: (balde) => (balde === 'social' ? {
+      storage: { from: (balde) => (balde === 'social' || balde === 'anexos' ? {
         upload: async (c, f) => { if (social.has(c)) return { data: null, error: { message: 'The resource already exists' } }; social.set(c, URL.createObjectURL(f)); return { data: { path: c }, error: null }; },
         createSignedUrls: async (cs) => ({ data: cs.map((c) => ({ path: c, signedUrl: social.has(c) ? urlSocial(c) : null, error: social.has(c) ? null : 'Object not found' })), error: null }),
         createSignedUrl: async (c) => (social.has(c) ? { data: { signedUrl: urlSocial(c) }, error: null } : { data: null, error: { message: 'Object not found' } }),

@@ -17,11 +17,11 @@
     "Painel de definições para os módulos.",
     "Funcionar também fora do método Discovercasa (hoje segue o nosso método; fica assim por agora)."
   ],
-  "metodo": "Segue o método construtivo Discovercasa. No futuro deve funcionar também com outros métodos.",
+  "metodo": "É a autoridade do método construtivo Discovercasa: os outros projetos usam-no quando precisam desse método, mas não dependem dele para funcionar. No futuro outros métodos entram como pacotes à parte.",
   "app": null,
   "organizacao": { "codigo": "BOB/ferramentas/modelo/ e BOB/conhecimento/", "publicado": "ainda sem página própria", "ramo": "builder/<tarefa>" },
   "ligacoes": [
     { "com": "gerador", "texto": "O Gerador usa o motor do Builder para tirar Módulos, Cobertura e Listagem de material." },
-    { "com": "plataforma_cliente", "texto": "O modelo Blender do Builder pode ser a fonte de verdade da visita 3D do Step Inside." }
+    { "com": "plataforma_cliente", "texto": "Opcional: nas obras Discovercasa o Step Inside pode partir do modelo do Builder (detalhe construtivo); não depende dele." }
   ]
 }

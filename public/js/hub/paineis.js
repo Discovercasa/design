@@ -1,5 +1,6 @@
 // Painéis e diálogos: notificações, menu do perfil, sugestões (gaveta), decisões, acrescentar/editar checkpoints e tarefas.
-import { E, projeto, nomeProjeto, checkpointsDe, naoLidas } from './dados.js';
+import { E, projeto, nomeProjeto, checkpointsDe, naoLidas, anexosDe } from './dados.js';
+import { img } from './imagens.js';
 import { ic, esc, dia, ha, iniciais, abrirDialogo } from './util.js';
 
 const ESTADOS_T = { por_fazer: 'Por fazer', em_curso: 'Em curso', bloqueada: 'Bloqueada', concluida: 'Concluída' };
@@ -58,6 +59,8 @@ export function dlgAcrescentar(projetoId, cpId, tipoInicial) {
       </div>
       <label class="campo-grupo"><span>Título</span><input class="campo" name="titulo" maxlength="200" required autocomplete="off"></label>
       <label class="campo-grupo"><span>Descrição <small>(opcional)</small></span><textarea class="campo" name="descricao" maxlength="4000"></textarea></label>
+      <label class="campo-grupo so-checkpoint"${tarefa ? ' hidden' : ''}><span>Critério de saída <small>(opcional: o que tem de ser verdade para o dar como concluído)</small></span><textarea class="campo" name="criterio_saida" maxlength="2000" rows="2"></textarea></label>
+      <label class="aprovar so-tarefa"${tarefa ? '' : ' hidden'}><input type="checkbox" class="visto" name="revisao"><span><b>Tarefa de teste ou revisão</b><br><span class="fraco mini">Mostra uma lista de notas (bugs, coisas a mudar, coisas a fazer). As imagens juntam-se depois, ao editar.</span></span></label>
       <div class="grelha-campos so-tarefa"${tarefa ? '' : ' hidden'}>
         <label class="campo-grupo"><span>Responsável</span><select class="campo" name="responsavel">${opcoesPessoas(null)}</select></label>
         <label class="campo-grupo"><span>App sugerida <small>(se poupa tempo)</small></span><select class="campo" name="app">${opcoesProjetos(null, 'Nenhuma')}</select></label>
@@ -75,6 +78,19 @@ export function opcoesCheckpoints(pid, atual) {
   return cps.map((c) => `<option value="${c.id}"${c.id === def ? ' selected' : ''}>${esc(c.titulo)}</option>`).join('');
 }
 
+// imagens de um checkpoint ou de uma tarefa no diálogo de edição: arrastar, colar (Ctrl+V) ou escolher
+export function htmlAnexosEdicao(alvo, id) {
+  const as = anexosDe(alvo, id);
+  return `<div class="anexos-edicao" data-alvo="${alvo}" data-ref="${id}">
+    <span class="campo-grupo-titulo">Imagens <small class="fraco">(${as.length})</small></span>
+    ${as.length ? `<ul class="anexos-lista">${as.map((a, i) => `<li><button type="button" class="galeria-img" data-acao="ver-anexo" data-alvo="${alvo}" data-ref="${id}" data-i="${i}" title="${esc(a.nome_ficheiro)}">${a.miniatura ? img('anexos', a.miniatura, a.nome_ficheiro) : img('anexos', a.caminho, a.nome_ficheiro)}</button>
+      <button type="button" class="icone-botao anexo-tirar" data-acao="apagar-anexo" data-id="${a.id}" aria-label="Tirar ${esc(a.nome_ficheiro)}">${ic('fechar', 'ic-sm')}</button></li>`).join('')}</ul>` : ''}
+    <label class="anexos-zona">${ic('imagem')}<span><b>Arrasta imagens para aqui</b>, cola-as (Ctrl+V) ou <u>escolhe do computador</u>.<br><span class="fraco mini">Ficam guardadas logo; as fotos grandes ficam com 2048 px.</span></span>
+      <input type="file" name="anexos-ficheiros" data-alvo="${alvo}" data-ref="${id}" multiple accept="image/*" class="so-leitor"></label>
+    <p class="anexos-progresso pequeno suave" role="status"></p>
+  </div>`;
+}
+
 export function dlgEditarTarefa(t) {
   return `<form data-form="editar-tarefa" data-id="${t.id}">${cabeca('Editar tarefa', esc(nomeProjeto(t.projeto)))}
     <div class="dlg-corpo">
@@ -87,6 +103,8 @@ export function dlgEditarTarefa(t) {
         <label class="campo-grupo"><span>App sugerida</span><select class="campo" name="app">${opcoesProjetos(t.app_sugerida, 'Nenhuma')}</select></label>
         <label class="campo-grupo"><span>Custo</span><input class="campo" name="custo" maxlength="300" value="${esc(t.custo)}"></label>
       </div>
+      <label class="aprovar"><input type="checkbox" class="visto" name="revisao"${t.revisao ? ' checked' : ''}><span><b>Tarefa de teste ou revisão</b><br><span class="fraco mini">Mostra uma lista de notas (bugs, coisas a mudar, coisas a fazer) onde a equipa regista o que encontrou.</span></span></label>
+      ${htmlAnexosEdicao('tarefa', t.id)}
       <p class="fraco mini">Acrescentada por ${esc(t.criado_por_nome || 'Equipa')} a ${dia(t.criado_em)}.</p>
       <p class="erro-msg pequeno" role="alert"></p>
     </div>
@@ -107,6 +125,8 @@ export function dlgEditarCheckpoint(c) {
         <label class="campo-grupo"><span>Estado</span><select class="campo" name="estado">${opcoes(ESTADOS_C, c.estado)}</select></label>
         <label class="campo-grupo"><span>Posição no workflow</span><select class="campo" name="posicao">${opcoesPosicao(c.projeto, c.id)}</select></label>
       </div>
+      <label class="campo-grupo"><span>Critério de saída <small>(opcional: o que tem de ser verdade para o dar como concluído)</small></span><textarea class="campo" name="criterio_saida" maxlength="2000" rows="2">${esc(c.criterio_saida || '')}</textarea></label>
+      ${htmlAnexosEdicao('checkpoint', c.id)}
       <p class="erro-msg pequeno" role="alert"></p>
     </div>
     <div class="dlg-rodape" style="justify-content:space-between">
@@ -150,6 +170,19 @@ export function dlgDecisao(d) {
           ? `<label class="opcao"><input type="radio" name="opcao" value="${o.id}" required>${corpoOpcao(o)}</label>`
           : `<div class="opcao">${corpoOpcao(o)}</div>`).join('')}
       </fieldset>
+      ${E.eu.editar ? `<div class="outra-opcao">
+        <button type="button" class="btn pequeno" data-acao="mostrar-outra-opcao" aria-expanded="false" aria-controls="outra-opcao-${d.id}">${ic('mais', 'ic-sm')}Outra opção</button>
+        <div class="opcao-edicao" id="outra-opcao-${d.id}" hidden>
+          <label class="campo-grupo"><span>Opção</span><input class="campo" name="n_titulo" maxlength="200" autocomplete="off" placeholder="Uma alternativa que não está na lista"></label>
+          <label class="campo-grupo"><span>Descrição <small>(opcional)</small></span><input class="campo" name="n_descricao" maxlength="2000"></label>
+          <div class="grelha-campos">
+            <label class="campo-grupo"><span>Vantagens</span><textarea class="campo" name="n_vantagens" rows="2" maxlength="2000"></textarea></label>
+            <label class="campo-grupo"><span>Desvantagens</span><textarea class="campo" name="n_desvantagens" rows="2" maxlength="2000"></textarea></label>
+          </div>
+          <label class="campo-grupo"><span>Custo <small>(opcional)</small></span><input class="campo" name="n_custo" maxlength="300"></label>
+          <div class="botoes"><button type="button" class="btn pequeno primario" data-acao="acrescentar-opcao" data-id="${d.id}">Acrescentar opção</button></div>
+        </div>
+      </div>` : ''}
       ${E.eu.editar ? `<label class="campo-grupo"><span>Porquê <small>(fica registado com a decisão)</small></span><textarea class="campo" name="justificacao" maxlength="4000"></textarea></label>` : '<p class="fraco pequeno">Quem tem acesso de editar regista a decisão.</p>'}
       <p class="erro-msg pequeno" role="alert"></p>
     </div>
@@ -180,7 +213,7 @@ export function dlgNovaDecisao(tarefa, projetoId) {
 }
 
 // ---------------------------------------------------------------- sugestões (gaveta): sugestões + checklist
-const FERRAMENTAS = { geral: 'Geral (o hub)', build_your_house: 'Build Your House', builder: 'Builder', gerador: 'Gerador de documentos', orcamentacao: 'Orçamentação', plataforma_cliente: 'Step Inside' };
+const FERRAMENTAS = { geral: 'Geral (o hub)', gerador: 'Gerador de documentos', builder: 'Builder', orcamentacao: 'Orçamentação', build_your_house: 'Build Your House', plataforma_cliente: 'Step Inside' };
 const ESTADOS_S = { nova: 'Nova', em_analise: 'Em análise', feita: 'Concluída', recusada: 'Recusada' };
 const COR_S = { nova: 'por_fazer', em_analise: 'em_curso', feita: 'concluida', recusada: 'bloqueada' };
 export function htmlGaveta(sep, sugestoes, abertas, erro) {

@@ -1,4 +1,4 @@
-"""Lê as migrações 0005, 0007 e 0008 e escreve tests/fixture.json com as mesmas linhas
+"""Lê as migrações 0005, 0007, 0008 e 0012 e escreve tests/fixture.json com as mesmas linhas
 (checkpoints, tarefas, decisões, opções) para a base simulada dos testes. Também confirma que cada chamada tem
 argumentos válidos (uma gralha no SQL aparece aqui antes de chegar ao Supabase).
 
@@ -13,14 +13,16 @@ MIG = RAIZ / "supabase" / "migrations"
 
 def partir(texto, sep):
     """Divide por `sep` fora de strings SQL ('...' com '' como aspa)."""
-    partes, atual, dentro, i = [], [], False, 0
+    partes, atual, dentro, i, nivel = [], [], False, 0, 0
     while i < len(texto):
         ch = texto[i]
         if ch == "'":
             if dentro and i + 1 < len(texto) and texto[i + 1] == "'":
                 atual.append("''"); i += 2; continue
             dentro = not dentro
-        if ch == sep and not dentro:
+        if not dentro and sep == "," and ch in "()":
+            nivel += 1 if ch == "(" else -1
+        if ch == sep and not dentro and nivel == 0:
             partes.append("".join(atual)); atual = []
         else:
             atual.append(ch)
@@ -50,15 +52,43 @@ db = {"checkpoints": [], "tarefas": [], "decisoes": [], "decisoes_opcoes": [], "
 var = {}
 CRIADO = "2026-11-05T10:00:00Z"
 v7 = False   # as funções de 0007 têm outra assinatura
+
+# 0012: procurar e mudar o que já existe (as chamadas encaixadas pg_temp.cpx/tx devolvem o id)
+def cpx(p, titulo):
+    return next(c["id"] for c in db["checkpoints"] if c["projeto"] == p and c["titulo"] == titulo)
+def tx(p, titulo):
+    return min(t["id"] for t in db["tarefas"] if t["projeto"] == p and t["titulo"] == titulo)
+def abrir(p, ordem):
+    for c in db["checkpoints"]:
+        if c["projeto"] == p and c["ordem"] >= ordem: c["ordem"] += 1
+def mudar(lista, i, **campos):
+    next(x for x in db[lista] if x["id"] == i).update(campos)
+def nota(t, tipo, texto):
+    assert tipo in ("bug", "mudar", "fazer", "nota")
+    tarefa = next(x for x in db["tarefas"] if x["id"] == t)
+    db["tarefas_notas"].append({"id": len(db["tarefas_notas"]) + 1, "tarefa_id": t, "projeto": tarefa["projeto"], "tipo": tipo, "texto": texto,
+        "resolvida": False, "resolvida_por_nome": "", "resolvida_em": None, "tarefa_criada_id": None, "autor_id": None, "autor_nome": "Equipa",
+        "criado_em": CRIADO})
+NOVAS = {"abrir": abrir, "cpx": cpx, "tx": tx, "nota": nota,
+         "crit": lambda c, t: mudar("checkpoints", c, criterio_saida=t), "desc_cp": lambda c, t: mudar("checkpoints", c, descricao=t),
+         "desc_t": lambda t, x: mudar("tarefas", t, descricao=x), "rev": lambda t: mudar("tarefas", t, revisao=True)}
+def arg(a):
+    m = re.fullmatch(r"\s*pg_temp\.(cpx|tx)\((.*)\)\s*", a, re.S)
+    if m: return NOVAS[m.group(1)](*[valor(x) for x in partir(m.group(2), ",")])
+    return valor(a)
 def correr(corpo):
   for st in partir(corpo, ";"):
     st = st.strip()
     if not st: continue
     if st.startswith("p constant"): continue
-    m = re.fullmatch(r"(?:([ctd])\s*:=\s*)?(?:perform\s+)?pg_temp\.(cp|tf|dc|op)\((.*)\)", st, re.S)
+    m = re.fullmatch(r"(?:([ctd])\s*:=\s*)?(?:perform\s+)?pg_temp\.(\w+)\((.*)\)", st, re.S)
     if not m: sys.exit(f"instrução não reconhecida: {st[:80]}")
-    alvo, fn, args = m.group(1), m.group(2), [valor(a) for a in partir(m.group(3), ",")]
+    alvo, fn, args = m.group(1), m.group(2), [arg(a) for a in partir(m.group(3), ",")]
     args = [var[a[1]] if isinstance(a, tuple) else a for a in args]
+    if fn in NOVAS:
+        r = NOVAS[fn](*args)
+        if alvo: var[alvo] = r
+        continue
     if v7 and fn == "cp": args = args[:4] + ["por_fazer"]
     if v7 and fn == "tf": args = [args[0], args[1], "por_fazer", None] + args[2:]
     if v7 and fn == "op": args = args[:5]
@@ -118,5 +148,12 @@ for l in linhas:
     a = [valor(x) for x in partir(l, ",")]
     db["documentos"].append({"id": len(db["documentos"]) + 1, "projeto": a[0], "tipo": a[1], "titulo": a[2], "descricao": a[3], "caminho": a[4],
         "nome_ficheiro": a[5], "tamanho": a[6], "mime": a[7], "criado_por": None, "criado_por_nome": a[8], "criado_em": a[9]})
+# 0011: colunas novas; 0012: conteúdo do documento de hierarquia e as notas de revisão
+for c in db["checkpoints"]: c["criterio_saida"] = ""
+for t in db["tarefas"]: t["revisao"] = False
+db["tarefas_notas"] = []
+correr(corpo_do((MIG / "0012_conteudo_hierarquia_revisoes.sql").read_text(encoding="utf-8")))
+for c in db["checkpoints"]: c.setdefault("criterio_saida", "")
+for t in db["tarefas"]: t.setdefault("revisao", False)
 (RAIZ / "tests" / "fixture.json").write_text(json.dumps(db, ensure_ascii=False, indent=1), encoding="utf-8")
 print({k: len(v) for k, v in db.items()})

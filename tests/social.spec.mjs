@@ -172,7 +172,7 @@ test('obras: fases que não se apagam, visita para fotos, fase nova na posição
   await expect(mat).toContainText('Julho - Ago');
   await expect(mat.locator('.obra-posts .chip')).toHaveCount(6);
   // a Estrutura de Matosinhos passa a em curso → aparece nas visitas para fotos
-  await mat.getByRole('button', { name: 'Estrutura' }).click();
+  await mat.getByRole('button', { name: 'Estrutura', exact: true }).click();
   const f = page.locator('#dlg form[data-sform="fase"]');
   await expect(f).toContainText('As fases não se apagam');
   await expect(f.getByRole('button', { name: /Apagar/ })).toHaveCount(0);

@@ -5,10 +5,10 @@ uma página (`#/projeto/<slug>`), um ficheiro de dados, uma pasta de código e u
 
 | Projeto | id (base de dados) | Página | Dados fixos | Código | Publicado em | Ramos |
 |---|---|---|---|---|---|---|
-| Build Your House | `build_your_house` | `#/projeto/build-your-house` | `public/dados/projetos/build_your_house.json` | `BOB/configurador/` | `public/build-your-house/` | `build-your-house/<tarefa>` |
-| Builder | `builder` | `#/projeto/builder` | `public/dados/projetos/builder.json` | `BOB/ferramentas/modelo/`, `BOB/conhecimento/` | (ainda sem página) | `builder/<tarefa>` |
 | Gerador de documentos | `gerador` | `#/projeto/gerador` | `public/dados/projetos/gerador.json` | `BOB/gerador/web/`, `BOB/ferramentas/documentos/` | `public/gerador/` | `gerador/<tarefa>` |
+| Builder | `builder` | `#/projeto/builder` | `public/dados/projetos/builder.json` | `BOB/ferramentas/modelo/`, `BOB/conhecimento/` | (ainda sem página) | `builder/<tarefa>` |
 | Orçamentação | `orcamentacao` | `#/projeto/orcamentacao` | `public/dados/projetos/orcamentacao.json` | `BOB/orcamentacao/` (a criar) | (ainda sem página) | `orcamentacao/<tarefa>` |
+| Build Your House | `build_your_house` | `#/projeto/build-your-house` | `public/dados/projetos/build_your_house.json` | `BOB/configurador/` | `public/build-your-house/` | `build-your-house/<tarefa>` |
 | Step Inside (VR/AR) | `plataforma_cliente` | `#/projeto/step-inside` | `public/dados/projetos/plataforma_cliente.json` | `BOB/step-inside/` (a criar) | (ainda sem página) | `step-inside/<fase>-<tarefa>` |
 | Hub do Design | — | `#/` | `public/dados/novidades.json` | `public/index.html`, `public/js/hub/`, `public/css/hub.css` | `public/` | `hub/<tarefa>` |
 | Redes sociais (do hub) | — (tabelas `obras`, `obras_fases`, `posts`, `posts_media`, `posts_comentarios`) | `#/social`, `#/social/obras` | Supabase (migrações 0009/0010) | `public/js/hub/social*.js`, `public/css/social.css` | `public/` | `hub/<tarefa>` |
@@ -30,5 +30,11 @@ uma página (`#/projeto/<slug>`), um ficheiro de dados, uma pasta de código e u
 - **Redes sociais**: um post por semana (mês + semana 1–5; um post não feito marca-se «Não feito» e adianta-se outro para essa semana, ficando registada a semana original); fotos e vídeos no armazenamento privado `social` (`posts/…`,
   miniaturas em `miniaturas/…`), nunca no Git. As fotos grandes reduzem-se a 2048 px ao carregar, salvo «Manter os
   originais». As fases das obras não se apagam (não há regra de apagar); as obras arquivam-se.
+- **Imagens e notas**: as imagens de checkpoints, tarefas e notas de teste ficam no armazenamento privado `anexos`
+  (nunca no Git), reduzidas a 2048 px. Uma tarefa de teste ou revisão (marca «Tarefa de teste ou revisão») tem a lista
+  de notas (Bug / A mudar / A fazer / Nota); um bug maior passa a tarefa própria.
+- **Hierarquia (2026-11-07)**: cada aplicação funciona sozinha; cada capacidade tem um só dono (regras de construção no
+  Builder, preços na Orçamentação, leitura de ficheiros no Gerador, desenho do cliente e terreno no Build Your House,
+  visita 3D no Step Inside). Uma tarefa técnica pertence a um só projeto; os outros têm a tarefa «integrar».
 - **Base de dados**: cada mudança é uma migração nova em `supabase/migrations/NNNN_nome.sql` (nunca editar uma já aplicada).
 - **Testes**: `cd tests && npm install && npx playwright install chromium && npm test` (base simulada, não toca na produção).

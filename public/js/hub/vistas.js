@@ -1,10 +1,12 @@
 // As páginas do hub, desenhadas a partir do estado E (dados.js). Os botões levam data-acao; o app.js trata dos cliques.
-import { E, projeto, nomeProjeto, checkpointsDe, tarefasDe, decisaoDaTarefa, decisoesDe, resumo, feitosDe, chave, documentosDe } from './dados.js';
+import { E, projeto, nomeProjeto, checkpointsDe, tarefasDe, decisaoDaTarefa, decisoesDe, resumo, feitosDe, chave, documentosDe, anexosDe, notasDe, TIPOS_NOTA, podeMexerNota } from './dados.js';
+import { img } from './imagens.js';
 import { ic, esc, dia, diaCurto, iniciais, euros } from './util.js';
 import { resumoInicio } from './social.js';
 
 const ROTULO = { por_fazer: 'Por fazer', em_curso: 'Em curso', bloqueada: 'Bloqueada', concluida: 'Concluída', concluido: 'Concluído' };
 export const abertos = new Set();   // checkpoints abertos (ficam abertos ao redesenhar)
+export const notasAbertas = new Set();   // tarefas com a lista de notas aberta
 let abertosIniciados = new Set();   // projetos cujos checkpoints "em curso" já abrimos por defeito
 
 const saudacao = () => { const h = new Date().getHours(); return h < 6 ? 'Boa noite' : h < 13 ? 'Bom dia' : h < 20 ? 'Boa tarde' : 'Boa noite'; };
@@ -77,8 +79,11 @@ export function inicio() {
     <aside class="lateral">
       <section class="bloco-lateral" id="decisoes-abertas" aria-labelledby="t-dec">
         <h3 id="t-dec">Decisões em aberto</h3>
-        ${abertas.length ? `<ul class="lista-simples">${abertas.map((d) => `<li><span>${pillDecisao(d)}</span><span><span class="pequeno">${esc(d.pergunta)}</span><br><span class="fraco mini">${esc(nomeProjeto(d.projeto))}</span></span></li>`).join('')}</ul>`
-          : '<p class="suave pequeno">Nenhuma decisão à espera.</p>'}
+        ${abertas.length ? E.projetos.filter((p) => abertas.some((d) => d.projeto === p.id)).map((p) => {
+          const ds = abertas.filter((d) => d.projeto === p.id);
+          return `<div class="decisoes-projeto"><a class="decisoes-projeto-nome" href="${linkProjeto(p.id)}">${esc(p.nome)} <span class="fraco num">${ds.length}</span></a>
+            <ul class="lista-simples">${ds.map((d) => `<li><span>${pillDecisao(d)}</span><span class="pequeno">${esc(d.pergunta)}</span></li>`).join('')}</ul></div>`;
+        }).join('') : '<p class="suave pequeno">Nenhuma decisão à espera.</p>'}
       </section>
       <section class="bloco-lateral" aria-labelledby="t-feito">
         <h3 id="t-feito">Feito recentemente</h3>
@@ -150,6 +155,13 @@ export function paginaProjeto(p) {
   </div>`;
 }
 
+// imagens anexadas (checkpoint, tarefa ou nota): miniaturas que abrem em grande no visor
+export function galeria(alvo, id) {
+  const as = anexosDe(alvo, id);
+  if (!as.length) return '';
+  return `<div class="galeria">${as.map((a, i) => `<button type="button" class="galeria-img" data-acao="ver-anexo" data-alvo="${alvo}" data-ref="${id}" data-i="${i}" title="${esc(a.nome_ficheiro)}">${a.miniatura ? img('anexos', a.miniatura, a.nome_ficheiro) : img('anexos', a.caminho, a.nome_ficheiro)}</button>`).join('')}</div>`;
+}
+
 function passo(c, i) {
   const ts = tarefasDe(c.id), feitas = ts.filter((t) => t.estado === 'concluida').length, aberto = abertos.has(c.id);
   return `<li class="passo ${c.estado}${aberto ? ' aberto' : ''}" id="cp-${c.id}">
@@ -162,6 +174,8 @@ function passo(c, i) {
       </button>
       <div class="passo-detalhe" id="cpd-${c.id}"${aberto ? '' : ' hidden'}>
         ${c.descricao ? `<p class="passo-descricao">${esc(c.descricao)}</p>` : ''}
+        ${galeria('checkpoint', c.id)}
+        ${c.criterio_saida ? `<p class="criterio">${ic('alvo', 'ic-sm')}<span><b>Critério de saída:</b> ${esc(c.criterio_saida)}</span></p>` : ''}
         <div class="passo-tarefas">
           ${ts.map(tarefa).join('') || '<p class="suave pequeno" style="padding:14px 16px">Ainda sem tarefas.</p>'}
           ${E.eu.editar ? `<form class="form-linha" data-form="nova-tarefa" data-cp="${c.id}">
@@ -185,11 +199,13 @@ function tarefa(t) {
     <div>
       <p class="titulo">${esc(t.titulo)} ${novo('tarefa', t.id)}</p>
       ${t.descricao ? `<p class="descricao">${esc(t.descricao)}</p>` : ''}
+      ${galeria('tarefa', t.id)}
       <div class="meta">
         <span class="estado ${t.estado}">${ROTULO[t.estado]}${t.concluida_em ? ' a ' + diaCurto(t.concluida_em) : ''}</span>
         ${t.responsavel_id ? `<span class="chip"><span class="avatar pequeno">${esc(iniciais(t.responsavel_nome))}</span>${esc(t.responsavel_nome)}</span>` : ''}
         ${appChip(t.app_sugerida)}${custoChip(t.custo)}
       </div>
+      ${t.revisao ? notas(t) : ''}
     </div>
     <div class="direita">
       ${pillDecisao(d)}
@@ -197,6 +213,45 @@ function tarefa(t) {
       ${E.eu.editar ? `<button class="icone-botao" type="button" data-acao="editar-tarefa" data-id="${t.id}" aria-label="Editar tarefa" title="Editar">${ic('editar', 'ic-sm')}</button>` : ''}
     </div>
   </div>`;
+}
+
+// ---------------------------------------------------------------- notas de teste/revisão
+function notas(t) {
+  const ns = notasDe(t.id), abertas = ns.filter((n) => !n.resolvida), bugs = abertas.filter((n) => n.tipo === 'bug').length;
+  const aberto = notasAbertas.has(t.id);
+  const resumo = ns.length ? `<b>${abertas.length} por resolver</b>${bugs ? ` · ${bugs} ${bugs === 1 ? 'bug' : 'bugs'}` : ''} · ${ns.length} no total` : 'Ainda sem notas';
+  return `<div class="notas-rev" id="notas-${t.id}">
+    <button type="button" class="notas-resumo" data-acao="alternar-notas" data-id="${t.id}" aria-expanded="${aberto}" aria-controls="notas-corpo-${t.id}">
+      ${ic('comentario', 'ic-sm')}<span>Notas do teste ou revisão: ${resumo}</span>${ic('baixo', 'ic-sm chev')}</button>
+    <div class="notas-corpo" id="notas-corpo-${t.id}"${aberto ? '' : ' hidden'}>
+      ${ns.length ? `<ul class="notas-lista">${ns.map((n) => linhaNota(n)).join('')}</ul>` : ''}
+      <form class="nota-nova" data-form="nota" data-tarefa="${t.id}">
+        <div class="segmentado" role="group" aria-label="Tipo de nota">${Object.entries(TIPOS_NOTA).map(([k, v], i) => `<button type="button" data-acao="tipo-nota" data-valor="${k}" aria-pressed="${i === 0}">${v}</button>`).join('')}</div>
+        <input type="hidden" name="tipo" value="bug">
+        <textarea class="campo" name="texto" rows="2" maxlength="4000" required placeholder="O que encontraste? Podes colar capturas de ecrã (Ctrl+V)." aria-label="Nota"></textarea>
+        <div class="nota-nova-fundo">
+          <label class="btn pequeno texto">${ic('imagem', 'ic-sm')}Imagens<input type="file" name="imagens-nota" data-tarefa="${t.id}" multiple accept="image/*" class="so-leitor"></label>
+          <ul class="escolhidas" data-escolhidas-nota="${t.id}"></ul>
+          <button class="btn pequeno primario" type="submit">Acrescentar nota</button>
+        </div>
+      </form>
+    </div>
+  </div>`;
+}
+function linhaNota(n) {
+  const pode = podeMexerNota(n), tarefa = n.tarefa_criada_id ? E.tarefas.find((x) => x.id === n.tarefa_criada_id) : null;
+  return `<li class="nota ${n.tipo}${n.resolvida ? ' resolvida' : ''}" id="nota-${n.id}">
+    <input type="checkbox" class="visto" data-acao="resolver-nota" data-id="${n.id}" aria-label="Resolvida"${n.resolvida ? ' checked' : ''}${pode ? '' : ' disabled'}>
+    <div class="nota-corpo">
+      <p class="nota-texto"><span class="nota-tipo ${n.tipo}">${TIPOS_NOTA[n.tipo]}</span> ${esc(n.texto)}</p>
+      ${galeria('nota', n.id)}
+      <p class="fraco mini">${esc(n.autor_nome || 'Equipa')} · ${dia(n.criado_em)}${n.resolvida ? ` · resolvida${n.resolvida_por_nome ? ' por ' + esc(n.resolvida_por_nome) : ''}${n.resolvida_em ? ' a ' + diaCurto(n.resolvida_em) : ''}` : ''}${tarefa ? ` · <a href="#/projeto/${projeto(tarefa.projeto).slug}/t-${tarefa.id}">passou a tarefa</a>` : ''}</p>
+    </div>
+    <div class="nota-acoes">
+      ${E.eu.editar && !n.tarefa_criada_id && !n.resolvida ? `<button class="btn pequeno texto" type="button" data-acao="passar-nota" data-id="${n.id}" title="Cria uma tarefa neste checkpoint com o texto da nota">Passar a tarefa</button>` : ''}
+      ${pode ? `<button class="icone-botao" type="button" data-acao="apagar-nota" data-id="${n.id}" aria-label="Apagar nota" title="Apagar">${ic('apagar', 'ic-sm')}</button>` : ''}
+    </div>
+  </li>`;
 }
 
 // ---------------------------------------------------------------- documentos do projeto (informativos e adicionais)

@@ -88,6 +88,22 @@ Why Claude learns the method; "vamos passo a passo" — an overall idea, then an
   GSAP skills, React Bits, taste-skill and impeccable, and a final Playwright check with feedback.
 - **Pending with the user**: confirm the name Step Inside (migrations applied and hub published 2026-11-05).
 
+## App hierarchy (user 2026-11-07)
+Agreed from the user-supplied "HIERARQUIA_E_ROADMAP_INTEGRADO_DISCOVERCASA" document (see registo 2026-11-07):
+- Each app works alone; each capability has one technical owner; one owner per technical task.
+- Data authority: prices only in Orçamentação; quantities from the Builder; configured design from Build Your House;
+  terrain belongs to Smart Land (Build Your House and Step Inside only consume it).
+- "The Builder is the authority of the DiscoverCasa construction method; other products may consume it but do not
+  depend on it" (replaces "the Builder is the base, everything depends on it").
+- Builder defect fixing does not wait for the Torres Vedras material list; Orçamentação may start its data model with
+  clearly marked test data; Gerador release policy: documents with known problems are marked "COM PROBLEMAS — NÃO
+  UTILIZAR EM FÁBRICA"; every engine change is checked against the regression references (Torres Vedras, L house, U/T
+  house, hidden roof, visible roof, pergola).
+- Only the contracts needed now (architecture BYH → Builder; quantities Listagem → Orçamentação with stable product
+  codes), not a full multi-organisation platform / 9-module contract; checkpoints stay as they are (Smart Land phases
+  not merged); BYH and Step Inside phase 0 audits done jointly.
+- Open business decision: sell BYH / Step Inside to third parties? (Design accounts come from the Hub.)
+
 ## Social media (user 2026-11-06)
 - Instagram/Facebook posts are planned in advance in a Google Sheets workbook ("DiscoverCasa Post Mensal - publicações"):
   one post per week, each month = 4 weeks (Semana 1-4); a post = title "<Obra> - <topic>" (e.g. "Boelhe - BF",
