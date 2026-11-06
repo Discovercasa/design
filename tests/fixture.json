@@ -10,7 +10,8 @@
    "concluido_em": "2026-10-20",
    "criado_por": null,
    "criado_por_nome": "Equipa",
-   "criado_em": "2026-11-05T10:00:00Z"
+   "criado_em": "2026-11-05T10:00:00Z",
+   "criterio_saida": ""
   },
   {
    "id": 2,
@@ -22,7 +23,8 @@
    "concluido_em": "2026-10-29",
    "criado_por": null,
    "criado_por_nome": "Equipa",
-   "criado_em": "2026-11-05T10:00:00Z"
+   "criado_em": "2026-11-05T10:00:00Z",
+   "criterio_saida": ""
   },
   {
    "id": 3,
@@ -34,7 +36,8 @@
    "concluido_em": "2026-10-30",
    "criado_por": null,
    "criado_por_nome": "Equipa",
-   "criado_em": "2026-11-05T10:00:00Z"
+   "criado_em": "2026-11-05T10:00:00Z",
+   "criterio_saida": ""
   },
   {
    "id": 4,
@@ -46,7 +49,8 @@
    "concluido_em": null,
    "criado_por": null,
    "criado_por_nome": "Equipa",
-   "criado_em": "2026-11-05T10:00:00Z"
+   "criado_em": "2026-11-05T10:00:00Z",
+   "criterio_saida": "Decisões que mudam a geometria registadas; teste da equipa concluído; bugs críticos resolvidos ou aceites."
   },
   {
    "id": 5,
@@ -58,7 +62,8 @@
    "concluido_em": null,
    "criado_por": null,
    "criado_por_nome": "Equipa",
-   "criado_em": "2026-11-05T10:00:00Z"
+   "criado_em": "2026-11-05T10:00:00Z",
+   "criterio_saida": "Nenhum preço provisório aparece como real; cada preço mostra a versão e a data."
   },
   {
    "id": 6,
@@ -70,7 +75,8 @@
    "concluido_em": null,
    "criado_por": null,
    "criado_por_nome": "Equipa",
-   "criado_em": "2026-11-05T10:00:00Z"
+   "criado_em": "2026-11-05T10:00:00Z",
+   "criterio_saida": "Testado em telemóvel e tablet; aprovação formal da Discovercasa; termos e permissões revistos."
   },
   {
    "id": 7,
@@ -82,7 +88,8 @@
    "concluido_em": "2026-10-15",
    "criado_por": null,
    "criado_por_nome": "Equipa",
-   "criado_em": "2026-11-05T10:00:00Z"
+   "criado_em": "2026-11-05T10:00:00Z",
+   "criterio_saida": ""
   },
   {
    "id": 8,
@@ -94,7 +101,8 @@
    "concluido_em": "2026-09-30",
    "criado_por": null,
    "criado_por_nome": "Equipa",
-   "criado_em": "2026-11-05T10:00:00Z"
+   "criado_em": "2026-11-05T10:00:00Z",
+   "criterio_saida": ""
   },
   {
    "id": 9,
@@ -106,43 +114,47 @@
    "concluido_em": "2026-10-20",
    "criado_por": null,
    "criado_por_nome": "Equipa",
-   "criado_em": "2026-11-05T10:00:00Z"
+   "criado_em": "2026-11-05T10:00:00Z",
+   "criterio_saida": ""
   },
   {
    "id": 10,
    "projeto": "builder",
    "titulo": "Validação com os materiais reais",
    "descricao": "Os valores do modelo têm de estar perto do que a obra realmente gastou.",
-   "ordem": 4,
+   "ordem": 5,
    "estado": "em_curso",
    "concluido_em": null,
    "criado_por": null,
    "criado_por_nome": "Equipa",
-   "criado_em": "2026-11-05T10:00:00Z"
+   "criado_em": "2026-11-05T10:00:00Z",
+   "criterio_saida": "Tolerância de erro definida por família de material; as diferenças fora da tolerância estão explicadas, corrigidas ou aceites."
   },
   {
    "id": 11,
    "projeto": "builder",
    "titulo": "Sobral: casas de dois pisos",
    "descricao": "Loteamento de 16 casas e um armazém; em pausa desde 2026-10-15.",
-   "ordem": 5,
+   "ordem": 6,
    "estado": "por_fazer",
    "concluido_em": null,
    "criado_por": null,
    "criado_por_nome": "Equipa",
-   "criado_em": "2026-11-05T10:00:00Z"
+   "criado_em": "2026-11-05T10:00:00Z",
+   "criterio_saida": ""
   },
   {
    "id": 12,
    "projeto": "builder",
    "titulo": "Painel de definições",
    "descricao": "Hoje as medidas estão em sistema_construtivo.json.",
-   "ordem": 6,
+   "ordem": 7,
    "estado": "por_fazer",
    "concluido_em": null,
    "criado_por": null,
    "criado_por_nome": "Equipa",
-   "criado_em": "2026-11-05T10:00:00Z"
+   "criado_em": "2026-11-05T10:00:00Z",
+   "criterio_saida": ""
   },
   {
    "id": 13,
@@ -154,7 +166,8 @@
    "concluido_em": "2026-10-20",
    "criado_por": null,
    "criado_por_nome": "Equipa",
-   "criado_em": "2026-11-05T10:00:00Z"
+   "criado_em": "2026-11-05T10:00:00Z",
+   "criterio_saida": ""
   },
   {
    "id": 14,
@@ -166,7 +179,8 @@
    "concluido_em": "2026-10-30",
    "criado_por": null,
    "criado_por_nome": "Equipa",
-   "criado_em": "2026-11-05T10:00:00Z"
+   "criado_em": "2026-11-05T10:00:00Z",
+   "criterio_saida": ""
   },
   {
    "id": 15,
@@ -178,19 +192,21 @@
    "concluido_em": null,
    "criado_por": null,
    "criado_por_nome": "Equipa",
-   "criado_em": "2026-11-05T10:00:00Z"
+   "criado_em": "2026-11-05T10:00:00Z",
+   "criterio_saida": "Módulos, Cobertura e Listagem de material aprovados e testados contra o Builder e uma obra de referência."
   },
   {
    "id": 16,
    "projeto": "gerador",
    "titulo": "Mais formatos de entrada",
    "descricao": "Os mesmos leitores servem o Step Inside (especificação §19).",
-   "ordem": 4,
+   "ordem": 5,
    "estado": "por_fazer",
    "concluido_em": null,
    "criado_por": null,
    "criado_por_nome": "Equipa",
-   "criado_em": "2026-11-05T10:00:00Z"
+   "criado_em": "2026-11-05T10:00:00Z",
+   "criterio_saida": "Matriz de formatos publicada; testes com ficheiros válidos, ambíguos e inválidos."
   },
   {
    "id": 17,
@@ -202,7 +218,8 @@
    "concluido_em": null,
    "criado_por": null,
    "criado_por_nome": "Equipa",
-   "criado_em": "2026-11-05T10:00:00Z"
+   "criado_em": "2026-11-05T10:00:00Z",
+   "criterio_saida": "Cada linha com preço tem código, unidade e fonte do preço; as exceções estão à vista."
   },
   {
    "id": 18,
@@ -214,7 +231,8 @@
    "concluido_em": null,
    "criado_por": null,
    "criado_por_nome": "Equipa",
-   "criado_em": "2026-11-05T10:00:00Z"
+   "criado_em": "2026-11-05T10:00:00Z",
+   "criterio_saida": "Orçamento reproduzível e comparável entre revisões, com as contas à vista."
   },
   {
    "id": 19,
@@ -226,19 +244,21 @@
    "concluido_em": null,
    "criado_por": null,
    "criado_por_nome": "Equipa",
-   "criado_em": "2026-11-05T10:00:00Z"
+   "criado_em": "2026-11-05T10:00:00Z",
+   "criterio_saida": ""
   },
   {
    "id": 20,
    "projeto": "plataforma_cliente",
    "titulo": "Fase 0 · Auditoria do sistema atual",
-   "descricao": "Conhecer o hub, a Cloudflare, o Supabase e a pipeline Blender antes de escrever código. Sem alterações em produção.",
+   "descricao": "Conhecer o hub, a Cloudflare, o Supabase e a pipeline Blender antes de escrever código. Feita em conjunto com a Fase 0 do Build Your House: um só relatório da infraestrutura, com uma secção por aplicação. Sem alterações de produção e sem despesas.",
    "ordem": 1,
    "estado": "por_fazer",
    "concluido_em": null,
    "criado_por": null,
    "criado_por_nome": "Equipa",
-   "criado_em": "2026-11-05T10:00:00Z"
+   "criado_em": "2026-11-05T10:00:00Z",
+   "criterio_saida": "Relatório da arquitetura atual, sem alterações de produção e sem despesas."
   },
   {
    "id": 21,
@@ -250,19 +270,21 @@
    "concluido_em": null,
    "criado_por": null,
    "criado_por_nome": "Equipa",
-   "criado_em": "2026-11-05T10:00:00Z"
+   "criado_em": "2026-11-05T10:00:00Z",
+   "criterio_saida": "Nenhum dado inferido aparece como confirmado; NEEDS_HUMAN_REVIEW trava o que depende dele."
   },
   {
    "id": 22,
    "projeto": "plataforma_cliente",
    "titulo": "Fase 2 · Modelo Blender e terreno",
-   "descricao": "O Blender é a fonte de verdade da geometria. Terreno rigoroso só com levantamento.",
+   "descricao": "Nas obras Discovercasa parte-se do modelo do Builder; aceita também modelos e documentos de outros arquitetos e construtores. O ficheiro Blender é uma saída editável: a verdade é o modelo estruturado, com IDs, medidas e origem. Terreno rigoroso só com levantamento (o terreno vem do Smart Land).",
    "ordem": 3,
    "estado": "por_fazer",
    "concluido_em": null,
    "criado_por": null,
    "criado_por_nome": "Equipa",
-   "criado_em": "2026-11-05T10:00:00Z"
+   "criado_em": "2026-11-05T10:00:00Z",
+   "criterio_saida": "Um projeto de outro arquiteto e um projeto Discovercasa preparados para a visita."
   },
   {
    "id": 23,
@@ -274,7 +296,8 @@
    "concluido_em": null,
    "criado_por": null,
    "criado_por_nome": "Equipa",
-   "criado_em": "2026-11-05T10:00:00Z"
+   "criado_em": "2026-11-05T10:00:00Z",
+   "criterio_saida": "Exportação reproduzível, sem perder os IDs e as relações."
   },
   {
    "id": 24,
@@ -286,7 +309,8 @@
    "concluido_em": null,
    "criado_por": null,
    "criado_por_nome": "Equipa",
-   "criado_em": "2026-11-05T10:00:00Z"
+   "criado_em": "2026-11-05T10:00:00Z",
+   "criterio_saida": "Casa de referência aprovada, desempenho medido e custo do build conhecido."
   },
   {
    "id": 25,
@@ -298,7 +322,8 @@
    "concluido_em": null,
    "criado_por": null,
    "criado_por_nome": "Equipa",
-   "criado_em": "2026-11-05T10:00:00Z"
+   "criado_em": "2026-11-05T10:00:00Z",
+   "criterio_saida": "Custo completo por sessão e capacidade por GPU medidos, antes de prometer o serviço."
   },
   {
    "id": 26,
@@ -310,7 +335,8 @@
    "concluido_em": null,
    "criado_por": null,
    "criado_por_nome": "Equipa",
-   "criado_em": "2026-11-05T10:00:00Z"
+   "criado_em": "2026-11-05T10:00:00Z",
+   "criterio_saida": "Um cliente nunca abre o projeto de outro (testado); backups e restauração testados."
   },
   {
    "id": 27,
@@ -322,7 +348,8 @@
    "concluido_em": null,
    "criado_por": null,
    "criado_por_nome": "Equipa",
-   "criado_em": "2026-11-05T10:00:00Z"
+   "criado_em": "2026-11-05T10:00:00Z",
+   "criterio_saida": "Escala, ancoragem, materiais e desempenho aceitáveis nos telemóveis de teste."
   },
   {
    "id": 28,
@@ -334,7 +361,8 @@
    "concluido_em": null,
    "criado_por": null,
    "criado_por_nome": "Equipa",
-   "criado_em": "2026-11-05T10:00:00Z"
+   "criado_em": "2026-11-05T10:00:00Z",
+   "criterio_saida": "Prova real com pessoas e critérios de conforto atingidos (não basta aparecer imagem no headset)."
   },
   {
    "id": 29,
@@ -346,19 +374,21 @@
    "concluido_em": null,
    "criado_por": null,
    "criado_por_nome": "Equipa",
-   "criado_em": "2026-11-05T10:00:00Z"
+   "criado_em": "2026-11-05T10:00:00Z",
+   "criterio_saida": "Operação segura e auditável, com custos por casa e por sessão conhecidos."
   },
   {
    "id": 30,
    "projeto": "build_your_house",
    "titulo": "Fase 0 · Auditoria para Smart Land, Interiores e Conformidade",
-   "descricao": "Antes de qualquer código: conhecer o configurador, o motor 3D, o Supabase e a Cloudflare e escrever o plano de integração. Nenhum código existente muda.",
+   "descricao": "Antes de qualquer código: conhecer o configurador, o motor 3D, o Supabase e a Cloudflare e escrever o plano de integração. Nenhum código existente muda. Feita em conjunto com a Fase 0 do Step Inside: um só relatório da infraestrutura, com uma secção por aplicação.",
    "ordem": 5,
    "estado": "por_fazer",
    "concluido_em": null,
    "criado_por": null,
    "criado_por_nome": "Equipa",
-   "criado_em": "2026-11-05T10:00:00Z"
+   "criado_em": "2026-11-05T10:00:00Z",
+   "criterio_saida": "Arquitetura atual documentada e plano de integração aprovado, sem alterações destrutivas."
   },
   {
    "id": 31,
@@ -370,7 +400,8 @@
    "concluido_em": null,
    "criado_por": null,
    "criado_por_nome": "Equipa",
-   "criado_em": "2026-11-05T10:00:00Z"
+   "criado_em": "2026-11-05T10:00:00Z",
+   "criterio_saida": ""
   },
   {
    "id": 32,
@@ -382,7 +413,8 @@
    "concluido_em": null,
    "criado_por": null,
    "criado_por_nome": "Equipa",
-   "criado_em": "2026-11-05T10:00:00Z"
+   "criado_em": "2026-11-05T10:00:00Z",
+   "criterio_saida": ""
   },
   {
    "id": 33,
@@ -394,7 +426,8 @@
    "concluido_em": null,
    "criado_por": null,
    "criado_por_nome": "Equipa",
-   "criado_em": "2026-11-05T10:00:00Z"
+   "criado_em": "2026-11-05T10:00:00Z",
+   "criterio_saida": ""
   },
   {
    "id": 34,
@@ -406,7 +439,8 @@
    "concluido_em": null,
    "criado_por": null,
    "criado_por_nome": "Equipa",
-   "criado_em": "2026-11-05T10:00:00Z"
+   "criado_em": "2026-11-05T10:00:00Z",
+   "criterio_saida": ""
   },
   {
    "id": 35,
@@ -418,7 +452,8 @@
    "concluido_em": null,
    "criado_por": null,
    "criado_por_nome": "Equipa",
-   "criado_em": "2026-11-05T10:00:00Z"
+   "criado_em": "2026-11-05T10:00:00Z",
+   "criterio_saida": ""
   },
   {
    "id": 36,
@@ -430,7 +465,8 @@
    "concluido_em": null,
    "criado_por": null,
    "criado_por_nome": "Equipa",
-   "criado_em": "2026-11-05T10:00:00Z"
+   "criado_em": "2026-11-05T10:00:00Z",
+   "criterio_saida": ""
   },
   {
    "id": 37,
@@ -442,7 +478,8 @@
    "concluido_em": null,
    "criado_por": null,
    "criado_por_nome": "Equipa",
-   "criado_em": "2026-11-05T10:00:00Z"
+   "criado_em": "2026-11-05T10:00:00Z",
+   "criterio_saida": ""
   },
   {
    "id": 38,
@@ -454,7 +491,34 @@
    "concluido_em": null,
    "criado_por": null,
    "criado_por_nome": "Equipa",
-   "criado_em": "2026-11-05T10:00:00Z"
+   "criado_em": "2026-11-05T10:00:00Z",
+   "criterio_saida": ""
+  },
+  {
+   "id": 39,
+   "projeto": "builder",
+   "titulo": "Corrigir defeitos geométricos conhecidos",
+   "descricao": "Os problemas que a verificação das madeiras encontrou em Torres Vedras. Avança já, sem esperar pela listagem real de materiais.",
+   "ordem": 4,
+   "estado": "por_fazer",
+   "concluido_em": null,
+   "criado_por": null,
+   "criado_por_nome": "Equipa",
+   "criado_em": "2026-11-05T10:00:00Z",
+   "criterio_saida": "Os testes de referência passam sem colisões não intencionais; as sobreposições intencionais estão documentadas; a lista de corte bate com a geometria."
+  },
+  {
+   "id": 40,
+   "projeto": "gerador",
+   "titulo": "Política de libertação dos documentos",
+   "descricao": "Um rascunho nunca se pode confundir com um documento validado para produção.",
+   "ordem": 4,
+   "estado": "por_fazer",
+   "concluido_em": null,
+   "criado_por": null,
+   "criado_por_nome": "Equipa",
+   "criado_em": "2026-11-05T10:00:00Z",
+   "criterio_saida": "Não é possível confundir um documento de rascunho com um documento validado para produção."
   }
  ],
  "tarefas": [
@@ -473,7 +537,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": "2026-10-20"
+   "concluida_em": "2026-10-20",
+   "revisao": false
   },
   {
    "id": 2,
@@ -490,7 +555,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": "2026-10-20"
+   "concluida_em": "2026-10-20",
+   "revisao": false
   },
   {
    "id": 3,
@@ -507,7 +573,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": "2026-10-20"
+   "concluida_em": "2026-10-20",
+   "revisao": false
   },
   {
    "id": 4,
@@ -524,7 +591,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": "2026-10-20"
+   "concluida_em": "2026-10-20",
+   "revisao": false
   },
   {
    "id": 5,
@@ -541,7 +609,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": "2026-10-21"
+   "concluida_em": "2026-10-21",
+   "revisao": false
   },
   {
    "id": 6,
@@ -558,7 +627,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": "2026-10-21"
+   "concluida_em": "2026-10-21",
+   "revisao": false
   },
   {
    "id": 7,
@@ -575,7 +645,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": "2026-10-27"
+   "concluida_em": "2026-10-27",
+   "revisao": false
   },
   {
    "id": 8,
@@ -592,7 +663,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": "2026-10-29"
+   "concluida_em": "2026-10-29",
+   "revisao": false
   },
   {
    "id": 9,
@@ -609,7 +681,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": "2026-10-30"
+   "concluida_em": "2026-10-30",
+   "revisao": false
   },
   {
    "id": 10,
@@ -626,7 +699,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 11,
@@ -643,7 +717,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 12,
@@ -660,14 +735,15 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 13,
    "checkpoint_id": 4,
    "projeto": "build_your_house",
    "titulo": "Teste completo do configurador pela equipa, com comentários",
-   "descricao": "",
+   "descricao": "Cada problema encontrado no teste fica na lista de notas: bug, a mudar ou a fazer.",
    "estado": "por_fazer",
    "responsavel_id": null,
    "responsavel_nome": "",
@@ -677,7 +753,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": true
   },
   {
    "id": 14,
@@ -694,7 +771,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 15,
@@ -711,7 +789,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 16,
@@ -728,7 +807,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": true
   },
   {
    "id": 17,
@@ -745,7 +825,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": true
   },
   {
    "id": 18,
@@ -762,7 +843,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 19,
@@ -779,7 +861,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": "2026-09-23"
+   "concluida_em": "2026-09-23",
+   "revisao": false
   },
   {
    "id": 20,
@@ -796,7 +879,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": "2026-10-15"
+   "concluida_em": "2026-10-15",
+   "revisao": false
   },
   {
    "id": 21,
@@ -813,7 +897,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": "2026-09-30"
+   "concluida_em": "2026-09-30",
+   "revisao": false
   },
   {
    "id": 22,
@@ -830,7 +915,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": "2026-10-15"
+   "concluida_em": "2026-10-15",
+   "revisao": false
   },
   {
    "id": 23,
@@ -847,7 +933,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": "2026-10-16"
+   "concluida_em": "2026-10-16",
+   "revisao": false
   },
   {
    "id": 24,
@@ -864,7 +951,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": "2026-10-19"
+   "concluida_em": "2026-10-19",
+   "revisao": false
   },
   {
    "id": 25,
@@ -881,7 +969,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": "2026-10-20"
+   "concluida_em": "2026-10-20",
+   "revisao": false
   },
   {
    "id": 26,
@@ -898,7 +987,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": "2026-10-30"
+   "concluida_em": "2026-10-30",
+   "revisao": false
   },
   {
    "id": 27,
@@ -915,7 +1005,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 28,
@@ -932,7 +1023,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": true
   },
   {
    "id": 29,
@@ -949,7 +1041,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 30,
@@ -966,7 +1059,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 31,
@@ -983,7 +1077,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 32,
@@ -1000,7 +1095,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": "2026-10-20"
+   "concluida_em": "2026-10-20",
+   "revisao": false
   },
   {
    "id": 33,
@@ -1017,7 +1113,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": "2026-10-30"
+   "concluida_em": "2026-10-30",
+   "revisao": false
   },
   {
    "id": 34,
@@ -1034,7 +1131,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": "2026-10-30"
+   "concluida_em": "2026-10-30",
+   "revisao": false
   },
   {
    "id": 35,
@@ -1051,7 +1149,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": "2026-10-30"
+   "concluida_em": "2026-10-30",
+   "revisao": false
   },
   {
    "id": 36,
@@ -1068,7 +1167,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": true
   },
   {
    "id": 37,
@@ -1085,7 +1185,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": true
   },
   {
    "id": 38,
@@ -1102,7 +1203,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 39,
@@ -1119,7 +1221,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 40,
@@ -1136,7 +1239,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 41,
@@ -1153,7 +1257,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 42,
@@ -1170,7 +1275,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 43,
@@ -1187,7 +1293,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 44,
@@ -1204,7 +1311,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 45,
@@ -1221,7 +1329,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 46,
@@ -1238,7 +1347,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 47,
@@ -1255,7 +1365,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 48,
@@ -1272,7 +1383,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 49,
@@ -1289,7 +1401,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 50,
@@ -1306,7 +1419,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 51,
@@ -1323,7 +1437,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 52,
@@ -1340,7 +1455,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 53,
@@ -1357,7 +1473,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 54,
@@ -1374,7 +1491,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 55,
@@ -1391,7 +1509,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 56,
@@ -1408,7 +1527,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 57,
@@ -1425,7 +1545,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 58,
@@ -1442,7 +1563,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 59,
@@ -1459,7 +1581,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 60,
@@ -1476,7 +1599,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 61,
@@ -1493,7 +1617,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 62,
@@ -1510,7 +1635,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 63,
@@ -1527,7 +1653,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 64,
@@ -1544,7 +1671,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 65,
@@ -1561,7 +1689,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 66,
@@ -1578,7 +1707,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 67,
@@ -1595,7 +1725,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 68,
@@ -1612,7 +1743,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 69,
@@ -1629,7 +1761,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 70,
@@ -1646,7 +1779,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 71,
@@ -1663,7 +1797,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": true
   },
   {
    "id": 72,
@@ -1680,7 +1815,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 73,
@@ -1697,7 +1833,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 74,
@@ -1714,7 +1851,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 75,
@@ -1731,7 +1869,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 76,
@@ -1748,7 +1887,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 77,
@@ -1765,7 +1905,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 78,
@@ -1782,7 +1923,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 79,
@@ -1799,7 +1941,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 80,
@@ -1816,7 +1959,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 81,
@@ -1833,7 +1977,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 82,
@@ -1850,7 +1995,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 83,
@@ -1867,7 +2013,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 84,
@@ -1884,7 +2031,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": true
   },
   {
    "id": 85,
@@ -1901,7 +2049,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 86,
@@ -1918,7 +2067,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 87,
@@ -1935,7 +2085,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 88,
@@ -1952,7 +2103,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 89,
@@ -1969,7 +2121,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 90,
@@ -1986,7 +2139,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": true
   },
   {
    "id": 91,
@@ -2003,7 +2157,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 92,
@@ -2020,7 +2175,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 93,
@@ -2037,7 +2193,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 94,
@@ -2054,7 +2211,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 95,
@@ -2071,7 +2229,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 96,
@@ -2088,7 +2247,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 97,
@@ -2105,7 +2265,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 98,
@@ -2122,7 +2283,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": true
   },
   {
    "id": 99,
@@ -2139,7 +2301,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 100,
@@ -2156,7 +2319,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 101,
@@ -2173,7 +2337,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 102,
@@ -2190,7 +2355,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 103,
@@ -2207,7 +2373,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 104,
@@ -2224,7 +2391,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 105,
@@ -2241,7 +2409,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 106,
@@ -2258,7 +2427,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 107,
@@ -2275,7 +2445,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 108,
@@ -2292,7 +2463,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 109,
@@ -2309,7 +2481,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 110,
@@ -2326,7 +2499,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 111,
@@ -2343,7 +2517,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 112,
@@ -2360,7 +2535,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 113,
@@ -2377,7 +2553,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 114,
@@ -2394,7 +2571,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 115,
@@ -2411,7 +2589,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 116,
@@ -2428,7 +2607,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 117,
@@ -2445,7 +2625,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 118,
@@ -2462,7 +2643,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 119,
@@ -2479,7 +2661,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 120,
@@ -2496,7 +2679,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 121,
@@ -2513,7 +2697,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 122,
@@ -2530,7 +2715,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 123,
@@ -2547,7 +2733,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 124,
@@ -2564,7 +2751,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 125,
@@ -2581,7 +2769,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 126,
@@ -2598,7 +2787,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 127,
@@ -2615,7 +2805,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 128,
@@ -2632,7 +2823,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 129,
@@ -2649,7 +2841,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 130,
@@ -2666,7 +2859,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 131,
@@ -2683,7 +2877,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 132,
@@ -2700,7 +2895,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 133,
@@ -2717,7 +2913,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 134,
@@ -2734,7 +2931,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 135,
@@ -2751,7 +2949,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
   },
   {
    "id": 136,
@@ -2768,7 +2967,296 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "concluida_em": null
+   "concluida_em": null,
+   "revisao": false
+  },
+  {
+   "id": 137,
+   "checkpoint_id": 39,
+   "projeto": "builder",
+   "titulo": "Regra de encontro do anel de amarração nos cantos e nos T",
+   "descricao": "",
+   "estado": "por_fazer",
+   "responsavel_id": null,
+   "responsavel_nome": "",
+   "app_sugerida": null,
+   "custo": "",
+   "ordem": 1,
+   "criado_por": null,
+   "criado_por_nome": "Equipa",
+   "criado_em": "2026-11-05T10:00:00Z",
+   "concluida_em": null,
+   "revisao": false
+  },
+  {
+   "id": 138,
+   "checkpoint_id": 39,
+   "projeto": "builder",
+   "titulo": "Comprimento dos montantes por cima das vergas",
+   "descricao": "",
+   "estado": "por_fazer",
+   "responsavel_id": null,
+   "responsavel_nome": "",
+   "app_sugerida": null,
+   "custo": "",
+   "ordem": 2,
+   "criado_por": null,
+   "criado_por_nome": "Equipa",
+   "criado_em": "2026-11-05T10:00:00Z",
+   "concluida_em": null,
+   "revisao": false
+  },
+  {
+   "id": 139,
+   "checkpoint_id": 39,
+   "projeto": "builder",
+   "titulo": "Sobreposições dos prumos em pares",
+   "descricao": "",
+   "estado": "por_fazer",
+   "responsavel_id": null,
+   "responsavel_nome": "",
+   "app_sugerida": null,
+   "custo": "",
+   "ordem": 3,
+   "criado_por": null,
+   "criado_por_nome": "Equipa",
+   "criado_em": "2026-11-05T10:00:00Z",
+   "concluida_em": null,
+   "revisao": false
+  },
+  {
+   "id": 140,
+   "checkpoint_id": 39,
+   "projeto": "builder",
+   "titulo": "Sobreposição dos módulos interiores",
+   "descricao": "",
+   "estado": "por_fazer",
+   "responsavel_id": null,
+   "responsavel_nome": "",
+   "app_sugerida": null,
+   "custo": "",
+   "ordem": 4,
+   "criado_por": null,
+   "criado_por_nome": "Equipa",
+   "criado_em": "2026-11-05T10:00:00Z",
+   "concluida_em": null,
+   "revisao": false
+  },
+  {
+   "id": 141,
+   "checkpoint_id": 39,
+   "projeto": "builder",
+   "titulo": "Completar a verificação da cobertura oculta",
+   "descricao": "",
+   "estado": "por_fazer",
+   "responsavel_id": null,
+   "responsavel_nome": "",
+   "app_sugerida": null,
+   "custo": "",
+   "ordem": 5,
+   "criado_por": null,
+   "criado_por_nome": "Equipa",
+   "criado_em": "2026-11-05T10:00:00Z",
+   "concluida_em": null,
+   "revisao": false
+  },
+  {
+   "id": 142,
+   "checkpoint_id": 39,
+   "projeto": "builder",
+   "titulo": "Completar a verificação de paredes e módulos",
+   "descricao": "",
+   "estado": "por_fazer",
+   "responsavel_id": null,
+   "responsavel_nome": "",
+   "app_sugerida": null,
+   "custo": "",
+   "ordem": 6,
+   "criado_por": null,
+   "criado_por_nome": "Equipa",
+   "criado_em": "2026-11-05T10:00:00Z",
+   "concluida_em": null,
+   "revisao": false
+  },
+  {
+   "id": 143,
+   "checkpoint_id": 39,
+   "projeto": "builder",
+   "titulo": "Tolerâncias por tipo de ligação, folga e peça",
+   "descricao": "",
+   "estado": "por_fazer",
+   "responsavel_id": null,
+   "responsavel_nome": "",
+   "app_sugerida": null,
+   "custo": "",
+   "ordem": 7,
+   "criado_por": null,
+   "criado_por_nome": "Equipa",
+   "criado_em": "2026-11-05T10:00:00Z",
+   "concluida_em": null,
+   "revisao": false
+  },
+  {
+   "id": 144,
+   "checkpoint_id": 39,
+   "projeto": "builder",
+   "titulo": "Testes de referência a cada mudança do motor",
+   "descricao": "Torres Vedras, uma casa regular, uma em L, uma em U/T, cobertura oculta, cobertura à vista e um caso com pérgola. O Gerador volta a gerar os documentos de referência.",
+   "estado": "por_fazer",
+   "responsavel_id": null,
+   "responsavel_nome": "",
+   "app_sugerida": "gerador",
+   "custo": "",
+   "ordem": 8,
+   "criado_por": null,
+   "criado_por_nome": "Equipa",
+   "criado_em": "2026-11-05T10:00:00Z",
+   "concluida_em": null,
+   "revisao": false
+  },
+  {
+   "id": 145,
+   "checkpoint_id": 40,
+   "projeto": "gerador",
+   "titulo": "Separar erros bloqueantes, avisos e informação em falta",
+   "descricao": "",
+   "estado": "por_fazer",
+   "responsavel_id": null,
+   "responsavel_nome": "",
+   "app_sugerida": null,
+   "custo": "",
+   "ordem": 1,
+   "criado_por": null,
+   "criado_por_nome": "Equipa",
+   "criado_em": "2026-11-05T10:00:00Z",
+   "concluida_em": null,
+   "revisao": false
+  },
+  {
+   "id": 146,
+   "checkpoint_id": 40,
+   "projeto": "gerador",
+   "titulo": "Marcar os documentos com erros bloqueantes: «COM PROBLEMAS — NÃO UTILIZAR EM FÁBRICA»",
+   "descricao": "",
+   "estado": "por_fazer",
+   "responsavel_id": null,
+   "responsavel_nome": "",
+   "app_sugerida": null,
+   "custo": "",
+   "ordem": 2,
+   "criado_por": null,
+   "criado_por_nome": "Equipa",
+   "criado_em": "2026-11-05T10:00:00Z",
+   "concluida_em": null,
+   "revisao": false
+  },
+  {
+   "id": 147,
+   "checkpoint_id": 40,
+   "projeto": "gerador",
+   "titulo": "Rascunho só com a marca inequívoca de não aprovado",
+   "descricao": "",
+   "estado": "por_fazer",
+   "responsavel_id": null,
+   "responsavel_nome": "",
+   "app_sugerida": null,
+   "custo": "",
+   "ordem": 3,
+   "criado_por": null,
+   "criado_por_nome": "Equipa",
+   "criado_em": "2026-11-05T10:00:00Z",
+   "concluida_em": null,
+   "revisao": false
+  },
+  {
+   "id": 148,
+   "checkpoint_id": 40,
+   "projeto": "gerador",
+   "titulo": "Exceções só com aprovação e motivo registados",
+   "descricao": "",
+   "estado": "por_fazer",
+   "responsavel_id": null,
+   "responsavel_nome": "",
+   "app_sugerida": null,
+   "custo": "",
+   "ordem": 4,
+   "criado_por": null,
+   "criado_por_nome": "Equipa",
+   "criado_em": "2026-11-05T10:00:00Z",
+   "concluida_em": null,
+   "revisao": false
+  },
+  {
+   "id": 149,
+   "checkpoint_id": 40,
+   "projeto": "gerador",
+   "titulo": "Guardar com cada documento a versão do motor, os dados de entrada e o relatório de verificação",
+   "descricao": "",
+   "estado": "por_fazer",
+   "responsavel_id": null,
+   "responsavel_nome": "",
+   "app_sugerida": null,
+   "custo": "",
+   "ordem": 5,
+   "criado_por": null,
+   "criado_por_nome": "Equipa",
+   "criado_em": "2026-11-05T10:00:00Z",
+   "concluida_em": null,
+   "revisao": false
+  },
+  {
+   "id": 150,
+   "checkpoint_id": 17,
+   "projeto": "orcamentacao",
+   "titulo": "Modelo de dados do catálogo (códigos, unidades, fornecedores, validade) com dados de teste",
+   "descricao": "Pode começar já. Os dados de teste ficam marcados como teste e nunca aparecem como preços reais.",
+   "estado": "por_fazer",
+   "responsavel_id": null,
+   "responsavel_nome": "",
+   "app_sugerida": null,
+   "custo": "",
+   "ordem": 3,
+   "criado_por": null,
+   "criado_por_nome": "Equipa",
+   "criado_em": "2026-11-05T10:00:00Z",
+   "concluida_em": null,
+   "revisao": false
+  },
+  {
+   "id": 151,
+   "checkpoint_id": 17,
+   "projeto": "orcamentacao",
+   "titulo": "Códigos de produto estáveis em cada linha da Listagem de material",
+   "descricao": "A ligação entre a Listagem e a lista de preços faz-se pelo código, não pelo nome.",
+   "estado": "por_fazer",
+   "responsavel_id": null,
+   "responsavel_nome": "",
+   "app_sugerida": "gerador",
+   "custo": "",
+   "ordem": 4,
+   "criado_por": null,
+   "criado_por_nome": "Equipa",
+   "criado_em": "2026-11-05T10:00:00Z",
+   "concluida_em": null,
+   "revisao": false
+  },
+  {
+   "id": 152,
+   "checkpoint_id": 18,
+   "projeto": "orcamentacao",
+   "titulo": "Aceitar também listas de quantidades manuais ou importadas (CSV / Excel)",
+   "descricao": "A Orçamentação não depende só do Gerador: serve obras antigas e orçamentos rápidos.",
+   "estado": "por_fazer",
+   "responsavel_id": null,
+   "responsavel_nome": "",
+   "app_sugerida": null,
+   "custo": "",
+   "ordem": 4,
+   "criado_por": null,
+   "criado_por_nome": "Equipa",
+   "criado_em": "2026-11-05T10:00:00Z",
+   "concluida_em": null,
+   "revisao": false
   }
  ],
  "decisoes": [
@@ -2922,6 +3410,54 @@
    "tarefa_id": 128,
    "pergunta": "De onde vêm os modelos 3D do catálogo de interiores?",
    "contexto": "Antes de integrar cada modelo: licença, atribuição, uso comercial, redistribuição (especificação §12.3). Começar com um catálogo pequeno e coerente.",
+   "estado": "aberta",
+   "opcao_escolhida": null,
+   "justificacao": "",
+   "decidida_por": null,
+   "decidida_por_nome": "",
+   "decidida_em": null,
+   "criado_por": null,
+   "criado_por_nome": "Equipa",
+   "criado_em": "2026-11-05T10:00:00Z"
+  },
+  {
+   "id": 11,
+   "projeto": "build_your_house",
+   "tarefa_id": null,
+   "pergunta": "Vendemos o Build Your House e o Step Inside a outras empresas? Quando?",
+   "contexto": "O documento de hierarquia (2026-11-07) desenha tudo para terceiros: várias organizações, isolamento entre clientes, métodos construtivos de outras empresas. As contas do Design vêm do Hub, por isso vender a terceiros obriga a repensar a entrada. Até decidir, não se constrói para terceiros, mas também não se fecham portas.",
+   "estado": "aberta",
+   "opcao_escolhida": null,
+   "justificacao": "",
+   "decidida_por": null,
+   "decidida_por_nome": "",
+   "decidida_em": null,
+   "criado_por": null,
+   "criado_por_nome": "Equipa",
+   "criado_em": "2026-11-05T10:00:00Z"
+  },
+  {
+   "id": 12,
+   "projeto": "builder",
+   "tarefa_id": null,
+   "pergunta": "Que contrato de dados fazemos já entre as aplicações?",
+   "contexto": "O documento de hierarquia propõe um Contrato de Intercâmbio com 9 módulos. Hoje há dois consumidores reais: a casa configurada → Builder e a Listagem de material → Orçamentação.",
+   "estado": "aberta",
+   "opcao_escolhida": null,
+   "justificacao": "",
+   "decidida_por": null,
+   "decidida_por_nome": "",
+   "decidida_em": null,
+   "criado_por": null,
+   "criado_por_nome": "Equipa",
+   "criado_em": "2026-11-05T10:00:00Z"
+  },
+  {
+   "id": 13,
+   "projeto": "orcamentacao",
+   "tarefa_id": null,
+   "pergunta": "Quem mantém os códigos de produto usados pela Listagem e pelos preços?",
+   "contexto": "A Listagem de material (Builder/Gerador) e a lista de preços (Orçamentação) têm de falar dos mesmos produtos.",
    "estado": "aberta",
    "opcao_escolhida": null,
    "justificacao": "",
@@ -3222,6 +3758,86 @@
    "vantagens": "Produtos reais que se podem vender.",
    "desvantagens": "Formatos e qualidade variáveis; acordos com cada marca.",
    "custo": "A negociar",
+   "ordem": 3
+  },
+  {
+   "id": 30,
+   "decisao_id": 11,
+   "titulo": "Só uso interno por agora",
+   "descricao": "",
+   "vantagens": "Sem trabalho extra; foco em abrir aos nossos clientes.",
+   "desvantagens": "Decidir mais tarde pode obrigar a adaptar dados e contas.",
+   "custo": "0 €",
+   "ordem": 1
+  },
+  {
+   "id": 31,
+   "decisao_id": 11,
+   "titulo": "Primeiro o Build Your House a terceiros",
+   "descricao": "",
+   "vantagens": "É o produto mais avançado; receita mais cedo.",
+   "desvantagens": "Exige contas próprias fora do Hub, isolamento por empresa, termos e preços por cliente.",
+   "custo": "Desenvolvimento a estimar",
+   "ordem": 2
+  },
+  {
+   "id": 32,
+   "decisao_id": 11,
+   "titulo": "Os dois, com plataforma para várias organizações",
+   "descricao": "",
+   "vantagens": "Uma base comum para vender os dois.",
+   "desvantagens": "Meses de infraestrutura antes de ter clientes externos.",
+   "custo": "Desenvolvimento a estimar; plano Supabase pago provável",
+   "ordem": 3
+  },
+  {
+   "id": 33,
+   "decisao_id": 12,
+   "titulo": "Mínimo: arquitetura e quantidades agora; o resto quando houver um segundo consumidor",
+   "descricao": "",
+   "vantagens": "Rápido; responde ao que já é preciso.",
+   "desvantagens": "Os outros módulos ficam por definir.",
+   "custo": "Pouco tempo de desenvolvimento",
+   "ordem": 1
+  },
+  {
+   "id": 34,
+   "decisao_id": 12,
+   "titulo": "Completo já (os 9 módulos)",
+   "descricao": "",
+   "vantagens": "Tudo pensado de uma vez.",
+   "desvantagens": "Muito trabalho antes de haver valor visível; partes podem mudar antes de serem usadas.",
+   "custo": "Semanas a meses de desenvolvimento",
+   "ordem": 2
+  },
+  {
+   "id": 35,
+   "decisao_id": 13,
+   "titulo": "A Orçamentação (catálogo); o Builder liga os seus materiais por uma tabela de correspondência",
+   "descricao": "",
+   "vantagens": "Um só dono dos códigos; os preços continuam só na Orçamentação.",
+   "desvantagens": "Mais uma tabela a manter quando entra um material novo.",
+   "custo": "",
+   "ordem": 1
+  },
+  {
+   "id": 36,
+   "decisao_id": 13,
+   "titulo": "O Builder define os códigos e a Orçamentação segue-os",
+   "descricao": "",
+   "vantagens": "Os códigos nascem com os materiais do método.",
+   "desvantagens": "Mistura dados comerciais com o método construtivo.",
+   "custo": "",
+   "ordem": 2
+  },
+  {
+   "id": 37,
+   "decisao_id": 13,
+   "titulo": "Lista mantida à mão pela equipa",
+   "descricao": "",
+   "vantagens": "Simples no início.",
+   "desvantagens": "Erros e duplicados com o tempo.",
+   "custo": "",
    "ordem": 3
   }
  ],
@@ -3799,6 +4415,36 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T12:00:00Z"
+  }
+ ],
+ "tarefas_notas": [
+  {
+   "id": 1,
+   "tarefa_id": 13,
+   "projeto": "build_your_house",
+   "tipo": "bug",
+   "texto": "Quando se muda os revestimentos exteriores e a casa tem cobertura oculta, a parte interior da platibanda que também tem revestimento não atualiza para dar match ao revestimento exterior e tem de o fazer porque se a casa for de capoto o revestimento do interior da platibanda que fica à mostra também é de capoto.",
+   "resolvida": false,
+   "resolvida_por_nome": "",
+   "resolvida_em": null,
+   "tarefa_criada_id": null,
+   "autor_id": null,
+   "autor_nome": "Equipa",
+   "criado_em": "2026-11-05T10:00:00Z"
+  },
+  {
+   "id": 2,
+   "tarefa_id": 13,
+   "projeto": "build_your_house",
+   "tipo": "bug",
+   "texto": "Outro Bug é relativo as coberturas que podes já tirar mesmo antes de eu te dar a informação toda sobre as coberturas. Quando é sem ser oculta estas a colocar uma peça de metal ou da cor do telhado a acompanhar as testeiras dos triângulos e isso não acontece.",
+   "resolvida": false,
+   "resolvida_por_nome": "",
+   "resolvida_em": null,
+   "tarefa_criada_id": null,
+   "autor_id": null,
+   "autor_nome": "Equipa",
+   "criado_em": "2026-11-05T10:00:00Z"
   }
  ]
 }

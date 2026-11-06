@@ -537,6 +537,9 @@ Structure (confirmed 2026-09-30 / 10-09; photos `fontes/fotos-teto-cobertura/1_`
   battens + counter-battens, a sub-roof, the tile's slope (clay ≥ ≈ 30 % without a continuous sub-roof), its weight on
   the structure — OPEN.
 - **Exposed roof (cobertura à vista)**:
+  - **Gable-end flashing (user 2026-11-07, BYH team test)**: when the roof is not hidden, a metal piece (or in the roof
+    colour) runs along the gable ends ("testeiras dos triângulos") — the configurator did not draw it (bug, fixable now,
+    before the user gives all the roof information). Profile, size and name of the piece not yet given (OPEN; ask).
   - **Panel = Munditelha® (Mundiperfil)** (confirmed 2026-10-22): "Sim exatamente, utilizamos o munditelha da mundiperfil
     tal como no segundo screenshot" — "PAINEL COBERTURA EM POLIURETANO (PUR ou PIR) — PAINEL MUNDITELHA® (Com chapa de Aço
     ou Alumínio lacada) — ESPESSURAS MÉDIAS: 40 - 60 mm", useful width **1000**, wave pitch **200**, relief **45** (mm),
@@ -805,7 +808,10 @@ Structure (confirmed 2026-09-30 / 10-09; photos `fontes/fotos-teto-cobertura/1_`
     parapet's cladding and the façade finish goes above (JSON `caleira_oculta.forro_ate_topo` 0,50, `forro_sobre` 0,10).
     ⚠ It departs from his 2026-10-20 words above ("até ao topo") and rests on his 2026-10-28 "o capoto tem que ficar na
     casa toda" (§6, parapets without a gutter): the two rules clash on an ETICS house, and he has not said which wins on a
-    gutter wall taller than 0,50. The D2503 sheet (0,80: 0,30 bottom + 0,30 parapet side + 0,10 + 0,10) gives only 0,30 up
+    gutter wall taller than 0,50. **2026-11-07 (BYH team test, user)**: on a hidden roof the parapet's inner face that
+    stays visible must follow the exterior cladding when it is changed ("se a casa for de capoto o revestimento do
+    interior da platibanda que fica à mostra também é de capoto") — the configurator did not update it (bug, to fix);
+    consistent with the 2026-10-28 rule below; which lining/cladding applies on a gutter wall > 0,50 is still open. The D2503 sheet (0,80: 0,30 bottom + 0,30 parapet side + 0,10 + 0,10) gives only 0,30 up
     the parapet side — a lining to the top of a 0,47 parapet is not that sheet either (check against the section).
   - **Parapets without a gutter — roof side clad, never a bare frame, in the house's own façade finish**: said for TV, a
     Tremolo house (2026-10-15): "lã mineral, osb 15, membrana transpir, ripado horizontal e tremolo vertical"; **the

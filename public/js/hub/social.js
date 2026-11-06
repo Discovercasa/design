@@ -145,7 +145,8 @@ function cartaoObra(o) {
     ${fs.length ? `<ol class="fases">${fs.map((f) => {
       const pf = posts.filter((p) => p.fase_id === f.id), feitos = pf.filter((p) => p.estado === 'publicado').length;
       return `<li class="fase-linha ${f.estado}">
-        <span class="marco" aria-hidden="true">${f.estado === 'concluida' ? ic('certo', 'ic-sm') : ''}</span>
+        ${E.eu.editar ? `<button type="button" class="marco" data-sacao="fase-atual" data-id="${f.id}" aria-label="${f.estado === 'em_curso' ? `Dar «${esc(f.nome)}» como concluída` : `A obra está em «${esc(f.nome)}»`}" title="${f.estado === 'em_curso' ? 'Clicar para dar esta fase como concluída' : 'Clicar: a obra está nesta fase'}">${f.estado === 'concluida' ? ic('certo', 'ic-sm') : ''}</button>`
+          : `<span class="marco" aria-hidden="true">${f.estado === 'concluida' ? ic('certo', 'ic-sm') : ''}</span>`}
         <div class="fase-corpo">
           ${E.eu.editar ? `<button type="button" class="fase-nome" data-sacao="editar-fase" data-id="${f.id}">${esc(f.nome)}</button>` : `<span class="fase-nome">${esc(f.nome)}</span>`}
           <span class="fase-meta"><span class="estado ${f.estado === 'concluida' ? 'concluida' : f.estado === 'em_curso' ? 'em_curso' : ''}">${S.ESTADOS_FASE[f.estado]}</span>
@@ -496,6 +497,18 @@ export function ligar(c) {
       case 'nova-fase': return abrirDialogo(dlg, dlgFase(id, null));
       case 'editar-fase': { const f = S.fase(id); return abrirDialogo(dlg, dlgFase(f.obra_id, f)); }
       case 'marcar-visita': return abrirDialogo(dlg, dlgVisita(S.fase(id)), { estreito: true });
+      case 'fase-atual': {
+        const f = S.fase(id), o = S.obra(f.obra_id);
+        const concluir = f.estado === 'em_curso';
+        if (concluir && !confirm(`Dar «${f.nome}» como concluída?`)) return;
+        const antes = S.estadosAtuais(f.obra_id), depois = S.estadosAoClicar(f, concluir);
+        if (await c.tentar(() => S.definirFases(f.obra_id, depois))) {
+          aviso(concluir ? `${esc(o.nome)}: «${esc(f.nome)}» concluída.` : `${esc(o.nome)} está agora em «${esc(f.nome)}».`, { icone: 'certo', duracao: 8,
+            acoes: [{ rotulo: 'Desfazer', fazer: async () => { if (await c.tentar(() => S.definirFases(f.obra_id, antes))) c.depois(); } }] });
+          c.depois();
+        }
+        return;
+      }
       case 'fotos-tiradas':
         if (await c.tentar(() => S.mudarFase(id, { fotos: 'tiradas' }))) { aviso('Fotos marcadas como tiradas.', { icone: 'certo', duracao: 3 }); c.depois(); }
         return;

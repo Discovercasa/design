@@ -32,20 +32,23 @@ test('sem sessão mostra a entrada com a conta do Hub', async ({ page }) => {
 test('Início: barra de navegação, projetos, ligações, decisões e feito', async ({ page }) => {
   const erros = await abrir(page);
   const nav = page.getByRole('navigation', { name: 'Secções' });
-  await expect(nav.getByRole('link')).toHaveText(['Início', 'Build Your House', 'Builder', 'Gerador de documentos', 'Orçamentação', 'Step Inside', 'Redes sociais']);
+  await expect(nav.getByRole('link')).toHaveText(['Início', 'Gerador de documentos', 'Builder', 'Orçamentação', 'Build Your House', 'Step Inside', 'Redes sociais']);
   await expect(nav.getByRole('link', { name: 'Início' })).toHaveAttribute('aria-current', 'page');
   await expect(page.getByRole('heading', { level: 1 })).toContainText('Teste');
   const linhas = page.locator('.projeto-linha');
   await expect(linhas).toHaveCount(5);
-  await expect(linhas.nth(0)).toContainText('Protótipo publicado');
-  await expect(linhas.nth(0)).toContainText('3 de 15 checkpoints');
-  await expect(linhas.nth(0)).toContainText('Respostas pendentes');
+  await expect(linhas.nth(0)).toContainText('Gerador de documentos');
+  await expect(linhas.nth(3)).toContainText('Protótipo publicado');
+  await expect(linhas.nth(3)).toContainText('3 de 15 checkpoints');
+  await expect(linhas.nth(3)).toContainText('Respostas pendentes');
   await expect(linhas.nth(4)).toContainText('Step Inside');
   await expect(linhas.nth(4)).toContainText('0 de 10 checkpoints');
   await expect(page.getByRole('heading', { name: 'Como os projetos se ligam' })).toBeVisible();
   await expect(page.locator('.nota').first()).toContainText('Cada aplicação funciona sozinha');
   await expect(page.locator('.ligacao')).toHaveCount(10);
-  await expect(page.locator('#decisoes-abertas .decisao-pill')).toHaveCount(10);
+  await expect(page.locator('#decisoes-abertas .decisao-pill')).toHaveCount(13);
+  // agrupadas por projeto, pela ordem das abas
+  await expect(page.locator('#decisoes-abertas .decisoes-projeto-nome')).toHaveText([/Builder\s*1/, /Orçamentação\s*1/, /Build Your House\s*5/, /Step Inside\s*6/]);
   await expect(page.locator('.tempo li').first()).toContainText('2026');
   for (const b of ['Sugestões', 'Notificações', 'Perfil']) await expect(page.getByRole('button', { name: b })).toBeVisible();
   await captura(page, 'inicio');
@@ -235,8 +238,8 @@ test('perfil: área pessoal, definições (nome, tema), novidades e sair', async
   await captura(page, 'inicio-escuro');
   await page.getByRole('button', { name: 'Perfil' }).click();
   await page.locator('#pop-perfil').getByRole('menuitem', { name: /Novidades/ }).click();
-  await expect(page.locator('.novidade').first()).toContainText('Redes sociais');
-  await expect(page.locator('.novidade').nth(1)).toContainText('Documentos, posições e atualização em direto');
+  await expect(page.locator('.novidade').first()).toContainText('Imagens, notas de teste e fases das obras');
+  await expect(page.locator('.novidade').nth(1)).toContainText('Redes sociais');
   await page.getByRole('button', { name: 'Perfil' }).click();
   await page.locator('#pop-perfil').getByRole('menuitem', { name: 'Sair' }).click();
   await expect(page.getByRole('button', { name: 'Entrar com a conta do Hub' })).toBeVisible();
@@ -278,7 +281,7 @@ test('logótipo: volta ao Início e atualiza o hub', async ({ page }) => {
   await db(page, () => window.__fake.comoOutro((x) => x.checkpoints.insert({ projeto: 'orcamentacao', titulo: 'Escolher o software de faturação', ordem: 4 })));
   await page.getByRole('link', { name: /Discovercasa Design/ }).click();
   await expect(page).toHaveURL(/#\/$/);
-  await expect(page.locator('.projeto-linha').nth(3)).toContainText('0 de 4 checkpoints');   // dado novo, sem recarregar a página
+  await expect(page.locator('.projeto-linha').nth(2)).toContainText('0 de 4 checkpoints');   // dado novo, sem recarregar a página
   await expect(page.locator('.aviso', { hasText: 'Novo checkpoint' })).toContainText('Escolher o software de faturação');
   // já no Início: clicar outra vez também atualiza
   await db(page, () => window.__fake.comoOutro((x) => x.tarefas.update({ estado: 'concluida' }).eq('id', 36)));
@@ -320,22 +323,22 @@ test('projeto: acrescentar tarefa e checkpoint na posição escolhida; mover um 
   await expect(page.locator('.passo.em_curso .tarefa', { hasText: 'Pedir a revisão por email' })).toBeVisible();
   // checkpoint na posição 2
   await page.locator('#vista').getByRole('button', { name: 'Checkpoint', exact: true }).click();
-  await expect(dlg.getByLabel('Posição no workflow')).toHaveValue('5');           // por defeito no fim (4 + 1)
+  await expect(dlg.getByLabel('Posição no workflow')).toHaveValue('6');           // por defeito no fim (5 + 1)
   await dlg.getByLabel('Posição no workflow').selectOption('2');
   await dlg.getByLabel('Título').fill('Ler plantas de dois pisos');
   await dlg.getByRole('button', { name: 'Acrescentar', exact: true }).click();
   await expect(page.locator('.passo').nth(1)).toContainText('Ler plantas de dois pisos');
   await expect(page.locator('.passo').nth(1).locator('.marco')).toHaveText('2');
   await expect(page.locator('.passo').nth(2)).toContainText('Gerador online');      // os outros desceram
-  await expect(page.locator('.passo')).toHaveCount(5);
+  await expect(page.locator('.passo')).toHaveCount(6);
   // mover o último checkpoint para primeiro
-  await page.locator('.passo').nth(4).locator('.passo-topo').click();
-  await page.locator('.passo').nth(4).getByRole('button', { name: 'Editar checkpoint' }).click();
+  await page.locator('.passo').nth(5).locator('.passo-topo').click();
+  await page.locator('.passo').nth(5).getByRole('button', { name: 'Editar checkpoint' }).click();
   await dlg.getByLabel('Posição no workflow').selectOption('1');
   await dlg.getByRole('button', { name: 'Guardar' }).click();
   await expect(page.locator('.passo').nth(0)).toContainText('Mais formatos de entrada');
   const ordens = await db(page, () => window.__fake.db.checkpoints.filter((c) => c.projeto === 'gerador').sort((a, b) => a.ordem - b.ordem).map((c) => c.ordem));
-  expect(ordens).toEqual([1, 2, 3, 4, 5]);
+  expect(ordens).toEqual([1, 2, 3, 4, 5, 6]);
 });
 
 test('Build Your House: as fases do Smart Land e Interiores na ordem certa, com decisões', async ({ page }) => {
@@ -347,7 +350,7 @@ test('Build Your House: as fases do Smart Land e Interiores na ordem certa, com 
     'Smart Land · Fase 1 · Terreno mínimo', 'Smart Land · Fase 2 · Importação geográfica alargada', 'Smart Land · Fase 3 · Terreno 3D',
     'Implantação · Fase 4 · Implantação geométrica', 'Conformidade · Fase 5 · Piloto municipal', 'Smart Interiors · Fase 6 · Base',
     'Smart Interiors · Fase 7 · Posicionamento e decoração automática', 'Conformidade · Fase 8 · Expansão municipal e técnica']);
-  await expect(page.locator('.bloco-lateral .decisao-pill')).toHaveCount(4);
+  await expect(page.locator('.bloco-lateral .decisao-pill')).toHaveCount(5);
   await expect(page.locator('#documentos')).toContainText('Especificação Smart Land, Smart Interiors e Conformidade');
 });
 
@@ -399,6 +402,6 @@ test('em direto: o que outra pessoa muda aparece sem recarregar, em todos os sí
   // e no Início também
   await page.getByRole('link', { name: 'Início', exact: true }).click();
   await db(page, () => window.__fake.comoOutro((x) => x.checkpoints.update({ estado: 'concluido' }).eq('id', 4)));
-  await expect(page.locator('.projeto-linha').nth(0)).toContainText('4 de 15 checkpoints');
+  await expect(page.locator('.projeto-linha').nth(3)).toContainText('4 de 15 checkpoints');
   await expect(page.locator('#contador')).not.toBeHidden();
 });

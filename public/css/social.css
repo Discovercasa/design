@@ -102,6 +102,10 @@ button.semana-vazia:hover { color: var(--acao); border-color: var(--acao); backg
 .fase-linha.em_curso .marco { border-color: var(--aviso); background: var(--aviso-suave); }
 .fase-linha.concluida .marco { border-color: var(--ok); background: var(--ok); }
 .fase-linha.concluida .marco .ic { width: 12px; height: 12px; stroke-width: 3; }
+/* o círculo é um botão para quem edita: clicar marca a fase atual da obra */
+button.marco { appearance: none; padding: 0; font: inherit; cursor: pointer; transition: box-shadow .15s, border-color .15s; }
+button.marco:hover { box-shadow: 0 0 0 4px var(--acao-suave); border-color: var(--acao); }
+.fase-linha.prevista button.marco:hover::after { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--acao); }
 .fase-corpo { display: grid; gap: 3px; min-width: 0; padding-top: 1px; }
 .fase-nome { justify-self: start; border: 0; background: none; padding: 0; font: inherit; font-size: 0.9375rem; font-weight: 500; color: var(--tinta); text-align: left; }
 button.fase-nome { cursor: pointer; text-decoration: underline; text-decoration-color: transparent; text-underline-offset: 3px; transition: text-decoration-color .15s; }
