@@ -464,7 +464,7 @@ function cena3D() {
   else if (est.cobertura.tipo === "escondida") {
     if (est.cob) cena.limpar("telhado"); else cena.telhado(cont, H - 0.45, matDe("sandwich")); // until the engine answers
   } else cena.telhadoFaces(est.faces, matDe("sandwich"));
-  if (fe && est.passo >= 4 && est.cob) cena.pecasCobertura(est.cob.objetos, est.materiais, mapearDe(est.cob.rodada));
+  if (fe && est.passo >= 4 && est.cob) cena.pecasCobertura(est.cob.objetos, est.materiais, mapearDe(est.cob.rodada), matDe(est.acabamentos.exterior));
   cena.empenas(fe && est.cobertura.tipo !== "escondida" ? cont : null, est.faces, H, matDe(est.acabamentos.exterior));
   // step 7: the pergolas as the engine builds them (by id: the engine answers for the list it was sent) and the
   // separate garages / annexes
@@ -1124,7 +1124,7 @@ function desenharSeparados() {
       if (!oculta) cena.telhadoFaces(d.faces, matDe("sandwich"));
       else if (d.objetos) cena.limpar("telhado");
       else cena.telhado(cont, H - 0.45, matDe("sandwich")); // until the engine answers
-      if (d.objetos) cena.pecasCobertura(d.objetos, est.materiais, mapear);
+      if (d.objetos) cena.pecasCobertura(d.objetos, est.materiais, mapear, matDe(est.acabamentos.exterior));
       cena.empenas(oculta ? null : cont, d.faces, H, matDe(est.acabamentos.exterior));
     });
   }

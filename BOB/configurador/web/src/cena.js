@@ -41,6 +41,21 @@ function prismas(mapear = (x, y) => [x, y]) {
         }
       }
     },
+    // the triangles in metres with planar texture coordinates (a face's own plane, as the walls'): for a textured material
+    malhaComTextura(material) {
+      const arr = [].concat(...porCor.values()), uvs = [];
+      for (let i = 0; i < arr.length; i += 9) {
+        const [ax, ay, az, bx, by, bz, cx, cy, cz] = arr.slice(i, i + 9);
+        const nx = Math.abs((by - ay) * (cz - az) - (bz - az) * (cy - ay)), ny = Math.abs((bz - az) * (cx - ax) - (bx - ax) * (cz - az)),
+          nz = Math.abs((bx - ax) * (cy - ay) - (by - ay) * (cx - ax));
+        for (const [x, y, z] of [[ax, ay, az], [bx, by, bz], [cx, cy, cz]]) uvs.push(...(ny >= nx && ny >= nz ? [x, -z] : nx >= nz ? [-z, y] : [x, y]));
+      }
+      const geo = new THREE.BufferGeometry();
+      geo.setAttribute("position", new THREE.Float32BufferAttribute(arr, 3));
+      geo.setAttribute("uv", new THREE.Float32BufferAttribute(uvs, 2));
+      geo.computeVertexNormals();
+      return new THREE.Mesh(geo, material);
+    },
     meshes(rug = 0.8) {
       return [...porCor].map(([c, arr]) => {
         const geo = new THREE.BufferGeometry();
@@ -767,10 +782,20 @@ export class Cena {
   // the roof as the engine builds it, over the panels already drawn: gutters, downpipes, ridge / hip caps, verge and
   // abutment trims, valley gutters, the parapets' caps, the hidden roof's panels (user 2026-10-28: "faltam calheiras,
   // tubos de queda e esses elementos") — pieces {nome, material, pecas} from camadas.py
-  pecasCobertura(objetos, materiais, mapear) {
-    const P = prismas(mapear);
-    for (const o of objetos || []) P.add((materiais[o.material] && materiais[o.material].cor) || "#3a3f43", o.pecas);
+  // matFachada: the facade's material (the cladding the client chose) for the parapets' roof-side finish (o.fachada)
+  pecasCobertura(objetos, materiais, mapear, matFachada = null) {
+    const P = prismas(mapear), F = prismas(mapear);
+    let fachada = false;
+    for (const o of objetos || []) {
+      if (o.fachada && matFachada) { F.add("f", o.pecas); fachada = true; }
+      else P.add((materiais[o.material] && materiais[o.material].cor) || "#3a3f43", o.pecas);
+    }
     for (const m of P.meshes(0.5)) this.grupos.telhado.add(m);
+    if (fachada) {
+      if (!this.dupla) this.dupla = new Map(); // the facade material seen from both sides (the pieces' faces are not all wound one way)
+      if (!this.dupla.has(matFachada)) { const d = matFachada.clone(); d.side = THREE.DoubleSide; this.dupla.set(matFachada, d); }
+      this.grupos.telhado.add(F.malhaComTextura(this.dupla.get(matFachada)));
+    }
   }
 
   mostrar(nome, sim) {
