@@ -1316,3 +1316,11 @@ When this file passes about 1 500 lines, continue in `registo-conversas-<year>-<
   images are Google-Sheets copies (150-430 KB), lower quality than originals.
 - Filed in: this log; `conhecimento/discovercasa.md` (Social media); Design repo `PROJETOS.md`, `CLAUDE.md`,
   `public/dados/novidades.json`.
+
+### 2026-11-06 — follow-up: posts not done, moving later posts forward; publish approved [Design hub, Redes sociais]
+> Por exemplo ás vezes como pudeste ver há post que não foram realizados então quando assim é ás vezes adiantamos posts por exemplo pode estar programado ser feito um post numa semana mas não é feito e então fazemos o post seguinte ou dois posts a frente deve haver liberdade para marcar isso e ser possível fazer isso. De resto pareceu-me tudo bem e podes publicar isso.
+- Context: answer to the social media tab built above (import assumptions and publication).
+- Company practice: when a planned weekly post is not done, the team moves a later post (the next one, or two ahead) into that week.
+- Done: post state "Não feito"; "Não foi feito" button in the post editor opens "Adiantar um post" (choose a later unpublished post to move into that week); weeks whose post was not done show "Adiantar um post para aqui"; a moved post keeps its original week (shown as "Adiantado · era semana X de <mês>" or "Adiado"). Import: past weeks without caption are now "Não feito" (Torres Vedras - Testemunho Sep S2, Cães - Analisar 2 Sep S3, Ribamar - Testemunho projetos Oct S1, Cães - Analisar 3 Oct S2).
+- Published 2026-11-06 with the user's approval ("podes publicar isso"): migrations 0009 and 0010 applied to the Design Supabase; 51 photos + 51 thumbnails (102 files) uploaded to the private bucket "social" through the temporary function, which was disabled right after (returns 401/410); merged to main and live on design.discovercasa.pt. Checked on the real database in a rolled-back transaction (approval -> Aprovado, move-ahead keeps original week, view-only users cannot change or delete phases, anonymous sees 0 files). The import assumptions (past with caption = Publicado, Nov with caption+photos = Por aprovar) were not objected to ("De resto pareceu-me tudo bem").
+- Filed in: this log; `conhecimento/discovercasa.md` (Social media).

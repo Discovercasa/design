@@ -98,8 +98,9 @@ Why Claude learns the method; "vamos passo a passo" — an overall idea, then an
   Acabamentos; Gaia "Aumento" (extension of a house DiscoverCasa built), Oliveira de Azeméis "Garantia" (client testimonial).
   Matosinhos plan: 1 terras, 3 BF, 2 estrutura, 2+ acabamento posts. Older sheets (Maio 2025?... MarçoAbril, "Geral" with a
   daily plan) exist, not imported.
-- Hub tab "Redes sociais" (#/social) built 2026-11-06 on branch hub/redes-sociais (not yet published or applied).
-- Pending: confirm import assumptions (past weeks with caption = Publicado; Nov with caption+photos = Por aprovar; no caption = Ideia).
+- Hub tab "Redes sociais" (#/social) built and published 2026-11-06 (design.discovercasa.pt; migrations 0009/0010 applied).
+- Practice (user 2026-11-06): when a planned weekly post is not done, the team moves a later post (the next one, or two ahead) into that week; the hub allows it ("Não feito", "Adiantar um post").
+- Import assumptions (past weeks with caption = Publicado; Nov with caption+photos = Por aprovar; no caption = Ideia, or "Não feito" for past weeks) not objected to by the user 2026-11-06.
 
 ## Working with the user
 **Language and words**
