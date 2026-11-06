@@ -77,8 +77,10 @@ def cobertura_casa(casa_json):
     # the exposed panels are the quick faces (6.2); of the parapets' roof-side cladding (6.4.k) only its finish, the
     # last layer — the chapéus wrap it as built
     fim_ = f"6.4.{len(CM.camadas_platibanda(S))}"
-    obj = [{"nome": o["nome"], "material": o["material"], "pecas": o["pecas"]} for o in out.objetos
-           if o["colecao"] in ("6.3", fim_) or (o["colecao"] == "6.2" and C.platibanda)]
+    # the facade finish on the parapets' roof side is drawn in the facade's own material (fachada) — the cladding the
+    # client chose, the same texture as the walls (user 2026-11-07: it did not follow a change of cladding)
+    obj = [{"nome": o["nome"], "material": o["material"], "pecas": o["pecas"], **({"fachada": True} if o["colecao"] == fim_ else {})}
+           for o in out.objetos if o["colecao"] in ("6.3", fim_) or (o["colecao"] == "6.2" and C.platibanda)]
     Cc = cfg["cobertura"]  # the hidden roof's gutter side and the sides the client may choose (one água)
     # each side's parapet as built: from the base edge (the frame's outer face) in to its roof-side face — the
     # cladding there, or only the gutter's lining on a gutter wall — so the screen draws it as wide as the chapéu

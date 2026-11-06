@@ -53,3 +53,6 @@ step 1; **step 7 Pérgolas, garagens e anexos** (`web/src/exteriores.js`, engine
 2026-10-29, later still: step 4 — walls from the house's inner corners, rooms in the middle of the house (closing
 snap), a wall's piece selected / removed, a real interior door, the camera kept between steps, the navigation pop-up —
 spec §11, §12.
+2026-11-07: the team test's two bugs (hub notes) — the hidden roof's parapet roof-side face now drawn in the facade's own
+material (it did not follow a change of cladding: the engine's pieces were painted a fixed colour; worker flag `fachada`);
+exposed roofs lose the verge trim along the gables ("isso não acontece" — no "Remate lateral" in camadas.py).
