@@ -36,6 +36,7 @@ OMISSAO_JANELA = {"peitoril": 1.0, "topo": 1.75}
 OMISSAO_PORTA_INTERIOR = (0.87, 2.03)   # DiscoverCasa rough opening: company method, not a guess
 TOL = 0.02                                # m: differences below this are not conflicts
 RESOLUCAO_MODULOS = "Prevalece o desenho de módulos (como construído)."
+PORTA_MIN = 1.90                          # m: a door lower than this is flagged for review
 
 
 def _r(x, n=3):
@@ -56,6 +57,14 @@ class Construtor:
         self.cfg = ler_json(self.cp)
         self.dir = self.cp.parent
         self.planta = ler_json(self.dir / self.cfg["planta"]) if self.cfg.get("planta") else None
+        # engineer's drawings: the extractor's geometry (extrair_casa.py) holds the placed wall panels
+        self.G = None
+        if not self.planta and self.cfg.get("dwfx") and (self.cfg.get("saida") or {}).get("geometria"):
+            gp = self.dir / self.cfg["saida"]["geometria"]
+            if not gp.exists():
+                raise SystemExit(f"Falta {gp.name}: correr primeiro ferramentas/modelo/extrair_casa.py")
+            self.G = ler_json(gp)
+        self.entrada = "planta_arquitetura" if self.planta else "desenhos_engenheiro" if self.G else "configurador"
         self.decl = declaracoes or {}
         self.catalogo = catalogo or {}
         self.conflitos = []
@@ -71,12 +80,23 @@ class Construtor:
         local = f"planta, região {r[0]:g}–{r[2]:g} × {r[1]:g}–{r[3]:g} mm da folha" if len(r) == 4 else "planta"
         return fonte(o.get("dwfx", "?"), o.get("folha"), local)
 
+    def fonte_eng(self, folha, local):
+        return fonte(Path(self.cfg["dwfx"]).name, (self.cfg.get("folhas") or {}).get(folha), local)
+
     def conflito(self, campo_path, gravidade, nota, resolucao=""):
         self.conflitos.append({"campo": campo_path, "gravidade": gravidade, "nota": nota,
                                "estado": "resolvido" if resolucao else "aberto", "resolucao": resolucao})
 
     # ------------------------------------------------------------------ sections
     def escala(self):
+        if self.G is not None:
+            esc = f"1:{self.cfg.get('escala', 50):g}"
+            doc = next((d for d in self.catalogo.get("documentos", []) if d["ficheiro"] == Path(self.cfg["dwfx"]).name), None)
+            usadas = set((self.cfg.get("folhas") or {}).values())
+            escrita = bool(doc) and all(esc in f["escalas"] for f in doc.get("folhas", []) if f["folha"] in usadas)
+            return campo(esc, CONFIRMED if escrita else INFERRED, "texto" if escrita else "inferencia", tipo="escala",
+                         fonte=self.fonte_eng("paredes", "rótulos de escala"),
+                         nota="Escrita nas folhas usadas (catálogo)." if escrita else "Escala da configuração; não verificada no texto.")
         o = (self.planta or {}).get("origem_desenho")
         if not o:
             return em_falta("escala", "sem planta lida")
@@ -84,6 +104,18 @@ class Construtor:
                      nota="Escala dada ao leitor da planta (deduzida das cotas ou do rótulo).")
 
     def referencial(self):
+        if self.G is not None:
+            return {
+                "unidade": "m",
+                "origem": campo("X para este a partir da face exterior poente, Y para norte a partir da face exterior "
+                                "sul, Z a partir do topo da laje", CONFIRMED, "calculo", tipo="referencial",
+                                nota="Convenção do extrator (extrair_casa.py)."),
+                "norte": campo("+Y", INFERRED, "inferencia", tipo="referencial", fonte=self.fonte_eng("paredes", "cortes das fachadas"),
+                               nota="O extrator põe Y para norte, pelas fachadas identificadas nos desenhos (docs/desenhos.md); "
+                                    "falta confirmar com a planta de implantação."),
+                "crs": em_falta("referencial", "Sem georreferência: o modelo está em coordenadas locais."),
+                "cota_referencia": em_falta("cota", "Cota absoluta (altitude) do Z = 0 do modelo.", "m"),
+            }
         return {
             "unidade": "m",
             "origem": campo("canto inferior esquerdo das paredes; X para a direita da folha, Y para cima, Z a "
@@ -120,7 +152,7 @@ class Construtor:
         fund = self.cfg.get("fundacao", {}).get("contorno")
         if fund:
             a = abs(sum(x0 * y1 - x1 * y0 for (x0, y0), (x1, y1) in zip(fund, fund[1:] + fund[:1]))) / 2
-            out["area_implantacao"] = campo(_r(a, 2), mais_fraco(est_geo, INFERRED), "calculo", unidade="m2",
+            out["area_base_fundacao"] = campo(_r(a, 2), mais_fraco(est_geo, INFERRED), "calculo", unidade="m2",
                                             tipo="dimensao", fonte=self.fonte_config("fundacao.contorno"),
                                             nota="Área do contorno da base de fundação.")
         return out
@@ -134,7 +166,7 @@ class Construtor:
                 continue
             out[k] = campo(_r(v), _estado_config(doc), "inferencia", unidade="m", tipo="nivel",
                            fonte=self.fonte_config(f"niveis.{k}"), nota=doc)
-        if "pe_direito" not in out:
+        if "pe_direito" not in out and self.G is None:  # the engineer's input gives storey levels instead
             out["pe_direito"] = em_falta("nivel", "Pé direito não indicado.", "m")
         plat = self.cfg.get("platibanda", {})
         if isinstance(plat.get("topo"), (int, float)):
@@ -170,6 +202,8 @@ class Construtor:
                            nota="Valor por omissão do motor: não está nos desenhos lidos.") for k in ("peitoril", "topo"))
 
     def paredes(self, est_geo):
+        if self.G is not None:
+            return self.paredes_engenheiro(est_geo)
         if not self.planta:
             return []
         fp = self.fonte_planta()
@@ -207,6 +241,123 @@ class Construtor:
                     self.conflito(f"paredes.{w['id']}.aberturas", "FAIL", f"Vãos sobrepostos ({a0:.2f}–{a1:.2f} e {b0:.2f}–{b1:.2f}).")
             out.append(p)
         return out
+
+    def paredes_engenheiro(self, est_geo):
+        """Wall panels placed from the engineer's elevations and wall plans; openings from the panel members."""
+        from ferramentas.modelo.paineis import Painel
+        casa = self.cfg.get("casa", {})
+        centro = (casa.get("comprimento", 0) / 2, casa.get("profundidade", 0) / 2)
+        E = self.cfg.get("estrutura") or {}
+        remover = set(E.get("remover_paineis", []))
+        alterar = E.get("aberturas_alterar", {})
+        correcoes = (self.cfg.get("paredes") or {}).get("correcoes", {})
+        out = []
+        for p in self.G["paineis"]:
+            nome = p["nome"]
+            if nome in remover:
+                self.conflito(f"paredes.{nome}", REVIEW, "Painel dos desenhos do engenheiro que o modelo não usa.",
+                              E.get("_remover_doc", "Retirado por decisão registada na configuração."))
+                continue
+            P = Painel(p, self.G["alcados"][p["alcado"]], centro)
+            eixo = "x" if abs(P.ux) > 0.5 else "y"
+            o, d = (P.ox, P.ux) if eixo == "x" else (P.oy, P.uy)
+            fo = self.fonte_eng("paredes", f"alçado {p['alcado']}")
+            est, nota = est_geo, f"Alçado {p['alcado']} colocado pela planta de paredes (montantes encaixados {p['encaixe']})."
+            a, b = (p.get("encaixe") or "0/1").split("/")
+            if a != b or p.get("extra"):
+                est, nota = mais_fraco(est, INFERRED), nota + " Encaixe incompleto: confirmar."
+            if nome in correcoes:
+                est, nota = mais_fraco(est, INFERRED), nota + f" Corrigido à mão: {correcoes[nome].get('nota', '')}"
+            g = dict(estado=est, metodo="geometria", unidade="m", fonte=fo, nota=nota)
+            s0, s1 = sorted((o + d * P.f0, o + d * P.f1))
+            w = {"id": nome, "piso": p["piso"], "exterior": p["tipo"] == "PE", "eixo": eixo,
+                 "inicio": campo(_r(s0), tipo="geometria", **g), "fim": campo(_r(s1), tipo="geometria", **g),
+                 "posicao": campo(_r(P.oy if eixo == "x" else P.ox), tipo="geometria", **g),
+                 "espessura": campo(_r(p["espessura"]), tipo="dimensao", **g), "aberturas": []}
+            # the engineer draws openings as gaps between the panel's pieces: door and window sizes are not drawn
+            # (Sobral revisao-tecnica #5), so their size is inferred even when the panel itself is certain
+            est_v = mais_fraco(est, INFERRED)
+            nota_v = ("Intervalo entre as peças do painel: as portas e janelas não têm medidas nos desenhos do "
+                      "engenheiro. Acima da base do painel (piso estrutural).")
+            for i, (u0, u1, v0, v1, k) in enumerate(sorted(P.aberturas)):
+                ga = dict(estado=est_v, metodo="geometria", unidade="m", fonte=fo)
+                a0, a1 = sorted((o + d * u0, o + d * u1))
+                ab = {"id": str(i),
+                      "tipo": campo(k, est_v, "geometria", tipo="classificacao", fonte=fo,
+                                    nota="Porta quando o vão chega à base do painel."),
+                      "inicio": campo(_r(a0), tipo="geometria", **ga), "fim": campo(_r(a1), tipo="geometria", **ga),
+                      "largura": campo(_r(u1 - u0), est_v, "calculo", unidade="m", tipo="dimensao", fonte=fo, nota=nota_v),
+                      "peitoril": campo(_r(v0), tipo="cota", nota=nota_v, **ga),
+                      "altura": campo(_r(v1), tipo="cota", nota=nota_v, **ga)}
+                if nome in alterar:
+                    alt = alterar[nome]
+                    fa = fonte("arquitetura (configuração: estrutura.aberturas_alterar)", None, nome)
+                    novos = {"peitoril": _r(alt["z"][0] - P.oz), "altura": _r(alt["z"][1] - P.oz)}
+                    if alt.get("tipo"):
+                        novos["tipo"] = alt["tipo"]
+                    for kk, v in novos.items():
+                        c = ab[kk]
+                        ab[kk] = campo(v, INFERRED, "inferencia", unidade=c["unidade"], tipo=c["tipo"], fonte=fa,
+                                       nota=alt.get("_doc", ""),
+                                       conflitos=[] if c["valor"] == v else [{
+                                           "valor": c["valor"], "fonte": fo, "estado": "resolvido",
+                                           "nota": "Desenhos do engenheiro.",
+                                           "resolucao": "Prevalece a arquitetura (vão corrigido na configuração)."}])
+                if u0 < P.f0 - TOL or u1 > P.f1 + TOL:
+                    self.conflito(f"paredes.{nome}.aberturas.{i}", "FAIL", "O vão sai fora do painel.")
+                if ab["peitoril"]["valor"] >= ab["altura"]["valor"]:
+                    self.conflito(f"paredes.{nome}.aberturas.{i}", "FAIL", "Peitoril acima do topo do vão.")
+                w["aberturas"].append(ab)
+            out.append(w)
+        out += self.paredes_extra()
+        return out
+
+    def paredes_extra(self):
+        """Walls and doorways the model adds from the architecture (config estrutura.paredes_extra / portas_extra)."""
+        E = self.cfg.get("estrutura") or {}
+        t_int = (NORMA.get("estrutura", {}).get("interior") or {}).get("espessura")
+        out = []
+        extras = [(w, False) for w in E.get("paredes_extra", [])] + \
+                 [(dict(w, nome=f"PORTA_EXTRA.{i}", portas=[[0, None]]), True) for i, w in enumerate(E.get("portas_extra", []))]
+        for w, so_vao in extras:
+            (x0, y0), (x1, y1) = w["de"], w["ate"]
+            eixo = "x" if abs(x1 - x0) >= abs(y1 - y0) else "y"
+            s0, s1 = sorted((x0, x1) if eixo == "x" else (y0, y1))
+            fa = fonte("arquitetura (configuração: estrutura.paredes_extra / portas_extra)", None, w["nome"])
+            g = dict(estado=INFERRED, metodo="inferencia", unidade="m", fonte=fa, nota=w.get("_doc", ""))
+            par = {"id": w["nome"], "piso": w.get("piso", 0), "exterior": False, "eixo": eixo,
+                   "inicio": campo(_r(s0), tipo="geometria", **g), "fim": campo(_r(s1), tipo="geometria", **g),
+                   "posicao": campo(_r(y0 if eixo == "x" else x0), tipo="geometria", **g),
+                   "espessura": campo(t_int, CONFIRMED, "norma_empresa", unidade="m", tipo="dimensao",
+                                      fonte=fonte("norma da empresa (sistema_construtivo.json, estrutura.interior)"))
+                   if t_int and not so_vao else
+                   campo(0.0, CONFIRMED, "calculo", unidade="m", tipo="dimensao", fonte=fa,
+                         nota="Vão aberto entre paredes: sem parede própria.") if so_vao else
+                   em_falta("dimensao", "Espessura das paredes interiores em falta na norma.", "m"),
+                   "aberturas": []}
+            for i, (u0, u1) in enumerate(w.get("portas", [])):
+                u1 = (s1 - s0) if u1 is None else u1
+                duvida = "?" in w.get("_doc", "")
+                peit, alt = self._alturas("porta", False)
+                par["aberturas"].append({
+                    "id": str(i),
+                    "tipo": campo("porta", REVIEW if duvida else INFERRED, "inferencia", tipo="classificacao", fonte=fa,
+                                  nota=("Tipo de porta por confirmar: " if duvida else "") + w.get("_doc", "")),
+                    "inicio": campo(_r(s0 + u0), tipo="geometria", **g), "fim": campo(_r(s0 + u1), tipo="geometria", **g),
+                    "largura": campo(_r(u1 - u0), INFERRED, "calculo", unidade="m", tipo="dimensao", fonte=fa),
+                    "peitoril": peit, "altura": alt})
+            out.append(par)
+        return out
+
+    def verificar_vaos(self, paredes):
+        """Plausibility (spec §3.3, size of doors and windows): a door under 1,90 m needs a person to look."""
+        for p in paredes:
+            for ab in p["aberturas"]:
+                h = ab["altura"]["valor"]
+                if ab["tipo"]["valor"] == "porta" and h is not None and h - (ab["peitoril"]["valor"] or 0) < PORTA_MIN:
+                    self.conflito(f"paredes.{p['id']}.aberturas.{ab['id']}.altura", REVIEW,
+                                  f"Porta com {h - (ab['peitoril']['valor'] or 0):.2f} m de altura livre: confirmar se é "
+                                  "uma porta ou outro tipo de vão.")
 
     def comparar_modulos_reais(self, paredes):
         """Openings as built (DiscoverCasa module drawings) against the plan + config: the built one wins."""
@@ -279,11 +430,12 @@ class Construtor:
         doc = cob.get("_doc", "")
         out = {}
         for k, v in cob.items():
-            if k.startswith("_") or isinstance(v, (dict, list)):
+            if k.startswith("_") or isinstance(v, (dict, list, bool)):
                 continue
             out[k] = campo(_r(v) if isinstance(v, (int, float)) and not isinstance(v, bool) else v,
                            _estado_config(doc), "inferencia",
-                           unidade={"inclinacao_pct": "%"}.get(k, "m" if isinstance(v, (int, float)) else ""),
+                           unidade={"inclinacao_pct": "%", "inclinacao": "°"}.get(
+                               k, "m" if isinstance(v, (int, float)) and not isinstance(v, bool) else ""),
                            tipo="dimensao" if isinstance(v, (int, float)) else "classificacao",
                            fonte=self.fonte_config(f"cobertura.{k}"), nota=doc)
         return out
@@ -338,7 +490,7 @@ class Construtor:
         doc = {"versao_schema": VERSAO_ESQUEMA,
                "projeto": {"id": self.decl.get("projeto", {}).get("id", self.cp.parent.name),
                            "nome": self.decl.get("projeto", {}).get("nome", self.cfg.get("nome", "")),
-                           "entrada": "planta_arquitetura" if self.planta else "configurador",
+                           "entrada": self.entrada,
                            "config": self.cfg_nome, "planta": self.cfg.get("planta", ""),
                            "gerado_por": "step-inside/ferramentas/fontes/proveniencia.py"},
                "documentos": [], "referencial": self.referencial(), "escala": esc}
@@ -348,6 +500,7 @@ class Construtor:
         est_geo = esc["estado"] if esc["estado"] in (CONFIRMED, INFERRED) else REVIEW
         paredes = self.paredes(est_geo)
         self.comparar_modulos_reais(paredes)
+        self.verificar_vaos(paredes)
         doc.update(dimensoes=self.dimensoes(est_geo), niveis=self.niveis(), paredes=paredes,
                    lajes=self.lajes(est_geo), cobertura=self.cobertura(), materiais=self.materiais(),
                    terreno=self.terreno())
@@ -371,6 +524,9 @@ class Construtor:
         usados = {}
         if self.planta:
             usados.setdefault(self.planta["origem_desenho"].get("dwfx", ""), []).append("planta (paredes e vãos)")
+        if self.G is not None:
+            usados.setdefault(Path(self.cfg["dwfx"]).name, []).append(
+                "paredes, vãos, pavimento e cobertura (desenhos do engenheiro)")
         mr = self.cfg.get("modulos_reais")
         if mr and mr.get("ficheiro"):
             try:

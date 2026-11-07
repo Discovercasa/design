@@ -26,7 +26,7 @@
    "fonte": {"documento": "250828_D2503_Modulos.dwfx", "folha": null, "local": "Dimensão da fundação e módulos", "data": "2025-08-28"},
    "nota": "Contorno da base de fundação = face exterior dos módulos."
   },
-  "dimensoes.area_implantacao": {"estado": "CONFIRMED", "metodo": "calculo", "nota": "Área do contorno da base de fundação (confirmado)."},
+  "dimensoes.area_base_fundacao": {"estado": "CONFIRMED", "metodo": "calculo", "nota": "Área do contorno da base de fundação (confirmado)."},
   "niveis.pe_direito": {
    "estado": "CONFIRMED", "metodo": "desenho_empresa", "valor": 2.5,
    "fonte": {"documento": "250828_D2503_Cobertura.dwfx", "folha": 5, "local": "Secções 1:50", "data": "2025-08-28"},

@@ -1,0 +1,77 @@
+{
+ "_doc": "Hand-kept sources of Sobral Casa Tipo 1 values (Step Inside Phase 1, second test project, user 2026-11-07: 'Sobral Tipo 1'). Keys are field paths of fontes.json; '*' matches any part. Each entry cites where the value comes from (Construção Sobral/docs/desenhos.md, docs/modelos.md, docs/revisao-tecnica.md, CLAUDE.md). No client data: the repo is public.",
+ "projeto": {"id": "sobral-tipo1", "nome": "Sobral · Casa Tipo 1 (loteamento; 11 casas)"},
+ "documentos": [
+  {"ficheiro": "SMA_012_arquitectura_pecas_desenhadas.dwfx", "usado_para": ["vãos e paredes corrigidos pela arquitetura (folhas 17–18)", "terreno do loteamento (folhas 2 e 4, Fase 2)"]}
+ ],
+ "campos": {
+  "dimensoes.comprimento": {
+   "estado": "CONFIRMED", "metodo": "geometria", "valor": 9.86,
+   "fonte": {"documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx", "folha": 1, "local": "FUNDAÇÕES | PLANTA, contorno da casa", "data": ""},
+   "nota": "Estrutura de madeira 9,86 × 6,11 nos desenhos do engenheiro; a arquitetura usa a mesma (ETICS por fora)."
+  },
+  "dimensoes.profundidade": {
+   "estado": "CONFIRMED", "metodo": "geometria", "valor": 6.11,
+   "fonte": {"documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx", "folha": 1, "local": "FUNDAÇÕES | PLANTA, contorno da casa", "data": ""},
+   "nota": "Como o comprimento."
+  },
+  "niveis.piso0": {
+   "estado": "CONFIRMED", "metodo": "calculo",
+   "nota": "Z = 0 no topo da laje (convenção do modelo); o pavimento acabado do rés do chão fica a Z 0,16."
+  },
+  "niveis.piso1_exterior": {
+   "estado": "CONFIRMED", "metodo": "geometria",
+   "fonte": {"documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx", "folha": 1, "local": "cortes EE' e FF'", "data": ""},
+   "nota": "Paredes exteriores do piso de cima sobre as vigas de bordadura a 2,96. O modelo DiscoverCasa sobe o piso 0,139 m (vigamento 220x75 + ripas + OSB 22) e mantém os 2,40 de pé direito (utilizador 2026-10-15)."
+  },
+  "niveis.piso1_interior": {
+   "estado": "CONFIRMED", "metodo": "geometria",
+   "fonte": {"documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx", "folha": 1, "local": "cortes EE' e FF'", "data": ""},
+   "nota": "Paredes interiores do piso de cima sobre o OSB a 2,978. A arquitetura dá +2,88 ao pavimento acabado do piso de cima (Z 3,04)."
+  },
+  "niveis.topo_vigas_pavimento": {
+   "estado": "CONFIRMED", "metodo": "geometria",
+   "fonte": {"documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx", "folha": 1, "local": "cortes EE' e FF'", "data": ""},
+   "nota": "Topo das vigas do pavimento intermédio nos desenhos do engenheiro."
+  },
+  "niveis.topo_paredes_piso0": {
+   "estado": "CONFIRMED", "metodo": "geometria",
+   "fonte": {"documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx", "folha": 2, "local": "alçados das paredes do piso térreo", "data": ""},
+   "nota": "Altura dos painéis do rés do chão."
+  },
+  "cobertura.inclinacao": {
+   "estado": "CONFIRMED", "metodo": "geometria",
+   "fonte": {"documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx", "folha": 1, "local": "ESTRUTURA DA COBERTURA (verdadeira grandeza) e cortes", "data": ""},
+   "nota": "Duas águas a 26,4°. O modelo mantém a inclinação (estrutura.cobertura_manter)."
+  },
+  "cobertura.altura_viga": {
+   "estado": "CONFIRMED", "metodo": "geometria",
+   "fonte": {"documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx", "folha": 1, "local": "ESTRUTURA DA COBERTURA", "data": ""},
+   "nota": "Vigas da cobertura 80x160 nos desenhos do engenheiro (o modelo DiscoverCasa usa prumos e madres)."
+  },
+  "lajes.fundacao.contorno": {
+   "estado": "CONFIRMED", "metodo": "geometria",
+   "fonte": {"documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx", "folha": 1, "local": "FUNDAÇÕES | PLANTA, contorno da laje", "data": ""},
+   "nota": "Laje de fundação de 11,50 × 11,25 com recortes (maior do que a casa)."
+  },
+  "lajes.fundacao.espessura": {
+   "estado": "CONFIRMED", "metodo": "texto",
+   "fonte": {"documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx", "folha": 1, "local": "pormenor das fundações", "data": ""},
+   "nota": "Laje de 20 cm."
+  },
+  "dimensoes.area_base_fundacao": {"estado": "CONFIRMED", "metodo": "calculo", "nota": "Área do contorno da laje de fundação (confirmado)."},
+  "materiais.exterior.opcao": {
+   "estado": "CONFIRMED", "metodo": "utilizador",
+   "fonte": {"documento": "utilizador 2026-09-24 (registo-conversas)", "folha": null, "local": "", "data": "2026-09-24"},
+   "nota": "Opção B: ETICS / capoto branco."
+  },
+  "terreno.*": {
+   "nota": "Lote plano (Casa Tipo 1). O levantamento do loteamento tem as cotas em texto (folhas 2 e 4 da arquitetura, cerca de 200–300 m): ler na Fase 2."
+  },
+  "terreno.fonte": {
+   "estado": "CONFIRMED", "metodo": "texto", "valor": "Levantamento do loteamento (arquitetura, folha 2, 1:500; modelação do terreno na folha 4)",
+   "fonte": {"documento": "SMA_012_arquitectura_pecas_desenhadas.dwfx", "folha": 2, "local": "LEV_PL", "data": ""},
+   "nota": "Existe levantamento com cotas em texto; ainda não foi lido."
+  }
+ }
+}

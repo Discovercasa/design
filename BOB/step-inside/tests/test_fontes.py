@@ -64,7 +64,7 @@ class TestProveniencia(Base):
         doc = self.gerar(self.decl)
         self.assertEqual(self.campo(doc, "escala")["estado"], CONFIRMED)
         self.assertEqual(self.campo(doc, "paredes.P03.espessura")["estado"], CONFIRMED)
-        self.assertEqual(self.campo(doc, "dimensoes.area_implantacao")["valor"], 80.0)
+        self.assertEqual(self.campo(doc, "dimensoes.area_base_fundacao")["valor"], 80.0)
 
     def test_vao_fora_da_parede_falha(self):
         self.planta["paredes"][0]["aberturas"].append({"s0": 9.5, "s1": 10.6, "tipo": "janela"})
@@ -128,6 +128,97 @@ class TestProveniencia(Base):
         self.assertEqual(relatorio.avaliar(doc)[0], "PASS")
         md, res = relatorio.markdown(doc)
         self.assertIn("Resultado: PASS", md)
+
+
+class TestProjetosDeTeste(unittest.TestCase):
+    """The two Phase 1 test projects, from the model data in the repo (the drawings themselves stay on the PC)."""
+    BOB = AQUI.parents[1]
+    PT = AQUI.parent / "projetos-teste"
+
+    def construir(self, config, pasta):
+        p = self.PT / pasta
+        return proveniencia.construir(self.BOB / config, json.loads((p / "declaracoes.json").read_text(encoding="utf-8")),
+                                      json.loads((p / "catalogo.json").read_text(encoding="utf-8")))
+
+    def test_torres_vedras(self):
+        doc = self.construir("Construção Torres Vedras/modelos/casa/config.json", "torres-vedras")
+        self.assertEqual(esquema.validar(doc), [])
+        self.assertEqual(doc["projeto"]["entrada"], "planta_arquitetura")
+        vaos = [a for p in doc["paredes"] for a in p["aberturas"]]
+        self.assertEqual(len(vaos), 19)
+        self.assertTrue(all(a["altura"]["metodo"] == "desenho_empresa" for a in vaos))  # all matched in D2503
+        self.assertNotEqual(relatorio.avaliar(doc)[0], "FAIL")
+
+    def test_sobral_tipo1(self):
+        doc = self.construir("Construção Sobral/modelos/tipo1/config.json", "sobral-tipo1")
+        self.assertEqual(esquema.validar(doc), [])
+        self.assertEqual(doc["projeto"]["entrada"], "desenhos_engenheiro")
+        self.assertEqual(self.campo(doc, "escala")["estado"], CONFIRMED)  # 1:50 written on the sheets
+        ids = {p["id"] for p in doc["paredes"]}
+        self.assertNotIn("PI2.09", ids)  # removed on purpose (duct)
+        self.assertIn("PD1.01", ids)  # added from the architecture
+        vao = [a for p in doc["paredes"] if p["id"] == "PE1.04" for a in p["aberturas"]][0]
+        self.assertEqual(vao["altura"]["estado"], INFERRED)  # sizes are not drawn by the engineer
+        self.assertNotEqual(relatorio.avaliar(doc)[0], "FAIL")
+
+    campo = staticmethod(Base.campo)
+
+
+def _desenhos(obra, ficheiro):
+    """Folder holding a project's drawing (they stay on the PC, never in Git), or None to skip the test.
+    STEP_INSIDE_DESENHOS may point at the folder that contains "Construção <obra>/desenhos/"."""
+    import os
+    bases = [Path(os.environ["STEP_INSIDE_DESENHOS"])] if os.environ.get("STEP_INSIDE_DESENHOS") else []
+    bases += [AQUI.parents[1], AQUI.parents[3].parent]  # BOB/ itself, or the old BOB folder next to _trabalho/
+    for b in bases:
+        d = b / f"Construção {obra}" / "desenhos"
+        if (d / ficheiro).exists():
+            return d
+    return None
+
+
+class TestRegressaoLeitores(unittest.TestCase):
+    """The existing readers must still give the stored plan / panels (spec §3.2: regression tests with reference
+    projects). Runs only where the drawings are (skipped elsewhere)."""
+    BOB = AQUI.parents[1]
+
+    def test_planta_torres_vedras(self):
+        from ferramentas.dwfx.leitor import Dwfx
+        from ferramentas.modelo.planta_arquitetura import ler_planta
+        guardada = json.loads((self.BOB / "Construção Torres Vedras/modelos/casa/planta_paredes.json").read_text(encoding="utf-8"))
+        o = guardada["origem_desenho"]
+        pasta = _desenhos("Torres Vedras", o["dwfx"])
+        if not pasta:
+            self.skipTest("desenhos de Torres Vedras não estão neste PC")
+        nova = ler_planta(Dwfx(pasta / o["dwfx"]).paths(o["folha"]), o["regiao"], o["escala"],
+                          origem={"dwfx": o["dwfx"], "folha": o["folha"]})
+        self.assertEqual(nova["paredes"], guardada["paredes"])
+        self.assertEqual(nova["contorno"], guardada["contorno"])
+
+    def test_paineis_sobral_tipo1(self):
+        from ferramentas.dwfx.leitor import Dwfx
+        from ferramentas.dwfx.pecas import build_members
+        from ferramentas.modelo.extrair_casa import elevations, place_panels
+        cp = self.BOB / "Construção Sobral/modelos/tipo1/config.json"
+        cfg = json.loads(cp.read_text(encoding="utf-8"))
+        nome = Path(cfg["dwfx"]).name
+        pasta = _desenhos("Sobral", nome)
+        if not pasta:
+            self.skipTest("desenhos do Sobral não estão neste PC")
+        G = json.loads((cp.parent / cfg["saida"]["geometria"]).read_text(encoding="utf-8"))
+        dw, S, fw = Dwfx(pasta / nome), cfg.get("escala", 50) / 1000, cfg["folhas"]["paredes"]
+        mw, gw = build_members(dw.paths(fw)), dw.glyphs(fw)
+        paineis = place_panels(mw, gw, elevations(mw, gw, cfg, S), cfg, S)
+        chave = ("nome", "piso", "origem", "sentido", "espessura", "encaixe")
+        resumo = lambda ps: sorted(([p[k] for k in chave] for p in ps), key=lambda x: (x[0], x[1]))  # noqa: E731
+        self.assertEqual(resumo(paineis), resumo(G["paineis"]))
+
+
+class TestRelatorio(unittest.TestCase):
+    def test_padrao_com_ids_com_pontos(self):
+        self.assertEqual(relatorio._padrao("paredes.PE1.12.aberturas.3.altura"), "paredes.*.aberturas.*.altura")
+        self.assertEqual(relatorio._padrao("paredes.P03.espessura"), "paredes.*.espessura")
+        self.assertEqual(relatorio._padrao("niveis.pe_direito"), "niveis.pe_direito")
 
 
 class TestEsquema(Base):

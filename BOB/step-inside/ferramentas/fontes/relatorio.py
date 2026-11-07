@@ -12,7 +12,7 @@ import argparse
 import fnmatch
 import re
 import sys
-from collections import OrderedDict
+from collections import Counter, OrderedDict
 from pathlib import Path
 
 from comum import CONFIRMED, INFERRED, MISSING, REVIEW, campos, ler_json, utf8_stdout
@@ -29,9 +29,15 @@ _EXPLICA = {
 }
 
 
+_CAMPOS_PAREDE = r"(inicio|fim|posicao|espessura|aberturas)"
+
+
 def _padrao(caminho):
-    """paredes.P03.aberturas.1.altura -> paredes.*.aberturas.*.altura (to group repeated fields)."""
-    return re.sub(r"\.(P\d+|\d+)(?=\.|$)", ".*", caminho)
+    """paredes.PE1.12.aberturas.1.altura -> paredes.*.aberturas.*.altura (to group repeated fields).
+    Wall ids may contain dots (engineer panels PE1.12), so the id is whatever comes before a wall field."""
+    c = re.sub(r"^(paredes|lajes)\.(.+?)\." + _CAMPOS_PAREDE + r"\b", r"\1.*.\3", caminho)
+    c = re.sub(r"^(lajes)\.([^.]+)\.", r"\1.*.", c)
+    return re.sub(r"\.aberturas\.\d+\.", ".aberturas.*.", c)
 
 
 def _essencial(caminho):
@@ -90,12 +96,26 @@ def _valor_txt(c):
 
 
 def _agrupar(itens):
-    """Group fields of the same section with the same method, source and note into one row."""
+    """Group fields of the same section with the same method and source document/sheet into one row."""
     g = OrderedDict()
     for p, c in itens:
-        k = (p.split(".", 1)[0], c["metodo"], _fonte_txt(c["fonte"]), c.get("nota", ""))
+        f = c["fonte"] or {}
+        k = (p.split(".", 1)[0], c["metodo"], f.get("documento", ""), f.get("folha"))
         g.setdefault(k, []).append((p, c))
     return g
+
+
+def _resumo_grupo(grupo):
+    """(source text, note text) for a row: one local / note, or the most common one and how many others."""
+    locais = Counter((c["fonte"] or {}).get("local", "") for _, c in grupo)
+    notas = Counter(c.get("nota", "") for _, c in grupo)
+    f = dict(grupo[0][1]["fonte"] or {})
+    if f:
+        f["local"] = locais.most_common(1)[0][0] if len(locais) == 1 else f"{len(locais)} locais"
+    nota, _ = notas.most_common(1)[0]
+    if len(notas) > 1:
+        nota += f" (+{len(notas) - 1} nota(s) diferente(s); ver fontes.json)"
+    return _fonte_txt(f or None), nota
 
 
 def markdown(doc):
@@ -123,7 +143,8 @@ def markdown(doc):
         if not itens:
             continue
         L += ["", f"## {titulo}", "", "| Campo | N.º | Valor | Método | Fonte | Nota |", "|---|---|---|---|---|---|"]
-        for (_, met, fon, nota), grupo in _agrupar(itens).items():
+        for (_, met, _doc, _folha), grupo in _agrupar(itens).items():
+            fon, nota = _resumo_grupo(grupo)
             pads = list(dict.fromkeys(_padrao(p) for p, _ in grupo))
             vals = sorted({_valor_txt(c) for _, c in grupo})
             v = vals[0] if len(vals) == 1 else f"{len(vals)} valores"

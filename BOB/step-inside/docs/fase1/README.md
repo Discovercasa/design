@@ -12,17 +12,19 @@ iguais. As ferramentas novas leem o que o motor já usa e escrevem uma camada po
 
 | Tarefa | Estado | Entregável |
 |---|---|---|
-| 52 · Escolher dois projetos de teste | **Por decidir** (decisão no hub) | Começou-se por Torres Vedras, que entra em todas as opções |
-| 53 · Catalogar plantas, cortes, alçados, cotas e topografia | Feito | `projetos-teste/<obra>/catalogo.md` (Torres Vedras e Sobral) |
+| 52 · Escolher dois projetos de teste | Decidido (utilizador, 2026-11-07: «Sobral Tipo 1») | **Torres Vedras** (térrea, construída, com levantamento real) e **Sobral Tipo 1** (dois pisos, lote plano, desenhos do engenheiro) |
+| 53 · Catalogar plantas, cortes, alçados, cotas e topografia | Feito | `projetos-teste/<obra>/catalogo.md` |
 | 54 · Schema com proveniência e confiança por campo | Feito | `schema/fontes_projeto.schema.json` + `ferramentas/fontes/proveniencia.py` |
 | 55 · Matriz de formatos | Feito | [`matriz-formatos.md`](matriz-formatos.md) + `ferramentas/fontes/matriz.py` |
-| 56 · Relatório de faltas e conflitos antes de gerar geometria | Feito | `ferramentas/fontes/relatorio.py` → `projetos-teste/torres-vedras/relatorio.md` |
+| 56 · Relatório de faltas e conflitos antes de gerar geometria | Feito | `ferramentas/fontes/relatorio.py` → `projetos-teste/<obra>/relatorio.md` |
+| Nova · Proveniência para o segundo projeto (desenhos do engenheiro) | Feito | Entrada `desenhos_engenheiro` no `proveniencia.py` → `projetos-teste/sobral-tipo1/` |
 
 **Critério de saída da especificação:** «as informações confirmadas/inferidas/em falta são distinguíveis e os conflitos
 são reportados».
-- **Cumprido em Torres Vedras.**
-- **Falta o segundo projeto de teste:** é preciso escolhê-lo (tarefa 52) e ligar a entrada «desenhos do engenheiro»
-  (tarefa nova no hub).
+- **Cumprido nos dois projetos de teste**, com as duas entradas do motor: a planta de arquitetura e os desenhos do
+  engenheiro.
+- Os leitores existentes têm testes de regressão: voltam a ler os desenhos e têm de dar a planta e os painéis
+  guardados (§6).
 
 ## 2. Como funciona
 
@@ -118,7 +120,40 @@ que prevalece o D2503, são:
 
 Nada disto impede gerar a casa; impede a Fase 2.
 
-### Sobral (loteamento; desenhos do engenheiro + arquitetura): só o catálogo
+### Sobral Tipo 1 (dois pisos; desenhos do engenheiro + arquitetura)
+
+**Resultado: `NEEDS_HUMAN_REVIEW`.** Há duas perguntas reais, que já estavam abertas no projeto. Os campos ficam assim:
+
+| Estado | Campos |
+|---|---|
+| CONFIRMED | 215 |
+| INFERRED | 134 |
+| MISSING | 10 |
+| NEEDS_HUMAN_REVIEW | 1 |
+
+Há 5 conflitos resolvidos.
+
+**Para rever:**
+- **Porta da lavandaria:** o lado nascente está aberto 1,40 m, e a configuração diz «porta (de correr?)». Falta saber
+  o tipo de porta.
+- **Vão do painel PI1.08:** tem 1,50 m de altura livre. Falta saber se é uma porta ou outro tipo de vão.
+
+**O que fica confirmado ou deduzido:**
+- **Escala 1:50:** confirmada, porque está escrita nas folhas usadas (catálogo).
+- **Paredes:** os 53 painéis vêm dos alçados do engenheiro, colocados pela planta de paredes. Ficam `INFERRED`
+  quando o encaixe dos montantes é incompleto ou a posição foi corrigida à mão.
+- **Painéis retirados:** os dois painéis da conduta (PI2.09/PI2.10) ficam como conflito resolvido.
+- **Paredes acrescentadas pela arquitetura:** PD1.01, PD2.01 e a porta da lavandaria, todas `INFERRED`.
+- **Medidas dos vãos: `INFERRED`.** O engenheiro desenha os vãos como intervalos entre peças e não dá as medidas das
+  portas e janelas (revisão técnica #5).
+- **Janela do WC do piso de cima:** está corrigida pela arquitetura (folha 18). Prevalece a arquitetura sobre a
+  abertura alta do engenheiro.
+
+**Em falta:**
+- o CRS e a cota absoluta;
+- os 8 metadados do terreno. O lote é plano, e o levantamento do loteamento existe, com as cotas em texto.
+
+### Sobral (loteamento): catálogo
 
 - **Arquitetura:** 22 folhas com texto legível. Inclui o levantamento (folha 2, «LEV_PL», 1:500) e a modelação do
   terreno (folha 4, «MOD_PL»).
@@ -126,9 +161,7 @@ Nada disto impede gerar a casa; impede a Fase 2.
   - 447 dos 451 números da folha 2 e 488 dos 491 da folha 4 estão entre 200 e 300 m;
   - são coerentes com as cotas do loteamento (pisos do armazém a 201,23 e 204,50);
   - verificado a 2026-11-07, só com contagens.
-- **Casa Tipo 2:** está num terreno com declive (piso inferior a −2,70).
-- **Proveniência:** ainda não se gera. Os desenhos do engenheiro entram por outro caminho do motor
-  (`estrutura_dc.py`), que precisa de um adaptador próprio.
+- **Casa Tipo 2:** está num terreno com declive (piso inferior a −2,70). Não foi escolhida como projeto de teste.
 
 ## 4. O que se aprendeu para a Fase 2 (terreno)
 
@@ -144,10 +177,16 @@ Nada disto impede gerar a casa; impede a Fase 2.
 
 ## 5. Limitações e riscos
 
-- **Só a entrada «planta de arquitetura»** (`casa_planta.py`) tem proveniência. Os desenhos do engenheiro (Sobral) e o
-  JSON do Build Your House ficam para os próximos adaptadores.
-- **As posições dos vãos** continuam as da planta. Do desenho de módulos só se compara a largura, o peitoril, a altura e
-  o tipo.
+- **Entradas com proveniência:** a planta de arquitetura (Torres Vedras) e os desenhos do engenheiro (Sobral). O JSON
+  do Build Your House fica para quando for preciso.
+- **Pé direito e cotas dos pisos:** a entrada do engenheiro dá a cota de cada piso, não um «pé direito»; o pé direito
+  de cada piso resulta do método DiscoverCasa (`docs/modelos.md` do Sobral).
+- **Vãos:**
+  - em Torres Vedras, as posições continuam as da planta; do desenho de módulos compara-se só a largura, o peitoril, a
+    altura e o tipo;
+  - no Sobral, as medidas são as dos intervalos entre peças, e o motor DiscoverCasa ajusta-as às regras de
+    enquadramento;
+  - uma porta com menos de 1,90 m de altura livre fica para rever.
 - **As declarações são à mão:**
   - cada valor tem de citar a sua fonte;
   - o relatório avisa quando uma declaração não encontra o campo ou contradiz o modelo.
@@ -158,8 +197,20 @@ Nada disto impede gerar a casa; impede a Fase 2.
 
 ## 6. Testes
 
-`step-inside/tests/test_fontes.py` (15 testes, `unittest`) com uma casa sintética em `tests/fixtures/casa_simples/`,
-sem dados de clientes. Cobrem:
+`step-inside/tests/test_fontes.py` tem 20 testes (`unittest`).
+
+**Os dois projetos de teste**, a partir dos dados do modelo guardados no Git:
+- validam contra o schema e não dão `FAIL`;
+- em Torres Vedras, os 19 vãos batem com o D2503;
+- no Sobral, a escala está escrita, a conduta foi retirada, as paredes da arquitetura entraram e as medidas dos vãos
+  ficam inferidas.
+
+**Testes de regressão dos leitores existentes** (especificação §3.2):
+- voltam a ler os desenhos e têm de dar a mesma planta de Torres Vedras e os mesmos 53 painéis do Sobral;
+- só correm onde estão os desenhos, porque estes não vão para o Git; noutro PC ficam por correr (*skip*);
+- `STEP_INSIDE_DESENHOS` pode apontar para a pasta das obras.
+
+**Os restantes usam uma casa sintética** em `tests/fixtures/casa_simples/`, sem dados de clientes. Cobrem:
 - escala deduzida contra escala declarada;
 - valores por omissão;
 - norma da empresa;
@@ -171,4 +222,4 @@ sem dados de clientes. Cobrem:
 - erros de schema;
 - matriz de formatos.
 
-Resultado a 2026-11-07: **15 OK**.
+Resultado a 2026-11-07, neste PC (com os desenhos): **20 OK**.
