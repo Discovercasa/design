@@ -16,8 +16,12 @@ das tarefas no hub), nem Cloudflare. Não se mostram segredos. Referência: espe
   - o Build Your House e o gerador, que correm o mesmo motor no browser (Pyodide + three.js).
 - **O que não existe:** Unreal, Pixel Streaming, R2, Workers, exportação FBX/USDZ, terreno, IDs estáveis de material,
   proveniência por campo.
-- **Workstation:** a candidata para o teste é **outro PC, fora da empresa** (decisão de 2026-11-07); falta inventariá-lo
-  com `BOB/step-inside/ferramentas/inventario_workstation.ps1`. O PC da empresa analisado aqui:
+- **Workstation:** a candidata é o **PC de casa do utilizador** (decisão de 2026-11-07), inventariado no mesmo dia:
+  - Ryzen 9 5900X (12 núcleos), 32 GB DDR4, RTX 2060 com 6 GB, Windows 11; sem disco NVMe e com o C: quase cheio
+    (15 GB livres);
+  - **é uma boa base:** para começar o Unreal falta só um NVMe de 2 TB; a GPU decide-se depois do primeiro teste no
+    Unreal (§8).
+- **PC da empresa (onde correu esta auditoria):**
   - serve para o que se faz hoje (Blender, scripts, documentos);
   - não serve para o Unreal Engine 5: 4 núcleos, 16 GB DDR3, GTX 1050 Ti com 4 GB, Windows 10;
   - **pôr só uma GPU nova não resolve:** a plataforma Z97 tem no máximo 32 GB DDR3, PCIe 3.0 e não é suportada pelo
@@ -209,11 +213,61 @@ Muito abaixo dos 8–15 GB por casa previstos para o Step Inside, que vêm sobre
 
 ## 8. Workstation (tarefa 50)
 
-O inventário é do PC da empresa onde esta auditoria correu. **A decisão de 2026-11-07 é testar outro PC, fora da
-empresa.** Para o inventariar há um script só de leitura,
-`BOB/step-inside/ferramentas/inventario_workstation.ps1`. Corre com
-`powershell -ExecutionPolicy Bypass -File .\inventario_workstation.ps1`, compara o PC com os mínimos abaixo e guarda o
-resultado no Ambiente de Trabalho.
+Inventariaram-se dois PCs. **A candidata é o PC de casa do utilizador** (decisão de 2026-11-07); o PC da empresa fica
+para o trabalho de hoje.
+
+O inventário usa um script só de leitura, `BOB/step-inside/ferramentas/inventario_workstation.ps1`:
+- compara o PC com os mínimos abaixo e guarda o resultado no Ambiente de Trabalho;
+- corre com `powershell -ExecutionPolicy Bypass -File .\inventario_workstation.ps1`;
+- noutro PC pode ser descarregado e corrido com um só comando, a partir do endereço «raw» do GitHub
+  (`Invoke-WebRequest -UseBasicParsing … -OutFile`). Testado a 2026-11-07.
+
+### 8.1 PC de casa (candidato; inventariado a 2026-11-07)
+
+| Peça | Encontrado | UE 5.8, recomendado pela Epic | Especificação §6.2 | Avaliação |
+|---|---|---|---|---|
+| CPU | AMD Ryzen 9 5900X, 12 núcleos / 24 threads | 4 núcleos a 2,5 GHz | «plataforma moderna, vários núcleos» | OK, com folga |
+| RAM | 32 GB DDR4-3200 (2 × 16 GB); 4 ranhuras, 2 livres; a motherboard aceita até 128 GB | 32 GB | 64 GB | OK para a Epic. Para 64 GB bastam mais 2 × 16 GB nas ranhuras livres |
+| GPU | NVIDIA RTX 2060, 6 GB, com ray tracing por hardware | 8 GB ou mais, DirectX 12; RTX 2000 ou mais recente para o Lumen por hardware | RTX 5070 Ti 16 GB no mínimo | **Abaixo:** 6 GB de VRAM |
+| Disco | 2 SSD SATA: 240 GB (C:, 223 GB formatados, 15 GB livres) e 480 GB (D:, 447 GB formatados, 83 GB livres); nenhum NVMe | SSD | NVMe de 2 TB + 4 TB | **Abaixo:** não há espaço para o Unreal |
+| Motherboard | ASUS ROG Strix X570-F Gaming (PCIe 4.0, DDR4, ranhuras M.2) | — | — | Boa base para melhorar |
+| Sistema | Windows 11 Pro 25H2 (build 26200) | Windows 11 | Windows 11 | OK |
+| Fonte e caixa | Por indicar (não se leem por software) | — | — | São precisas antes de trocar a GPU |
+
+**Software:**
+- **Instalado:** Blender 5.2.2, Epic Games Launcher (sem nenhuma versão do Unreal) e Node 24.14.
+- **Não aparecem:** Python, Git, Visual Studio e Meta Horizon Link.
+
+**Conclusão:**
+- **É uma boa base:** tem o que falta ao PC da empresa (CPU de 12 núcleos, PCIe 4.0, DDR4 até 128 GB, Windows 11, GPU
+  com ray tracing). **Não é preciso uma workstation nova.**
+- **O disco é o primeiro problema:**
+  - C: tem 15 GB livres e D: tem 83 GB;
+  - o Unreal, a cache de shaders e os projetos ocupam dezenas a centenas de GB;
+  - **proposta:** um NVMe de 2 TB numa ranhura M.2 livre, só para o Unreal e os projetos. É a única compra necessária
+    para começar;
+  - mesmo sem o Step Inside, 15 GB livres no C: é pouco para as atualizações do Windows.
+- **A GPU chega para começar, não para a qualidade final:**
+  - com 6 GB dá para instalar o Unreal 5.8, importar uma casa do Blender e testar o Lumen em 1080p com qualidade média;
+  - fica abaixo da Epic (8 GB) e muito abaixo da especificação (16 GB): texturas 4K e testes de VR vão bater no limite;
+  - a workstation não serve os clientes (especificação §6), por isso basta que chegue para desenvolver;
+  - **proposta:** manter a RTX 2060 até ao primeiro teste no Unreal (Fase 4) e decidir a troca com esses números
+    (decisão 3). É um desvio temporário à §6.2, para não comprar às cegas;
+  - se for preciso trocar, uma placa de 16 GB: a RTX 5060 Ti 16 GB é a mais barata, a RTX 5070 Ti é a da
+    especificação. Antes, confirmar a potência da fonte e o espaço na caixa.
+- **RAM:** 32 GB chegam para começar. Passar a 64 GB (mais 2 × 16 GB DDR4-3200, de preferência do mesmo modelo) quando
+  os cooks ou as cenas o pedirem.
+- **Software a instalar quando começar a Fase 4 (tudo grátis):**
+  - o Unreal 5.8, pelo Epic Games Launcher, que já está instalado;
+  - Git e Python, para as ferramentas do BOB (verificar com `python ferramentas/verificar.py`; as ferramentas foram
+    usadas com o Blender 4.4 e falta testá-las com o 5.2);
+  - o Visual Studio, só se o projeto Unreal tiver código C++.
+- **Quando comprar:** pela ordem da §14, as Fases 1–3 (e a 7, se for aprovada antes) não precisam deste PC. As compras
+  podem esperar pela Fase 4 e nenhuma se faz sem autorização.
+- **Desenhos de clientes:** é um PC pessoal, fora da empresa. Antes de lá copiar desenhos de clientes, decidir se podem
+  ficar nele, ou se o trabalho usa só os modelos e exportações já sem dados dos clientes.
+
+### 8.2 PC da empresa (onde correu a auditoria)
 
 | Peça | Encontrado | UE 5.8, recomendado pela Epic | Especificação §6.2 |
 |---|---|---|---|
@@ -238,11 +292,8 @@ resultado no Ambiente de Trabalho.
   - a motherboard fica limitada a 32 GB DDR3 e PCIe 3.0;
   - o CPU de 4.ª geração não é suportado pelo Windows 11;
   - o suporte do Windows 10 pela Microsoft terminou em 2025-10-14.
-- As opções são uma workstation nova, como na §6.2, ou começar as Fases 4 e 5 numa GPU cloud de teste. Qualquer das duas
-  só com autorização.
-- **Atenção:** a pasta de trabalho está num disco USB externo. É lento para caches do Unreal, e falta confirmar onde
-  ficam as cópias de segurança.
-- **Não se lê por software:** a fonte de alimentação (W) e o tamanho da caixa. Só interessam se se mantiver este PC.
+- Por isso a candidata passou a ser o PC de casa (§8.1).
+- **Atenção:** a pasta de trabalho está num disco USB externo e falta confirmar onde ficam as cópias de segurança (R10).
 
 ## 9. Dependências e versões
 
@@ -277,7 +328,7 @@ resultado no Ambiente de Trabalho.
 | # | Risco | Impacto | Ação proposta |
 |---|---|---|---|
 | R1 | **5 desenhos de clientes no repositório público** de 2026-10-30 a 2026-11-07 | Alto: dados de clientes expostos | **Feito a 2026-11-07:** tirados de todo o histórico (os ramos `main` e `hub/inicio-projetos` foram reescritos e enviados); `*.dwg`/`*.skp` no `.gitignore`; os ficheiros continuam no PC. **Falta:** (a) o GitHub ainda mostra os commits antigos a quem souber o identificador, até o Suporte do GitHub os limpar; (b) qualquer cópia antiga do repositório tem de ser descarregada de novo, senão um push volta a trazer os ficheiros; (c) o `.skp` do Sobral não está nos Documentos do hub (os 4 DWG estão). |
-| R2 | A workstation não corre o UE5 | Alto para as Fases 4–5 | Decidir: workstation nova ou GPU cloud de teste (§15) |
+| R2 | Workstation (PC de casa): sem NVMe e com o C: quase cheio; GPU com 6 GB de VRAM | Médio para as Fases 4–5 | NVMe de 2 TB antes de instalar o Unreal; decidir a GPU depois do primeiro teste no Unreal (§8.1, decisão 3) |
 | R3 | Supabase Free: pausa ao fim de 1 semana sem atividade, 1 GB de ficheiros | Médio agora; alto com links de clientes | Pro (25 USD/mês) antes de haver links de clientes; ficheiros 3D no R2 |
 | R4 | A zona DNS não está na Cloudflare | Médio: limita Workers e R2 com domínio próprio | Usar Pages Functions + R2 privado com URLs assinados; mudar o DNS só se for preciso |
 | R5 | Sem proveniência nem confiança por campo; alturas por omissão; escala deduzida | Médio: vai contra a regra 9 (não inventar) | Fase 1: uma camada de proveniência por cima da planta e da configuração, sem reescrever o motor |
@@ -313,7 +364,8 @@ Nenhuma destas alterações está feita. Cada uma espera aprovação.
    `MAT_*` estáveis, texturas e UVs, GLB e USDZ (o Blender exporta USDZ) e `manifest.json` com SHA-256.
 4. Supabase: tabelas novas só na Fase 6. Até lá nada de ficheiros 3D no Supabase.
 5. Apagar a Edge Function desligada `carregar-documentos-iniciais` (opcional).
-6. Workstation: não comprar só uma GPU para este PC (§8).
+6. Workstation: usar o PC de casa; comprar um NVMe de 2 TB antes de instalar o Unreal; não comprar GPU antes do primeiro
+   teste no Unreal. Não comprar só uma GPU para o PC da empresa (§8).
 
 ## 14. Proposta de ordem das fases
 
@@ -337,9 +389,12 @@ cloud, onde guardar os ficheiros 3D, VR). Os factos desta auditoria foram acresc
 
 1. ~~**Desenhos de clientes no Git público.**~~ Decidido a 2026-11-07: tirados do histórico. Falta pedir ao Suporte do
    GitHub que limpe os commits antigos (R1).
-2. **Workstation:** vai testar-se outro PC, fora da empresa (2026-11-07). Falta o seu inventário (script da §8). Depois
-   decide-se entre usá-lo, comprar uma workstation nova (64 GB, RTX 5070 Ti ou superior, NVMe 2 TB, Windows 11) ou
-   começar o Unreal numa GPU cloud de teste.
+2. **Workstation:** o PC de casa foi inventariado a 2026-11-07 e serve de base (§8.1). Para aprovar:
+   - (a) comprar um NVMe de 2 TB antes da Fase 4;
+   - (b) manter a RTX 2060 até ao primeiro teste no Unreal e decidir a GPU com esses números (decisão 3);
+   - (c) passar a RAM a 64 GB só quando for preciso.
+
+   Falta indicar a potência da fonte de alimentação (W) e a caixa.
 3. **Ordem das fases:** Fase 7 (AR) antes das Fases 4–5?
 4. **Dois projetos de teste para a Fase 1:**
    - sugestão: Torres Vedras (tem levantamento topográfico e casa construída) e uma casa simples do Build Your House;

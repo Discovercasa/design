@@ -1417,3 +1417,42 @@ When this file passes about 1 500 lines, continue in `registo-conversas-<year>-<
 > Tirar do Histórico em relação aos desenhos
 - Context: (1) the Step Inside workstation test candidate is another PC outside the company, not the company PC inventoried in Phase 0; (2) chooses the history purge for the drawings. Done: the 5 drawings were purged from the whole Git history of Discovercasa/design (`main` and `hub/inicio-projetos` rewritten with filter-branch and force-pushed 2026-11-07); `.gitignore` now ignores `*.dwg` and `*.skp`. The files were NOT deleted: they stay on the PC (working folder, ignored; old private BOB folder) and the 4 DWG are also in the hub's private storage (Builder documents). Local backup bundle of the old history: `_trabalho/design-antes-limpeza-historico-2026-11-07.bundle` (next to the repo folder, local only). Read-only inventory script written: `step-inside/ferramentas/inventario_workstation.ps1`; hub task 50 back to "em curso" until that PC is inventoried; hub decision 3 updated.
 - Filed in: this log; `conhecimento/insights.md` → client-drawings insight (done, open points a–c); `conhecimento/discovercasa.md` → Product vision 3 (workstation choice); `CLAUDE.md` → rule line (`*.dwg`/`*.skp` ignored). Open: (a) GitHub still serves the old commits by SHA until GitHub Support purges them (only the user / an org owner can request it); (b) any old clone must be re-cloned, or a push from it would bring the files back; (c) the Sobral `.skp` is not in the hub's documents (upload via a temporary Edge Function blocked by permissions) — the user can upload it in the hub; (d) the PC outside the company still has to be inventoried (script run by the user), then the Unreal / GPU question can be reassessed.
+
+### 2026-11-07 — Asks for the inventory script so he can download it from the chat [Step Inside]
+> manda-me o script de forma a eu conseguir fazer download aqui neste chat e já te mando as informações
+- Context: asks for the `inventario_workstation.ps1` script of the previous entry so he can run it on the home PC; promises to send the output. We sent the file.
+- Filed in: nothing new (procedure only; see next entry).
+
+### 2026-11-07 — Cannot download the file from the chat [Step Inside]
+> nao consigo transferir o ficheiro assim pelo menos a partir daqui não estou a conseguir
+- Context: the download from the chat failed. We gave a one-line PowerShell command that downloads the script from the GitHub raw URL and runs it (tested here, works).
+- Filed in: `step-inside/docs/audit/current-architecture.md` → §8 (one-command download, tested 2026-11-07).
+
+### 2026-11-07 — Home PC inventory output (script output pasted) [Step Inside]
+> CPU: AMD Ryzen 9 5900X 12-Core Processor · 12 núcleos / 24 threads
+> RAM: 32 GB (16 GB DDR4-3200, 16 GB DDR4-3200) · ranhuras: 4 · máximo da motherboard: 128 GB
+> Motherboard: ASUSTeK COMPUTER INC. ROG STRIX X570-F GAMING
+> GPU: NVIDIA GeForce RTX 2060 · 6 GB · driver 32.0.16.1047
+> Disco: CT480BX500SSD1 · SSD · SATA · 447 GB
+> Disco: KINGSTON SHFS37A240G · SSD · SATA · 224 GB
+>   Volume C: 223 GB, livres 15 GB
+>   Volume D: 447 GB, livres 83 GB
+> Sistema: Microsoft Windows 11 Pro · versão 10.0.26200 (build 26200)
+>
+> Programas relevantes:
+>   Blender 5.2.2
+>   Epic Games Launcher 1.3.93.0
+>   Epic Games Launcher Prerequisites (x64) 1.0.0.0
+>   Node.js 24.14.1
+>
+> Comparação com o mínimo para o Unreal Engine 5 (Epic) e a especificação do Step Inside (§6.2):
+>   [OK]     CPU com 4 ou mais núcleos (Epic: 4 núcleos a 2,5 GHz; especificação: plataforma moderna)
+>   [OK]     RAM ≥ 32 GB (Epic); a especificação recomenda 64 GB
+>   [ABAIXO] VRAM ≥ 8 GB (Epic); a especificação pede 16 GB no mínimo (RTX 5070 Ti)
+>   [OK]     GPU com ray tracing por hardware (Lumen: RTX 2000+, RX 6000+, Arc)
+>   [OK]     Windows 11 (recomendado pela Epic)
+>   [ABAIXO] Disco NVMe (especificação: 2 TB no mínimo)
+>
+> Não se lê por software: fonte de alimentação (W) e tamanho da caixa. Indique-os à mão se os souber.
+- Context: output of the inventory script on the user's home PC (last two lines, the save path and the prompt, left out: they contain the Windows user folder). PSU wattage and case were not given.
+- Filed in: `step-inside/docs/audit/current-architecture.md` → §8.1 (home PC table, conclusion), §11 R2, §13 item 6, §15 item 2; `public/dados/projetos/plataforma_cliente.json`; hub task 50 concluded, decision 3 (context and options); `conhecimento/discovercasa.md` → Product vision 3 (workstation); `conhecimento/insights.md` → 2026-11-07 home-PC insight (proposed, awaiting the user). Pending: PSU wattage and case.
