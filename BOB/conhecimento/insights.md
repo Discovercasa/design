@@ -279,4 +279,6 @@ he answers (`metodo-construtivo.md`). Condensed 2026-10-28 (history in git).
   head was 30,9 cm lower). Hidden roof: heads not capped (lintel up to the module top). **Open question:** the
   engineer-drawing path (`estrutura_dc.py`, Sobral, module heights fixed by the drawings) still lowers heads ≈ 3 cm
   (Sobral `revisao-tecnica.md` #21) and interior doors stay under the interior module: should that path also raise?
+  **Answered 2026-11-07 (user "Sim, ficam"): no.** Sobral keeps the drawings' module heights and the ≈ 3 cm lower heads;
+  the raise applies only to houses built from a plan. Interior doors: no decision (normal heights fit).
   Suggestion: ask the user; since the heights come from the engineer's drawings, 3 cm is probably acceptable.

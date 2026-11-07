@@ -110,7 +110,8 @@ and the ceiling fix for thin strips of a room (they were left without Pladur: +0
   (perfis 27 mm under the beams).
 - Openings (not drawn as such in the engineer's drawings): inferred from the stud layout (bays ≥ 0.55 m
   between full-height studs; sills/headers from cripples) and kept in the DiscoverCasa structure, with
-  heads lowered where the 110x75 header must fit under the top plate (≈ 3 cm vs the engineer's openings;
+  heads lowered where the 110x75 header must fit under the top plate (≈ 3 cm vs the engineer's openings; **user
+  decision 2026-11-07 "Sim, ficam": keep it, module heights stay those of the drawings, not raised**;
   upstairs heads ≤ Z 5.36 since the 2026-10-13 floor (were 5.22, ≈ 11 cm below the architecture's
   windows), `revisao-tecnica.md` #21): 5 doors/French windows
   + WC window PE1.12 downstairs, 5 windows + 1 French window (PE2.08) upstairs, 5 interior doors.

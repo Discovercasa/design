@@ -24,7 +24,8 @@ base, no flashing at the ledger, tiles on the slats).
 - on exposed roofs the exterior module from the clear height with afinação + amarração on top (assumed); the interior top
   piece named "Viga de afinação interior" except with lameladas (naming only);
 - the clear height from cfg `niveis.pe_direito` (= the rule); from a plan the modules now rise as the rule says (X1 closed
-  for `casa_planta` 2026-11-07, a760ce8; open only the points listed under X1);
+  for `casa_planta` 2026-11-07, a760ce8; engineer-drawing houses keep the drawings' height by the user's choice; open only
+  the points listed under X1);
 - **exposed roofs from a configured house** (`para_construtor.py` → cfg `cobertura.tipo` "a_vista" with `forma`, `beirado`
   0,25, verge = beirado (was 0,12 until 2026-10-29 night), `inclinacao_pct` vs JSON 15 %; `casa_planta.py` `a_vista`; `motor.worker.js` "telhado"). Test houses
   (the caller's): L 97 m², U 175 m², rectangle 12 × 8, L_misto / U_misto, the surface audit (2 064 + 1 032 cases), the
@@ -33,7 +34,8 @@ base, no flashing at the ledger, tiles on the slats).
     `para_construtor`'s note says "a confirmar" and names the highest rough top, not the opening → name it (e.g. "janela de
     correr 4 folhas, parede S"); (b) **closed 2026-11-07** (a760ce8, user "altera isso e faz com que os módulos subam"):
     `casa_planta` from a plan raises the whole house as `para_construtor`, and no longer caps a head under a hidden roof's
-    ring; left only `estrutura_dc.py` from engineer drawings (heads from the drawings, SB #21); (c) the longer ceiling drop (≤ ≈ 0,34) not checked against the réguas; (d) the screen offers
+    ring; `estrutura_dc.py` from engineer drawings keeps the drawings' module heights, heads ≈ 3 cm lower — **a confirmed
+    exception, no longer a deviation** (user 2026-11-07 "Sim, ficam"; scope in §3); (c) the longer ceiling drop (≤ ≈ 0,34) not checked against the réguas; (d) the screen offers
     no alternative when one opening lifts the house.
   - **X2** (E2, §6) Glulam per rectangle when its **outline length** passes 8,0 (`telhado_estrutura.construir`, `sec = lam
     if vao > 8`) — the rule's limit is the free span (≈ outer − 0,22 → glulam from ≈ 7,78 free) — while the hidden-roof path
