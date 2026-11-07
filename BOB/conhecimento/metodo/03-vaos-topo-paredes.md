@@ -30,9 +30,12 @@
   verga is lowered onto the opening head** (Claude: "Num vão largo mais baixo que a verga, baixo a verga até ao vão?" —
   user 2026-11-06 "Sim, baixa a verga") — confirmed. Verga underside = min(opening head, top plate underside − 0,22); the
   two 110×75 posts stop under it; where the verga reaches the top plate (opening at its highest) there is nothing above
-  it (see the cripples rule). **Our addition (assumed, not said):** over the verga's two ends the jamb goes on as a
-  110×75 piece from the verga's top to the top plate / module top, closing the 40 cm stud grid at the opening edges
-  (D2503 keeps jambs full height). — `estrutura_dc.emoldurar` (commit 0e4902a); `casa_planta` still caps an opening head
+  it (see the cripples rule). **Jamb pieces over the verga's ends — confirmed:** over the two ends the jamb goes on as a
+  110×75 piece from the verga's top to the top plate / module top (Claude showed an engine-drawn elevation, exterior
+  module with a 3,00 × 2,23 garage door, offering this piece / a montante curto 11×3,5 / nothing; user 2026-11-07
+  "Sim, confirmo"). Reason: without it the gap above the verga between the first cripple and the stud beside the opening
+  is ≈ 45 cm (> 40 cm clear between studs); D2503 keeps jambs full height. — `estrutura_dc.emoldurar` (commit 0e4902a;
+  comment updated 7743ec4); `casa_planta` still caps an opening head
   under its own framing (X1, unchanged). Closes the 17–19 cm unframed strip of L72 / §15 item 26 ([TV] P03.1 builder
   model, configurator 3,00 portão beside a taller opening).
 - **Vertical 7,5×3,5 pieces (cripples)** above every opening up to the top plate and below every window down to the bottom

@@ -151,6 +151,8 @@ Other items (numbers kept):
     the posts stopping under it and cripples above it up to the top plate (module top in a hidden roof). **CLOSED
     2026-11-06:** asked "Num vão largo mais baixo que a verga, baixo a verga até ao vão?" — user "Sim, baixa a verga" —
     confirmed; verga underside = min(opening head, top plate underside − 0,22) (§3; L72; `estrutura_dc.emoldurar`).
+    The 110×75 jamb piece over the verga's ends (verga's top to top plate / module top) also **confirmed 2026-11-07**:
+    "Sim, confirmo" (gap otherwise ≈ 45 cm > 40 cm clear).
 ### [TV] to ask, low priority (TV comparison)
 - The pergola: slope and what is under the ceramic tiles, tile battens, gutter section and material, where the 2 downpipes
   discharge, sections and post bases, the exterior glulam treatment's name (§8, TV #21, #22).

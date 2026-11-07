@@ -32,7 +32,7 @@ rule by rule, in `metodo-construtivo.md`; the user's words in `registo-conversas
   2,8 (JSON `verga_grande.vao_min`). Exact threshold (2,8 / 3,0 / over 3,0; rough opening or frame): OPEN.
   **Position (user 2026-11-06, "Sim, baixa a verga")**: the verga sits on the opening head (underside = min(head, top
   plate underside − 0,22)); posts stop under it, short studs above it up to the top plate. Jamb pieces 110×75 over the
-  verga's ends up to the top plate / module top: OUR derived choice, not told by the user.
+  verga's ends up to the top plate / module top: CONFIRMED (user 2026-11-07, "Sim, confirmo"; earlier our derived choice).
   TV exception: the 3,00 garage door has an 11×7,5 lintel in a 3,50 full-height module — "exatamente neste caso o nosso
   engenheiro confirmou que poderia ser a de 11x7,5 mas por norma é 22x7,5" (2026-10-19) → engineer-approved for TV
   only (TV `revisao-tecnica.md` #17).
