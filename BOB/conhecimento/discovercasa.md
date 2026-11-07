@@ -70,8 +70,14 @@ Why Claude learns the method; "vamos passo a passo" — an overall idea, then an
    **Phase 1 done 2026-11-07** (data contract and input quality; hub checkpoint 21 concluido). **Test projects decided
    (user 2026-11-07, "Sobral Tipo 1"; hub decision 17):** Torres Vedras + Sobral Tipo 1 (engineer drawings, flat lot;
    `step-inside/projetos-teste/`). Sobral Tipo 1 report is NEEDS_HUMAN_REVIEW (two open questions filed in
-   `Construção Sobral/docs/estado.md`). **Still open:** decision 18 (phase order: Phase 7 AR before Unreal), PSU/case,
+   `Construção Sobral/docs/estado.md`). **Still open:** PSU/case,
    client drawings on the home PC, Cloudflare panel access (task 47).
+   **Phase order decided (user 2026-11-07, hub decision 18):** Phase 7 (AR on the phone) right after Phase 3, before the
+   Unreal Phases 4–5 (order 0, 1, 2, 3, 7, 4, 5, 6, 8, 9). **Requirement (user):** the AR must be realistic too — "não tanto
+   como nos óculos VR mas ter um nível de realismo bom e não aparentar ter materiais simples": real PBR textures from
+   Phase 3, relief as normal maps, baked ambient occlusion, frames and glass modelled; approved next to photos of the built
+   Torres Vedras house. AR will not reach Unreal realism (`insights.md`). Open: photos of the real materials from the user.
+   (Decision 18 in the "still open" lists above is now closed.)
    **Phase 1 started 2026-11-07** ("Contrato de dados e qualidade de entrada", hub checkpoint 21 em curso): schema
    `step-inside/schema/fontes_projeto.schema.json`, tools `step-inside/ferramentas/fontes/`, 15 tests, report
    `step-inside/docs/fase1/`, test projects Torres Vedras (report WARNING, 202 CONFIRMED / 2 INFERRED / 10 MISSING) and
