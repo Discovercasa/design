@@ -233,4 +233,6 @@ circled (`discovercasa.md`).
   member over the opening — nothing over a verga in an ordinary module, from the verga's top to the module top in a
   full-height one, from the padieira's top to the top plate as before → §3 (cripples, verga) → `estrutura_dc.emoldurar`
   (`topo_montantes`; `casa_planta` passes the module top for exterior modules of a hidden roof). Side finding, still open:
-  the strip between a lower opening head and the verga (§15 item 26).
+  the strip between a lower opening head and the verga — answered the same day: "Sim, baixa a verga" (user 2026-11-06),
+  the verga now sits on the opening head (§3, §15 item 26 closed) → `estrutura_dc.emoldurar` (underside = min(opening
+  head, top plate underside − 0,22); jamb pieces on over the verga's ends, our addition).

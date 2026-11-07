@@ -148,8 +148,9 @@ Other items (numbers kept):
     verga "under the top plate, the two 110×75 posts stopping under it" (Casa CL; the configurator's modules rise so the
     highest head fits under it, X1) but "in a full-height exterior module the lintel sits directly over the opening" (D2503).
     **Our suggestion:** lower the verga onto the opening head, as the padieira does and as the D2503 full-height lintels do,
-    the posts stopping under it and cripples above it up to the top plate (module top in a hidden roof). Status: **OPEN —
-    ask the user**; the tools keep the verga under the top plate until answered (§3; L72).
+    the posts stopping under it and cripples above it up to the top plate (module top in a hidden roof). **CLOSED
+    2026-11-06:** asked "Num vão largo mais baixo que a verga, baixo a verga até ao vão?" — user "Sim, baixa a verga" —
+    confirmed; verga underside = min(opening head, top plate underside − 0,22) (§3; L72; `estrutura_dc.emoldurar`).
 ### [TV] to ask, low priority (TV comparison)
 - The pergola: slope and what is under the ceramic tiles, tile battens, gutter section and material, where the 2 downpipes
   discharge, sections and post bases, the exterior glulam treatment's name (§8, TV #21, #22).

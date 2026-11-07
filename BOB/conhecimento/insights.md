@@ -261,7 +261,9 @@ he answers (`metodo-construtivo.md`). Condensed 2026-10-28 (history in git).
   company and where the company evaluates our suggestions, `discovercasa.md`; the coating stays per house, PO Q15);
   PUR vs PIR — "4. Ok tranquilo" (noted: PIR near a neighbour / garage, per house, no decision); the minimum slope with
   laps, the cold cut and the annual inspection: not answered (not asked).
-- **2026-11-06** — **status: open (to ask the user).** When a wide opening is lower than the verga's underside, a strip
+- **2026-11-06** — **status: accepted and done 2026-11-06** (user: "Sim, baixa a verga"; engine commit 0e4902a,
+  `estrutura_dc.emoldurar`: verga on the opening head, posts under it, short studs above up to the top plate; the 110×75
+  jamb pieces above the verga's ends are our derived choice, to be confirmed). Original insight: When a wide opening is lower than the verga's underside, a strip
   between the opening head and the verga has no framing: TV P03.1 (builder, without the real modules) door head 2,205,
   verga underside 2,398 → 19 cm; in Build Your House a 3,00 garage door (head ≈ 2,225) beside a taller opening whose
   head sets the modules (e.g. a sliding window with estore at 2,40) → ≈ 17–18 cm. The rulebook puts the verga "under the
@@ -269,4 +271,4 @@ he answers (`metodo-construtivo.md`). Condensed 2026-10-28 (history in git).
   over the opening" (D2503, same file line 150) and the padieira also sits over the opening (line 13). Suggestion:
   lower the verga onto the opening head, as the padieira and the D2503 lintels do, with cripples above it up to the top
   plate (a 22×7,5 piece lower also means a longer bearing path for the loads above — fine, the posts stay under it).
-  Not changed in the engine until the user answers.
+  (Was "not changed until the user answers"; now changed, see status above.)
