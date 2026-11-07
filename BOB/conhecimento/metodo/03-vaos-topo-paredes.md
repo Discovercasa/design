@@ -161,18 +161,26 @@
   4-leaf 3,60 (verga) **≈ + 0,31** (0,309; from ≈ 2,71); no door. ⚠ Ours: one opening lifts the whole house (cladding,
   cércea, price) → name the opening, offer an alternative (X1); the ceiling drop grows to ≈ 0,19 (2-leaf) / ≈ 0,34
   (4-leaf) → réguas long enough (§6); a 2,5 cm clearance over the box (2,425 vs 2,40): not said (PO Q11). Under a hidden
-  roof nothing changes (full-height modules). ⚠ From a plan, `casa_planta` still caps every opening silently under its own
-  framing (`min(z1, Hf − top plate − lintel)` ≈ pé direito − 0,16 exposed; − 0,107 with the verga) → it should raise as
-  `para_construtor` does (X1).
+  roof nothing changes (full-height modules). **From a plan too (2026-11-07):** `casa_planta.construir`, when the project does
+  not fix the structure height (`niveis.teto_estrutura` absent), raises the whole house (beams level, interior modules
+  follow, ceil to the mm; false ceiling at the pé direito on longer réguas) exactly as `para_construtor` — user 2026-11-07
+  "altera isso e faz com que os módulos subam" (Claude had said the engine still lowered a head to fit under the structure);
+  the opening is never lowered from a plan — confirmed — `casa_planta.construir` (commit a760ce8; equivalence test: a config
+  without the configurator's raise gives the same geometry and layers). Not so in `estrutura_dc.py` from engineer drawings
+  (module heights come from the drawings; [SB] heads ≈ 3 cm lower, SB #21) nor in interior walls.
 - **In a full-height exterior module (hidden roof) the lintel sits directly over the opening, the cripples run on the
   grid up to the module's top plate** (the ring on the inner face across them), jambs full height — D2503 Módulos [TV doors
   2,20 / 2,40 under a ring at 2,543] — company document; the same on 22×7,5 roofs — assumed. The builder without real
-  modules frames under the ring (`casa_planta` `continuar`). (Tension with the verga rule resolved
+  modules frames under the ring (`casa_planta` `continuar`). Since 2026-11-07 a head is no longer capped under the ring level
+  (ring − top plate − lintel) in `casa_planta`: the lintel sits on the opening, up to the module top (our derived extension of
+  "never lower the opening"; under a hidden roof the modules need not rise — e.g. a 3,60 4-leaf window with estore at pé
+  direito 2,40, formerly lowered 10,7 cm, now at its 2,405). (Tension with the verga rule resolved
   2026-11-06: the verga too sits on the opening head — user "Sim, baixa a verga"; see the verga rule above.)
-- An opening head is lowered so the padieira / verga fits under the top plate (`casa_planta` only; the verga itself now
-  follows the head, user 2026-11-06 — a lower head no longer leaves a strip); a window sill ≥ bottom plate + peitoril +
-  5 cm — assumed — `casa_planta.construir` ([SB] heads ≈ 3 cm lower, SB #21). (On exposed roofs superseded by "opção a",
-  not yet in `casa_planta` — X1.)
+- (superseded 2026-11-07: "An opening head is lowered so the padieira / verga fits under the top plate" — the engine no
+  longer lowers a head from a plan: exposed roof → the house rises, hidden roof → the lintel sits on the opening; user
+  "altera isso e faz com que os módulos subam"; only `estrutura_dc.py` from engineer drawings still does, [SB] heads ≈ 3 cm
+  lower, SB #21.) A window sill ≥ bottom plate + peitoril + 5 cm — assumed — `casa_planta.construir`. The verga follows the
+  head (user 2026-11-06).
 - A doorway left as a gap between two modules gets a bandeira (padieira at the door head, short studs, top plate,
   afinação; 110×75 jambs on the module ends) — assumed (after "There are gaps in between the walls … why ?", 2026-10-09;
   how DiscoverCasa closes it: OPEN) — `estrutura_dc.emoldurar_bandeira`. In the company's own drawings every door is inside

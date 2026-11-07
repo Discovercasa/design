@@ -185,7 +185,7 @@ engineer's drawings by `estrutura_dc.py` + `camadas.cobertura`.
   it; the false ceiling at the 27 mm suspension (no `teto_sob_anel`) — draft + user 2026-09-30, 2026-10-19 — company
   document + confirmed / assumed (the draft's top pieces as the exposed-roof rule) — `casa_planta.construir` (not-`anel`),
   `estrutura_dc.py`. **Modules raised for the highest opening head** ("opção a", §3). Engine ✓; the raise in
-  `para_construtor` ✓ (its note to name the opening), not from a plan — X1.
+  `para_construtor` ✓ (its note to name the opening); from a plan ✓ since 2026-11-07 (X1).
 - **E2 Ceiling beams**: 22×7,5 at ≤ 1 m (equal division), perpendicular to the ridge, eave wall to eave wall, on the
   amarração, **over the wall to its outer face**; free span ≤ 8 m; past 8 m glulam 20×10 at ≤ 0,92; bearing on the
   interior walls — user 2026-09-30, 2026-10-09, 2026-10-15, 2026-10-19 — confirmed / assumed (to the outer face; glulam on

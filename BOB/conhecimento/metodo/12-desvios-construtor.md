@@ -23,16 +23,17 @@ base, no flashing at the ledger, tiles on the slats).
   modules, the beams on the ring and the ceiling below it = the rules;
 - on exposed roofs the exterior module from the clear height with afinação + amarração on top (assumed); the interior top
   piece named "Viga de afinação interior" except with lameladas (naming only);
-- the clear height from cfg `niveis.pe_direito` (= the rule); from a plan the openings capped silently under the framing
-  instead of raising the modules (X1);
+- the clear height from cfg `niveis.pe_direito` (= the rule); from a plan the modules now rise as the rule says (X1 closed
+  for `casa_planta` 2026-11-07, a760ce8; open only the points listed under X1);
 - **exposed roofs from a configured house** (`para_construtor.py` → cfg `cobertura.tipo` "a_vista" with `forma`, `beirado`
   0,25, verge = beirado (was 0,12 until 2026-10-29 night), `inclinacao_pct` vs JSON 15 %; `casa_planta.py` `a_vista`; `motor.worker.js` "telhado"). Test houses
   (the caller's): L 97 m², U 175 m², rectangle 12 × 8, L_misto / U_misto, the surface audit (2 064 + 1 032 cases), the
   timber audit `--formas` and his U in misto (1 033 objects). Deviations (each to confirm or fix):
   - **X1** (E1, §3) The raise for the highest head is the rule since 2026-10-28 ("opção a"). Left: (a)
     `para_construtor`'s note says "a confirmar" and names the highest rough top, not the opening → name it (e.g. "janela de
-    correr 4 folhas, parede S"); (b) `casa_planta` (from a plan) caps the opening silently (`min(z1, Hf − top plate −
-    lintel)`) → the same lift; (c) the longer ceiling drop (≤ ≈ 0,34) not checked against the réguas; (d) the screen offers
+    correr 4 folhas, parede S"); (b) **closed 2026-11-07** (a760ce8, user "altera isso e faz com que os módulos subam"):
+    `casa_planta` from a plan raises the whole house as `para_construtor`, and no longer caps a head under a hidden roof's
+    ring; left only `estrutura_dc.py` from engineer drawings (heads from the drawings, SB #21); (c) the longer ceiling drop (≤ ≈ 0,34) not checked against the réguas; (d) the screen offers
     no alternative when one opening lifts the house.
   - **X2** (E2, §6) Glulam per rectangle when its **outline length** passes 8,0 (`telhado_estrutura.construir`, `sec = lam
     if vao > 8`) — the rule's limit is the free span (≈ outer − 0,22 → glulam from ≈ 7,78 free) — while the hidden-roof path

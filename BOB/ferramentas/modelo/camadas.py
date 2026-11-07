@@ -2394,6 +2394,9 @@ def gerar(cfg_path, geometria=None):
     base = Path(cfg_path).resolve().parent
     G = json.load(open(geometria or base / cfg["saida"]["geometria"], encoding="utf-8"))
     S = teto_sob_anel(fundir(json.load(open(AQUI / "sistema_construtivo.json", encoding="utf-8")), cfg.get("camadas") or {}), cfg)
+    folga = (G.get("niveis") or {}).get("teto_suspensao_folga")  # casa_planta raised the modules for a head: the false
+    if folga is not None:  # ceiling stays at the pé direito on longer réguas
+        S["tetos"]["suspensao"]["folga"] = folga
     casa = Casa(G)
     out, resumo = Saida(), []
     exterior(casa, S, out, resumo)

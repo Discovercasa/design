@@ -113,7 +113,10 @@ rule by rule, in `metodo-construtivo.md`; the user's words in `registo-conversas
   direito" → the estore box takes **0,20**; the **2,20 janela de correr** to the floor (rough 2,40) fits a 2,40 clear.
   (Doors take no estore — 2026-10-27, §3b; a 2,20 door's rough top is 2,225.) **When the head over the highest opening
   does not fit under the module top on an exposed roof — "opção a" (2026-10-28): the exterior modules are made taller**
-  (confirmed); the false ceiling stays at the pé direito on a longer suspension (ours). At 2,40 (ours, arithmetic): the
+  (confirmed); the false ceiling stays at the pé direito on a longer suspension (ours). **Same rule from a plan since
+  2026-11-07** (user: "altera isso e faz com que os módulos subam"; `casa_planta`, commit a760ce8: before, the engine
+  lowered the head to fit under the structure; under a hidden roof the head is no longer capped, the lintel sits on the
+  opening up to the module top — our extension). Still capping: the engineer-drawing path (Sobral) and interior walls. At 2,40 (ours, arithmetic): the
   1,20 window with estore ≈ + 0,089, a garage door ≥ 2,75 wide ≈ + 0,134, the 4-leaf window ≈ + 0,31; the beams sit
   level on the ring, so the whole house rises; the ceiling drop grows up to ≈ 0,34 → check the réguas' length. OPEN: a
   2,5 cm clearance over the box (2,425 vs 2,40).

@@ -49,7 +49,7 @@ def emoldurar(f0, f1, H, aberturas, cls, E, canto0, canto1, ombreira0=False, omb
     """Members of one rectangular module (elevation u from f0 to f1, v from 0 to H). canto: the end is a house
     corner; ombreira: the end is the jamb of a doorway next to the module (both 110x75). topo_montantes: the module
     goes on above H with no top plate (full-height module of a hidden roof, casa_planta.continuar): the cripples and
-    jambs over a 220 lintel run from its top up to there. The 220 lintel sits on the opening head (user 2026-11-06);
+    jambs over a lintel run from its top up to there, and a 220 lintel may sit above H - top plate (up to that top). The 220 lintel sits on the opening head (user 2026-11-06);
     its posts stop under it and go on above its ends (user 2026-11-07)."""
     pl, livre = E["placa"], E["vao_livre"]
     w, wr, hp, hs = cls["montante"], cls["reforco"], cls["padieira"], cls["peitoril"]
@@ -96,8 +96,8 @@ def emoldurar(f0, f1, H, aberturas, cls, E, canto0, canto1, ombreira0=False, omb
                 unidos[-1][2:] = b[2:]
         else:
             unidos.append(list(b))
-    def base_verga(g):  # the 220 lintel sits on the opening head (user 2026-11-06), never above the top plate
-        return min(g[3], top - vg["altura"])
+    def base_verga(g):  # the 220 lintel sits on the opening head (user 2026-11-06), never above the top plate (above
+        return min(g[3], (topo_montantes or top) - vg["altura"])  # H only in a full-height module, which goes on)
 
     for a, b, tipo, sec in unidos:
         sob = [base_verga(g) for g in grandes if a < g[1] + wr + 0.01 and b > g[0] - wr - 0.01]
@@ -136,7 +136,7 @@ def emoldurar(f0, f1, H, aberturas, cls, E, canto0, canto1, ombreira0=False, omb
             if u1 - u0 >= vg["vao_min"]:
                 cima, alto = base_verga(dentro[0]) + vg["altura"], (topo_montantes or top)
             else:
-                cima, alto = v1 + hp, top
+                cima, alto = v1 + hp, (topo_montantes or top)
             if alto - cima > 0.03:
                 ms.append(membro("Montante curto", sm, ret(a, b, cima, alto)))
             if v0 > 1e-6 and v0 - hs - pl > 0.03:
