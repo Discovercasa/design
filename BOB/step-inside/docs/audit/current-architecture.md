@@ -147,7 +147,8 @@ O plano Pro custa a partir de 25 USD por mês: 8 GB de disco, 100 GB de ficheiro
 | JSON do configurador | DIRECT | `ferramentas/configurador/para_construtor.py` |
 | Desenhos de módulos da empresa ou do engenheiro (DWFx) | DIRECT | `modelo/modulos_dc.py`, `modelo/extrair_casa.py` |
 | DWG | CONVERT_REQUIRED | O gerador pede para exportar para PDF ou DWFx. Não há leitor. |
-| DXF, IFC | UNSUPPORTED | Não há leitor. |
+| DXF | CONVERT_REQUIRED | Não há leitor; é texto aberto, por isso um leitor para o terreno é viável (revisto na Fase 1, `docs/fase1/matriz-formatos.md`). |
+| IFC | UNSUPPORTED | Não há leitor. |
 | Imagens, fotos, SketchUp `.skp` | REFERENCE_ONLY | Não se tira geometria delas. |
 
 **Como a planta é lida:**

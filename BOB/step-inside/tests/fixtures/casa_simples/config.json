@@ -1,0 +1,10 @@
+{
+ "nome": "Casa de teste (sintética)",
+ "planta": "planta_paredes.json",
+ "casa": {"comprimento": 10.0, "profundidade": 8.0},
+ "niveis": {"pe_direito": 2.5, "_doc": "Corte A."},
+ "aberturas": {"_doc": "Janelas pelos alçados, a confirmar.", "janela": {"peitoril": 1.0, "topo": 2.1}},
+ "cobertura": {"tipo": "platibanda", "inclinacao_pct": 3.0, "_doc": "Planta de cobertura."},
+ "fundacao": {"contorno": [[0, 0], [10, 0], [10, 8], [0, 8]], "espessura_laje": 0.2, "nota": "Indicativa."},
+ "camadas": {"exterior": {"opcao_visivel": "A", "opcoes": {"A": {"_doc": "Opção A do padrão.", "camadas": [{"material": "Ripa"}]}}}}
+}

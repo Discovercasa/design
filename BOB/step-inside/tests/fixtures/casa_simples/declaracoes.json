@@ -1,0 +1,6 @@
+{
+ "projeto": {"id": "casa-simples", "nome": "Casa de teste (sintética)"},
+ "campos": {
+  "escala": {"estado": "CONFIRMED", "metodo": "geometria", "nota": "Rótulo 1:100 conferido com as cotas."}
+ }
+}

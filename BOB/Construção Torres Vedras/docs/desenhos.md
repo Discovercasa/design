@@ -106,3 +106,7 @@ lameladas cut to fit each house — "cortamos para "encaixar""); the downpipes a
   house outline dimensions repeated (17,50 · 8,50 / 11,00).
 - `Planta de implantação F01,1.dwfx`, `Levantamento topográfico F00.0.dwfx`: site plan and survey (not
   read in detail yet).
+- Note 2026-11-07 (Step Inside Phase 1, `step-inside/projetos-teste/torres-vedras/`): in the survey DWFx / PDF the heights
+  are drawn as outlines (no text), so they cannot be read from them; the terrain needs the DWG exported to DXF. No CRS,
+  datum, survey date or precision found. The 19 openings of the architecture plan match one-to-one the 19 of D2503
+  Módulos; where they differ D2503 (as built) prevails (see the Phase 1 `relatorio.md`).

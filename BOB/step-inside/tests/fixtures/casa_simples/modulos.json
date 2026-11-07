@@ -1,0 +1,7 @@
+{
+ "origem": "exemplo_modulos.dwfx",
+ "modulos": [
+  {"nome": "M1", "tipo": "exterior", "eixo": "x", "pegada": [0.0, 5.0, 0.0, 0.11], "aberturas": [{"u": [2.0, 3.2], "v": [0.9, 2.1], "tipo": "janela"}]},
+  {"nome": "M2", "tipo": "exterior", "eixo": "x", "pegada": [5.0, 10.0, 0.0, 0.11], "aberturas": [{"u": [1.0, 1.95], "v": [0.0, 2.2], "tipo": "porta"}, {"u": [3.0, 3.6], "v": [1.2, 1.8], "tipo": "janela"}]}
+ ]
+}

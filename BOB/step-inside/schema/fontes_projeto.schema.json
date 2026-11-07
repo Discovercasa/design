@@ -1,0 +1,162 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "https://design.discovercasa.pt/step-inside/schema/fontes_projeto.schema.json",
+ "title": "Step Inside · fontes do projeto (contrato de dados da Fase 1)",
+ "description": "Every architectural value of a house with its provenance and confidence (spec §3.2, §13 Fase 1). A layer over the builder's planta_paredes.json and config.json: it does not replace them. Units: metres; model axes X right of the sheet, Y up the sheet, Z up from the top of the slab.",
+ "type": "object",
+ "required": ["versao_schema", "projeto", "documentos", "referencial", "escala", "dimensoes", "niveis", "paredes", "lajes", "cobertura", "materiais", "terreno", "conflitos", "resumo"],
+ "additionalProperties": false,
+ "properties": {
+  "versao_schema": {"type": "string", "enum": ["1.0"]},
+  "projeto": {
+   "type": "object",
+   "required": ["id", "nome", "entrada"],
+   "properties": {
+    "id": {"type": "string"},
+    "nome": {"type": "string", "description": "No client names or addresses (public repo)."},
+    "entrada": {"type": "string", "enum": ["planta_arquitetura", "desenhos_empresa", "desenhos_engenheiro", "configurador"]},
+    "config": {"type": "string"},
+    "planta": {"type": "string"},
+    "gerado_por": {"type": "string"}
+   }
+  },
+  "documentos": {"type": "array", "items": {"$ref": "#/$defs/documento"}},
+  "referencial": {
+   "type": "object",
+   "required": ["unidade", "origem", "norte", "crs", "cota_referencia"],
+   "properties": {
+    "unidade": {"type": "string", "enum": ["m"]},
+    "origem": {"$ref": "#/$defs/campo"},
+    "norte": {"$ref": "#/$defs/campo"},
+    "crs": {"$ref": "#/$defs/campo"},
+    "cota_referencia": {"$ref": "#/$defs/campo"}
+   }
+  },
+  "escala": {"$ref": "#/$defs/campo"},
+  "dimensoes": {"type": "object", "additionalProperties": {"$ref": "#/$defs/campo"}},
+  "niveis": {"type": "object", "additionalProperties": {"$ref": "#/$defs/campo"}},
+  "paredes": {"type": "array", "items": {"$ref": "#/$defs/parede"}},
+  "lajes": {"type": "array", "items": {"$ref": "#/$defs/laje"}},
+  "cobertura": {"type": "object", "additionalProperties": {"$ref": "#/$defs/campo"}},
+  "materiais": {"type": "array", "items": {"$ref": "#/$defs/material"}},
+  "terreno": {
+   "type": "object",
+   "required": ["fonte", "crs", "datum_vertical", "unidade_horizontal", "unidade_vertical", "limite_lote", "data_levantamento", "precisao", "pontos_controlo"],
+   "additionalProperties": {"$ref": "#/$defs/campo"}
+  },
+  "conflitos": {"type": "array", "items": {"$ref": "#/$defs/conflito_global"}},
+  "resumo": {
+   "type": "object",
+   "required": ["CONFIRMED", "INFERRED", "MISSING", "NEEDS_HUMAN_REVIEW", "conflitos_abertos", "conflitos_resolvidos"],
+   "additionalProperties": {"type": "integer"}
+  }
+ },
+ "$defs": {
+  "estado": {"type": "string", "enum": ["CONFIRMED", "INFERRED", "MISSING", "NEEDS_HUMAN_REVIEW"]},
+  "metodo": {"type": "string", "enum": ["geometria", "texto", "ocr", "inferencia", "valor_omissao", "norma_empresa", "desenho_empresa", "utilizador", "calculo", "nenhum"]},
+  "fonte": {
+   "type": ["object", "null"],
+   "required": ["documento"],
+   "properties": {
+    "documento": {"type": "string", "description": "File name, 'norma da empresa (sistema_construtivo.json)', or 'utilizador AAAA-MM-DD (registo-conversas)'."},
+    "folha": {"type": ["integer", "null"]},
+    "local": {"type": "string", "description": "Region or view on the sheet (sheet mm), or where in the file."},
+    "data": {"type": "string"}
+   }
+  },
+  "campo": {
+   "type": "object",
+   "required": ["valor", "estado", "metodo", "fonte", "conflitos"],
+   "additionalProperties": false,
+   "properties": {
+    "valor": {"description": "null when estado is MISSING."},
+    "unidade": {"type": "string"},
+    "tipo": {"type": "string", "enum": ["", "dimensao", "cota", "nivel", "geometria", "escala", "material", "texto", "terreno", "referencial", "classificacao"]},
+    "estado": {"$ref": "#/$defs/estado"},
+    "metodo": {"$ref": "#/$defs/metodo"},
+    "fonte": {"$ref": "#/$defs/fonte"},
+    "nota": {"type": "string"},
+    "conflitos": {"type": "array", "items": {"$ref": "#/$defs/conflito"}}
+   }
+  },
+  "conflito": {
+   "type": "object",
+   "required": ["valor", "fonte", "estado"],
+   "properties": {
+    "valor": {},
+    "fonte": {"$ref": "#/$defs/fonte"},
+    "nota": {"type": "string"},
+    "estado": {"type": "string", "enum": ["aberto", "resolvido"]},
+    "resolucao": {"type": "string"}
+   }
+  },
+  "conflito_global": {
+   "type": "object",
+   "required": ["campo", "gravidade", "nota", "estado"],
+   "properties": {
+    "campo": {"type": "string"},
+    "gravidade": {"type": "string", "enum": ["FAIL", "NEEDS_HUMAN_REVIEW", "WARNING"]},
+    "nota": {"type": "string"},
+    "estado": {"type": "string", "enum": ["aberto", "resolvido"]},
+    "resolucao": {"type": "string"}
+   }
+  },
+  "documento": {
+   "type": "object",
+   "required": ["ficheiro", "formato", "categoria"],
+   "properties": {
+    "ficheiro": {"type": "string"},
+    "formato": {"type": "string"},
+    "categoria": {"type": "string", "enum": ["DIRECT", "CONVERT_REQUIRED", "REFERENCE_ONLY", "UNSUPPORTED"]},
+    "usado_para": {"type": "array", "items": {"type": "string"}},
+    "nota": {"type": "string"}
+   }
+  },
+  "abertura": {
+   "type": "object",
+   "required": ["id", "tipo", "inicio", "fim", "largura", "peitoril", "altura"],
+   "properties": {
+    "id": {"type": "string"},
+    "tipo": {"$ref": "#/$defs/campo"},
+    "inicio": {"$ref": "#/$defs/campo"},
+    "fim": {"$ref": "#/$defs/campo"},
+    "largura": {"$ref": "#/$defs/campo"},
+    "peitoril": {"$ref": "#/$defs/campo"},
+    "altura": {"$ref": "#/$defs/campo", "description": "Top of the opening above the finished floor."}
+   }
+  },
+  "parede": {
+   "type": "object",
+   "required": ["id", "exterior", "eixo", "inicio", "fim", "posicao", "espessura", "aberturas"],
+   "properties": {
+    "id": {"type": "string"},
+    "exterior": {"type": "boolean"},
+    "eixo": {"type": "string", "enum": ["x", "y"]},
+    "inicio": {"$ref": "#/$defs/campo"},
+    "fim": {"$ref": "#/$defs/campo"},
+    "posicao": {"$ref": "#/$defs/campo", "description": "Axis line: y for an x wall, x for a y wall."},
+    "espessura": {"$ref": "#/$defs/campo"},
+    "aberturas": {"type": "array", "items": {"$ref": "#/$defs/abertura"}}
+   }
+  },
+  "laje": {
+   "type": "object",
+   "required": ["id", "funcao", "contorno", "espessura"],
+   "properties": {
+    "id": {"type": "string"},
+    "funcao": {"type": "string"},
+    "contorno": {"$ref": "#/$defs/campo"},
+    "espessura": {"$ref": "#/$defs/campo"}
+   }
+  },
+  "material": {
+   "type": "object",
+   "required": ["elemento", "opcao"],
+   "properties": {
+    "elemento": {"type": "string"},
+    "opcao": {"$ref": "#/$defs/campo"},
+    "camadas": {"type": "array", "items": {"type": "string"}}
+   }
+  }
+ }
+}

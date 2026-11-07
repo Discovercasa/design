@@ -65,7 +65,13 @@ Why Claude learns the method; "vamos passo a passo" — an overall idea, then an
    disk. Our assessment (no new workstation; 2 TB NVMe first; keep the GPU until the first Unreal test) is in
    `insights.md`, **approved by the user 2026-11-07** ("Sim, aprovo"; hub decision 3 decidida, task 154 in the Phase 4
    checkpoint; nothing bought before Phase 4, the user buys it). Pending from the user: PSU wattage and case, whether the home PC may
-   hold client drawings, phase order (Phase 7 before Unreal).
+   hold client drawings, phase order (Phase 7 before Unreal); the user (2026-11-07) had them noted in hub task 154 and
+   asked to proceed.
+   **Phase 1 started 2026-11-07** ("Contrato de dados e qualidade de entrada", hub checkpoint 21 em curso): schema
+   `step-inside/schema/fontes_projeto.schema.json`, tools `step-inside/ferramentas/fontes/`, 15 tests, report
+   `step-inside/docs/fase1/`, test projects Torres Vedras (report WARNING, 202 CONFIRMED / 2 INFERRED / 10 MISSING) and
+   Sobral (catalogue only); all 0 €, nothing in production changed. Open hub decisions: 17 (which two test projects;
+   suggestion Torres Vedras + Sobral Tipo 2) and 18 (Phase 7 AR before Phases 4–5 Unreal; suggestion yes).
 4. **Configurator** like IKEA Builder / Kreativ — "DiscovercasaBuilder" (his name, 2026-10-21): the client picks the
    shape, then the m² and the pé direito, sees the base with its price, builds with 3 m walls ("Estilo como se construía
    no jogo SIMS"), never sees "módulo", the price live; prices predefined before any launch ("não temos qualquer tipo de
