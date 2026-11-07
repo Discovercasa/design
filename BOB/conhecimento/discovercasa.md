@@ -54,7 +54,11 @@ Why Claude learns the method; "vamos passo a passo" — an overall idea, then an
    **Phase 0 (read-only audit) done 2026-11-07**, report `step-inside/docs/audit/current-architecture.md` (Portuguese):
    repo, Cloudflare (no account access), Supabase, PDF/DWFx → Blender pipeline, this PC's inventory (cannot serve
    Unreal 5). Findings and proposals (client drawings tracked in Git; Phase 7 before Unreal) are in `insights.md`
-   (2026-11-07, awaiting the user). The user asked on 2026-11-07 to start the project's tasks.
+   (2026-11-07; drawings purged from the history the same day, phase order still awaiting the user). The user asked on
+   2026-11-07 to start the project's tasks.
+   **Workstation (user 2026-11-07):** he intends to test a PC outside the company, not the company PC inventoried above
+   (so its "cannot serve Unreal 5" verdict does not apply to the test machine). Read-only inventory script
+   `step-inside/ferramentas/inventario_workstation.ps1`; hub task 50 stays "em curso" until that PC is inventoried.
 4. **Configurator** like IKEA Builder / Kreativ — "DiscovercasaBuilder" (his name, 2026-10-21): the client picks the
    shape, then the m² and the pé direito, sees the base with its price, builds with 3 m walls ("Estilo como se construía
    no jogo SIMS"), never sees "módulo", the price live; prices predefined before any launch ("não temos qualquer tipo de

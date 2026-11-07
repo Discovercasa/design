@@ -16,7 +16,8 @@ das tarefas no hub), nem Cloudflare. Não se mostram segredos. Referência: espe
   - o Build Your House e o gerador, que correm o mesmo motor no browser (Pyodide + three.js).
 - **O que não existe:** Unreal, Pixel Streaming, R2, Workers, exportação FBX/USDZ, terreno, IDs estáveis de material,
   proveniência por campo.
-- **Workstation atual:**
+- **Workstation:** a candidata para o teste é **outro PC, fora da empresa** (decisão de 2026-11-07); falta inventariá-lo
+  com `BOB/step-inside/ferramentas/inventario_workstation.ps1`. O PC da empresa analisado aqui:
   - serve para o que se faz hoje (Blender, scripts, documentos);
   - não serve para o Unreal Engine 5: 4 núcleos, 16 GB DDR3, GTX 1050 Ti com 4 GB, Windows 10;
   - **pôr só uma GPU nova não resolve:** a plataforma Z97 tem no máximo 32 GB DDR3, PCIe 3.0 e não é suportada pelo
@@ -25,9 +26,10 @@ das tarefas no hub), nem Cloudflare. Não se mostram segredos. Referência: espe
   - pausa o projeto ao fim de 1 semana sem atividade;
   - tem 1 GB para ficheiros e 50 MB por ficheiro;
   - serve para os dados, mas não para os ficheiros 3D nem para links de clientes sem passar a Pro.
-- **Problema encontrado fora do Step Inside:** há **5 desenhos de clientes no repositório público** (4 `.dwg` de Torres
-  Vedras, incluindo o levantamento topográfico, e 1 `.skp` do Sobral). Isto vai contra a regra «os desenhos dos clientes
-  ficam no PC». Ver §11 e §15.
+- **Problema encontrado fora do Step Inside:** havia **5 desenhos de clientes no repositório público** (4 `.dwg` de
+  Torres Vedras, incluindo o levantamento topográfico, e 1 `.skp` do Sobral), contra a regra «os desenhos dos clientes
+  ficam no PC». **Tirados do histórico a 2026-11-07** a pedido do utilizador: os ficheiros continuam no PC e o Git
+  ignora agora `*.dwg` e `*.skp`. Ver §11.
 
 ## 2. Mapa da arquitetura atual
 
@@ -207,7 +209,11 @@ Muito abaixo dos 8–15 GB por casa previstos para o Step Inside, que vêm sobre
 
 ## 8. Workstation (tarefa 50)
 
-O inventário é do computador onde esta auditoria correu. **Falta confirmar que é a workstation que se quer usar.**
+O inventário é do PC da empresa onde esta auditoria correu. **A decisão de 2026-11-07 é testar outro PC, fora da
+empresa.** Para o inventariar há um script só de leitura,
+`BOB/step-inside/ferramentas/inventario_workstation.ps1`. Corre com
+`powershell -ExecutionPolicy Bypass -File .\inventario_workstation.ps1`, compara o PC com os mínimos abaixo e guarda o
+resultado no Ambiente de Trabalho.
 
 | Peça | Encontrado | UE 5.8, recomendado pela Epic | Especificação §6.2 |
 |---|---|---|---|
@@ -270,7 +276,7 @@ O inventário é do computador onde esta auditoria correu. **Falta confirmar que
 
 | # | Risco | Impacto | Ação proposta |
 |---|---|---|---|
-| R1 | **5 desenhos de clientes no repositório público** desde 2026-10-30 (`*.dwg` e `*.skp` não estão no `.gitignore`) | Alto: dados de clientes expostos | Tirá-los do Git já (ficam no PC) e acrescentar `*.dwg`/`*.skp` ao `.gitignore`. Apagá-los também do histórico obriga a reescrever o histórico público: decisão à parte. |
+| R1 | **5 desenhos de clientes no repositório público** de 2026-10-30 a 2026-11-07 | Alto: dados de clientes expostos | **Feito a 2026-11-07:** tirados de todo o histórico (os ramos `main` e `hub/inicio-projetos` foram reescritos e enviados); `*.dwg`/`*.skp` no `.gitignore`; os ficheiros continuam no PC. **Falta:** (a) o GitHub ainda mostra os commits antigos a quem souber o identificador, até o Suporte do GitHub os limpar; (b) qualquer cópia antiga do repositório tem de ser descarregada de novo, senão um push volta a trazer os ficheiros; (c) o `.skp` do Sobral não está nos Documentos do hub (os 4 DWG estão). |
 | R2 | A workstation não corre o UE5 | Alto para as Fases 4–5 | Decidir: workstation nova ou GPU cloud de teste (§15) |
 | R3 | Supabase Free: pausa ao fim de 1 semana sem atividade, 1 GB de ficheiros | Médio agora; alto com links de clientes | Pro (25 USD/mês) antes de haver links de clientes; ficheiros 3D no R2 |
 | R4 | A zona DNS não está na Cloudflare | Médio: limita Workers e R2 com domínio próprio | Usar Pages Functions + R2 privado com URLs assinados; mudar o DNS só se for preciso |
@@ -300,7 +306,7 @@ O inventário é do computador onde esta auditoria correu. **Falta confirmar que
 
 Nenhuma destas alterações está feita. Cada uma espera aprovação.
 
-1. Tirar do Git os 5 desenhos de clientes e ignorar `*.dwg`/`*.skp` (R1).
+1. ~~Tirar do Git os 5 desenhos de clientes e ignorar `*.dwg`/`*.skp` (R1).~~ Feito a 2026-11-07.
 2. Fase 1, sem custos: definir o schema com proveniência e confiança por campo como camada por cima de
    `planta_paredes.json` e `config.json`.
 3. Fases 2–3, sem custos: exportação para visualização separada da exportação de produção, com collections semânticas,
@@ -329,9 +335,11 @@ Nenhuma destas alterações está feita. Cada uma espera aprovação.
 O hub já tem 6 decisões abertas do Step Inside (n.º 3 a 8: GPU da workstation, empacotamento Unreal, resolução e FPS, GPU
 cloud, onde guardar os ficheiros 3D, VR). Os factos desta auditoria foram acrescentados ao contexto das decisões 3 e 7.
 
-1. **Desenhos de clientes no Git público:** tirá-los já e, à parte, decidir se se reescreve o histórico.
-2. **Workstation:** nova (64 GB, RTX 5070 Ti ou superior, NVMe 2 TB, Windows 11) ou começar o Unreal numa GPU cloud de
-   teste. E confirmar se este PC é a workstation que se quer usar.
+1. ~~**Desenhos de clientes no Git público.**~~ Decidido a 2026-11-07: tirados do histórico. Falta pedir ao Suporte do
+   GitHub que limpe os commits antigos (R1).
+2. **Workstation:** vai testar-se outro PC, fora da empresa (2026-11-07). Falta o seu inventário (script da §8). Depois
+   decide-se entre usá-lo, comprar uma workstation nova (64 GB, RTX 5070 Ti ou superior, NVMe 2 TB, Windows 11) ou
+   começar o Unreal numa GPU cloud de teste.
 3. **Ordem das fases:** Fase 7 (AR) antes das Fases 4–5?
 4. **Dois projetos de teste para a Fase 1:**
    - sugestão: Torres Vedras (tem levantamento topográfico e casa construída) e uma casa simples do Build Your House;
