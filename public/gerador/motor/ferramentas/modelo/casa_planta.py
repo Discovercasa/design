@@ -454,6 +454,27 @@ def construir(cfg, S, E, planta):
     # ------------------------------------------------------------------ modules
     lmax = cfg.get("modulos", {}).get("comprimento_max", 3.0)
     vg = E["verga_grande"]
+    # the modules rise for the highest head: under an exposed roof the exterior modules end under the ceiling beams; when
+    # the lintel + top plate over an exterior opening does not fit under them, the whole house rises (the ceiling beams
+    # level, the interior modules follow) and the false ceiling stays at the pé direito on longer réguas (user 2026-10-28
+    # "opção a"; from a plan too, never lowering the opening — user 2026-11-07 "altera isso e faz com que os módulos
+    # subam"). A configured house comes already raised (para_construtor.converter); a structure height fixed by the
+    # project (niveis.teto_estrutura) stays as drawn. The new suspension goes into S (the same S for camadas.py) and
+    # into G (niveis.teto_suspensao_folga) for camadas.py run on its own.
+    subida = 0.0
+    if not anel and not nv.get("teto_estrutura"):
+        cabeca = max((z1 + (vg["altura"] if s1 - s0 >= vg["vao_min"] else ext_c["padieira"]) + pl
+                      for w in ws if w["exterior"] for s0, s1, _z0, z1, *_ in aberturas_de(w)), default=0.0)
+        if cabeca > H_ext + 1e-4:
+            subida = math.ceil((cabeca - H_ext) * 1000) / 1000
+            T["suspensao"]["folga"] = round(T["suspensao"]["folga"] + subida, 4)
+            teto_plano = T["suspensao"]["folga"] + T["perfis"]["altura"] + T["acabamento"]["espessura"]
+            z_teto = fin + nv["pe_direito"] + teto_plano  # as at the top, so a configured house gives the same heights
+            z_vig = z_teto + vt["altura"]  # (no lameladas: those make a ring, anel)
+            H_ext = z_teto - topo_ext
+            H_int = H_int + subida if cfg.get("_modulos") else z_teto - topo_int
+            print(f"módulos {subida * 100:.1f} cm mais altos para a cabeça do vão mais alto ({cabeca:.3f}); "
+                  f"o teto falso fica no pé direito {nv['pe_direito']:.2f}")
     alcados, paineis = {}, []
     cantos = set()
     for w in ws:  # exterior corners: ends of exterior walls
@@ -570,7 +591,9 @@ def construir(cfg, S, E, planta):
             loc = []
             for s0, s1, z0, z1, kind, _ in abert:
                 if s0 >= m0 - 1e-6 and s1 <= m1 + 1e-6:
-                    topo = Hf - pl - (vg["altura"] if s1 - s0 >= vg["vao_min"] else cls["padieira"])
+                    # the head's lintel under the top plate; a full-height module of a hidden roof has none there,
+                    # the lintel sits on the opening up to the module top (D2503; user 2026-11-07: never lower it)
+                    topo = (H if anel and w["exterior"] else Hf - pl) - (vg["altura"] if s1 - s0 >= vg["vao_min"] else cls["padieira"])
                     v0 = 0.0 if kind == "porta" else max(z0, pl + cls["peitoril"] + 0.05)
                     loc.append([round(s0 - m0, 4), round(s1 - m0, 4), round(v0, 4), round(min(z1, topo), 4), kind])
             c0 = k == 1 and (w["id"], "a") in cantos
@@ -1340,7 +1363,9 @@ def construir(cfg, S, E, planta):
          "casa": {"comprimento": L, "profundidade": D, "espessura_exterior": te, "espessura_interior": ti},
          "niveis": {"piso0": 0.0, "topo_paredes_piso0": round(H_ext, 4), "teto_piso0": round(z_teto, 4),
                     "topo_vigas_teto": round(z_vig, 4), "platibanda": z_plat,
-                    **({"topo_forro_piso0": round(z_teto - ama["altura"], 4)} if anel else {})},
+                    **({"topo_forro_piso0": round(z_teto - ama["altura"], 4)} if anel else {}),
+                    # the modules raised for a head: the false ceiling's longer suspension, for camadas.py
+                    **({"subida_modulos": subida, "teto_suspensao_folga": T["suspensao"]["folga"]} if subida else {})},
          "cobertura": cobertura_avista(T_av, z_e, z_vig, hv, vt, pn_esp, Cc, res_av.get("encostos", [])) if avista else
                       {"sistema": "discovercasa", "tipo": "platibanda", "inclinacao": 0.0, "cumeeira_y": D / 2,
                        "cumeeira_z": z_plat, "plano_z_cume": z_plat, "altura_viga": hv, "apoio_z": {"N": z_vig, "S": z_vig},
@@ -1383,7 +1408,11 @@ def construir(cfg, S, E, planta):
               "pecas_paredes": sum(len(a["members"]) for a in alcados.values()), "vigas_teto": len(vigas_pav),
               "madres": n_madres, "prumos": n_prumos, "H_modulos_ext": round(H_ext, 3), "H_modulos_int": round(H_int, 3),
               "z_teto": round(z_teto, 3), "z_vigas": round(z_vig, 3), "topo_cobertura": round(z_topo_max, 3),
-              "topo_platibanda": z_plat, **({"pergola_pecas": n_pg} if pg else {})}
+              "topo_platibanda": z_plat, **({"pergola_pecas": n_pg} if pg else {}),
+              **({"subida_modulos": subida} if subida else {})}
+    if subida:
+        G["notas_modelo"].append(f"Módulos {subida * 100:.1f} cm mais altos do que o pé direito pede, para caber a padieira / "
+                                 f"verga do vão mais alto; o teto falso fica no pé direito, em réguas mais compridas.")
     return G, resumo
 
 
