@@ -1,0 +1,5973 @@
+{
+ "versao_schema": "1.0",
+ "projeto": {
+  "id": "sobral-tipo1",
+  "nome": "Sobral · Casa Tipo 1 (loteamento; 11 casas)",
+  "entrada": "desenhos_engenheiro",
+  "config": "config.json",
+  "planta": "",
+  "gerado_por": "step-inside/ferramentas/fontes/proveniencia.py"
+ },
+ "documentos": [
+  {
+   "ficheiro": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+   "formato": "DWFX",
+   "categoria": "DIRECT",
+   "usado_para": [
+    "paredes, vãos, pavimento e cobertura (desenhos do engenheiro)"
+   ],
+   "nota": "Plot 2D do AutoCAD: traços com cor, espessura e texto. Só tem 3D se o DWFx incluir um modelo."
+  },
+  {
+   "ficheiro": "SMA_012_arquitectura_pecas_desenhadas.dwfx",
+   "formato": "DWFX",
+   "categoria": "DIRECT",
+   "usado_para": [
+    "vãos e paredes corrigidos pela arquitetura (folhas 17–18)",
+    "terreno do loteamento (folhas 2 e 4, Fase 2)"
+   ],
+   "nota": "Plot 2D do AutoCAD: traços com cor, espessura e texto. Só tem 3D se o DWFx incluir um modelo."
+  },
+  {
+   "ficheiro": "PD_Estabilidade Armazém.dwfx",
+   "formato": "DWFX",
+   "categoria": "DIRECT",
+   "usado_para": [],
+   "nota": "Plot 2D do AutoCAD: traços com cor, espessura e texto. Só tem 3D se o DWFx incluir um modelo."
+  },
+  {
+   "ficheiro": "PD_Habitacoes F G H I J.dwfx",
+   "formato": "DWFX",
+   "categoria": "DIRECT",
+   "usado_para": [],
+   "nota": "Plot 2D do AutoCAD: traços com cor, espessura e texto. Só tem 3D se o DWFx incluir um modelo."
+  }
+ ],
+ "referencial": {
+  "unidade": "m",
+  "origem": {
+   "valor": "X para este a partir da face exterior poente, Y para norte a partir da face exterior sul, Z a partir do topo da laje",
+   "unidade": "",
+   "tipo": "referencial",
+   "estado": "CONFIRMED",
+   "metodo": "calculo",
+   "fonte": null,
+   "nota": "Convenção do extrator (extrair_casa.py).",
+   "conflitos": []
+  },
+  "norte": {
+   "valor": "+Y",
+   "unidade": "",
+   "tipo": "referencial",
+   "estado": "INFERRED",
+   "metodo": "inferencia",
+   "fonte": {
+    "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+    "folha": 2,
+    "local": "cortes das fachadas",
+    "data": ""
+   },
+   "nota": "O extrator põe Y para norte, pelas fachadas identificadas nos desenhos (docs/desenhos.md); falta confirmar com a planta de implantação.",
+   "conflitos": []
+  },
+  "crs": {
+   "valor": null,
+   "unidade": "",
+   "tipo": "referencial",
+   "estado": "MISSING",
+   "metodo": "nenhum",
+   "fonte": null,
+   "nota": "Sem georreferência: o modelo está em coordenadas locais.",
+   "conflitos": []
+  },
+  "cota_referencia": {
+   "valor": null,
+   "unidade": "m",
+   "tipo": "cota",
+   "estado": "MISSING",
+   "metodo": "nenhum",
+   "fonte": null,
+   "nota": "Cota absoluta (altitude) do Z = 0 do modelo.",
+   "conflitos": []
+  }
+ },
+ "escala": {
+  "valor": "1:50",
+  "unidade": "",
+  "tipo": "escala",
+  "estado": "CONFIRMED",
+  "metodo": "texto",
+  "fonte": {
+   "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+   "folha": 2,
+   "local": "rótulos de escala",
+   "data": ""
+  },
+  "nota": "Escrita nas folhas usadas (catálogo).",
+  "conflitos": []
+ },
+ "dimensoes": {
+  "comprimento": {
+   "valor": 9.86,
+   "unidade": "m",
+   "tipo": "dimensao",
+   "estado": "CONFIRMED",
+   "metodo": "geometria",
+   "fonte": {
+    "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+    "folha": 1,
+    "local": "FUNDAÇÕES | PLANTA, contorno da casa",
+    "data": ""
+   },
+   "nota": "Estrutura de madeira 9,86 × 6,11 nos desenhos do engenheiro; a arquitetura usa a mesma (ETICS por fora).",
+   "conflitos": []
+  },
+  "profundidade": {
+   "valor": 6.11,
+   "unidade": "m",
+   "tipo": "dimensao",
+   "estado": "CONFIRMED",
+   "metodo": "geometria",
+   "fonte": {
+    "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+    "folha": 1,
+    "local": "FUNDAÇÕES | PLANTA, contorno da casa",
+    "data": ""
+   },
+   "nota": "Como o comprimento.",
+   "conflitos": []
+  },
+  "area_base_fundacao": {
+   "valor": 133.97,
+   "unidade": "m2",
+   "tipo": "dimensao",
+   "estado": "CONFIRMED",
+   "metodo": "calculo",
+   "fonte": {
+    "documento": "config.json (configuração do modelo)",
+    "folha": null,
+    "local": "fundacao.contorno",
+    "data": ""
+   },
+   "nota": "Área do contorno da laje de fundação (confirmado).",
+   "conflitos": []
+  }
+ },
+ "niveis": {
+  "piso0": {
+   "valor": 0.0,
+   "unidade": "m",
+   "tipo": "nivel",
+   "estado": "CONFIRMED",
+   "metodo": "calculo",
+   "fonte": {
+    "documento": "config.json (configuração do modelo)",
+    "folha": null,
+    "local": "niveis.piso0",
+    "data": ""
+   },
+   "nota": "Z = 0 no topo da laje (convenção do modelo); o pavimento acabado do rés do chão fica a Z 0,16.",
+   "conflitos": []
+  },
+  "piso1_exterior": {
+   "valor": 2.96,
+   "unidade": "m",
+   "tipo": "nivel",
+   "estado": "CONFIRMED",
+   "metodo": "geometria",
+   "fonte": {
+    "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+    "folha": 1,
+    "local": "cortes EE' e FF'",
+    "data": ""
+   },
+   "nota": "Paredes exteriores do piso de cima sobre as vigas de bordadura a 2,96. O modelo DiscoverCasa sobe o piso 0,139 m (vigamento 220x75 + ripas + OSB 22) e mantém os 2,40 de pé direito (utilizador 2026-10-15).",
+   "conflitos": []
+  },
+  "piso1_interior": {
+   "valor": 2.978,
+   "unidade": "m",
+   "tipo": "nivel",
+   "estado": "CONFIRMED",
+   "metodo": "geometria",
+   "fonte": {
+    "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+    "folha": 1,
+    "local": "cortes EE' e FF'",
+    "data": ""
+   },
+   "nota": "Paredes interiores do piso de cima sobre o OSB a 2,978. A arquitetura dá +2,88 ao pavimento acabado do piso de cima (Z 3,04).",
+   "conflitos": []
+  },
+  "topo_paredes_piso0": {
+   "valor": 2.8,
+   "unidade": "m",
+   "tipo": "nivel",
+   "estado": "CONFIRMED",
+   "metodo": "geometria",
+   "fonte": {
+    "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+    "folha": 2,
+    "local": "alçados das paredes do piso térreo",
+    "data": ""
+   },
+   "nota": "Altura dos painéis do rés do chão.",
+   "conflitos": []
+  },
+  "topo_vigas_pavimento": {
+   "valor": 2.96,
+   "unidade": "m",
+   "tipo": "nivel",
+   "estado": "CONFIRMED",
+   "metodo": "geometria",
+   "fonte": {
+    "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+    "folha": 1,
+    "local": "cortes EE' e FF'",
+    "data": ""
+   },
+   "nota": "Topo das vigas do pavimento intermédio nos desenhos do engenheiro.",
+   "conflitos": []
+  },
+  "osb_pavimento": {
+   "valor": 0.018,
+   "unidade": "m",
+   "tipo": "nivel",
+   "estado": "INFERRED",
+   "metodo": "inferencia",
+   "fonte": {
+    "documento": "config.json (configuração do modelo)",
+    "folha": null,
+    "local": "niveis.osb_pavimento",
+    "data": ""
+   },
+   "nota": "",
+   "conflitos": []
+  }
+ },
+ "paredes": [
+  {
+   "id": "PI1.02",
+   "piso": 0,
+   "exterior": false,
+   "eixo": "y",
+   "inicio": {
+    "valor": 4.904,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI1.02",
+     "data": ""
+    },
+    "nota": "Alçado PI1.02 colocado pela planta de paredes (montantes encaixados 2/2).",
+    "conflitos": []
+   },
+   "fim": {
+    "valor": 5.95,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI1.02",
+     "data": ""
+    },
+    "nota": "Alçado PI1.02 colocado pela planta de paredes (montantes encaixados 2/2).",
+    "conflitos": []
+   },
+   "posicao": {
+    "valor": 5.049,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI1.02",
+     "data": ""
+    },
+    "nota": "Alçado PI1.02 colocado pela planta de paredes (montantes encaixados 2/2).",
+    "conflitos": []
+   },
+   "espessura": {
+    "valor": 0.1,
+    "unidade": "m",
+    "tipo": "dimensao",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI1.02",
+     "data": ""
+    },
+    "nota": "Alçado PI1.02 colocado pela planta de paredes (montantes encaixados 2/2).",
+    "conflitos": []
+   },
+   "aberturas": []
+  },
+  {
+   "id": "PI1.01",
+   "piso": 0,
+   "exterior": false,
+   "eixo": "y",
+   "inicio": {
+    "valor": 4.9,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI1.01",
+     "data": ""
+    },
+    "nota": "Alçado PI1.01 colocado pela planta de paredes (montantes encaixados 3/3).",
+    "conflitos": []
+   },
+   "fim": {
+    "valor": 5.95,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI1.01",
+     "data": ""
+    },
+    "nota": "Alçado PI1.01 colocado pela planta de paredes (montantes encaixados 3/3).",
+    "conflitos": []
+   },
+   "posicao": {
+    "valor": 1.456,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI1.01",
+     "data": ""
+    },
+    "nota": "Alçado PI1.01 colocado pela planta de paredes (montantes encaixados 3/3).",
+    "conflitos": []
+   },
+   "espessura": {
+    "valor": 0.1,
+    "unidade": "m",
+    "tipo": "dimensao",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI1.01",
+     "data": ""
+    },
+    "nota": "Alçado PI1.01 colocado pela planta de paredes (montantes encaixados 3/3).",
+    "conflitos": []
+   },
+   "aberturas": []
+  },
+  {
+   "id": "PI1.03",
+   "piso": 0,
+   "exterior": false,
+   "eixo": "x",
+   "inicio": {
+    "valor": 3.269,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI1.03",
+     "data": ""
+    },
+    "nota": "Alçado PI1.03 colocado pela planta de paredes (montantes encaixados 5/5).",
+    "conflitos": []
+   },
+   "fim": {
+    "valor": 5.269,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI1.03",
+     "data": ""
+    },
+    "nota": "Alçado PI1.03 colocado pela planta de paredes (montantes encaixados 5/5).",
+    "conflitos": []
+   },
+   "posicao": {
+    "valor": 4.825,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI1.03",
+     "data": ""
+    },
+    "nota": "Alçado PI1.03 colocado pela planta de paredes (montantes encaixados 5/5).",
+    "conflitos": []
+   },
+   "espessura": {
+    "valor": 0.16,
+    "unidade": "m",
+    "tipo": "dimensao",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI1.03",
+     "data": ""
+    },
+    "nota": "Alçado PI1.03 colocado pela planta de paredes (montantes encaixados 5/5).",
+    "conflitos": []
+   },
+   "aberturas": []
+  },
+  {
+   "id": "PE1.09",
+   "piso": 0,
+   "exterior": true,
+   "eixo": "x",
+   "inicio": {
+    "valor": 9.139,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE1.09",
+     "data": ""
+    },
+    "nota": "Alçado PE1.09 colocado pela planta de paredes (montantes encaixados 2/2).",
+    "conflitos": []
+   },
+   "fim": {
+    "valor": 9.699,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE1.09",
+     "data": ""
+    },
+    "nota": "Alçado PE1.09 colocado pela planta de paredes (montantes encaixados 2/2).",
+    "conflitos": []
+   },
+   "posicao": {
+    "valor": 4.942,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE1.09",
+     "data": ""
+    },
+    "nota": "Alçado PE1.09 colocado pela planta de paredes (montantes encaixados 2/2).",
+    "conflitos": []
+   },
+   "espessura": {
+    "valor": 0.16,
+    "unidade": "m",
+    "tipo": "dimensao",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE1.09",
+     "data": ""
+    },
+    "nota": "Alçado PE1.09 colocado pela planta de paredes (montantes encaixados 2/2).",
+    "conflitos": []
+   },
+   "aberturas": []
+  },
+  {
+   "id": "PI1.05",
+   "piso": 0,
+   "exterior": false,
+   "eixo": "x",
+   "inicio": {
+    "valor": 0.16,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI1.05",
+     "data": ""
+    },
+    "nota": "Alçado PI1.05 colocado pela planta de paredes (montantes encaixados 4/4).",
+    "conflitos": []
+   },
+   "fim": {
+    "valor": 1.489,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI1.05",
+     "data": ""
+    },
+    "nota": "Alçado PI1.05 colocado pela planta de paredes (montantes encaixados 4/4).",
+    "conflitos": []
+   },
+   "posicao": {
+    "valor": 3.463,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI1.05",
+     "data": ""
+    },
+    "nota": "Alçado PI1.05 colocado pela planta de paredes (montantes encaixados 4/4).",
+    "conflitos": []
+   },
+   "espessura": {
+    "valor": 0.16,
+    "unidade": "m",
+    "tipo": "dimensao",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI1.05",
+     "data": ""
+    },
+    "nota": "Alçado PI1.05 colocado pela planta de paredes (montantes encaixados 4/4).",
+    "conflitos": []
+   },
+   "aberturas": []
+  },
+  {
+   "id": "PI1.07",
+   "piso": 0,
+   "exterior": false,
+   "eixo": "y",
+   "inicio": {
+    "valor": 2.959,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI1.07",
+     "data": ""
+    },
+    "nota": "Alçado PI1.07 colocado pela planta de paredes (montantes encaixados 2/2).",
+    "conflitos": []
+   },
+   "fim": {
+    "valor": 3.37,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI1.07",
+     "data": ""
+    },
+    "nota": "Alçado PI1.07 colocado pela planta de paredes (montantes encaixados 2/2).",
+    "conflitos": []
+   },
+   "posicao": {
+    "valor": 2.998,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI1.07",
+     "data": ""
+    },
+    "nota": "Alçado PI1.07 colocado pela planta de paredes (montantes encaixados 2/2).",
+    "conflitos": []
+   },
+   "espessura": {
+    "valor": 0.1,
+    "unidade": "m",
+    "tipo": "dimensao",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI1.07",
+     "data": ""
+    },
+    "nota": "Alçado PI1.07 colocado pela planta de paredes (montantes encaixados 2/2).",
+    "conflitos": []
+   },
+   "aberturas": []
+  },
+  {
+   "id": "PI1.09",
+   "piso": 0,
+   "exterior": false,
+   "eixo": "y",
+   "inicio": {
+    "valor": 2.975,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI1.09",
+     "data": ""
+    },
+    "nota": "Alçado PI1.09 colocado pela planta de paredes (montantes encaixados 3/3).",
+    "conflitos": []
+   },
+   "fim": {
+    "valor": 3.37,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI1.09",
+     "data": ""
+    },
+    "nota": "Alçado PI1.09 colocado pela planta de paredes (montantes encaixados 3/3).",
+    "conflitos": []
+   },
+   "posicao": {
+    "valor": 3.83,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI1.09",
+     "data": ""
+    },
+    "nota": "Alçado PI1.09 colocado pela planta de paredes (montantes encaixados 3/3).",
+    "conflitos": []
+   },
+   "espessura": {
+    "valor": 0.16,
+    "unidade": "m",
+    "tipo": "dimensao",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI1.09",
+     "data": ""
+    },
+    "nota": "Alçado PI1.09 colocado pela planta de paredes (montantes encaixados 3/3).",
+    "conflitos": []
+   },
+   "aberturas": []
+  },
+  {
+   "id": "PI1.08",
+   "piso": 0,
+   "exterior": false,
+   "eixo": "x",
+   "inicio": {
+    "valor": 2.954,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI1.08",
+     "data": ""
+    },
+    "nota": "Alçado PI1.08 colocado pela planta de paredes (montantes encaixados 3/3).",
+    "conflitos": []
+   },
+   "fim": {
+    "valor": 3.899,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI1.08",
+     "data": ""
+    },
+    "nota": "Alçado PI1.08 colocado pela planta de paredes (montantes encaixados 3/3).",
+    "conflitos": []
+   },
+   "posicao": {
+    "valor": 2.919,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI1.08",
+     "data": ""
+    },
+    "nota": "Alçado PI1.08 colocado pela planta de paredes (montantes encaixados 3/3).",
+    "conflitos": []
+   },
+   "espessura": {
+    "valor": 0.1,
+    "unidade": "m",
+    "tipo": "dimensao",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI1.08",
+     "data": ""
+    },
+    "nota": "Alçado PI1.08 colocado pela planta de paredes (montantes encaixados 3/3).",
+    "conflitos": []
+   },
+   "aberturas": [
+    {
+     "id": "0",
+     "tipo": {
+      "valor": "porta",
+      "unidade": "",
+      "tipo": "classificacao",
+      "estado": "INFERRED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PI1.08",
+       "data": ""
+      },
+      "nota": "Porta quando o vão chega à base do painel.",
+      "conflitos": []
+     },
+     "inicio": {
+      "valor": 3.055,
+      "unidade": "m",
+      "tipo": "geometria",
+      "estado": "INFERRED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PI1.08",
+       "data": ""
+      },
+      "nota": "",
+      "conflitos": []
+     },
+     "fim": {
+      "valor": 3.8,
+      "unidade": "m",
+      "tipo": "geometria",
+      "estado": "INFERRED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PI1.08",
+       "data": ""
+      },
+      "nota": "",
+      "conflitos": []
+     },
+     "largura": {
+      "valor": 0.745,
+      "unidade": "m",
+      "tipo": "dimensao",
+      "estado": "INFERRED",
+      "metodo": "calculo",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PI1.08",
+       "data": ""
+      },
+      "nota": "Intervalo entre as peças do painel: as portas e janelas não têm medidas nos desenhos do engenheiro. Acima da base do painel (piso estrutural).",
+      "conflitos": []
+     },
+     "peitoril": {
+      "valor": 0.08,
+      "unidade": "m",
+      "tipo": "cota",
+      "estado": "INFERRED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PI1.08",
+       "data": ""
+      },
+      "nota": "Intervalo entre as peças do painel: as portas e janelas não têm medidas nos desenhos do engenheiro. Acima da base do painel (piso estrutural).",
+      "conflitos": []
+     },
+     "altura": {
+      "valor": 1.58,
+      "unidade": "m",
+      "tipo": "cota",
+      "estado": "INFERRED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PI1.08",
+       "data": ""
+      },
+      "nota": "Intervalo entre as peças do painel: as portas e janelas não têm medidas nos desenhos do engenheiro. Acima da base do painel (piso estrutural).",
+      "conflitos": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "PI1.10",
+   "piso": 0,
+   "exterior": false,
+   "eixo": "x",
+   "inicio": {
+    "valor": 6.715,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI1.10",
+     "data": ""
+    },
+    "nota": "Alçado PI1.10 colocado pela planta de paredes (montantes encaixados 2/2).",
+    "conflitos": []
+   },
+   "fim": {
+    "valor": 7.284,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI1.10",
+     "data": ""
+    },
+    "nota": "Alçado PI1.10 colocado pela planta de paredes (montantes encaixados 2/2).",
+    "conflitos": []
+   },
+   "posicao": {
+    "valor": 3.457,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI1.10",
+     "data": ""
+    },
+    "nota": "Alçado PI1.10 colocado pela planta de paredes (montantes encaixados 2/2).",
+    "conflitos": []
+   },
+   "espessura": {
+    "valor": 0.16,
+    "unidade": "m",
+    "tipo": "dimensao",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI1.10",
+     "data": ""
+    },
+    "nota": "Alçado PI1.10 colocado pela planta de paredes (montantes encaixados 2/2).",
+    "conflitos": []
+   },
+   "aberturas": []
+  },
+  {
+   "id": "PI1.12",
+   "piso": 0,
+   "exterior": false,
+   "eixo": "y",
+   "inicio": {
+    "valor": 0.16,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI1.12",
+     "data": ""
+    },
+    "nota": "Alçado PI1.12 colocado pela planta de paredes (montantes encaixados 9/9).",
+    "conflitos": []
+   },
+   "fim": {
+    "valor": 3.371,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI1.12",
+     "data": ""
+    },
+    "nota": "Alçado PI1.12 colocado pela planta de paredes (montantes encaixados 9/9).",
+    "conflitos": []
+   },
+   "posicao": {
+    "valor": 6.785,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI1.12",
+     "data": ""
+    },
+    "nota": "Alçado PI1.12 colocado pela planta de paredes (montantes encaixados 9/9).",
+    "conflitos": []
+   },
+   "espessura": {
+    "valor": 0.16,
+    "unidade": "m",
+    "tipo": "dimensao",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI1.12",
+     "data": ""
+    },
+    "nota": "Alçado PI1.12 colocado pela planta de paredes (montantes encaixados 9/9).",
+    "conflitos": []
+   },
+   "aberturas": []
+  },
+  {
+   "id": "PI1.11",
+   "piso": 0,
+   "exterior": false,
+   "eixo": "x",
+   "inicio": {
+    "valor": 8.144,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI1.11",
+     "data": ""
+    },
+    "nota": "Alçado PI1.11 colocado pela planta de paredes (montantes encaixados 3/3).",
+    "conflitos": []
+   },
+   "fim": {
+    "valor": 9.06,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI1.11",
+     "data": ""
+    },
+    "nota": "Alçado PI1.11 colocado pela planta de paredes (montantes encaixados 3/3).",
+    "conflitos": []
+   },
+   "posicao": {
+    "valor": 3.463,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI1.11",
+     "data": ""
+    },
+    "nota": "Alçado PI1.11 colocado pela planta de paredes (montantes encaixados 3/3).",
+    "conflitos": []
+   },
+   "espessura": {
+    "valor": 0.1,
+    "unidade": "m",
+    "tipo": "dimensao",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI1.11",
+     "data": ""
+    },
+    "nota": "Alçado PI1.11 colocado pela planta de paredes (montantes encaixados 3/3).",
+    "conflitos": []
+   },
+   "aberturas": []
+  },
+  {
+   "id": "PE1.10",
+   "piso": 0,
+   "exterior": true,
+   "eixo": "x",
+   "inicio": {
+    "valor": 9.06,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE1.10",
+     "data": ""
+    },
+    "nota": "Alçado PE1.10 colocado pela planta de paredes (montantes encaixados 3/3).",
+    "conflitos": []
+   },
+   "fim": {
+    "valor": 9.7,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE1.10",
+     "data": ""
+    },
+    "nota": "Alçado PE1.10 colocado pela planta de paredes (montantes encaixados 3/3).",
+    "conflitos": []
+   },
+   "posicao": {
+    "valor": 3.463,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE1.10",
+     "data": ""
+    },
+    "nota": "Alçado PE1.10 colocado pela planta de paredes (montantes encaixados 3/3).",
+    "conflitos": []
+   },
+   "espessura": {
+    "valor": 0.16,
+    "unidade": "m",
+    "tipo": "dimensao",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE1.10",
+     "data": ""
+    },
+    "nota": "Alçado PE1.10 colocado pela planta de paredes (montantes encaixados 3/3).",
+    "conflitos": []
+   },
+   "aberturas": []
+  },
+  {
+   "id": "PE1.14",
+   "piso": 0,
+   "exterior": true,
+   "eixo": "x",
+   "inicio": {
+    "valor": -0.0,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE1.14",
+     "data": ""
+    },
+    "nota": "Alçado PE1.14 colocado pela planta de paredes (montantes encaixados 5/5).",
+    "conflitos": []
+   },
+   "fim": {
+    "valor": 1.49,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE1.14",
+     "data": ""
+    },
+    "nota": "Alçado PE1.14 colocado pela planta de paredes (montantes encaixados 5/5).",
+    "conflitos": []
+   },
+   "posicao": {
+    "valor": 6.03,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE1.14",
+     "data": ""
+    },
+    "nota": "Alçado PE1.14 colocado pela planta de paredes (montantes encaixados 5/5).",
+    "conflitos": []
+   },
+   "espessura": {
+    "valor": 0.16,
+    "unidade": "m",
+    "tipo": "dimensao",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE1.14",
+     "data": ""
+    },
+    "nota": "Alçado PE1.14 colocado pela planta de paredes (montantes encaixados 5/5).",
+    "conflitos": []
+   },
+   "aberturas": []
+  },
+  {
+   "id": "PE1.12",
+   "piso": 0,
+   "exterior": true,
+   "eixo": "x",
+   "inicio": {
+    "valor": 3.82,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE1.12",
+     "data": ""
+    },
+    "nota": "Alçado PE1.12 colocado pela planta de paredes (montantes encaixados 7/7).",
+    "conflitos": []
+   },
+   "fim": {
+    "valor": 6.795,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE1.12",
+     "data": ""
+    },
+    "nota": "Alçado PE1.12 colocado pela planta de paredes (montantes encaixados 7/7).",
+    "conflitos": []
+   },
+   "posicao": {
+    "valor": 6.03,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE1.12",
+     "data": ""
+    },
+    "nota": "Alçado PE1.12 colocado pela planta de paredes (montantes encaixados 7/7).",
+    "conflitos": []
+   },
+   "espessura": {
+    "valor": 0.16,
+    "unidade": "m",
+    "tipo": "dimensao",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE1.12",
+     "data": ""
+    },
+    "nota": "Alçado PE1.12 colocado pela planta de paredes (montantes encaixados 7/7).",
+    "conflitos": []
+   },
+   "aberturas": [
+    {
+     "id": "0",
+     "tipo": {
+      "valor": "janela",
+      "unidade": "",
+      "tipo": "classificacao",
+      "estado": "INFERRED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PE1.12",
+       "data": ""
+      },
+      "nota": "Porta quando o vão chega à base do painel.",
+      "conflitos": []
+     },
+     "inicio": {
+      "valor": 6.024,
+      "unidade": "m",
+      "tipo": "geometria",
+      "estado": "INFERRED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PE1.12",
+       "data": ""
+      },
+      "nota": "",
+      "conflitos": []
+     },
+     "fim": {
+      "valor": 6.714,
+      "unidade": "m",
+      "tipo": "geometria",
+      "estado": "INFERRED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PE1.12",
+       "data": ""
+      },
+      "nota": "",
+      "conflitos": []
+     },
+     "largura": {
+      "valor": 0.69,
+      "unidade": "m",
+      "tipo": "dimensao",
+      "estado": "INFERRED",
+      "metodo": "calculo",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PE1.12",
+       "data": ""
+      },
+      "nota": "Intervalo entre as peças do painel: as portas e janelas não têm medidas nos desenhos do engenheiro. Acima da base do painel (piso estrutural).",
+      "conflitos": []
+     },
+     "peitoril": {
+      "valor": 1.259,
+      "unidade": "m",
+      "tipo": "cota",
+      "estado": "INFERRED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PE1.12",
+       "data": ""
+      },
+      "nota": "Intervalo entre as peças do painel: as portas e janelas não têm medidas nos desenhos do engenheiro. Acima da base do painel (piso estrutural).",
+      "conflitos": []
+     },
+     "altura": {
+      "valor": 1.813,
+      "unidade": "m",
+      "tipo": "cota",
+      "estado": "INFERRED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PE1.12",
+       "data": ""
+      },
+      "nota": "Intervalo entre as peças do painel: as portas e janelas não têm medidas nos desenhos do engenheiro. Acima da base do painel (piso estrutural).",
+      "conflitos": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "PE1.11",
+   "piso": 0,
+   "exterior": true,
+   "eixo": "x",
+   "inicio": {
+    "valor": 6.794,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE1.11",
+     "data": ""
+    },
+    "nota": "Alçado PE1.11 colocado pela planta de paredes (montantes encaixados 8/8).",
+    "conflitos": []
+   },
+   "fim": {
+    "valor": 9.859,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE1.11",
+     "data": ""
+    },
+    "nota": "Alçado PE1.11 colocado pela planta de paredes (montantes encaixados 8/8).",
+    "conflitos": []
+   },
+   "posicao": {
+    "valor": 6.03,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE1.11",
+     "data": ""
+    },
+    "nota": "Alçado PE1.11 colocado pela planta de paredes (montantes encaixados 8/8).",
+    "conflitos": []
+   },
+   "espessura": {
+    "valor": 0.16,
+    "unidade": "m",
+    "tipo": "dimensao",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE1.11",
+     "data": ""
+    },
+    "nota": "Alçado PE1.11 colocado pela planta de paredes (montantes encaixados 8/8).",
+    "conflitos": []
+   },
+   "aberturas": []
+  },
+  {
+   "id": "PI1.06",
+   "piso": 0,
+   "exterior": false,
+   "eixo": "x",
+   "inicio": {
+    "valor": 1.489,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "INFERRED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI1.06",
+     "data": ""
+    },
+    "nota": "Alçado PI1.06 colocado pela planta de paredes (montantes encaixados 4/6). Encaixe incompleto: confirmar. Corrigido à mão: label position; its 3 middle studs differ 80 mm between plan and elevation (elevation followed)",
+    "conflitos": []
+   },
+   "fim": {
+    "valor": 3.899,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "INFERRED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI1.06",
+     "data": ""
+    },
+    "nota": "Alçado PI1.06 colocado pela planta de paredes (montantes encaixados 4/6). Encaixe incompleto: confirmar. Corrigido à mão: label position; its 3 middle studs differ 80 mm between plan and elevation (elevation followed)",
+    "conflitos": []
+   },
+   "posicao": {
+    "valor": 3.457,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "INFERRED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI1.06",
+     "data": ""
+    },
+    "nota": "Alçado PI1.06 colocado pela planta de paredes (montantes encaixados 4/6). Encaixe incompleto: confirmar. Corrigido à mão: label position; its 3 middle studs differ 80 mm between plan and elevation (elevation followed)",
+    "conflitos": []
+   },
+   "espessura": {
+    "valor": 0.16,
+    "unidade": "m",
+    "tipo": "dimensao",
+    "estado": "INFERRED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI1.06",
+     "data": ""
+    },
+    "nota": "Alçado PI1.06 colocado pela planta de paredes (montantes encaixados 4/6). Encaixe incompleto: confirmar. Corrigido à mão: label position; its 3 middle studs differ 80 mm between plan and elevation (elevation followed)",
+    "conflitos": []
+   },
+   "aberturas": []
+  },
+  {
+   "id": "PI1.04",
+   "piso": 0,
+   "exterior": false,
+   "eixo": "x",
+   "inicio": {
+    "valor": 5.269,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI1.04",
+     "data": ""
+    },
+    "nota": "Alçado PI1.04 colocado pela planta de paredes (montantes encaixados 5/5).",
+    "conflitos": []
+   },
+   "fim": {
+    "valor": 7.269,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI1.04",
+     "data": ""
+    },
+    "nota": "Alçado PI1.04 colocado pela planta de paredes (montantes encaixados 5/5).",
+    "conflitos": []
+   },
+   "posicao": {
+    "valor": 4.825,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI1.04",
+     "data": ""
+    },
+    "nota": "Alçado PI1.04 colocado pela planta de paredes (montantes encaixados 5/5).",
+    "conflitos": []
+   },
+   "espessura": {
+    "valor": 0.16,
+    "unidade": "m",
+    "tipo": "dimensao",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI1.04",
+     "data": ""
+    },
+    "nota": "Alçado PI1.04 colocado pela planta de paredes (montantes encaixados 5/5).",
+    "conflitos": []
+   },
+   "aberturas": []
+  },
+  {
+   "id": "PE1.01",
+   "piso": 0,
+   "exterior": true,
+   "eixo": "y",
+   "inicio": {
+    "valor": 3.055,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE1.01",
+     "data": ""
+    },
+    "nota": "Alçado PE1.01 colocado pela planta de paredes (montantes encaixados 7/7).",
+    "conflitos": []
+   },
+   "fim": {
+    "valor": 5.949,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE1.01",
+     "data": ""
+    },
+    "nota": "Alçado PE1.01 colocado pela planta de paredes (montantes encaixados 7/7).",
+    "conflitos": []
+   },
+   "posicao": {
+    "valor": 0.08,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE1.01",
+     "data": ""
+    },
+    "nota": "Alçado PE1.01 colocado pela planta de paredes (montantes encaixados 7/7).",
+    "conflitos": []
+   },
+   "espessura": {
+    "valor": 0.16,
+    "unidade": "m",
+    "tipo": "dimensao",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE1.01",
+     "data": ""
+    },
+    "nota": "Alçado PE1.01 colocado pela planta de paredes (montantes encaixados 7/7).",
+    "conflitos": []
+   },
+   "aberturas": []
+  },
+  {
+   "id": "PE1.02",
+   "piso": 0,
+   "exterior": true,
+   "eixo": "y",
+   "inicio": {
+    "valor": 0.16,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE1.02",
+     "data": ""
+    },
+    "nota": "Alçado PE1.02 colocado pela planta de paredes (montantes encaixados 7/7).",
+    "conflitos": []
+   },
+   "fim": {
+    "valor": 3.054,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE1.02",
+     "data": ""
+    },
+    "nota": "Alçado PE1.02 colocado pela planta de paredes (montantes encaixados 7/7).",
+    "conflitos": []
+   },
+   "posicao": {
+    "valor": 0.08,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE1.02",
+     "data": ""
+    },
+    "nota": "Alçado PE1.02 colocado pela planta de paredes (montantes encaixados 7/7).",
+    "conflitos": []
+   },
+   "espessura": {
+    "valor": 0.16,
+    "unidade": "m",
+    "tipo": "dimensao",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE1.02",
+     "data": ""
+    },
+    "nota": "Alçado PE1.02 colocado pela planta de paredes (montantes encaixados 7/7).",
+    "conflitos": []
+   },
+   "aberturas": []
+  },
+  {
+   "id": "PE1.03",
+   "piso": 0,
+   "exterior": true,
+   "eixo": "x",
+   "inicio": {
+    "valor": 0.0,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE1.03",
+     "data": ""
+    },
+    "nota": "Alçado PE1.03 colocado pela planta de paredes (montantes encaixados 5/5).",
+    "conflitos": []
+   },
+   "fim": {
+    "valor": 1.49,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE1.03",
+     "data": ""
+    },
+    "nota": "Alçado PE1.03 colocado pela planta de paredes (montantes encaixados 5/5).",
+    "conflitos": []
+   },
+   "posicao": {
+    "valor": 0.08,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE1.03",
+     "data": ""
+    },
+    "nota": "Alçado PE1.03 colocado pela planta de paredes (montantes encaixados 5/5).",
+    "conflitos": []
+   },
+   "espessura": {
+    "valor": 0.16,
+    "unidade": "m",
+    "tipo": "dimensao",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE1.03",
+     "data": ""
+    },
+    "nota": "Alçado PE1.03 colocado pela planta de paredes (montantes encaixados 5/5).",
+    "conflitos": []
+   },
+   "aberturas": []
+  },
+  {
+   "id": "PE1.04",
+   "piso": 0,
+   "exterior": true,
+   "eixo": "x",
+   "inicio": {
+    "valor": 1.49,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE1.04",
+     "data": ""
+    },
+    "nota": "Alçado PE1.04 colocado pela planta de paredes (montantes encaixados 4/4).",
+    "conflitos": []
+   },
+   "fim": {
+    "valor": 3.821,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE1.04",
+     "data": ""
+    },
+    "nota": "Alçado PE1.04 colocado pela planta de paredes (montantes encaixados 4/4).",
+    "conflitos": []
+   },
+   "posicao": {
+    "valor": 0.08,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE1.04",
+     "data": ""
+    },
+    "nota": "Alçado PE1.04 colocado pela planta de paredes (montantes encaixados 4/4).",
+    "conflitos": []
+   },
+   "espessura": {
+    "valor": 0.16,
+    "unidade": "m",
+    "tipo": "dimensao",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE1.04",
+     "data": ""
+    },
+    "nota": "Alçado PE1.04 colocado pela planta de paredes (montantes encaixados 4/4).",
+    "conflitos": []
+   },
+   "aberturas": [
+    {
+     "id": "0",
+     "tipo": {
+      "valor": "porta",
+      "unidade": "",
+      "tipo": "classificacao",
+      "estado": "INFERRED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PE1.04",
+       "data": ""
+      },
+      "nota": "Porta quando o vão chega à base do painel.",
+      "conflitos": []
+     },
+     "inicio": {
+      "valor": 1.571,
+      "unidade": "m",
+      "tipo": "geometria",
+      "estado": "INFERRED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PE1.04",
+       "data": ""
+      },
+      "nota": "",
+      "conflitos": []
+     },
+     "fim": {
+      "valor": 2.681,
+      "unidade": "m",
+      "tipo": "geometria",
+      "estado": "INFERRED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PE1.04",
+       "data": ""
+      },
+      "nota": "",
+      "conflitos": []
+     },
+     "largura": {
+      "valor": 1.11,
+      "unidade": "m",
+      "tipo": "dimensao",
+      "estado": "INFERRED",
+      "metodo": "calculo",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PE1.04",
+       "data": ""
+      },
+      "nota": "Intervalo entre as peças do painel: as portas e janelas não têm medidas nos desenhos do engenheiro. Acima da base do painel (piso estrutural).",
+      "conflitos": []
+     },
+     "peitoril": {
+      "valor": 0.16,
+      "unidade": "m",
+      "tipo": "cota",
+      "estado": "INFERRED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PE1.04",
+       "data": ""
+      },
+      "nota": "Intervalo entre as peças do painel: as portas e janelas não têm medidas nos desenhos do engenheiro. Acima da base do painel (piso estrutural).",
+      "conflitos": []
+     },
+     "altura": {
+      "valor": 2.72,
+      "unidade": "m",
+      "tipo": "cota",
+      "estado": "INFERRED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PE1.04",
+       "data": ""
+      },
+      "nota": "Intervalo entre as peças do painel: as portas e janelas não têm medidas nos desenhos do engenheiro. Acima da base do painel (piso estrutural).",
+      "conflitos": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "PE1.05",
+   "piso": 0,
+   "exterior": true,
+   "eixo": "x",
+   "inicio": {
+    "valor": 3.821,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE1.05",
+     "data": ""
+    },
+    "nota": "Alçado PE1.05 colocado pela planta de paredes (montantes encaixados 6/6).",
+    "conflitos": []
+   },
+   "fim": {
+    "valor": 6.796,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE1.05",
+     "data": ""
+    },
+    "nota": "Alçado PE1.05 colocado pela planta de paredes (montantes encaixados 6/6).",
+    "conflitos": []
+   },
+   "posicao": {
+    "valor": 0.08,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE1.05",
+     "data": ""
+    },
+    "nota": "Alçado PE1.05 colocado pela planta de paredes (montantes encaixados 6/6).",
+    "conflitos": []
+   },
+   "espessura": {
+    "valor": 0.16,
+    "unidade": "m",
+    "tipo": "dimensao",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE1.05",
+     "data": ""
+    },
+    "nota": "Alçado PE1.05 colocado pela planta de paredes (montantes encaixados 6/6).",
+    "conflitos": []
+   },
+   "aberturas": [
+    {
+     "id": "0",
+     "tipo": {
+      "valor": "porta",
+      "unidade": "",
+      "tipo": "classificacao",
+      "estado": "INFERRED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PE1.05",
+       "data": ""
+      },
+      "nota": "Porta quando o vão chega à base do painel.",
+      "conflitos": []
+     },
+     "inicio": {
+      "valor": 4.591,
+      "unidade": "m",
+      "tipo": "geometria",
+      "estado": "INFERRED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PE1.05",
+       "data": ""
+      },
+      "nota": "",
+      "conflitos": []
+     },
+     "fim": {
+      "valor": 5.74,
+      "unidade": "m",
+      "tipo": "geometria",
+      "estado": "INFERRED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PE1.05",
+       "data": ""
+      },
+      "nota": "",
+      "conflitos": []
+     },
+     "largura": {
+      "valor": 1.149,
+      "unidade": "m",
+      "tipo": "dimensao",
+      "estado": "INFERRED",
+      "metodo": "calculo",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PE1.05",
+       "data": ""
+      },
+      "nota": "Intervalo entre as peças do painel: as portas e janelas não têm medidas nos desenhos do engenheiro. Acima da base do painel (piso estrutural).",
+      "conflitos": []
+     },
+     "peitoril": {
+      "valor": 0.16,
+      "unidade": "m",
+      "tipo": "cota",
+      "estado": "INFERRED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PE1.05",
+       "data": ""
+      },
+      "nota": "Intervalo entre as peças do painel: as portas e janelas não têm medidas nos desenhos do engenheiro. Acima da base do painel (piso estrutural).",
+      "conflitos": []
+     },
+     "altura": {
+      "valor": 2.72,
+      "unidade": "m",
+      "tipo": "cota",
+      "estado": "INFERRED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PE1.05",
+       "data": ""
+      },
+      "nota": "Intervalo entre as peças do painel: as portas e janelas não têm medidas nos desenhos do engenheiro. Acima da base do painel (piso estrutural).",
+      "conflitos": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "PE1.06",
+   "piso": 0,
+   "exterior": true,
+   "eixo": "x",
+   "inicio": {
+    "valor": 6.796,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE1.06",
+     "data": ""
+    },
+    "nota": "Alçado PE1.06 colocado pela planta de paredes (montantes encaixados 7/7).",
+    "conflitos": []
+   },
+   "fim": {
+    "valor": 9.861,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE1.06",
+     "data": ""
+    },
+    "nota": "Alçado PE1.06 colocado pela planta de paredes (montantes encaixados 7/7).",
+    "conflitos": []
+   },
+   "posicao": {
+    "valor": 0.08,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE1.06",
+     "data": ""
+    },
+    "nota": "Alçado PE1.06 colocado pela planta de paredes (montantes encaixados 7/7).",
+    "conflitos": []
+   },
+   "espessura": {
+    "valor": 0.16,
+    "unidade": "m",
+    "tipo": "dimensao",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE1.06",
+     "data": ""
+    },
+    "nota": "Alçado PE1.06 colocado pela planta de paredes (montantes encaixados 7/7).",
+    "conflitos": []
+   },
+   "aberturas": [
+    {
+     "id": "0",
+     "tipo": {
+      "valor": "porta",
+      "unidade": "",
+      "tipo": "classificacao",
+      "estado": "INFERRED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PE1.06",
+       "data": ""
+      },
+      "nota": "Porta quando o vão chega à base do painel.",
+      "conflitos": []
+     },
+     "inicio": {
+      "valor": 7.611,
+      "unidade": "m",
+      "tipo": "geometria",
+      "estado": "INFERRED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PE1.06",
+       "data": ""
+      },
+      "nota": "",
+      "conflitos": []
+     },
+     "fim": {
+      "valor": 8.721,
+      "unidade": "m",
+      "tipo": "geometria",
+      "estado": "INFERRED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PE1.06",
+       "data": ""
+      },
+      "nota": "",
+      "conflitos": []
+     },
+     "largura": {
+      "valor": 1.11,
+      "unidade": "m",
+      "tipo": "dimensao",
+      "estado": "INFERRED",
+      "metodo": "calculo",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PE1.06",
+       "data": ""
+      },
+      "nota": "Intervalo entre as peças do painel: as portas e janelas não têm medidas nos desenhos do engenheiro. Acima da base do painel (piso estrutural).",
+      "conflitos": []
+     },
+     "peitoril": {
+      "valor": 0.16,
+      "unidade": "m",
+      "tipo": "cota",
+      "estado": "INFERRED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PE1.06",
+       "data": ""
+      },
+      "nota": "Intervalo entre as peças do painel: as portas e janelas não têm medidas nos desenhos do engenheiro. Acima da base do painel (piso estrutural).",
+      "conflitos": []
+     },
+     "altura": {
+      "valor": 2.72,
+      "unidade": "m",
+      "tipo": "cota",
+      "estado": "INFERRED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PE1.06",
+       "data": ""
+      },
+      "nota": "Intervalo entre as peças do painel: as portas e janelas não têm medidas nos desenhos do engenheiro. Acima da base do painel (piso estrutural).",
+      "conflitos": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "PE1.07",
+   "piso": 0,
+   "exterior": true,
+   "eixo": "y",
+   "inicio": {
+    "valor": 0.16,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE1.07",
+     "data": ""
+    },
+    "nota": "Alçado PE1.07 colocado pela planta de paredes (montantes encaixados 7/7).",
+    "conflitos": []
+   },
+   "fim": {
+    "valor": 3.055,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE1.07",
+     "data": ""
+    },
+    "nota": "Alçado PE1.07 colocado pela planta de paredes (montantes encaixados 7/7).",
+    "conflitos": []
+   },
+   "posicao": {
+    "valor": 9.78,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE1.07",
+     "data": ""
+    },
+    "nota": "Alçado PE1.07 colocado pela planta de paredes (montantes encaixados 7/7).",
+    "conflitos": []
+   },
+   "espessura": {
+    "valor": 0.16,
+    "unidade": "m",
+    "tipo": "dimensao",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE1.07",
+     "data": ""
+    },
+    "nota": "Alçado PE1.07 colocado pela planta de paredes (montantes encaixados 7/7).",
+    "conflitos": []
+   },
+   "aberturas": []
+  },
+  {
+   "id": "PE1.08",
+   "piso": 0,
+   "exterior": true,
+   "eixo": "y",
+   "inicio": {
+    "valor": 3.054,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE1.08",
+     "data": ""
+    },
+    "nota": "Alçado PE1.08 colocado pela planta de paredes (montantes encaixados 5/5).",
+    "conflitos": []
+   },
+   "fim": {
+    "valor": 5.949,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE1.08",
+     "data": ""
+    },
+    "nota": "Alçado PE1.08 colocado pela planta de paredes (montantes encaixados 5/5).",
+    "conflitos": []
+   },
+   "posicao": {
+    "valor": 9.78,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE1.08",
+     "data": ""
+    },
+    "nota": "Alçado PE1.08 colocado pela planta de paredes (montantes encaixados 5/5).",
+    "conflitos": []
+   },
+   "espessura": {
+    "valor": 0.16,
+    "unidade": "m",
+    "tipo": "dimensao",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE1.08",
+     "data": ""
+    },
+    "nota": "Alçado PE1.08 colocado pela planta de paredes (montantes encaixados 5/5).",
+    "conflitos": []
+   },
+   "aberturas": [
+    {
+     "id": "0",
+     "tipo": {
+      "valor": "porta",
+      "unidade": "",
+      "tipo": "classificacao",
+      "estado": "INFERRED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PE1.08",
+       "data": ""
+      },
+      "nota": "Porta quando o vão chega à base do painel.",
+      "conflitos": []
+     },
+     "inicio": {
+      "valor": 3.53,
+      "unidade": "m",
+      "tipo": "geometria",
+      "estado": "INFERRED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PE1.08",
+       "data": ""
+      },
+      "nota": "",
+      "conflitos": []
+     },
+     "fim": {
+      "valor": 4.87,
+      "unidade": "m",
+      "tipo": "geometria",
+      "estado": "INFERRED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PE1.08",
+       "data": ""
+      },
+      "nota": "",
+      "conflitos": []
+     },
+     "largura": {
+      "valor": 1.34,
+      "unidade": "m",
+      "tipo": "dimensao",
+      "estado": "INFERRED",
+      "metodo": "calculo",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PE1.08",
+       "data": ""
+      },
+      "nota": "Intervalo entre as peças do painel: as portas e janelas não têm medidas nos desenhos do engenheiro. Acima da base do painel (piso estrutural).",
+      "conflitos": []
+     },
+     "peitoril": {
+      "valor": 0.16,
+      "unidade": "m",
+      "tipo": "cota",
+      "estado": "INFERRED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PE1.08",
+       "data": ""
+      },
+      "nota": "Intervalo entre as peças do painel: as portas e janelas não têm medidas nos desenhos do engenheiro. Acima da base do painel (piso estrutural).",
+      "conflitos": []
+     },
+     "altura": {
+      "valor": 2.72,
+      "unidade": "m",
+      "tipo": "cota",
+      "estado": "INFERRED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PE1.08",
+       "data": ""
+      },
+      "nota": "Intervalo entre as peças do painel: as portas e janelas não têm medidas nos desenhos do engenheiro. Acima da base do painel (piso estrutural).",
+      "conflitos": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "PE1.13",
+   "piso": 0,
+   "exterior": true,
+   "eixo": "x",
+   "inicio": {
+    "valor": 1.49,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE1.13",
+     "data": ""
+    },
+    "nota": "Alçado PE1.13 colocado pela planta de paredes (montantes encaixados 5/5).",
+    "conflitos": []
+   },
+   "fim": {
+    "valor": 3.82,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE1.13",
+     "data": ""
+    },
+    "nota": "Alçado PE1.13 colocado pela planta de paredes (montantes encaixados 5/5).",
+    "conflitos": []
+   },
+   "posicao": {
+    "valor": 6.03,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE1.13",
+     "data": ""
+    },
+    "nota": "Alçado PE1.13 colocado pela planta de paredes (montantes encaixados 5/5).",
+    "conflitos": []
+   },
+   "espessura": {
+    "valor": 0.16,
+    "unidade": "m",
+    "tipo": "dimensao",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE1.13",
+     "data": ""
+    },
+    "nota": "Alçado PE1.13 colocado pela planta de paredes (montantes encaixados 5/5).",
+    "conflitos": []
+   },
+   "aberturas": [
+    {
+     "id": "0",
+     "tipo": {
+      "valor": "porta",
+      "unidade": "",
+      "tipo": "classificacao",
+      "estado": "INFERRED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PE1.13",
+       "data": ""
+      },
+      "nota": "Porta quando o vão chega à base do painel.",
+      "conflitos": []
+     },
+     "inicio": {
+      "valor": 1.569,
+      "unidade": "m",
+      "tipo": "geometria",
+      "estado": "INFERRED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PE1.13",
+       "data": ""
+      },
+      "nota": "",
+      "conflitos": []
+     },
+     "fim": {
+      "valor": 2.68,
+      "unidade": "m",
+      "tipo": "geometria",
+      "estado": "INFERRED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PE1.13",
+       "data": ""
+      },
+      "nota": "",
+      "conflitos": []
+     },
+     "largura": {
+      "valor": 1.11,
+      "unidade": "m",
+      "tipo": "dimensao",
+      "estado": "INFERRED",
+      "metodo": "calculo",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PE1.13",
+       "data": ""
+      },
+      "nota": "Intervalo entre as peças do painel: as portas e janelas não têm medidas nos desenhos do engenheiro. Acima da base do painel (piso estrutural).",
+      "conflitos": []
+     },
+     "peitoril": {
+      "valor": 0.16,
+      "unidade": "m",
+      "tipo": "cota",
+      "estado": "INFERRED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PE1.13",
+       "data": ""
+      },
+      "nota": "Intervalo entre as peças do painel: as portas e janelas não têm medidas nos desenhos do engenheiro. Acima da base do painel (piso estrutural).",
+      "conflitos": []
+     },
+     "altura": {
+      "valor": 2.72,
+      "unidade": "m",
+      "tipo": "cota",
+      "estado": "INFERRED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PE1.13",
+       "data": ""
+      },
+      "nota": "Intervalo entre as peças do painel: as portas e janelas não têm medidas nos desenhos do engenheiro. Acima da base do painel (piso estrutural).",
+      "conflitos": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "PI2.01",
+   "piso": 1,
+   "exterior": false,
+   "eixo": "y",
+   "inicio": {
+    "valor": 3.15,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI2.01",
+     "data": ""
+    },
+    "nota": "Alçado PI2.01 colocado pela planta de paredes (montantes encaixados 6/6).",
+    "conflitos": []
+   },
+   "fim": {
+    "valor": 5.949,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI2.01",
+     "data": ""
+    },
+    "nota": "Alçado PI2.01 colocado pela planta de paredes (montantes encaixados 6/6).",
+    "conflitos": []
+   },
+   "posicao": {
+    "valor": 2.201,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI2.01",
+     "data": ""
+    },
+    "nota": "Alçado PI2.01 colocado pela planta de paredes (montantes encaixados 6/6).",
+    "conflitos": []
+   },
+   "espessura": {
+    "valor": 0.1,
+    "unidade": "m",
+    "tipo": "dimensao",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI2.01",
+     "data": ""
+    },
+    "nota": "Alçado PI2.01 colocado pela planta de paredes (montantes encaixados 6/6).",
+    "conflitos": []
+   },
+   "aberturas": [
+    {
+     "id": "0",
+     "tipo": {
+      "valor": "porta",
+      "unidade": "",
+      "tipo": "classificacao",
+      "estado": "INFERRED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PI2.01",
+       "data": ""
+      },
+      "nota": "Porta quando o vão chega à base do painel.",
+      "conflitos": []
+     },
+     "inicio": {
+      "valor": 3.82,
+      "unidade": "m",
+      "tipo": "geometria",
+      "estado": "INFERRED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PI2.01",
+       "data": ""
+      },
+      "nota": "",
+      "conflitos": []
+     },
+     "fim": {
+      "valor": 4.719,
+      "unidade": "m",
+      "tipo": "geometria",
+      "estado": "INFERRED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PI2.01",
+       "data": ""
+      },
+      "nota": "",
+      "conflitos": []
+     },
+     "largura": {
+      "valor": 0.9,
+      "unidade": "m",
+      "tipo": "dimensao",
+      "estado": "INFERRED",
+      "metodo": "calculo",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PI2.01",
+       "data": ""
+      },
+      "nota": "Intervalo entre as peças do painel: as portas e janelas não têm medidas nos desenhos do engenheiro. Acima da base do painel (piso estrutural).",
+      "conflitos": []
+     },
+     "peitoril": {
+      "valor": 0.079,
+      "unidade": "m",
+      "tipo": "cota",
+      "estado": "INFERRED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PI2.01",
+       "data": ""
+      },
+      "nota": "Intervalo entre as peças do painel: as portas e janelas não têm medidas nos desenhos do engenheiro. Acima da base do painel (piso estrutural).",
+      "conflitos": []
+     },
+     "altura": {
+      "valor": 2.26,
+      "unidade": "m",
+      "tipo": "cota",
+      "estado": "INFERRED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PI2.01",
+       "data": ""
+      },
+      "nota": "Intervalo entre as peças do painel: as portas e janelas não têm medidas nos desenhos do engenheiro. Acima da base do painel (piso estrutural).",
+      "conflitos": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "PI2.02",
+   "piso": 1,
+   "exterior": false,
+   "eixo": "y",
+   "inicio": {
+    "valor": 4.9,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI2.02",
+     "data": ""
+    },
+    "nota": "Alçado PI2.02 colocado pela planta de paredes (montantes encaixados 3/3).",
+    "conflitos": []
+   },
+   "fim": {
+    "valor": 5.949,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI2.02",
+     "data": ""
+    },
+    "nota": "Alçado PI2.02 colocado pela planta de paredes (montantes encaixados 3/3).",
+    "conflitos": []
+   },
+   "posicao": {
+    "valor": 3.289,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI2.02",
+     "data": ""
+    },
+    "nota": "Alçado PI2.02 colocado pela planta de paredes (montantes encaixados 3/3).",
+    "conflitos": []
+   },
+   "espessura": {
+    "valor": 0.1,
+    "unidade": "m",
+    "tipo": "dimensao",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI2.02",
+     "data": ""
+    },
+    "nota": "Alçado PI2.02 colocado pela planta de paredes (montantes encaixados 3/3).",
+    "conflitos": []
+   },
+   "aberturas": []
+  },
+  {
+   "id": "PI2.03",
+   "piso": 1,
+   "exterior": false,
+   "eixo": "x",
+   "inicio": {
+    "valor": 3.245,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI2.03",
+     "data": ""
+    },
+    "nota": "Alçado PI2.03 colocado pela planta de paredes (montantes encaixados 5/5).",
+    "conflitos": []
+   },
+   "fim": {
+    "valor": 5.17,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI2.03",
+     "data": ""
+    },
+    "nota": "Alçado PI2.03 colocado pela planta de paredes (montantes encaixados 5/5).",
+    "conflitos": []
+   },
+   "posicao": {
+    "valor": 4.851,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI2.03",
+     "data": ""
+    },
+    "nota": "Alçado PI2.03 colocado pela planta de paredes (montantes encaixados 5/5).",
+    "conflitos": []
+   },
+   "espessura": {
+    "valor": 0.1,
+    "unidade": "m",
+    "tipo": "dimensao",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI2.03",
+     "data": ""
+    },
+    "nota": "Alçado PI2.03 colocado pela planta de paredes (montantes encaixados 5/5).",
+    "conflitos": []
+   },
+   "aberturas": []
+  },
+  {
+   "id": "PI2.04",
+   "piso": 1,
+   "exterior": false,
+   "eixo": "y",
+   "inicio": {
+    "valor": 3.539,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI2.04",
+     "data": ""
+    },
+    "nota": "Alçado PI2.04 colocado pela planta de paredes (montantes encaixados 3/3).",
+    "conflitos": []
+   },
+   "fim": {
+    "valor": 4.899,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI2.04",
+     "data": ""
+    },
+    "nota": "Alçado PI2.04 colocado pela planta de paredes (montantes encaixados 3/3).",
+    "conflitos": []
+   },
+   "posicao": {
+    "valor": 5.221,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI2.04",
+     "data": ""
+    },
+    "nota": "Alçado PI2.04 colocado pela planta de paredes (montantes encaixados 3/3).",
+    "conflitos": []
+   },
+   "espessura": {
+    "valor": 0.1,
+    "unidade": "m",
+    "tipo": "dimensao",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI2.04",
+     "data": ""
+    },
+    "nota": "Alçado PI2.04 colocado pela planta de paredes (montantes encaixados 3/3).",
+    "conflitos": []
+   },
+   "aberturas": [
+    {
+     "id": "0",
+     "tipo": {
+      "valor": "porta",
+      "unidade": "",
+      "tipo": "classificacao",
+      "estado": "INFERRED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PI2.04",
+       "data": ""
+      },
+      "nota": "Porta quando o vão chega à base do painel.",
+      "conflitos": []
+     },
+     "inicio": {
+      "valor": 3.62,
+      "unidade": "m",
+      "tipo": "geometria",
+      "estado": "INFERRED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PI2.04",
+       "data": ""
+      },
+      "nota": "",
+      "conflitos": []
+     },
+     "fim": {
+      "valor": 4.51,
+      "unidade": "m",
+      "tipo": "geometria",
+      "estado": "INFERRED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PI2.04",
+       "data": ""
+      },
+      "nota": "",
+      "conflitos": []
+     },
+     "largura": {
+      "valor": 0.89,
+      "unidade": "m",
+      "tipo": "dimensao",
+      "estado": "INFERRED",
+      "metodo": "calculo",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PI2.04",
+       "data": ""
+      },
+      "nota": "Intervalo entre as peças do painel: as portas e janelas não têm medidas nos desenhos do engenheiro. Acima da base do painel (piso estrutural).",
+      "conflitos": []
+     },
+     "peitoril": {
+      "valor": 0.079,
+      "unidade": "m",
+      "tipo": "cota",
+      "estado": "INFERRED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PI2.04",
+       "data": ""
+      },
+      "nota": "Intervalo entre as peças do painel: as portas e janelas não têm medidas nos desenhos do engenheiro. Acima da base do painel (piso estrutural).",
+      "conflitos": []
+     },
+     "altura": {
+      "valor": 2.26,
+      "unidade": "m",
+      "tipo": "cota",
+      "estado": "INFERRED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PI2.04",
+       "data": ""
+      },
+      "nota": "Intervalo entre as peças do painel: as portas e janelas não têm medidas nos desenhos do engenheiro. Acima da base do painel (piso estrutural).",
+      "conflitos": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "PI2.05",
+   "piso": 1,
+   "exterior": false,
+   "eixo": "y",
+   "inicio": {
+    "valor": 3.54,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI2.05",
+     "data": ""
+    },
+    "nota": "Alçado PI2.05 colocado pela planta de paredes (montantes encaixados 5/5).",
+    "conflitos": []
+   },
+   "fim": {
+    "valor": 5.949,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI2.05",
+     "data": ""
+    },
+    "nota": "Alçado PI2.05 colocado pela planta de paredes (montantes encaixados 5/5).",
+    "conflitos": []
+   },
+   "posicao": {
+    "valor": 8.292,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI2.05",
+     "data": ""
+    },
+    "nota": "Alçado PI2.05 colocado pela planta de paredes (montantes encaixados 5/5).",
+    "conflitos": []
+   },
+   "espessura": {
+    "valor": 0.1,
+    "unidade": "m",
+    "tipo": "dimensao",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI2.05",
+     "data": ""
+    },
+    "nota": "Alçado PI2.05 colocado pela planta de paredes (montantes encaixados 5/5).",
+    "conflitos": []
+   },
+   "aberturas": [
+    {
+     "id": "0",
+     "tipo": {
+      "valor": "porta",
+      "unidade": "",
+      "tipo": "classificacao",
+      "estado": "INFERRED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PI2.05",
+       "data": ""
+      },
+      "nota": "Porta quando o vão chega à base do painel.",
+      "conflitos": []
+     },
+     "inicio": {
+      "valor": 3.619,
+      "unidade": "m",
+      "tipo": "geometria",
+      "estado": "INFERRED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PI2.05",
+       "data": ""
+      },
+      "nota": "",
+      "conflitos": []
+     },
+     "fim": {
+      "valor": 4.41,
+      "unidade": "m",
+      "tipo": "geometria",
+      "estado": "INFERRED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PI2.05",
+       "data": ""
+      },
+      "nota": "",
+      "conflitos": []
+     },
+     "largura": {
+      "valor": 0.791,
+      "unidade": "m",
+      "tipo": "dimensao",
+      "estado": "INFERRED",
+      "metodo": "calculo",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PI2.05",
+       "data": ""
+      },
+      "nota": "Intervalo entre as peças do painel: as portas e janelas não têm medidas nos desenhos do engenheiro. Acima da base do painel (piso estrutural).",
+      "conflitos": []
+     },
+     "peitoril": {
+      "valor": 0.079,
+      "unidade": "m",
+      "tipo": "cota",
+      "estado": "INFERRED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PI2.05",
+       "data": ""
+      },
+      "nota": "Intervalo entre as peças do painel: as portas e janelas não têm medidas nos desenhos do engenheiro. Acima da base do painel (piso estrutural).",
+      "conflitos": []
+     },
+     "altura": {
+      "valor": 2.26,
+      "unidade": "m",
+      "tipo": "cota",
+      "estado": "INFERRED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PI2.05",
+       "data": ""
+      },
+      "nota": "Intervalo entre as peças do painel: as portas e janelas não têm medidas nos desenhos do engenheiro. Acima da base do painel (piso estrutural).",
+      "conflitos": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "PI2.06",
+   "piso": 1,
+   "exterior": false,
+   "eixo": "x",
+   "inicio": {
+    "valor": 0.16,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI2.06",
+     "data": ""
+    },
+    "nota": "Alçado PI2.06 colocado pela planta de paredes (montantes encaixados 6/6).",
+    "conflitos": []
+   },
+   "fim": {
+    "valor": 2.249,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI2.06",
+     "data": ""
+    },
+    "nota": "Alçado PI2.06 colocado pela planta de paredes (montantes encaixados 6/6).",
+    "conflitos": []
+   },
+   "posicao": {
+    "valor": 3.073,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI2.06",
+     "data": ""
+    },
+    "nota": "Alçado PI2.06 colocado pela planta de paredes (montantes encaixados 6/6).",
+    "conflitos": []
+   },
+   "espessura": {
+    "valor": 0.16,
+    "unidade": "m",
+    "tipo": "dimensao",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI2.06",
+     "data": ""
+    },
+    "nota": "Alçado PI2.06 colocado pela planta de paredes (montantes encaixados 6/6).",
+    "conflitos": []
+   },
+   "aberturas": []
+  },
+  {
+   "id": "PI2.07",
+   "piso": 1,
+   "exterior": false,
+   "eixo": "x",
+   "inicio": {
+    "valor": 3.21,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI2.07",
+     "data": ""
+    },
+    "nota": "Alçado PI2.07 colocado pela planta de paredes (montantes encaixados 6/6).",
+    "conflitos": []
+   },
+   "fim": {
+    "valor": 5.735,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI2.07",
+     "data": ""
+    },
+    "nota": "Alçado PI2.07 colocado pela planta de paredes (montantes encaixados 6/6).",
+    "conflitos": []
+   },
+   "posicao": {
+    "valor": 3.487,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI2.07",
+     "data": ""
+    },
+    "nota": "Alçado PI2.07 colocado pela planta de paredes (montantes encaixados 6/6).",
+    "conflitos": []
+   },
+   "espessura": {
+    "valor": 0.1,
+    "unidade": "m",
+    "tipo": "dimensao",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI2.07",
+     "data": ""
+    },
+    "nota": "Alçado PI2.07 colocado pela planta de paredes (montantes encaixados 6/6).",
+    "conflitos": []
+   },
+   "aberturas": []
+  },
+  {
+   "id": "PI2.08",
+   "piso": 1,
+   "exterior": false,
+   "eixo": "x",
+   "inicio": {
+    "valor": 6.634,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI2.08",
+     "data": ""
+    },
+    "nota": "Alçado PI2.08 colocado pela planta de paredes (montantes encaixados 6/6).",
+    "conflitos": []
+   },
+   "fim": {
+    "valor": 9.194,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI2.08",
+     "data": ""
+    },
+    "nota": "Alçado PI2.08 colocado pela planta de paredes (montantes encaixados 6/6).",
+    "conflitos": []
+   },
+   "posicao": {
+    "valor": 3.487,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI2.08",
+     "data": ""
+    },
+    "nota": "Alçado PI2.08 colocado pela planta de paredes (montantes encaixados 6/6).",
+    "conflitos": []
+   },
+   "espessura": {
+    "valor": 0.1,
+    "unidade": "m",
+    "tipo": "dimensao",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI2.08",
+     "data": ""
+    },
+    "nota": "Alçado PI2.08 colocado pela planta de paredes (montantes encaixados 6/6).",
+    "conflitos": []
+   },
+   "aberturas": [
+    {
+     "id": "0",
+     "tipo": {
+      "valor": "porta",
+      "unidade": "",
+      "tipo": "classificacao",
+      "estado": "INFERRED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PI2.08",
+       "data": ""
+      },
+      "nota": "Porta quando o vão chega à base do painel.",
+      "conflitos": []
+     },
+     "inicio": {
+      "valor": 6.955,
+      "unidade": "m",
+      "tipo": "geometria",
+      "estado": "INFERRED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PI2.08",
+       "data": ""
+      },
+      "nota": "",
+      "conflitos": []
+     },
+     "fim": {
+      "valor": 7.854,
+      "unidade": "m",
+      "tipo": "geometria",
+      "estado": "INFERRED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PI2.08",
+       "data": ""
+      },
+      "nota": "",
+      "conflitos": []
+     },
+     "largura": {
+      "valor": 0.9,
+      "unidade": "m",
+      "tipo": "dimensao",
+      "estado": "INFERRED",
+      "metodo": "calculo",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PI2.08",
+       "data": ""
+      },
+      "nota": "Intervalo entre as peças do painel: as portas e janelas não têm medidas nos desenhos do engenheiro. Acima da base do painel (piso estrutural).",
+      "conflitos": []
+     },
+     "peitoril": {
+      "valor": 0.079,
+      "unidade": "m",
+      "tipo": "cota",
+      "estado": "INFERRED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PI2.08",
+       "data": ""
+      },
+      "nota": "Intervalo entre as peças do painel: as portas e janelas não têm medidas nos desenhos do engenheiro. Acima da base do painel (piso estrutural).",
+      "conflitos": []
+     },
+     "altura": {
+      "valor": 2.26,
+      "unidade": "m",
+      "tipo": "cota",
+      "estado": "INFERRED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PI2.08",
+       "data": ""
+      },
+      "nota": "Intervalo entre as peças do painel: as portas e janelas não têm medidas nos desenhos do engenheiro. Acima da base do painel (piso estrutural).",
+      "conflitos": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "PI2.11",
+   "piso": 1,
+   "exterior": false,
+   "eixo": "y",
+   "inicio": {
+    "valor": 2.974,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI2.11",
+     "data": ""
+    },
+    "nota": "Alçado PI2.11 colocado pela planta de paredes (montantes encaixados 3/3).",
+    "conflitos": []
+   },
+   "fim": {
+    "valor": 3.44,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI2.11",
+     "data": ""
+    },
+    "nota": "Alçado PI2.11 colocado pela planta de paredes (montantes encaixados 3/3).",
+    "conflitos": []
+   },
+   "posicao": {
+    "valor": 3.286,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI2.11",
+     "data": ""
+    },
+    "nota": "Alçado PI2.11 colocado pela planta de paredes (montantes encaixados 3/3).",
+    "conflitos": []
+   },
+   "espessura": {
+    "valor": 0.16,
+    "unidade": "m",
+    "tipo": "dimensao",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI2.11",
+     "data": ""
+    },
+    "nota": "Alçado PI2.11 colocado pela planta de paredes (montantes encaixados 3/3).",
+    "conflitos": []
+   },
+   "aberturas": []
+  },
+  {
+   "id": "PI2.12",
+   "piso": 1,
+   "exterior": false,
+   "eixo": "y",
+   "inicio": {
+    "valor": 2.974,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI2.11",
+     "data": ""
+    },
+    "nota": "Alçado PI2.11 colocado pela planta de paredes (montantes encaixados 3/3).",
+    "conflitos": []
+   },
+   "fim": {
+    "valor": 3.44,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI2.11",
+     "data": ""
+    },
+    "nota": "Alçado PI2.11 colocado pela planta de paredes (montantes encaixados 3/3).",
+    "conflitos": []
+   },
+   "posicao": {
+    "valor": 3.793,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI2.11",
+     "data": ""
+    },
+    "nota": "Alçado PI2.11 colocado pela planta de paredes (montantes encaixados 3/3).",
+    "conflitos": []
+   },
+   "espessura": {
+    "valor": 0.16,
+    "unidade": "m",
+    "tipo": "dimensao",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI2.11",
+     "data": ""
+    },
+    "nota": "Alçado PI2.11 colocado pela planta de paredes (montantes encaixados 3/3).",
+    "conflitos": []
+   },
+   "aberturas": []
+  },
+  {
+   "id": "PI2.14",
+   "piso": 1,
+   "exterior": false,
+   "eixo": "y",
+   "inicio": {
+    "valor": 0.159,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI2.14",
+     "data": ""
+    },
+    "nota": "Alçado PI2.14 colocado pela planta de paredes (montantes encaixados 7/7).",
+    "conflitos": []
+   },
+   "fim": {
+    "valor": 2.974,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI2.14",
+     "data": ""
+    },
+    "nota": "Alçado PI2.14 colocado pela planta de paredes (montantes encaixados 7/7).",
+    "conflitos": []
+   },
+   "posicao": {
+    "valor": 3.835,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI2.14",
+     "data": ""
+    },
+    "nota": "Alçado PI2.14 colocado pela planta de paredes (montantes encaixados 7/7).",
+    "conflitos": []
+   },
+   "espessura": {
+    "valor": 0.1,
+    "unidade": "m",
+    "tipo": "dimensao",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI2.14",
+     "data": ""
+    },
+    "nota": "Alçado PI2.14 colocado pela planta de paredes (montantes encaixados 7/7).",
+    "conflitos": []
+   },
+   "aberturas": []
+  },
+  {
+   "id": "PI2.15",
+   "piso": 1,
+   "exterior": false,
+   "eixo": "y",
+   "inicio": {
+    "valor": 0.159,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI2.14",
+     "data": ""
+    },
+    "nota": "Alçado PI2.14 colocado pela planta de paredes (montantes encaixados 7/7).",
+    "conflitos": []
+   },
+   "fim": {
+    "valor": 2.974,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI2.14",
+     "data": ""
+    },
+    "nota": "Alçado PI2.14 colocado pela planta de paredes (montantes encaixados 7/7).",
+    "conflitos": []
+   },
+   "posicao": {
+    "valor": 6.797,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI2.14",
+     "data": ""
+    },
+    "nota": "Alçado PI2.14 colocado pela planta de paredes (montantes encaixados 7/7).",
+    "conflitos": []
+   },
+   "espessura": {
+    "valor": 0.1,
+    "unidade": "m",
+    "tipo": "dimensao",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI2.14",
+     "data": ""
+    },
+    "nota": "Alçado PI2.14 colocado pela planta de paredes (montantes encaixados 7/7).",
+    "conflitos": []
+   },
+   "aberturas": []
+  },
+  {
+   "id": "PI2.13",
+   "piso": 1,
+   "exterior": false,
+   "eixo": "y",
+   "inicio": {
+    "valor": 2.974,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI2.11",
+     "data": ""
+    },
+    "nota": "Alçado PI2.11 colocado pela planta de paredes (montantes encaixados 3/3).",
+    "conflitos": []
+   },
+   "fim": {
+    "valor": 3.44,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI2.11",
+     "data": ""
+    },
+    "nota": "Alçado PI2.11 colocado pela planta de paredes (montantes encaixados 3/3).",
+    "conflitos": []
+   },
+   "posicao": {
+    "valor": 6.797,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI2.11",
+     "data": ""
+    },
+    "nota": "Alçado PI2.11 colocado pela planta de paredes (montantes encaixados 3/3).",
+    "conflitos": []
+   },
+   "espessura": {
+    "valor": 0.16,
+    "unidade": "m",
+    "tipo": "dimensao",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PI2.11",
+     "data": ""
+    },
+    "nota": "Alçado PI2.11 colocado pela planta de paredes (montantes encaixados 3/3).",
+    "conflitos": []
+   },
+   "aberturas": []
+  },
+  {
+   "id": "PE2.14",
+   "piso": 1,
+   "exterior": true,
+   "eixo": "x",
+   "inicio": {
+    "valor": -0.0,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE2.14",
+     "data": ""
+    },
+    "nota": "Alçado PE2.14 colocado pela planta de paredes (montantes encaixados 5/5).",
+    "conflitos": []
+   },
+   "fim": {
+    "valor": 1.34,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE2.14",
+     "data": ""
+    },
+    "nota": "Alçado PE2.14 colocado pela planta de paredes (montantes encaixados 5/5).",
+    "conflitos": []
+   },
+   "posicao": {
+    "valor": 6.03,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE2.14",
+     "data": ""
+    },
+    "nota": "Alçado PE2.14 colocado pela planta de paredes (montantes encaixados 5/5).",
+    "conflitos": []
+   },
+   "espessura": {
+    "valor": 0.16,
+    "unidade": "m",
+    "tipo": "dimensao",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE2.14",
+     "data": ""
+    },
+    "nota": "Alçado PE2.14 colocado pela planta de paredes (montantes encaixados 5/5).",
+    "conflitos": []
+   },
+   "aberturas": []
+  },
+  {
+   "id": "PE2.12",
+   "piso": 1,
+   "exterior": true,
+   "eixo": "x",
+   "inicio": {
+    "valor": 3.82,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE2.12",
+     "data": ""
+    },
+    "nota": "Alçado PE2.12 colocado pela planta de paredes (montantes encaixados 7/7).",
+    "conflitos": []
+   },
+   "fim": {
+    "valor": 6.795,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE2.12",
+     "data": ""
+    },
+    "nota": "Alçado PE2.12 colocado pela planta de paredes (montantes encaixados 7/7).",
+    "conflitos": []
+   },
+   "posicao": {
+    "valor": 6.03,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE2.12",
+     "data": ""
+    },
+    "nota": "Alçado PE2.12 colocado pela planta de paredes (montantes encaixados 7/7).",
+    "conflitos": []
+   },
+   "espessura": {
+    "valor": 0.16,
+    "unidade": "m",
+    "tipo": "dimensao",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE2.12",
+     "data": ""
+    },
+    "nota": "Alçado PE2.12 colocado pela planta de paredes (montantes encaixados 7/7).",
+    "conflitos": []
+   },
+   "aberturas": []
+  },
+  {
+   "id": "PE2.11",
+   "piso": 1,
+   "exterior": true,
+   "eixo": "x",
+   "inicio": {
+    "valor": 6.794,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "INFERRED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE2.11",
+     "data": ""
+    },
+    "nota": "Alçado PE2.11 colocado pela planta de paredes (montantes encaixados 7/8). Encaixe incompleto: confirmar.",
+    "conflitos": []
+   },
+   "fim": {
+    "valor": 9.859,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "INFERRED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE2.11",
+     "data": ""
+    },
+    "nota": "Alçado PE2.11 colocado pela planta de paredes (montantes encaixados 7/8). Encaixe incompleto: confirmar.",
+    "conflitos": []
+   },
+   "posicao": {
+    "valor": 6.03,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "INFERRED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE2.11",
+     "data": ""
+    },
+    "nota": "Alçado PE2.11 colocado pela planta de paredes (montantes encaixados 7/8). Encaixe incompleto: confirmar.",
+    "conflitos": []
+   },
+   "espessura": {
+    "valor": 0.16,
+    "unidade": "m",
+    "tipo": "dimensao",
+    "estado": "INFERRED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE2.11",
+     "data": ""
+    },
+    "nota": "Alçado PE2.11 colocado pela planta de paredes (montantes encaixados 7/8). Encaixe incompleto: confirmar.",
+    "conflitos": []
+   },
+   "aberturas": [
+    {
+     "id": "0",
+     "tipo": {
+      "valor": "janela",
+      "unidade": "",
+      "tipo": "classificacao",
+      "estado": "INFERRED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PE2.11",
+       "data": ""
+      },
+      "nota": "Porta quando o vão chega à base do painel.",
+      "conflitos": []
+     },
+     "inicio": {
+      "valor": 7.08,
+      "unidade": "m",
+      "tipo": "geometria",
+      "estado": "INFERRED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PE2.11",
+       "data": ""
+      },
+      "nota": "",
+      "conflitos": []
+     },
+     "fim": {
+      "valor": 8.235,
+      "unidade": "m",
+      "tipo": "geometria",
+      "estado": "INFERRED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PE2.11",
+       "data": ""
+      },
+      "nota": "",
+      "conflitos": []
+     },
+     "largura": {
+      "valor": 1.155,
+      "unidade": "m",
+      "tipo": "dimensao",
+      "estado": "INFERRED",
+      "metodo": "calculo",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PE2.11",
+       "data": ""
+      },
+      "nota": "Intervalo entre as peças do painel: as portas e janelas não têm medidas nos desenhos do engenheiro. Acima da base do painel (piso estrutural).",
+      "conflitos": []
+     },
+     "peitoril": {
+      "valor": 1.039,
+      "unidade": "m",
+      "tipo": "cota",
+      "estado": "INFERRED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PE2.11",
+       "data": ""
+      },
+      "nota": "Intervalo entre as peças do painel: as portas e janelas não têm medidas nos desenhos do engenheiro. Acima da base do painel (piso estrutural).",
+      "conflitos": []
+     },
+     "altura": {
+      "valor": 2.28,
+      "unidade": "m",
+      "tipo": "cota",
+      "estado": "INFERRED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PE2.11",
+       "data": ""
+      },
+      "nota": "Intervalo entre as peças do painel: as portas e janelas não têm medidas nos desenhos do engenheiro. Acima da base do painel (piso estrutural).",
+      "conflitos": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "PE2.01",
+   "piso": 1,
+   "exterior": true,
+   "eixo": "y",
+   "inicio": {
+    "valor": 3.055,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE2.01",
+     "data": ""
+    },
+    "nota": "Alçado PE2.01 colocado pela planta de paredes (montantes encaixados 6/6).",
+    "conflitos": []
+   },
+   "fim": {
+    "valor": 5.949,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE2.01",
+     "data": ""
+    },
+    "nota": "Alçado PE2.01 colocado pela planta de paredes (montantes encaixados 6/6).",
+    "conflitos": []
+   },
+   "posicao": {
+    "valor": 0.08,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE2.01",
+     "data": ""
+    },
+    "nota": "Alçado PE2.01 colocado pela planta de paredes (montantes encaixados 6/6).",
+    "conflitos": []
+   },
+   "espessura": {
+    "valor": 0.16,
+    "unidade": "m",
+    "tipo": "dimensao",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE2.01",
+     "data": ""
+    },
+    "nota": "Alçado PE2.01 colocado pela planta de paredes (montantes encaixados 6/6).",
+    "conflitos": []
+   },
+   "aberturas": [
+    {
+     "id": "0",
+     "tipo": {
+      "valor": "janela",
+      "unidade": "",
+      "tipo": "classificacao",
+      "estado": "INFERRED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PE2.01",
+       "data": ""
+      },
+      "nota": "Porta quando o vão chega à base do painel.",
+      "conflitos": []
+     },
+     "inicio": {
+      "valor": 3.134,
+      "unidade": "m",
+      "tipo": "geometria",
+      "estado": "INFERRED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PE2.01",
+       "data": ""
+      },
+      "nota": "",
+      "conflitos": []
+     },
+     "fim": {
+      "valor": 4.259,
+      "unidade": "m",
+      "tipo": "geometria",
+      "estado": "INFERRED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PE2.01",
+       "data": ""
+      },
+      "nota": "",
+      "conflitos": []
+     },
+     "largura": {
+      "valor": 1.125,
+      "unidade": "m",
+      "tipo": "dimensao",
+      "estado": "INFERRED",
+      "metodo": "calculo",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PE2.01",
+       "data": ""
+      },
+      "nota": "Intervalo entre as peças do painel: as portas e janelas não têm medidas nos desenhos do engenheiro. Acima da base do painel (piso estrutural).",
+      "conflitos": []
+     },
+     "peitoril": {
+      "valor": 1.079,
+      "unidade": "m",
+      "tipo": "cota",
+      "estado": "INFERRED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PE2.01",
+       "data": ""
+      },
+      "nota": "Intervalo entre as peças do painel: as portas e janelas não têm medidas nos desenhos do engenheiro. Acima da base do painel (piso estrutural).",
+      "conflitos": []
+     },
+     "altura": {
+      "valor": 2.179,
+      "unidade": "m",
+      "tipo": "cota",
+      "estado": "INFERRED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PE2.01",
+       "data": ""
+      },
+      "nota": "Intervalo entre as peças do painel: as portas e janelas não têm medidas nos desenhos do engenheiro. Acima da base do painel (piso estrutural).",
+      "conflitos": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "PE2.02",
+   "piso": 1,
+   "exterior": true,
+   "eixo": "y",
+   "inicio": {
+    "valor": 0.16,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE2.02",
+     "data": ""
+    },
+    "nota": "Alçado PE2.02 colocado pela planta de paredes (montantes encaixados 7/7).",
+    "conflitos": []
+   },
+   "fim": {
+    "valor": 3.054,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE2.02",
+     "data": ""
+    },
+    "nota": "Alçado PE2.02 colocado pela planta de paredes (montantes encaixados 7/7).",
+    "conflitos": []
+   },
+   "posicao": {
+    "valor": 0.08,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE2.02",
+     "data": ""
+    },
+    "nota": "Alçado PE2.02 colocado pela planta de paredes (montantes encaixados 7/7).",
+    "conflitos": []
+   },
+   "espessura": {
+    "valor": 0.16,
+    "unidade": "m",
+    "tipo": "dimensao",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE2.02",
+     "data": ""
+    },
+    "nota": "Alçado PE2.02 colocado pela planta de paredes (montantes encaixados 7/7).",
+    "conflitos": []
+   },
+   "aberturas": []
+  },
+  {
+   "id": "PE2.03",
+   "piso": 1,
+   "exterior": true,
+   "eixo": "x",
+   "inicio": {
+    "valor": 0.0,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE2.03",
+     "data": ""
+    },
+    "nota": "Alçado PE2.03 colocado pela planta de paredes (montantes encaixados 5/5).",
+    "conflitos": []
+   },
+   "fim": {
+    "valor": 1.34,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE2.03",
+     "data": ""
+    },
+    "nota": "Alçado PE2.03 colocado pela planta de paredes (montantes encaixados 5/5).",
+    "conflitos": []
+   },
+   "posicao": {
+    "valor": 0.08,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE2.03",
+     "data": ""
+    },
+    "nota": "Alçado PE2.03 colocado pela planta de paredes (montantes encaixados 5/5).",
+    "conflitos": []
+   },
+   "espessura": {
+    "valor": 0.16,
+    "unidade": "m",
+    "tipo": "dimensao",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE2.03",
+     "data": ""
+    },
+    "nota": "Alçado PE2.03 colocado pela planta de paredes (montantes encaixados 5/5).",
+    "conflitos": []
+   },
+   "aberturas": []
+  },
+  {
+   "id": "PE2.04",
+   "piso": 1,
+   "exterior": true,
+   "eixo": "x",
+   "inicio": {
+    "valor": 1.34,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "INFERRED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE2.04",
+     "data": ""
+    },
+    "nota": "Alçado PE2.04 colocado pela planta de paredes (montantes encaixados 5/6). Encaixe incompleto: confirmar.",
+    "conflitos": []
+   },
+   "fim": {
+    "valor": 3.821,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "INFERRED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE2.04",
+     "data": ""
+    },
+    "nota": "Alçado PE2.04 colocado pela planta de paredes (montantes encaixados 5/6). Encaixe incompleto: confirmar.",
+    "conflitos": []
+   },
+   "posicao": {
+    "valor": 0.08,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "INFERRED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE2.04",
+     "data": ""
+    },
+    "nota": "Alçado PE2.04 colocado pela planta de paredes (montantes encaixados 5/6). Encaixe incompleto: confirmar.",
+    "conflitos": []
+   },
+   "espessura": {
+    "valor": 0.16,
+    "unidade": "m",
+    "tipo": "dimensao",
+    "estado": "INFERRED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE2.04",
+     "data": ""
+    },
+    "nota": "Alçado PE2.04 colocado pela planta de paredes (montantes encaixados 5/6). Encaixe incompleto: confirmar.",
+    "conflitos": []
+   },
+   "aberturas": [
+    {
+     "id": "0",
+     "tipo": {
+      "valor": "janela",
+      "unidade": "",
+      "tipo": "classificacao",
+      "estado": "INFERRED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PE2.04",
+       "data": ""
+      },
+      "nota": "Porta quando o vão chega à base do painel.",
+      "conflitos": []
+     },
+     "inicio": {
+      "valor": 1.571,
+      "unidade": "m",
+      "tipo": "geometria",
+      "estado": "INFERRED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PE2.04",
+       "data": ""
+      },
+      "nota": "",
+      "conflitos": []
+     },
+     "fim": {
+      "valor": 2.681,
+      "unidade": "m",
+      "tipo": "geometria",
+      "estado": "INFERRED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PE2.04",
+       "data": ""
+      },
+      "nota": "",
+      "conflitos": []
+     },
+     "largura": {
+      "valor": 1.11,
+      "unidade": "m",
+      "tipo": "dimensao",
+      "estado": "INFERRED",
+      "metodo": "calculo",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PE2.04",
+       "data": ""
+      },
+      "nota": "Intervalo entre as peças do painel: as portas e janelas não têm medidas nos desenhos do engenheiro. Acima da base do painel (piso estrutural).",
+      "conflitos": []
+     },
+     "peitoril": {
+      "valor": 1.04,
+      "unidade": "m",
+      "tipo": "cota",
+      "estado": "INFERRED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PE2.04",
+       "data": ""
+      },
+      "nota": "Intervalo entre as peças do painel: as portas e janelas não têm medidas nos desenhos do engenheiro. Acima da base do painel (piso estrutural).",
+      "conflitos": []
+     },
+     "altura": {
+      "valor": 2.29,
+      "unidade": "m",
+      "tipo": "cota",
+      "estado": "INFERRED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PE2.04",
+       "data": ""
+      },
+      "nota": "Intervalo entre as peças do painel: as portas e janelas não têm medidas nos desenhos do engenheiro. Acima da base do painel (piso estrutural).",
+      "conflitos": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "PE2.05",
+   "piso": 1,
+   "exterior": true,
+   "eixo": "x",
+   "inicio": {
+    "valor": 3.821,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE2.05",
+     "data": ""
+    },
+    "nota": "Alçado PE2.05 colocado pela planta de paredes (montantes encaixados 6/6).",
+    "conflitos": []
+   },
+   "fim": {
+    "valor": 6.796,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE2.05",
+     "data": ""
+    },
+    "nota": "Alçado PE2.05 colocado pela planta de paredes (montantes encaixados 6/6).",
+    "conflitos": []
+   },
+   "posicao": {
+    "valor": 0.08,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE2.05",
+     "data": ""
+    },
+    "nota": "Alçado PE2.05 colocado pela planta de paredes (montantes encaixados 6/6).",
+    "conflitos": []
+   },
+   "espessura": {
+    "valor": 0.16,
+    "unidade": "m",
+    "tipo": "dimensao",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE2.05",
+     "data": ""
+    },
+    "nota": "Alçado PE2.05 colocado pela planta de paredes (montantes encaixados 6/6).",
+    "conflitos": []
+   },
+   "aberturas": [
+    {
+     "id": "0",
+     "tipo": {
+      "valor": "janela",
+      "unidade": "",
+      "tipo": "classificacao",
+      "estado": "INFERRED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PE2.05",
+       "data": ""
+      },
+      "nota": "Porta quando o vão chega à base do painel.",
+      "conflitos": []
+     },
+     "inicio": {
+      "valor": 4.591,
+      "unidade": "m",
+      "tipo": "geometria",
+      "estado": "INFERRED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PE2.05",
+       "data": ""
+      },
+      "nota": "",
+      "conflitos": []
+     },
+     "fim": {
+      "valor": 5.74,
+      "unidade": "m",
+      "tipo": "geometria",
+      "estado": "INFERRED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PE2.05",
+       "data": ""
+      },
+      "nota": "",
+      "conflitos": []
+     },
+     "largura": {
+      "valor": 1.149,
+      "unidade": "m",
+      "tipo": "dimensao",
+      "estado": "INFERRED",
+      "metodo": "calculo",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PE2.05",
+       "data": ""
+      },
+      "nota": "Intervalo entre as peças do painel: as portas e janelas não têm medidas nos desenhos do engenheiro. Acima da base do painel (piso estrutural).",
+      "conflitos": []
+     },
+     "peitoril": {
+      "valor": 1.04,
+      "unidade": "m",
+      "tipo": "cota",
+      "estado": "INFERRED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PE2.05",
+       "data": ""
+      },
+      "nota": "Intervalo entre as peças do painel: as portas e janelas não têm medidas nos desenhos do engenheiro. Acima da base do painel (piso estrutural).",
+      "conflitos": []
+     },
+     "altura": {
+      "valor": 2.29,
+      "unidade": "m",
+      "tipo": "cota",
+      "estado": "INFERRED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PE2.05",
+       "data": ""
+      },
+      "nota": "Intervalo entre as peças do painel: as portas e janelas não têm medidas nos desenhos do engenheiro. Acima da base do painel (piso estrutural).",
+      "conflitos": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "PE2.06",
+   "piso": 1,
+   "exterior": true,
+   "eixo": "x",
+   "inicio": {
+    "valor": 6.796,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE2.06",
+     "data": ""
+    },
+    "nota": "Alçado PE2.06 colocado pela planta de paredes (montantes encaixados 7/7).",
+    "conflitos": []
+   },
+   "fim": {
+    "valor": 9.861,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE2.06",
+     "data": ""
+    },
+    "nota": "Alçado PE2.06 colocado pela planta de paredes (montantes encaixados 7/7).",
+    "conflitos": []
+   },
+   "posicao": {
+    "valor": 0.08,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE2.06",
+     "data": ""
+    },
+    "nota": "Alçado PE2.06 colocado pela planta de paredes (montantes encaixados 7/7).",
+    "conflitos": []
+   },
+   "espessura": {
+    "valor": 0.16,
+    "unidade": "m",
+    "tipo": "dimensao",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE2.06",
+     "data": ""
+    },
+    "nota": "Alçado PE2.06 colocado pela planta de paredes (montantes encaixados 7/7).",
+    "conflitos": []
+   },
+   "aberturas": [
+    {
+     "id": "0",
+     "tipo": {
+      "valor": "janela",
+      "unidade": "",
+      "tipo": "classificacao",
+      "estado": "INFERRED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PE2.06",
+       "data": ""
+      },
+      "nota": "Porta quando o vão chega à base do painel.",
+      "conflitos": []
+     },
+     "inicio": {
+      "valor": 7.611,
+      "unidade": "m",
+      "tipo": "geometria",
+      "estado": "INFERRED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PE2.06",
+       "data": ""
+      },
+      "nota": "",
+      "conflitos": []
+     },
+     "fim": {
+      "valor": 8.721,
+      "unidade": "m",
+      "tipo": "geometria",
+      "estado": "INFERRED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PE2.06",
+       "data": ""
+      },
+      "nota": "",
+      "conflitos": []
+     },
+     "largura": {
+      "valor": 1.11,
+      "unidade": "m",
+      "tipo": "dimensao",
+      "estado": "INFERRED",
+      "metodo": "calculo",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PE2.06",
+       "data": ""
+      },
+      "nota": "Intervalo entre as peças do painel: as portas e janelas não têm medidas nos desenhos do engenheiro. Acima da base do painel (piso estrutural).",
+      "conflitos": []
+     },
+     "peitoril": {
+      "valor": 1.04,
+      "unidade": "m",
+      "tipo": "cota",
+      "estado": "INFERRED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PE2.06",
+       "data": ""
+      },
+      "nota": "Intervalo entre as peças do painel: as portas e janelas não têm medidas nos desenhos do engenheiro. Acima da base do painel (piso estrutural).",
+      "conflitos": []
+     },
+     "altura": {
+      "valor": 2.29,
+      "unidade": "m",
+      "tipo": "cota",
+      "estado": "INFERRED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PE2.06",
+       "data": ""
+      },
+      "nota": "Intervalo entre as peças do painel: as portas e janelas não têm medidas nos desenhos do engenheiro. Acima da base do painel (piso estrutural).",
+      "conflitos": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "PE2.07",
+   "piso": 1,
+   "exterior": true,
+   "eixo": "y",
+   "inicio": {
+    "valor": 0.16,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE2.07",
+     "data": ""
+    },
+    "nota": "Alçado PE2.07 colocado pela planta de paredes (montantes encaixados 7/7).",
+    "conflitos": []
+   },
+   "fim": {
+    "valor": 3.055,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE2.07",
+     "data": ""
+    },
+    "nota": "Alçado PE2.07 colocado pela planta de paredes (montantes encaixados 7/7).",
+    "conflitos": []
+   },
+   "posicao": {
+    "valor": 9.78,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE2.07",
+     "data": ""
+    },
+    "nota": "Alçado PE2.07 colocado pela planta de paredes (montantes encaixados 7/7).",
+    "conflitos": []
+   },
+   "espessura": {
+    "valor": 0.16,
+    "unidade": "m",
+    "tipo": "dimensao",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE2.07",
+     "data": ""
+    },
+    "nota": "Alçado PE2.07 colocado pela planta de paredes (montantes encaixados 7/7).",
+    "conflitos": []
+   },
+   "aberturas": []
+  },
+  {
+   "id": "PE2.08",
+   "piso": 1,
+   "exterior": true,
+   "eixo": "y",
+   "inicio": {
+    "valor": 3.054,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE2.08",
+     "data": ""
+    },
+    "nota": "Alçado PE2.08 colocado pela planta de paredes (montantes encaixados 7/7).",
+    "conflitos": []
+   },
+   "fim": {
+    "valor": 5.949,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE2.08",
+     "data": ""
+    },
+    "nota": "Alçado PE2.08 colocado pela planta de paredes (montantes encaixados 7/7).",
+    "conflitos": []
+   },
+   "posicao": {
+    "valor": 9.78,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE2.08",
+     "data": ""
+    },
+    "nota": "Alçado PE2.08 colocado pela planta de paredes (montantes encaixados 7/7).",
+    "conflitos": []
+   },
+   "espessura": {
+    "valor": 0.16,
+    "unidade": "m",
+    "tipo": "dimensao",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE2.08",
+     "data": ""
+    },
+    "nota": "Alçado PE2.08 colocado pela planta de paredes (montantes encaixados 7/7).",
+    "conflitos": []
+   },
+   "aberturas": [
+    {
+     "id": "0",
+     "tipo": {
+      "valor": "janela",
+      "unidade": "",
+      "tipo": "classificacao",
+      "estado": "INFERRED",
+      "metodo": "inferencia",
+      "fonte": {
+       "documento": "arquitetura (configuração: estrutura.aberturas_alterar)",
+       "folha": null,
+       "local": "PE2.08",
+       "data": ""
+      },
+      "nota": "Janela da casa de banho 1.2 no alçado nascente (arquitetura SMA_012 f.18: topo +4,88 = Z 5,04, cerca de 0,47 x 0,99 m); nos desenhos do engenheiro era uma abertura alta.",
+      "conflitos": [
+       {
+        "valor": "porta",
+        "fonte": {
+         "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+         "folha": 2,
+         "local": "alçado PE2.08",
+         "data": ""
+        },
+        "estado": "resolvido",
+        "nota": "Desenhos do engenheiro.",
+        "resolucao": "Prevalece a arquitetura (vão corrigido na configuração)."
+       }
+      ]
+     },
+     "inicio": {
+      "valor": 4.449,
+      "unidade": "m",
+      "tipo": "geometria",
+      "estado": "INFERRED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PE2.08",
+       "data": ""
+      },
+      "nota": "",
+      "conflitos": []
+     },
+     "fim": {
+      "valor": 5.11,
+      "unidade": "m",
+      "tipo": "geometria",
+      "estado": "INFERRED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PE2.08",
+       "data": ""
+      },
+      "nota": "",
+      "conflitos": []
+     },
+     "largura": {
+      "valor": 0.66,
+      "unidade": "m",
+      "tipo": "dimensao",
+      "estado": "INFERRED",
+      "metodo": "calculo",
+      "fonte": {
+       "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+       "folha": 2,
+       "local": "alçado PE2.08",
+       "data": ""
+      },
+      "nota": "Intervalo entre as peças do painel: as portas e janelas não têm medidas nos desenhos do engenheiro. Acima da base do painel (piso estrutural).",
+      "conflitos": []
+     },
+     "peitoril": {
+      "valor": 1.09,
+      "unidade": "m",
+      "tipo": "cota",
+      "estado": "INFERRED",
+      "metodo": "inferencia",
+      "fonte": {
+       "documento": "arquitetura (configuração: estrutura.aberturas_alterar)",
+       "folha": null,
+       "local": "PE2.08",
+       "data": ""
+      },
+      "nota": "Janela da casa de banho 1.2 no alçado nascente (arquitetura SMA_012 f.18: topo +4,88 = Z 5,04, cerca de 0,47 x 0,99 m); nos desenhos do engenheiro era uma abertura alta.",
+      "conflitos": [
+       {
+        "valor": 0.08,
+        "fonte": {
+         "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+         "folha": 2,
+         "local": "alçado PE2.08",
+         "data": ""
+        },
+        "estado": "resolvido",
+        "nota": "Desenhos do engenheiro.",
+        "resolucao": "Prevalece a arquitetura (vão corrigido na configuração)."
+       }
+      ]
+     },
+     "altura": {
+      "valor": 2.08,
+      "unidade": "m",
+      "tipo": "cota",
+      "estado": "INFERRED",
+      "metodo": "inferencia",
+      "fonte": {
+       "documento": "arquitetura (configuração: estrutura.aberturas_alterar)",
+       "folha": null,
+       "local": "PE2.08",
+       "data": ""
+      },
+      "nota": "Janela da casa de banho 1.2 no alçado nascente (arquitetura SMA_012 f.18: topo +4,88 = Z 5,04, cerca de 0,47 x 0,99 m); nos desenhos do engenheiro era uma abertura alta.",
+      "conflitos": [
+       {
+        "valor": 2.768,
+        "fonte": {
+         "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+         "folha": 2,
+         "local": "alçado PE2.08",
+         "data": ""
+        },
+        "estado": "resolvido",
+        "nota": "Desenhos do engenheiro.",
+        "resolucao": "Prevalece a arquitetura (vão corrigido na configuração)."
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "PE2.13",
+   "piso": 1,
+   "exterior": true,
+   "eixo": "x",
+   "inicio": {
+    "valor": 1.34,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE2.13",
+     "data": ""
+    },
+    "nota": "Alçado PE2.13 colocado pela planta de paredes (montantes encaixados 6/6).",
+    "conflitos": []
+   },
+   "fim": {
+    "valor": 3.82,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE2.13",
+     "data": ""
+    },
+    "nota": "Alçado PE2.13 colocado pela planta de paredes (montantes encaixados 6/6).",
+    "conflitos": []
+   },
+   "posicao": {
+    "valor": 6.03,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE2.13",
+     "data": ""
+    },
+    "nota": "Alçado PE2.13 colocado pela planta de paredes (montantes encaixados 6/6).",
+    "conflitos": []
+   },
+   "espessura": {
+    "valor": 0.16,
+    "unidade": "m",
+    "tipo": "dimensao",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 2,
+     "local": "alçado PE2.13",
+     "data": ""
+    },
+    "nota": "Alçado PE2.13 colocado pela planta de paredes (montantes encaixados 6/6).",
+    "conflitos": []
+   },
+   "aberturas": []
+  },
+  {
+   "id": "PD1.01",
+   "piso": 0,
+   "exterior": false,
+   "eixo": "y",
+   "inicio": {
+    "valor": 4.863,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "INFERRED",
+    "metodo": "inferencia",
+    "fonte": {
+     "documento": "arquitetura (configuração: estrutura.paredes_extra / portas_extra)",
+     "folha": null,
+     "local": "PD1.01",
+     "data": ""
+    },
+    "nota": "WC 0.6 (inst. sanitária): parede nascente com porta 0,87 para a entrada (arquitetura SMA_012 f.17).",
+    "conflitos": []
+   },
+   "fim": {
+    "valor": 6.0,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "INFERRED",
+    "metodo": "inferencia",
+    "fonte": {
+     "documento": "arquitetura (configuração: estrutura.paredes_extra / portas_extra)",
+     "folha": null,
+     "local": "PD1.01",
+     "data": ""
+    },
+    "nota": "WC 0.6 (inst. sanitária): parede nascente com porta 0,87 para a entrada (arquitetura SMA_012 f.17).",
+    "conflitos": []
+   },
+   "posicao": {
+    "valor": 7.232,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "INFERRED",
+    "metodo": "inferencia",
+    "fonte": {
+     "documento": "arquitetura (configuração: estrutura.paredes_extra / portas_extra)",
+     "folha": null,
+     "local": "PD1.01",
+     "data": ""
+    },
+    "nota": "WC 0.6 (inst. sanitária): parede nascente com porta 0,87 para a entrada (arquitetura SMA_012 f.17).",
+    "conflitos": []
+   },
+   "espessura": {
+    "valor": 0.075,
+    "unidade": "m",
+    "tipo": "dimensao",
+    "estado": "CONFIRMED",
+    "metodo": "norma_empresa",
+    "fonte": {
+     "documento": "norma da empresa (sistema_construtivo.json, estrutura.interior)",
+     "folha": null,
+     "local": "",
+     "data": ""
+    },
+    "nota": "",
+    "conflitos": []
+   },
+   "aberturas": [
+    {
+     "id": "0",
+     "tipo": {
+      "valor": "porta",
+      "unidade": "",
+      "tipo": "classificacao",
+      "estado": "INFERRED",
+      "metodo": "inferencia",
+      "fonte": {
+       "documento": "arquitetura (configuração: estrutura.paredes_extra / portas_extra)",
+       "folha": null,
+       "local": "PD1.01",
+       "data": ""
+      },
+      "nota": "WC 0.6 (inst. sanitária): parede nascente com porta 0,87 para a entrada (arquitetura SMA_012 f.17).",
+      "conflitos": []
+     },
+     "inicio": {
+      "valor": 4.93,
+      "unidade": "m",
+      "tipo": "geometria",
+      "estado": "INFERRED",
+      "metodo": "inferencia",
+      "fonte": {
+       "documento": "arquitetura (configuração: estrutura.paredes_extra / portas_extra)",
+       "folha": null,
+       "local": "PD1.01",
+       "data": ""
+      },
+      "nota": "WC 0.6 (inst. sanitária): parede nascente com porta 0,87 para a entrada (arquitetura SMA_012 f.17).",
+      "conflitos": []
+     },
+     "fim": {
+      "valor": 5.8,
+      "unidade": "m",
+      "tipo": "geometria",
+      "estado": "INFERRED",
+      "metodo": "inferencia",
+      "fonte": {
+       "documento": "arquitetura (configuração: estrutura.paredes_extra / portas_extra)",
+       "folha": null,
+       "local": "PD1.01",
+       "data": ""
+      },
+      "nota": "WC 0.6 (inst. sanitária): parede nascente com porta 0,87 para a entrada (arquitetura SMA_012 f.17).",
+      "conflitos": []
+     },
+     "largura": {
+      "valor": 0.87,
+      "unidade": "m",
+      "tipo": "dimensao",
+      "estado": "INFERRED",
+      "metodo": "calculo",
+      "fonte": {
+       "documento": "arquitetura (configuração: estrutura.paredes_extra / portas_extra)",
+       "folha": null,
+       "local": "PD1.01",
+       "data": ""
+      },
+      "nota": "",
+      "conflitos": []
+     },
+     "peitoril": {
+      "valor": 0.0,
+      "unidade": "m",
+      "tipo": "cota",
+      "estado": "CONFIRMED",
+      "metodo": "norma_empresa",
+      "fonte": {
+       "documento": "norma da empresa (sistema_construtivo.json, estrutura.porta_interior)",
+       "folha": null,
+       "local": "",
+       "data": ""
+      },
+      "nota": "",
+      "conflitos": []
+     },
+     "altura": {
+      "valor": 2.03,
+      "unidade": "m",
+      "tipo": "cota",
+      "estado": "CONFIRMED",
+      "metodo": "norma_empresa",
+      "fonte": {
+       "documento": "norma da empresa (sistema_construtivo.json, estrutura.porta_interior)",
+       "folha": null,
+       "local": "",
+       "data": ""
+      },
+      "nota": "Vão DiscoverCasa 0.87 × 2.03 centrado na porta do arquiteto.",
+      "conflitos": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "PD2.01",
+   "piso": 1,
+   "exterior": false,
+   "eixo": "x",
+   "inicio": {
+    "valor": 9.19,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "INFERRED",
+    "metodo": "inferencia",
+    "fonte": {
+     "documento": "arquitetura (configuração: estrutura.paredes_extra / portas_extra)",
+     "folha": null,
+     "local": "PD2.01",
+     "data": ""
+    },
+    "nota": "Continuação de PI2.08 até à fachada nascente, sem a conduta PI2.09/PI2.10 (user 2026-10-09).",
+    "conflitos": []
+   },
+   "fim": {
+    "valor": 9.75,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "INFERRED",
+    "metodo": "inferencia",
+    "fonte": {
+     "documento": "arquitetura (configuração: estrutura.paredes_extra / portas_extra)",
+     "folha": null,
+     "local": "PD2.01",
+     "data": ""
+    },
+    "nota": "Continuação de PI2.08 até à fachada nascente, sem a conduta PI2.09/PI2.10 (user 2026-10-09).",
+    "conflitos": []
+   },
+   "posicao": {
+    "valor": 3.487,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "INFERRED",
+    "metodo": "inferencia",
+    "fonte": {
+     "documento": "arquitetura (configuração: estrutura.paredes_extra / portas_extra)",
+     "folha": null,
+     "local": "PD2.01",
+     "data": ""
+    },
+    "nota": "Continuação de PI2.08 até à fachada nascente, sem a conduta PI2.09/PI2.10 (user 2026-10-09).",
+    "conflitos": []
+   },
+   "espessura": {
+    "valor": 0.075,
+    "unidade": "m",
+    "tipo": "dimensao",
+    "estado": "CONFIRMED",
+    "metodo": "norma_empresa",
+    "fonte": {
+     "documento": "norma da empresa (sistema_construtivo.json, estrutura.interior)",
+     "folha": null,
+     "local": "",
+     "data": ""
+    },
+    "nota": "",
+    "conflitos": []
+   },
+   "aberturas": []
+  },
+  {
+   "id": "PORTA_EXTRA.0",
+   "piso": 0,
+   "exterior": false,
+   "eixo": "y",
+   "inicio": {
+    "valor": 3.495,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "INFERRED",
+    "metodo": "inferencia",
+    "fonte": {
+     "documento": "arquitetura (configuração: estrutura.paredes_extra / portas_extra)",
+     "folha": null,
+     "local": "PORTA_EXTRA.0",
+     "data": ""
+    },
+    "nota": "Lavandaria 0.5: lado nascente aberto em 1,4 m com porta (de correr?) — bandeira por cima (arquitetura SMA_012 f.17).",
+    "conflitos": []
+   },
+   "fim": {
+    "valor": 4.9,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "INFERRED",
+    "metodo": "inferencia",
+    "fonte": {
+     "documento": "arquitetura (configuração: estrutura.paredes_extra / portas_extra)",
+     "folha": null,
+     "local": "PORTA_EXTRA.0",
+     "data": ""
+    },
+    "nota": "Lavandaria 0.5: lado nascente aberto em 1,4 m com porta (de correr?) — bandeira por cima (arquitetura SMA_012 f.17).",
+    "conflitos": []
+   },
+   "posicao": {
+    "valor": 1.456,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "INFERRED",
+    "metodo": "inferencia",
+    "fonte": {
+     "documento": "arquitetura (configuração: estrutura.paredes_extra / portas_extra)",
+     "folha": null,
+     "local": "PORTA_EXTRA.0",
+     "data": ""
+    },
+    "nota": "Lavandaria 0.5: lado nascente aberto em 1,4 m com porta (de correr?) — bandeira por cima (arquitetura SMA_012 f.17).",
+    "conflitos": []
+   },
+   "espessura": {
+    "valor": 0.0,
+    "unidade": "m",
+    "tipo": "dimensao",
+    "estado": "CONFIRMED",
+    "metodo": "calculo",
+    "fonte": {
+     "documento": "arquitetura (configuração: estrutura.paredes_extra / portas_extra)",
+     "folha": null,
+     "local": "PORTA_EXTRA.0",
+     "data": ""
+    },
+    "nota": "Vão aberto entre paredes: sem parede própria.",
+    "conflitos": []
+   },
+   "aberturas": [
+    {
+     "id": "0",
+     "tipo": {
+      "valor": "porta",
+      "unidade": "",
+      "tipo": "classificacao",
+      "estado": "NEEDS_HUMAN_REVIEW",
+      "metodo": "inferencia",
+      "fonte": {
+       "documento": "arquitetura (configuração: estrutura.paredes_extra / portas_extra)",
+       "folha": null,
+       "local": "PORTA_EXTRA.0",
+       "data": ""
+      },
+      "nota": "Tipo de porta por confirmar: Lavandaria 0.5: lado nascente aberto em 1,4 m com porta (de correr?) — bandeira por cima (arquitetura SMA_012 f.17).",
+      "conflitos": []
+     },
+     "inicio": {
+      "valor": 3.495,
+      "unidade": "m",
+      "tipo": "geometria",
+      "estado": "INFERRED",
+      "metodo": "inferencia",
+      "fonte": {
+       "documento": "arquitetura (configuração: estrutura.paredes_extra / portas_extra)",
+       "folha": null,
+       "local": "PORTA_EXTRA.0",
+       "data": ""
+      },
+      "nota": "Lavandaria 0.5: lado nascente aberto em 1,4 m com porta (de correr?) — bandeira por cima (arquitetura SMA_012 f.17).",
+      "conflitos": []
+     },
+     "fim": {
+      "valor": 4.9,
+      "unidade": "m",
+      "tipo": "geometria",
+      "estado": "INFERRED",
+      "metodo": "inferencia",
+      "fonte": {
+       "documento": "arquitetura (configuração: estrutura.paredes_extra / portas_extra)",
+       "folha": null,
+       "local": "PORTA_EXTRA.0",
+       "data": ""
+      },
+      "nota": "Lavandaria 0.5: lado nascente aberto em 1,4 m com porta (de correr?) — bandeira por cima (arquitetura SMA_012 f.17).",
+      "conflitos": []
+     },
+     "largura": {
+      "valor": 1.405,
+      "unidade": "m",
+      "tipo": "dimensao",
+      "estado": "INFERRED",
+      "metodo": "calculo",
+      "fonte": {
+       "documento": "arquitetura (configuração: estrutura.paredes_extra / portas_extra)",
+       "folha": null,
+       "local": "PORTA_EXTRA.0",
+       "data": ""
+      },
+      "nota": "",
+      "conflitos": []
+     },
+     "peitoril": {
+      "valor": 0.0,
+      "unidade": "m",
+      "tipo": "cota",
+      "estado": "CONFIRMED",
+      "metodo": "norma_empresa",
+      "fonte": {
+       "documento": "norma da empresa (sistema_construtivo.json, estrutura.porta_interior)",
+       "folha": null,
+       "local": "",
+       "data": ""
+      },
+      "nota": "",
+      "conflitos": []
+     },
+     "altura": {
+      "valor": 2.03,
+      "unidade": "m",
+      "tipo": "cota",
+      "estado": "CONFIRMED",
+      "metodo": "norma_empresa",
+      "fonte": {
+       "documento": "norma da empresa (sistema_construtivo.json, estrutura.porta_interior)",
+       "folha": null,
+       "local": "",
+       "data": ""
+      },
+      "nota": "Vão DiscoverCasa 0.87 × 2.03 centrado na porta do arquiteto.",
+      "conflitos": []
+     }
+    }
+   ]
+  }
+ ],
+ "lajes": [
+  {
+   "id": "fundacao",
+   "funcao": "base de fundação",
+   "contorno": {
+    "valor": [
+     [
+      -1.37,
+      -3.069
+     ],
+     [
+      10.131,
+      -3.069
+     ],
+     [
+      10.131,
+      3.056
+     ],
+     [
+      11.729,
+      3.056
+     ],
+     [
+      11.729,
+      6.181
+     ],
+     [
+      9.931,
+      6.181
+     ],
+     [
+      9.931,
+      8.18
+     ],
+     [
+      -1.37,
+      8.18
+     ]
+    ],
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 1,
+     "local": "FUNDAÇÕES | PLANTA, contorno da laje",
+     "data": ""
+    },
+    "nota": "Laje de fundação de 11,50 × 11,25 com recortes (maior do que a casa).",
+    "conflitos": []
+   },
+   "espessura": {
+    "valor": 0.2,
+    "unidade": "m",
+    "tipo": "dimensao",
+    "estado": "CONFIRMED",
+    "metodo": "texto",
+    "fonte": {
+     "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+     "folha": 1,
+     "local": "pormenor das fundações",
+     "data": ""
+    },
+    "nota": "Laje de 20 cm.",
+    "conflitos": []
+   }
+  }
+ ],
+ "cobertura": {
+  "cumeeira_y": {
+   "valor": 3.055,
+   "unidade": "m",
+   "tipo": "dimensao",
+   "estado": "INFERRED",
+   "metodo": "inferencia",
+   "fonte": {
+    "documento": "config.json (configuração do modelo)",
+    "folha": null,
+    "local": "cobertura.cumeeira_y",
+    "data": ""
+   },
+   "nota": "",
+   "conflitos": []
+  },
+  "cumeeira_z": {
+   "valor": 6.965,
+   "unidade": "m",
+   "tipo": "dimensao",
+   "estado": "INFERRED",
+   "metodo": "inferencia",
+   "fonte": {
+    "documento": "config.json (configuração do modelo)",
+    "folha": null,
+    "local": "cobertura.cumeeira_z",
+    "data": ""
+   },
+   "nota": "",
+   "conflitos": []
+  },
+  "inclinacao": {
+   "valor": 26.37,
+   "unidade": "°",
+   "tipo": "dimensao",
+   "estado": "CONFIRMED",
+   "metodo": "geometria",
+   "fonte": {
+    "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+    "folha": 1,
+    "local": "ESTRUTURA DA COBERTURA (verdadeira grandeza) e cortes",
+    "data": ""
+   },
+   "nota": "Duas águas a 26,4°. O modelo mantém a inclinação (estrutura.cobertura_manter).",
+   "conflitos": []
+  },
+  "altura_viga": {
+   "valor": 0.16,
+   "unidade": "m",
+   "tipo": "dimensao",
+   "estado": "CONFIRMED",
+   "metodo": "geometria",
+   "fonte": {
+    "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+    "folha": 1,
+    "local": "ESTRUTURA DA COBERTURA",
+    "data": ""
+   },
+   "nota": "Vigas da cobertura 80x160 nos desenhos do engenheiro (o modelo DiscoverCasa usa prumos e madres).",
+   "conflitos": []
+  }
+ },
+ "materiais": [
+  {
+   "elemento": "exterior",
+   "camadas": [],
+   "opcao": {
+    "valor": "B",
+    "unidade": "",
+    "tipo": "material",
+    "estado": "CONFIRMED",
+    "metodo": "utilizador",
+    "fonte": {
+     "documento": "utilizador 2026-09-24 (registo-conversas)",
+     "folha": null,
+     "local": "",
+     "data": "2026-09-24"
+    },
+    "nota": "Opção B: ETICS / capoto branco.",
+    "conflitos": []
+   }
+  }
+ ],
+ "terreno": {
+  "fonte": {
+   "valor": "Levantamento do loteamento (arquitetura, folha 2, 1:500; modelação do terreno na folha 4)",
+   "unidade": "",
+   "tipo": "terreno",
+   "estado": "CONFIRMED",
+   "metodo": "texto",
+   "fonte": {
+    "documento": "SMA_012_arquitectura_pecas_desenhadas.dwfx",
+    "folha": 2,
+    "local": "LEV_PL",
+    "data": ""
+   },
+   "nota": "Existe levantamento com cotas em texto; ainda não foi lido.",
+   "conflitos": []
+  },
+  "crs": {
+   "valor": null,
+   "unidade": "",
+   "tipo": "terreno",
+   "estado": "MISSING",
+   "metodo": "nenhum",
+   "fonte": null,
+   "nota": "Lote plano (Casa Tipo 1). O levantamento do loteamento tem as cotas em texto (folhas 2 e 4 da arquitetura, cerca de 200–300 m): ler na Fase 2.",
+   "conflitos": []
+  },
+  "datum_vertical": {
+   "valor": null,
+   "unidade": "",
+   "tipo": "terreno",
+   "estado": "MISSING",
+   "metodo": "nenhum",
+   "fonte": null,
+   "nota": "Lote plano (Casa Tipo 1). O levantamento do loteamento tem as cotas em texto (folhas 2 e 4 da arquitetura, cerca de 200–300 m): ler na Fase 2.",
+   "conflitos": []
+  },
+  "unidade_horizontal": {
+   "valor": null,
+   "unidade": "",
+   "tipo": "terreno",
+   "estado": "MISSING",
+   "metodo": "nenhum",
+   "fonte": null,
+   "nota": "Lote plano (Casa Tipo 1). O levantamento do loteamento tem as cotas em texto (folhas 2 e 4 da arquitetura, cerca de 200–300 m): ler na Fase 2.",
+   "conflitos": []
+  },
+  "unidade_vertical": {
+   "valor": null,
+   "unidade": "",
+   "tipo": "terreno",
+   "estado": "MISSING",
+   "metodo": "nenhum",
+   "fonte": null,
+   "nota": "Lote plano (Casa Tipo 1). O levantamento do loteamento tem as cotas em texto (folhas 2 e 4 da arquitetura, cerca de 200–300 m): ler na Fase 2.",
+   "conflitos": []
+  },
+  "limite_lote": {
+   "valor": null,
+   "unidade": "",
+   "tipo": "terreno",
+   "estado": "MISSING",
+   "metodo": "nenhum",
+   "fonte": null,
+   "nota": "Lote plano (Casa Tipo 1). O levantamento do loteamento tem as cotas em texto (folhas 2 e 4 da arquitetura, cerca de 200–300 m): ler na Fase 2.",
+   "conflitos": []
+  },
+  "data_levantamento": {
+   "valor": null,
+   "unidade": "",
+   "tipo": "terreno",
+   "estado": "MISSING",
+   "metodo": "nenhum",
+   "fonte": null,
+   "nota": "Lote plano (Casa Tipo 1). O levantamento do loteamento tem as cotas em texto (folhas 2 e 4 da arquitetura, cerca de 200–300 m): ler na Fase 2.",
+   "conflitos": []
+  },
+  "precisao": {
+   "valor": null,
+   "unidade": "",
+   "tipo": "terreno",
+   "estado": "MISSING",
+   "metodo": "nenhum",
+   "fonte": null,
+   "nota": "Lote plano (Casa Tipo 1). O levantamento do loteamento tem as cotas em texto (folhas 2 e 4 da arquitetura, cerca de 200–300 m): ler na Fase 2.",
+   "conflitos": []
+  },
+  "pontos_controlo": {
+   "valor": null,
+   "unidade": "",
+   "tipo": "terreno",
+   "estado": "MISSING",
+   "metodo": "nenhum",
+   "fonte": null,
+   "nota": "Lote plano (Casa Tipo 1). O levantamento do loteamento tem as cotas em texto (folhas 2 e 4 da arquitetura, cerca de 200–300 m): ler na Fase 2.",
+   "conflitos": []
+  }
+ },
+ "conflitos": [
+  {
+   "campo": "paredes.PI2.09",
+   "gravidade": "NEEDS_HUMAN_REVIEW",
+   "nota": "Painel dos desenhos do engenheiro que o modelo não usa.",
+   "estado": "resolvido",
+   "resolucao": "Conduta PI2.09/PI2.10 retirada: 'it will not exist' (user 2026-10-09, arquitetura SMA_012)."
+  },
+  {
+   "campo": "paredes.PI2.10",
+   "gravidade": "NEEDS_HUMAN_REVIEW",
+   "nota": "Painel dos desenhos do engenheiro que o modelo não usa.",
+   "estado": "resolvido",
+   "resolucao": "Conduta PI2.09/PI2.10 retirada: 'it will not exist' (user 2026-10-09, arquitetura SMA_012)."
+  },
+  {
+   "campo": "paredes.PI1.08.aberturas.0.altura",
+   "gravidade": "NEEDS_HUMAN_REVIEW",
+   "nota": "Porta com 1.50 m de altura livre: confirmar se é uma porta ou outro tipo de vão.",
+   "estado": "aberto",
+   "resolucao": ""
+  }
+ ],
+ "resumo": {
+  "CONFIRMED": 215,
+  "INFERRED": 134,
+  "MISSING": 10,
+  "NEEDS_HUMAN_REVIEW": 1,
+  "conflitos_abertos": 1,
+  "conflitos_resolvidos": 5
+ }
+}

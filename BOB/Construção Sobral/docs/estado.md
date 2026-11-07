@@ -29,6 +29,10 @@ door, Lavandaria 1,4 m opening with bandeira, quarto 1.5 one room 14,7 m², PE2.
 storeys (upper floor Z 3,117, +0,139) · 2026-10-15 central floor beam removed; floor joists ≤ 0,615.
 
 ## Open questions
+- **Raised 2026-11-07 (Step Inside Phase 1 report, `step-inside/projetos-teste/sobral-tipo1/relatorio.md`; not answered):**
+  (a) Tipo 1 laundry ("Lavandaria 0.5"): the east side is open 1,40 m with a door of unknown type — the config note says
+  "porta (de correr?)": which door type? (b) panel PI1.08 has an opening 1,50 m clear high: door or another kind of
+  opening? (related: #5 openings drawn as gaps, sizes not drawn).
 - **Roof option** (#22): with 22×7,5 ceiling beams and the deeper floor the roof plane is ≈ +0,35 vs the drawings. A keep
   the 26,4° pitch → ridge panel underside Z 7,398 (drawings 7,048), ridge ≈ +7,35; B keep the ridge → pitch 20,93°. Eaves
   ≈ +5,65 in both → either changes the licensed volume — the architect must agree. Shown as an interactive section

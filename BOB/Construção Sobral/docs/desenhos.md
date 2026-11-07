@@ -58,7 +58,7 @@ Sheets: 1 index (A4) · 2–5 site 1:500 (survey, implantação, modelação, in
 AA'–BB' · 7–8 implantação sectors A/B 1:200 · 9–11 cortes CC'–KK' 1:200 (+ rua de baixo 1:50) · 12–16
 Edifício de apoio à actividade agrícola (= warehouse) 1:100 · **17–19 Casa tipo 1** (plantas + cobertura,
 alçados, corte + pormenores) · **20–22 Casa tipo 2** (same) — all houses 1:50.
-- Note 2026-11-07 (Step Inside Phase 1, `step-inside/projetos-teste/sobral/`): sheet 2 (survey, 1:500) and sheet 4
+- Note 2026-11-07 (Step Inside Phase 1, `step-inside/projetos-teste/sobral-tipo1/`): sheet 2 (survey, 1:500) and sheet 4
   (terrain modelling) carry the heights as readable text (447 of 451 numbers on sheet 2 and 488 of 491 on sheet 4 lie
   between 200 and 300 m, consistent with the lot levels; counted 2026-11-07), so the set is the best candidate for a
   first real terrain. No CRS, datum, survey date or precision found yet.

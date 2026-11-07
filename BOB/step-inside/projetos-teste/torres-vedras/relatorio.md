@@ -12,8 +12,7 @@ Gerado a partir de `fontes.json` (entrada: planta_arquitetura; configuração `c
 
 | Campo | N.º | Valor | Método | Fonte | Nota |
 |---|---|---|---|---|---|
-| `referencial.norte` | 1 | — | nenhum | — | Os alçados chamam-se Sudeste, Noroeste, Nordeste e Sudoeste: os eixos da casa estão rodados em relação ao norte. A direção exata lê-se na planta de implantação (Fase 2). |
-| `referencial.crs` | 1 | — | nenhum | — | Sem georreferência: o modelo está em coordenadas locais. |
+| `referencial.norte`, `referencial.crs` | 2 | — | nenhum | — | Os alçados chamam-se Sudeste, Noroeste, Nordeste e Sudoeste: os eixos da casa estão rodados em relação ao norte. A direção exata lê-se na planta de implantação (Fase 2). (+1 nota(s) diferente(s); ver fontes.json) |
 | `terreno.crs`, `terreno.datum_vertical`, `terreno.unidade_horizontal`, `terreno.unidade_vertical`, `terreno.limite_lote`, `terreno.data_levantamento`, `terreno.precisao`, `terreno.pontos_controlo` | 8 | — | nenhum | — | No DWFx e no PDF do levantamento as cotas estão desenhadas como contornos (sem texto): para as ler é preciso o DWG exportado para DXF (Fase 2). |
 
 ## Inferidos (INFERRED)
@@ -21,7 +20,7 @@ Gerado a partir de `fontes.json` (entrada: planta_arquitetura; configuração `c
 | Campo | N.º | Valor | Método | Fonte | Nota |
 |---|---|---|---|---|---|
 | `referencial.cota_referencia` | 1 | 117.5 m | inferencia | projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx, folha 1 (CORTE A) | 117,50 é a cota do pavimento interior acabado; o Z = 0 do modelo é o topo da laje, uns milímetros abaixo (espessura do pavimento). Confirmar com o levantamento na Fase 2. |
-| `lajes.fundacao.espessura` | 1 | 0.2 m | inferencia | config.json (configuração do modelo) (fundacao.espessura_laje) | Base de fundação DiscoverCasa — o utilizador vai explicar como a fazem; aqui só indicativa (laje 20 cm sob a casa). |
+| `lajes.*.espessura` | 1 | 0.2 m | inferencia | config.json (configuração do modelo) (fundacao.espessura_laje) | Base de fundação DiscoverCasa — o utilizador vai explicar como a fazem; aqui só indicativa (laje 20 cm sob a casa). |
 
 ## Conflitos resolvidos (o que prevaleceu)
 

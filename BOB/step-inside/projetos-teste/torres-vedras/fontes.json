@@ -225,7 +225,7 @@
    "nota": "Como o comprimento.",
    "conflitos": []
   },
-  "area_implantacao": {
+  "area_base_fundacao": {
    "valor": 165.59,
    "unidade": "m2",
    "tipo": "dimensao",

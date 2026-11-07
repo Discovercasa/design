@@ -130,6 +130,7 @@
    "required": ["id", "exterior", "eixo", "inicio", "fim", "posicao", "espessura", "aberturas"],
    "properties": {
     "id": {"type": "string"},
+    "piso": {"type": "integer", "description": "Storey (0 = ground floor). Only for the engineer-drawings input."},
     "exterior": {"type": "boolean"},
     "eixo": {"type": "string", "enum": ["x", "y"]},
     "inicio": {"$ref": "#/$defs/campo"},

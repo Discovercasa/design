@@ -101,7 +101,9 @@ he answers (`metodo-construtivo.md`). Condensed 2026-10-28 (history in git).
 - **2026-11-07** — Step Inside Phase 1, second test project: Torres Vedras (flat, built, as-built D2503 available) plus
   **Sobral Tipo 2** (sloped site, legible survey) → the pair covers both extremes (flat as-built house; sloped site with
   terrain) with the data we already hold — `step-inside/docs/fase1/README.md`, hub decision 17 — **proposed, awaiting
-  the user**.
+  the user**. (Superseded 2026-11-07, see registo: the user chose **Sobral Tipo 1**, flat lot, same engineer drawings.
+  The "sloped site" case of the spec is now covered only by Torres Vedras' real survey, if it has a slope — it has a
+  retaining-walls drawing "muros"; to confirm. Hub decision 17 decidida.)
 - **2026-11-07** — Terrain sources for Phase 2: in Torres Vedras the survey DWFx / PDF has the heights drawn as outlines
   (no text) → export the DWG to DXF (a DXF carries the points as data); in Sobral the architecture set (sheet 2 survey
   1:500, sheet 4 terrain modelling) has the heights as readable text → best candidate for the first real terrain. No CRS,
@@ -114,7 +116,9 @@ he answers (`metodo-construtivo.md`). Condensed 2026-10-28 (history in git).
   torres-vedras/relatorio.md` — **recorded; raise when the telas finais are done**.
 - **2026-11-07** — Step Inside Phase 1 limitation: only the "planta de arquitetura" input has provenance; the engineer-drawings
   input (Sobral, `estrutura_dc.py`) needs its own adapter (new hub task); opening positions stay those of the plan —
-  **open (hub task)**.
+  **open (hub task)**. **Done 2026-11-07** (hub task 155): the engineer-drawings input now has provenance (panels,
+  openings, walls/doorways from the architecture, removed panels). Opening sizes stay INFERRED (the engineer draws
+  openings as gaps; Sobral revisao-tecnica #5); a door under 1,90 m clear is flagged for review.
 
 ## Recorded, not yet told (raise when it fits)
 - **2026-10-16** — lameladas cut from stock waste a lot (8,50 from 13,5 m: ≈ 1,1 m³ at TV) → order to length or a 17 m

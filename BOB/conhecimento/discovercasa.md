@@ -67,6 +67,11 @@ Why Claude learns the method; "vamos passo a passo" — an overall idea, then an
    checkpoint; nothing bought before Phase 4, the user buys it). Pending from the user: PSU wattage and case, whether the home PC may
    hold client drawings, phase order (Phase 7 before Unreal); the user (2026-11-07) had them noted in hub task 154 and
    asked to proceed.
+   **Phase 1 done 2026-11-07** (data contract and input quality; hub checkpoint 21 concluido). **Test projects decided
+   (user 2026-11-07, "Sobral Tipo 1"; hub decision 17):** Torres Vedras + Sobral Tipo 1 (engineer drawings, flat lot;
+   `step-inside/projetos-teste/`). Sobral Tipo 1 report is NEEDS_HUMAN_REVIEW (two open questions filed in
+   `Construção Sobral/docs/estado.md`). **Still open:** decision 18 (phase order: Phase 7 AR before Unreal), PSU/case,
+   client drawings on the home PC, Cloudflare panel access (task 47).
    **Phase 1 started 2026-11-07** ("Contrato de dados e qualidade de entrada", hub checkpoint 21 em curso): schema
    `step-inside/schema/fontes_projeto.schema.json`, tools `step-inside/ferramentas/fontes/`, 15 tests, report
    `step-inside/docs/fase1/`, test projects Torres Vedras (report WARNING, 202 CONFIRMED / 2 INFERRED / 10 MISSING) and
