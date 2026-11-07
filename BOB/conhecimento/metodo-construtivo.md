@@ -6,8 +6,9 @@ How DiscoverCasa builds a house, ordered like the work on site. Kept by the agen
 version, how to use the book, the section map and the legend; the rules are in `conhecimento/metodo/`, one file per topic,
 text unchanged, § numbers and rule IDs kept ("rulebook §7", "metodo-construtivo.md §13" resolve through the map below).
 
+**Version 8.12, 2026-11-07** — the 110×75 jamb piece over the verga's ends is **confirmed** (user "Sim, confirmo"; §3, L72, §15 item 26).
 **Version 8.11, 2026-11-07** — **the verga sits on the opening head** when a wide opening is lower than the top-plate
-underside − 0,22 (user 2026-11-06 "Sim, baixa a verga"; §3, L72; §15 item 26 closed); jamb pieces over its ends are our addition.
+underside − 0,22 (user 2026-11-06 "Sim, baixa a verga"; §3, L72; §15 item 26 closed); jamb pieces over its ends (confirmed in v8.12).
 **Version 8.10, 2026-11-06 (later)** — **no cripples over a verga** in an ordinary module, cripples from the verga's top to the
 module top in a full-height one (§3, L72; engine fix, our reading, no new user fact); new open item §15 no. 26: where the verga
 sits when a wide opening is lower than it (suggestion: onto the opening head).

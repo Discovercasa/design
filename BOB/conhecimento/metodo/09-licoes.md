@@ -235,4 +235,4 @@ circled (`discovercasa.md`).
   (`topo_montantes`; `casa_planta` passes the module top for exterior modules of a hidden roof). Side finding, still open:
   the strip between a lower opening head and the verga — answered the same day: "Sim, baixa a verga" (user 2026-11-06),
   the verga now sits on the opening head (§3, §15 item 26 closed) → `estrutura_dc.emoldurar` (underside = min(opening
-  head, top plate underside − 0,22); jamb pieces on over the verga's ends, our addition).
+  head, top plate underside − 0,22); jamb pieces on over the verga's ends, confirmed user 2026-11-07 "Sim, confirmo": the gap above the verga would be ≈ 45 cm > 40 cm).

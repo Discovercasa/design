@@ -50,7 +50,7 @@ def emoldurar(f0, f1, H, aberturas, cls, E, canto0, canto1, ombreira0=False, omb
     corner; ombreira: the end is the jamb of a doorway next to the module (both 110x75). topo_montantes: the module
     goes on above H with no top plate (full-height module of a hidden roof, casa_planta.continuar): the cripples and
     jambs over a 220 lintel run from its top up to there. The 220 lintel sits on the opening head (user 2026-11-06);
-    its posts stop under it and go on above its ends."""
+    its posts stop under it and go on above its ends (user 2026-11-07)."""
     pl, livre = E["placa"], E["vao_livre"]
     w, wr, hp, hs = cls["montante"], cls["reforco"], cls["padieira"], cls["peitoril"]
     sm, sr = cls["seccao_montante"], cls["seccao_reforco"]
@@ -104,7 +104,8 @@ def emoldurar(f0, f1, H, aberturas, cls, E, canto0, canto1, ombreira0=False, omb
         if not sob:
             ms.append(membro(tipo, sec, ret(max(a, f0), min(b, f1), pl, top)))
             continue
-        # posts of a big opening stop under the 220 lintel; over its ends the jamb goes on from the lintel's top
+        # posts of a big opening stop under the 220 lintel; over its ends the jamb goes on from the lintel's top (user
+        # 2026-11-07 "Sim, confirmo": 110x75 over both ends, keeps the 40 cm clear between studs above the lintel)
         ms.append(membro(tipo, sec, ret(max(a, f0), min(b, f1), pl, min(sob))))
         cima, alto = max(sob) + vg["altura"], (topo_montantes or top)
         if alto - cima > 0.03:

@@ -263,7 +263,7 @@ he answers (`metodo-construtivo.md`). Condensed 2026-10-28 (history in git).
   laps, the cold cut and the annual inspection: not answered (not asked).
 - **2026-11-06** — **status: accepted and done 2026-11-06** (user: "Sim, baixa a verga"; engine commit 0e4902a,
   `estrutura_dc.emoldurar`: verga on the opening head, posts under it, short studs above up to the top plate; the 110×75
-  jamb pieces above the verga's ends are our derived choice, to be confirmed). Original insight: When a wide opening is lower than the verga's underside, a strip
+  jamb pieces above the verga's ends were our derived choice, CONFIRMED by the user 2026-11-07: "Sim, confirmo"). Original insight: When a wide opening is lower than the verga's underside, a strip
   between the opening head and the verga has no framing: TV P03.1 (builder, without the real modules) door head 2,205,
   verga underside 2,398 → 19 cm; in Build Your House a 3,00 garage door (head ≈ 2,225) beside a taller opening whose
   head sets the modules (e.g. a sliding window with estore at 2,40) → ≈ 17–18 cm. The rulebook puts the verga "under the
