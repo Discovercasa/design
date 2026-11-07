@@ -205,7 +205,7 @@ Other items (numbers kept):
 - The header's section (≥ the beams' depth), end posts and size per span (§6, §13, X4); the encosto header 220×100 (X7).
 - The réguas de suspensão for drops up to ≈ 0,34 (§6).
 - Name the opening that raises the modules in the converter's note, drop "a confirmar", offer an alternative; the plan path
-  to raise as the converter does (§3, X1).
+  (the plan path now raises as the converter does — closed 2026-11-07, §3, X1).
 - The audit's range and tolerances (X19); one beam-system rule (X2); fix the sketch's "a cada ≈ 0,60 m" if reused (§6).
 - The remate de topo's upstand vs the parapet top (X20); a per-house lower beirado maximum in the cfg (§7); the gutter
   side of a one-água rectangle: the client's (`cobertura.lado_caleira`, user 2026-10-29), default south (ours) (§7).

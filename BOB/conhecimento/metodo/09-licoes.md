@@ -236,3 +236,8 @@ circled (`discovercasa.md`).
   the strip between a lower opening head and the verga — answered the same day: "Sim, baixa a verga" (user 2026-11-06),
   the verga now sits on the opening head (§3, §15 item 26 closed) → `estrutura_dc.emoldurar` (underside = min(opening
   head, top plate underside − 0,22); jamb pieces on over the verga's ends, confirmed user 2026-11-07 "Sim, confirmo": the gap above the verga would be ≈ 45 cm > 40 cm).
+- **L73** (builder, 2026-11-07; user "altera isso e faz com que os módulos subam") From a plan the engine lowered the top of
+  an opening to fit under the structure instead of raising the modules as the configurator does: the opening the client
+  chose was silently shorter (a 3,60 4-leaf window with estore at pé direito 2,40: − 10,7 cm under a hidden roof). Rule: the
+  opening is never lowered — exposed roof, the whole house rises; hidden roof, the lintel sits on the opening up to the module
+  top → §3 → `casa_planta.construir` (a760ce8). Left: `estrutura_dc.py` from engineer drawings keeps the drawings' heights.

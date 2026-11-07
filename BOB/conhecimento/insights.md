@@ -272,3 +272,11 @@ he answers (`metodo-construtivo.md`). Condensed 2026-10-28 (history in git).
   lower the verga onto the opening head, as the padieira and the D2503 lintels do, with cripples above it up to the top
   plate (a 22×7,5 piece lower also means a longer bearing path for the loads above — fine, the posts stay under it).
   (Was "not changed until the user answers"; now changed, see status above.)
+- **2026-11-07** — **status: done 2026-11-07 (X1 from a plan); one question open.** The old point "from a plan the engine
+  lowers an opening head to fit under the structure instead of raising the modules" is closed: user "altera isso e faz com
+  que os módulos subam"; `casa_planta.construir` now raises the whole house like the configurator (commit a760ce8;
+  config without the raise gives the same geometry and layers as the raised one; before, at 2,40 exposed, the 3,60 window
+  head was 30,9 cm lower). Hidden roof: heads not capped (lintel up to the module top). **Open question:** the
+  engineer-drawing path (`estrutura_dc.py`, Sobral, module heights fixed by the drawings) still lowers heads ≈ 3 cm
+  (Sobral `revisao-tecnica.md` #21) and interior doors stay under the interior module: should that path also raise?
+  Suggestion: ask the user; since the heights come from the engineer's drawings, 3 cm is probably acceptable.
