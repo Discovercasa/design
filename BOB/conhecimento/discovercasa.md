@@ -51,6 +51,10 @@ Why Claude learns the method; "vamos passo a passo" — an overall idea, then an
    workflow component in the hub): RunPod RTX 4090 Secure 0.89 USD/h, Community 0.34 USD/h; R2 0.015 USD/GB-month, 10 GB
    free, no egress; 1 USD = 0.89131 EUR on 2026-11-05; 8–15 GB per house. VR risk: Lumen does not support VR, Pixel
    Streaming VR is experimental. Decisions for DiscoverCasa are listed in the spec's §16.1 (become "decisão" tasks in the hub).
+   **Phase 0 (read-only audit) done 2026-11-07**, report `step-inside/docs/audit/current-architecture.md` (Portuguese):
+   repo, Cloudflare (no account access), Supabase, PDF/DWFx → Blender pipeline, this PC's inventory (cannot serve
+   Unreal 5). Findings and proposals (client drawings tracked in Git; Phase 7 before Unreal) are in `insights.md`
+   (2026-11-07, awaiting the user). The user asked on 2026-11-07 to start the project's tasks.
 4. **Configurator** like IKEA Builder / Kreativ — "DiscovercasaBuilder" (his name, 2026-10-21): the client picks the
    shape, then the m² and the pé direito, sees the base with its price, builds with 3 m walls ("Estilo como se construía
    no jogo SIMS"), never sees "módulo", the price live; prices predefined before any launch ("não temos qualquer tipo de

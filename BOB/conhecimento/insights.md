@@ -69,6 +69,16 @@ he answers (`metodo-construtivo.md`). Condensed 2026-10-28 (history in git).
   modelo" (tail ≈ 0,71 at 0,50) — **closed**.
 - **2026-10-28** — how purlin ends are fixed against a rincão / laró — **asked** → "estribos." — **closed** (the product:
   below).
+- **2026-11-07** — Step Inside Phase 0 audit: five client drawings are tracked in the public repo since 2026-10-30
+  (4 `.dwg` under `Construção Torres Vedras/desenhos/`, one of them the topographic survey, and 1 `.skp` under
+  `Construção Sobral/modelos/tipo1/`); `.gitignore` covers `*.dwfx` and `*.pdf` but not `*.dwg` / `*.skp` → this breaks
+  his rule of 2026-10-30 ("client drawings stay local, not in Git") and exposes client data publicly → untrack them
+  (`git rm --cached`) and add `*.dwg` / `*.skp` to `.gitignore`; purging the history is a separate decision (it rewrites
+  the public history) — `step-inside/docs/audit/current-architecture.md` — **proposed, awaiting the user**.
+- **2026-11-07** — Step Inside phase order: the spec runs Unreal (Phases 4–5) before AR (Phase 7), but this PC (i7-4790K,
+  16 GB DDR3, GTX 1050 Ti 4 GB, Z97 board) cannot serve Unreal 5 and a GPU alone is not advised → do Phase 7 (AR, GLB /
+  USDZ) right after Phase 3, before Unreal; the client already gets a 3D / AR view, and the Unreal / GPU spend (needs his
+  approval anyway) can wait — same audit report — **proposed, awaiting the user**.
 
 ## Recorded, not yet told (raise when it fits)
 - **2026-10-16** — lameladas cut from stock waste a lot (8,50 from 13,5 m: ≈ 1,1 m³ at TV) → order to length or a 17 m
