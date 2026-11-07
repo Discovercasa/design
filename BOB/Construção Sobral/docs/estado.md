@@ -91,3 +91,8 @@ storeys (upper floor Z 3,117, +0,139) · 2026-10-15 central floor beam removed; 
 - 2026-10-22 — The exposed-roof panel is Munditelha (Mundiperfil) — the model's 40 mm tile-effect panel is that
   product; beirado range 0,20–0,55 (Tipo 1 0,25 inside it) (max superseded 2026-10-28, see registo: 0,50 — Tipo 1's
   0,25 still inside).
+- 2026-11-07 — Opening heads in Sobral: "Sim, ficam" (user), answering "leave as is (our suggestion) or also raise the
+  Sobral modules". The module heights stay those of the engineer's drawings and the heads stay ≈ 3 cm lower than the
+  engineer's openings where the 110×75 header must fit under the top plate (`modelos.md`, `revisao-tecnica.md` #21,
+  #22). Houses built from a plan (configurator, `casa_planta`) raise the modules instead (user, same day, see registo).
+  Not a pending point any more. Interior doors: no decision (they fit at normal heights).

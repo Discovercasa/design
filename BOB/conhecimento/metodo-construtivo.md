@@ -6,6 +6,7 @@ How DiscoverCasa builds a house, ordered like the work on site. Kept by the agen
 version, how to use the book, the section map and the legend; the rules are in `conhecimento/metodo/`, one file per topic,
 text unchanged, § numbers and rule IDs kept ("rulebook §7", "metodo-construtivo.md §13" resolve through the map below).
 
+**Version 8.14, 2026-11-07** — the raise applies to houses from a plan only; houses from the engineer's module drawings (`estrutura_dc.py`, Sobral) keep the drawings' module height and heads ≈ 3 cm lower — confirmed exception (user "Sim, ficam"; §3, X1(b)).
 **Version 8.13, 2026-11-07** — **from a plan the modules rise, an opening is never lowered** (user "altera isso e faz com que os módulos subam"; §3, L73, X1 closed for `casa_planta`, a760ce8).
 **Version 8.12, 2026-11-07** — the 110×75 jamb piece over the verga's ends is **confirmed** (user "Sim, confirmo"; §3, L72, §15 item 26).
 **Version 8.11, 2026-11-07** — **the verga sits on the opening head** when a wide opening is lower than the top-plate

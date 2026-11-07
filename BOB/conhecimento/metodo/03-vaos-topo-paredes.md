@@ -166,8 +166,12 @@
   follow, ceil to the mm; false ceiling at the pé direito on longer réguas) exactly as `para_construtor` — user 2026-11-07
   "altera isso e faz com que os módulos subam" (Claude had said the engine still lowered a head to fit under the structure);
   the opening is never lowered from a plan — confirmed — `casa_planta.construir` (commit a760ce8; equivalence test: a config
-  without the configurator's raise gives the same geometry and layers). Not so in `estrutura_dc.py` from engineer drawings
-  (module heights come from the drawings; [SB] heads ≈ 3 cm lower, SB #21) nor in interior walls.
+  without the configurator's raise gives the same geometry and layers). **Scope: the raise applies to houses built from a
+  plan (`casa_planta`: configurator / Build Your House / gerador).** Houses built from the engineer's module drawings
+  (`estrutura_dc.py`, e.g. Sobral) keep the drawings' module heights and the heads stay ≈ 3 cm lower where the 110×75
+  header must fit under the top plate — **confirmed exception**, user 2026-11-07 "Sim, ficam" (asked whether to raise the
+  modules there too; our suggestion to keep it). (The upper clear height 2,40 kept is SB #21 — a different point.) Interior
+  walls are not raised either.
 - **In a full-height exterior module (hidden roof) the lintel sits directly over the opening, the cripples run on the
   grid up to the module's top plate** (the ring on the inner face across them), jambs full height — D2503 Módulos [TV doors
   2,20 / 2,40 under a ring at 2,543] — company document; the same on 22×7,5 roofs — assumed. The builder without real
