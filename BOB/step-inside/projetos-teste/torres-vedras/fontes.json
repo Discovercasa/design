@@ -1,0 +1,3906 @@
+{
+ "versao_schema": "1.0",
+ "projeto": {
+  "id": "torres-vedras",
+  "nome": "Casa Torres Vedras (construída; obra D2503)",
+  "entrada": "planta_arquitetura",
+  "config": "config.json",
+  "planta": "planta_paredes.json",
+  "gerado_por": "step-inside/ferramentas/fontes/proveniencia.py"
+ },
+ "documentos": [
+  {
+   "ficheiro": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+   "formato": "DWFX",
+   "categoria": "DIRECT",
+   "usado_para": [
+    "planta (paredes e vãos)"
+   ],
+   "nota": "Plot 2D do AutoCAD: traços com cor, espessura e texto. Só tem 3D se o DWFx incluir um modelo."
+  },
+  {
+   "ficheiro": "250828_D2503_Modulos.dwfx",
+   "formato": "DWFX",
+   "categoria": "DIRECT",
+   "usado_para": [
+    "vãos e módulos como construídos"
+   ],
+   "nota": "Plot 2D do AutoCAD: traços com cor, espessura e texto. Só tem 3D se o DWFx incluir um modelo."
+  },
+  {
+   "ficheiro": "250828_D2503_Cobertura.dwfx",
+   "formato": "DWFX",
+   "categoria": "DIRECT",
+   "usado_para": [
+    "níveis (secções 1:50)",
+    "cobertura como construída"
+   ],
+   "nota": "Plot 2D do AutoCAD: traços com cor, espessura e texto. Só tem 3D se o DWFx incluir um modelo."
+  },
+  {
+   "ficheiro": "Levantamento topográfico F00.0.dwg",
+   "formato": "DWG",
+   "categoria": "CONVERT_REQUIRED",
+   "usado_para": [
+    "terreno (Fase 2)"
+   ],
+   "nota": "Sem leitor. O DWG tem a informação toda (camadas, 3D, cotas como objetos), mas é um formato fechado."
+  },
+  {
+   "ficheiro": "Planta de implantação F01,1.dwfx",
+   "formato": "DWFX",
+   "categoria": "DIRECT",
+   "usado_para": [
+    "implantação no lote (Fase 2)"
+   ],
+   "nota": "Plot 2D do AutoCAD: traços com cor, espessura e texto. Só tem 3D se o DWFx incluir um modelo."
+  },
+  {
+   "ficheiro": "20241024.PL_LA_muros-F05.1_MUROS.dwfx",
+   "formato": "DWFX",
+   "categoria": "DIRECT",
+   "usado_para": [],
+   "nota": "Plot 2D do AutoCAD: traços com cor, espessura e texto. Só tem 3D se o DWFx incluir um modelo."
+  },
+  {
+   "ficheiro": "20241024.PL_LA_muros-F05.1_MUROS.dwg",
+   "formato": "DWG",
+   "categoria": "CONVERT_REQUIRED",
+   "usado_para": [],
+   "nota": "Sem leitor. O DWG tem a informação toda (camadas, 3D, cotas como objetos), mas é um formato fechado."
+  },
+  {
+   "ficheiro": "20241024.PL_LA_muros-F05.1_MUROS.pdf",
+   "formato": "PDF",
+   "categoria": "DIRECT",
+   "usado_para": [],
+   "nota": "PDF vetorial."
+  },
+  {
+   "ficheiro": "Levantamento topográfico F00.0.dwfx",
+   "formato": "DWFX",
+   "categoria": "DIRECT",
+   "usado_para": [],
+   "nota": "Plot 2D do AutoCAD: traços com cor, espessura e texto. Só tem 3D se o DWFx incluir um modelo."
+  },
+  {
+   "ficheiro": "Levantamento topográfico F00.0.pdf",
+   "formato": "PDF",
+   "categoria": "DIRECT",
+   "usado_para": [],
+   "nota": "PDF vetorial."
+  },
+  {
+   "ficheiro": "Planta de implantação F01,1.dwg",
+   "formato": "DWG",
+   "categoria": "CONVERT_REQUIRED",
+   "usado_para": [],
+   "nota": "Sem leitor. O DWG tem a informação toda (camadas, 3D, cotas como objetos), mas é um formato fechado."
+  },
+  {
+   "ficheiro": "Planta de implantação F01,1.pdf",
+   "formato": "PDF",
+   "categoria": "DIRECT",
+   "usado_para": [],
+   "nota": "PDF vetorial."
+  },
+  {
+   "ficheiro": "planta localização.pdf",
+   "formato": "PDF",
+   "categoria": "DIRECT",
+   "usado_para": [],
+   "nota": "PDF vetorial."
+  },
+  {
+   "ficheiro": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwg",
+   "formato": "DWG",
+   "categoria": "CONVERT_REQUIRED",
+   "usado_para": [],
+   "nota": "Sem leitor. O DWG tem a informação toda (camadas, 3D, cotas como objetos), mas é um formato fechado."
+  },
+  {
+   "ficheiro": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.pdf",
+   "formato": "PDF",
+   "categoria": "DIRECT",
+   "usado_para": [],
+   "nota": "PDF vetorial."
+  }
+ ],
+ "referencial": {
+  "unidade": "m",
+  "origem": {
+   "valor": "canto inferior esquerdo das paredes; X para a direita da folha, Y para cima, Z a partir do topo da laje",
+   "unidade": "",
+   "tipo": "referencial",
+   "estado": "CONFIRMED",
+   "metodo": "calculo",
+   "fonte": {
+    "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+    "folha": 1,
+    "local": "planta, região 120–215 × 192–258 mm da folha",
+    "data": ""
+   },
+   "nota": "Convenção do leitor da planta (planta_arquitetura.py).",
+   "conflitos": []
+  },
+  "norte": {
+   "valor": null,
+   "unidade": "",
+   "tipo": "referencial",
+   "estado": "MISSING",
+   "metodo": "nenhum",
+   "fonte": null,
+   "nota": "Os alçados chamam-se Sudeste, Noroeste, Nordeste e Sudoeste: os eixos da casa estão rodados em relação ao norte. A direção exata lê-se na planta de implantação (Fase 2).",
+   "conflitos": []
+  },
+  "crs": {
+   "valor": null,
+   "unidade": "",
+   "tipo": "referencial",
+   "estado": "MISSING",
+   "metodo": "nenhum",
+   "fonte": null,
+   "nota": "Sem georreferência: o modelo está em coordenadas locais.",
+   "conflitos": []
+  },
+  "cota_referencia": {
+   "valor": 117.5,
+   "unidade": "m",
+   "tipo": "cota",
+   "estado": "INFERRED",
+   "metodo": "inferencia",
+   "fonte": {
+    "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+    "folha": 1,
+    "local": "CORTE A",
+    "data": ""
+   },
+   "nota": "117,50 é a cota do pavimento interior acabado; o Z = 0 do modelo é o topo da laje, uns milímetros abaixo (espessura do pavimento). Confirmar com o levantamento na Fase 2.",
+   "conflitos": []
+  }
+ },
+ "escala": {
+  "valor": "1:200",
+  "unidade": "",
+  "tipo": "escala",
+  "estado": "CONFIRMED",
+  "metodo": "geometria",
+  "fonte": {
+   "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+   "folha": 1,
+   "local": "planta, região 120–215 × 192–258 mm da folha",
+   "data": ""
+  },
+  "nota": "1:200 em folhas A2. Conferida com as dimensões e áreas dos compartimentos desenhadas na planta e com o D2503 («Dimensão da fundação e módulos»: 17,50 × 11,00).",
+  "conflitos": []
+ },
+ "dimensoes": {
+  "comprimento": {
+   "valor": 17.501,
+   "unidade": "m",
+   "tipo": "dimensao",
+   "estado": "CONFIRMED",
+   "metodo": "desenho_empresa",
+   "fonte": {
+    "documento": "250828_D2503_Modulos.dwfx",
+    "folha": null,
+    "local": "Dimensão da fundação e módulos",
+    "data": "2025-08-28"
+   },
+   "nota": "Face exterior dos módulos = linha da fundação = face exterior das paredes da arquitetura; o revestimento fica cerca de 9 cm por fora.",
+   "conflitos": []
+  },
+  "profundidade": {
+   "valor": 11.0,
+   "unidade": "m",
+   "tipo": "dimensao",
+   "estado": "CONFIRMED",
+   "metodo": "desenho_empresa",
+   "fonte": {
+    "documento": "250828_D2503_Modulos.dwfx",
+    "folha": null,
+    "local": "Dimensão da fundação e módulos",
+    "data": "2025-08-28"
+   },
+   "nota": "Como o comprimento.",
+   "conflitos": []
+  },
+  "area_implantacao": {
+   "valor": 165.59,
+   "unidade": "m2",
+   "tipo": "dimensao",
+   "estado": "CONFIRMED",
+   "metodo": "calculo",
+   "fonte": {
+    "documento": "config.json (configuração do modelo)",
+    "folha": null,
+    "local": "fundacao.contorno",
+    "data": ""
+   },
+   "nota": "Área do contorno da base de fundação (confirmado).",
+   "conflitos": []
+  }
+ },
+ "niveis": {
+  "pe_direito": {
+   "valor": 2.5,
+   "unidade": "m",
+   "tipo": "nivel",
+   "estado": "CONFIRMED",
+   "metodo": "desenho_empresa",
+   "fonte": {
+    "documento": "250828_D2503_Cobertura.dwfx",
+    "folha": 5,
+    "local": "Secções 1:50",
+    "data": "2025-08-28"
+   },
+   "nota": "Teto a 2,50 do pavimento, como construída; confirmado pelo utilizador a 2026-10-16.",
+   "conflitos": [
+    {
+     "valor": 2.6,
+     "fonte": {
+      "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+      "folha": 1,
+      "local": "CORTE A",
+      "data": ""
+     },
+     "estado": "resolvido",
+     "nota": "A arquitetura (estudo prévio) dava 2,60.",
+     "resolucao": "Prevalece o D2503 (como construído)."
+    }
+   ]
+  },
+  "teto_estrutura": {
+   "valor": 2.653,
+   "unidade": "m",
+   "tipo": "nivel",
+   "estado": "CONFIRMED",
+   "metodo": "desenho_empresa",
+   "fonte": {
+    "documento": "250828_D2503_Cobertura.dwfx",
+    "folha": 5,
+    "local": "Secções 1:50",
+    "data": "2025-08-28"
+   },
+   "nota": "Face inferior das lameladas: amarração 2,543–2,653, lameladas 2,653–2,853.",
+   "conflitos": []
+  },
+  "topo_platibanda": {
+   "valor": 3.5,
+   "unidade": "m",
+   "tipo": "nivel",
+   "estado": "CONFIRMED",
+   "metodo": "desenho_empresa",
+   "fonte": {
+    "documento": "250828_D2503_Modulos.dwfx",
+    "folha": 2,
+    "local": "Módulos exteriores",
+    "data": "2025-08-28"
+   },
+   "nota": "Módulos exteriores de 3,50, de uma peça até ao topo da platibanda; a casa tem a mesma altura a toda a volta (utilizador 2026-10-16).",
+   "conflitos": []
+  }
+ },
+ "paredes": [
+  {
+   "id": "P01",
+   "exterior": true,
+   "eixo": "x",
+   "inicio": {
+    "valor": 10.778,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+     "folha": 1,
+     "local": "planta, região 120–215 × 192–258 mm da folha",
+     "data": ""
+    },
+    "nota": "",
+    "conflitos": []
+   },
+   "fim": {
+    "valor": 17.498,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+     "folha": 1,
+     "local": "planta, região 120–215 × 192–258 mm da folha",
+     "data": ""
+    },
+    "nota": "",
+    "conflitos": []
+   },
+   "posicao": {
+    "valor": 0.125,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+     "folha": 1,
+     "local": "planta, região 120–215 × 192–258 mm da folha",
+     "data": ""
+    },
+    "nota": "",
+    "conflitos": []
+   },
+   "espessura": {
+    "valor": 0.25,
+    "unidade": "m",
+    "tipo": "dimensao",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+     "folha": 1,
+     "local": "planta, região 120–215 × 192–258 mm da folha",
+     "data": ""
+    },
+    "nota": "",
+    "conflitos": []
+   },
+   "aberturas": [
+    {
+     "id": "0",
+     "tipo": {
+      "valor": "porta",
+      "unidade": "",
+      "tipo": "classificacao",
+      "estado": "CONFIRMED",
+      "metodo": "desenho_empresa",
+      "fonte": {
+       "documento": "250828_D2503_Modulos.dwfx",
+       "folha": null,
+       "local": "módulo M9",
+       "data": ""
+      },
+      "nota": "Como construído (desenho de módulos da DiscoverCasa).",
+      "conflitos": [
+       {
+        "valor": "janela",
+        "fonte": {
+         "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+         "folha": 1,
+         "local": "planta, região 120–215 × 192–258 mm da folha",
+         "data": ""
+        },
+        "estado": "resolvido",
+        "nota": "A planta desenha-o de outro tipo.",
+        "resolucao": "Prevalece o desenho de módulos (como construído)."
+       }
+      ]
+     },
+     "inicio": {
+      "valor": 15.248,
+      "unidade": "m",
+      "tipo": "geometria",
+      "estado": "CONFIRMED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+       "folha": 1,
+       "local": "planta, região 120–215 × 192–258 mm da folha",
+       "data": ""
+      },
+      "nota": "",
+      "conflitos": []
+     },
+     "fim": {
+      "valor": 17.248,
+      "unidade": "m",
+      "tipo": "geometria",
+      "estado": "CONFIRMED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+       "folha": 1,
+       "local": "planta, região 120–215 × 192–258 mm da folha",
+       "data": ""
+      },
+      "nota": "",
+      "conflitos": []
+     },
+     "largura": {
+      "valor": 1.996,
+      "unidade": "m",
+      "tipo": "dimensao",
+      "estado": "CONFIRMED",
+      "metodo": "desenho_empresa",
+      "fonte": {
+       "documento": "250828_D2503_Modulos.dwfx",
+       "folha": null,
+       "local": "módulo M9",
+       "data": ""
+      },
+      "nota": "Como construído (desenho de módulos da DiscoverCasa).",
+      "conflitos": []
+     },
+     "peitoril": {
+      "valor": 0.0,
+      "unidade": "m",
+      "tipo": "cota",
+      "estado": "CONFIRMED",
+      "metodo": "desenho_empresa",
+      "fonte": {
+       "documento": "250828_D2503_Modulos.dwfx",
+       "folha": null,
+       "local": "módulo M9",
+       "data": ""
+      },
+      "nota": "Como construído (desenho de módulos da DiscoverCasa).",
+      "conflitos": []
+     },
+     "altura": {
+      "valor": 2.4,
+      "unidade": "m",
+      "tipo": "cota",
+      "estado": "CONFIRMED",
+      "metodo": "desenho_empresa",
+      "fonte": {
+       "documento": "250828_D2503_Modulos.dwfx",
+       "folha": null,
+       "local": "módulo M9",
+       "data": ""
+      },
+      "nota": "Como construído (desenho de módulos da DiscoverCasa).",
+      "conflitos": [
+       {
+        "valor": 2.2,
+        "fonte": {
+         "documento": "config.json (configuração do modelo)",
+         "folha": null,
+         "local": "aberturas.porta_exterior.altura",
+         "data": ""
+        },
+        "estado": "resolvido",
+        "nota": "Planta/configuração: 2.2.",
+        "resolucao": "Prevalece o desenho de módulos (como construído)."
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "P02",
+   "exterior": false,
+   "eixo": "x",
+   "inicio": {
+    "valor": 11.032,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+     "folha": 1,
+     "local": "planta, região 120–215 × 192–258 mm da folha",
+     "data": ""
+    },
+    "nota": "",
+    "conflitos": []
+   },
+   "fim": {
+    "valor": 13.4,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+     "folha": 1,
+     "local": "planta, região 120–215 × 192–258 mm da folha",
+     "data": ""
+    },
+    "nota": "",
+    "conflitos": []
+   },
+   "posicao": {
+    "valor": 2.428,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+     "folha": 1,
+     "local": "planta, região 120–215 × 192–258 mm da folha",
+     "data": ""
+    },
+    "nota": "",
+    "conflitos": []
+   },
+   "espessura": {
+    "valor": 0.14,
+    "unidade": "m",
+    "tipo": "dimensao",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+     "folha": 1,
+     "local": "planta, região 120–215 × 192–258 mm da folha",
+     "data": ""
+    },
+    "nota": "",
+    "conflitos": []
+   },
+   "aberturas": [
+    {
+     "id": "0",
+     "tipo": {
+      "valor": "porta",
+      "unidade": "",
+      "tipo": "classificacao",
+      "estado": "CONFIRMED",
+      "metodo": "desenho_empresa",
+      "fonte": {
+       "documento": "250828_D2503_Modulos.dwfx",
+       "folha": null,
+       "local": "módulo M15",
+       "data": ""
+      },
+      "nota": "Como construído (desenho de módulos da DiscoverCasa).",
+      "conflitos": []
+     },
+     "inicio": {
+      "valor": 11.84,
+      "unidade": "m",
+      "tipo": "geometria",
+      "estado": "CONFIRMED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+       "folha": 1,
+       "local": "planta, região 120–215 × 192–258 mm da folha",
+       "data": ""
+      },
+      "nota": "",
+      "conflitos": []
+     },
+     "fim": {
+      "valor": 12.64,
+      "unidade": "m",
+      "tipo": "geometria",
+      "estado": "CONFIRMED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+       "folha": 1,
+       "local": "planta, região 120–215 × 192–258 mm da folha",
+       "data": ""
+      },
+      "nota": "",
+      "conflitos": []
+     },
+     "largura": {
+      "valor": 0.87,
+      "unidade": "m",
+      "tipo": "dimensao",
+      "estado": "CONFIRMED",
+      "metodo": "desenho_empresa",
+      "fonte": {
+       "documento": "250828_D2503_Modulos.dwfx",
+       "folha": null,
+       "local": "módulo M15",
+       "data": ""
+      },
+      "nota": "Como construído (desenho de módulos da DiscoverCasa).",
+      "conflitos": [
+       {
+        "valor": 0.8,
+        "fonte": {
+         "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+         "folha": 1,
+         "local": "planta, região 120–215 × 192–258 mm da folha",
+         "data": ""
+        },
+        "estado": "resolvido",
+        "nota": "Planta/configuração: 0.8.",
+        "resolucao": "Prevalece o desenho de módulos (como construído)."
+       }
+      ]
+     },
+     "peitoril": {
+      "valor": 0.0,
+      "unidade": "m",
+      "tipo": "cota",
+      "estado": "CONFIRMED",
+      "metodo": "desenho_empresa",
+      "fonte": {
+       "documento": "250828_D2503_Modulos.dwfx",
+       "folha": null,
+       "local": "módulo M15",
+       "data": ""
+      },
+      "nota": "Como construído (desenho de módulos da DiscoverCasa).",
+      "conflitos": []
+     },
+     "altura": {
+      "valor": 2.03,
+      "unidade": "m",
+      "tipo": "cota",
+      "estado": "CONFIRMED",
+      "metodo": "desenho_empresa",
+      "fonte": {
+       "documento": "250828_D2503_Modulos.dwfx",
+       "folha": null,
+       "local": "módulo M15",
+       "data": ""
+      },
+      "nota": "Como construído (desenho de módulos da DiscoverCasa).",
+      "conflitos": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "P03",
+   "exterior": true,
+   "eixo": "x",
+   "inicio": {
+    "valor": 0.0,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+     "folha": 1,
+     "local": "planta, região 120–215 × 192–258 mm da folha",
+     "data": ""
+    },
+    "nota": "",
+    "conflitos": []
+   },
+   "fim": {
+    "valor": 10.78,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+     "folha": 1,
+     "local": "planta, região 120–215 × 192–258 mm da folha",
+     "data": ""
+    },
+    "nota": "",
+    "conflitos": []
+   },
+   "posicao": {
+    "valor": 2.623,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+     "folha": 1,
+     "local": "planta, região 120–215 × 192–258 mm da folha",
+     "data": ""
+    },
+    "nota": "",
+    "conflitos": []
+   },
+   "espessura": {
+    "valor": 0.25,
+    "unidade": "m",
+    "tipo": "dimensao",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+     "folha": 1,
+     "local": "planta, região 120–215 × 192–258 mm da folha",
+     "data": ""
+    },
+    "nota": "",
+    "conflitos": []
+   },
+   "aberturas": [
+    {
+     "id": "0",
+     "tipo": {
+      "valor": "porta",
+      "unidade": "",
+      "tipo": "classificacao",
+      "estado": "CONFIRMED",
+      "metodo": "desenho_empresa",
+      "fonte": {
+       "documento": "250828_D2503_Modulos.dwfx",
+       "folha": null,
+       "local": "módulo M1",
+       "data": ""
+      },
+      "nota": "Como construído (desenho de módulos da DiscoverCasa).",
+      "conflitos": [
+       {
+        "valor": "janela",
+        "fonte": {
+         "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+         "folha": 1,
+         "local": "planta, região 120–215 × 192–258 mm da folha",
+         "data": ""
+        },
+        "estado": "resolvido",
+        "nota": "A planta desenha-o de outro tipo.",
+        "resolucao": "Prevalece o desenho de módulos (como construído)."
+       }
+      ]
+     },
+     "inicio": {
+      "valor": 0.31,
+      "unidade": "m",
+      "tipo": "geometria",
+      "estado": "CONFIRMED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+       "folha": 1,
+       "local": "planta, região 120–215 × 192–258 mm da folha",
+       "data": ""
+      },
+      "nota": "",
+      "conflitos": []
+     },
+     "fim": {
+      "valor": 3.31,
+      "unidade": "m",
+      "tipo": "geometria",
+      "estado": "CONFIRMED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+       "folha": 1,
+       "local": "planta, região 120–215 × 192–258 mm da folha",
+       "data": ""
+      },
+      "nota": "",
+      "conflitos": []
+     },
+     "largura": {
+      "valor": 3.0,
+      "unidade": "m",
+      "tipo": "dimensao",
+      "estado": "CONFIRMED",
+      "metodo": "desenho_empresa",
+      "fonte": {
+       "documento": "250828_D2503_Modulos.dwfx",
+       "folha": null,
+       "local": "módulo M1",
+       "data": ""
+      },
+      "nota": "Como construído (desenho de módulos da DiscoverCasa).",
+      "conflitos": []
+     },
+     "peitoril": {
+      "valor": 0.0,
+      "unidade": "m",
+      "tipo": "cota",
+      "estado": "CONFIRMED",
+      "metodo": "desenho_empresa",
+      "fonte": {
+       "documento": "250828_D2503_Modulos.dwfx",
+       "folha": null,
+       "local": "módulo M1",
+       "data": ""
+      },
+      "nota": "Como construído (desenho de módulos da DiscoverCasa).",
+      "conflitos": []
+     },
+     "altura": {
+      "valor": 2.2,
+      "unidade": "m",
+      "tipo": "cota",
+      "estado": "CONFIRMED",
+      "metodo": "desenho_empresa",
+      "fonte": {
+       "documento": "250828_D2503_Modulos.dwfx",
+       "folha": null,
+       "local": "módulo M1",
+       "data": ""
+      },
+      "nota": "Como construído (desenho de módulos da DiscoverCasa).",
+      "conflitos": []
+     }
+    },
+    {
+     "id": "1",
+     "tipo": {
+      "valor": "porta",
+      "unidade": "",
+      "tipo": "classificacao",
+      "estado": "CONFIRMED",
+      "metodo": "desenho_empresa",
+      "fonte": {
+       "documento": "250828_D2503_Modulos.dwfx",
+       "folha": null,
+       "local": "módulo M3",
+       "data": ""
+      },
+      "nota": "Como construído (desenho de módulos da DiscoverCasa).",
+      "conflitos": []
+     },
+     "inicio": {
+      "valor": 4.8,
+      "unidade": "m",
+      "tipo": "geometria",
+      "estado": "CONFIRMED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+       "folha": 1,
+       "local": "planta, região 120–215 × 192–258 mm da folha",
+       "data": ""
+      },
+      "nota": "",
+      "conflitos": []
+     },
+     "fim": {
+      "valor": 6.8,
+      "unidade": "m",
+      "tipo": "geometria",
+      "estado": "CONFIRMED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+       "folha": 1,
+       "local": "planta, região 120–215 × 192–258 mm da folha",
+       "data": ""
+      },
+      "nota": "",
+      "conflitos": []
+     },
+     "largura": {
+      "valor": 1.996,
+      "unidade": "m",
+      "tipo": "dimensao",
+      "estado": "CONFIRMED",
+      "metodo": "desenho_empresa",
+      "fonte": {
+       "documento": "250828_D2503_Modulos.dwfx",
+       "folha": null,
+       "local": "módulo M3",
+       "data": ""
+      },
+      "nota": "Como construído (desenho de módulos da DiscoverCasa).",
+      "conflitos": []
+     },
+     "peitoril": {
+      "valor": 0.0,
+      "unidade": "m",
+      "tipo": "cota",
+      "estado": "CONFIRMED",
+      "metodo": "desenho_empresa",
+      "fonte": {
+       "documento": "250828_D2503_Modulos.dwfx",
+       "folha": null,
+       "local": "módulo M3",
+       "data": ""
+      },
+      "nota": "Como construído (desenho de módulos da DiscoverCasa).",
+      "conflitos": []
+     },
+     "altura": {
+      "valor": 2.4,
+      "unidade": "m",
+      "tipo": "cota",
+      "estado": "CONFIRMED",
+      "metodo": "desenho_empresa",
+      "fonte": {
+       "documento": "250828_D2503_Modulos.dwfx",
+       "folha": null,
+       "local": "módulo M3",
+       "data": ""
+      },
+      "nota": "Como construído (desenho de módulos da DiscoverCasa).",
+      "conflitos": [
+       {
+        "valor": 2.2,
+        "fonte": {
+         "documento": "config.json (configuração do modelo)",
+         "folha": null,
+         "local": "aberturas.porta_exterior.altura",
+         "data": ""
+        },
+        "estado": "resolvido",
+        "nota": "Planta/configuração: 2.2.",
+        "resolucao": "Prevalece o desenho de módulos (como construído)."
+       }
+      ]
+     }
+    },
+    {
+     "id": "2",
+     "tipo": {
+      "valor": "porta",
+      "unidade": "",
+      "tipo": "classificacao",
+      "estado": "CONFIRMED",
+      "metodo": "desenho_empresa",
+      "fonte": {
+       "documento": "250828_D2503_Modulos.dwfx",
+       "folha": null,
+       "local": "módulo M5",
+       "data": ""
+      },
+      "nota": "Como construído (desenho de módulos da DiscoverCasa).",
+      "conflitos": []
+     },
+     "inicio": {
+      "valor": 9.55,
+      "unidade": "m",
+      "tipo": "geometria",
+      "estado": "CONFIRMED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+       "folha": 1,
+       "local": "planta, região 120–215 × 192–258 mm da folha",
+       "data": ""
+      },
+      "nota": "",
+      "conflitos": []
+     },
+     "fim": {
+      "valor": 10.46,
+      "unidade": "m",
+      "tipo": "geometria",
+      "estado": "CONFIRMED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+       "folha": 1,
+       "local": "planta, região 120–215 × 192–258 mm da folha",
+       "data": ""
+      },
+      "nota": "",
+      "conflitos": []
+     },
+     "largura": {
+      "valor": 1.04,
+      "unidade": "m",
+      "tipo": "dimensao",
+      "estado": "CONFIRMED",
+      "metodo": "desenho_empresa",
+      "fonte": {
+       "documento": "250828_D2503_Modulos.dwfx",
+       "folha": null,
+       "local": "módulo M5",
+       "data": ""
+      },
+      "nota": "Como construído (desenho de módulos da DiscoverCasa).",
+      "conflitos": [
+       {
+        "valor": 0.91,
+        "fonte": {
+         "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+         "folha": 1,
+         "local": "planta, região 120–215 × 192–258 mm da folha",
+         "data": ""
+        },
+        "estado": "resolvido",
+        "nota": "Planta/configuração: 0.91.",
+        "resolucao": "Prevalece o desenho de módulos (como construído)."
+       }
+      ]
+     },
+     "peitoril": {
+      "valor": 0.0,
+      "unidade": "m",
+      "tipo": "cota",
+      "estado": "CONFIRMED",
+      "metodo": "desenho_empresa",
+      "fonte": {
+       "documento": "250828_D2503_Modulos.dwfx",
+       "folha": null,
+       "local": "módulo M5",
+       "data": ""
+      },
+      "nota": "Como construído (desenho de módulos da DiscoverCasa).",
+      "conflitos": []
+     },
+     "altura": {
+      "valor": 2.2,
+      "unidade": "m",
+      "tipo": "cota",
+      "estado": "CONFIRMED",
+      "metodo": "desenho_empresa",
+      "fonte": {
+       "documento": "250828_D2503_Modulos.dwfx",
+       "folha": null,
+       "local": "módulo M5",
+       "data": ""
+      },
+      "nota": "Como construído (desenho de módulos da DiscoverCasa).",
+      "conflitos": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "P04",
+   "exterior": false,
+   "eixo": "x",
+   "inicio": {
+    "valor": 12.95,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+     "folha": 1,
+     "local": "planta, região 120–215 × 192–258 mm da folha",
+     "data": ""
+    },
+    "nota": "",
+    "conflitos": []
+   },
+   "fim": {
+    "valor": 17.25,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+     "folha": 1,
+     "local": "planta, região 120–215 × 192–258 mm da folha",
+     "data": ""
+    },
+    "nota": "",
+    "conflitos": []
+   },
+   "posicao": {
+    "valor": 3.965,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+     "folha": 1,
+     "local": "planta, região 120–215 × 192–258 mm da folha",
+     "data": ""
+    },
+    "nota": "",
+    "conflitos": []
+   },
+   "espessura": {
+    "valor": 0.14,
+    "unidade": "m",
+    "tipo": "dimensao",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+     "folha": 1,
+     "local": "planta, região 120–215 × 192–258 mm da folha",
+     "data": ""
+    },
+    "nota": "",
+    "conflitos": []
+   },
+   "aberturas": []
+  },
+  {
+   "id": "P05",
+   "exterior": false,
+   "eixo": "x",
+   "inicio": {
+    "valor": 10.922,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+     "folha": 1,
+     "local": "planta, região 120–215 × 192–258 mm da folha",
+     "data": ""
+    },
+    "nota": "",
+    "conflitos": []
+   },
+   "fim": {
+    "valor": 13.552,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+     "folha": 1,
+     "local": "planta, região 120–215 × 192–258 mm da folha",
+     "data": ""
+    },
+    "nota": "",
+    "conflitos": []
+   },
+   "posicao": {
+    "valor": 5.958,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+     "folha": 1,
+     "local": "planta, região 120–215 × 192–258 mm da folha",
+     "data": ""
+    },
+    "nota": "",
+    "conflitos": []
+   },
+   "espessura": {
+    "valor": 0.14,
+    "unidade": "m",
+    "tipo": "dimensao",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+     "folha": 1,
+     "local": "planta, região 120–215 × 192–258 mm da folha",
+     "data": ""
+    },
+    "nota": "",
+    "conflitos": []
+   },
+   "aberturas": [
+    {
+     "id": "0",
+     "tipo": {
+      "valor": "porta",
+      "unidade": "",
+      "tipo": "classificacao",
+      "estado": "CONFIRMED",
+      "metodo": "desenho_empresa",
+      "fonte": {
+       "documento": "250828_D2503_Modulos.dwfx",
+       "folha": null,
+       "local": "módulo M12",
+       "data": ""
+      },
+      "nota": "Como construído (desenho de módulos da DiscoverCasa).",
+      "conflitos": []
+     },
+     "inicio": {
+      "valor": 11.832,
+      "unidade": "m",
+      "tipo": "geometria",
+      "estado": "CONFIRMED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+       "folha": 1,
+       "local": "planta, região 120–215 × 192–258 mm da folha",
+       "data": ""
+      },
+      "nota": "",
+      "conflitos": []
+     },
+     "fim": {
+      "valor": 12.632,
+      "unidade": "m",
+      "tipo": "geometria",
+      "estado": "CONFIRMED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+       "folha": 1,
+       "local": "planta, região 120–215 × 192–258 mm da folha",
+       "data": ""
+      },
+      "nota": "",
+      "conflitos": []
+     },
+     "largura": {
+      "valor": 0.87,
+      "unidade": "m",
+      "tipo": "dimensao",
+      "estado": "CONFIRMED",
+      "metodo": "desenho_empresa",
+      "fonte": {
+       "documento": "250828_D2503_Modulos.dwfx",
+       "folha": null,
+       "local": "módulo M12",
+       "data": ""
+      },
+      "nota": "Como construído (desenho de módulos da DiscoverCasa).",
+      "conflitos": [
+       {
+        "valor": 0.8,
+        "fonte": {
+         "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+         "folha": 1,
+         "local": "planta, região 120–215 × 192–258 mm da folha",
+         "data": ""
+        },
+        "estado": "resolvido",
+        "nota": "Planta/configuração: 0.8.",
+        "resolucao": "Prevalece o desenho de módulos (como construído)."
+       }
+      ]
+     },
+     "peitoril": {
+      "valor": 0.0,
+      "unidade": "m",
+      "tipo": "cota",
+      "estado": "CONFIRMED",
+      "metodo": "desenho_empresa",
+      "fonte": {
+       "documento": "250828_D2503_Modulos.dwfx",
+       "folha": null,
+       "local": "módulo M12",
+       "data": ""
+      },
+      "nota": "Como construído (desenho de módulos da DiscoverCasa).",
+      "conflitos": []
+     },
+     "altura": {
+      "valor": 2.03,
+      "unidade": "m",
+      "tipo": "cota",
+      "estado": "CONFIRMED",
+      "metodo": "desenho_empresa",
+      "fonte": {
+       "documento": "250828_D2503_Modulos.dwfx",
+       "folha": null,
+       "local": "módulo M12",
+       "data": ""
+      },
+      "nota": "Como construído (desenho de módulos da DiscoverCasa).",
+      "conflitos": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "P06",
+   "exterior": false,
+   "eixo": "x",
+   "inicio": {
+    "valor": 10.922,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+     "folha": 1,
+     "local": "planta, região 120–215 × 192–258 mm da folha",
+     "data": ""
+    },
+    "nota": "",
+    "conflitos": []
+   },
+   "fim": {
+    "valor": 11.522,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+     "folha": 1,
+     "local": "planta, região 120–215 × 192–258 mm da folha",
+     "data": ""
+    },
+    "nota": "",
+    "conflitos": []
+   },
+   "posicao": {
+    "valor": 7.165,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+     "folha": 1,
+     "local": "planta, região 120–215 × 192–258 mm da folha",
+     "data": ""
+    },
+    "nota": "",
+    "conflitos": []
+   },
+   "espessura": {
+    "valor": 0.14,
+    "unidade": "m",
+    "tipo": "dimensao",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+     "folha": 1,
+     "local": "planta, região 120–215 × 192–258 mm da folha",
+     "data": ""
+    },
+    "nota": "",
+    "conflitos": []
+   },
+   "aberturas": []
+  },
+  {
+   "id": "P07",
+   "exterior": false,
+   "eixo": "x",
+   "inicio": {
+    "valor": 13.691,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+     "folha": 1,
+     "local": "planta, região 120–215 × 192–258 mm da folha",
+     "data": ""
+    },
+    "nota": "",
+    "conflitos": []
+   },
+   "fim": {
+    "valor": 17.251,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+     "folha": 1,
+     "local": "planta, região 120–215 × 192–258 mm da folha",
+     "data": ""
+    },
+    "nota": "",
+    "conflitos": []
+   },
+   "posicao": {
+    "valor": 7.19,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+     "folha": 1,
+     "local": "planta, região 120–215 × 192–258 mm da folha",
+     "data": ""
+    },
+    "nota": "",
+    "conflitos": []
+   },
+   "espessura": {
+    "valor": 0.14,
+    "unidade": "m",
+    "tipo": "dimensao",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+     "folha": 1,
+     "local": "planta, região 120–215 × 192–258 mm da folha",
+     "data": ""
+    },
+    "nota": "",
+    "conflitos": []
+   },
+   "aberturas": []
+  },
+  {
+   "id": "P08",
+   "exterior": false,
+   "eixo": "x",
+   "inicio": {
+    "valor": 0.25,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+     "folha": 1,
+     "local": "planta, região 120–215 × 192–258 mm da folha",
+     "data": ""
+    },
+    "nota": "",
+    "conflitos": []
+   },
+   "fim": {
+    "valor": 3.48,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+     "folha": 1,
+     "local": "planta, região 120–215 × 192–258 mm da folha",
+     "data": ""
+    },
+    "nota": "",
+    "conflitos": []
+   },
+   "posicao": {
+    "valor": 7.885,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+     "folha": 1,
+     "local": "planta, região 120–215 × 192–258 mm da folha",
+     "data": ""
+    },
+    "nota": "",
+    "conflitos": []
+   },
+   "espessura": {
+    "valor": 0.14,
+    "unidade": "m",
+    "tipo": "dimensao",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+     "folha": 1,
+     "local": "planta, região 120–215 × 192–258 mm da folha",
+     "data": ""
+    },
+    "nota": "",
+    "conflitos": []
+   },
+   "aberturas": [
+    {
+     "id": "0",
+     "tipo": {
+      "valor": "porta",
+      "unidade": "",
+      "tipo": "classificacao",
+      "estado": "CONFIRMED",
+      "metodo": "desenho_empresa",
+      "fonte": {
+       "documento": "250828_D2503_Modulos.dwfx",
+       "folha": null,
+       "local": "módulo M6",
+       "data": ""
+      },
+      "nota": "Como construído (desenho de módulos da DiscoverCasa).",
+      "conflitos": []
+     },
+     "inicio": {
+      "valor": 2.58,
+      "unidade": "m",
+      "tipo": "geometria",
+      "estado": "CONFIRMED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+       "folha": 1,
+       "local": "planta, região 120–215 × 192–258 mm da folha",
+       "data": ""
+      },
+      "nota": "",
+      "conflitos": []
+     },
+     "fim": {
+      "valor": 3.38,
+      "unidade": "m",
+      "tipo": "geometria",
+      "estado": "CONFIRMED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+       "folha": 1,
+       "local": "planta, região 120–215 × 192–258 mm da folha",
+       "data": ""
+      },
+      "nota": "",
+      "conflitos": []
+     },
+     "largura": {
+      "valor": 0.87,
+      "unidade": "m",
+      "tipo": "dimensao",
+      "estado": "CONFIRMED",
+      "metodo": "desenho_empresa",
+      "fonte": {
+       "documento": "250828_D2503_Modulos.dwfx",
+       "folha": null,
+       "local": "módulo M6",
+       "data": ""
+      },
+      "nota": "Como construído (desenho de módulos da DiscoverCasa).",
+      "conflitos": [
+       {
+        "valor": 0.8,
+        "fonte": {
+         "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+         "folha": 1,
+         "local": "planta, região 120–215 × 192–258 mm da folha",
+         "data": ""
+        },
+        "estado": "resolvido",
+        "nota": "Planta/configuração: 0.8.",
+        "resolucao": "Prevalece o desenho de módulos (como construído)."
+       }
+      ]
+     },
+     "peitoril": {
+      "valor": 0.0,
+      "unidade": "m",
+      "tipo": "cota",
+      "estado": "CONFIRMED",
+      "metodo": "desenho_empresa",
+      "fonte": {
+       "documento": "250828_D2503_Modulos.dwfx",
+       "folha": null,
+       "local": "módulo M6",
+       "data": ""
+      },
+      "nota": "Como construído (desenho de módulos da DiscoverCasa).",
+      "conflitos": []
+     },
+     "altura": {
+      "valor": 2.03,
+      "unidade": "m",
+      "tipo": "cota",
+      "estado": "CONFIRMED",
+      "metodo": "desenho_empresa",
+      "fonte": {
+       "documento": "250828_D2503_Modulos.dwfx",
+       "folha": null,
+       "local": "módulo M6",
+       "data": ""
+      },
+      "nota": "Como construído (desenho de módulos da DiscoverCasa).",
+      "conflitos": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "P09",
+   "exterior": false,
+   "eixo": "x",
+   "inicio": {
+    "valor": 3.628,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+     "folha": 1,
+     "local": "planta, região 120–215 × 192–258 mm da folha",
+     "data": ""
+    },
+    "nota": "",
+    "conflitos": []
+   },
+   "fim": {
+    "valor": 5.378,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+     "folha": 1,
+     "local": "planta, região 120–215 × 192–258 mm da folha",
+     "data": ""
+    },
+    "nota": "",
+    "conflitos": []
+   },
+   "posicao": {
+    "valor": 8.278,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+     "folha": 1,
+     "local": "planta, região 120–215 × 192–258 mm da folha",
+     "data": ""
+    },
+    "nota": "",
+    "conflitos": []
+   },
+   "espessura": {
+    "valor": 0.14,
+    "unidade": "m",
+    "tipo": "dimensao",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+     "folha": 1,
+     "local": "planta, região 120–215 × 192–258 mm da folha",
+     "data": ""
+    },
+    "nota": "",
+    "conflitos": []
+   },
+   "aberturas": []
+  },
+  {
+   "id": "P10",
+   "exterior": false,
+   "eixo": "x",
+   "inicio": {
+    "valor": 10.918,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+     "folha": 1,
+     "local": "planta, região 120–215 × 192–258 mm da folha",
+     "data": ""
+    },
+    "nota": "",
+    "conflitos": []
+   },
+   "fim": {
+    "valor": 13.548,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+     "folha": 1,
+     "local": "planta, região 120–215 × 192–258 mm da folha",
+     "data": ""
+    },
+    "nota": "",
+    "conflitos": []
+   },
+   "posicao": {
+    "valor": 8.42,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+     "folha": 1,
+     "local": "planta, região 120–215 × 192–258 mm da folha",
+     "data": ""
+    },
+    "nota": "",
+    "conflitos": []
+   },
+   "espessura": {
+    "valor": 0.144,
+    "unidade": "m",
+    "tipo": "dimensao",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+     "folha": 1,
+     "local": "planta, região 120–215 × 192–258 mm da folha",
+     "data": ""
+    },
+    "nota": "",
+    "conflitos": []
+   },
+   "aberturas": [
+    {
+     "id": "0",
+     "tipo": {
+      "valor": "porta",
+      "unidade": "",
+      "tipo": "classificacao",
+      "estado": "CONFIRMED",
+      "metodo": "desenho_empresa",
+      "fonte": {
+       "documento": "250828_D2503_Modulos.dwfx",
+       "folha": null,
+       "local": "módulo M8",
+       "data": ""
+      },
+      "nota": "Como construído (desenho de módulos da DiscoverCasa).",
+      "conflitos": []
+     },
+     "inicio": {
+      "valor": 11.838,
+      "unidade": "m",
+      "tipo": "geometria",
+      "estado": "CONFIRMED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+       "folha": 1,
+       "local": "planta, região 120–215 × 192–258 mm da folha",
+       "data": ""
+      },
+      "nota": "",
+      "conflitos": []
+     },
+     "fim": {
+      "valor": 12.638,
+      "unidade": "m",
+      "tipo": "geometria",
+      "estado": "CONFIRMED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+       "folha": 1,
+       "local": "planta, região 120–215 × 192–258 mm da folha",
+       "data": ""
+      },
+      "nota": "",
+      "conflitos": []
+     },
+     "largura": {
+      "valor": 0.87,
+      "unidade": "m",
+      "tipo": "dimensao",
+      "estado": "CONFIRMED",
+      "metodo": "desenho_empresa",
+      "fonte": {
+       "documento": "250828_D2503_Modulos.dwfx",
+       "folha": null,
+       "local": "módulo M8",
+       "data": ""
+      },
+      "nota": "Como construído (desenho de módulos da DiscoverCasa).",
+      "conflitos": [
+       {
+        "valor": 0.8,
+        "fonte": {
+         "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+         "folha": 1,
+         "local": "planta, região 120–215 × 192–258 mm da folha",
+         "data": ""
+        },
+        "estado": "resolvido",
+        "nota": "Planta/configuração: 0.8.",
+        "resolucao": "Prevalece o desenho de módulos (como construído)."
+       }
+      ]
+     },
+     "peitoril": {
+      "valor": 0.0,
+      "unidade": "m",
+      "tipo": "cota",
+      "estado": "CONFIRMED",
+      "metodo": "desenho_empresa",
+      "fonte": {
+       "documento": "250828_D2503_Modulos.dwfx",
+       "folha": null,
+       "local": "módulo M8",
+       "data": ""
+      },
+      "nota": "Como construído (desenho de módulos da DiscoverCasa).",
+      "conflitos": []
+     },
+     "altura": {
+      "valor": 2.03,
+      "unidade": "m",
+      "tipo": "cota",
+      "estado": "CONFIRMED",
+      "metodo": "desenho_empresa",
+      "fonte": {
+       "documento": "250828_D2503_Modulos.dwfx",
+       "folha": null,
+       "local": "módulo M8",
+       "data": ""
+      },
+      "nota": "Como construído (desenho de módulos da DiscoverCasa).",
+      "conflitos": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "P11",
+   "exterior": true,
+   "eixo": "x",
+   "inicio": {
+    "valor": 0.0,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+     "folha": 1,
+     "local": "planta, região 120–215 × 192–258 mm da folha",
+     "data": ""
+    },
+    "nota": "",
+    "conflitos": []
+   },
+   "fim": {
+    "valor": 17.5,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+     "folha": 1,
+     "local": "planta, região 120–215 × 192–258 mm da folha",
+     "data": ""
+    },
+    "nota": "",
+    "conflitos": []
+   },
+   "posicao": {
+    "valor": 10.873,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+     "folha": 1,
+     "local": "planta, região 120–215 × 192–258 mm da folha",
+     "data": ""
+    },
+    "nota": "",
+    "conflitos": []
+   },
+   "espessura": {
+    "valor": 0.25,
+    "unidade": "m",
+    "tipo": "dimensao",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+     "folha": 1,
+     "local": "planta, região 120–215 × 192–258 mm da folha",
+     "data": ""
+    },
+    "nota": "",
+    "conflitos": []
+   },
+   "aberturas": [
+    {
+     "id": "0",
+     "tipo": {
+      "valor": "porta",
+      "unidade": "",
+      "tipo": "classificacao",
+      "estado": "CONFIRMED",
+      "metodo": "desenho_empresa",
+      "fonte": {
+       "documento": "250828_D2503_Modulos.dwfx",
+       "folha": null,
+       "local": "módulo M23",
+       "data": ""
+      },
+      "nota": "Como construído (desenho de módulos da DiscoverCasa).",
+      "conflitos": []
+     },
+     "inicio": {
+      "valor": 0.35,
+      "unidade": "m",
+      "tipo": "geometria",
+      "estado": "CONFIRMED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+       "folha": 1,
+       "local": "planta, região 120–215 × 192–258 mm da folha",
+       "data": ""
+      },
+      "nota": "",
+      "conflitos": []
+     },
+     "fim": {
+      "valor": 1.15,
+      "unidade": "m",
+      "tipo": "geometria",
+      "estado": "CONFIRMED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+       "folha": 1,
+       "local": "planta, região 120–215 × 192–258 mm da folha",
+       "data": ""
+      },
+      "nota": "",
+      "conflitos": []
+     },
+     "largura": {
+      "valor": 0.94,
+      "unidade": "m",
+      "tipo": "dimensao",
+      "estado": "CONFIRMED",
+      "metodo": "desenho_empresa",
+      "fonte": {
+       "documento": "250828_D2503_Modulos.dwfx",
+       "folha": null,
+       "local": "módulo M23",
+       "data": ""
+      },
+      "nota": "Como construído (desenho de módulos da DiscoverCasa).",
+      "conflitos": [
+       {
+        "valor": 0.8,
+        "fonte": {
+         "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+         "folha": 1,
+         "local": "planta, região 120–215 × 192–258 mm da folha",
+         "data": ""
+        },
+        "estado": "resolvido",
+        "nota": "Planta/configuração: 0.8.",
+        "resolucao": "Prevalece o desenho de módulos (como construído)."
+       }
+      ]
+     },
+     "peitoril": {
+      "valor": 0.0,
+      "unidade": "m",
+      "tipo": "cota",
+      "estado": "CONFIRMED",
+      "metodo": "desenho_empresa",
+      "fonte": {
+       "documento": "250828_D2503_Modulos.dwfx",
+       "folha": null,
+       "local": "módulo M23",
+       "data": ""
+      },
+      "nota": "Como construído (desenho de módulos da DiscoverCasa).",
+      "conflitos": []
+     },
+     "altura": {
+      "valor": 2.2,
+      "unidade": "m",
+      "tipo": "cota",
+      "estado": "CONFIRMED",
+      "metodo": "desenho_empresa",
+      "fonte": {
+       "documento": "250828_D2503_Modulos.dwfx",
+       "folha": null,
+       "local": "módulo M23",
+       "data": ""
+      },
+      "nota": "Como construído (desenho de módulos da DiscoverCasa).",
+      "conflitos": []
+     }
+    },
+    {
+     "id": "1",
+     "tipo": {
+      "valor": "janela",
+      "unidade": "",
+      "tipo": "classificacao",
+      "estado": "CONFIRMED",
+      "metodo": "desenho_empresa",
+      "fonte": {
+       "documento": "250828_D2503_Modulos.dwfx",
+       "folha": null,
+       "local": "módulo M20",
+       "data": ""
+      },
+      "nota": "Como construído (desenho de módulos da DiscoverCasa).",
+      "conflitos": []
+     },
+     "inicio": {
+      "valor": 7.03,
+      "unidade": "m",
+      "tipo": "geometria",
+      "estado": "CONFIRMED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+       "folha": 1,
+       "local": "planta, região 120–215 × 192–258 mm da folha",
+       "data": ""
+      },
+      "nota": "",
+      "conflitos": []
+     },
+     "fim": {
+      "valor": 8.53,
+      "unidade": "m",
+      "tipo": "geometria",
+      "estado": "CONFIRMED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+       "folha": 1,
+       "local": "planta, região 120–215 × 192–258 mm da folha",
+       "data": ""
+      },
+      "nota": "",
+      "conflitos": []
+     },
+     "largura": {
+      "valor": 1.504,
+      "unidade": "m",
+      "tipo": "dimensao",
+      "estado": "CONFIRMED",
+      "metodo": "desenho_empresa",
+      "fonte": {
+       "documento": "250828_D2503_Modulos.dwfx",
+       "folha": null,
+       "local": "módulo M20",
+       "data": ""
+      },
+      "nota": "Como construído (desenho de módulos da DiscoverCasa).",
+      "conflitos": []
+     },
+     "peitoril": {
+      "valor": 1.036,
+      "unidade": "m",
+      "tipo": "cota",
+      "estado": "CONFIRMED",
+      "metodo": "desenho_empresa",
+      "fonte": {
+       "documento": "250828_D2503_Modulos.dwfx",
+       "folha": null,
+       "local": "módulo M20",
+       "data": ""
+      },
+      "nota": "Como construído (desenho de módulos da DiscoverCasa).",
+      "conflitos": [
+       {
+        "valor": 1.0,
+        "fonte": {
+         "documento": "config.json (configuração do modelo)",
+         "folha": null,
+         "local": "aberturas.janela.peitoril",
+         "data": ""
+        },
+        "estado": "resolvido",
+        "nota": "Planta/configuração: 1.0.",
+        "resolucao": "Prevalece o desenho de módulos (como construído)."
+       }
+      ]
+     },
+     "altura": {
+      "valor": 1.986,
+      "unidade": "m",
+      "tipo": "cota",
+      "estado": "CONFIRMED",
+      "metodo": "desenho_empresa",
+      "fonte": {
+       "documento": "250828_D2503_Modulos.dwfx",
+       "folha": null,
+       "local": "módulo M20",
+       "data": ""
+      },
+      "nota": "Como construído (desenho de módulos da DiscoverCasa).",
+      "conflitos": [
+       {
+        "valor": 1.75,
+        "fonte": {
+         "documento": "config.json (configuração do modelo)",
+         "folha": null,
+         "local": "aberturas.janela.topo",
+         "data": ""
+        },
+        "estado": "resolvido",
+        "nota": "Planta/configuração: 1.75.",
+        "resolucao": "Prevalece o desenho de módulos (como construído)."
+       }
+      ]
+     }
+    },
+    {
+     "id": "2",
+     "tipo": {
+      "valor": "janela",
+      "unidade": "",
+      "tipo": "classificacao",
+      "estado": "CONFIRMED",
+      "metodo": "desenho_empresa",
+      "fonte": {
+       "documento": "250828_D2503_Modulos.dwfx",
+       "folha": null,
+       "local": "módulo M18",
+       "data": ""
+      },
+      "nota": "Como construído (desenho de módulos da DiscoverCasa).",
+      "conflitos": []
+     },
+     "inicio": {
+      "valor": 11.86,
+      "unidade": "m",
+      "tipo": "geometria",
+      "estado": "CONFIRMED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+       "folha": 1,
+       "local": "planta, região 120–215 × 192–258 mm da folha",
+       "data": ""
+      },
+      "nota": "",
+      "conflitos": []
+     },
+     "fim": {
+      "valor": 12.61,
+      "unidade": "m",
+      "tipo": "geometria",
+      "estado": "CONFIRMED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+       "folha": 1,
+       "local": "planta, região 120–215 × 192–258 mm da folha",
+       "data": ""
+      },
+      "nota": "",
+      "conflitos": []
+     },
+     "largura": {
+      "valor": 0.749,
+      "unidade": "m",
+      "tipo": "dimensao",
+      "estado": "CONFIRMED",
+      "metodo": "desenho_empresa",
+      "fonte": {
+       "documento": "250828_D2503_Modulos.dwfx",
+       "folha": null,
+       "local": "módulo M18",
+       "data": ""
+      },
+      "nota": "Como construído (desenho de módulos da DiscoverCasa).",
+      "conflitos": []
+     },
+     "peitoril": {
+      "valor": 1.036,
+      "unidade": "m",
+      "tipo": "cota",
+      "estado": "CONFIRMED",
+      "metodo": "desenho_empresa",
+      "fonte": {
+       "documento": "250828_D2503_Modulos.dwfx",
+       "folha": null,
+       "local": "módulo M18",
+       "data": ""
+      },
+      "nota": "Como construído (desenho de módulos da DiscoverCasa).",
+      "conflitos": [
+       {
+        "valor": 1.0,
+        "fonte": {
+         "documento": "config.json (configuração do modelo)",
+         "folha": null,
+         "local": "aberturas.janela.peitoril",
+         "data": ""
+        },
+        "estado": "resolvido",
+        "nota": "Planta/configuração: 1.0.",
+        "resolucao": "Prevalece o desenho de módulos (como construído)."
+       }
+      ]
+     },
+     "altura": {
+      "valor": 1.785,
+      "unidade": "m",
+      "tipo": "cota",
+      "estado": "CONFIRMED",
+      "metodo": "desenho_empresa",
+      "fonte": {
+       "documento": "250828_D2503_Modulos.dwfx",
+       "folha": null,
+       "local": "módulo M18",
+       "data": ""
+      },
+      "nota": "Como construído (desenho de módulos da DiscoverCasa).",
+      "conflitos": [
+       {
+        "valor": 1.75,
+        "fonte": {
+         "documento": "config.json (configuração do modelo)",
+         "folha": null,
+         "local": "aberturas.janela.topo",
+         "data": ""
+        },
+        "estado": "resolvido",
+        "nota": "Planta/configuração: 1.75.",
+        "resolucao": "Prevalece o desenho de módulos (como construído)."
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "P12",
+   "exterior": true,
+   "eixo": "y",
+   "inicio": {
+    "valor": 2.498,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+     "folha": 1,
+     "local": "planta, região 120–215 × 192–258 mm da folha",
+     "data": ""
+    },
+    "nota": "",
+    "conflitos": []
+   },
+   "fim": {
+    "valor": 10.998,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+     "folha": 1,
+     "local": "planta, região 120–215 × 192–258 mm da folha",
+     "data": ""
+    },
+    "nota": "",
+    "conflitos": []
+   },
+   "posicao": {
+    "valor": 0.125,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+     "folha": 1,
+     "local": "planta, região 120–215 × 192–258 mm da folha",
+     "data": ""
+    },
+    "nota": "",
+    "conflitos": []
+   },
+   "espessura": {
+    "valor": 0.25,
+    "unidade": "m",
+    "tipo": "dimensao",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+     "folha": 1,
+     "local": "planta, região 120–215 × 192–258 mm da folha",
+     "data": ""
+    },
+    "nota": "",
+    "conflitos": []
+   },
+   "aberturas": [
+    {
+     "id": "0",
+     "tipo": {
+      "valor": "janela",
+      "unidade": "",
+      "tipo": "classificacao",
+      "estado": "CONFIRMED",
+      "metodo": "desenho_empresa",
+      "fonte": {
+       "documento": "250828_D2503_Modulos.dwfx",
+       "folha": null,
+       "local": "módulo M24",
+       "data": ""
+      },
+      "nota": "Como construído (desenho de módulos da DiscoverCasa).",
+      "conflitos": []
+     },
+     "inicio": {
+      "valor": 8.458,
+      "unidade": "m",
+      "tipo": "geometria",
+      "estado": "CONFIRMED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+       "folha": 1,
+       "local": "planta, região 120–215 × 192–258 mm da folha",
+       "data": ""
+      },
+      "nota": "",
+      "conflitos": []
+     },
+     "fim": {
+      "valor": 9.208,
+      "unidade": "m",
+      "tipo": "geometria",
+      "estado": "CONFIRMED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+       "folha": 1,
+       "local": "planta, região 120–215 × 192–258 mm da folha",
+       "data": ""
+      },
+      "nota": "",
+      "conflitos": []
+     },
+     "largura": {
+      "valor": 0.75,
+      "unidade": "m",
+      "tipo": "dimensao",
+      "estado": "CONFIRMED",
+      "metodo": "desenho_empresa",
+      "fonte": {
+       "documento": "250828_D2503_Modulos.dwfx",
+       "folha": null,
+       "local": "módulo M24",
+       "data": ""
+      },
+      "nota": "Como construído (desenho de módulos da DiscoverCasa).",
+      "conflitos": []
+     },
+     "peitoril": {
+      "valor": 1.035,
+      "unidade": "m",
+      "tipo": "cota",
+      "estado": "CONFIRMED",
+      "metodo": "desenho_empresa",
+      "fonte": {
+       "documento": "250828_D2503_Modulos.dwfx",
+       "folha": null,
+       "local": "módulo M24",
+       "data": ""
+      },
+      "nota": "Como construído (desenho de módulos da DiscoverCasa).",
+      "conflitos": [
+       {
+        "valor": 1.0,
+        "fonte": {
+         "documento": "config.json (configuração do modelo)",
+         "folha": null,
+         "local": "aberturas.janela.peitoril",
+         "data": ""
+        },
+        "estado": "resolvido",
+        "nota": "Planta/configuração: 1.0.",
+        "resolucao": "Prevalece o desenho de módulos (como construído)."
+       }
+      ]
+     },
+     "altura": {
+      "valor": 1.985,
+      "unidade": "m",
+      "tipo": "cota",
+      "estado": "CONFIRMED",
+      "metodo": "desenho_empresa",
+      "fonte": {
+       "documento": "250828_D2503_Modulos.dwfx",
+       "folha": null,
+       "local": "módulo M24",
+       "data": ""
+      },
+      "nota": "Como construído (desenho de módulos da DiscoverCasa).",
+      "conflitos": [
+       {
+        "valor": 1.75,
+        "fonte": {
+         "documento": "config.json (configuração do modelo)",
+         "folha": null,
+         "local": "aberturas.janela.topo",
+         "data": ""
+        },
+        "estado": "resolvido",
+        "nota": "Planta/configuração: 1.75.",
+        "resolucao": "Prevalece o desenho de módulos (como construído)."
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "P13",
+   "exterior": false,
+   "eixo": "y",
+   "inicio": {
+    "valor": 2.747,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+     "folha": 1,
+     "local": "planta, região 120–215 × 192–258 mm da folha",
+     "data": ""
+    },
+    "nota": "",
+    "conflitos": []
+   },
+   "fim": {
+    "valor": 10.747,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+     "folha": 1,
+     "local": "planta, região 120–215 × 192–258 mm da folha",
+     "data": ""
+    },
+    "nota": "",
+    "conflitos": []
+   },
+   "posicao": {
+    "valor": 3.552,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+     "folha": 1,
+     "local": "planta, região 120–215 × 192–258 mm da folha",
+     "data": ""
+    },
+    "nota": "",
+    "conflitos": []
+   },
+   "espessura": {
+    "valor": 0.152,
+    "unidade": "m",
+    "tipo": "dimensao",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+     "folha": 1,
+     "local": "planta, região 120–215 × 192–258 mm da folha",
+     "data": ""
+    },
+    "nota": "",
+    "conflitos": []
+   },
+   "aberturas": [
+    {
+     "id": "0",
+     "tipo": {
+      "valor": "porta",
+      "unidade": "",
+      "tipo": "classificacao",
+      "estado": "CONFIRMED",
+      "metodo": "desenho_empresa",
+      "fonte": {
+       "documento": "250828_D2503_Modulos.dwfx",
+       "folha": null,
+       "local": "módulo M4",
+       "data": ""
+      },
+      "nota": "Como construído (desenho de módulos da DiscoverCasa).",
+      "conflitos": []
+     },
+     "inicio": {
+      "valor": 9.147,
+      "unidade": "m",
+      "tipo": "geometria",
+      "estado": "CONFIRMED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+       "folha": 1,
+       "local": "planta, região 120–215 × 192–258 mm da folha",
+       "data": ""
+      },
+      "nota": "",
+      "conflitos": []
+     },
+     "fim": {
+      "valor": 9.947,
+      "unidade": "m",
+      "tipo": "geometria",
+      "estado": "CONFIRMED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+       "folha": 1,
+       "local": "planta, região 120–215 × 192–258 mm da folha",
+       "data": ""
+      },
+      "nota": "",
+      "conflitos": []
+     },
+     "largura": {
+      "valor": 0.871,
+      "unidade": "m",
+      "tipo": "dimensao",
+      "estado": "CONFIRMED",
+      "metodo": "desenho_empresa",
+      "fonte": {
+       "documento": "250828_D2503_Modulos.dwfx",
+       "folha": null,
+       "local": "módulo M4",
+       "data": ""
+      },
+      "nota": "Como construído (desenho de módulos da DiscoverCasa).",
+      "conflitos": [
+       {
+        "valor": 0.8,
+        "fonte": {
+         "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+         "folha": 1,
+         "local": "planta, região 120–215 × 192–258 mm da folha",
+         "data": ""
+        },
+        "estado": "resolvido",
+        "nota": "Planta/configuração: 0.8.",
+        "resolucao": "Prevalece o desenho de módulos (como construído)."
+       }
+      ]
+     },
+     "peitoril": {
+      "valor": 0.0,
+      "unidade": "m",
+      "tipo": "cota",
+      "estado": "CONFIRMED",
+      "metodo": "desenho_empresa",
+      "fonte": {
+       "documento": "250828_D2503_Modulos.dwfx",
+       "folha": null,
+       "local": "módulo M4",
+       "data": ""
+      },
+      "nota": "Como construído (desenho de módulos da DiscoverCasa).",
+      "conflitos": []
+     },
+     "altura": {
+      "valor": 2.03,
+      "unidade": "m",
+      "tipo": "cota",
+      "estado": "CONFIRMED",
+      "metodo": "desenho_empresa",
+      "fonte": {
+       "documento": "250828_D2503_Modulos.dwfx",
+       "folha": null,
+       "local": "módulo M4",
+       "data": ""
+      },
+      "nota": "Como construído (desenho de módulos da DiscoverCasa).",
+      "conflitos": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "P14",
+   "exterior": true,
+   "eixo": "y",
+   "inicio": {
+    "valor": 0.0,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+     "folha": 1,
+     "local": "planta, região 120–215 × 192–258 mm da folha",
+     "data": ""
+    },
+    "nota": "",
+    "conflitos": []
+   },
+   "fim": {
+    "valor": 2.5,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+     "folha": 1,
+     "local": "planta, região 120–215 × 192–258 mm da folha",
+     "data": ""
+    },
+    "nota": "",
+    "conflitos": []
+   },
+   "posicao": {
+    "valor": 10.905,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+     "folha": 1,
+     "local": "planta, região 120–215 × 192–258 mm da folha",
+     "data": ""
+    },
+    "nota": "",
+    "conflitos": []
+   },
+   "espessura": {
+    "valor": 0.254,
+    "unidade": "m",
+    "tipo": "dimensao",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+     "folha": 1,
+     "local": "planta, região 120–215 × 192–258 mm da folha",
+     "data": ""
+    },
+    "nota": "",
+    "conflitos": []
+   },
+   "aberturas": [
+    {
+     "id": "0",
+     "tipo": {
+      "valor": "janela",
+      "unidade": "",
+      "tipo": "classificacao",
+      "estado": "CONFIRMED",
+      "metodo": "desenho_empresa",
+      "fonte": {
+       "documento": "250828_D2503_Modulos.dwfx",
+       "folha": null,
+       "local": "módulo M6",
+       "data": ""
+      },
+      "nota": "Como construído (desenho de módulos da DiscoverCasa).",
+      "conflitos": [
+       {
+        "valor": "porta",
+        "fonte": {
+         "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+         "folha": 1,
+         "local": "planta, região 120–215 × 192–258 mm da folha",
+         "data": ""
+        },
+        "estado": "resolvido",
+        "nota": "A planta desenha-o de outro tipo.",
+        "resolucao": "Prevalece o desenho de módulos (como construído)."
+       }
+      ]
+     },
+     "inicio": {
+      "valor": 0.25,
+      "unidade": "m",
+      "tipo": "geometria",
+      "estado": "CONFIRMED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+       "folha": 1,
+       "local": "planta, região 120–215 × 192–258 mm da folha",
+       "data": ""
+      },
+      "nota": "",
+      "conflitos": []
+     },
+     "fim": {
+      "valor": 1.0,
+      "unidade": "m",
+      "tipo": "geometria",
+      "estado": "CONFIRMED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+       "folha": 1,
+       "local": "planta, região 120–215 × 192–258 mm da folha",
+       "data": ""
+      },
+      "nota": "",
+      "conflitos": []
+     },
+     "largura": {
+      "valor": 0.75,
+      "unidade": "m",
+      "tipo": "dimensao",
+      "estado": "CONFIRMED",
+      "metodo": "desenho_empresa",
+      "fonte": {
+       "documento": "250828_D2503_Modulos.dwfx",
+       "folha": null,
+       "local": "módulo M6",
+       "data": ""
+      },
+      "nota": "Como construído (desenho de módulos da DiscoverCasa).",
+      "conflitos": []
+     },
+     "peitoril": {
+      "valor": 1.035,
+      "unidade": "m",
+      "tipo": "cota",
+      "estado": "CONFIRMED",
+      "metodo": "desenho_empresa",
+      "fonte": {
+       "documento": "250828_D2503_Modulos.dwfx",
+       "folha": null,
+       "local": "módulo M6",
+       "data": ""
+      },
+      "nota": "Como construído (desenho de módulos da DiscoverCasa).",
+      "conflitos": [
+       {
+        "valor": 1.0,
+        "fonte": {
+         "documento": "config.json (configuração do modelo)",
+         "folha": null,
+         "local": "aberturas.janela.peitoril",
+         "data": ""
+        },
+        "estado": "resolvido",
+        "nota": "Planta/configuração: 1.0.",
+        "resolucao": "Prevalece o desenho de módulos (como construído)."
+       }
+      ]
+     },
+     "altura": {
+      "valor": 1.785,
+      "unidade": "m",
+      "tipo": "cota",
+      "estado": "CONFIRMED",
+      "metodo": "desenho_empresa",
+      "fonte": {
+       "documento": "250828_D2503_Modulos.dwfx",
+       "folha": null,
+       "local": "módulo M6",
+       "data": ""
+      },
+      "nota": "Como construído (desenho de módulos da DiscoverCasa).",
+      "conflitos": [
+       {
+        "valor": 1.75,
+        "fonte": {
+         "documento": "config.json (configuração do modelo)",
+         "folha": null,
+         "local": "aberturas.janela.topo",
+         "data": ""
+        },
+        "estado": "resolvido",
+        "nota": "Planta/configuração: 1.75.",
+        "resolucao": "Prevalece o desenho de módulos (como construído)."
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "P15",
+   "exterior": false,
+   "eixo": "y",
+   "inicio": {
+    "valor": 2.75,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+     "folha": 1,
+     "local": "planta, região 120–215 × 192–258 mm da folha",
+     "data": ""
+    },
+    "nota": "",
+    "conflitos": []
+   },
+   "fim": {
+    "valor": 10.748,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+     "folha": 1,
+     "local": "planta, região 120–215 × 192–258 mm da folha",
+     "data": ""
+    },
+    "nota": "",
+    "conflitos": []
+   },
+   "posicao": {
+    "valor": 10.85,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+     "folha": 1,
+     "local": "planta, região 120–215 × 192–258 mm da folha",
+     "data": ""
+    },
+    "nota": "",
+    "conflitos": []
+   },
+   "espessura": {
+    "valor": 0.144,
+    "unidade": "m",
+    "tipo": "dimensao",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+     "folha": 1,
+     "local": "planta, região 120–215 × 192–258 mm da folha",
+     "data": ""
+    },
+    "nota": "",
+    "conflitos": []
+   },
+   "aberturas": [
+    {
+     "id": "0",
+     "tipo": {
+      "valor": "porta",
+      "unidade": "",
+      "tipo": "classificacao",
+      "estado": "CONFIRMED",
+      "metodo": "desenho_empresa",
+      "fonte": {
+       "documento": "250828_D2503_Modulos.dwfx",
+       "folha": null,
+       "local": "módulo M17",
+       "data": ""
+      },
+      "nota": "Como construído (desenho de módulos da DiscoverCasa).",
+      "conflitos": []
+     },
+     "inicio": {
+      "valor": 7.41,
+      "unidade": "m",
+      "tipo": "geometria",
+      "estado": "CONFIRMED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+       "folha": 1,
+       "local": "planta, região 120–215 × 192–258 mm da folha",
+       "data": ""
+      },
+      "nota": "",
+      "conflitos": []
+     },
+     "fim": {
+      "valor": 8.21,
+      "unidade": "m",
+      "tipo": "geometria",
+      "estado": "CONFIRMED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+       "folha": 1,
+       "local": "planta, região 120–215 × 192–258 mm da folha",
+       "data": ""
+      },
+      "nota": "",
+      "conflitos": []
+     },
+     "largura": {
+      "valor": 0.871,
+      "unidade": "m",
+      "tipo": "dimensao",
+      "estado": "CONFIRMED",
+      "metodo": "desenho_empresa",
+      "fonte": {
+       "documento": "250828_D2503_Modulos.dwfx",
+       "folha": null,
+       "local": "módulo M17",
+       "data": ""
+      },
+      "nota": "Como construído (desenho de módulos da DiscoverCasa).",
+      "conflitos": [
+       {
+        "valor": 0.8,
+        "fonte": {
+         "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+         "folha": 1,
+         "local": "planta, região 120–215 × 192–258 mm da folha",
+         "data": ""
+        },
+        "estado": "resolvido",
+        "nota": "Planta/configuração: 0.8.",
+        "resolucao": "Prevalece o desenho de módulos (como construído)."
+       }
+      ]
+     },
+     "peitoril": {
+      "valor": 0.0,
+      "unidade": "m",
+      "tipo": "cota",
+      "estado": "CONFIRMED",
+      "metodo": "desenho_empresa",
+      "fonte": {
+       "documento": "250828_D2503_Modulos.dwfx",
+       "folha": null,
+       "local": "módulo M17",
+       "data": ""
+      },
+      "nota": "Como construído (desenho de módulos da DiscoverCasa).",
+      "conflitos": []
+     },
+     "altura": {
+      "valor": 2.031,
+      "unidade": "m",
+      "tipo": "cota",
+      "estado": "CONFIRMED",
+      "metodo": "desenho_empresa",
+      "fonte": {
+       "documento": "250828_D2503_Modulos.dwfx",
+       "folha": null,
+       "local": "módulo M17",
+       "data": ""
+      },
+      "nota": "Como construído (desenho de módulos da DiscoverCasa).",
+      "conflitos": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "P16",
+   "exterior": false,
+   "eixo": "y",
+   "inicio": {
+    "valor": 0.25,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+     "folha": 1,
+     "local": "planta, região 120–215 × 192–258 mm da folha",
+     "data": ""
+    },
+    "nota": "",
+    "conflitos": []
+   },
+   "fim": {
+    "valor": 2.5,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+     "folha": 1,
+     "local": "planta, região 120–215 × 192–258 mm da folha",
+     "data": ""
+    },
+    "nota": "",
+    "conflitos": []
+   },
+   "posicao": {
+    "valor": 13.333,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+     "folha": 1,
+     "local": "planta, região 120–215 × 192–258 mm da folha",
+     "data": ""
+    },
+    "nota": "",
+    "conflitos": []
+   },
+   "espessura": {
+    "valor": 0.14,
+    "unidade": "m",
+    "tipo": "dimensao",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+     "folha": 1,
+     "local": "planta, região 120–215 × 192–258 mm da folha",
+     "data": ""
+    },
+    "nota": "",
+    "conflitos": []
+   },
+   "aberturas": []
+  },
+  {
+   "id": "P17",
+   "exterior": false,
+   "eixo": "y",
+   "inicio": {
+    "valor": 4.034,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+     "folha": 1,
+     "local": "planta, região 120–215 × 192–258 mm da folha",
+     "data": ""
+    },
+    "nota": "",
+    "conflitos": []
+   },
+   "fim": {
+    "valor": 10.744,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+     "folha": 1,
+     "local": "planta, região 120–215 × 192–258 mm da folha",
+     "data": ""
+    },
+    "nota": "",
+    "conflitos": []
+   },
+   "posicao": {
+    "valor": 13.621,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+     "folha": 1,
+     "local": "planta, região 120–215 × 192–258 mm da folha",
+     "data": ""
+    },
+    "nota": "",
+    "conflitos": []
+   },
+   "espessura": {
+    "valor": 0.14,
+    "unidade": "m",
+    "tipo": "dimensao",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+     "folha": 1,
+     "local": "planta, região 120–215 × 192–258 mm da folha",
+     "data": ""
+    },
+    "nota": "",
+    "conflitos": []
+   },
+   "aberturas": [
+    {
+     "id": "0",
+     "tipo": {
+      "valor": "porta",
+      "unidade": "",
+      "tipo": "classificacao",
+      "estado": "CONFIRMED",
+      "metodo": "desenho_empresa",
+      "fonte": {
+       "documento": "250828_D2503_Modulos.dwfx",
+       "folha": null,
+       "local": "módulo M21",
+       "data": ""
+      },
+      "nota": "Como construído (desenho de módulos da DiscoverCasa).",
+      "conflitos": []
+     },
+     "inicio": {
+      "valor": 6.174,
+      "unidade": "m",
+      "tipo": "geometria",
+      "estado": "CONFIRMED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+       "folha": 1,
+       "local": "planta, região 120–215 × 192–258 mm da folha",
+       "data": ""
+      },
+      "nota": "",
+      "conflitos": []
+     },
+     "fim": {
+      "valor": 6.974,
+      "unidade": "m",
+      "tipo": "geometria",
+      "estado": "CONFIRMED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+       "folha": 1,
+       "local": "planta, região 120–215 × 192–258 mm da folha",
+       "data": ""
+      },
+      "nota": "",
+      "conflitos": []
+     },
+     "largura": {
+      "valor": 0.871,
+      "unidade": "m",
+      "tipo": "dimensao",
+      "estado": "CONFIRMED",
+      "metodo": "desenho_empresa",
+      "fonte": {
+       "documento": "250828_D2503_Modulos.dwfx",
+       "folha": null,
+       "local": "módulo M21",
+       "data": ""
+      },
+      "nota": "Como construído (desenho de módulos da DiscoverCasa).",
+      "conflitos": [
+       {
+        "valor": 0.8,
+        "fonte": {
+         "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+         "folha": 1,
+         "local": "planta, região 120–215 × 192–258 mm da folha",
+         "data": ""
+        },
+        "estado": "resolvido",
+        "nota": "Planta/configuração: 0.8.",
+        "resolucao": "Prevalece o desenho de módulos (como construído)."
+       }
+      ]
+     },
+     "peitoril": {
+      "valor": 0.0,
+      "unidade": "m",
+      "tipo": "cota",
+      "estado": "CONFIRMED",
+      "metodo": "desenho_empresa",
+      "fonte": {
+       "documento": "250828_D2503_Modulos.dwfx",
+       "folha": null,
+       "local": "módulo M21",
+       "data": ""
+      },
+      "nota": "Como construído (desenho de módulos da DiscoverCasa).",
+      "conflitos": []
+     },
+     "altura": {
+      "valor": 2.03,
+      "unidade": "m",
+      "tipo": "cota",
+      "estado": "CONFIRMED",
+      "metodo": "desenho_empresa",
+      "fonte": {
+       "documento": "250828_D2503_Modulos.dwfx",
+       "folha": null,
+       "local": "módulo M21",
+       "data": ""
+      },
+      "nota": "Como construído (desenho de módulos da DiscoverCasa).",
+      "conflitos": []
+     }
+    },
+    {
+     "id": "1",
+     "tipo": {
+      "valor": "porta",
+      "unidade": "",
+      "tipo": "classificacao",
+      "estado": "CONFIRMED",
+      "metodo": "desenho_empresa",
+      "fonte": {
+       "documento": "250828_D2503_Modulos.dwfx",
+       "folha": null,
+       "local": "módulo M21",
+       "data": ""
+      },
+      "nota": "Como construído (desenho de módulos da DiscoverCasa).",
+      "conflitos": []
+     },
+     "inicio": {
+      "valor": 7.404,
+      "unidade": "m",
+      "tipo": "geometria",
+      "estado": "CONFIRMED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+       "folha": 1,
+       "local": "planta, região 120–215 × 192–258 mm da folha",
+       "data": ""
+      },
+      "nota": "",
+      "conflitos": []
+     },
+     "fim": {
+      "valor": 8.204,
+      "unidade": "m",
+      "tipo": "geometria",
+      "estado": "CONFIRMED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+       "folha": 1,
+       "local": "planta, região 120–215 × 192–258 mm da folha",
+       "data": ""
+      },
+      "nota": "",
+      "conflitos": []
+     },
+     "largura": {
+      "valor": 0.871,
+      "unidade": "m",
+      "tipo": "dimensao",
+      "estado": "CONFIRMED",
+      "metodo": "desenho_empresa",
+      "fonte": {
+       "documento": "250828_D2503_Modulos.dwfx",
+       "folha": null,
+       "local": "módulo M21",
+       "data": ""
+      },
+      "nota": "Como construído (desenho de módulos da DiscoverCasa).",
+      "conflitos": [
+       {
+        "valor": 0.8,
+        "fonte": {
+         "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+         "folha": 1,
+         "local": "planta, região 120–215 × 192–258 mm da folha",
+         "data": ""
+        },
+        "estado": "resolvido",
+        "nota": "Planta/configuração: 0.8.",
+        "resolucao": "Prevalece o desenho de módulos (como construído)."
+       }
+      ]
+     },
+     "peitoril": {
+      "valor": 0.0,
+      "unidade": "m",
+      "tipo": "cota",
+      "estado": "CONFIRMED",
+      "metodo": "desenho_empresa",
+      "fonte": {
+       "documento": "250828_D2503_Modulos.dwfx",
+       "folha": null,
+       "local": "módulo M21",
+       "data": ""
+      },
+      "nota": "Como construído (desenho de módulos da DiscoverCasa).",
+      "conflitos": []
+     },
+     "altura": {
+      "valor": 2.03,
+      "unidade": "m",
+      "tipo": "cota",
+      "estado": "CONFIRMED",
+      "metodo": "desenho_empresa",
+      "fonte": {
+       "documento": "250828_D2503_Modulos.dwfx",
+       "folha": null,
+       "local": "módulo M21",
+       "data": ""
+      },
+      "nota": "Como construído (desenho de módulos da DiscoverCasa).",
+      "conflitos": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "P18",
+   "exterior": true,
+   "eixo": "y",
+   "inicio": {
+    "valor": 0.0,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+     "folha": 1,
+     "local": "planta, região 120–215 × 192–258 mm da folha",
+     "data": ""
+    },
+    "nota": "",
+    "conflitos": []
+   },
+   "fim": {
+    "valor": 11.0,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+     "folha": 1,
+     "local": "planta, região 120–215 × 192–258 mm da folha",
+     "data": ""
+    },
+    "nota": "",
+    "conflitos": []
+   },
+   "posicao": {
+    "valor": 17.376,
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+     "folha": 1,
+     "local": "planta, região 120–215 × 192–258 mm da folha",
+     "data": ""
+    },
+    "nota": "",
+    "conflitos": []
+   },
+   "espessura": {
+    "valor": 0.25,
+    "unidade": "m",
+    "tipo": "dimensao",
+    "estado": "CONFIRMED",
+    "metodo": "geometria",
+    "fonte": {
+     "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+     "folha": 1,
+     "local": "planta, região 120–215 × 192–258 mm da folha",
+     "data": ""
+    },
+    "nota": "",
+    "conflitos": []
+   },
+   "aberturas": [
+    {
+     "id": "0",
+     "tipo": {
+      "valor": "porta",
+      "unidade": "",
+      "tipo": "classificacao",
+      "estado": "CONFIRMED",
+      "metodo": "desenho_empresa",
+      "fonte": {
+       "documento": "250828_D2503_Modulos.dwfx",
+       "folha": null,
+       "local": "módulo M12",
+       "data": ""
+      },
+      "nota": "Como construído (desenho de módulos da DiscoverCasa).",
+      "conflitos": [
+       {
+        "valor": "janela",
+        "fonte": {
+         "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+         "folha": 1,
+         "local": "planta, região 120–215 × 192–258 mm da folha",
+         "data": ""
+        },
+        "estado": "resolvido",
+        "nota": "A planta desenha-o de outro tipo.",
+        "resolucao": "Prevalece o desenho de módulos (como construído)."
+       }
+      ]
+     },
+     "inicio": {
+      "valor": 5.13,
+      "unidade": "m",
+      "tipo": "geometria",
+      "estado": "CONFIRMED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+       "folha": 1,
+       "local": "planta, região 120–215 × 192–258 mm da folha",
+       "data": ""
+      },
+      "nota": "",
+      "conflitos": []
+     },
+     "fim": {
+      "valor": 7.12,
+      "unidade": "m",
+      "tipo": "geometria",
+      "estado": "CONFIRMED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+       "folha": 1,
+       "local": "planta, região 120–215 × 192–258 mm da folha",
+       "data": ""
+      },
+      "nota": "",
+      "conflitos": []
+     },
+     "largura": {
+      "valor": 2.0,
+      "unidade": "m",
+      "tipo": "dimensao",
+      "estado": "CONFIRMED",
+      "metodo": "desenho_empresa",
+      "fonte": {
+       "documento": "250828_D2503_Modulos.dwfx",
+       "folha": null,
+       "local": "módulo M12",
+       "data": ""
+      },
+      "nota": "Como construído (desenho de módulos da DiscoverCasa).",
+      "conflitos": []
+     },
+     "peitoril": {
+      "valor": 0.0,
+      "unidade": "m",
+      "tipo": "cota",
+      "estado": "CONFIRMED",
+      "metodo": "desenho_empresa",
+      "fonte": {
+       "documento": "250828_D2503_Modulos.dwfx",
+       "folha": null,
+       "local": "módulo M12",
+       "data": ""
+      },
+      "nota": "Como construído (desenho de módulos da DiscoverCasa).",
+      "conflitos": []
+     },
+     "altura": {
+      "valor": 2.4,
+      "unidade": "m",
+      "tipo": "cota",
+      "estado": "CONFIRMED",
+      "metodo": "desenho_empresa",
+      "fonte": {
+       "documento": "250828_D2503_Modulos.dwfx",
+       "folha": null,
+       "local": "módulo M12",
+       "data": ""
+      },
+      "nota": "Como construído (desenho de módulos da DiscoverCasa).",
+      "conflitos": [
+       {
+        "valor": 2.2,
+        "fonte": {
+         "documento": "config.json (configuração do modelo)",
+         "folha": null,
+         "local": "aberturas.porta_exterior.altura",
+         "data": ""
+        },
+        "estado": "resolvido",
+        "nota": "Planta/configuração: 2.2.",
+        "resolucao": "Prevalece o desenho de módulos (como construído)."
+       }
+      ]
+     }
+    },
+    {
+     "id": "1",
+     "tipo": {
+      "valor": "porta",
+      "unidade": "",
+      "tipo": "classificacao",
+      "estado": "CONFIRMED",
+      "metodo": "desenho_empresa",
+      "fonte": {
+       "documento": "250828_D2503_Modulos.dwfx",
+       "folha": null,
+       "local": "módulo M14",
+       "data": ""
+      },
+      "nota": "Como construído (desenho de módulos da DiscoverCasa).",
+      "conflitos": [
+       {
+        "valor": "janela",
+        "fonte": {
+         "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+         "folha": 1,
+         "local": "planta, região 120–215 × 192–258 mm da folha",
+         "data": ""
+        },
+        "estado": "resolvido",
+        "nota": "A planta desenha-o de outro tipo.",
+        "resolucao": "Prevalece o desenho de módulos (como construído)."
+       }
+      ]
+     },
+     "inicio": {
+      "valor": 7.26,
+      "unidade": "m",
+      "tipo": "geometria",
+      "estado": "CONFIRMED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+       "folha": 1,
+       "local": "planta, região 120–215 × 192–258 mm da folha",
+       "data": ""
+      },
+      "nota": "",
+      "conflitos": []
+     },
+     "fim": {
+      "valor": 9.26,
+      "unidade": "m",
+      "tipo": "geometria",
+      "estado": "CONFIRMED",
+      "metodo": "geometria",
+      "fonte": {
+       "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+       "folha": 1,
+       "local": "planta, região 120–215 × 192–258 mm da folha",
+       "data": ""
+      },
+      "nota": "",
+      "conflitos": []
+     },
+     "largura": {
+      "valor": 2.0,
+      "unidade": "m",
+      "tipo": "dimensao",
+      "estado": "CONFIRMED",
+      "metodo": "desenho_empresa",
+      "fonte": {
+       "documento": "250828_D2503_Modulos.dwfx",
+       "folha": null,
+       "local": "módulo M14",
+       "data": ""
+      },
+      "nota": "Como construído (desenho de módulos da DiscoverCasa).",
+      "conflitos": []
+     },
+     "peitoril": {
+      "valor": 0.0,
+      "unidade": "m",
+      "tipo": "cota",
+      "estado": "CONFIRMED",
+      "metodo": "desenho_empresa",
+      "fonte": {
+       "documento": "250828_D2503_Modulos.dwfx",
+       "folha": null,
+       "local": "módulo M14",
+       "data": ""
+      },
+      "nota": "Como construído (desenho de módulos da DiscoverCasa).",
+      "conflitos": []
+     },
+     "altura": {
+      "valor": 2.4,
+      "unidade": "m",
+      "tipo": "cota",
+      "estado": "CONFIRMED",
+      "metodo": "desenho_empresa",
+      "fonte": {
+       "documento": "250828_D2503_Modulos.dwfx",
+       "folha": null,
+       "local": "módulo M14",
+       "data": ""
+      },
+      "nota": "Como construído (desenho de módulos da DiscoverCasa).",
+      "conflitos": [
+       {
+        "valor": 2.2,
+        "fonte": {
+         "documento": "config.json (configuração do modelo)",
+         "folha": null,
+         "local": "aberturas.porta_exterior.altura",
+         "data": ""
+        },
+        "estado": "resolvido",
+        "nota": "Planta/configuração: 2.2.",
+        "resolucao": "Prevalece o desenho de módulos (como construído)."
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ],
+ "lajes": [
+  {
+   "id": "fundacao",
+   "funcao": "base de fundação",
+   "contorno": {
+    "valor": [
+     [
+      0.0,
+      2.498
+     ],
+     [
+      0.0,
+      11.0
+     ],
+     [
+      17.501,
+      11.0
+     ],
+     [
+      17.501,
+      0.0
+     ],
+     [
+      10.778,
+      0.0
+     ],
+     [
+      10.778,
+      2.498
+     ]
+    ],
+    "unidade": "m",
+    "tipo": "geometria",
+    "estado": "CONFIRMED",
+    "metodo": "desenho_empresa",
+    "fonte": {
+     "documento": "250828_D2503_Modulos.dwfx",
+     "folha": null,
+     "local": "Dimensão da fundação e módulos",
+     "data": "2025-08-28"
+    },
+    "nota": "Contorno da base de fundação = face exterior dos módulos.",
+    "conflitos": []
+   },
+   "espessura": {
+    "valor": 0.2,
+    "unidade": "m",
+    "tipo": "dimensao",
+    "estado": "INFERRED",
+    "metodo": "inferencia",
+    "fonte": {
+     "documento": "config.json (configuração do modelo)",
+     "folha": null,
+     "local": "fundacao.espessura_laje",
+     "data": ""
+    },
+    "nota": "Base de fundação DiscoverCasa — o utilizador vai explicar como a fazem; aqui só indicativa (laje 20 cm sob a casa).",
+    "conflitos": []
+   }
+  }
+ ],
+ "cobertura": {
+  "tipo": {
+   "valor": "platibanda",
+   "unidade": "",
+   "tipo": "classificacao",
+   "estado": "CONFIRMED",
+   "metodo": "desenho_empresa",
+   "fonte": {
+    "documento": "250828_D2503_Cobertura.dwfx",
+    "folha": null,
+    "local": "",
+    "data": "2025-08-28"
+   },
+   "nota": "Cobertura escondida atrás da platibanda, como construída.",
+   "conflitos": []
+  },
+  "estrutura": {
+   "valor": "lameladas",
+   "unidade": "",
+   "tipo": "classificacao",
+   "estado": "CONFIRMED",
+   "metodo": "desenho_empresa",
+   "fonte": {
+    "documento": "250828_D2503_Cobertura.dwfx",
+    "folha": 1,
+    "local": "Vigas lameladas horizontais",
+    "data": "2025-08-28"
+   },
+   "nota": "Lameladas 20x10 a 0,915; madres 11x7,5 em prumos.",
+   "conflitos": []
+  },
+  "inclinacao_pct": {
+   "valor": 6.0,
+   "unidade": "%",
+   "tipo": "dimensao",
+   "estado": "CONFIRMED",
+   "metodo": "desenho_empresa",
+   "fonte": {
+    "documento": "250828_D2503_Cobertura.dwfx",
+    "folha": 2,
+    "local": "Vigas de pendente (madres)",
+    "data": "2025-08-28"
+   },
+   "nota": "Duas águas a 6 %, como construída (utilizador 2026-10-16: «eu disse-te mal como seriam as águas»).",
+   "conflitos": [
+    {
+     "valor": 1.3,
+     "fonte": {
+      "documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+      "folha": 1,
+      "local": "CORTE B",
+      "data": ""
+     },
+     "estado": "resolvido",
+     "nota": "O corte B da arquitetura mostra 1,3 %.",
+     "resolucao": "Prevalece o D2503 (como construído)."
+    }
+   ]
+  },
+  "painel_espessura": {
+   "valor": 0.08,
+   "unidade": "m",
+   "tipo": "dimensao",
+   "estado": "CONFIRMED",
+   "metodo": "norma_empresa",
+   "fonte": {
+    "documento": "norma da empresa (sistema_construtivo.json, painel_oculto)",
+    "folha": null,
+    "local": "",
+    "data": ""
+   },
+   "nota": "Painel sandwich de 5 ondas, 80 mm.",
+   "conflitos": []
+  },
+  "cumeeira_y": {
+   "valor": 6.749,
+   "unidade": "m",
+   "tipo": "dimensao",
+   "estado": "CONFIRMED",
+   "metodo": "desenho_empresa",
+   "fonte": {
+    "documento": "250828_D2503_Cobertura.dwfx",
+    "folha": 2,
+    "local": "Vigas de pendente (madres)",
+    "data": "2025-08-28"
+   },
+   "nota": "Cumeeira a meio do bloco principal, ao longo da casa.",
+   "conflitos": []
+  }
+ },
+ "materiais": [
+  {
+   "elemento": "exterior",
+   "camadas": [
+    "Ripa casquinha",
+    "Douglas marron"
+   ],
+   "opcao": {
+    "valor": "A",
+    "unidade": "",
+    "tipo": "material",
+    "estado": "CONFIRMED",
+    "metodo": "utilizador",
+    "fonte": {
+     "documento": "utilizador 2026-10-15 (registo-conversas)",
+     "folha": null,
+     "local": "",
+     "data": "2026-10-15"
+    },
+    "nota": "Opção A: só ripado horizontal, sem contra-ripado («Nesta casa só levou ripado na horizontal e não levou o contra-ripado»).",
+    "conflitos": []
+   }
+  }
+ ],
+ "terreno": {
+  "fonte": {
+   "valor": "Levantamento topográfico F00.0 (DWG; também em DWFx e PDF)",
+   "unidade": "",
+   "tipo": "terreno",
+   "estado": "CONFIRMED",
+   "metodo": "texto",
+   "fonte": {
+    "documento": "Levantamento topográfico F00.0.dwg",
+    "folha": null,
+    "local": "",
+    "data": ""
+   },
+   "nota": "Existe levantamento topográfico; ainda não foi lido.",
+   "conflitos": []
+  },
+  "crs": {
+   "valor": null,
+   "unidade": "",
+   "tipo": "terreno",
+   "estado": "MISSING",
+   "metodo": "nenhum",
+   "fonte": null,
+   "nota": "No DWFx e no PDF do levantamento as cotas estão desenhadas como contornos (sem texto): para as ler é preciso o DWG exportado para DXF (Fase 2).",
+   "conflitos": []
+  },
+  "datum_vertical": {
+   "valor": null,
+   "unidade": "",
+   "tipo": "terreno",
+   "estado": "MISSING",
+   "metodo": "nenhum",
+   "fonte": null,
+   "nota": "No DWFx e no PDF do levantamento as cotas estão desenhadas como contornos (sem texto): para as ler é preciso o DWG exportado para DXF (Fase 2).",
+   "conflitos": []
+  },
+  "unidade_horizontal": {
+   "valor": null,
+   "unidade": "",
+   "tipo": "terreno",
+   "estado": "MISSING",
+   "metodo": "nenhum",
+   "fonte": null,
+   "nota": "No DWFx e no PDF do levantamento as cotas estão desenhadas como contornos (sem texto): para as ler é preciso o DWG exportado para DXF (Fase 2).",
+   "conflitos": []
+  },
+  "unidade_vertical": {
+   "valor": null,
+   "unidade": "",
+   "tipo": "terreno",
+   "estado": "MISSING",
+   "metodo": "nenhum",
+   "fonte": null,
+   "nota": "No DWFx e no PDF do levantamento as cotas estão desenhadas como contornos (sem texto): para as ler é preciso o DWG exportado para DXF (Fase 2).",
+   "conflitos": []
+  },
+  "limite_lote": {
+   "valor": null,
+   "unidade": "",
+   "tipo": "terreno",
+   "estado": "MISSING",
+   "metodo": "nenhum",
+   "fonte": null,
+   "nota": "No DWFx e no PDF do levantamento as cotas estão desenhadas como contornos (sem texto): para as ler é preciso o DWG exportado para DXF (Fase 2).",
+   "conflitos": []
+  },
+  "data_levantamento": {
+   "valor": null,
+   "unidade": "",
+   "tipo": "terreno",
+   "estado": "MISSING",
+   "metodo": "nenhum",
+   "fonte": null,
+   "nota": "No DWFx e no PDF do levantamento as cotas estão desenhadas como contornos (sem texto): para as ler é preciso o DWG exportado para DXF (Fase 2).",
+   "conflitos": []
+  },
+  "precisao": {
+   "valor": null,
+   "unidade": "",
+   "tipo": "terreno",
+   "estado": "MISSING",
+   "metodo": "nenhum",
+   "fonte": null,
+   "nota": "No DWFx e no PDF do levantamento as cotas estão desenhadas como contornos (sem texto): para as ler é preciso o DWG exportado para DXF (Fase 2).",
+   "conflitos": []
+  },
+  "pontos_controlo": {
+   "valor": null,
+   "unidade": "",
+   "tipo": "terreno",
+   "estado": "MISSING",
+   "metodo": "nenhum",
+   "fonte": null,
+   "nota": "No DWFx e no PDF do levantamento as cotas estão desenhadas como contornos (sem texto): para as ler é preciso o DWG exportado para DXF (Fase 2).",
+   "conflitos": []
+  }
+ },
+ "conflitos": [],
+ "resumo": {
+  "CONFIRMED": 202,
+  "INFERRED": 2,
+  "MISSING": 10,
+  "NEEDS_HUMAN_REVIEW": 0,
+  "conflitos_abertos": 0,
+  "conflitos_resolvidos": 29
+ }
+}

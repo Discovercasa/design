@@ -1,0 +1,94 @@
+{
+ "_doc": "Hand-kept sources of Torres Vedras values that the plan alone does not give (Step Inside Phase 1). Keys are field paths of fontes.json; '*' matches any part. Each entry cites where the value comes from (docs/desenhos.md, docs/cobertura-D2503.md, docs/modulos-D2503.md, conhecimento/registo-conversas.md). No client data: the repo is public.",
+ "projeto": {"id": "torres-vedras", "nome": "Casa Torres Vedras (construída; obra D2503)"},
+ "documentos": [
+  {"ficheiro": "250828_D2503_Cobertura.dwfx", "usado_para": ["níveis (secções 1:50)", "cobertura como construída"]},
+  {"ficheiro": "Levantamento topográfico F00.0.dwg", "usado_para": ["terreno (Fase 2)"]},
+  {"ficheiro": "Planta de implantação F01,1.dwfx", "usado_para": ["implantação no lote (Fase 2)"]}
+ ],
+ "campos": {
+  "escala": {
+   "estado": "CONFIRMED", "metodo": "geometria",
+   "nota": "1:200 em folhas A2. Conferida com as dimensões e áreas dos compartimentos desenhadas na planta e com o D2503 («Dimensão da fundação e módulos»: 17,50 × 11,00)."
+  },
+  "dimensoes.comprimento": {
+   "estado": "CONFIRMED", "metodo": "desenho_empresa", "valor": 17.501,
+   "fonte": {"documento": "250828_D2503_Modulos.dwfx", "folha": null, "local": "Dimensão da fundação e módulos", "data": "2025-08-28"},
+   "nota": "Face exterior dos módulos = linha da fundação = face exterior das paredes da arquitetura; o revestimento fica cerca de 9 cm por fora."
+  },
+  "dimensoes.profundidade": {
+   "estado": "CONFIRMED", "metodo": "desenho_empresa", "valor": 11.0,
+   "fonte": {"documento": "250828_D2503_Modulos.dwfx", "folha": null, "local": "Dimensão da fundação e módulos", "data": "2025-08-28"},
+   "nota": "Como o comprimento."
+  },
+  "lajes.fundacao.contorno": {
+   "estado": "CONFIRMED", "metodo": "desenho_empresa",
+   "fonte": {"documento": "250828_D2503_Modulos.dwfx", "folha": null, "local": "Dimensão da fundação e módulos", "data": "2025-08-28"},
+   "nota": "Contorno da base de fundação = face exterior dos módulos."
+  },
+  "dimensoes.area_implantacao": {"estado": "CONFIRMED", "metodo": "calculo", "nota": "Área do contorno da base de fundação (confirmado)."},
+  "niveis.pe_direito": {
+   "estado": "CONFIRMED", "metodo": "desenho_empresa", "valor": 2.5,
+   "fonte": {"documento": "250828_D2503_Cobertura.dwfx", "folha": 5, "local": "Secções 1:50", "data": "2025-08-28"},
+   "nota": "Teto a 2,50 do pavimento, como construída; confirmado pelo utilizador a 2026-10-16.",
+   "conflitos": [{"valor": 2.6, "fonte": {"documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx", "folha": 1, "local": "CORTE A", "data": ""}, "estado": "resolvido", "nota": "A arquitetura (estudo prévio) dava 2,60.", "resolucao": "Prevalece o D2503 (como construído)."}]
+  },
+  "niveis.teto_estrutura": {
+   "estado": "CONFIRMED", "metodo": "desenho_empresa",
+   "fonte": {"documento": "250828_D2503_Cobertura.dwfx", "folha": 5, "local": "Secções 1:50", "data": "2025-08-28"},
+   "nota": "Face inferior das lameladas: amarração 2,543–2,653, lameladas 2,653–2,853."
+  },
+  "niveis.topo_platibanda": {
+   "estado": "CONFIRMED", "metodo": "desenho_empresa", "valor": 3.5,
+   "fonte": {"documento": "250828_D2503_Modulos.dwfx", "folha": 2, "local": "Módulos exteriores", "data": "2025-08-28"},
+   "nota": "Módulos exteriores de 3,50, de uma peça até ao topo da platibanda; a casa tem a mesma altura a toda a volta (utilizador 2026-10-16)."
+  },
+  "cobertura.tipo": {
+   "estado": "CONFIRMED", "metodo": "desenho_empresa",
+   "fonte": {"documento": "250828_D2503_Cobertura.dwfx", "folha": null, "local": "", "data": "2025-08-28"},
+   "nota": "Cobertura escondida atrás da platibanda, como construída."
+  },
+  "cobertura.estrutura": {
+   "estado": "CONFIRMED", "metodo": "desenho_empresa",
+   "fonte": {"documento": "250828_D2503_Cobertura.dwfx", "folha": 1, "local": "Vigas lameladas horizontais", "data": "2025-08-28"},
+   "nota": "Lameladas 20x10 a 0,915; madres 11x7,5 em prumos."
+  },
+  "cobertura.inclinacao_pct": {
+   "estado": "CONFIRMED", "metodo": "desenho_empresa", "valor": 6.0,
+   "fonte": {"documento": "250828_D2503_Cobertura.dwfx", "folha": 2, "local": "Vigas de pendente (madres)", "data": "2025-08-28"},
+   "nota": "Duas águas a 6 %, como construída (utilizador 2026-10-16: «eu disse-te mal como seriam as águas»).",
+   "conflitos": [{"valor": 1.3, "fonte": {"documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx", "folha": 1, "local": "CORTE B", "data": ""}, "estado": "resolvido", "nota": "O corte B da arquitetura mostra 1,3 %.", "resolucao": "Prevalece o D2503 (como construído)."}]
+  },
+  "cobertura.cumeeira_y": {
+   "estado": "CONFIRMED", "metodo": "desenho_empresa",
+   "fonte": {"documento": "250828_D2503_Cobertura.dwfx", "folha": 2, "local": "Vigas de pendente (madres)", "data": "2025-08-28"},
+   "nota": "Cumeeira a meio do bloco principal, ao longo da casa."
+  },
+  "cobertura.painel_espessura": {
+   "estado": "CONFIRMED", "metodo": "norma_empresa",
+   "fonte": {"documento": "norma da empresa (sistema_construtivo.json, painel_oculto)", "folha": null, "local": "", "data": ""},
+   "nota": "Painel sandwich de 5 ondas, 80 mm."
+  },
+  "materiais.exterior.opcao": {
+   "estado": "CONFIRMED", "metodo": "utilizador",
+   "fonte": {"documento": "utilizador 2026-10-15 (registo-conversas)", "folha": null, "local": "", "data": "2026-10-15"},
+   "nota": "Opção A: só ripado horizontal, sem contra-ripado («Nesta casa só levou ripado na horizontal e não levou o contra-ripado»)."
+  },
+  "referencial.cota_referencia": {
+   "estado": "INFERRED", "metodo": "inferencia", "valor": 117.5, "unidade": "m",
+   "fonte": {"documento": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx", "folha": 1, "local": "CORTE A", "data": ""},
+   "nota": "117,50 é a cota do pavimento interior acabado; o Z = 0 do modelo é o topo da laje, uns milímetros abaixo (espessura do pavimento). Confirmar com o levantamento na Fase 2."
+  },
+  "referencial.norte": {
+   "nota": "Os alçados chamam-se Sudeste, Noroeste, Nordeste e Sudoeste: os eixos da casa estão rodados em relação ao norte. A direção exata lê-se na planta de implantação (Fase 2)."
+  },
+  "terreno.*": {
+   "nota": "No DWFx e no PDF do levantamento as cotas estão desenhadas como contornos (sem texto): para as ler é preciso o DWG exportado para DXF (Fase 2)."
+  },
+  "terreno.fonte": {
+   "estado": "CONFIRMED", "metodo": "texto", "valor": "Levantamento topográfico F00.0 (DWG; também em DWFx e PDF)",
+   "fonte": {"documento": "Levantamento topográfico F00.0.dwg", "folha": null, "local": "", "data": ""},
+   "nota": "Existe levantamento topográfico; ainda não foi lido."
+  }
+ }
+}

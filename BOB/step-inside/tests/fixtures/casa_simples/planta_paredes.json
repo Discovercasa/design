@@ -1,0 +1,14 @@
+{
+ "origem_desenho": {"dwfx": "exemplo_planta.dwfx", "folha": 1, "regiao": [10.0, 10.0, 110.0, 90.0], "escala": 100.0, "origem_m": [0.0, 0.0]},
+ "contorno": [0.0, 10.0, 0.0, 8.0],
+ "paredes": [
+  {"id": "P01", "eixo": "x", "s0": 0.0, "s1": 10.0, "c": 0.125, "espessura": 0.25, "exterior": true, "lado_exterior": -1,
+   "aberturas": [{"s0": 2.0, "s1": 3.2, "tipo": "janela"}, {"s0": 6.0, "s1": 6.9, "tipo": "porta"}]},
+  {"id": "P02", "eixo": "y", "s0": 0.0, "s1": 8.0, "c": 9.875, "espessura": 0.25, "exterior": true, "lado_exterior": 1, "aberturas": []},
+  {"id": "P03", "eixo": "x", "s0": 0.0, "s1": 10.0, "c": 7.875, "espessura": 0.25, "exterior": true, "lado_exterior": 1,
+   "aberturas": [{"s0": 4.0, "s1": 5.5, "tipo": "janela"}]},
+  {"id": "P04", "eixo": "y", "s0": 0.0, "s1": 8.0, "c": 0.125, "espessura": 0.25, "exterior": true, "lado_exterior": -1, "aberturas": []},
+  {"id": "P05", "eixo": "y", "s0": 0.25, "s1": 7.75, "c": 5.0, "espessura": 0.15, "exterior": false, "lado_exterior": 0,
+   "aberturas": [{"s0": 3.0, "s1": 3.8, "tipo": "porta"}]}
+ ]
+}

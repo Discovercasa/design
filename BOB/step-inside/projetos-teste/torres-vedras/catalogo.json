@@ -1,0 +1,489 @@
+{
+ "documentos": [
+  {
+   "ficheiro": "20241024.PL_LA_muros-F05.1_MUROS.dwfx",
+   "tamanho_kb": 162,
+   "formato": "DWFX",
+   "categoria": "DIRECT",
+   "leitor": "ferramentas/dwfx/leitor.py",
+   "nota": "Plot 2D do AutoCAD: traços com cor, espessura e texto. Só tem 3D se o DWFx incluir um modelo.",
+   "tem_3d": false,
+   "folhas": [
+    {
+     "folha": 1,
+     "nome": "F05.1_MUROS",
+     "papel_mm": [
+      594.0,
+      420.0
+     ],
+     "tracos": 907,
+     "cores": {
+      "paredes_vermelho": 10,
+      "vidros_azul": 2,
+      "aberturas_magenta": 0
+     },
+     "texto_caracteres": 792,
+     "vistas": [
+      "localizacao",
+      "planta",
+      "alcado"
+     ],
+     "escalas": [
+      "1:200"
+     ],
+     "numeros": 32
+    }
+   ]
+  },
+  {
+   "ficheiro": "20241024.PL_LA_muros-F05.1_MUROS.dwg",
+   "tamanho_kb": 1485,
+   "formato": "DWG",
+   "categoria": "CONVERT_REQUIRED",
+   "leitor": "exportar para DWFx ou PDF vetorial (AutoCAD / DWG TrueView)",
+   "nota": "Sem leitor. O DWG tem a informação toda (camadas, 3D, cotas como objetos), mas é um formato fechado.",
+   "versao": "AutoCAD 2018 ou mais recente"
+  },
+  {
+   "ficheiro": "20241024.PL_LA_muros-F05.1_MUROS.pdf",
+   "tamanho_kb": 1063,
+   "formato": "PDF",
+   "categoria": "DIRECT",
+   "leitor": "ferramentas/dwfx/leitor_pdf.py",
+   "nota": "PDF vetorial.",
+   "paginas": 1,
+   "tracos_por_pagina": [
+    5261
+   ],
+   "imagens": 12
+  },
+  {
+   "ficheiro": "250828_D2503_Cobertura.dwfx",
+   "tamanho_kb": 539,
+   "formato": "DWFX",
+   "categoria": "DIRECT",
+   "leitor": "ferramentas/dwfx/leitor.py",
+   "nota": "Plot 2D do AutoCAD: traços com cor, espessura e texto. Só tem 3D se o DWFx incluir um modelo.",
+   "tem_3d": false,
+   "folhas": [
+    {
+     "folha": 1,
+     "nome": "Vigas Lameladas Horizontais",
+     "papel_mm": [
+      420.0,
+      297.0
+     ],
+     "tracos": 280,
+     "cores": {
+      "paredes_vermelho": 41,
+      "vidros_azul": 0,
+      "aberturas_magenta": 0
+     },
+     "texto_caracteres": 1505,
+     "vistas": [
+      "implantacao",
+      "cobertura",
+      "fundacoes",
+      "modulos"
+     ],
+     "escalas": [],
+     "numeros": 38
+    },
+    {
+     "folha": 2,
+     "nome": "Vigas de Pendente (Madres)",
+     "papel_mm": [
+      420.0,
+      297.0
+     ],
+     "tracos": 347,
+     "cores": {
+      "paredes_vermelho": 45,
+      "vidros_azul": 0,
+      "aberturas_magenta": 0
+     },
+     "texto_caracteres": 1523,
+     "vistas": [
+      "implantacao",
+      "cobertura",
+      "fundacoes",
+      "modulos"
+     ],
+     "escalas": [],
+     "numeros": 40
+    },
+    {
+     "folha": 3,
+     "nome": "Vigas de Pendente (Madres) Esquemas",
+     "papel_mm": [
+      420.0,
+      297.0
+     ],
+     "tracos": 70,
+     "cores": {
+      "paredes_vermelho": 6,
+      "vidros_azul": 0,
+      "aberturas_magenta": 1
+     },
+     "texto_caracteres": 1319,
+     "vistas": [
+      "implantacao",
+      "cobertura",
+      "fundacoes",
+      "modulos"
+     ],
+     "escalas": [],
+     "numeros": 7
+    },
+    {
+     "folha": 4,
+     "nome": "Telhas",
+     "papel_mm": [
+      420.0,
+      297.0
+     ],
+     "tracos": 44,
+     "cores": {
+      "paredes_vermelho": 7,
+      "vidros_azul": 0,
+      "aberturas_magenta": 0
+     },
+     "texto_caracteres": 1204,
+     "vistas": [
+      "implantacao",
+      "corte",
+      "cobertura",
+      "pormenor",
+      "fundacoes",
+      "modulos"
+     ],
+     "escalas": [],
+     "numeros": 12
+    },
+    {
+     "folha": 5,
+     "nome": "Secções",
+     "papel_mm": [
+      420.0,
+      297.0
+     ],
+     "tracos": 417,
+     "cores": {
+      "paredes_vermelho": 20,
+      "vidros_azul": 0,
+      "aberturas_magenta": 0
+     },
+     "texto_caracteres": 1501,
+     "vistas": [
+      "implantacao",
+      "cobertura",
+      "pormenor",
+      "fundacoes",
+      "modulos"
+     ],
+     "escalas": [
+      "1:50"
+     ],
+     "numeros": 16
+    }
+   ]
+  },
+  {
+   "ficheiro": "250828_D2503_Modulos.dwfx",
+   "tamanho_kb": 195,
+   "formato": "DWFX",
+   "categoria": "DIRECT",
+   "leitor": "ferramentas/dwfx/leitor.py",
+   "nota": "Plot 2D do AutoCAD: traços com cor, espessura e texto. Só tem 3D se o DWFx incluir um modelo.",
+   "tem_3d": false,
+   "folhas": [
+    {
+     "folha": 1,
+     "nome": "Módulos Interiores A1",
+     "papel_mm": [
+      841.0,
+      594.0
+     ],
+     "tracos": 340,
+     "cores": {
+      "paredes_vermelho": 0,
+      "vidros_azul": 0,
+      "aberturas_magenta": 0
+     },
+     "texto_caracteres": 2217,
+     "vistas": [
+      "cobertura",
+      "fundacoes",
+      "modulos"
+     ],
+     "escalas": [],
+     "numeros": 147
+    },
+    {
+     "folha": 2,
+     "nome": "Módulos Exteriores A1",
+     "papel_mm": [
+      841.0,
+      594.0
+     ],
+     "tracos": 423,
+     "cores": {
+      "paredes_vermelho": 0,
+      "vidros_azul": 0,
+      "aberturas_magenta": 0
+     },
+     "texto_caracteres": 2529,
+     "vistas": [
+      "cobertura",
+      "fundacoes",
+      "modulos"
+     ],
+     "escalas": [],
+     "numeros": 156
+    }
+   ]
+  },
+  {
+   "ficheiro": "Levantamento topográfico F00.0.dwfx",
+   "tamanho_kb": 168,
+   "formato": "DWFX",
+   "categoria": "DIRECT",
+   "leitor": "ferramentas/dwfx/leitor.py",
+   "nota": "Plot 2D do AutoCAD: traços com cor, espessura e texto. Só tem 3D se o DWFx incluir um modelo.",
+   "tem_3d": false,
+   "folhas": [
+    {
+     "folha": 1,
+     "nome": "F1.0_levantamento topográfico",
+     "papel_mm": [
+      594.0,
+      420.0
+     ],
+     "tracos": 1178,
+     "cores": {
+      "paredes_vermelho": 523,
+      "vidros_azul": 0,
+      "aberturas_magenta": 16
+     },
+     "texto_caracteres": 0,
+     "vistas": [
+      "levantamento"
+     ],
+     "escalas": [],
+     "numeros": 0
+    }
+   ]
+  },
+  {
+   "ficheiro": "Levantamento topográfico F00.0.dwg",
+   "tamanho_kb": 2035,
+   "formato": "DWG",
+   "categoria": "CONVERT_REQUIRED",
+   "leitor": "exportar para DWFx ou PDF vetorial (AutoCAD / DWG TrueView)",
+   "nota": "Sem leitor. O DWG tem a informação toda (camadas, 3D, cotas como objetos), mas é um formato fechado.",
+   "versao": "AutoCAD 2018 ou mais recente"
+  },
+  {
+   "ficheiro": "Levantamento topográfico F00.0.pdf",
+   "tamanho_kb": 194,
+   "formato": "PDF",
+   "categoria": "DIRECT",
+   "leitor": "ferramentas/dwfx/leitor_pdf.py",
+   "nota": "PDF vetorial.",
+   "paginas": 1,
+   "tracos_por_pagina": [
+    4080
+   ],
+   "imagens": 0
+  },
+  {
+   "ficheiro": "Planta de implantação F01,1.dwfx",
+   "tamanho_kb": 198,
+   "formato": "DWFX",
+   "categoria": "DIRECT",
+   "leitor": "ferramentas/dwfx/leitor.py",
+   "nota": "Plot 2D do AutoCAD: traços com cor, espessura e texto. Só tem 3D se o DWFx incluir um modelo.",
+   "tem_3d": false,
+   "folhas": [
+    {
+     "folha": 1,
+     "nome": "F1.1_implantação",
+     "papel_mm": [
+      594.0,
+      420.0
+     ],
+     "tracos": 1573,
+     "cores": {
+      "paredes_vermelho": 532,
+      "vidros_azul": 2,
+      "aberturas_magenta": 21
+     },
+     "texto_caracteres": 0,
+     "vistas": [
+      "implantacao"
+     ],
+     "escalas": [],
+     "numeros": 0
+    }
+   ]
+  },
+  {
+   "ficheiro": "Planta de implantação F01,1.dwg",
+   "tamanho_kb": 2010,
+   "formato": "DWG",
+   "categoria": "CONVERT_REQUIRED",
+   "leitor": "exportar para DWFx ou PDF vetorial (AutoCAD / DWG TrueView)",
+   "nota": "Sem leitor. O DWG tem a informação toda (camadas, 3D, cotas como objetos), mas é um formato fechado.",
+   "versao": "AutoCAD 2018 ou mais recente"
+  },
+  {
+   "ficheiro": "Planta de implantação F01,1.pdf",
+   "tamanho_kb": 229,
+   "formato": "PDF",
+   "categoria": "DIRECT",
+   "leitor": "ferramentas/dwfx/leitor_pdf.py",
+   "nota": "PDF vetorial.",
+   "paginas": 1,
+   "tracos_por_pagina": [
+    7530
+   ],
+   "imagens": 0
+  },
+  {
+   "ficheiro": "planta localização.pdf",
+   "tamanho_kb": 7904,
+   "formato": "PDF",
+   "categoria": "DIRECT",
+   "leitor": "ferramentas/dwfx/leitor_pdf.py",
+   "nota": "PDF vetorial.",
+   "paginas": 8,
+   "tracos_por_pagina": [
+    1681,
+    204,
+    22,
+    6,
+    22,
+    6,
+    22,
+    6
+   ],
+   "imagens": 25
+  },
+  {
+   "ficheiro": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
+   "tamanho_kb": 1058,
+   "formato": "DWFX",
+   "categoria": "DIRECT",
+   "leitor": "ferramentas/dwfx/leitor.py",
+   "nota": "Plot 2D do AutoCAD: traços com cor, espessura e texto. Só tem 3D se o DWFx incluir um modelo.",
+   "tem_3d": false,
+   "folhas": [
+    {
+     "folha": 1,
+     "nome": "F01.2_PLAN COR",
+     "papel_mm": [
+      594.0,
+      420.0
+     ],
+     "tracos": 8536,
+     "cores": {
+      "paredes_vermelho": 601,
+      "vidros_azul": 38,
+      "aberturas_magenta": 34
+     },
+     "texto_caracteres": 0,
+     "vistas": [
+      "planta",
+      "corte"
+     ],
+     "escalas": [],
+     "numeros": 0
+    },
+    {
+     "folha": 2,
+     "nome": "F01.3_PLAN ALÇ .",
+     "papel_mm": [
+      594.0,
+      420.0
+     ],
+     "tracos": 1953,
+     "cores": {
+      "paredes_vermelho": 532,
+      "vidros_azul": 2,
+      "aberturas_magenta": 31
+     },
+     "texto_caracteres": 0,
+     "vistas": [
+      "planta",
+      "alcado"
+     ],
+     "escalas": [],
+     "numeros": 0
+    },
+    {
+     "folha": 3,
+     "nome": "F02.1_POR CONST",
+     "papel_mm": [
+      594.0,
+      420.0
+     ],
+     "tracos": 3510,
+     "cores": {
+      "paredes_vermelho": 0,
+      "vidros_azul": 0,
+      "aberturas_magenta": 0
+     },
+     "texto_caracteres": 0,
+     "vistas": [
+      "pormenor"
+     ],
+     "escalas": [],
+     "numeros": 0
+    },
+    {
+     "folha": 4,
+     "nome": "F03.1_PMC",
+     "papel_mm": [
+      594.0,
+      420.0
+     ],
+     "tracos": 3276,
+     "cores": {
+      "paredes_vermelho": 559,
+      "vidros_azul": 17,
+      "aberturas_magenta": 31
+     },
+     "texto_caracteres": 0,
+     "vistas": [],
+     "escalas": [],
+     "numeros": 0
+    }
+   ]
+  },
+  {
+   "ficheiro": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwg",
+   "tamanho_kb": 2054,
+   "formato": "DWG",
+   "categoria": "CONVERT_REQUIRED",
+   "leitor": "exportar para DWFx ou PDF vetorial (AutoCAD / DWG TrueView)",
+   "nota": "Sem leitor. O DWG tem a informação toda (camadas, 3D, cotas como objetos), mas é um formato fechado.",
+   "versao": "AutoCAD 2018 ou mais recente"
+  },
+  {
+   "ficheiro": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.pdf",
+   "tamanho_kb": 793,
+   "formato": "PDF",
+   "categoria": "DIRECT",
+   "leitor": "ferramentas/dwfx/leitor_pdf.py",
+   "nota": "PDF vetorial.",
+   "paginas": 4,
+   "tracos_por_pagina": [
+    13215,
+    9221,
+    16980,
+    4675
+   ],
+   "imagens": 0
+  }
+ ]
+}

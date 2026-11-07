@@ -1,0 +1,730 @@
+{
+ "documentos": [
+  {
+   "ficheiro": "PD_Estabilidade Armazém.dwfx",
+   "tamanho_kb": 819,
+   "formato": "DWFX",
+   "categoria": "DIRECT",
+   "leitor": "ferramentas/dwfx/leitor.py",
+   "nota": "Plot 2D do AutoCAD: traços com cor, espessura e texto. Só tem 3D se o DWFx incluir um modelo.",
+   "tem_3d": false,
+   "folhas": [
+    {
+     "folha": 1,
+     "nome": "1de1",
+     "papel_mm": [
+      841.0,
+      594.0
+     ],
+     "tracos": 31956,
+     "cores": {
+      "paredes_vermelho": 4,
+      "vidros_azul": 0,
+      "aberturas_magenta": 1
+     },
+     "texto_caracteres": 6712,
+     "vistas": [
+      "localizacao",
+      "planta",
+      "cobertura",
+      "pormenor",
+      "fundacoes",
+      "estrutura"
+     ],
+     "escalas": [
+      "1:50",
+      "1:100"
+     ],
+     "numeros": 53
+    }
+   ]
+  },
+  {
+   "ficheiro": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+   "tamanho_kb": 1356,
+   "formato": "DWFX",
+   "categoria": "DIRECT",
+   "leitor": "ferramentas/dwfx/leitor.py",
+   "nota": "Plot 2D do AutoCAD: traços com cor, espessura e texto. Só tem 3D se o DWFx incluir um modelo.",
+   "tem_3d": false,
+   "folhas": [
+    {
+     "folha": 1,
+     "nome": "Tipo1 1de2",
+     "papel_mm": [
+      841.0,
+      594.0
+     ],
+     "tracos": 5005,
+     "cores": {
+      "paredes_vermelho": 0,
+      "vidros_azul": 0,
+      "aberturas_magenta": 0
+     },
+     "texto_caracteres": 5292,
+     "vistas": [
+      "localizacao",
+      "planta",
+      "corte",
+      "alcado",
+      "cobertura",
+      "pormenor",
+      "fundacoes",
+      "estrutura"
+     ],
+     "escalas": [
+      "1:50",
+      "1:100"
+     ],
+     "numeros": 104
+    },
+    {
+     "folha": 2,
+     "nome": "Tipo1 2de2",
+     "papel_mm": [
+      841.0,
+      594.0
+     ],
+     "tracos": 10090,
+     "cores": {
+      "paredes_vermelho": 0,
+      "vidros_azul": 0,
+      "aberturas_magenta": 0
+     },
+     "texto_caracteres": 4833,
+     "vistas": [
+      "localizacao",
+      "planta",
+      "corte",
+      "alcado",
+      "cobertura",
+      "pormenor",
+      "estrutura"
+     ],
+     "escalas": [
+      "1:50"
+     ],
+     "numeros": 502
+    }
+   ]
+  },
+  {
+   "ficheiro": "PD_Habitacoes F G H I J.dwfx",
+   "tamanho_kb": 1379,
+   "formato": "DWFX",
+   "categoria": "DIRECT",
+   "leitor": "ferramentas/dwfx/leitor.py",
+   "nota": "Plot 2D do AutoCAD: traços com cor, espessura e texto. Só tem 3D se o DWFx incluir um modelo.",
+   "tem_3d": false,
+   "folhas": [
+    {
+     "folha": 1,
+     "nome": "Tipo2 1de2",
+     "papel_mm": [
+      841.0,
+      594.0
+     ],
+     "tracos": 4774,
+     "cores": {
+      "paredes_vermelho": 0,
+      "vidros_azul": 0,
+      "aberturas_magenta": 0
+     },
+     "texto_caracteres": 5144,
+     "vistas": [
+      "localizacao",
+      "planta",
+      "corte",
+      "alcado",
+      "cobertura",
+      "pormenor",
+      "fundacoes",
+      "estrutura"
+     ],
+     "escalas": [
+      "1:50",
+      "1:100"
+     ],
+     "numeros": 68
+    },
+    {
+     "folha": 2,
+     "nome": "Tipo2 2de2",
+     "papel_mm": [
+      841.0,
+      594.0
+     ],
+     "tracos": 9480,
+     "cores": {
+      "paredes_vermelho": 0,
+      "vidros_azul": 0,
+      "aberturas_magenta": 0
+     },
+     "texto_caracteres": 4573,
+     "vistas": [
+      "localizacao",
+      "planta",
+      "corte",
+      "alcado",
+      "cobertura",
+      "pormenor",
+      "estrutura"
+     ],
+     "escalas": [
+      "1:50"
+     ],
+     "numeros": 444
+    }
+   ]
+  },
+  {
+   "ficheiro": "SMA_012_arquitectura_pecas_desenhadas.dwfx",
+   "tamanho_kb": 25336,
+   "formato": "DWFX",
+   "categoria": "DIRECT",
+   "leitor": "ferramentas/dwfx/leitor.py",
+   "nota": "Plot 2D do AutoCAD: traços com cor, espessura e texto. Só tem 3D se o DWFx incluir um modelo.",
+   "tem_3d": false,
+   "folhas": [
+    {
+     "folha": 1,
+     "nome": "INDICE",
+     "papel_mm": [
+      210.0,
+      297.0
+     ],
+     "tracos": 7,
+     "cores": {
+      "paredes_vermelho": 0,
+      "vidros_azul": 0,
+      "aberturas_magenta": 0
+     },
+     "texto_caracteres": 1830,
+     "vistas": [
+      "levantamento",
+      "implantacao",
+      "planta",
+      "corte",
+      "alcado",
+      "cobertura",
+      "pormenor",
+      "estrutura",
+      "modelacao_terreno"
+     ],
+     "escalas": [
+      "1:50",
+      "1:100",
+      "1:200",
+      "1:500"
+     ],
+     "numeros": 0
+    },
+    {
+     "folha": 2,
+     "nome": "01-LEV_PL",
+     "papel_mm": [
+      841.0,
+      594.0
+     ],
+     "tracos": 167676,
+     "cores": {
+      "paredes_vermelho": 0,
+      "vidros_azul": 39,
+      "aberturas_magenta": 0
+     },
+     "texto_caracteres": 5217,
+     "vistas": [
+      "levantamento",
+      "localizacao",
+      "planta",
+      "estrutura"
+     ],
+     "escalas": [
+      "1:500",
+      "1:5000"
+     ],
+     "numeros": 451
+    },
+    {
+     "folha": 3,
+     "nome": "02-GER_PL",
+     "papel_mm": [
+      841.0,
+      594.0
+     ],
+     "tracos": 271635,
+     "cores": {
+      "paredes_vermelho": 0,
+      "vidros_azul": 30,
+      "aberturas_magenta": 0
+     },
+     "texto_caracteres": 2399,
+     "vistas": [
+      "levantamento",
+      "implantacao",
+      "localizacao",
+      "planta",
+      "corte"
+     ],
+     "escalas": [
+      "1:500",
+      "1:5000"
+     ],
+     "numeros": 8
+    },
+    {
+     "folha": 4,
+     "nome": "03-MOD_PL",
+     "papel_mm": [
+      841.0,
+      594.0
+     ],
+     "tracos": 7886,
+     "cores": {
+      "paredes_vermelho": 0,
+      "vidros_azul": 30,
+      "aberturas_magenta": 0
+     },
+     "texto_caracteres": 6057,
+     "vistas": [
+      "levantamento",
+      "implantacao",
+      "localizacao",
+      "planta",
+      "modelacao_terreno"
+     ],
+     "escalas": [
+      "1:500",
+      "1:5000"
+     ],
+     "numeros": 494
+    },
+    {
+     "folha": 5,
+     "nome": "04-INF_PL",
+     "papel_mm": [
+      841.0,
+      594.0
+     ],
+     "tracos": 105509,
+     "cores": {
+      "paredes_vermelho": 0,
+      "vidros_azul": 30,
+      "aberturas_magenta": 0
+     },
+     "texto_caracteres": 2873,
+     "vistas": [
+      "levantamento",
+      "implantacao",
+      "localizacao",
+      "planta",
+      "corte",
+      "estrutura"
+     ],
+     "escalas": [
+      "1:500",
+      "1:5000"
+     ],
+     "numeros": 8
+    },
+    {
+     "folha": 6,
+     "nome": "05-GER_CT",
+     "papel_mm": [
+      841.0,
+      594.0
+     ],
+     "tracos": 6100,
+     "cores": {
+      "paredes_vermelho": 9,
+      "vidros_azul": 0,
+      "aberturas_magenta": 0
+     },
+     "texto_caracteres": 655,
+     "vistas": [
+      "localizacao",
+      "planta",
+      "corte"
+     ],
+     "escalas": [
+      "1:500",
+      "1:5000"
+     ],
+     "numeros": 0
+    },
+    {
+     "folha": 7,
+     "nome": "06-A",
+     "papel_mm": [
+      841.0,
+      594.0
+     ],
+     "tracos": 165559,
+     "cores": {
+      "paredes_vermelho": 1,
+      "vidros_azul": 3,
+      "aberturas_magenta": 0
+     },
+     "texto_caracteres": 1986,
+     "vistas": [
+      "implantacao",
+      "planta"
+     ],
+     "escalas": [
+      "1:200"
+     ],
+     "numeros": 98
+    },
+    {
+     "folha": 8,
+     "nome": "07-B",
+     "papel_mm": [
+      841.0,
+      594.0
+     ],
+     "tracos": 146325,
+     "cores": {
+      "paredes_vermelho": 1,
+      "vidros_azul": 1,
+      "aberturas_magenta": 0
+     },
+     "texto_caracteres": 2385,
+     "vistas": [
+      "implantacao",
+      "planta"
+     ],
+     "escalas": [
+      "1:200"
+     ],
+     "numeros": 100
+    },
+    {
+     "folha": 9,
+     "nome": "08-CT",
+     "papel_mm": [
+      841.0,
+      594.0
+     ],
+     "tracos": 5381,
+     "cores": {
+      "paredes_vermelho": 11,
+      "vidros_azul": 0,
+      "aberturas_magenta": 0
+     },
+     "texto_caracteres": 692,
+     "vistas": [
+      "corte"
+     ],
+     "escalas": [
+      "1:200"
+     ],
+     "numeros": 0
+    },
+    {
+     "folha": 10,
+     "nome": "09-CT",
+     "papel_mm": [
+      841.0,
+      594.0
+     ],
+     "tracos": 5672,
+     "cores": {
+      "paredes_vermelho": 13,
+      "vidros_azul": 0,
+      "aberturas_magenta": 0
+     },
+     "texto_caracteres": 757,
+     "vistas": [
+      "corte"
+     ],
+     "escalas": [
+      "1:200"
+     ],
+     "numeros": 0
+    },
+    {
+     "folha": 11,
+     "nome": "10-CT",
+     "papel_mm": [
+      841.0,
+      594.0
+     ],
+     "tracos": 5966,
+     "cores": {
+      "paredes_vermelho": 16,
+      "vidros_azul": 2,
+      "aberturas_magenta": 0
+     },
+     "texto_caracteres": 736,
+     "vistas": [
+      "corte",
+      "estrutura"
+     ],
+     "escalas": [
+      "1:50",
+      "1:200"
+     ],
+     "numeros": 0
+    },
+    {
+     "folha": 12,
+     "nome": "11-AP_PL",
+     "papel_mm": [
+      841.0,
+      594.0
+     ],
+     "tracos": 23903,
+     "cores": {
+      "paredes_vermelho": 2,
+      "vidros_azul": 2,
+      "aberturas_magenta": 0
+     },
+     "texto_caracteres": 1117,
+     "vistas": [
+      "planta"
+     ],
+     "escalas": [
+      "1:100"
+     ],
+     "numeros": 17
+    },
+    {
+     "folha": 13,
+     "nome": "12-AP_PL",
+     "papel_mm": [
+      841.0,
+      594.0
+     ],
+     "tracos": 18822,
+     "cores": {
+      "paredes_vermelho": 1,
+      "vidros_azul": 1,
+      "aberturas_magenta": 0
+     },
+     "texto_caracteres": 892,
+     "vistas": [
+      "planta",
+      "cobertura"
+     ],
+     "escalas": [
+      "1:100"
+     ],
+     "numeros": 12
+    },
+    {
+     "folha": 14,
+     "nome": "13-AP_CT",
+     "papel_mm": [
+      841.0,
+      594.0
+     ],
+     "tracos": 1844,
+     "cores": {
+      "paredes_vermelho": 10,
+      "vidros_azul": 0,
+      "aberturas_magenta": 0
+     },
+     "texto_caracteres": 665,
+     "vistas": [
+      "corte",
+      "alcado"
+     ],
+     "escalas": [
+      "1:100"
+     ],
+     "numeros": 0
+    },
+    {
+     "folha": 15,
+     "nome": "14-AP_CT",
+     "papel_mm": [
+      841.0,
+      594.0
+     ],
+     "tracos": 867,
+     "cores": {
+      "paredes_vermelho": 5,
+      "vidros_azul": 0,
+      "aberturas_magenta": 0
+     },
+     "texto_caracteres": 702,
+     "vistas": [
+      "corte",
+      "alcado"
+     ],
+     "escalas": [
+      "1:100"
+     ],
+     "numeros": 0
+    },
+    {
+     "folha": 16,
+     "nome": "15-AP_CT",
+     "papel_mm": [
+      841.0,
+      594.0
+     ],
+     "tracos": 1494,
+     "cores": {
+      "paredes_vermelho": 8,
+      "vidros_azul": 0,
+      "aberturas_magenta": 0
+     },
+     "texto_caracteres": 751,
+     "vistas": [
+      "corte",
+      "alcado"
+     ],
+     "escalas": [
+      "1:100"
+     ],
+     "numeros": 0
+    },
+    {
+     "folha": 17,
+     "nome": "16-CS1_PL",
+     "papel_mm": [
+      841.0,
+      594.0
+     ],
+     "tracos": 14200,
+     "cores": {
+      "paredes_vermelho": 0,
+      "vidros_azul": 0,
+      "aberturas_magenta": 0
+     },
+     "texto_caracteres": 1126,
+     "vistas": [
+      "planta",
+      "cobertura"
+     ],
+     "escalas": [
+      "1:50"
+     ],
+     "numeros": 11
+    },
+    {
+     "folha": 18,
+     "nome": "17-CS1_AL",
+     "papel_mm": [
+      841.0,
+      594.0
+     ],
+     "tracos": 524,
+     "cores": {
+      "paredes_vermelho": 13,
+      "vidros_azul": 0,
+      "aberturas_magenta": 0
+     },
+     "texto_caracteres": 1415,
+     "vistas": [
+      "corte",
+      "alcado",
+      "cobertura"
+     ],
+     "escalas": [
+      "1:50"
+     ],
+     "numeros": 0
+    },
+    {
+     "folha": 19,
+     "nome": "18-CS1_CT",
+     "papel_mm": [
+      841.0,
+      594.0
+     ],
+     "tracos": 3485,
+     "cores": {
+      "paredes_vermelho": 13,
+      "vidros_azul": 0,
+      "aberturas_magenta": 0
+     },
+     "texto_caracteres": 2317,
+     "vistas": [
+      "corte",
+      "cobertura",
+      "pormenor",
+      "estrutura"
+     ],
+     "escalas": [
+      "1:50"
+     ],
+     "numeros": 0
+    },
+    {
+     "folha": 20,
+     "nome": "19-CS2_PL",
+     "papel_mm": [
+      841.0,
+      594.0
+     ],
+     "tracos": 15065,
+     "cores": {
+      "paredes_vermelho": 0,
+      "vidros_azul": 0,
+      "aberturas_magenta": 0
+     },
+     "texto_caracteres": 946,
+     "vistas": [
+      "planta",
+      "cobertura"
+     ],
+     "escalas": [
+      "1:50"
+     ],
+     "numeros": 5
+    },
+    {
+     "folha": 21,
+     "nome": "20-CS2_AL",
+     "papel_mm": [
+      841.0,
+      594.0
+     ],
+     "tracos": 813,
+     "cores": {
+      "paredes_vermelho": 11,
+      "vidros_azul": 0,
+      "aberturas_magenta": 0
+     },
+     "texto_caracteres": 1233,
+     "vistas": [
+      "corte",
+      "alcado",
+      "cobertura"
+     ],
+     "escalas": [
+      "1:50"
+     ],
+     "numeros": 0
+    },
+    {
+     "folha": 22,
+     "nome": "21-CS2_CT",
+     "papel_mm": [
+      841.0,
+      594.0
+     ],
+     "tracos": 4493,
+     "cores": {
+      "paredes_vermelho": 11,
+      "vidros_azul": 0,
+      "aberturas_magenta": 0
+     },
+     "texto_caracteres": 2347,
+     "vistas": [
+      "corte",
+      "cobertura",
+      "pormenor",
+      "estrutura"
+     ],
+     "escalas": [
+      "1:50"
+     ],
+     "numeros": 0
+    }
+   ]
+  }
+ ]
+}

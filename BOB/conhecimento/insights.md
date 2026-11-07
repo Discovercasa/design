@@ -96,6 +96,25 @@ he answers (`metodo-construtivo.md`). Condensed 2026-10-28 (history in git).
   to "disco NVMe agora, placa gráfica só depois do primeiro teste"; hub decision 3 decidida, task 154 in the Phase 4
   checkpoint). Nothing is bought before Phase 4; the user buys it. **Still pending:** PSU wattage and case (needed only if
   the GPU is replaced), whether the home PC may hold client drawings, phase order (Phase 7 before Unreal).
+  **2026-11-07 update:** the user asked to note these open items in the description of hub task 154 and to go on with
+  the next tasks (they remain open; also the Cloudflare panel access, task 47).
+- **2026-11-07** — Step Inside Phase 1, second test project: Torres Vedras (flat, built, as-built D2503 available) plus
+  **Sobral Tipo 2** (sloped site, legible survey) → the pair covers both extremes (flat as-built house; sloped site with
+  terrain) with the data we already hold — `step-inside/docs/fase1/README.md`, hub decision 17 — **proposed, awaiting
+  the user**.
+- **2026-11-07** — Terrain sources for Phase 2: in Torres Vedras the survey DWFx / PDF has the heights drawn as outlines
+  (no text) → export the DWG to DXF (a DXF carries the points as data); in Sobral the architecture set (sheet 2 survey
+  1:500, sheet 4 terrain modelling) has the heights as readable text → best candidate for the first real terrain. No CRS,
+  datum, survey date or precision found in either (recorded as MISSING in the provenance) → ask for them with the survey
+  — `step-inside/projetos-teste/`, hub decision 17 — **told in the Phase 1 report; open**.
+- **2026-11-07** — The differences between the as-built D2503 modules and the architecture plan (sliding doors 2,40 vs
+  2,20, entrance 1,04 vs 0,91, service door 0,94 vs 0,80, windows sill 1,035 / tops 1,785–1,985, interior doors 0,87 vs
+  0,80, pé direito 2,50 vs 2,60, roof 6 % vs 1,3 %) are now reported automatically by the Phase 1 provenance tool, D2503
+  prevailing → useful input for the Torres Vedras "telas finais" (as-built drawings) — `step-inside/projetos-teste/
+  torres-vedras/relatorio.md` — **recorded; raise when the telas finais are done**.
+- **2026-11-07** — Step Inside Phase 1 limitation: only the "planta de arquitetura" input has provenance; the engineer-drawings
+  input (Sobral, `estrutura_dc.py`) needs its own adapter (new hub task); opening positions stay those of the plan —
+  **open (hub task)**.
 
 ## Recorded, not yet told (raise when it fits)
 - **2026-10-16** — lameladas cut from stock waste a lot (8,50 from 13,5 m: ≈ 1,1 m³ at TV) → order to length or a 17 m
