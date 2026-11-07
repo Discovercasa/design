@@ -92,8 +92,10 @@ he answers (`metodo-construtivo.md`). Condensed 2026-10-28 (history in git).
   5070 Ti per spec; check PSU and case first); (c) 64 GB RAM (2 × 16 GB DDR4-3200) only when needed; (d) at Phase 4
   install Unreal 5.8, Git, Python (BOB tools used with Blender 4.4, untested with the 5.2.2 there), Visual Studio only
   for C++; (e) purchases can wait for Phase 4 (Phases 1–3 and maybe 7 do not need this PC); none without approval —
-  `step-inside/docs/audit/current-architecture.md` §8.1, hub decision 3 — **aguarda o utilizador** (PSU wattage and case
-  also pending).
+  `step-inside/docs/audit/current-architecture.md` §8.1, hub decision 3 — **status: approved 2026-11-07** (user: "Sim, aprovo"
+  to "disco NVMe agora, placa gráfica só depois do primeiro teste"; hub decision 3 decidida, task 154 in the Phase 4
+  checkpoint). Nothing is bought before Phase 4; the user buys it. **Still pending:** PSU wattage and case (needed only if
+  the GPU is replaced), whether the home PC may hold client drawings, phase order (Phase 7 before Unreal).
 
 ## Recorded, not yet told (raise when it fits)
 - **2026-10-16** — lameladas cut from stock waste a lot (8,50 from 13,5 m: ≈ 1,1 m³ at TV) → order to length or a 17 m

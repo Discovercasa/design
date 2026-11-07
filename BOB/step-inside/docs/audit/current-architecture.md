@@ -20,7 +20,7 @@ das tarefas no hub), nem Cloudflare. Não se mostram segredos. Referência: espe
   - Ryzen 9 5900X (12 núcleos), 32 GB DDR4, RTX 2060 com 6 GB, Windows 11; sem disco NVMe e com o C: quase cheio
     (15 GB livres);
   - **é uma boa base:** para começar o Unreal falta só um NVMe de 2 TB; a GPU decide-se depois do primeiro teste no
-    Unreal (§8).
+    Unreal (§8). Plano aprovado pelo utilizador a 2026-11-07.
 - **PC da empresa (onde correu esta auditoria):**
   - serve para o que se faz hoje (Blender, scripts, documentos);
   - não serve para o Unreal Engine 5: 4 núcleos, 16 GB DDR3, GTX 1050 Ti com 4 GB, Windows 10;
@@ -364,8 +364,8 @@ Nenhuma destas alterações está feita. Cada uma espera aprovação.
    `MAT_*` estáveis, texturas e UVs, GLB e USDZ (o Blender exporta USDZ) e `manifest.json` com SHA-256.
 4. Supabase: tabelas novas só na Fase 6. Até lá nada de ficheiros 3D no Supabase.
 5. Apagar a Edge Function desligada `carregar-documentos-iniciais` (opcional).
-6. Workstation: usar o PC de casa; comprar um NVMe de 2 TB antes de instalar o Unreal; não comprar GPU antes do primeiro
-   teste no Unreal. Não comprar só uma GPU para o PC da empresa (§8).
+6. Workstation (aprovado a 2026-11-07): usar o PC de casa; comprar um NVMe de 2 TB antes de instalar o Unreal; não
+   comprar GPU antes do primeiro teste no Unreal. Não comprar só uma GPU para o PC da empresa (§8).
 
 ## 14. Proposta de ordem das fases
 
@@ -389,12 +389,14 @@ cloud, onde guardar os ficheiros 3D, VR). Os factos desta auditoria foram acresc
 
 1. ~~**Desenhos de clientes no Git público.**~~ Decidido a 2026-11-07: tirados do histórico. Falta pedir ao Suporte do
    GitHub que limpe os commits antigos (R1).
-2. **Workstation:** o PC de casa foi inventariado a 2026-11-07 e serve de base (§8.1). Para aprovar:
+2. ~~**Workstation.**~~ **Aprovado a 2026-11-07** («Sim, aprovo»; decisão 3 do hub): o PC de casa é a workstation
+   (§8.1):
    - (a) comprar um NVMe de 2 TB antes da Fase 4;
-   - (b) manter a RTX 2060 até ao primeiro teste no Unreal e decidir a GPU com esses números (decisão 3);
+   - (b) manter a RTX 2060 até ao primeiro teste no Unreal e decidir a GPU com esses números;
    - (c) passar a RAM a 64 GB só quando for preciso.
 
-   Falta indicar a potência da fonte de alimentação (W) e a caixa.
+   A tarefa nova «Preparar o PC de casa para o Unreal» (Fase 4) junta estes passos. Falta indicar a potência da fonte
+   de alimentação (W) e a caixa, e decidir se o PC de casa pode guardar desenhos de clientes.
 3. **Ordem das fases:** Fase 7 (AR) antes das Fases 4–5?
 4. **Dois projetos de teste para a Fase 1:**
    - sugestão: Torres Vedras (tem levantamento topográfico e casa construída) e uma casa simples do Build Your House;
