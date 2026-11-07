@@ -85,6 +85,15 @@ he answers (`metodo-construtivo.md`). Condensed 2026-10-28 (history in git).
   16 GB DDR3, GTX 1050 Ti 4 GB, Z97 board) cannot serve Unreal 5 and a GPU alone is not advised → do Phase 7 (AR, GLB /
   USDZ) right after Phase 3, before Unreal; the client already gets a 3D / AR view, and the Unreal / GPU spend (needs his
   approval anyway) can wait — same audit report — **proposed, awaiting the user**.
+- **2026-11-07** — Step Inside workstation = his home PC (Ryzen 9 5900X, 32 GB DDR4, RTX 2060 6 GB, 2 SATA SSDs with
+  15 GB / 83 GB free, no NVMe): a good base, no new workstation needed. Disk is the first limit, VRAM the second →
+  (a) buy a 2 TB NVMe before installing Unreal; (b) keep the RTX 2060 until the first Unreal test (Phase 4) and decide
+  the GPU with numbers (temporary deviation from spec §6.2, RTX 5070 Ti 16 GB; if replaced: RTX 5060 Ti 16 GB cheapest,
+  5070 Ti per spec; check PSU and case first); (c) 64 GB RAM (2 × 16 GB DDR4-3200) only when needed; (d) at Phase 4
+  install Unreal 5.8, Git, Python (BOB tools used with Blender 4.4, untested with the 5.2.2 there), Visual Studio only
+  for C++; (e) purchases can wait for Phase 4 (Phases 1–3 and maybe 7 do not need this PC); none without approval —
+  `step-inside/docs/audit/current-architecture.md` §8.1, hub decision 3 — **aguarda o utilizador** (PSU wattage and case
+  also pending).
 
 ## Recorded, not yet told (raise when it fits)
 - **2026-10-16** — lameladas cut from stock waste a lot (8,50 from 13,5 m: ≈ 1,1 m³ at TV) → order to length or a 17 m
