@@ -63,7 +63,9 @@ Why Claude learns the method; "vamos passo a passo" — an overall idea, then an
    free, board max 128 GB), ASUS ROG Strix X570-F, RTX 2060 6 GB, two SATA SSDs (C: 15 GB free, D: 83 GB free, no NVMe),
    Windows 11 Pro; Blender 5.2.2, Epic Games Launcher, Node 24 (no Python / Git). Below spec §6.2 on VRAM (6 vs 16 GB) and
    disk. Our assessment (no new workstation; 2 TB NVMe first; keep the GPU until the first Unreal test) is in
-   `insights.md`, awaiting the user. Pending from him: approval of that plan (hub decision 3), PSU wattage and case.
+   `insights.md`, **approved by the user 2026-11-07** ("Sim, aprovo"; hub decision 3 decidida, task 154 in the Phase 4
+   checkpoint; nothing bought before Phase 4, the user buys it). Pending from the user: PSU wattage and case, whether the home PC may
+   hold client drawings, phase order (Phase 7 before Unreal).
 4. **Configurator** like IKEA Builder / Kreativ — "DiscovercasaBuilder" (his name, 2026-10-21): the client picks the
    shape, then the m² and the pé direito, sees the base with its price, builds with 3 m walls ("Estilo como se construía
    no jogo SIMS"), never sees "módulo", the price live; prices predefined before any launch ("não temos qualquer tipo de
