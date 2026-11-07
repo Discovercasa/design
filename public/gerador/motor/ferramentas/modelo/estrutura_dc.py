@@ -7,7 +7,7 @@ openings, floor levels) and rebuilds the structure the DiscoverCasa way
 (conhecimento/sistema-construtivo.md §2, §5, §6; standard in sistema_construtivo.json "estrutura"):
   - walls: exterior 110 deep (studs 110x35), interior 75 deep (studs 75x35), 40 cm clear between studs,
     single 35 plates, no noggings; 110x75 at the house corners and around openings (jambs, header,
-    sill); 220x75 lintel over openings from 2.8 m (verga_grande.vao_min); doors without bottom plate; every module has its own
+    sill); 220x75 lintel on the opening head from 2.8 m (verga_grande.vao_min); doors without bottom plate; every module has its own
     end studs; doorways that the drawings leave as a gap between modules get a short wall above the door
     (bandeira) and 110x75 jambs on the module ends beside them;
   - floor between storeys: joists 220x75 on edge at 1 m on the ground-floor walls, battens 110x75 laid flat
@@ -48,8 +48,9 @@ def membro(tipo, seccao, poly):
 def emoldurar(f0, f1, H, aberturas, cls, E, canto0, canto1, ombreira0=False, ombreira1=False, topo_montantes=None):
     """Members of one rectangular module (elevation u from f0 to f1, v from 0 to H). canto: the end is a house
     corner; ombreira: the end is the jamb of a doorway next to the module (both 110x75). topo_montantes: the module
-    goes on above H with no top plate (full-height module of a hidden roof, casa_planta.continuar): the cripples over a
-    220 lintel, which sits right under H, run from its top up to there."""
+    goes on above H with no top plate (full-height module of a hidden roof, casa_planta.continuar): the cripples and
+    jambs over a 220 lintel run from its top up to there. The 220 lintel sits on the opening head (user 2026-11-06);
+    its posts stop under it and go on above its ends."""
     pl, livre = E["placa"], E["vao_livre"]
     w, wr, hp, hs = cls["montante"], cls["reforco"], cls["padieira"], cls["peitoril"]
     sm, sr = cls["seccao_montante"], cls["seccao_reforco"]
@@ -95,16 +96,24 @@ def emoldurar(f0, f1, H, aberturas, cls, E, canto0, canto1, ombreira0=False, omb
                 unidos[-1][2:] = b[2:]
         else:
             unidos.append(list(b))
+    def base_verga(g):  # the 220 lintel sits on the opening head (user 2026-11-06), never above the top plate
+        return min(g[3], top - vg["altura"])
+
     for a, b, tipo, sec in unidos:
-        vtop = top
-        for g in grandes:  # posts of a big opening stop under the 220 lintel
-            if a < g[1] + wr + 0.01 and b > g[0] - wr - 0.01:
-                vtop = top - vg["altura"]
-        ms.append(membro(tipo, sec, ret(max(a, f0), min(b, f1), pl, vtop)))
+        sob = [base_verga(g) for g in grandes if a < g[1] + wr + 0.01 and b > g[0] - wr - 0.01]
+        if not sob:
+            ms.append(membro(tipo, sec, ret(max(a, f0), min(b, f1), pl, top)))
+            continue
+        # posts of a big opening stop under the 220 lintel; over its ends the jamb goes on from the lintel's top
+        ms.append(membro(tipo, sec, ret(max(a, f0), min(b, f1), pl, min(sob))))
+        cima, alto = max(sob) + vg["altura"], (topo_montantes or top)
+        if alto - cima > 0.03:
+            ms.append(membro(tipo, sec, ret(max(a, f0), min(b, f1), cima, alto)))
     # headers, sills
     for u0, u1, v0, v1, _k in aberturas:
         if u1 - u0 >= vg["vao_min"]:
-            ms.append(membro("Verga", vg["seccao"], ret(u0 - wr, u1 + wr, top - vg["altura"], top)))
+            vb = base_verga((u0, u1, v0, v1))
+            ms.append(membro("Verga", vg["seccao"], ret(u0 - wr, u1 + wr, vb, vb + vg["altura"])))
         else:
             ms.append(membro("Padieira", sr, ret(u0, u1, v1, v1 + hp)))
         if v0 > 1e-6:
@@ -120,11 +129,11 @@ def emoldurar(f0, f1, H, aberturas, cls, E, canto0, canto1, ombreira0=False, omb
         dentro = [op for op in aberturas if a >= op[0] - 1e-6 and b <= op[1] + 1e-6]
         if dentro:
             u0, u1, v0, v1, _k = dentro[0]
-            # cripples stand on the head: over a padieira up to the top plate; a 220 verga fills the wall up to the top
-            # plate, so cripples only where the module goes on above it (they had started at its underside and run
-            # through it — 22 cm too long in the cut list, found by verificar.py 2026-10-30)
+            # cripples stand on the head, up to the top plate (to the module top in a full-height module): over a
+            # padieira, or over a 220 verga on the opening head — none when the verga reaches the top plate (they had
+            # started at its underside and run through it, 22 cm too long — verificar.py 2026-10-30)
             if u1 - u0 >= vg["vao_min"]:
-                cima, alto = top, (topo_montantes or top)
+                cima, alto = base_verga(dentro[0]) + vg["altura"], (topo_montantes or top)
             else:
                 cima, alto = v1 + hp, top
             if alto - cima > 0.03:

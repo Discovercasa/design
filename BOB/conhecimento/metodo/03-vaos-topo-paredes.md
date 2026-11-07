@@ -15,7 +15,8 @@
   `estrutura.exterior/interior.padieira`.
 - **Peitoril 110×75** under every window, between the jambs ([TV] sill tops ≈ 1,03–1,04) — Casa CL; D2503 — company
   document — `estrutura_dc.emoldurar`.
-- **Verga 220×75 over wide openings**, under the top plate, the two 110×75 posts stopping under it (Casa CL 2,92 · 2,96 ·
+- **Verga 220×75 over wide openings**, sitting ON THE OPENING HEAD (as the padieira), the two 110×75 posts stopping under it
+  (Casa CL 2,92 · 2,96 ·
   3,06 · 4,14 · 4,52) — user 2026-10-13 "a partir de 2,8 m-3m mais o menos entre esses valores"; 2026-10-22 "lembra-te mais
   de 3 metros usamos 22x7,5" — confirmed (over 3 m) / **OPEN: the threshold — 2,8, 3,0 or over 3,0, on the rough opening
   or the frame** — JSON `estrutura.verga_grande.vao_min` **2,8** (the lower end kept — ours; measured on the rough opening:
@@ -25,21 +26,26 @@
   lintel alone ≈ 2,5–3,5× over; the ≈ 1,2 m of sheathed frame above with the ring acts as header) — keep the engineer's
   note and conditions (OSB fixings for shear, ring unjointed over the opening, deflection) in the project file (TV #17);
   per house **PO Q8** (with Q3). Whether the engineer also covered TV's 2,00 janelas de correr on P03 / P01: OPEN. Upper
-  verga limit: OPEN (widest seen 4,52). **The verga fills the wall from its underside up to the top plate** (ordinary
-  module) — no cripples over it (see the cripples rule) — our derived reading (2026-11-06). **OPEN (§15 item 26):** when an
-  opening ≥ `vao_min` has its head lower than the verga's underside, the strip between them stays unframed; we suggest
-  lowering the verga onto the opening head, as the padieira is.
+  verga limit: OPEN (widest seen 4,52). **Where it sits — in a wide opening lower than the top-plate underside − 0,22, the
+  verga is lowered onto the opening head** (Claude: "Num vão largo mais baixo que a verga, baixo a verga até ao vão?" —
+  user 2026-11-06 "Sim, baixa a verga") — confirmed. Verga underside = min(opening head, top plate underside − 0,22); the
+  two 110×75 posts stop under it; where the verga reaches the top plate (opening at its highest) there is nothing above
+  it (see the cripples rule). **Our addition (assumed, not said):** over the verga's two ends the jamb goes on as a
+  110×75 piece from the verga's top to the top plate / module top, closing the 40 cm stud grid at the opening edges
+  (D2503 keeps jambs full height). — `estrutura_dc.emoldurar` (commit 0e4902a); `casa_planta` still caps an opening head
+  under its own framing (X1, unchanged). Closes the 17–19 cm unframed strip of L72 / §15 item 26 ([TV] P03.1 builder
+  model, configurator 3,00 portão beside a taller opening).
 - **Vertical 7,5×3,5 pieces (cripples)** above every opening up to the top plate and below every window down to the bottom
   plate, "para dar estabilidade ao vão"; no horizontal pieces — user 2026-10-15 "por nroma só tem as 7,5x3,5 verticais",
   "os nossos módulos base não possuem esse vigamento de 7,5x3,5 na horizontal nos vão" — confirmed —
   `estrutura_dc.emoldurar` (Montante curto). On the stud grid, 11×3,5 in exterior modules (full depth) — D2503 Módulos
   (one house) — the tools use 110×35 at the stud spacing. (The horizontal pieces of a 2026-10-09 photo were a site
-  change — L14.) **Over a padieira**: cripples from the padieira's top up to the top plate. **Over a verga (220×75) in an
-  ordinary module (exposed roof): none** — the verga fills the wall from its underside to the top plate, so a cripple there
-  would lie inside it. **Over a verga in a full-height module (hidden roof, no top plate, studs run on to the module
-  top)**: cripples from the verga's top up to the module top, never through the verga — our derived reading
-  (2026-11-06, no new user fact; L72) — `estrutura_dc.emoldurar` (argument `topo_montantes`, which `casa_planta` passes for
-  the exterior modules of a hidden roof). The verga's own open question: §15 item 26.
+  change — L14.) **Over a padieira**: cripples from the padieira's top up to the top plate. **Over a verga (220×75)**, which
+  sits on the opening head: cripples on the stud grid from the verga's top up to the top plate (ordinary module, exposed
+  roof) or to the module top (full-height module, hidden roof, no top plate), never through the verga; **none when the verga
+  reaches the top plate** (opening at its highest) — verga position confirmed user 2026-11-06 "Sim, baixa a verga"; the
+  cripple counting our derived reading (L72) — `estrutura_dc.emoldurar` (argument `topo_montantes`, which `casa_planta`
+  passes for the exterior modules of a hidden roof).
 - Doors: no bottom plate across the opening — Casa CL — `estrutura_dc.emoldurar`.
 - **Interior doors 2,00 × 0,80 → rough opening 0,87 × 2,03** above the finished floor (3 cm on top, 3,5 cm each side) —
   user 2026-10-09 "usually we use 2mx0,8m doors and we leabe 3cm on top and 3,5 cm on each side" — confirmed — JSON
@@ -158,9 +164,10 @@
 - **In a full-height exterior module (hidden roof) the lintel sits directly over the opening, the cripples run on the
   grid up to the module's top plate** (the ring on the inner face across them), jambs full height — D2503 Módulos [TV doors
   2,20 / 2,40 under a ring at 2,543] — company document; the same on 22×7,5 roofs — assumed. The builder without real
-  modules frames under the ring (`casa_planta` `continuar`). ⚠ Tension with the verga rule above ("under the top plate"):
-  D2503 puts the lintel on the opening, the verga rule puts the 220×75 under the top plate — see §15 item 26.
-- An opening head is lowered so the padieira / verga fits under the top plate; a window sill ≥ bottom plate + peitoril +
+  modules frames under the ring (`casa_planta` `continuar`). (Tension with the verga rule resolved
+  2026-11-06: the verga too sits on the opening head — user "Sim, baixa a verga"; see the verga rule above.)
+- An opening head is lowered so the padieira / verga fits under the top plate (`casa_planta` only; the verga itself now
+  follows the head, user 2026-11-06 — a lower head no longer leaves a strip); a window sill ≥ bottom plate + peitoril +
   5 cm — assumed — `casa_planta.construir` ([SB] heads ≈ 3 cm lower, SB #21). (On exposed roofs superseded by "opção a",
   not yet in `casa_planta` — X1.)
 - A doorway left as a gap between two modules gets a bandeira (padieira at the door head, short studs, top plate,
