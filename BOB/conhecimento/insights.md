@@ -85,6 +85,17 @@ he answers (`metodo-construtivo.md`). Condensed 2026-10-28 (history in git).
   16 GB DDR3, GTX 1050 Ti 4 GB, Z97 board) cannot serve Unreal 5 and a GPU alone is not advised → do Phase 7 (AR, GLB /
   USDZ) right after Phase 3, before Unreal; the client already gets a 3D / AR view, and the Unreal / GPU spend (needs his
   approval anyway) can wait — same audit report — **proposed, awaiting the user**.
+  **Accepted 2026-11-07** (user: "ok podemos avançar por essa rota", hub decision 18 decidida; checkpoints reordered 0, 1,
+  2, 3, 7, 4, 5, 6, 8, 9) **with a condition:** the AR must be realistic too, not flat-coloured materials (see next entry).
+- **2026-11-07** — Step Inside realistic AR on phones: reached with real PBR textures (colour, relief, gloss, 2K) made in
+  Phase 3; battens and other relief as normal maps instead of geometry (phone limits ≈ 100k triangles, 2048 textures,
+  ≈ 10 MB); ambient occlusion baked into the textures but no baked ground shadows (the phone draws them); frames, glass
+  with reflection, sills, flashings and gutters modelled. **Limit:** AR will not reach the Unreal level (spec §8); the
+  Unreal visit stays the photorealistic one. AR files of ≈ 10 MB fit Supabase private storage with temporary links, so
+  the first tests do not need all of Phase 6. Approval: AR next to photos of the built Torres Vedras house (one iPhone,
+  one Android). **Request to the user (open):** photos of the real materials (ripado, capoto, painel sandwich,
+  caixilharia) so the textures match what DiscoverCasa builds; otherwise photos / free CC0 libraries (nothing paid
+  without approval) — `step-inside/docs/audit/current-architecture.md` §14, hub Phase 3 and 7 tasks.
 - **2026-11-07** — Step Inside workstation = his home PC (Ryzen 9 5900X, 32 GB DDR4, RTX 2060 6 GB, 2 SATA SSDs with
   15 GB / 83 GB free, no NVMe): a good base, no new workstation needed. Disk is the first limit, VRAM the second →
   (a) buy a 2 TB NVMe before installing Unreal; (b) keep the RTX 2060 until the first Unreal test (Phase 4) and decide

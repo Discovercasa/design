@@ -383,6 +383,32 @@ Nenhuma destas alterações está feita. Cada uma espera aprovação.
 
 **Fases 8–9:** no fim, como na especificação.
 
+**Decidido a 2026-11-07** (decisão 18 do hub): a ordem é **2 → 3 → 7 (AR) → 4 → 5 → 6 → 8 → 9**, e o hub mostra as
+fases nesta ordem.
+
+O utilizador acrescentou um requisito: «queria que o AR fosse realista também, não tanto como nos óculos VR mas ter um
+nível de realismo bom e não aparentar ter materiais simples». Isto muda a forma como se fazem as Fases 3 e 7, dentro
+dos limites do telemóvel (especificação §8 e §12.1: cerca de 100 mil triângulos, texturas até 2048, cerca de 10 MB):
+
+**Fase 3:**
+- texturas PBR (cor, relevo e brilho) dos produtos que a DiscoverCasa usa, ligadas aos IDs `MAT_*`;
+- fonte das texturas: fotos dos materiais reais ou bibliotecas gratuitas CC0.
+
+**Fase 7:**
+- **Relevo em texturas:** o ripado e os outros relevos passam a texturas de relevo (*normal maps*) em vez de peças
+  modeladas, para caber no limite do telemóvel.
+- **Oclusão ambiente nas texturas:** a sombra suave dos cantos e encontros fica gravada nas texturas. As sombras no
+  chão não se gravam, porque o telemóvel já as desenha.
+- **Pormenores modelados:** caixilharia, vidro com reflexo, peitoris, rufos e caleiras.
+- **Luz:** o iPhone e o Android ajustam a luz e os reflexos à luz real à volta.
+- **Aprovação:** o modelo de Torres Vedras ao lado das fotos da casa construída, num iPhone e num Android.
+
+**Limite assumido:** o AR não chega ao realismo do Unreal (especificação §8). O objetivo é um aspeto real, não o de um
+modelo de cores lisas.
+
+**Links para clientes:** os ficheiros AR (cerca de 10 MB) cabem no armazenamento privado do Supabase, com links
+temporários. Para os primeiros testes não é preciso a Fase 6 inteira.
+
 ## 15. Decisões que precisam de aprovação
 
 O hub já tem 6 decisões abertas do Step Inside (n.º 3 a 8: GPU da workstation, empacotamento Unreal, resolução e FPS, GPU
@@ -398,7 +424,8 @@ cloud, onde guardar os ficheiros 3D, VR). Os factos desta auditoria foram acresc
 
    A tarefa nova «Preparar o PC de casa para o Unreal» (Fase 4) junta estes passos. Falta indicar a potência da fonte
    de alimentação (W) e a caixa, e decidir se o PC de casa pode guardar desenhos de clientes.
-3. **Ordem das fases:** Fase 7 (AR) antes das Fases 4–5?
+3. ~~**Ordem das fases.**~~ Decidido a 2026-11-07 (decisão 18): a Fase 7 (AR) vem logo depois da 3, com materiais
+   realistas (§14).
 4. **Dois projetos de teste para a Fase 1:**
    - sugestão: Torres Vedras (tem levantamento topográfico e casa construída) e uma casa simples do Build Your House;
    - falta um projeto de outro arquiteto, se houver.

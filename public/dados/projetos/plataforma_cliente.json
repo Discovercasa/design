@@ -6,7 +6,7 @@
   "resumo": "O cliente entra na sua casa antes de ela existir: visita 3D por link, realidade aumentada no telemóvel e VR.",
   "descricao": "Serviço comercial da Discovercasa que substitui o Enscape + Chaos Cloud. Os documentos do projeto passam a um modelo Blender, o Unreal Engine dá-lhe o aspeto final e o cliente explora a casa por um link privado: no browser (Pixel Streaming a partir de uma GPU na cloud), no telemóvel em realidade aumentada (modelo próprio, leve) ou num headset VR (depois de uma prova de conceito).",
   "fase": "Fase 1 · Contrato de dados (feita)",
-  "fase_detalhe": "Especificação técnica aprovada para trabalho em 2026-11-05. Fase 0 (auditoria) feita a 2026-11-07; falta só o painel Cloudflare. Fase 1 feita a 2026-11-07 (BOB/step-inside/docs/fase1/): schema com origem e confiança de cada valor, matriz de formatos e relatório de faltas, testados nos dois projetos de teste (Torres Vedras e Sobral Tipo 1). Workstation (aprovado a 2026-11-07): o PC de casa; compra-se um NVMe de 2 TB antes do Unreal e a GPU decide-se depois do primeiro teste. Nada de serviços pagos, GPU, buckets ou produção sem autorização expressa.",
+  "fase_detalhe": "Especificação técnica aprovada para trabalho em 2026-11-05. Fase 0 (auditoria) feita a 2026-11-07; falta só o painel Cloudflare. Fase 1 feita a 2026-11-07 (BOB/step-inside/docs/fase1/): schema com origem e confiança de cada valor, matriz de formatos e relatório de faltas, testados nos dois projetos de teste (Torres Vedras e Sobral Tipo 1). Ordem decidida a 2026-11-07: Fases 2 → 3 → 7 (AR realista) → 4 → 5 → 6 → 8 → 9. Workstation (aprovado a 2026-11-07): o PC de casa; compra-se um NVMe de 2 TB antes do Unreal e a GPU decide-se depois do primeiro teste. Nada de serviços pagos, GPU, buckets ou produção sem autorização expressa.",
   "objetivos": [
     "Visita 3D fotorrealista por link, sem o cliente instalar nada.",
     "AR no telemóvel com a casa à escala real.",
@@ -15,7 +15,7 @@
   ],
   "futuro": [
     "Prova de conceito Pixel Streaming numa GPU cloud de teste.",
-    "AR em iPhone e Android reais.",
+    "AR realista em iPhone e Android reais (texturas dos materiais reais, relevo, caixilharia e vidro), logo depois da Fase 3 — decidido a 2026-11-07.",
     "Decisão escrita sobre a VR em produção.",
     "Ideia nossa: o cliente vê em 3D a casa que configurou no Build Your House."
   ],
