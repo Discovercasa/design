@@ -5,6 +5,9 @@ node_modules/
 .wrangler/
 _trabalho/
 *.dwfx
+# client drawings stay on the PC, never in Git (user 2026-10-30; purged from history 2026-11-07)
+*.dwg
+*.skp
 .claude/settings.local.json
 tests/node_modules/
 tests/test-results/
