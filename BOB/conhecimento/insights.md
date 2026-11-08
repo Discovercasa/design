@@ -130,6 +130,14 @@ he answers (`metodo-construtivo.md`). Condensed 2026-10-28 (history in git).
   **open (hub task)**. **Done 2026-11-07** (hub task 155): the engineer-drawings input now has provenance (panels,
   openings, walls/doorways from the architecture, removed panels). Opening sizes stay INFERRED (the engineer draws
   openings as gaps; Sobral revisao-tecnica #5); a door under 1,90 m clear is flagged for review.
+- **2026-11-08** — PT survey sheets: the decimal point of a spot height marks the surveyed point; reading the label origin
+  instead shifts points by metres at 1:500 and biases heights on slopes (0.28 m median here vs 0.04 m) — **applied** in
+  Step Inside's reader.
+- **2026-11-08** — Two independent drawings of the same ground (spot heights and contours) let us check a survey without
+  the surveyor: points vs contours median 0.04 m on Sobral; points that disagree with both neighbours and contours
+  (beyond what the slope explains) are set aside for a person to look at — **applied**.
+- **2026-11-08** — Placing a house: written corner coordinates + the outline on the implantation sheet give a dimension
+  check of the finished model (Sobral house P: model 10.011 × 6.261 m vs drawing 10.02 × 6.255 m) — **applied**.
 
 ## Recorded, not yet told (raise when it fits)
 - **2026-10-16** — lameladas cut from stock waste a lot (8,50 from 13,5 m: ≈ 1,1 m³ at TV) → order to length or a 17 m

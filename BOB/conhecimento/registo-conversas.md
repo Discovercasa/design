@@ -1481,3 +1481,13 @@ When this file passes about 1 500 lines, continue in `registo-conversas-<year>-<
 > ok podemos avançar por essa rota mas queria que o AR fosse realista também, não tanto como nos óculos VR mas ter um nível de realismo bom e não aparentar ter materiais simples
 - Context: answers the previous reason-for-AR explanation; decides hub decision 18 and adds a requirement: realistic AR (good level, not VR-glasses level, no "simple" looking materials).
 - Filed in: hub decision 18 decidida (option "Sim: Fase 7 logo depois da 3"), notification sent; hub checkpoints reordered (Fase 0, 1, 2, 3, 7, 4, 5, 6, 8, 9); exit criteria extended (Phase 3: materials leave with real PBR textures — colour, relief, gloss; Phase 7: realistic materials, not flat colours, approved by DiscoverCasa next to photos of the built Torres Vedras house); new hub tasks Phase 3 "Texturas reais dos materiais DiscoverCasa (cor, relevo e brilho, 2K)", Phase 7 "Modelo AR realista: relevo em texturas, oclusão ambiente, caixilharia e vidro" and "Aprovação visual: o AR ao lado das fotos da casa construída"; `step-inside/docs/audit/current-architecture.md` §14 and §15 item 3 (decided); `public/dados/projetos/plataforma_cliente.json` (futuro, fase_detalhe); `conhecimento/discovercasa.md` → Product vision 3; `conhecimento/insights.md` → phase-order entry accepted + new realism insight. Pending: photos of the real materials (request to the user, open).
+
+### 2026-11-07 — Status request; chat messages vanished on Remote Control [Step Inside]
+> ponto de situação por favor... as tuas mensagens desaparceram para mim
+- Context: the user, on Remote Control, lost the chat messages and asked for a status summary. The assistant gave the Step Inside status (Phases 0 and 1 done, Phase 3 before Phase 7 order) and asked whether to start Phase 2.
+- Filed in: nothing new (status request).
+
+### 2026-11-08 — Start Phase 2 (Blender model and terrain) [Step Inside]
+> Sim, começa
+- Context: answers "Começo já a Fase 2 (modelo Blender e terreno)?". Phase 2 started and done the same day; still open: Torres Vedras terrain.
+- Filed in: `Construção Sobral/docs/desenhos.md` → 2026-11-08 note (survey grid, spot heights, contours, lot boundary, sheet 4 house P); `Construção Sobral/docs/estado.md` → Open questions (orientation of house P, surveyor data, terrain modelling; hub tasks 160–162); `Construção Torres Vedras/docs/estado.md` → Step Inside Phase 2 (visit model, 36 clashes = hub tasks 137/139/140, terrain blocked on DXF, task 159); `conhecimento/insights.md` → three 2026-11-08 entries (decimal point of spot heights, survey check via contours, house placement dimension check).

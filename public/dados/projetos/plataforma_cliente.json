@@ -21,7 +21,7 @@
   ],
   "metodo": "Funciona com projetos de qualquer arquiteto ou construtor; reutiliza os leitores e a geração 3D que já existem; nunca inventa cotas (NEEDS_HUMAN_REVIEW).",
   "app": null,
-  "organizacao": { "codigo": "BOB/step-inside/ (para já só a documentação)", "publicado": "ainda sem página própria", "ramo": "step-inside/<fase>-<tarefa>" },
+  "organizacao": { "codigo": "BOB/step-inside/ (fontes, terreno, modelo de visita, testes)", "publicado": "ainda sem página própria", "ramo": "step-inside/<fase>-<tarefa>" },
   "ligacoes": [
     { "com": "builder", "texto": "Opcional: nas obras Discovercasa parte-se do modelo do Builder; os projetos de outros arquitetos entram diretamente." },
     { "com": "gerador", "texto": "Sugerido usar o Gerador: os seus leitores de DWFx e PDF interpretam os documentos." },

@@ -62,6 +62,26 @@ alçados, corte + pormenores) · **20–22 Casa tipo 2** (same) — all houses 1
   (terrain modelling) carry the heights as readable text (447 of 451 numbers on sheet 2 and 488 of 491 on sheet 4 lie
   between 200 and 300 m, consistent with the lot levels; counted 2026-11-07), so the set is the best candidate for a
   first real terrain. No CRS, datum, survey date or precision found yet.
+- Note 2026-11-08 (Step Inside Phase 2, terrain reader; coordinates stay only on the PC, public repo):
+  - Sheet 2 (01-LEV_PL, survey, 1:500) carries a coordinate grid: small crosses every 100 mm (= 50 m) labelled "…mM"
+    (meridiana/easting, vertical text) and "…mP" (perpendicular/northing); 14 labelled crosses fit the 1:500 scale with
+    4 mm residual and no rotation. The sheet names neither the coordinate system nor the vertical datum (likely
+    PT-TM06/ETRS89 and Cascais heights — unconfirmed); no survey date, precision or control points shown (the sheet date
+    is the architecture drawing's).
+  - Spot heights: 450 labels as text (≈1.7 mm, horizontal) without point markers; the surveyed point is the label's
+    decimal point (Portuguese survey convention). Checked against the contours: median difference 0.04 m with the
+    decimal point, 0.05 m with the label centre, 0.28 m with the text origin. Heights ≈200–301 m.
+  - Contours: grey #808080 (0.08 mm) intermediate and brown #725639 (0.08 mm) index contours; index labels every 2.5 m
+    (202.5 … 300.0, along the line, ≈1.8 mm, rotated); 4 intermediates per index → interval 0.5 m. 400 contour polylines.
+  - Lot boundary "LIMITE DO TERRENO": thick dashed line drawn as small filled black dashes; rebuilt by joining the
+    dashes: ≈48,500 m² inside, perimeter ≈1,225 m.
+  - Sheet 4 (03-MOD_PL, modelação/implantação 1:500): each house is a dashed outline with a small circle on its NW corner
+    carrying its own coordinates (small text ≈0.7 mm, "…mM" / "…mP") and a level with an arrow ("223,88>") inside.
+    House P (a Tipo 1 lot): outline 10.02 × 6.255 m (20.05 × 12.51 mm), aligned with the grid (long side E–W), level
+    223,88 (read as the ground-floor finished floor level — INFERRED; the same sheet-2/cotas de soleira list gives
+    M N O P 223,90, see above). A black 0.08 mm outline around it (≈189.6 m², with a notch) read as its platform. The
+    written corner coordinates agree with the sheet grid to 0.23 m (label placement). Existing ground under house P is
+    0.9–2.6 m above the slab top → the house sits in a cut platform.
 - Text: titles and the construction notes are text; **room names, areas and level marks are vector
   outlines** → read them with `zoom` (sheet 17: ground plan ≈ region 80 165 220 140, upper plan
   ≈ 545 75 230 150; sheet 19: section HH' ≈ 440 205 300 175).
