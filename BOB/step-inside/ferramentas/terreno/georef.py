@@ -144,11 +144,11 @@ def sistema_provavel(xs, ys):
     """What the coordinates are compatible with. Returns (texto, compativel_pt: bool)."""
     if not xs:
         return "sem coordenadas", False
+    if all(abs(x) < 5000 for x in xs) and all(abs(y) < 5000 for y in ys):  # also the PT-TM06 central point: rare
+        return "coordenadas locais (sem georreferência)", False
     dentro = all(LIMITES_PT["M"][0] <= x <= LIMITES_PT["M"][1] for x in xs) and \
         all(LIMITES_PT["P"][0] <= y <= LIMITES_PT["P"][1] for y in ys)
     if dentro:
         return ("compatível com Portugal continental em PT-TM06/ETRS89 (EPSG:3763) ou num sistema Hayford-Gauss "
                 "antigo (Datum 73 / Datum Lisboa): confirmar com o topógrafo"), True
-    if all(abs(x) < 5000 for x in xs) and all(abs(y) < 5000 for y in ys):
-        return "coordenadas locais (sem georreferência)", False
     return "fora de Portugal continental nos sistemas portugueses: confirmar o CRS", False
