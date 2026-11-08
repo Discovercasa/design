@@ -29,6 +29,11 @@ door, Lavandaria 1,4 m opening with bandeira, quarto 1.5 one room 14,7 m², PE2.
 storeys (upper floor Z 3,117, +0,139) · 2026-10-15 central floor beam removed; floor joists ≤ 0,615.
 
 ## Open questions
+- **Step Inside Phase 2, 2026-11-08** (terrain of the lot and Casa Tipo 1 placed on lot P; visit model, WARNING; hub
+  tasks 160, 161, 162). Asked, not answered: (1) confirm the house orientation on lot P (as in the engineer's drawing =
+  0°, or turned 180°); (2) confirm with the surveyor the coordinate system, vertical datum, survey date and precision;
+  (3) the terrain modelling of sheet 4 (walls, banks, roads) is not modelled yet — only a flat platform at slab level
+  around the house.
 - **Raised 2026-11-07 (Step Inside Phase 1 report, `step-inside/projetos-teste/sobral-tipo1/relatorio.md`; not answered):**
   (a) Tipo 1 laundry ("Lavandaria 0.5"): the east side is open 1,40 m with a door of unknown type — the config note says
   "porta (de correr?)": which door type? (b) panel PI1.08 has an opening 1,50 m clear high: door or another kind of

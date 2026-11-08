@@ -1,0 +1,25 @@
+{
+ "_doc": "Step Inside Phase 2: terrain of the Sobral lot (test project). Reading rules for the survey sheet of the architecture set and facts stated by people (with their source). No coordinates here: the real ones stay on the PC. Run: python step-inside/ferramentas/terreno/terreno.py step-inside/projetos-teste/sobral-tipo1/terreno.json",
+ "obra": "sobral-tipo1",
+ "obra_pasta": "Sobral",
+ "nome": "Sobral · loteamento (Casa Tipo 1)",
+ "superficies": [
+  {
+   "id": "existente",
+   "nome": "Terreno existente (levantamento topográfico)",
+   "fontes": [
+    {
+     "ficheiro": "SMA_012_arquitectura_pecas_desenhadas.dwfx",
+     "folha": 2,
+     "local": "01-LEV_PL, planta de levantamento sobre levantamento topográfico, 1:500",
+     "pontos_cotados": {"altura_texto": [1.6, 1.75], "angulo": 0, "intervalo_z": [150, 400], "posicao": "ponto_decimal",
+                        "_nota": "PT survey convention: the decimal point of the height marks the surveyed point. Checked 2026-11-08: points vs contours median 0,04 m with the decimal point, 0,05 m with the label centre, 0,28 m with the label origin."},
+     "rotulos_curvas": {"altura_texto": [1.75, 1.9]},
+     "curvas": [{"stroke": "#808080", "sw": 0.08, "papel": "intermedia"}, {"stroke": "#725639", "sw": 0.08, "papel": "mestra"}],
+     "limite": {"fill": "#000000", "tracejado": true}
+    }
+   ]
+  }
+ ],
+ "metadados": {}
+}

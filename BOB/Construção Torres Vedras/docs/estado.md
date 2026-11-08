@@ -18,6 +18,16 @@ Condensed 2026-10-28 (the old "Where we stopped" chain and the superseded readin
 - Next: a new project through the whole chain (per-project questions → model → documents); this house's real materials
   list, when he sends it, to compare with `materiais.md`.
 
+## Step Inside Phase 2 (2026-11-08)
+- Visit model built (WARNING): structure 17.500 × 10.999 m vs sources 17.501 × 11.000; all 19 openings open in the model.
+  The checker `ferramentas/modelo/verificar.py` reports 36 timber clashes > 8 mm in the production model (mostly
+  Prumo × Prumo and the tie beam/amarração) — the known builder defects of hub tasks 137, 139, 140 (Construtor ›
+  "Corrigir defeitos geométricos conhecidos"), not a Step Inside issue.
+- Terrain still missing: the survey's heights are only in the DWG (DWFx/PDF carry outlines) → needs a DXF export (or
+  LandXML/XYZ from the surveyor); hub task 159 (blocked, waiting on the user). DWG TrueView 2026 is on the company PC
+  but Autodesk's documentation says it only saves DWG (not verified on the PC); the free ODA File Converter would
+  convert DWG→DXF but needs the user's permission to install.
+
 ## Goal (user 2026-10-15)
 Model this built house with the DiscoverCasa method and check that the model's materials are close to what was really
 used and that the structure matches the finished work, "de forma a ficares realmente a construir as nossas casas como

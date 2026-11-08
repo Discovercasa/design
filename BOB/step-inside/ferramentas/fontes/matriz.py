@@ -3,7 +3,8 @@
     DIRECT            read by an existing tool, geometry/values can be extracted
     CONVERT_REQUIRED  usable after exporting it to a DIRECT format (e.g. DWG -> DWFx / vector PDF)
     REFERENCE_ONLY    for people to look at; no geometry or values are taken from it
-    UNSUPPORTED       no reader yet (terrain formats: planned for Phase 2)
+    UNSUPPORTED       no reader yet
+Terrain formats (Phase 2): step-inside/ferramentas/terreno/leitores.py.
 
 classificar(path) looks inside the file when the extension is not enough (vector vs scanned PDF, DWFx with 3D).
 """
@@ -24,25 +25,27 @@ FORMATOS = {
     ".json": (DIRECT, "ferramentas/configurador/para_construtor.py", "JSON do configurador (Build Your House)."),
     ".dwg": (CONVERT, "exportar para DWFx ou PDF vetorial (AutoCAD / DWG TrueView)",
              "Sem leitor. O DWG tem a informação toda (camadas, 3D, cotas como objetos), mas é um formato fechado."),
-    ".dxf": (CONVERT, "exportar para DWFx ou PDF vetorial",
-             "Sem leitor. É texto aberto: um leitor de DXF faz sentido na Fase 2 para curvas de nível e pontos 3D."),
+    ".dxf": (DIRECT, "step-inside/ferramentas/terreno/leitores.py (terreno)",
+             "DXF ASCII: pontos 3D, polilinhas 3D, curvas com elevação, faces 3D (Fase 2). Plantas em DXF: exportar para "
+             "DWFx ou PDF vetorial. Linhas 2D sem cota nunca dão alturas."),
     ".dwf": (CONVERT, "voltar a exportar como DWFx", "DWF antigo (binário)."),
     ".ifc": (UNSUPPORTED, "—", "BIM aberto. Sem leitor; só se algum arquiteto o entregar."),
     ".rvt": (UNSUPPORTED, "—", "Revit: pedir DWFx/PDF ou IFC."),
     ".skp": (REFERENCE, "—", "Modelo SketchUp: só para ver."),
-    ".tif": (UNSUPPORTED, "leitor GeoTIFF previsto na Fase 2",
-             "Pode ser um GeoTIFF/DEM (terreno). Se for só uma imagem: REFERENCE_ONLY."),
-    ".tiff": (UNSUPPORTED, "leitor GeoTIFF previsto na Fase 2", "Como .tif."),
-    ".xml": (UNSUPPORTED, "leitor LandXML previsto na Fase 2", "LandXML (superfície topográfica), se for o caso."),
-    ".landxml": (UNSUPPORTED, "leitor LandXML previsto na Fase 2", "Superfície topográfica."),
+    ".tif": (CONVERT, "converter o DEM para ESRI ASCII (.asc) ou XYZ (ex.: gdal_translate -of AAIGrid)",
+             "GeoTIFF/DEM: sem leitor direto (exige TIFF comprimido e georreferência). Se for só uma imagem: REFERENCE_ONLY."),
+    ".tiff": (CONVERT, "como .tif", "Como .tif."),
+    ".asc": (DIRECT, "step-inside/ferramentas/terreno/leitores.py", "DEM em ESRI ASCII grid: declarar unidade e CRS."),
+    ".xml": (DIRECT, "step-inside/ferramentas/terreno/leitores.py", "LandXML: pontos, superfícies, linhas de quebra, curvas."),
+    ".landxml": (DIRECT, "step-inside/ferramentas/terreno/leitores.py", "LandXML (superfície topográfica)."),
     ".las": (UNSUPPORTED, "—", "Nuvem de pontos."),
     ".laz": (UNSUPPORTED, "—", "Nuvem de pontos comprimida."),
-    ".xyz": (UNSUPPORTED, "leitor de pontos previsto na Fase 2", "Pontos X Y Z: precisa de unidade, CRS e cota."),
-    ".csv": (UNSUPPORTED, "leitor de pontos previsto na Fase 2", "Pontos X Y Z, se for o caso."),
+    ".xyz": (DIRECT, "step-inside/ferramentas/terreno/leitores.py", "Pontos X Y Z: declarar unidade e CRS."),
+    ".csv": (DIRECT, "step-inside/ferramentas/terreno/leitores.py", "Pontos X Y Z (com ou sem cabeçalho, vírgula decimal)."),
     ".docx": (REFERENCE, "—", "Memória descritiva ou caderno de encargos: texto para ler e confrontar."),
     ".doc": (REFERENCE, "—", "Como .docx."),
     ".xlsx": (REFERENCE, "—", "Mapa de quantidades ou de vãos: para ler e confrontar."),
-    ".txt": (REFERENCE, "—", "Texto."),
+    ".txt": (REFERENCE, "—", "Texto. Pontos X Y Z em .txt: lidos pelo terreno se declarados em terreno.json."),
 }
 for _e in (".jpg", ".jpeg", ".png", ".webp", ".heic", ".gif", ".bmp"):
     FORMATOS[_e] = (REFERENCE, "—", "Imagem ou foto: só para ver (nunca se tira um terreno de uma imagem aérea).")
