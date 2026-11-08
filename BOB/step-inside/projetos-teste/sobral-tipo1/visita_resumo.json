@@ -1,0 +1,229 @@
+{
+ "obra": "sobral-tipo1",
+ "casa_blend": "Construção Sobral/modelos/tipo1/Casa_Tipo1_Estrutura_Madeira.blend",
+ "modelo": {
+  "avisos": [],
+  "objetos_por_categoria": {
+   "ARCH_FOUNDATION": 3,
+   "ARCH_WALLS_EXT": 16,
+   "ARCH_WALLS_INT": 81,
+   "ARCH_FLOORS": 26,
+   "ARCH_CEILINGS": 58,
+   "ARCH_ROOF": 33,
+   "STRUCT_TIMBER": 705,
+   "ARCH_OPTIONS": 24,
+   "ARCH_LABELS": 12
+  },
+  "dimensoes_modelo": {
+   "estrutura_planta_m": [
+    9.861,
+    6.11
+   ],
+   "estrutura_origem_m": [
+    -0.0,
+    0.0
+   ],
+   "acabamento_planta_m": [
+    10.011,
+    6.261
+   ],
+   "acabamento_canto_so_m": [
+    -0.076,
+    -0.075
+   ],
+   "altura_total_m": 8.492,
+   "z_min_m": -1.0
+  },
+  "malhas": {
+   "verificadas": 217,
+   "abertas": [],
+   "n_abertas": 0,
+   "normais_invertidas": [],
+   "n_invertidas": 0,
+   "duplicados": [],
+   "n_duplicados": 0
+  },
+  "aberturas": {
+   "verificadas": 19,
+   "fechadas": [],
+   "controlo_paredes_cheias": 40,
+   "controlo_abertas_por_engano": [],
+   "controlo_detalhe": []
+  },
+  "colocacao": {
+   "canto_modelo": [
+    -0.076,
+    6.186
+   ],
+   "rotacao_graus": 0.0,
+   "z_laje": 223.72
+  },
+  "casa_terreno_existente": {
+   "amostras": 625,
+   "fora_do_terreno": 0,
+   "terreno_menos_laje_min_m": 0.89,
+   "terreno_menos_laje_max_m": 2.55,
+   "fracao_terreno_acima_do_pavimento": 1.0
+  },
+  "plataforma": {
+   "vertices_rebaixados_ou_subidos": 64,
+   "z": 223.72
+  },
+  "casa_terreno": {
+   "amostras": 625,
+   "fora_do_terreno": 0,
+   "terreno_menos_laje_min_m": -0.02,
+   "terreno_menos_laje_max_m": 0.01,
+   "fracao_terreno_acima_do_pavimento": 0.0
+  }
+ },
+ "implantacao": {
+  "canto": {
+   "valor": "só no PC",
+   "unidade": "",
+   "tipo": "referencial",
+   "estado": "CONFIRMED",
+   "metodo": "texto",
+   "fonte": {
+    "documento": "SMA_012_arquitectura_pecas_desenhadas.dwfx",
+    "folha": 4,
+    "local": "rótulos perto de [475.8, 157.6] mm (folha)",
+    "data": ""
+   },
+   "nota": "canto NO do contorno da casa P: coordenadas escritas no desenho; confere com a quadrícula da folha a 0,23 m (posição do rótulo)",
+   "conflitos": []
+  },
+  "cota_pavimento": {
+   "valor": 223.88,
+   "unidade": "m",
+   "tipo": "nivel",
+   "estado": "INFERRED",
+   "metodo": "texto",
+   "fonte": {
+    "documento": "SMA_012_arquitectura_pecas_desenhadas.dwfx",
+    "folha": 4,
+    "local": "rótulo '223,88>'",
+    "data": ""
+   },
+   "nota": "cota com seta dentro do contorno da casa, lida como a do pavimento acabado do rés do chão",
+   "conflitos": []
+  },
+  "rotacao_graus": {
+   "valor": 0.0,
+   "unidade": "",
+   "tipo": "geometria",
+   "estado": "INFERRED",
+   "metodo": "inferencia",
+   "fonte": {
+    "documento": "SMA_012_arquitectura_pecas_desenhadas.dwfx",
+    "folha": 4,
+    "local": "contorno tracejado da casa P",
+    "data": ""
+   },
+   "nota": "o contorno da casa é um retângulo alinhado com a quadrícula (lado maior E-O, como o modelo); falta confirmar se a casa está virada como no desenho do engenheiro (0°) ou rodada 180°",
+   "conflitos": []
+  },
+  "pavimento_acima_laje": {
+   "valor": 0.16,
+   "unidade": "m",
+   "tipo": "nivel",
+   "estado": "CONFIRMED",
+   "metodo": "calculo",
+   "fonte": {
+    "documento": "step-inside/projetos-teste/sobral-tipo1/declaracoes.json",
+    "folha": null,
+    "local": "niveis.piso0",
+    "data": ""
+   },
+   "nota": "pavimento acabado do rés do chão a Z 0,16 sobre o topo da laje (modelo DiscoverCasa)",
+   "conflitos": []
+  },
+  "contorno_desenho_m": {
+   "valor": [
+    10.02,
+    6.255
+   ],
+   "unidade": "m",
+   "tipo": "geometria",
+   "estado": "CONFIRMED",
+   "metodo": "geometria",
+   "fonte": {
+    "documento": "SMA_012_arquitectura_pecas_desenhadas.dwfx",
+    "folha": 4,
+    "local": "contorno tracejado da casa P (20,05 × 12,51 mm a 1:500)",
+    "data": ""
+   },
+   "nota": "contorno exterior acabado da casa na implantação",
+   "conflitos": []
+  },
+  "plataforma": {
+   "valor": {
+    "area_m2": 189.6,
+    "vertices": 8,
+    "cota": "laje + 0,00 m"
+   },
+   "unidade": "",
+   "tipo": "terreno",
+   "estado": "INFERRED",
+   "metodo": "geometria",
+   "fonte": {
+    "documento": "SMA_012_arquitectura_pecas_desenhadas.dwfx",
+    "folha": 4,
+    "local": "contorno que contém a casa",
+    "data": ""
+   },
+   "nota": "modelação simplificada (folha 4): o lote P fica plano à cota do topo da laje dentro do contorno desenhado à volta da casa; os muros e taludes da modelação ainda não estão no modelo",
+   "conflitos": []
+  }
+ },
+ "dimensoes_fontes": {
+  "comprimento": {
+   "valor": 9.86,
+   "unidade": "m",
+   "tipo": "dimensao",
+   "estado": "CONFIRMED",
+   "metodo": "geometria",
+   "fonte": {
+    "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+    "folha": 1,
+    "local": "FUNDAÇÕES | PLANTA, contorno da casa",
+    "data": ""
+   },
+   "nota": "Estrutura de madeira 9,86 × 6,11 nos desenhos do engenheiro; a arquitetura usa a mesma (ETICS por fora).",
+   "conflitos": []
+  },
+  "profundidade": {
+   "valor": 6.11,
+   "unidade": "m",
+   "tipo": "dimensao",
+   "estado": "CONFIRMED",
+   "metodo": "geometria",
+   "fonte": {
+    "documento": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
+    "folha": 1,
+    "local": "FUNDAÇÕES | PLANTA, contorno da casa",
+    "data": ""
+   },
+   "nota": "Como o comprimento.",
+   "conflitos": []
+  }
+ },
+ "choques_madeira": {
+  "pecas": 364,
+  "choques": 0,
+  "fora": 0,
+  "por_tipo": {},
+  "maior_cm": 0
+ },
+ "terreno": "WARNING",
+ "dif_dimensoes_estrutura_m": 0.001,
+ "dif_contorno_implantacao_m": 0.009,
+ "resultado": "WARNING",
+ "motivos": [
+  "implantação: cota_pavimento INFERRED",
+  "implantação: rotacao_graus INFERRED",
+  "implantação: plataforma INFERRED",
+  "terreno existente entre 0,89 e 2,55 m da laje sob a casa: a plataforma (modelação simplificada) corrige-o no modelo",
+  "terreno: WARNING"
+ ]
+}

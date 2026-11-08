@@ -1,0 +1,111 @@
+{
+ "obra": "torres-vedras",
+ "casa_blend": "Construção Torres Vedras/modelos/casa/Casa_TorresVedras.blend",
+ "modelo": {
+  "avisos": [],
+  "objetos_por_categoria": {
+   "ARCH_FOUNDATION": 1,
+   "ARCH_WALLS_EXT": 24,
+   "ARCH_WALLS_INT": 66,
+   "ARCH_FLOORS": 8,
+   "ARCH_CEILINGS": 40,
+   "ARCH_ROOF": 116,
+   "ARCH_OPENINGS": 50,
+   "ARCH_PERGOLA": 4,
+   "STRUCT_TIMBER": 880,
+   "ARCH_LABELS": 8
+  },
+  "dimensoes_modelo": {
+   "estrutura_planta_m": [
+    17.5,
+    10.999
+   ],
+   "estrutura_origem_m": [
+    0.004,
+    0.0
+   ],
+   "acabamento_planta_m": [
+    17.632,
+    11.132
+   ],
+   "acabamento_canto_so_m": [
+    -0.063,
+    -0.066
+   ],
+   "altura_total_m": 3.702,
+   "z_min_m": -0.2
+  },
+  "malhas": {
+   "verificadas": 309,
+   "abertas": [],
+   "n_abertas": 0,
+   "normais_invertidas": [],
+   "n_invertidas": 0,
+   "duplicados": [],
+   "n_duplicados": 0
+  },
+  "aberturas": {
+   "verificadas": 19,
+   "fechadas": [],
+   "controlo_paredes_cheias": 14,
+   "controlo_abertas_por_engano": [],
+   "controlo_detalhe": []
+  },
+  "chao_provisorio": {
+   "z": 0.0,
+   "tamanho_m": 60.0
+  }
+ },
+ "implantacao": {},
+ "dimensoes_fontes": {
+  "comprimento": {
+   "valor": 17.501,
+   "unidade": "m",
+   "tipo": "dimensao",
+   "estado": "CONFIRMED",
+   "metodo": "desenho_empresa",
+   "fonte": {
+    "documento": "250828_D2503_Modulos.dwfx",
+    "folha": null,
+    "local": "Dimensão da fundação e módulos",
+    "data": "2025-08-28"
+   },
+   "nota": "Face exterior dos módulos = linha da fundação = face exterior das paredes da arquitetura; o revestimento fica cerca de 9 cm por fora.",
+   "conflitos": []
+  },
+  "profundidade": {
+   "valor": 11.0,
+   "unidade": "m",
+   "tipo": "dimensao",
+   "estado": "CONFIRMED",
+   "metodo": "desenho_empresa",
+   "fonte": {
+    "documento": "250828_D2503_Modulos.dwfx",
+    "folha": null,
+    "local": "Dimensão da fundação e módulos",
+    "data": "2025-08-28"
+   },
+   "nota": "Como o comprimento.",
+   "conflitos": []
+  }
+ },
+ "choques_madeira": {
+  "pecas": 736,
+  "choques": 36,
+  "fora": 0,
+  "por_tipo": {
+   "Prumo x Prumo": 18,
+   "Amarração x Viga": 10,
+   "Amarração x Amarração": 5,
+   "PI x PI": 3
+  },
+  "maior_cm": 7.5
+ },
+ "terreno": null,
+ "dif_dimensoes_estrutura_m": 0.001,
+ "resultado": "WARNING",
+ "motivos": [
+  "36 choques entre peças de madeira > 8 mm no modelo de produção (verificar.py)",
+  "chão provisório plano: não é terreno (falta o levantamento)"
+ ]
+}

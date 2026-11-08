@@ -1,0 +1,11 @@
+{
+ "_doc": "Step Inside Phase 2: visit model of the Torres Vedras house (test project, another architect's design). The survey exists only as DWG (heights drawn as outlines in the DWFx/PDF): the terrain waits for a DXF export, so the site is a clearly named flat placeholder for now. Run: python step-inside/ferramentas/visita/visita.py step-inside/projetos-teste/torres-vedras/visita.json",
+ "obra": "torres-vedras",
+ "obra_pasta": "Torres Vedras",
+ "nome": "Torres Vedras · casa",
+ "casa": {"config": "Construção Torres Vedras/modelos/casa/config.json"},
+ "fontes": "step-inside/projetos-teste/torres-vedras/fontes.json",
+ "terreno": null,
+ "implantacao": null,
+ "chao_provisorio": {"z": 0.0, "tamanho": 60.0}
+}

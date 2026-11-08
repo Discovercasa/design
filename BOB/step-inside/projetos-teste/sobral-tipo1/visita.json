@@ -1,0 +1,28 @@
+{
+ "_doc": "Step Inside Phase 2: visit model of Casa Tipo 1 on lot P of the Sobral development (test project). Where to read the placement on the drawings (the values themselves are read on the PC; no coordinates here). Run after terreno.py: python step-inside/ferramentas/visita/visita.py step-inside/projetos-teste/sobral-tipo1/visita.json",
+ "obra": "sobral-tipo1",
+ "obra_pasta": "Sobral",
+ "nome": "Sobral · Casa Tipo 1 no lote P",
+ "casa": {"config": "Construção Sobral/modelos/tipo1/config.json"},
+ "fontes": "step-inside/projetos-teste/sobral-tipo1/fontes.json",
+ "terreno": {"declaracao": "step-inside/projetos-teste/sobral-tipo1/terreno.json", "superficie": "existente"},
+ "implantacao": {
+  "lote": "P",
+  "canto": "NO",
+  "coordenadas": {"ficheiro": "SMA_012_arquitectura_pecas_desenhadas.dwfx", "folha": 4, "perto_mm": [475.8, 157.6],
+                  "_nota": "03-MOD_PL: circle on the NW corner of the dashed house outline of lot P with '…mM' / '…mP' labels"},
+  "cota": {"ficheiro": "SMA_012_arquitectura_pecas_desenhadas.dwfx", "folha": 4, "perto_mm": [489.3, 162.4]},
+  "rotacao_graus": {"valor": 0.0, "estado": "INFERRED", "metodo": "inferencia",
+                    "fonte": {"documento": "SMA_012_arquitectura_pecas_desenhadas.dwfx", "folha": 4, "local": "contorno tracejado da casa P", "data": ""},
+                    "nota": "o contorno da casa é um retângulo alinhado com a quadrícula (lado maior E-O, como o modelo); falta confirmar se a casa está virada como no desenho do engenheiro (0°) ou rodada 180°"},
+  "pavimento_acima_laje": {"valor": 0.16, "estado": "CONFIRMED", "metodo": "calculo", "unidade": "m",
+                           "fonte": {"documento": "step-inside/projetos-teste/sobral-tipo1/declaracoes.json", "folha": null, "local": "niveis.piso0", "data": ""},
+                           "nota": "pavimento acabado do rés do chão a Z 0,16 sobre o topo da laje (modelo DiscoverCasa)"},
+  "contorno_desenho_m": {"valor": [10.02, 6.255], "estado": "CONFIRMED", "metodo": "geometria", "unidade": "m",
+                         "fonte": {"documento": "SMA_012_arquitectura_pecas_desenhadas.dwfx", "folha": 4, "local": "contorno tracejado da casa P (20,05 × 12,51 mm a 1:500)", "data": ""},
+                         "nota": "contorno exterior acabado da casa na implantação"}
+ },
+ "plataforma": {"ficheiro": "SMA_012_arquitectura_pecas_desenhadas.dwfx", "folha": 4, "contem_mm": [490.0, 168.0],
+                "estilo": {"stroke": "#000000", "sw": 0.08}, "acima_da_laje": 0.0,
+                "nota": "modelação simplificada (folha 4): o lote P fica plano à cota do topo da laje dentro do contorno desenhado à volta da casa; os muros e taludes da modelação ainda não estão no modelo"}
+}

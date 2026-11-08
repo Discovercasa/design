@@ -1,0 +1,396 @@
+{
+ "obra": "sobral-tipo1",
+ "resultado": "WARNING",
+ "motivos": [
+  "existente: 10 pontos discordam de uma das verificações (mantidos)",
+  "crs: INFERRED — terreno aproximado (posição relativa medida; georreferência por confirmar com o topógrafo)",
+  "datum_vertical: INFERRED — terreno aproximado (posição relativa medida; georreferência por confirmar com o topógrafo)",
+  "data_levantamento: em falta",
+  "precisao: em falta",
+  "pontos_controlo: em falta"
+ ],
+ "terreno": {
+  "fonte": {
+   "valor": "DWFx: SMA_012_arquitectura_pecas_desenhadas.dwfx, folha 2",
+   "unidade": "",
+   "tipo": "terreno",
+   "estado": "CONFIRMED",
+   "metodo": "texto",
+   "fonte": {
+    "documento": "SMA_012_arquitectura_pecas_desenhadas.dwfx",
+    "folha": 2,
+    "local": "01-LEV_PL, planta de levantamento sobre levantamento topográfico, 1:500",
+    "data": ""
+   },
+   "nota": "",
+   "conflitos": []
+  },
+  "crs": {
+   "valor": "PT-TM06/ETRS89 (EPSG:3763), provável",
+   "unidade": "",
+   "tipo": "referencial",
+   "estado": "INFERRED",
+   "metodo": "inferencia",
+   "fonte": {
+    "documento": "SMA_012_arquitectura_pecas_desenhadas.dwfx",
+    "folha": 2,
+    "local": "01-LEV_PL, planta de levantamento sobre levantamento topográfico, 1:500",
+    "data": ""
+   },
+   "nota": "quadrícula M/P lida na folha (14 cruzes, resíduo 0,004 m, escala 1:500); compatível com Portugal continental em PT-TM06/ETRS89 (EPSG:3763) ou num sistema Hayford-Gauss antigo (Datum 73 / Datum Lisboa): confirmar com o topógrafo. O desenho não escreve o sistema.",
+   "conflitos": []
+  },
+  "datum_vertical": {
+   "valor": "altitudes ortométricas (Marégrafo de Cascais), provável",
+   "unidade": "",
+   "tipo": "terreno",
+   "estado": "INFERRED",
+   "metodo": "inferencia",
+   "fonte": null,
+   "nota": "cotas entre 200,22 e 301,10 m, coerentes com altitudes em Portugal continental; o desenho não escreve o datum",
+   "conflitos": []
+  },
+  "unidade_horizontal": {
+   "valor": "m",
+   "unidade": "m",
+   "tipo": "terreno",
+   "estado": "CONFIRMED",
+   "metodo": "texto",
+   "fonte": {
+    "documento": "SMA_012_arquitectura_pecas_desenhadas.dwfx",
+    "folha": 2,
+    "local": "01-LEV_PL, planta de levantamento sobre levantamento topográfico, 1:500",
+    "data": ""
+   },
+   "nota": "rótulos da quadrícula em metros ('…mM', '…mP') e escala verificada",
+   "conflitos": []
+  },
+  "unidade_vertical": {
+   "valor": "m",
+   "unidade": "m",
+   "tipo": "terreno",
+   "estado": "INFERRED",
+   "metodo": "inferencia",
+   "fonte": {
+    "documento": "SMA_012_arquitectura_pecas_desenhadas.dwfx",
+    "folha": 2,
+    "local": "01-LEV_PL, planta de levantamento sobre levantamento topográfico, 1:500",
+    "data": ""
+   },
+   "nota": "cotas com 2 casas decimais e a gama de altitudes da região",
+   "conflitos": []
+  },
+  "limite_lote": {
+   "valor": {
+    "area_m2": 48505,
+    "perimetro_m": 1225,
+    "vertices": 1639,
+    "coordenadas": "só no PC (terreno_local.json)"
+   },
+   "unidade": "",
+   "tipo": "terreno",
+   "estado": "INFERRED",
+   "metodo": "geometria",
+   "fonte": {
+    "documento": "SMA_012_arquitectura_pecas_desenhadas.dwfx",
+    "folha": 2,
+    "local": "01-LEV_PL, planta de levantamento sobre levantamento topográfico, 1:500",
+    "data": ""
+   },
+   "nota": "linha tracejada «LIMITE DO TERRENO» reconstruída a partir dos traços",
+   "conflitos": []
+  },
+  "data_levantamento": {
+   "valor": null,
+   "unidade": "",
+   "tipo": "terreno",
+   "estado": "MISSING",
+   "metodo": "nenhum",
+   "fonte": null,
+   "nota": "o desenho não diz a data do levantamento (a data da folha é a do desenho de arquitetura)",
+   "conflitos": []
+  },
+  "precisao": {
+   "valor": null,
+   "unidade": "",
+   "tipo": "terreno",
+   "estado": "MISSING",
+   "metodo": "nenhum",
+   "fonte": null,
+   "nota": "precisão não declarada pelo topógrafo; ver a coerência medida no relatório",
+   "conflitos": []
+  },
+  "pontos_controlo": {
+   "valor": null,
+   "unidade": "",
+   "tipo": "terreno",
+   "estado": "MISSING",
+   "metodo": "nenhum",
+   "fonte": null,
+   "nota": "o desenho não mostra marcos nem estações do levantamento com coordenadas e cota",
+   "conflitos": []
+  }
+ },
+ "leitura": [
+  {
+   "superficie": "existente",
+   "ficheiro": "SMA_012_arquitectura_pecas_desenhadas.dwfx",
+   "formato": "DWFx",
+   "folha": 2,
+   "contagens": {
+    "pontos_cotados": 450,
+    "curvas_2d": 400,
+    "vertices_curvas": 8921,
+    "limites": 1,
+    "posicao_do_ponto": "ponto_decimal"
+   },
+   "avisos": [],
+   "georef": {
+    "residuo_max_m": 0.004,
+    "escala_x": 499.98,
+    "escala_y": 499.99,
+    "rotacao_graus": -0.0,
+    "n_cruzes": 14
+   }
+  }
+ ],
+ "controlo_xy_implantacao": [],
+ "superficies": [
+  {
+   "id": "existente",
+   "nome": "Terreno existente (levantamento topográfico)",
+   "pontos": 433,
+   "excluidos_por_decisao": 0,
+   "duplicados_com_cotas_diferentes": [],
+   "validacao_cruzada": {
+    "n": 415,
+    "media": 0.037,
+    "media_abs": 0.57,
+    "rmse": 0.861,
+    "p50": 0.391,
+    "p95": 1.667,
+    "max": 6.693
+   },
+   "limite_pico_m": 3.48,
+   "curvas": {
+    "linhas": 400,
+    "com_cota_por_rotulo": 12,
+    "com_cota_pelo_tin": 345,
+    "sem_cota": 43,
+    "rotulos_em_conflito": 0,
+    "equidistancia_mestras": 2.5,
+    "equidistancia": 0.5,
+    "razao_comprimentos_intermedias_mestras": 4.17,
+    "desvio_ao_longo_da_curva_p50": 0.094,
+    "retiradas_por_incoerencia": 26,
+    "com_cota_final": 331
+   },
+   "curvas_vs_pontos": {
+    "n": 422,
+    "media": 0.039,
+    "media_abs": 0.155,
+    "rmse": 0.341,
+    "p50": 0.042,
+    "p95": 0.818,
+    "max": 1.805
+   },
+   "limite_desacordo_curvas_m": 1.0,
+   "incerteza_xy_m": 1.0,
+   "pontos_afastados": [],
+   "pontos_a_rever": [
+    {
+     "indice": 15,
+     "z": 201.11,
+     "erro_vizinhos": null,
+     "previsto_vizinhos": null,
+     "dif_curvas": 1.38,
+     "declive_pct": 0,
+     "folha_mm": [
+      737.2,
+      62.3
+     ],
+     "texto": "201.11"
+    },
+    {
+     "indice": 72,
+     "z": 227.72,
+     "erro_vizinhos": null,
+     "previsto_vizinhos": null,
+     "dif_curvas": 1.76,
+     "declive_pct": 19,
+     "folha_mm": [
+      414.4,
+      139.1
+     ],
+     "texto": "227.72"
+    },
+    {
+     "indice": 265,
+     "z": 228.26,
+     "erro_vizinhos": null,
+     "previsto_vizinhos": null,
+     "dif_curvas": -1.56,
+     "declive_pct": 47,
+     "folha_mm": [
+      548.6,
+      317.8
+     ],
+     "texto": "228.26"
+    },
+    {
+     "indice": 302,
+     "z": 232.86,
+     "erro_vizinhos": null,
+     "previsto_vizinhos": null,
+     "dif_curvas": -1.78,
+     "declive_pct": 12,
+     "folha_mm": [
+      508.3,
+      360.1
+     ],
+     "texto": "232.86"
+    },
+    {
+     "indice": 358,
+     "z": 224.19,
+     "erro_vizinhos": null,
+     "previsto_vizinhos": null,
+     "dif_curvas": -1.45,
+     "declive_pct": 9,
+     "folha_mm": [
+      721.8,
+      411.7
+     ],
+     "texto": "224.19"
+    },
+    {
+     "indice": 374,
+     "z": 224.49,
+     "erro_vizinhos": null,
+     "previsto_vizinhos": null,
+     "dif_curvas": -1.69,
+     "declive_pct": 8,
+     "folha_mm": [
+      720.8,
+      422.6
+     ],
+     "texto": "224.49"
+    },
+    {
+     "indice": 378,
+     "z": 224.84,
+     "erro_vizinhos": null,
+     "previsto_vizinhos": null,
+     "dif_curvas": -1.16,
+     "declive_pct": 7,
+     "folha_mm": [
+      695.5,
+      425.2
+     ],
+     "texto": "224.84"
+    },
+    {
+     "indice": 408,
+     "z": 271.64,
+     "erro_vizinhos": null,
+     "previsto_vizinhos": null,
+     "dif_curvas": 1.81,
+     "declive_pct": 29,
+     "folha_mm": [
+      143.1,
+      455.4
+     ],
+     "texto": "271.64"
+    },
+    {
+     "indice": 427,
+     "z": 301.1,
+     "erro_vizinhos": null,
+     "previsto_vizinhos": null,
+     "dif_curvas": -1.11,
+     "declive_pct": 0,
+     "folha_mm": [
+      27.1,
+      488.2
+     ],
+     "texto": "301.10"
+    },
+    {
+     "indice": 433,
+     "z": 272.74,
+     "erro_vizinhos": null,
+     "previsto_vizinhos": null,
+     "dif_curvas": 1.74,
+     "declive_pct": 43,
+     "folha_mm": [
+      134.2,
+      506.6
+     ],
+     "texto": "272.74"
+    }
+   ],
+   "picos_confirmados_pelas_curvas": [
+    {
+     "indice": 426,
+     "z": 300.4,
+     "erro_vizinhos": 4.99,
+     "previsto_vizinhos": 295.41,
+     "dif_curvas": -1.01,
+     "declive_pct": 64,
+     "folha_mm": [
+      41.0,
+      484.2
+     ],
+     "texto": "300.40"
+    },
+    {
+     "indice": 428,
+     "z": 285.83,
+     "erro_vizinhos": 6.69,
+     "previsto_vizinhos": 292.52,
+     "dif_curvas": 1.33,
+     "declive_pct": 35,
+     "folha_mm": [
+      63.5,
+      488.7
+     ],
+     "texto": "285.83"
+    },
+    {
+     "indice": 436,
+     "z": 296.42,
+     "erro_vizinhos": 3.69,
+     "previsto_vizinhos": 292.73,
+     "dif_curvas": 0.56,
+     "declive_pct": 21,
+     "folha_mm": [
+      60.3,
+      517.5
+     ],
+     "texto": "296.42"
+    }
+   ],
+   "cruzamentos_de_curvas": 0,
+   "triangulos_aparados": 273,
+   "aresta_max_borda_m": 13.35,
+   "malha": {
+    "vertices": 8303,
+    "triangulos": 16314,
+    "area_planta_m2": 55954.1,
+    "area_m2": 58105.5,
+    "extensao_m": [
+     409.7,
+     277.0
+    ],
+    "z_min": 200.22,
+    "z_max": 301.1,
+    "faces_para_baixo": 0,
+    "faces_verticais": 3,
+    "inclinacao_graus_p50": 13.2,
+    "inclinacao_graus_p95": 29.5,
+    "inclinacao_graus_max": 89.6
+   }
+  }
+ ],
+ "origem_local": "guardada só no PC (_trabalho/step-inside/<obra>/terreno/terreno_local.json)"
+}
