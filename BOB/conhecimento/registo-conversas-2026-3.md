@@ -32,4 +32,25 @@ words (`registo-conversas*.md`). When this file passes about 1 500 lines, contin
   note that the gaps were an AR bug) and §4 item 3 (smooth plasterboard);
   `step-inside/docs/fase7/README.md` → AR version 3 (done by the caller).
 - Pending: the user approves or comments on AR version 3 (phone, next to the photo).
+  (closed 2026-11-09, see the next entry)
+
+### 2026-11-09 — AR version 3 approved; four new tasks; notify the team member [Torres Vedras, Sobral]
+> está aprovada mas encaixa as seguintes tarefas no nosso workflow onde achas que elas deviam de ficar:
+>
+> 1. Fix no tremolo, continua com gaps entre as madeiras do revestimento exterior.
+> 2. Adicionar interiores, para o cliente ter uma experiência o amis próximo possível de caminhar dentro da sua própria casa.
+> 3. Se casa tiver dois pisos ou mais como é que o cliente pode ver o piso de cima ou o de baixo dependendo da casa ?
+> 4. Nas portas interiores o chão na zona das portas está em cimento.
+>
+> Quero que notifiques o [membro da equipa] no HUB a dizer que versão teste AR está pronta e pode ser testada e que também pode escrever na descrição mudanças ou coisas que ele ache que estão bem ou mal.
+- Context: reply to "A versão 3 está próxima da casa real?" (Step Inside, AR phase 7).
+- Filed in: `step-inside/docs/fase7/README.md` → «Versão 3 aprovada e o que ficou» (items 1-4 placed in the
+  workflow: hub tasks 164, 165, 166, 167; task 158 concluded; task 84 invites the team to write what is good / bad;
+  the team member notified in the hub); `step-inside/docs/fase3/README.md` → «A seguir» item 2 (interiors library, task
+  167); `public/dados/projetos/plataforma_cliente.json`; `Construção Torres Vedras/docs/estado.md` → AR v3 approved
+  against the photo (one line); item 1 = AR / visit-model defect, not a real-façade fact (the real Tremolo is
+  tongue and groove, no open joints; see the previous entry); item 4 = model defect (floor finish stops at the wall).
+- Pending: task 164 (do the gaps also exist in the production Builder model?), 165 (cause unconfirmed), 166 (floor
+  proposal to confirm with the user), 167 (scope: only what DiscoverCasa delivers vs also furniture; model source;
+  downloads need authorization); the team member's feedback in task 84.
 
