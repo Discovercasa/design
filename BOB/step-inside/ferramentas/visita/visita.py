@@ -323,6 +323,14 @@ def avaliar(r, campos, terreno_gate):
     if fech:
         rever.append(f"{len(fech)} aberturas das fontes estão fechadas no modelo: "
                      + ", ".join(f"{v['parede']}#{v['abertura']}" for v in fech[:8]))
+    mt = r["modelo"].get("materiais")
+    if mt:
+        vis = [x for x in mt["sem_mapa"] if x["categoria"] not in ("STRUCT_TIMBER", "ARCH_OPTIONS", "ARCH_LABELS")]
+        if vis:
+            rever.append("materiais sem correspondência no catálogo: " + ", ".join(f"{x['material']} ({x['categoria']})"
+                                                                              for x in vis[:6]))
+        if mt["estados"].get("INFERRED"):
+            avisos.append("materiais provisórios: mapeados a partir do sistema construtivo até chegar a lista oficial")
     ab = r["modelo"].get("aberturas", {})
     if ab.get("controlo_abertas_por_engano"):
         rever.append(f"o teste das aberturas falhou o controlo: paredes cheias vistas como abertas "
@@ -428,6 +436,17 @@ def relatorio_md(r, decl):
     if m.get("plataforma"):
         L.append(f"- **Plataforma:** terreno plano dentro do contorno da plataforma ({m['plataforma']['vertices_rebaixados_ou_subidos']} "
                  "vértices do terreno ajustados).")
+    mt = m.get("materiais")
+    if mt:
+        L += ["", "## Materiais (catálogo comum `MAT_*`)", "",
+              f"Os materiais de produção foram trocados pelos do catálogo comum (`step-inside/materiais/catalogo.json`, "
+              f"mapeamento `mapeamentos/{r.get('construtor', 'discovercasa')}.json`). Estados dos mapeamentos usados: "
+              + ", ".join(f"{k} {v}" for k, v in sorted(mt["estados"].items())) + ".", "",
+              "| ID | Objetos |", "|---|---|"]
+        L += [f"| `{k}` | {v} |" for k, v in mt["usados"].items()]
+        if mt["sem_mapa"]:
+            L += ["", "**Sem correspondência:** " + ", ".join(f"{x['material']} ({x['categoria']}, {x['objetos']})"
+                                                             for x in mt["sem_mapa"])]
     L += ["", "## Ficheiros (só no PC)", "", "- `visita.blend` (coleções VISITA > SITE / HOUSE), `visita.glb` (o que está visível), "
           "`preview.png`.", ""]
     return "\n".join(L)
@@ -472,10 +491,17 @@ def main():
         if loc.get("alvo_xy") and z_laje is not None:
             coloc = {"alvo_xy": loc["alvo_xy"], "canto": loc["canto"], "rotacao_graus": loc["rotacao_graus"], "z_laje": z_laje}
     pl = plataforma(decl, origem, z_laje, campos)
+    sys.path.insert(0, str(AQUI.parent / "materiais"))
+    import materiais
+    cat, mp = materiais.ler(decl.get("construtor", "discovercasa"))
+    erros_mat = materiais.validar(cat, mp)
+    if erros_mat:
+        raise SystemExit("catálogo de materiais inválido: " + "; ".join(erros_mat[:5]))
+    tabela_mat = materiais.resolver(cat, mp)
     run = {"casa_blend": str(casa_blend), "terreno_blend": str(terreno_blend) if terreno_blend else "",
            "superficie": (T or {}).get("superficie", "existente"), "colocacao": coloc, "plataforma": pl,
            "pavimento_acima_laje": (campos.get("pavimento_acima_laje") or {}).get("valor", 0.16),
-           "chao_provisorio": decl.get("chao_provisorio"),
+           "chao_provisorio": decl.get("chao_provisorio"), "materiais": tabela_mat,
            "aberturas": aberturas(fontes_doc), "paredes_cheias": paredes_cheias(fontes_doc, alturas_paredes(cfg_path, cfg)), "blend": str(local / "visita.blend"), "glb": str(local / "visita.glb"),
            "preview": str(local / "preview.png"), "saida": str(local / "visita_modelo.json")}
     with tempfile.NamedTemporaryFile("w", suffix=".json", delete=False, encoding="utf-8") as fh:
@@ -492,7 +518,7 @@ def main():
         campos["pavimento_acima_laje"] = campo(modelo["colocacao"]["pavimento_rc_modelo_m"], CONFIRMED, "calculo", unidade="m",
                                                tipo="nivel", nota="medido no modelo: topo do pavimento acabado do rés do chão "
                                                                   "sobre o topo da laje")
-    r = {"obra": obra, "casa_blend": str(casa_blend.relative_to(BOB)).replace("\\", "/"), "modelo": modelo,
+    r = {"obra": obra, "construtor": decl.get("construtor", "discovercasa"), "casa_blend": str(casa_blend.relative_to(BOB)).replace("\\", "/"), "modelo": modelo,
          "implantacao": campos, "dimensoes_fontes": {k: fontes_doc["dimensoes"].get(k) for k in ("comprimento", "profundidade")},
          "choques_madeira": choques_madeira(cfg_path), "terreno": terreno_gate}
     gate, motivos = avaliar(r, campos, terreno_gate)

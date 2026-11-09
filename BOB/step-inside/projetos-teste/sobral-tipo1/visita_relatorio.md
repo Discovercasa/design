@@ -2,6 +2,7 @@
 
 **Resultado: WARNING**
 
+- materiais provisórios: mapeados a partir do sistema construtivo até chegar a lista oficial
 - implantação: cota_pavimento INFERRED
 - implantação: rotacao_graus INFERRED
 - implantação: plataforma INFERRED
@@ -52,6 +53,33 @@ Cada objeto tem `si_id` = `<coleção>/<nome do objeto>` (os nomes vêm dos dese
 - **Terreno existente sob a casa** (antes da plataforma): entre 0,89 e 2,55 m da laje; acima do pavimento em 100 % da área.
 - **Casa e terreno** (625 pontos sob a casa): terreno entre -0,02 e 0,01 m da laje; acima do pavimento em 0 % da área.
 - **Plataforma:** terreno plano dentro do contorno da plataforma (64 vértices do terreno ajustados).
+
+## Materiais (catálogo comum `MAT_*`)
+
+Os materiais de produção foram trocados pelos do catálogo comum (`step-inside/materiais/catalogo.json`, mapeamento `mapeamentos/discovercasa.json`). Estados dos mapeamentos usados: INFERRED 886.
+
+| ID | Objetos |
+|---|---|
+| `MAT_BOARD_OSB` | 20 |
+| `MAT_CONCRETE_SLAB` | 3 |
+| `MAT_CORK_CLADDING` | 4 |
+| `MAT_FLOOR_VINYL_WOOD` | 12 |
+| `MAT_INSULATION_MINERAL_WOOL` | 69 |
+| `MAT_INSULATION_XPS` | 9 |
+| `MAT_INT_PLASTER_PAINTED__WHITE` | 24 |
+| `MAT_MEMBRANE_BREATHER` | 4 |
+| `MAT_METAL_FLASHING__RAL7016` | 5 |
+| `MAT_METAL_GALVANIZED` | 34 |
+| `MAT_METAL_GUTTER__DARK_GREY` | 6 |
+| `MAT_ROOF_SANDWICH_TILE__RAL7016` | 22 |
+| `MAT_SCREED` | 5 |
+| `MAT_TIMBER_STRUCTURE` | 645 |
+| `MAT_WALL_RENDER__WHITE` | 4 |
+| `MAT_WOOD_CLADDING__DOUGLAS_BROWN` | 4 |
+| `MAT_WOOD_CLADDING__PINE_NATURAL` | 16 |
+| `MAT_LANDSCAPE_SOIL` | 1 |
+
+**Sem correspondência:** Etiqueta (ARCH_LABELS, 12)
 
 ## Ficheiros (só no PC)
 

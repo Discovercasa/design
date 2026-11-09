@@ -232,7 +232,7 @@ for ob in list(bpy.data.objects):
     bpy.data.objects.remove(ob, do_unlink=True)
 col = bpy.data.collections.new("SITE_TERRAIN")
 bpy.context.scene.collection.children.link(col)
-mat = bpy.data.materials.new("MAT_SITE_TERRAIN")
+mat = bpy.data.materials.new("MAT_LANDSCAPE_SOIL")  # common catalogue id (step-inside/materiais/catalogo.json)
 mat.diffuse_color = (0.45, 0.52, 0.32, 1.0)
 saida = {"superficies": []}
 
