@@ -8,7 +8,6 @@
   "MAT_BOARD_OSB",
   "MAT_INSULATION_MINERAL_WOOL",
   "MAT_INSULATION_XPS",
-  "MAT_MEMBRANE_BREATHER",
   "MAT_METAL_GALVANIZED",
   "MAT_SCREED",
   "MAT_TIMBER_STRUCTURE"
@@ -16,18 +15,19 @@
  "variantes": [
   {
    "variante": "casa",
-   "objetos": 7,
+   "objetos": 8,
    "materiais": [
     "MAT_CONCRETE_SLAB",
     "MAT_FLOOR_VINYL_WOOD",
     "MAT_INT_PLASTER_PAINTED__WHITE",
+    "MAT_MEMBRANE_BREATHER",
     "MAT_METAL_FLASHING__RAL7016",
     "MAT_METAL_GUTTER__DARK_GREY",
     "MAT_ROOF_SANDWICH_TILE__RAL7016",
     "MAT_WALL_RENDER__WHITE"
    ],
-   "triangulos": 9430,
-   "triangulos_antes_de_simplificar": 9438,
+   "triangulos": 9698,
+   "triangulos_antes_de_simplificar": 9822,
    "imagens": {
     "Chipboard004_2K-JPG_Color.jpg": [
      1024,
@@ -93,7 +93,7 @@
      512,
      512
     ],
-    "MAT_TIMBER_STRUCTURE_Color.jpg": [
+    "MAT_TIMBER_STRUCTURE_E2BE86_Color.jpg": [
      1024,
      1024
     ],
@@ -105,7 +105,7 @@
      512,
      512
     ],
-    "MAT_WALL_RENDER__WHITE_Color.jpg": [
+    "MAT_WALL_RENDER__WHITE_F4F3EE_Color.jpg": [
      1024,
      1024
     ],
@@ -117,7 +117,7 @@
      512,
      512
     ],
-    "MAT_WOOD_CLADDING__DOUGLAS_BROWN_Color.jpg": [
+    "MAT_WOOD_CLADDING__DOUGLAS_BROWN_A0653C_Color.jpg": [
      1024,
      512
     ],
@@ -129,7 +129,7 @@
      512,
      256
     ],
-    "MAT_WOOD_CLADDING__PINE_NATURAL_Color.jpg": [
+    "MAT_WOOD_CLADDING__PINE_NATURAL_EBD5A6_Color.jpg": [
      1024,
      512
     ]
@@ -145,18 +145,18 @@
    "ficheiros": {
     "glb": {
      "ficheiro": "sobral-tipo1_ar_casa.glb",
-     "bytes": 1397712,
-     "sha256": "6f3e2ab6aa53e0c1525b7f1cf499940718e7980d9a247e37e8ee7de722994da7"
+     "bytes": 1415772,
+     "sha256": "a9bd09e16a55cba0d6640ad85df2f1d0ff5b207bdcdef65f433a2d4e2b8ee375"
     },
     "usdz": {
      "ficheiro": "sobral-tipo1_ar_casa.usdz",
-     "bytes": 1110290,
-     "sha256": "5c6720f94b92d6f421d5690516ce41fd1c16f8c16c36e12a26373a46ba489bf6"
+     "bytes": 1124099,
+     "sha256": "35e1158a219e15ce92b2c1a8eed47673c23e783c0cfa0e70ea3325b234fd9ee1"
     }
    },
    "reimportacao": {
     "glb": {
-     "triangulos": 9430,
+     "triangulos": 9698,
      "dimensoes": [
       13.099,
       11.249,
@@ -166,6 +166,7 @@
       "MAT_CONCRETE_SLAB",
       "MAT_FLOOR_VINYL_WOOD",
       "MAT_INT_PLASTER_PAINTED__WHITE",
+      "MAT_MEMBRANE_BREATHER",
       "MAT_METAL_FLASHING__RAL7016",
       "MAT_METAL_GUTTER__DARK_GREY",
       "MAT_ROOF_SANDWICH_TILE__RAL7016",
@@ -176,7 +177,7 @@
      "erro": null
     },
     "usdz": {
-     "triangulos": 9430,
+     "triangulos": 9698,
      "dimensoes": [
       13.099,
       11.249,
@@ -186,6 +187,7 @@
       "MAT_CONCRETE_SLAB",
       "MAT_FLOOR_VINYL_WOOD",
       "MAT_INT_PLASTER_PAINTED__WHITE",
+      "MAT_MEMBRANE_BREATHER",
       "MAT_METAL_FLASHING__RAL7016",
       "MAT_METAL_GUTTER__DARK_GREY",
       "MAT_ROOF_SANDWICH_TILE__RAL7016",
@@ -199,19 +201,20 @@
   },
   {
    "variante": "maquete",
-   "objetos": 8,
+   "objetos": 9,
    "materiais": [
     "MAT_CONCRETE_SLAB",
     "MAT_FLOOR_VINYL_WOOD",
     "MAT_INT_PLASTER_PAINTED__WHITE",
     "MAT_LANDSCAPE_SOIL",
+    "MAT_MEMBRANE_BREATHER",
     "MAT_METAL_FLASHING__RAL7016",
     "MAT_METAL_GUTTER__DARK_GREY",
     "MAT_ROOF_SANDWICH_TILE__RAL7016",
     "MAT_WALL_RENDER__WHITE"
    ],
-   "triangulos": 10066,
-   "triangulos_antes_de_simplificar": 10074,
+   "triangulos": 10334,
+   "triangulos_antes_de_simplificar": 10458,
    "imagens": {
     "Chipboard004_2K-JPG_Color.jpg": [
      1024,
@@ -277,7 +280,7 @@
      512,
      512
     ],
-    "MAT_TIMBER_STRUCTURE_Color.jpg": [
+    "MAT_TIMBER_STRUCTURE_E2BE86_Color.jpg": [
      1024,
      1024
     ],
@@ -289,7 +292,7 @@
      512,
      512
     ],
-    "MAT_WALL_RENDER__WHITE_Color.jpg": [
+    "MAT_WALL_RENDER__WHITE_F4F3EE_Color.jpg": [
      1024,
      1024
     ],
@@ -301,7 +304,7 @@
      512,
      512
     ],
-    "MAT_WOOD_CLADDING__DOUGLAS_BROWN_Color.jpg": [
+    "MAT_WOOD_CLADDING__DOUGLAS_BROWN_A0653C_Color.jpg": [
      1024,
      512
     ],
@@ -313,7 +316,7 @@
      512,
      256
     ],
-    "MAT_WOOD_CLADDING__PINE_NATURAL_Color.jpg": [
+    "MAT_WOOD_CLADDING__PINE_NATURAL_EBD5A6_Color.jpg": [
      1024,
      512
     ]
@@ -329,18 +332,18 @@
    "ficheiros": {
     "glb": {
      "ficheiro": "sobral-tipo1_ar_maquete.glb",
-     "bytes": 2084064,
-     "sha256": "c391d230f0f5f1b38816d06b14b602fd80205e1db38e95a20f67c0f268e219b4"
+     "bytes": 2102120,
+     "sha256": "a739ef0e24fa354f6b9a023f5909834642fa5c6508fa49b549ddff6aab073ef2"
     },
     "usdz": {
      "ficheiro": "sobral-tipo1_ar_maquete.usdz",
-     "bytes": 1626393,
-     "sha256": "e812f2811fbfbc303563a21b6ddb3deefb3a2dba1d300990dc830dcd02e0bc45"
+     "bytes": 1640224,
+     "sha256": "f1cbff4ab4ebfe91be53503210f23f24599bac722f41c0ecea0be0a6b77a70f5"
     }
    },
    "reimportacao": {
     "glb": {
-     "triangulos": 10066,
+     "triangulos": 10334,
      "dimensoes": [
       53.369,
       51.497,
@@ -351,6 +354,7 @@
       "MAT_FLOOR_VINYL_WOOD",
       "MAT_INT_PLASTER_PAINTED__WHITE",
       "MAT_LANDSCAPE_SOIL",
+      "MAT_MEMBRANE_BREATHER",
       "MAT_METAL_FLASHING__RAL7016",
       "MAT_METAL_GUTTER__DARK_GREY",
       "MAT_ROOF_SANDWICH_TILE__RAL7016",
@@ -361,7 +365,7 @@
      "erro": null
     },
     "usdz": {
-     "triangulos": 10066,
+     "triangulos": 10334,
      "dimensoes": [
       53.369,
       51.497,
@@ -372,6 +376,7 @@
       "MAT_FLOOR_VINYL_WOOD",
       "MAT_INT_PLASTER_PAINTED__WHITE",
       "MAT_LANDSCAPE_SOIL",
+      "MAT_MEMBRANE_BREATHER",
       "MAT_METAL_FLASHING__RAL7016",
       "MAT_METAL_GUTTER__DARK_GREY",
       "MAT_ROOF_SANDWICH_TILE__RAL7016",

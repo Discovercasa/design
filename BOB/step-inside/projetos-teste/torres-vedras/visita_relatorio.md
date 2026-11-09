@@ -79,7 +79,7 @@ Os materiais de produção foram trocados pelos do catálogo comum (`step-inside
 | `MAT_TIMBER_STRUCTURE__GLULAM` | 21 | sim |
 | `MAT_WOOD_CLADDING__DOUGLAS_BROWN` | 17 | sim |
 | `MAT_WOOD_CLADDING__PINE_NATURAL` | 17 | sim |
-| `MAT_LANDSCAPE_SOIL` | 1 | sim |
+| `MAT_LANDSCAPE_GRASS` | 1 | sim |
 
 **Sem correspondência:** Etiqueta (ARCH_LABELS, 8)
 

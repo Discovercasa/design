@@ -3,9 +3,14 @@
  "obra": "torres-vedras",
  "obra_pasta": "Torres Vedras",
  "nome": "Torres Vedras · casa no lote",
- "casa": {"config": "Construção Torres Vedras/modelos/casa/config.json"},
+ "casa": {
+  "config": "Construção Torres Vedras/modelos/casa/config.json"
+ },
  "fontes": "step-inside/projetos-teste/torres-vedras/fontes.json",
- "terreno": {"declaracao": "step-inside/projetos-teste/torres-vedras/terreno.json", "superficie": "existente"},
+ "terreno": {
+  "declaracao": "step-inside/projetos-teste/torres-vedras/terreno.json",
+  "superficie": "existente"
+ },
  "implantacao": {
   "metodo": "ajuste_tramas_dxf",
   "ficheiro": "Levantamento topográfico F00.0.dxf",
@@ -14,12 +19,37 @@
   "raio_m": 40.0,
   "area_max_m2": 60.0,
   "_nota": "Only around the copy of the drawing at the real coordinates (the lot boundary chosen by terreno.py).",
-  "cota_pavimento": {"valor": 117.50, "estado": "INFERRED", "metodo": "texto", "unidade": "m",
-                     "fonte": {"documento": "Levantamento topográfico F00.0.dwg (DXF)", "folha": null, "local": "camada 0_PROP.aux.cotas: '117.50' dentro da casa; '117,5' nos alçados, com '120,6' no topo", "data": ""},
-                     "nota": "cota do pavimento acabado do rés do chão (±0,00) lida nas cotas da proposta; também há '117.48' junto da casa (exterior?): confirmar"}
+  "cota_pavimento": {
+   "valor": 117.5,
+   "estado": "INFERRED",
+   "metodo": "texto",
+   "unidade": "m",
+   "fonte": {
+    "documento": "Levantamento topográfico F00.0.dwg (DXF)",
+    "folha": null,
+    "local": "camada 0_PROP.aux.cotas: '117.50' dentro da casa; '117,5' nos alçados, com '120,6' no topo",
+    "data": ""
+   },
+   "nota": "cota do pavimento acabado do rés do chão (±0,00) lida nas cotas da proposta; também há '117.48' junto da casa (exterior?): confirmar"
+  }
  },
- "plataforma": {"tipo": "contorno_casa", "margem_m": 1.5,
-                "cota": {"valor": 117.48, "estado": "INFERRED", "metodo": "texto", "unidade": "m",
-                         "fonte": {"documento": "Levantamento topográfico F00.0.dwg (DXF)", "folha": null, "local": "camada 0_PROP.aux.cotas: '117.48' junto da casa (4 vezes) e '117,48' nos alçados", "data": ""}},
-                "nota": "o levantamento é de antes da obra (março de 2024): à volta da casa o terreno fica plano à cota exterior desenhada, numa faixa de 1,5 m (modelação aproximada; a casa já está construída: confirmar com as fotos)"}
+ "plataforma": {
+  "tipo": "contorno_casa",
+  "margem_m": 1.5,
+  "cota": {
+   "valor": 117.48,
+   "estado": "INFERRED",
+   "metodo": "texto",
+   "unidade": "m",
+   "fonte": {
+    "documento": "Levantamento topográfico F00.0.dwg (DXF)",
+    "folha": null,
+    "local": "camada 0_PROP.aux.cotas: '117.48' junto da casa (4 vezes) e '117,48' nos alçados",
+    "data": ""
+   }
+  },
+  "nota": "o levantamento é de antes da obra (março de 2024): à volta da casa o terreno fica plano à cota exterior desenhada, numa faixa de 1,5 m (modelação aproximada; a casa já está construída: confirmar com as fotos)"
+ },
+ "material_terreno": "MAT_LANDSCAPE_GRASS",
+ "_nota_material_terreno": "relva à volta da casa, como na foto da casa construída (utilizador 2026-11-09)"
 }

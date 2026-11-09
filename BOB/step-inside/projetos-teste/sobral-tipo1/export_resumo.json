@@ -1,8 +1,8 @@
 {
  "project_id": "sobral-tipo1",
- "version_id": "sobral-tipo1-26e7b62-202611090343",
- "source_blend_hash": "sha256:626a5a2d93da0e6b5443b1e39a119f9e28739c14d5fd8f1f7cf4fa922249911f",
- "export_timestamp": "2026-11-09T03:43:46+00:00",
+ "version_id": "sobral-tipo1-d6bff6c-202611090410",
+ "source_blend_hash": "sha256:9aa573313331abe710041b0530a3558c61e5a356b4406e986d7995d339dcf526",
+ "export_timestamp": "2026-11-09T04:10:42+00:00",
  "blender_version": "4.4.3",
  "unreal_target_version": "5.8 (a confirmar na Fase 4)",
  "unit_system": "métrico (1 unidade = 1 m)",
@@ -39,8 +39,8 @@
   {
    "path": "sobral-tipo1_visita.fbx",
    "type": "fbx",
-   "size_bytes": 1995884,
-   "sha256": "f6407ed23cab3274f9d8a4bd40a462791182054e948f93fc6f47483174f2f6f0",
+   "size_bytes": 1995932,
+   "sha256": "aadd202fbf3bc5316cf0c3cede071658c8a60920c193f2b2e5d61db5e0cae673",
    "material_ids": [
     "MAT_BOARD_OSB",
     "MAT_CONCRETE_SLAB",
@@ -62,8 +62,8 @@
   {
    "path": "sobral-tipo1_visita.glb",
    "type": "glb",
-   "size_bytes": 105981200,
-   "sha256": "1d99f37365c188c3a398f78b9a855e143034e22c1939d7fbda435ef28c9cc481",
+   "size_bytes": 105981204,
+   "sha256": "89702238e5c1677862f3f83fb27d4dcd0de497d237ec44258251cd23b3be863a",
    "material_ids": [
     "MAT_BOARD_OSB",
     "MAT_CONCRETE_SLAB",
@@ -85,8 +85,8 @@
   {
    "path": "sobral-tipo1_visita.usdz",
    "type": "usdz",
-   "size_bytes": 94402114,
-   "sha256": "baa470508c47c860582c5088cf67ba26cfb0ab4abd0d82ea520210123021e2af",
+   "size_bytes": 94402139,
+   "sha256": "9d2410a134acd6904fb2928291555fbf15dc486cb8d398826f1940dc12ab8bf1",
    "material_ids": [
     "MAT_BOARD_OSB",
     "MAT_CONCRETE_SLAB",

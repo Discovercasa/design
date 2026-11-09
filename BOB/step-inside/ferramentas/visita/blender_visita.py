@@ -157,7 +157,7 @@ def _tingida(img, alvo_hex, nome):
     GLB / USDZ cannot brighten a texture in the material, so the tint is baked into the image."""
     import numpy as np
     DERIVADAS.mkdir(parents=True, exist_ok=True)
-    f = DERIVADAS / f"{nome}_Color.jpg"
+    f = DERIVADAS / f"{nome}_{alvo_hex.lstrip('#').upper()}_Color.jpg"  # the colour is part of the key
     if f.exists() and f.stat().st_mtime > Path(img.filepath_from_user()).stat().st_mtime:
         return _imagem(f)
     w, h = img.size
@@ -290,6 +290,8 @@ def aplicar_materiais(obs):
             if not slot.material:
                 continue
             nome = ob.get("si_produto_forcado") or slot.material.get("si_producao", slot.material.name)
+            if ob.get("si_categoria") == "SITE_TERRAIN" and run.get("material_terreno"):
+                nome = run["material_terreno"]  # what covers the ground in this project (e.g. a lawn)
             e = TAB.get(nome)
             if not e:
                 k = (nome, ob.get("si_categoria", ""))

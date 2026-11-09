@@ -508,7 +508,7 @@ def main():
            "superficie": (T or {}).get("superficie", "existente"), "colocacao": coloc, "plataforma": pl,
            "pavimento_acima_laje": (campos.get("pavimento_acima_laje") or {}).get("valor", 0.16),
            "chao_provisorio": decl.get("chao_provisorio"), "materiais": tabela_mat, "bob_dir": str(BOB),
-           "estrutura_a_vista": mp.get("estrutura_a_vista", []),
+           "estrutura_a_vista": mp.get("estrutura_a_vista", []), "material_terreno": decl.get("material_terreno"),
            "texturas": decl.get("texturas", True),
            "aberturas": aberturas(fontes_doc), "paredes_cheias": paredes_cheias(fontes_doc, alturas_paredes(cfg_path, cfg)), "blend": str(local / "visita.blend"), "glb": str(local / "visita.glb"),
            "preview": str(local / "preview.png"), "saida": str(local / "visita_modelo.json")}

@@ -129,6 +129,32 @@ O utilizador reportou três problemas.
 **Nos testes:** os 8 ficheiros do hub foram substituídos pela versão 2, no mesmo documento e com o mesmo link (a
 função temporária foi desligada outra vez). A exportação da Fase 3 e o AR voltaram a passar nas duas casas.
 
+## Versão 3: comparação com a foto da casa construída (2026-11-09)
+
+O utilizador enviou uma foto de Torres Vedras construída. É a referência da aprovação visual (tarefa 158). Disse
+ainda:
+- «havia pequenos gaps no tremolo e conseguia-se ver o interior através desses pequenos gaps»;
+- «o gesso cartonado do interior é plano não tem relevo nem imperfeições». Já estava liso na versão 2.
+
+**Tremolo:**
+- **Cor medida na foto:** castanho-avermelhado quente, ≈ #C0935C ao sol e ≈ #895332 à sombra. No catálogo ficou
+  `MAT_WOOD_CLADDING__DOUGLAS_BROWN` = #A0653C.
+- **Largura:** tábuas verticais de 135 mm (Tremolo Piveteau 22×135, dos registos). A textura WoodSiding009 tem 8
+  tábuas na altura da imagem; rodada 90°, com `tile_m` [2,16 m, 1,08 m], dá 135 mm por tábua.
+- **Erro corrigido:** as texturas tingidas ficavam em cache pelo nome do material, por isso uma cor nova não mudava
+  nada. Agora a chave inclui a cor.
+
+**Frestas no Tremolo:** eram as juntas abertas entre tábuas, com a membrana de trás retirada. `MAT_MEMBRANE_BREATHER`
+passou a visível: vê-se a membrana, como na casa real.
+
+**Pérgola:** a madeira lamelada passou ao mesmo tom quente (#A8743F).
+
+**Terreno:** `material_terreno` no `visita.json` põe relva à volta de Torres Vedras, como na foto.
+
+**Imagem de comparação:** `_trabalho/step-inside/torres-vedras/ar/comparacao_foto_v3.png` (só no PC).
+
+Os 8 ficheiros do hub passaram à versão 3, nos mesmos links.
+
 ## Em falta
 
 - **Telemóveis reais** (tarefa 84):
