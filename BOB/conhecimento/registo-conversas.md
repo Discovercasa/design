@@ -1527,3 +1527,10 @@ When this file passes about 1 500 lines, continue in `registo-conversas-<year>-<
 - Filed in: `step-inside/docs/fase3/README.md` -> export; hub tasks 62-65.
 - Notes for later phases: GLB (about 110 MB) and USDZ (about 100 MB) must come down to about 10 MB for AR (Phase 7); FBX import axes in Unreal to be validated (Phase 4).
 - PENDING (still open): official materials list (task 163, user) and photos of real materials (task 156).
+
+### 2026-11-09 — Start Phase 7 (AR on the phone, light and realistic) [Step Inside]
+> Sim, começa
+- Context: answers "Começo a Fase 7 (AR no telemóvel, leve e realista)?". Done the same day: AR assets (`step-inside/ferramentas/ar/`): GLB (Android Scene Viewer) and USDZ (iPhone Quick Look) in two variants per house: "casa" at 1:1 (indicative foundation cut 0.2 m below the finished floor so the phone does not show the house floating) and "maquete" with the terrain around; hidden layers removed, one object per material, coplanar faces merged, textures 1024/512 px. Sobral: 8,686 triangles, 1.2-2.1 MB; Torres Vedras: 22,888 triangles, 2.0-3.3 MB (before: about 110 MB). The 8 files were sent to the user to try on their phone. Hub: tasks 82, 83 done; 157 in progress; 84 (real phones) and 158 (approval next to photos of the built house) pending the user.
+- Filed in: `step-inside/docs/fase7/README.md`; hub tasks 82, 83, 157.
+- PENDING (user): open the files on an iPhone and/or Android and say how they look (scale, sits on the ground, orientation, loading time) (tasks 84, 158).
+- Open items: glass and frames in the Sobral openings; ambient occlusion; terrain texture repetition. A web 3D fallback viewer (Google's model-viewer) would be a new dependency: must ask the user first.
