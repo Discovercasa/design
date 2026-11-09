@@ -78,6 +78,30 @@ test('notificações por ver: ponto, abrir, rato; as minhas não contam; o estad
   expect(erros).toEqual([]);
 });
 
+test('notificações: ver uma com o rato lá em baixo não faz a lista voltar ao início', async ({ page }) => {
+  // pedido de 2026-11-09: «quando passamos sobre uma notificação com o rato desaparece que está por ler mas não deve
+  // levar de volta ao inicio senão não se consegue ler a notificação»
+  test.skip(ehTelemovel(), 'no telemóvel não há rato');
+  const erros = await abrir(page);
+  for (const id of [46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59])
+    await db(page, (i) => window.__fake.comoOutro((x) => x.tarefas.update({ estado: 'em_curso' }).eq('id', i)), id);
+  await page.getByRole('button', { name: /Notificações/ }).click();
+  const pop = page.locator('#pop-notificacoes');
+  const corpo = pop.locator('.pop-corpo');
+  await expect(pop.locator('.notif.nao-lida')).toHaveCount(14);
+  await corpo.evaluate((c) => { c.scrollTop = c.scrollHeight; });
+  const antes = await corpo.evaluate((c) => c.scrollTop);
+  expect(antes).toBeGreaterThan(100);
+  const ultima = pop.locator('.notif.nao-lida').last();
+  const id = await ultima.getAttribute('data-notif');
+  await ultima.locator('.notif-abrir').hover();
+  await expect(pop.locator(`.notif[data-notif="${id}"]`)).not.toHaveClass(/nao-lida/, { timeout: 3000 });
+  await page.waitForTimeout(900);  // a mudança volta pela ligação em direto (350 ms) e não pode redesenhar a lista do início
+  expect(Math.abs(await corpo.evaluate((c) => c.scrollTop) - antes)).toBeLessThan(2);
+  await expect(pop.locator('[data-por-ver]')).toHaveText('13 por ver');
+  expect(erros).toEqual([]);
+});
+
 test('Início: o estado dos posts vem fresco ao mudar de página (mesmo sem a ligação em direto)', async ({ page }) => {
   await abrir(page, '/#/social');
   // outra pessoa publica o post desta semana noutro aparelho e a ligação em direto desta janela falhou (nada avisa)

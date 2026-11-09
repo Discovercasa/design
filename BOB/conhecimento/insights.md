@@ -85,7 +85,7 @@ he answers (`metodo-construtivo.md`). Condensed 2026-10-28 (history in git).
   16 GB DDR3, GTX 1050 Ti 4 GB, Z97 board) cannot serve Unreal 5 and a GPU alone is not advised → do Phase 7 (AR, GLB /
   USDZ) right after Phase 3, before Unreal; the client already gets a 3D / AR view, and the Unreal / GPU spend (needs his
   approval anyway) can wait — same audit report — **proposed, awaiting the user**.
-  **Accepted 2026-11-07** (user: "ok podemos avançar por essa rota", hub decision 18 decidida; checkpoints reordered 0, 1,
+  **Accepted 2026-11-07** (user: "ok podemos avançar por essa rota", hub decision 18 decidida; checkpoints reordered (hub display order reverted to the phase numbers 2026-11-09, see registo; the work order stands) 0, 1,
   2, 3, 7, 4, 5, 6, 8, 9) **with a condition:** the AR must be realistic too, not flat-coloured materials (see next entry).
 - **2026-11-07** — Step Inside realistic AR on phones: reached with real PBR textures (colour, relief, gloss, 2K) made in
   Phase 3; battens and other relief as normal maps instead of geometry (phone limits ≈ 100k triangles, 2048 textures,

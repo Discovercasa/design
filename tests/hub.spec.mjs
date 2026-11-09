@@ -238,8 +238,8 @@ test('perfil: área pessoal, definições (nome, tema), novidades e sair', async
   await captura(page, 'inicio-escuro');
   await page.getByRole('button', { name: 'Perfil' }).click();
   await page.locator('#pop-perfil').getByRole('menuitem', { name: /Novidades/ }).click();
-  await expect(page.locator('.novidade').first()).toContainText('Notificações por ver');
-  await expect(page.locator('.novidade').nth(1)).toContainText('Imagens, notas de teste e fases das obras');
+  await expect(page.locator('.novidade').first()).toContainText('Notificações sem saltos e ponto de situação fechado');
+  await expect(page.locator('.novidade').nth(1)).toContainText('Notificações por ver');
   await page.getByRole('button', { name: 'Perfil' }).click();
   await page.locator('#pop-perfil').getByRole('menuitem', { name: 'Sair' }).click();
   await expect(page.getByRole('button', { name: 'Entrar com a conta do Hub' })).toBeVisible();
@@ -404,6 +404,18 @@ test('em direto: o que outra pessoa muda aparece sem recarregar, em todos os sí
   await db(page, () => window.__fake.comoOutro((x) => x.checkpoints.update({ estado: 'concluido' }).eq('id', 4)));
   await expect(page.locator('.projeto-linha').nth(3)).toContainText('4 de 15 checkpoints');
   await expect(page.locator('#contador')).not.toBeHidden();
+});
+
+test('projeto: o ponto de situação das fases fica fechado num acordeão', async ({ page }) => {
+  // pedido de 2026-11-09: «este texto que ocupa demasiado espaço marca-o como aquilo que ele representa num acordion»
+  await abrir(page, { rota: '/#/projeto/step-inside' });
+  const sit = page.locator('.projeto-cabeca details.situacao');
+  await expect(sit.locator('summary')).toHaveText('Ponto de situação das fases');
+  await expect(sit).not.toHaveAttribute('open', '');
+  await expect(sit.locator('p')).toBeHidden();
+  await sit.locator('summary').click();
+  await expect(sit.locator('p')).toBeVisible();
+  await expect(sit.locator('p')).toContainText('Fase 7');
 });
 
 test('Step Inside: teste do AR — carregar modelos e abrir no Quick Look / Scene Viewer', async ({ page }) => {
