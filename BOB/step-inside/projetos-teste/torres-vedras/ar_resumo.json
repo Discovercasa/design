@@ -20,8 +20,9 @@
    "niveis": [
     0.0
    ],
-   "objetos": 17,
+   "objetos": 18,
    "materiais": [
+    "AR_OCLUSAO",
     "MAT_CONCRETE_SLAB",
     "MAT_DOOR_GARAGE_SECTIONAL__RAL7016",
     "MAT_FLOOR_VINYL_WOOD",
@@ -40,9 +41,13 @@
     "MAT_WOOD_CLADDING__DOUGLAS_BROWN",
     "MAT_WOOD_CLADDING__PINE_NATURAL"
    ],
-   "triangulos": 22468,
+   "triangulos": 24572,
    "triangulos_antes_de_simplificar": 25188,
    "imagens": {
+    "AR_OCLUSAO": [
+     2048,
+     2048
+    ],
     "Chipboard004_2K-JPG_Color.jpg": [
      1024,
      1024
@@ -152,35 +157,47 @@
      512
     ]
    },
-   "textura_maior": 1024,
+   "oclusao": {
+    "faces_candidatas": 5660,
+    "faces": 1051,
+    "triangulos": 2104,
+    "px": 2048,
+    "distancia_m": 1.0,
+    "forca": 0.7,
+    "afastamento_m": 0.005
+   },
+   "maquete_base": {},
+   "terreno_cozido": {},
+   "textura_maior": 2048,
    "dimensoes": [
     19.261,
     21.691,
-    3.697
+    3.702
    ],
    "origem": "centro da planta da casa, no pavimento acabado do rés do chão",
    "z_min": -0.2,
    "ficheiros": {
     "glb": {
      "ficheiro": "torres-vedras_ar_casa.glb",
-     "bytes": 2238868,
-     "sha256": "bc21408a5a9be8b97f1996b1921a9b6826963366b2faa62a25a871d09fdbd228"
+     "bytes": 3892212,
+     "sha256": "17625e89a50cae7acfcb194776c56259418f65870eb340e744c1fa3ef6e74166"
     },
     "usdz": {
      "ficheiro": "torres-vedras_ar_casa.usdz",
-     "bytes": 1965736,
-     "sha256": "6640daf4d5cc0809636cdd93e5b9785636698d51d8a559afc0ff13d90c174a92"
+     "bytes": 2620265,
+     "sha256": "43258f59ddeeb5718866cefc7aecd859d72279a74ae3faab23e0cad01caaab65"
     }
    },
    "reimportacao": {
     "glb": {
-     "triangulos": 22468,
+     "triangulos": 24572,
      "dimensoes": [
       19.261,
       21.691,
-      3.697
+      3.702
      ],
      "materiais": [
+      "AR_OCLUSAO",
       "MAT_CONCRETE_SLAB",
       "MAT_DOOR_GARAGE_SECTIONAL__RAL7016",
       "MAT_FLOOR_VINYL_WOOD",
@@ -199,18 +216,19 @@
       "MAT_WOOD_CLADDING__DOUGLAS_BROWN",
       "MAT_WOOD_CLADDING__PINE_NATURAL"
      ],
-     "imagens": 20,
+     "imagens": 21,
      "imagens_em_falta": [],
      "erro": null
     },
     "usdz": {
-     "triangulos": 22468,
+     "triangulos": 24572,
      "dimensoes": [
       19.261,
       21.691,
-      3.697
+      3.702
      ],
      "materiais": [
+      "AR_OCLUSAO",
       "MAT_CONCRETE_SLAB",
       "MAT_DOOR_GARAGE_SECTIONAL__RAL7016",
       "MAT_FLOOR_VINYL_WOOD",
@@ -229,7 +247,7 @@
       "MAT_WOOD_CLADDING__DOUGLAS_BROWN",
       "MAT_WOOD_CLADDING__PINE_NATURAL"
      ],
-     "imagens": 20,
+     "imagens": 21,
      "imagens_em_falta": [],
      "erro": null
     }
@@ -242,8 +260,10 @@
    "niveis": [
     0.0
    ],
-   "objetos": 18,
+   "objetos": 20,
    "materiais": [
+    "AR_OCLUSAO",
+    "MAQUETE_BASE",
     "MAT_CONCRETE_SLAB",
     "MAT_DOOR_GARAGE_SECTIONAL__RAL7016",
     "MAT_FLOOR_VINYL_WOOD",
@@ -263,9 +283,13 @@
     "MAT_WOOD_CLADDING__DOUGLAS_BROWN",
     "MAT_WOOD_CLADDING__PINE_NATURAL"
    ],
-   "triangulos": 27023,
-   "triangulos_antes_de_simplificar": 29743,
+   "triangulos": 26449,
+   "triangulos_antes_de_simplificar": 26549,
    "imagens": {
+    "AR_OCLUSAO": [
+     2048,
+     2048
+    ],
     "Chipboard004_2K-JPG_Color.jpg": [
      1024,
      1024
@@ -309,6 +333,10 @@
     "WoodFloor051_2K-JPG_NormalGL.jpg": [
      512,
      512
+    ],
+    "AR_TERRENO": [
+     1664,
+     2048
     ],
     "Grass005_2K-JPG_Color.jpg": [
      1024,
@@ -375,35 +403,75 @@
      512
     ]
    },
-   "textura_maior": 1024,
+   "oclusao": {
+    "faces_candidatas": 5661,
+    "faces": 1011,
+    "triangulos": 2024,
+    "px": 2048,
+    "distancia_m": 1.0,
+    "forca": 0.7,
+    "afastamento_m": 0.005
+   },
+   "maquete_base": {
+    "retangulo_m": [
+     -11.73,
+     -14.35,
+     12.73,
+     15.85
+    ],
+    "z_base_m": -1.61,
+    "faces_laterais": 299,
+    "margens_m": [
+     1.5,
+     2.5,
+     3.5,
+     5.0
+    ]
+   },
+   "terreno_cozido": {
+    "MAT_LANDSCAPE_GRASS": {
+     "px": [
+      1664,
+      2048
+     ],
+     "textura_base": "Grass005_2K-JPG_Color.jpg",
+     "tile_m": [
+      2.0,
+      2.0
+     ]
+    }
+   },
+   "textura_maior": 2048,
    "dimensoes": [
-    60.263,
-    58.26,
-    5.545
+    24.455,
+    30.191,
+    5.112
    ],
    "origem": "centro da planta da casa, no pavimento acabado do rés do chão",
-   "z_min": -1.523,
+   "z_min": -1.615,
    "ficheiros": {
     "glb": {
      "ficheiro": "torres-vedras_ar_maquete.glb",
-     "bytes": 3142804,
-     "sha256": "eee6f6f3bed0d24523dae0cdf4138907f49b4bf1519fefe759b4635cdf49a72e"
+     "bytes": 4791896,
+     "sha256": "24285d909685665e654906256c1d6ecaf52296eb68a3719f17efa87346f5e93d"
     },
     "usdz": {
      "ficheiro": "torres-vedras_ar_maquete.usdz",
-     "bytes": 2646491,
-     "sha256": "4266f785245b647f3d2fabd10904cf37236e433931c5b1329677e2034c7aa835"
+     "bytes": 2912534,
+     "sha256": "321994f66b4252061635a169eccaf44d7e7f4edb25565291c416ca0d31ba765f"
     }
    },
    "reimportacao": {
     "glb": {
-     "triangulos": 27023,
+     "triangulos": 26449,
      "dimensoes": [
-      60.263,
-      58.26,
-      5.545
+      24.455,
+      30.191,
+      5.112
      ],
      "materiais": [
+      "AR_OCLUSAO",
+      "MAQUETE_BASE",
       "MAT_CONCRETE_SLAB",
       "MAT_DOOR_GARAGE_SECTIONAL__RAL7016",
       "MAT_FLOOR_VINYL_WOOD",
@@ -423,18 +491,20 @@
       "MAT_WOOD_CLADDING__DOUGLAS_BROWN",
       "MAT_WOOD_CLADDING__PINE_NATURAL"
      ],
-     "imagens": 23,
+     "imagens": 22,
      "imagens_em_falta": [],
      "erro": null
     },
     "usdz": {
-     "triangulos": 27023,
+     "triangulos": 26449,
      "dimensoes": [
-      60.263,
-      58.26,
-      5.545
+      24.455,
+      30.191,
+      5.112
      ],
      "materiais": [
+      "AR_OCLUSAO",
+      "MAQUETE_BASE",
       "MAT_CONCRETE_SLAB",
       "MAT_DOOR_GARAGE_SECTIONAL__RAL7016",
       "MAT_FLOOR_VINYL_WOOD",
@@ -454,7 +524,7 @@
       "MAT_WOOD_CLADDING__DOUGLAS_BROWN",
       "MAT_WOOD_CLADDING__PINE_NATURAL"
      ],
-     "imagens": 23,
+     "imagens": 22,
      "imagens_em_falta": [],
      "erro": null
     }

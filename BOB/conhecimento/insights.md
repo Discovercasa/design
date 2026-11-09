@@ -362,3 +362,10 @@ he answers (`metodo-construtivo.md`). Condensed 2026-10-28 (history in git).
   **Answered 2026-11-07 (user "Sim, ficam"): no.** Sobral keeps the drawings' module heights and the ≈ 3 cm lower heads;
   the raise applies only to houses built from a plan. Interior doors: no decision (normal heights fit).
   Suggestion: ask the user; since the heights come from the engineer's drawings, 3 cm is probably acceptable.
+- **2026-11-09** — **status: done in AR version 6 (ours); to be judged on the phone, not yet told.** Ambient occlusion in a
+  USDZ for iPhone cannot go in a second UV map (Quick Look reads one UV set) nor in the house textures (they tile on the
+  primary UV) → bake it into a thin black film `AR_OCLUSAO` 5 mm off each shaded surface, with its own UVs and transparency
+  from the AO; kept only on faces that have shade (on the roof covering only underneath: on top it showed a hard broken line
+  at each tile row). Same version: a clean rectangular maquete and a terrain baked with a 2,3× rotated copy so the 2–3 m
+  repetition no longer shows — `step-inside/docs/fase7/README.md` «Versão 6». Risk to check on the phone: a film 5 mm off
+  the surface may flicker (z-fighting) or show a dark edge at oblique views.
