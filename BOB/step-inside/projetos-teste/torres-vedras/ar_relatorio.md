@@ -15,7 +15,7 @@ Orçamento (Google Scene Viewer  especificação §12.1): ideal até 50 000 tri�
 **Simplificação:**
 - tiram-se as camadas que não se veem de fora (`MAT_BOARD_OSB`, `MAT_INSULATION_MINERAL_WOOL`, `MAT_INSULATION_XPS`, `MAT_METAL_GALVANIZED`, `MAT_SCREED`, `MAT_TIMBER_STRUCTURE`);
 - junta-se um objeto por material;
-- juntam-se as faces no mesmo plano;
+- juntam-se os vértices repetidos (as faces no mesmo plano não: deixava frestas finas);
 - as texturas descem a 1024 px (cor) e 512 px (relevo e rugosidade), em JPEG.
 
 **Sem sombras gravadas:** o Scene Viewer e o Quick Look desenham-nas.
@@ -23,6 +23,7 @@ Orçamento (Google Scene Viewer  especificação §12.1): ideal até 50 000 tri�
 **Origem:** centro da planta da casa, no pavimento acabado do rés do chão (escala real em metros).
 
 **Fundação na versão casa:** o telemóvel pousa o ponto mais baixo do modelo no chão real, por isso a fundação indicativa é cortada 0,2 m abaixo do pavimento e o soco fica visível.
+
 
 **Reabertos num Blender limpo** (triângulos, dimensões, texturas):
 

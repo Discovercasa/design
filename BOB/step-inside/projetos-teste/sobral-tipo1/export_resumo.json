@@ -1,8 +1,8 @@
 {
  "project_id": "sobral-tipo1",
- "version_id": "sobral-tipo1-12c32d4-202611091520",
- "source_blend_hash": "sha256:46e55d7b5254981239e648b1ba2171cd440bcca7e06eaf34e4b85605296fff99",
- "export_timestamp": "2026-11-09T15:20:26+00:00",
+ "version_id": "sobral-tipo1-3c5454a-202611091622",
+ "source_blend_hash": "sha256:0b85e2dfc864ead776b470ab24245db240aa850c0874ed5a56aaa3d2837cc1ea",
+ "export_timestamp": "2026-11-09T16:22:19+00:00",
  "blender_version": "4.4.3",
  "unreal_target_version": "5.8 (a confirmar na Fase 4)",
  "unit_system": "métrico (1 unidade = 1 m)",
@@ -39,12 +39,14 @@
   {
    "path": "sobral-tipo1_visita.fbx",
    "type": "fbx",
-   "size_bytes": 2007452,
-   "sha256": "130f4294ee01b07398b09202edae6a14c0b5ab1452a7e6cf3cc47aaea8ce5745",
+   "size_bytes": 2093004,
+   "sha256": "1d88773c0c3ba541b4ee022b53a3250930a85fbe707410d4d0dc417e6ddd9276",
    "material_ids": [
     "MAT_BOARD_OSB",
     "MAT_CONCRETE_SLAB",
     "MAT_FLOOR_VINYL_WOOD",
+    "MAT_FRAME_ALUMINIUM__RAL7016",
+    "MAT_GLASS_CLEAR",
     "MAT_INSULATION_MINERAL_WOOL",
     "MAT_INSULATION_XPS",
     "MAT_INT_PLASTER_PAINTED__WHITE",
@@ -62,12 +64,14 @@
   {
    "path": "sobral-tipo1_visita.glb",
    "type": "glb",
-   "size_bytes": 106066804,
-   "sha256": "df8d05a59558bceb0751bc957613d969746d03264b499c346f1cdc0465b25903",
+   "size_bytes": 106135372,
+   "sha256": "4d7fc6e55de17498a8e068273eea2ebd580ef401db7429c593513e8cedfbdad2",
    "material_ids": [
     "MAT_BOARD_OSB",
     "MAT_CONCRETE_SLAB",
     "MAT_FLOOR_VINYL_WOOD",
+    "MAT_FRAME_ALUMINIUM__RAL7016",
+    "MAT_GLASS_CLEAR",
     "MAT_INSULATION_MINERAL_WOOL",
     "MAT_INSULATION_XPS",
     "MAT_INT_PLASTER_PAINTED__WHITE",
@@ -85,12 +89,14 @@
   {
    "path": "sobral-tipo1_visita.usdz",
    "type": "usdz",
-   "size_bytes": 94445342,
-   "sha256": "2bdbdca5decb36701c5fda2495f32facff1e862538a357eb6cccc2a07cb5d854",
+   "size_bytes": 94474451,
+   "sha256": "701ef9a889062cd6cfd927ca78d042ae691d9b6c7aa04c1a413377443979a218",
    "material_ids": [
     "MAT_BOARD_OSB",
     "MAT_CONCRETE_SLAB",
     "MAT_FLOOR_VINYL_WOOD",
+    "MAT_FRAME_ALUMINIUM__RAL7016",
+    "MAT_GLASS_CLEAR",
     "MAT_INSULATION_MINERAL_WOOL",
     "MAT_INSULATION_XPS",
     "MAT_INT_PLASTER_PAINTED__WHITE",
@@ -116,8 +122,8 @@
  ],
  "validation": {
   "referencia": {
-   "objetos": 237,
-   "triangulos": 53182,
+   "objetos": 261,
+   "triangulos": 53902,
    "dimensoes": [
     409.727,
     276.992,
@@ -127,6 +133,8 @@
     "MAT_BOARD_OSB",
     "MAT_CONCRETE_SLAB",
     "MAT_FLOOR_VINYL_WOOD",
+    "MAT_FRAME_ALUMINIUM__RAL7016",
+    "MAT_GLASS_CLEAR",
     "MAT_INSULATION_MINERAL_WOOL",
     "MAT_INSULATION_XPS",
     "MAT_INT_PLASTER_PAINTED__WHITE",
@@ -141,8 +149,8 @@
    ],
    "imagens": 19,
    "casa": {
-    "objetos": 236,
-    "triangulos": 36768,
+    "objetos": 260,
+    "triangulos": 37488,
     "caixa_min": [
      -16.819,
      48.671,
@@ -162,6 +170,8 @@
      "MAT_BOARD_OSB",
      "MAT_CONCRETE_SLAB",
      "MAT_FLOOR_VINYL_WOOD",
+     "MAT_FRAME_ALUMINIUM__RAL7016",
+     "MAT_GLASS_CLEAR",
      "MAT_INSULATION_MINERAL_WOOL",
      "MAT_INSULATION_XPS",
      "MAT_INT_PLASTER_PAINTED__WHITE",
@@ -178,8 +188,8 @@
   },
   "reimportacao": {
    "fbx": {
-    "objetos": 237,
-    "triangulos": 53182,
+    "objetos": 261,
+    "triangulos": 53902,
     "dimensoes": [
      409.727,
      276.992,
@@ -189,6 +199,8 @@
      "MAT_BOARD_OSB",
      "MAT_CONCRETE_SLAB",
      "MAT_FLOOR_VINYL_WOOD",
+     "MAT_FRAME_ALUMINIUM__RAL7016",
+     "MAT_GLASS_CLEAR",
      "MAT_INSULATION_MINERAL_WOOL",
      "MAT_INSULATION_XPS",
      "MAT_INT_PLASTER_PAINTED__WHITE",
@@ -204,16 +216,16 @@
     "imagens": 19,
     "imagens_em_falta": [],
     "imagem": {
-     "diferenca_media": 0.0431,
-     "pixeis_diferentes": 0.0151,
+     "diferenca_media": 0.0433,
+     "pixeis_diferentes": 0.0169,
      "silhueta_diferente": 0.0,
      "cobertura": 0.65
     },
     "erro_caixa_m": 0.0
    },
    "glb": {
-    "objetos": 237,
-    "triangulos": 53182,
+    "objetos": 261,
+    "triangulos": 53902,
     "dimensoes": [
      409.727,
      276.992,
@@ -223,6 +235,8 @@
      "MAT_BOARD_OSB",
      "MAT_CONCRETE_SLAB",
      "MAT_FLOOR_VINYL_WOOD",
+     "MAT_FRAME_ALUMINIUM__RAL7016",
+     "MAT_GLASS_CLEAR",
      "MAT_INSULATION_MINERAL_WOOL",
      "MAT_INSULATION_XPS",
      "MAT_INT_PLASTER_PAINTED__WHITE",
@@ -246,8 +260,8 @@
     "erro_caixa_m": 0.0
    },
    "usdz": {
-    "objetos": 237,
-    "triangulos": 53182,
+    "objetos": 261,
+    "triangulos": 53902,
     "dimensoes": [
      409.727,
      276.992,
@@ -257,6 +271,8 @@
      "MAT_BOARD_OSB",
      "MAT_CONCRETE_SLAB",
      "MAT_FLOOR_VINYL_WOOD",
+     "MAT_FRAME_ALUMINIUM__RAL7016",
+     "MAT_GLASS_CLEAR",
      "MAT_INSULATION_MINERAL_WOOL",
      "MAT_INSULATION_XPS",
      "MAT_INT_PLASTER_PAINTED__WHITE",
@@ -272,8 +288,8 @@
     "imagens": 19,
     "imagens_em_falta": [],
     "imagem": {
-     "diferenca_media": 0.0422,
-     "pixeis_diferentes": 0.0086,
+     "diferenca_media": 0.0424,
+     "pixeis_diferentes": 0.0105,
      "silhueta_diferente": 0.0004,
      "cobertura": 0.65
     },

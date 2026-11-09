@@ -50,6 +50,7 @@ Cada objeto tem `si_id` = `<coleção>/<nome do objeto>` (os nomes vêm dos dese
 - **Malhas:** 213 objetos visíveis; abertas 0, normais para dentro 0, repetidos 0.
 - **Aberturas:** 19 das fontes procuradas no modelo (raios horizontais através da parede, de 0,3 a 2,0 m acima do piso); fechadas: 0. Controlo: 40 troços de parede cheia, vistos como abertos: 0.
 - **Juntas dos acabamentos** (o modelo de produção desenha cada tábua e placa com a sua junta; em obra ficam fechadas): fechadas ARCH_CEILINGS 243, ARCH_WALLS_EXT 940, ARCH_WALLS_INT 521; por fechar 0.
+- **Caixilharia padrão nos vãos exteriores sem caixilho** (INFERRED: alumínio RAL 7016 e vidro duplo, pergunta 12 por obra; o tipo de cada vão vem da tabela de vãos do projeto): 12 vãos.
 - **Chão nos vãos das portas:** 11 portas; chão acrescentado em 5 peças, 6 já tinham chão ou soleira; sem chão (raio a descer do meio do vão): 0.
 - **Choques da madeira** (verificar.py, > 8 mm): 0 em 364 peças.
 - **Terreno existente sob a casa** (antes da plataforma): entre 0,89 e 2,55 m da laje; acima do pavimento em 100 % da área.

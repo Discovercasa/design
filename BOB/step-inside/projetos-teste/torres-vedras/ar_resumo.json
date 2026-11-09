@@ -15,6 +15,11 @@
  "variantes": [
   {
    "variante": "casa",
+   "base": "casa",
+   "piso": null,
+   "niveis": [
+    0.0
+   ],
    "objetos": 17,
    "materiais": [
     "MAT_CONCRETE_SLAB",
@@ -163,8 +168,8 @@
     },
     "usdz": {
      "ficheiro": "torres-vedras_ar_casa.usdz",
-     "bytes": 1965604,
-     "sha256": "7d022d86339485a449264e01b272582f09f0aa6276072dc13de78ca7c6fc6d56"
+     "bytes": 1965736,
+     "sha256": "6640daf4d5cc0809636cdd93e5b9785636698d51d8a559afc0ff13d90c174a92"
     }
    },
    "reimportacao": {
@@ -232,6 +237,11 @@
   },
   {
    "variante": "maquete",
+   "base": "maquete",
+   "piso": null,
+   "niveis": [
+    0.0
+   ],
    "objetos": 18,
    "materiais": [
     "MAT_CONCRETE_SLAB",
@@ -381,8 +391,8 @@
     },
     "usdz": {
      "ficheiro": "torres-vedras_ar_maquete.usdz",
-     "bytes": 2646486,
-     "sha256": "6c190f0e6d76b90fd68a3afc3da2cb2c767ac6a4e702d18d89f951b767ed2d75"
+     "bytes": 2646491,
+     "sha256": "4266f785245b647f3d2fabd10904cf37236e433931c5b1329677e2034c7aa835"
     }
    },
    "reimportacao": {

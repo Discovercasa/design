@@ -116,3 +116,12 @@ words (`registo-conversas*.md`). When this file passes about 1 500 lines, contin
 > Sim, avisa
 - Context: answer to "Ponho o hub a avisar quando há uma versão nova para recarregar?" (the old-open-tab case above). Filed in: nothing in BOB (code in the design repo: `public/js/hub/app.js` stores the ETag of every hub file loaded, compares every 3 minutes and when the tab is shown again, and shows a persistent toast «Há uma versão nova do hub. Recarrega a página para a veres.» with a «Recarregar» button; test `tests/hub.spec.mjs` «versão nova publicada…»; hub news in `public/dados/novidades.json`). Closes the improvement suggested in the entry above.
 
+### 2026-11-09 — Next step inside: finish Phase 7 (AR per storey, Sobral windows) [Step Inside, Sobral]
+> next step do step inside qual é?
+
+> Sim, avança
+- Context: question on the next Step Inside step. Answer given: finish Phase 7 — models per storey (task 166) and Sobral windows (157) now; phone test by the team (84); model-viewer needs OK (85); pending inputs 163, 156, 167, 160, 161; Phase 4 starts with the NVMe (154). «Sim, avança» approved this.
+- Filed in: `step-inside/docs/fase7/README.md` «Versão 5» (AR per storey: `casa_pisoN` = storey alone at 1:1, top storey without roof, floor at origin; `maquete_pisoN` = house open down to storey N, no ceilings; `step-inside/ferramentas/ar/`; 8 new hub documents ids 50–57, one button per storey; Sobral levels 0 and 2,96 m); `step-inside/docs/fase2/README.md` and `public/dados/projetos/plataforma_cliente.json` (Sobral exterior openings); hub task 166 concluded, 157 updated.
+- Decision (INFERRED, not confirmed): the Sobral visit model adds the company STANDARD frame (aluminium RAL 7016, double glazing; `perguntas-por-obra.md` Q12 default) in the 12 exterior openings that had none (5 full-height doors, 7 windows); the entrance door would be a flat panel by the standard. Production model and quantities unchanged.
+- Pending: Sobral window table (type, size per opening; Q12/Q13) to replace the standard frames in the visit/AR model → `Construção Sobral/docs/estado.md` → Open questions.
+

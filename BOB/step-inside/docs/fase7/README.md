@@ -265,6 +265,52 @@ traz também as mudanças do construtor de 06 e 07/11, que nunca lhes tinham che
 
 Correr o construtor antigo nos mesmos ficheiros confirmou que só as linhas do pavimento vêm desta correção.
 
+## Versão 5: um modelo por piso e a caixilharia do Sobral (2026-11-09)
+
+O utilizador disse «Sim, avança» para as tarefas 166 e 157.
+
+**Pisos (tarefa 166, concluída).** Nas casas com mais de um piso, `ar.py` gera, além de `casa` e `maquete`:
+- `casa_pisoN`: só o piso N à escala real.
+  - Vai de 0,2 m abaixo do pavimento até logo abaixo do pavimento do piso de cima.
+  - O último piso fica sem a cobertura.
+  - O pavimento fica na origem: o telemóvel pousa-o no chão e anda-se lá dentro.
+- `maquete_pisoN`: a casa com o terreno, aberta até ao piso N, sem o que está por cima nem os tetos desse piso.
+- Os pisos são os níveis dos pavimentos acabados visíveis, com pelo menos 4 m² cada (Sobral: 0 e 2,96 m).
+- Os cortes ficam fechados (`holes_fill`), para as paredes não parecerem ocas vistas de cima.
+- A regra de não flutuar vale também para `casa_pisoN`.
+- Torres Vedras tem um só piso e não leva variantes.
+
+| Sobral Tipo 1 | Triângulos | GLB | USDZ |
+|---|---|---|---|
+| casa | 11 354 | 1,4 MB | 1,2 MB |
+| maquete | 11 990 | 2,1 MB | 1,7 MB |
+| casa_piso0 | 4 130 | 0,9 MB | 0,9 MB |
+| casa_piso1 | 4 242 | 0,7 MB | 0,8 MB |
+| maquete_piso0 | 3 766 | 1,6 MB | 1,3 MB |
+| maquete_piso1 | 7 608 | 1,8 MB | 1,5 MB |
+
+**Hub:** cada piso tem o seu botão no Teste do AR.
+- «Sobral Tipo 1 (lote P) · piso 0 (1:1)»;
+- «· piso 1 (1:1)»;
+- «· maquete do piso 0»;
+- «· maquete do piso 1».
+
+São 8 documentos novos (ids 50–57). A casa e a maquete do Sobral (ids 46–49) passaram à versão 5.
+
+**Caixilharia do Sobral (parte da tarefa 157).**
+- **Antes:** os vãos exteriores eram buracos. O construtor só põe caixilharia a partir da tabela de vãos do projeto e
+  só no rés do chão; o Sobral não tem essa tabela.
+- **Agora:** o modelo de visita põe um caixilho de alumínio RAL 7016 e vidro em cada vão exterior sem caixilho. É o
+  padrão da empresa (pergunta 12 por obra), com os perfis assumidos de `sistema_construtivo.json`.
+  - Um vão é exterior quando há camadas exteriores na parede ao lado; o caixilho fica do lado de fora.
+  - As portas ficam assentes no pavimento.
+- **Resultado:** 12 vãos (5 portas até ao chão, 7 janelas).
+- **É INFERRED:** o tipo de cada vão (fixo, basculante, de correr, porta em painel) vem com a tabela de vãos do
+  projeto. A porta de entrada, pelo padrão, seria de painel liso.
+- O modelo de produção e as quantidades não mudam.
+
+**Imagens de verificação** (só no PC): `_trabalho/step-inside/sobral-tipo1/ar/v5_*.png`.
+
 ## Em falta
 
 - **Telemóveis reais** (tarefa 84):
@@ -272,13 +318,13 @@ Correr o construtor antigo nos mesmos ficheiros confirmou que só as linhas do p
   - confirmar a escala, a posição no chão e a orientação;
   - medir o tempo de carregamento.
 - **Mais realismo** (tarefa 157):
-  - vidro e caixilho nos vãos do Sobral (hoje os vãos são buracos);
+  - vidro e caixilho no Sobral: feitos na versão 5 com o padrão (INFERRED), falta a tabela de vãos;
   - oclusão ambiente (sombra suave dos cantos);
   - terreno sem a repetição visível da textura;
   - borda do terreno da maquete mais limpa.
 - **Soleira das portas exteriores** (pergunta 23 por obra). O pavimento das portas interiores é contínuo
   (confirmado a 2026-11-09).
-- **Um modelo por piso** nas casas de dois ou mais pisos (tarefa 166).
+- **Tabela de vãos do Sobral:** o tipo de cada vão, para trocar a caixilharia padrão (INFERRED) pela real.
 - **Fotos e materiais reais** (tarefas 156 e 163): texturas e lista oficial de materiais.
 - **Interiores** (tarefa 167, Fase 3): entram no AR na versão leve.
 - **Visualizador 3D** para quem não tem AR (tarefa 85):

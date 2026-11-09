@@ -52,8 +52,8 @@ def avaliar(v, ficheiros, reimp):
         falhas.append(f"{v['variante']}: {t} triângulos (máximo {TRI_MAX})")
     elif t > TRI_IDEAL:
         avisos.append(f"{v['variante']}: {t} triângulos (ideal até {TRI_IDEAL})")
-    if v["variante"] == "casa" and v.get("z_min", 0) < -0.25:
-        falhas.append(f"casa: o modelo desce {-v['z_min']:.2f} m abaixo do pavimento: no telemóvel fica a flutuar")
+    if v.get("base", v["variante"]) == "casa" and v.get("z_min", 0) < -0.25:
+        falhas.append(f"{v['variante']}: o modelo desce {-v['z_min']:.2f} m abaixo do pavimento: no telemóvel fica a flutuar")
     if v["textura_maior"] > 2048:
         falhas.append(f"{v['variante']}: textura de {v['textura_maior']} px (máximo 2048)")
     for fmt, f in ficheiros.items():
@@ -93,18 +93,25 @@ def main():
     oc = ocultos(decl.get("construtor", "discovercasa"))
     from ferramentas.comum import correr_blender
     variantes, falhas, avisos = [], [], []
-    for var in ("casa", "maquete"):
-        glb, usdz, res = pasta / f"{obra}_ar_{var}.glb", pasta / f"{obra}_ar_{var}.usdz", pasta / f"_{var}.json"
+    # casa and maquete; then, for a house of two or more storeys, each storey (1:1 and table model): the storeys come
+    # from the first run (resumo "niveis")
+    fila = [("casa", None), ("maquete", None)]
+    while fila:
+        var, piso = fila.pop(0)
+        nome = var + (f"_piso{piso}" if piso is not None else "")
+        glb, usdz, res = pasta / f"{obra}_ar_{nome}.glb", pasta / f"{obra}_ar_{nome}.usdz", pasta / f"_{nome}.json"
         with tempfile.NamedTemporaryFile("w", suffix=".json", delete=False, encoding="utf-8") as fh:
-            json.dump({"variante": var, "ocultos": oc, "raio_terreno_m": a.raio_terreno, "textura_max": a.textura_max,
-                       "glb": str(glb), "usdz": str(usdz), "resumo": str(res)}, fh)
+            json.dump({"variante": var, "piso": piso, "ocultos": oc, "raio_terreno_m": a.raio_terreno,
+                       "textura_max": a.textura_max, "glb": str(glb), "usdz": str(usdz), "resumo": str(res)}, fh)
             rp = fh.name
         code, out = correr_blender(AQUI / "blender_ar.py", [rp], blend=blend)
         Path(rp).unlink(missing_ok=True)
         if code or "AR_OK" not in out:
             print(out[-3000:])
-            raise SystemExit(f"AR ({var}) falhou")
+            raise SystemExit(f"AR ({nome}) falhou")
         v = comum.ler_json(res)
+        if var == "casa" and piso is None and len(v.get("niveis", [])) >= 2:
+            fila += [(b, k) for k in range(len(v["niveis"])) for b in ("casa", "maquete")]
         fich = {fmt: {"ficheiro": p.name, "bytes": p.stat().st_size, "sha256": hashlib.sha256(p.read_bytes()).hexdigest()}
                 for fmt, p in (("glb", glb), ("usdz", usdz))}
         cam = {"loc": [-1.6 * max(v["dimensoes"][:2]), -2.0 * max(v["dimensoes"][:2]), 1.1 * max(v["dimensoes"][:2])],
@@ -142,15 +149,20 @@ def relatorio(r, decl):
           f"{TRI_MAX:,}; texturas até 2048 px; ficheiro ≈ {MB_ALVO:g} MB.".replace(",", " "), "",
           "| Variante | Para quê | Triângulos (antes) | Materiais | Maior textura | GLB | USDZ | Dimensões (m) |",
           "|---|---|---|---|---|---|---|---|"]
-    para = {"casa": "1:1 no terreno real, para andar à volta", "maquete": "com o terreno, em ponto pequeno sobre uma mesa"}
+    def para(v):
+        if v.get("piso") is None:
+            return {"casa": "1:1 no terreno real, para andar à volta",
+                    "maquete": "com o terreno, em ponto pequeno sobre uma mesa"}[v["variante"]]
+        return (f"piso {v['piso']} sozinho à escala 1:1, pousado no chão para andar dentro dele" if v["base"] == "casa"
+                else f"maquete aberta até ao piso {v['piso']} (sem o que está por cima, sem teto)")
     for v in r["variantes"]:
-        L.append(f"| {v['variante']} | {para[v['variante']]} | {v['triangulos']} ({v['triangulos_antes_de_simplificar']}) | "
+        L.append(f"| {v['variante']} | {para(v)} | {v['triangulos']} ({v['triangulos_antes_de_simplificar']}) | "
                  f"{len(v['materiais'])} | {v['textura_maior']} px | {_mb(v['ficheiros']['glb']['bytes'])} | "
                  f"{_mb(v['ficheiros']['usdz']['bytes'])} | {v['dimensoes']} |")
     L += ["", "**Simplificação:**",
           "- tiram-se as camadas que não se veem de fora (" + ", ".join(f"`{m}`" for m in r["materiais_ocultos"]) + ");",
           "- junta-se um objeto por material;",
-          "- juntam-se as faces no mesmo plano;",
+          "- juntam-se os vértices repetidos (as faces no mesmo plano não: deixava frestas finas);",
           f"- as texturas descem a {r['textura_max']} px (cor) e {max(256, r['textura_max'] // 2)} px (relevo e "
           "rugosidade), em JPEG.",
           "",
@@ -160,7 +172,18 @@ def relatorio(r, decl):
           "",
           "**Fundação na versão casa:** o telemóvel pousa o ponto mais baixo do modelo no chão real, por isso a "
           "fundação indicativa é cortada 0,2 m abaixo do pavimento e o soco fica visível.",
-          "",
+          ""]
+    niv = next((v.get("niveis") for v in r["variantes"] if v.get("niveis")), [])
+    if len(niv) >= 2:
+        L += ["**Pisos** (níveis dos pavimentos acabados, a partir do rés do chão: "
+              + ", ".join(f"{z:.2f}".replace(".", ",") + " m" for z in niv) + "):",
+              "- `casa_pisoN`: o piso N sozinho à escala real, de 0,2 m abaixo do pavimento até logo abaixo do piso de "
+              "cima (o último sem a cobertura), com o pavimento na origem. O telemóvel pousa-o no chão e anda-se lá "
+              "dentro.",
+              "- `maquete_pisoN`: a casa com o terreno, aberta até ao piso N (o que está por cima é cortado e os tetos "
+              "desse piso tirados), para ver as divisões de cima.",
+              "- Os cortes são fechados, para as paredes não parecerem ocas vistas de cima.", ""]
+    L += ["",
           "**Reabertos num Blender limpo** (triângulos, dimensões, texturas):", ""]
     for v in r["variantes"]:
         for f, x in v["reimportacao"].items():

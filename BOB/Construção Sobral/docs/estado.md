@@ -34,6 +34,10 @@ storeys (upper floor Z 3,117, +0,139) · 2026-10-15 central floor beam removed; 
   0°, or turned 180°); (2) confirm with the surveyor the coordinate system, vertical datum, survey date and precision;
   (3) the terrain modelling of sheet 4 (walls, banks, roads) is not modelled yet — only a flat platform at slab level
   around the house.
+- **Sobral window table pending (2026-11-09):** needed from the user/architect: type and size per exterior opening
+  (Q12/Q13; the entrance door would be a flat panel by the standard). Until then the visit/AR model uses INFERRED
+  standard frames (aluminium RAL 7016, double glazing) in the 12 openings with no frame (5 full-height doors, 7 windows);
+  production model and quantities unchanged. Replace them when the table arrives.
 - **More documents offered 2026-11-08** ("em principio eu consigo te arranjar mais documentos sobre ambas as obras"):
   pending — tell the user which are most useful: the surveyor's original survey file (DWG/DXF/LandXML) with coordinate
   system, vertical datum, date and precision (answers (2)); the implantation / modelação DWG; anything showing which way
