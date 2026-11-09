@@ -61,6 +61,16 @@ pessoas.
 }
 ```
 
+**DXF de um levantamento** (Torres Vedras):
+- `camadas`: só as camadas que interessam (pontos, curvas, limite e rótulos GNSS);
+- `curvas_camadas`: `{"CVD": "mestra", "CV": "intermedia"}`. Só as linhas 2D destas camadas são curvas de nível;
+  muros, caminhos e edifícios também são linhas 2D;
+- `limite_camadas`: as polilinhas fechadas destas camadas são o limite do lote;
+- `escolher_copia: true` e `margem_m`: quando o ficheiro tem várias cópias do levantamento (uma por folha), usa-se a
+  que tem à volta os pontos GNSS escritos que coincidem com os pontos 3D. Fica o que está até `margem_m` do limite,
+  mais os pontos GNSS um pouco mais longe;
+- `equidistancia`: quando as curvas não têm rótulos, declara-se a da legenda.
+
 **Outros formatos** de fonte: em vez de `folha` e das regras DWFx, indica-se só o ficheiro. Opções:
 - `colunas` (XYZ sem cabeçalho);
 - `camadas` (DXF: lista de nomes ou expressões regulares);
@@ -72,11 +82,11 @@ pessoas.
 | DWFx (folha de levantamento) | `ler_dwfx` | Pontos cotados escritos em texto, curvas 2D, limite tracejado | Georreferência pela quadrícula M/P da folha (cruzes e rótulos). Sem quadrícula, coordenadas locais (precisa de `escala`). |
 | XYZ / CSV / TXT | `ler_xyz` | Pontos | Deteta o separador e a vírgula decimal. Com 4 colunas sem cabeçalho assume `id x y z` e avisa. |
 | LandXML | `ler_landxml` | Pontos, superfícies (faces), linhas de quebra, curvas, parcelas | A ordem do LandXML é **norte, este, cota**. A unidade e o CRS vêm do ficheiro. |
-| DXF ASCII | `ler_dxf` | Pontos 3D, polilinhas 3D, curvas com elevação, faces 3D | **Uma linha 2D sem cota nunca dá alturas** (§19.4). Texto numérico só se for declarado. O DXF binário é recusado. |
+| DXF ASCII | `ler_dxf` | Pontos 3D, polilinhas 3D, curvas com elevação, faces 3D, rótulos GNSS (`E=`, `N=`, `h=`), o EPSG escrito numa legenda | **Uma linha 2D sem cota nunca dá alturas** (§19.4); uma polilinha «3D» com todas as cotas a zero é 2D. Texto numérico só se for declarado. O DXF binário é recusado. |
 | ESRI ASCII grid (`.asc`) | `ler_asc` | DEM em grelha | Sem unidade nem CRS: declarar. |
 | GeoTIFF / DEM | — | — | CONVERT_REQUIRED: converter para `.asc` ou XYZ. |
 | LAS / LAZ | — | — | UNSUPPORTED (nuvem de pontos). |
-| DWG | — | — | CONVERT_REQUIRED: exportar o levantamento para DXF. |
+| DWG | — | — | CONVERT_REQUIRED: converter para DXF com o ODA File Converter (gratuito; extraído no PC da empresa a 2026-11-08 em `%LOCALAPPDATA%\Programs\ODAFileConverter`): `ODAFileConverter.exe <pasta DWG> <pasta DXF> ACAD2018 DXF 0 1 "*.DWG"`. Os DXF ficam em `desenhos/` (`*.dxf` está no `.gitignore`). |
 
 ## Como se faz o terreno (`terreno/blender_tin.py`)
 
@@ -120,6 +130,25 @@ origem real fica só no PC.
  "chao_provisorio": {"z": 0.0, "tamanho": 60}       // só sem levantamento; nunca é apresentado como terreno
 }
 ```
+
+**Implantação pelo DXF** (`ajuste.py`): quando a proposta está desenhada nas coordenadas reais por cima do
+levantamento, em vez de `coordenadas` / `cota` / `canto` usa-se:
+
+```json
+"implantacao": {"metodo": "ajuste_tramas_dxf", "ficheiro": "….dxf", "camada": "0_PROP.trama", "tipo_trama": "SOLID",
+                "raio_m": 40, "area_max_m2": 60, "cota_pavimento": {"valor": 117.50, "estado": "INFERRED", …}},
+"plataforma": {"tipo": "contorno_casa", "margem_m": 1.5, "cota": {"valor": 117.48, …}, "nota": "…"}
+```
+
+**Como funciona o ajuste:**
+1. As tramas das paredes (poché) à volta do lote dão pontos sobre as faces das paredes.
+2. Procura-se a rotação e a posição que põem mais pontos em cima das paredes do modelo (`fontes.json`):
+   - primeiro pelo eixo do retângulo mínimo;
+   - depois pesquisa grossa e fina da posição;
+   - por fim um afinamento do ângulo e da posição sobre as faces.
+3. Fica CONFIRMED com ≥ 80 % dos pontos nas paredes, mediana ≤ 5 cm e uma orientação claramente melhor do que as
+   outras. Caso contrário fica NEEDS_HUMAN_REVIEW.
+4. A altura do pavimento sobre a laje é medida no próprio modelo.
 
 ### Coleções semânticas (`blender_visita.py`)
 
@@ -198,19 +227,38 @@ Um levantamento georreferenciado localiza o terreno do cliente. Fica no PC, como
 - **Terreno:** o terreno existente fica 0,9 a 2,6 m acima da laje. A plataforma da folha 4 (189,6 m²) corrige isto no
   modelo.
 
-**Torres Vedras, visita: WARNING.**
+**Torres Vedras, terreno: WARNING** (só faltam a precisão e os pontos de controlo, que não estão escritos).
+- **Conversão:** o DWG do levantamento foi convertido para DXF com o ODA File Converter.
+- **Metadados confirmados pelo próprio ficheiro:**
+  - sistema ETRS89/PT-TM06 (EPSG:3763);
+  - ligação à rede GNSS com correção ao geóide (altitudes ortométricas);
+  - levantamento de março de 2024;
+  - curvas de 0,20 m e mestras de 1,00 m.
+- **Três cópias:** o ficheiro tem três cópias do levantamento, uma por folha, a cerca de 100 m umas das outras.
+  - Foi usada a cópia nas coordenadas reais.
+  - 92 dos 93 pontos GNSS escritos coincidem com os pontos 3D a menos de 1 cm.
+- **Dados usados:** 92 pontos e 54 curvas (53 com cota).
+- **Coerência:**
+  - pontos contra curvas: mediana 0,03 m, p95 0,09 m;
+  - pontos entre si: mediana 0,07 m.
+
+**Torres Vedras, visita (casa no lote): WARNING.**
+- **Implantação:** as paredes do modelo foram ajustadas às tramas das paredes da proposta, desenhada no levantamento.
+  - 154 de 163 pontos ficam sobre as paredes (mediana 1 mm, p90 4 cm), com rotação de 317,86°;
+  - a outra orientação só tem 79 pontos, por isso posição e rotação ficam CONFIRMED.
+- **Cotas:** pavimento a 117,50 (INFERRED). O vinílico assenta na laje, com 5 mm medidos no modelo.
 - **Dimensões:** estrutura 17,500 × 10,999 m, contra 17,501 × 11,000 m nas fontes.
 - **Aberturas:** as 19 estão abertas; o controlo deu 14 paredes cheias fechadas.
+- **Terreno:** o levantamento é de antes da obra. O terreno ia de 0,68 m abaixo a 0,76 m acima da laje sob a casa.
+  Ficou uma faixa plana de 1,5 m à cota exterior 117,48 (aproximada).
 - **Choques:** **36 choques de madeira** no modelo de produção (verificar.py). A maioria é Prumo × Prumo e na viga de
   amarração: são defeitos já conhecidos do construtor (hub, Construtor › «Corrigir defeitos geométricos conhecidos»,
   tarefas 137, 139 e 140).
-- **Terreno:** falta. O levantamento só existe em DWG, e as cotas do DWFx e do PDF estão desenhadas como contornos.
-  Fica um chão provisório.
 
 ## Em aberto
 
-- **Torres Vedras:** exportar o levantamento DWG para DXF (ou obter um LandXML ou XYZ do topógrafo). O leitor de DXF
-  está pronto e testado com ficheiros sintéticos, mas ainda não com o DXF real.
+- **Torres Vedras:** confirmar a cota do pavimento (117,50) e a exterior (117,48), por exemplo com fotos da casa
+  construída.
 - **Sobral:** confirmar com o topógrafo o CRS, o datum, a data e a precisão do levantamento.
 - **Sobral:** confirmar a orientação da casa no lote (0° como no desenho do engenheiro, ou 180°).
 - **Modelação do terreno:** completar a modelação (muros, taludes, arruamentos da folha 4). Para já há só uma

@@ -60,10 +60,90 @@ def ler_fonte(decl, f):
         return leitores.ler_dwfx(caminho, f["folha"], f)
     kw = {k: f[k] for k in ("colunas", "camadas", "passo") if k in f}
     lev = leitores.ler(caminho, **kw)
+    # 2D lines: contours only on the layers declared as such (walls, roads, buildings are 2D lines too)
+    cc = f.get("curvas_camadas", {})
+    lims = set(f.get("limite_camadas", []))
+    linhas = []
+    for l in lev["linhas"]:
+        if l["tipo"] != "linha2d":
+            linhas.append(l)
+        elif l["camada"] in cc:
+            l["papel"] = cc[l["camada"]]
+            linhas.append(l)
+        elif l["camada"] in lims and len(l["pts"]) >= 4 and l["pts"][0][:2] == l["pts"][-1][:2]:
+            lev["limites"].append([q[:2] for q in l["pts"][:-1]])
+    lev["linhas"] = linhas
+    if f.get("escolher_copia") and len(lev["limites"]) > 1:
+        escolher_copia(lev, f.get("margem_m", 15.0))
+    lev["contagens"]["curvas_2d_usadas"] = sum(1 for l in lev["linhas"] if l["tipo"] == "linha2d")
     if f.get("rotulos_como_pontos"):  # heights written as text at the point (declared after looking at the file)
         lev["pontos"] += [list(r) for r in lev["rotulos"]]
         lev["contagens"]["pontos_de_rotulos"] = len(lev["rotulos"])
     return lev
+
+
+def _dist_poligono(x, y, poly):
+    """0 inside, else the distance to the polygon's edges."""
+    dentro = False
+    best = 1e18
+    for i in range(len(poly)):
+        (x0, y0), (x1, y1) = poly[i][:2], poly[(i + 1) % len(poly)][:2]
+        if (y0 > y) != (y1 > y) and x < x0 + (y - y0) * (x1 - x0) / (y1 - y0):
+            dentro = not dentro
+        dx, dy = x1 - x0, y1 - y0
+        L2 = dx * dx + dy * dy or 1e-12
+        t = max(0.0, min(1.0, ((x - x0) * dx + (y - y0) * dy) / L2))
+        best = min(best, math.hypot(x0 + t * dx - x, y0 + t * dy - y))
+    return 0.0 if dentro else best
+
+
+def coincide_gnss(p, gnss):
+    return any(abs(p[0] - g[0]) < 0.01 and abs(p[1] - g[1]) < 0.01 and abs(p[2] - g[2]) < 0.01 for g in gnss)
+
+
+def escolher_copia(lev, margem):
+    """Some CAD files hold several copies of the survey in model space (one per sheet), shifted from one another;
+    only one sits at the real coordinates. That copy is the one whose lot boundary has the GNSS points written as
+    text (E=, N=, h=) around it, matching the drawn 3D points. Keep it and what lies within `margem` of its boundary."""
+    gnss = lev.get("gnss", [])
+    pontos = lev["pontos"]
+
+    def coincide(g):
+        return any(abs(p[0] - g[0]) < 0.01 and abs(p[1] - g[1]) < 0.01 and abs(p[2] - g[2]) < 0.01 for p in pontos)
+    reais = [g for g in gnss if coincide(g)]
+    if not reais:
+        lev["avisos"].append(f"{len(lev['limites'])} limites do lote e nenhum ponto GNSS escrito que coincida: "
+                             "não sei que cópia está nas coordenadas reais (ver o desenho)")
+        return
+    contagem = [sum(1 for g in reais if _dist_poligono(g[0], g[1], L) <= margem) for L in lev["limites"]]
+    k = max(range(len(contagem)), key=lambda i: contagem[i])
+    L = lev["limites"][k]
+    n0 = len(pontos)
+    # points within the margin, plus the GNSS points (certainly of the real copy) a little further out
+    lev["pontos"] = [p for p in pontos if _dist_poligono(p[0], p[1], L) <= margem or
+                     (_dist_poligono(p[0], p[1], L) <= 3 * margem and coincide_gnss(p, reais))]
+    novas = []
+    for l in lev["linhas"]:  # cut lines where they leave the kept zone
+        troco = []
+        for q in l["pts"]:
+            if _dist_poligono(q[0], q[1], L) <= margem:
+                troco.append(q)
+            else:
+                if len(troco) >= 2:
+                    novas.append(dict(l, pts=troco))
+                troco = []
+        if len(troco) >= 2:
+            novas.append(dict(l, pts=troco))
+    lev["linhas"] = novas
+    lev["limites"] = [L]
+    lev["contagens"]["copias_do_levantamento"] = len(contagem)
+    lev["contagens"]["gnss_escritos"] = len(gnss)
+    lev["contagens"]["gnss_que_coincidem"] = len(reais)
+    lev["contagens"]["gnss_junto_da_copia_usada"] = contagem[k]
+    lev["contagens"]["pontos_na_copia_usada"] = len(lev["pontos"])
+    lev["avisos"].append(f"o ficheiro tem {len(contagem)} cópias do levantamento; usada a que tem à volta os pontos GNSS "
+                         f"escritos que coincidem com os pontos 3D ({contagem[k]} de {len(reais)}), com {margem:g} m à "
+                         f"volta do limite ({len(lev['pontos'])} de {n0} pontos)")
 
 
 def area_poligono(pts):

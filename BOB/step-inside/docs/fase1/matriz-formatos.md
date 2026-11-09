@@ -16,7 +16,7 @@ auditoria: o DXF passou a `CONVERT_REQUIRED` e entraram os formatos de terreno. 
 | PDF vetorial | DIRECT | `ferramentas/dwfx/leitor_pdf.py` | Os mesmos traços do DWFx, **sem texto**. |
 | PDF digitalizado ou imagem | REFERENCE_ONLY | — | Não dá geometria. O catálogo distingue-o pelo número de traços. |
 | JSON do configurador | DIRECT | `ferramentas/configurador/para_construtor.py` | Casa do Build Your House. |
-| DWG | CONVERT_REQUIRED | Exportar para DWFx ou PDF (plantas, cortes), ou para DXF (levantamento) | Formato fechado, sem leitor. Tem a informação toda, incluindo as cotas 3D do levantamento. |
+| DWG | CONVERT_REQUIRED | Exportar para DWFx ou PDF (plantas, cortes), ou para DXF (levantamento: ODA File Converter, Fase 2) | Formato fechado, sem leitor. Tem a informação toda, incluindo as cotas 3D do levantamento. |
 | DXF | DIRECT (terreno, Fase 2) | `step-inside/ferramentas/terreno/leitores.py` | DXF ASCII: pontos 3D, polilinhas 3D, curvas com elevação, faces 3D. Linhas 2D sem cota nunca dão alturas. Plantas em DXF: exportar para DWFx/PDF. |
 | DWF (antigo) | CONVERT_REQUIRED | Voltar a exportar como DWFx | Binário. |
 | IFC, Revit | UNSUPPORTED | Pedir DWFx/PDF | Só se algum arquiteto entregar BIM. |

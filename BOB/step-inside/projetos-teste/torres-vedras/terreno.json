@@ -1,0 +1,42 @@
+{
+ "_doc": "Step Inside Phase 2: terrain of the Torres Vedras lot (test project). Source: the topographic survey DWG converted to DXF on the PC with ODA File Converter 27.10 (ACAD2018 DXF, user 2026-11-08: 'Instala o conversor ODA'). No coordinates here. Run: python step-inside/ferramentas/terreno/terreno.py step-inside/projetos-teste/torres-vedras/terreno.json",
+ "obra": "torres-vedras",
+ "obra_pasta": "Torres Vedras",
+ "nome": "Torres Vedras · lote da casa",
+ "superficies": [
+  {
+   "id": "existente",
+   "nome": "Terreno existente (levantamento topográfico GNSS)",
+   "fontes": [
+    {
+     "ficheiro": "Levantamento topográfico F00.0.dxf",
+     "local": "DXF convertido do DWG do levantamento (camadas POINTS, CV, CVD, 0_Limites_Terreno)",
+     "camadas": ["POINTS", "CV", "CVD", "0_Limites_Terreno", "GPS"],
+     "curvas_camadas": {"CVD": "mestra", "CV": "intermedia"},
+     "limite_camadas": ["0_Limites_Terreno"],
+     "escolher_copia": true,
+     "margem_m": 15.0,
+     "_nota_copias": "The DWG holds 3 copies of the survey in model space (one per sheet), shifted ~100 m apart; only one is at the real coordinates: the one whose GNSS labels (layer GPS: E=, N=, h=) match the 3D points."
+    }
+   ],
+   "equidistancia": {"mestras": 1.0, "curvas": 0.2},
+   "_nota_equidistancia": "Legend of the survey: '- CURVA DE NIVEL MESTRA - Equidistância 1.00 m' and '- CURVA DE NIVEL - Equidistância 0.20 m'. The contours are 3D polylines with every z = 0 (no heights): their heights come from the points.",
+   "incerteza_xy_m": 0.1
+  }
+ ],
+ "metadados": {
+  "unidade_horizontal": {"valor": "m", "estado": "CONFIRMED", "metodo": "texto", "unidade": "m",
+                         "fonte": {"documento": "Levantamento topográfico F00.0.dwg (DXF)", "folha": null, "local": "camada GPS: 'E=…m.', 'N=…m.'; EPSG:3763 é em metros", "data": ""},
+                         "nota": "o DXF não tem $INSUNITS; os rótulos GNSS e o sistema dizem metros"},
+  "unidade_vertical": {"valor": "m", "estado": "CONFIRMED", "metodo": "texto", "unidade": "m",
+                       "fonte": {"documento": "Levantamento topográfico F00.0.dwg (DXF)", "folha": null, "local": "camada GPS: 'h=…m.'", "data": ""}},
+  "datum_vertical": {"valor": "altitudes ortométricas (ligação à rede GNSS com correção ao geóide)", "estado": "CONFIRMED", "metodo": "texto",
+                     "fonte": {"documento": "Levantamento topográfico F00.0.dwg (DXF)", "folha": null, "local": "legenda: 'Ligação á Rede GNSS no Sistema de coordenadas ETRS89/PTM06 (correção ao Geóide)'", "data": ""},
+                     "nota": "a correção ao geóide dá altitudes ortométricas (datum altimétrico nacional, Cascais); o nome do modelo de geóide não está escrito"},
+  "data_levantamento": {"valor": "março de 2024", "estado": "CONFIRMED", "metodo": "texto",
+                        "fonte": {"documento": "Levantamento topográfico F00.0.dwg (DXF)", "folha": null, "local": "carimbo do levantamento: 'LEVANTAMENTO TOPOGRAFICO' / 'MARÇO 2024'", "data": ""},
+                        "nota": "as folhas do arquiteto são de junho e julho de 2024"},
+  "pontos_controlo": {"valor": null, "estado": "MISSING", "metodo": "nenhum",
+                      "nota": "sem marcos nem estações com coordenadas; verificação interna: 92 dos 93 pontos GNSS com E/N/h escritos (camada GPS) coincidem com os pontos 3D do desenho a menos de 1 cm"}
+ }
+}

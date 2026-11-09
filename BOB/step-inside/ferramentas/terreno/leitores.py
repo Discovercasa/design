@@ -238,7 +238,8 @@ def ler_dxf(path, camadas=None):
     dados = Path(path).read_bytes()
     if dados.startswith(b"AutoCAD Binary DXF"):
         raise ValueError("DXF binário: voltar a exportar como DXF ASCII")
-    ents, header = _entidades(_pares_dxf(dados.decode("utf-8", errors="replace")))
+    texto = dados.decode("utf-8", errors="replace")
+    ents, header = _entidades(_pares_dxf(texto))
     ins = header.get("$INSUNITS", {}).get(70)
     lev["unidade"] = _INSUNITS.get(int(ins)) if ins is not None and ins.lstrip("-").isdigit() else None
     filtro = [re.compile(c, re.I) for c in (camadas or [])]
@@ -296,8 +297,11 @@ def ler_dxf(path, camadas=None):
             if flag & (16 | 64):
                 lev["avisos"].append(f"malha POLYLINE (flag {flag}) na camada {camada}: lida só como pontos")
                 lev["pontos"] += [v for v in vs if v[2]]
-            elif flag & 8:
+            elif flag & 8 and any(v[2] for v in vs):
                 lev["linhas"].append({"tipo": "quebra", "z": None, "pts": vs, "camada": camada})
+            elif flag & 8:  # a "3D" polyline with every z = 0 has no heights: it is a 2D line
+                lev["linhas"].append({"tipo": "linha2d", "z": None, "pts": [[x, y, None] for x, y, _ in vs],
+                                      "camada": camada})
             elif elev:
                 lev["linhas"].append({"tipo": "curva", "z": elev, "pts": [[x, y, elev] for x, y, _ in vs],
                                       "camada": camada})
@@ -307,6 +311,8 @@ def ler_dxf(path, camadas=None):
         elif tipo == "3DFACE":
             k0 = len(lev["pontos"])
             vs = [[_f(_g(cs, 10 + j)), _f(_g(cs, 20 + j)), _f(_g(cs, 30 + j, "0"))] for j in range(4)]
+            if not any(v[2] for v in vs):  # a flat face at z = 0: drawing, not terrain
+                continue
             if vs[3] == vs[2]:
                 vs = vs[:3]
             lev["pontos"] += vs
@@ -318,6 +324,24 @@ def ler_dxf(path, camadas=None):
             t = re.sub(r"\\[A-Za-z][^;]*;|[{}]", "", t)  # MTEXT formatting codes
             if NUM.match(t):
                 lev["rotulos"].append([_f(_g(cs, 10)), _f(_g(cs, 20)), _f(t)])
+    # GNSS point labels written as text, one value per text ("E=-10000.123m.", "N=…", "h=…"): kept in file order
+    cur = {}
+    lev["gnss"] = []
+    for tipo, cs in ents:
+        if tipo not in ("TEXT", "MTEXT"):
+            continue
+        t = (_g(cs, 1, "") or "").strip()
+        m = re.match(r"^\s*([ENhHZ])\s*=\s*(-?\d+(?:[.,]\d+)?)", t)
+        if m:
+            cur[{"E": "E", "N": "N"}.get(m.group(1), "h")] = _f(m.group(2))
+            if len(cur) == 3:
+                lev["gnss"].append([cur["E"], cur["N"], cur["h"]])
+                cur = {}
+    # the coordinate system written on the drawing, in any text (survey legends are often blocks: "... EPSG:3763")
+    for c, v in _pares_dxf(texto):
+        if c in (1, 3) and (m := re.search(r"EPSG\s*:?\s*(\d{4,5})", v)):
+            lev["crs"] = {"epsg": m.group(1), "nome": re.sub(r"\\[A-OQ-Za-z][^;]*;|[{}]|\\P", " ", v).strip()[:120]}
+            break
     curvas = [l for l in lev["linhas"] if l["tipo"] == "curva"]
     planas = [l for l in lev["linhas"] if l["tipo"] == "linha2d"]
     lev["contagens"] = {"entidades": cont, "pontos": len(lev["pontos"]), "curvas": len(curvas),

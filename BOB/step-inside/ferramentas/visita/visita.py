@@ -78,6 +78,65 @@ def declarado(d, tipo=""):
                  fonte=d.get("fonte"), nota=d.get("nota", ""))
 
 
+def tramas_dxf(caminho, camada, tipo, centro, raio, area_max):
+    """Vertices of the hatches (e.g. the walls' poché) of one layer around a point, in the file's coordinates."""
+    sys.path.insert(0, str(AQUI.parent / "terreno"))
+    import leitores
+    texto = Path(caminho).read_bytes().decode("utf-8", errors="replace")
+    ents, _h = leitores._entidades(leitores._pares_dxf(texto))
+    pts = []
+    for tp, cs in ents:
+        if tp != "HATCH" or leitores._g(cs, 8) != camada or (tipo and leitores._g(cs, 2) != tipo):
+            continue
+        xs = [float(v) for c, v in cs if c == 10][1:]  # the first 10/20 is the hatch's elevation point
+        ys = [float(v) for c, v in cs if c == 20][1:]
+        q = [(x, y) for x, y in zip(xs, ys) if math.hypot(x - centro[0], y - centro[1]) < raio]
+        if len(q) < 4:
+            continue
+        a = abs(sum(q[i][0] * q[(i + 1) % len(q)][1] - q[(i + 1) % len(q)][0] * q[i][1] for i in range(len(q)))) / 2
+        if a < area_max:
+            pts += q
+    return pts
+
+
+def implantacao_ajuste(decl, fontes_doc, terreno_local):
+    """The house drawn in real coordinates in a DXF (proposal over the survey): fit the model's walls to the walls'
+    hatches. Returns (campos, local)."""
+    import ajuste
+    I = decl["implantacao"]
+    campos, local = {}, {}
+    f = pasta_desenhos(decl["obra_pasta"], I["ficheiro"])
+    lim = terreno_local["superficies"][0]["limites_abs"]
+    if not f or not lim:
+        campos["posicao"] = campo(None, REVIEW, "geometria", nota="sem o DXF ou sem o limite do lote do terreno")
+        return campos, local
+    L0 = lim[0]
+    centro = (sum(q[0] for q in L0) / len(L0), sum(q[1] for q in L0) / len(L0))
+    pts = tramas_dxf(f, I["camada"], I.get("tipo_trama", "SOLID"), centro, I.get("raio_m", 40.0), I.get("area_max_m2", 60.0))
+    paredes = [{"eixo": p["eixo"], "inicio": p["inicio"]["valor"], "fim": p["fim"]["valor"], "posicao": p["posicao"]["valor"],
+                "espessura": p["espessura"]["valor"]} for p in fontes_doc["paredes"] if p.get("piso", 0) == 0]
+    if len(pts) < 20:
+        campos["posicao"] = campo(None, REVIEW, "geometria", nota=f"só {len(pts)} pontos de trama na camada {I['camada']}")
+        return campos, local
+    r = ajuste.ajustar(pts, paredes)
+    src = fonte(I["ficheiro"], None, f"tramas das paredes, camada {I['camada']}")
+    bom = r["inliers"] >= 0.8 * r["n"] and r["mediana_m"] is not None and r["mediana_m"] <= 0.05 and r["inliers"] > 1.5 * r["segundo_inliers"]
+    est = CONFIRMED if bom else REVIEW
+    nota = (f"paredes do modelo ajustadas às tramas das paredes da planta: {r['inliers']} de {r['n']} pontos sobre as "
+            f"paredes (mediana {r['mediana_m']:.3f} m, p90 {r['p90_m']:.3f} m); a segunda orientação só tem "
+            f"{r['segundo_inliers']}").replace(".", ",")
+    campos["posicao"] = campo("só no PC", est, "geometria", tipo="referencial", fonte=src, nota=nota)
+    campos["rotacao_graus"] = campo(r["rotacao_graus"], est, "geometria", unidade="°", tipo="geometria", fonte=src,
+                                    nota="eixo X do modelo medido a partir do eixo das abcissas do sistema de coordenadas")
+    o = comum.ler_json(BOB / "_trabalho" / "step-inside" / decl["obra"] / "terreno" / "terreno_local.json")["origem"]
+    local["origem_xy"] = [r["origem"][0] - o["x"], r["origem"][1] - o["y"]]
+    local["rotacao_graus"] = r["rotacao_graus"]
+    if I.get("cota_pavimento"):
+        campos["cota_pavimento"] = declarado(I["cota_pavimento"], "nivel")
+        local["cota_pavimento"] = I["cota_pavimento"]["valor"]
+    return campos, local
+
+
 def implantacao(decl, origem):
     """Placement fields (committed: states and relative numbers) + the local values for Blender."""
     I = decl["implantacao"]
@@ -128,6 +187,12 @@ def implantacao(decl, origem):
 
 def plataforma(decl, origem, z_laje, campos):
     PL = decl.get("plataforma")
+    if PL and PL.get("tipo") == "contorno_casa":  # flat ground around the house at a drawn exterior level
+        c = PL["cota"]
+        campos["plataforma"] = campo({"margem_m": PL.get("margem_m", 1.0), "cota": c["valor"]}, INFERRED, "geometria",
+                                     tipo="terreno", fonte=c.get("fonte"),
+                                     nota=PL.get("nota", "terreno plano à volta da casa (modelação aproximada)"))
+        return {"contorno_casa": True, "margem_m": PL.get("margem_m", 1.0), "z": c["valor"], "nota": PL.get("nota", "")}
     if not PL or origem is None or z_laje is None:
         return None
     tx, paths = ler_folha(decl["obra_pasta"], PL["ficheiro"], PL["folha"])
@@ -327,7 +392,7 @@ def relatorio_md(r, decl):
     for k, c in r["implantacao"].items():
         v = c["valor"]
         if isinstance(v, dict):
-            v = ", ".join(f"{a} {_n(b, 1)}" for a, b in v.items())
+            v = ", ".join(f"{a} {_n(b, 2)}" for a, b in v.items())
         L.append(f"| {k} | {_n(v)} | {c['estado']} | {c['metodo']} | {c.get('nota', '')} |")
     dm = m.get("dimensoes_modelo", {})
     df = r["dimensoes_fontes"]
@@ -395,7 +460,13 @@ def main():
         terreno_blend = tl / "terreno.blend"
         terreno_gate = comum.ler_json(BOB / Path(T["declaracao"]).parent / "terreno_resumo.json")["resultado"]
     campos, coloc, z_laje = {}, None, None
-    if decl.get("implantacao"):
+    if decl.get("implantacao") and decl["implantacao"].get("metodo") == "ajuste_tramas_dxf":
+        tl = comum.ler_json(BOB / "_trabalho" / "step-inside" / obra / "terreno" / "terreno_local.json")
+        campos, loc = implantacao_ajuste(decl, fontes_doc, tl)
+        if loc.get("origem_xy") and loc.get("cota_pavimento") is not None:
+            coloc = {"origem_xy": loc["origem_xy"], "rotacao_graus": loc["rotacao_graus"],
+                     "cota_pavimento": loc["cota_pavimento"]}
+    elif decl.get("implantacao"):
         campos, loc, _g = implantacao(decl, origem)
         z_laje = loc.get("z_laje")
         if loc.get("alvo_xy") and z_laje is not None:
@@ -417,6 +488,10 @@ def main():
         print(out[-3000:])
         raise SystemExit("Blender (blender_visita.py) falhou")
     modelo = comum.ler_json(local / "visita_modelo.json")
+    if modelo.get("colocacao", {}).get("pavimento_rc_modelo_m") is not None and "pavimento_acima_laje" not in campos:
+        campos["pavimento_acima_laje"] = campo(modelo["colocacao"]["pavimento_rc_modelo_m"], CONFIRMED, "calculo", unidade="m",
+                                               tipo="nivel", nota="medido no modelo: topo do pavimento acabado do rés do chão "
+                                                                  "sobre o topo da laje")
     r = {"obra": obra, "casa_blend": str(casa_blend.relative_to(BOB)).replace("\\", "/"), "modelo": modelo,
          "implantacao": campos, "dimensoes_fontes": {k: fontes_doc["dimensoes"].get(k) for k in ("comprimento", "profundidade")},
          "choques_madeira": choques_madeira(cfg_path), "terreno": terreno_gate}

@@ -258,7 +258,17 @@ for ob in bpy.data.objects:
         mw = ob.matrix_world.copy()
         ob.parent = root
         ob.matrix_world = mw
-if C and acab:
+if C and "cota_pavimento" in C:  # slab level from the finished-floor level and the model's own floor build-up
+    pisos = [o for o in objetos("ARCH_FLOORS") if caixa([o])[1].z < 1.0]
+    pav = round(max(caixa([o])[1].z for o in pisos), 3) if pisos else 0.0
+    C["z_laje"] = C["cota_pavimento"] - pav
+    OUT["colocacao"] = {"pavimento_rc_modelo_m": pav}
+if C and "origem_xy" in C:  # the model's (0, 0) placed directly (fit to the site plan's walls)
+    rot = math.radians(C.get("rotacao_graus", 0.0))
+    root.rotation_euler = (0, 0, rot)
+    root.location = (C["origem_xy"][0], C["origem_xy"][1], C["z_laje"])
+    OUT.setdefault("colocacao", {}).update({"rotacao_graus": C.get("rotacao_graus", 0.0), "z_laje": round(C["z_laje"], 3)})
+elif C and acab:
     canto = {"NO": (acab[0].x, acab[1].y), "SO": (acab[0].x, acab[0].y), "NE": (acab[1].x, acab[1].y),
              "SE": (acab[1].x, acab[0].y)}[C["canto"]]
     rot = math.radians(C.get("rotacao_graus", 0.0))
@@ -328,6 +338,12 @@ if terreno is not None and PL:
     me = terreno.data
     pts = [(v.co.x, v.co.y) for v in me.vertices]
     zs = [v.co.z for v in me.vertices]
+    if PL.get("contorno_casa"):  # the finished outline + margin, in site coordinates
+        m = PL.get("margem_m", 1.0)
+        mw = root.matrix_world
+        cantos = [(acab[0].x - m, acab[0].y - m), (acab[1].x + m, acab[0].y - m), (acab[1].x + m, acab[1].y + m),
+                  (acab[0].x - m, acab[1].y + m)]
+        PL["contorno"] = [list((mw @ Vector((x, y, 0)))[:2]) for x, y in cantos]
     poly = PL["contorno"]
 
     def dentro(x, y):

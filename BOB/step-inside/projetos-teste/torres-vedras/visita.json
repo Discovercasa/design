@@ -1,11 +1,25 @@
 {
- "_doc": "Step Inside Phase 2: visit model of the Torres Vedras house (test project, another architect's design). The survey exists only as DWG (heights drawn as outlines in the DWFx/PDF): the terrain waits for a DXF export, so the site is a clearly named flat placeholder for now. Run: python step-inside/ferramentas/visita/visita.py step-inside/projetos-teste/torres-vedras/visita.json",
+ "_doc": "Step Inside Phase 2: visit model of the Torres Vedras house (test project, another architect's design) on its surveyed lot. The survey DWG (converted to DXF on the PC) holds the proposal in real coordinates: the house is placed by fitting the model's walls to the walls' hatches. Run after terreno.py: python step-inside/ferramentas/visita/visita.py step-inside/projetos-teste/torres-vedras/visita.json",
  "obra": "torres-vedras",
  "obra_pasta": "Torres Vedras",
- "nome": "Torres Vedras · casa",
+ "nome": "Torres Vedras · casa no lote",
  "casa": {"config": "Construção Torres Vedras/modelos/casa/config.json"},
  "fontes": "step-inside/projetos-teste/torres-vedras/fontes.json",
- "terreno": null,
- "implantacao": null,
- "chao_provisorio": {"z": 0.0, "tamanho": 60.0}
+ "terreno": {"declaracao": "step-inside/projetos-teste/torres-vedras/terreno.json", "superficie": "existente"},
+ "implantacao": {
+  "metodo": "ajuste_tramas_dxf",
+  "ficheiro": "Levantamento topográfico F00.0.dxf",
+  "camada": "0_PROP.trama",
+  "tipo_trama": "SOLID",
+  "raio_m": 40.0,
+  "area_max_m2": 60.0,
+  "_nota": "Only around the copy of the drawing at the real coordinates (the lot boundary chosen by terreno.py).",
+  "cota_pavimento": {"valor": 117.50, "estado": "INFERRED", "metodo": "texto", "unidade": "m",
+                     "fonte": {"documento": "Levantamento topográfico F00.0.dwg (DXF)", "folha": null, "local": "camada 0_PROP.aux.cotas: '117.50' dentro da casa; '117,5' nos alçados, com '120,6' no topo", "data": ""},
+                     "nota": "cota do pavimento acabado do rés do chão (±0,00) lida nas cotas da proposta; também há '117.48' junto da casa (exterior?): confirmar"}
+ },
+ "plataforma": {"tipo": "contorno_casa", "margem_m": 1.5,
+                "cota": {"valor": 117.48, "estado": "INFERRED", "metodo": "texto", "unidade": "m",
+                         "fonte": {"documento": "Levantamento topográfico F00.0.dwg (DXF)", "folha": null, "local": "camada 0_PROP.aux.cotas: '117.48' junto da casa (4 vezes) e '117,48' nos alçados", "data": ""}},
+                "nota": "o levantamento é de antes da obra (março de 2024): à volta da casa o terreno fica plano à cota exterior desenhada, numa faixa de 1,5 m (modelação aproximada; a casa já está construída: confirmar com as fotos)"}
 }

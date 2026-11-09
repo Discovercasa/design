@@ -110,3 +110,15 @@ lameladas cut to fit each house — "cortamos para "encaixar""); the downpipes a
   are drawn as outlines (no text), so they cannot be read from them; the terrain needs the DWG exported to DXF. No CRS,
   datum, survey date or precision found. The 19 openings of the architecture plan match one-to-one the 19 of D2503
   Módulos; where they differ D2503 (as built) prevails (see the Phase 1 `relatorio.md`).
+- Note 2026-11-09 (survey DWG converted to DXF with the ODA File Converter, Step Inside Phase 2). The survey DWG holds:
+  278 3D survey points (layer POINTS, heights ≈ 115.3–121.5 m); the heights as text (layer Z); GNSS labels per point
+  "E=…m." "N=…m." "h=…m." (layer GPS; 92 of 93 match the 3D points within 1 cm); contours CV (0.20 m) and CVD (index,
+  1.00 m) drawn as 3D polylines with every z = 0 (no heights); the lot boundary (layer 0_Limites_Terreno, ≈ 1,665 m²,
+  perimeter ≈ 162 m; 6 numbered marks 01–06 on its corners, layer 0_coordinates); the legend "COORDENADAS ETRS89/PT-TM06
+  (EPSG:3763)", "Ligação á Rede GNSS … (correção ao Geóide)" and "LEVANTAMENTO TOPOGRAFICO / MARÇO 2024"; and the
+  architect's proposal drawn in place (layers 0_PROP.*; the walls' poché as SOLID hatches on 0_PROP.trama; proposed
+  levels on 0_PROP.aux.cotas: 117.50 inside the house, 117.48 around it, 120,6 at the top in the elevations).
+  **Trap:** model space holds 3 copies of the survey (one per sheet), ≈ 100 m apart; only one is at the real
+  coordinates (the one matching the GNSS labels). The site plan DWG (F01,1) is the same model as the survey DWG.
+  CRS and survey date are therefore now known (ETRS89 / PT-TM06, March 2024); precision and survey control points are
+  still not stated (supersedes "No CRS, datum, survey date or precision found" for CRS and date).
