@@ -73,19 +73,63 @@ Um produto sem correspondência aparece no relatório do modelo de visita e pede
 - **Provisório:** as texturas da DiscoverCasa passam às fotos dos produtos reais quando houver (tarefa 156). O terreno
   ainda mostra a repetição da textura e está claro demais (a afinar na Fase 7).
 
+## Exportação, manifest e reimportação (2026-11-09, «Sim, avança»)
+
+```bash
+python step-inside/ferramentas/exportar/exportar.py step-inside/projetos-teste/<obra>/visita.json
+```
+
+**Predefinições** (`blender_exportar.py`). Exporta-se o que está visível na visita (sem estrutura, opções nem
+etiquetas):
+
+| Formato | Para | Unidades e eixos | Texturas |
+|---|---|---|---|
+| FBX | Unreal (Fases 4–5) | metros (`FBX_SCALE_UNITS`), −Z para a frente, Y para cima; no Unreal importar com *Convert Scene* (a validar na Fase 4) | ficheiros à parte (spec §4.2) |
+| GLB | AR Android, visualizador 3D | glTF 2.0, +Y para cima; propriedades `si_*` como *extras* | embebidas |
+| USDZ | AR Quick Look (iPhone) | `metersPerUnit` 1, Y para cima | embebidas (UsdPreviewSurface) |
+
+**Teste:**
+- **Duas exportações:** a casa exporta-se duas vezes e os ficheiros comparam-se byte a byte. Se um formato grava a
+  data, compara-se o conteúdo reimportado.
+- **Reimportação:** cada ficheiro reabre num Blender limpo (`blender_reimportar.py`) e compara-se com a fonte:
+  - objetos e triângulos;
+  - caixa envolvente, que confirma a escala, os eixos e a posição;
+  - IDs `MAT_*`;
+  - texturas presentes;
+  - uma imagem com a mesma câmara e luz plana (píxeis e silhueta).
+
+**`manifest.json`** (spec §4.3, esquema `step-inside/schema/manifest.schema.json`). Fica com os ficheiros, só no PC,
+porque tem a origem real. Contém:
+- o projeto e a versão (`<obra>-<commit>-<data>`);
+- o SHA-256 do `.blend`;
+- a data e as versões do Blender e do Unreal alvo;
+- as unidades e os sistemas de coordenadas;
+- a origem e a rotação da casa;
+- o catálogo de materiais usado;
+- cada ficheiro, com tamanho, SHA-256, IDs de material e finalidade;
+- os avisos, o resultado da validação e a origem do terreno.
+
+No Git ficam `export_resumo.json` e `export_relatorio.md`, sem coordenadas.
+
+**Resultados:**
+
+| Casa | Objetos | Triângulos | Caixa | Materiais e texturas | GLB | USDZ | FBX + texturas | Píxeis diferentes |
+|---|---|---|---|---|---|---|---|---|
+| Sobral Tipo 1 | 218 | 50 790 | erro 0,0 mm nos 3 formatos | 14 / 22, nenhuma em falta | 112,8 MB, bytes iguais | 100,4 MB, conteúdo igual | 1,9 + 97,5 MB, conteúdo igual | ≤ 1,4 % |
+| Torres Vedras | 310 | 52 839 | erro 0,0 mm nos 3 formatos | 18 / 26, nenhuma em falta | 109,1 MB, bytes iguais | 95,9 MB, conteúdo igual | 2,1 + 93,1 MB, conteúdo igual | ≤ 0,9 % |
+
+Nos dois casos as silhuetas são iguais e o resultado é WARNING: o FBX e o USDZ mudam de bytes só pela data.
+
+**Critério de saída da fase:**
+- **Cumprido:** exportação determinística, sem materiais nem recursos críticos em falta.
+- **Ainda provisório:** as texturas reais da DiscoverCasa (fotos) e a lista oficial de materiais.
+
 ## A seguir
 
-1. Fotos dos materiais reais da DiscoverCasa para substituir as CC0.
-2. **Predefinições de exportação** (tarefa 63): FBX para o Unreal, GLB para Android e USDZ para iPhone, em metros, com
-   origem e eixos fixos.
-3. **`manifest.json`** (tarefa 64), com os campos da §4.3:
-   - IDs do projeto e da versão;
-   - hash do `.blend`;
-   - versões;
-   - unidades e sistema de coordenadas;
-   - transformação da origem;
-   - para cada ficheiro: SHA-256, tamanho, IDs de material e finalidade;
-   - avisos;
-   - estado da validação;
-   - origem do terreno.
-4. **Reimportação e comparação visual** (tarefa 65).
+1. Lista oficial de materiais da DiscoverCasa (tarefa 163) e fotos dos materiais reais (tarefa 156): trocar as
+   texturas CC0.
+2. Na Fase 7 (AR), o GLB e o USDZ têm de baixar de cerca de 100 MB para cerca de 10 MB:
+   - tirar as camadas escondidas (OSB, lã, membranas);
+   - texturas a 1K ou partilhadas;
+   - malha mais leve.
+3. Na Fase 4 (Unreal), validar a importação do FBX (eixos e materiais mestre por ID).

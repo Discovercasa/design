@@ -16,6 +16,7 @@ hub. Trabalha-se uma fase de cada vez, em ramos `step-inside/<fase>-<tarefa>`.
 | `ferramentas/terreno/` | Leitores de terreno (DWFx, XYZ, LandXML, DXF, ASC), georreferência, superfície no Blender, relatório |
 | `ferramentas/visita/` | Modelo de visita: coleções semânticas, casa no lote, materiais do catálogo, verificações, relatório |
 | `ferramentas/materiais/` | Validação do catálogo e dos mapeamentos; resolução produto → ID e PBR |
+| `ferramentas/exportar/` | FBX / GLB / USDZ, `manifest.json`, teste de determinismo e de reimportação |
 | `projetos-teste/<obra>/` | Projetos de teste: catálogo, declarações à mão, `fontes.json`, `terreno.json`, `visita.json`, relatórios |
 | `tests/` | `python -m unittest discover -s step-inside/tests` (a partir de `BOB/`) |
 
