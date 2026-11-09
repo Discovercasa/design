@@ -128,8 +128,18 @@ Nos dois casos as silhuetas são iguais e o resultado é WARNING: o FBX e o USDZ
 
 1. Lista oficial de materiais da DiscoverCasa (tarefa 163) e fotos dos materiais reais (tarefa 156): trocar as
    texturas CC0.
-2. Na Fase 7 (AR), o GLB e o USDZ têm de baixar de cerca de 100 MB para cerca de 10 MB:
-   - tirar as camadas escondidas (OSB, lã, membranas);
-   - texturas a 1K ou partilhadas;
-   - malha mais leve.
+2. **Interiores** (tarefa 167, pedido de 2026-11-09: o cliente deve ter uma experiência o mais próxima possível de
+   caminhar dentro da sua própria casa).
+   - Ficam na Fase 3 porque são uma biblioteca comum, como o catálogo de materiais: IDs estáveis, fonte e licença de
+     cada peça, para a DiscoverCasa e para terceiros.
+   - **Um só catálogo de objetos** para as duas aplicações: o do Build Your House («Smart Interiors», tarefas 123,
+     124 e 128 do hub), com os materiais deste catálogo comum. Não se faz um segundo.
+   - Cada casa usa-os no modelo de visita: versão leve no AR (orçamento de 50 mil triângulos, Fase 7) e completa no
+     Unreal (Fase 4). Quando o cliente decorar a casa no Build Your House, a visita mostra o que ele escolheu.
+   - A decidir:
+     - só o que a DiscoverCasa entrega (portas interiores com folha, rodapés, cozinha, louças, base de duche,
+       interruptores, luzes) ou também mobiliário de decoração;
+     - de onde vêm os modelos (gratuitos CC0 ou dos fornecedores). Descarregá-los precisa de autorização.
 3. Na Fase 4 (Unreal), validar a importação do FBX (eixos e materiais mestre por ID).
+
+A redução do GLB e do USDZ para o telemóvel, que estava aqui, foi feita na Fase 7 (de ≈ 100 MB para 1–3 MB).

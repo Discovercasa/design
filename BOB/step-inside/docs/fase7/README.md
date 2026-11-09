@@ -157,6 +157,27 @@ interior.
 
 Os 8 ficheiros do hub passaram à versão 3, nos mesmos links.
 
+## Versão 3 aprovada e o que ficou (2026-11-09)
+
+O utilizador aprovou a versão 3 («está aprovada»; tarefa 158 concluída) e pediu para encaixar quatro pontos no
+fluxo de trabalho. A equipa foi avisada no hub de que pode testar e escrever na tarefa 84 o que está bem ou mal.
+
+| Pedido do utilizador | Tarefa | Fase | Porquê aí |
+|---|---|---|---|
+| «Fix no tremolo, continua com gaps entre as madeiras do revestimento exterior» | 164 | 7 | Defeito do modelo AR: a versão 3 só tapou o fundo com a membrana, as aberturas entre as peças continuam. Falta ver se vêm do modelo de produção ou só do de visita. |
+| «Nas portas interiores o chão na zona das portas está em cimento» | 165 | 7 | Defeito do modelo AR, ao lado dos forros dos vãos. Causa provável, a confirmar: o pavimento para na parede e, no vão, vê-se a laje. Pavimento contínuo ou perfil/soleira: pergunta 23 por obra, em aberto. |
+| Ver o piso de cima ou o de baixo numa casa de dois ou mais pisos | 166 | 7 (e 4) | O Sobral Tipo 1, já no teste, tem dois pisos. Ver a proposta abaixo. A navegação do Unreal (tarefa 70, Fase 4) passa a incluir escadas e um menu de pisos. |
+| «Adicionar interiores», para o cliente caminhar dentro da sua própria casa | 167 | 3 | Biblioteca comum de peças, como o catálogo de materiais, partilhada com o «Smart Interiors» do Build Your House (tarefas 123, 124, 128); a versão leve vai para o AR e a completa para o Unreal. |
+
+**Proposta para os pisos (tarefa 166).**
+- **Problema:** à escala 1:1 o piso de cima do Sobral Tipo 1 fica 2,88 m acima do chão e o cliente não lhe chega.
+- **Um modelo por piso no Teste do AR:**
+  - «Piso 0»: sem o que está por cima;
+  - «Piso 1»: sem a cobertura e pousado no chão, para se andar dentro dele à escala real.
+- **Maquete:** um ficheiro por piso, com a casa aberta.
+- **Escolha do piso:** no hub, com um botão por piso. O Quick Look e o Scene Viewer não têm botões dentro do modelo.
+- **Visualizador 3D (tarefa 85) e Unreal:** o piso escolhe-se num menu e sobem-se as escadas.
+
 ## Em falta
 
 - **Telemóveis reais** (tarefa 84):
@@ -168,8 +189,12 @@ Os 8 ficheiros do hub passaram à versão 3, nos mesmos links.
   - oclusão ambiente (sombra suave dos cantos);
   - terreno sem a repetição visível da textura;
   - borda do terreno da maquete mais limpa.
+- **Defeitos da versão 3:**
+  - frestas entre as tábuas do Tremolo (tarefa 164);
+  - cimento à vista no chão dos vãos das portas interiores (tarefa 165).
+- **Um modelo por piso** nas casas de dois ou mais pisos (tarefa 166).
 - **Fotos e materiais reais** (tarefas 156 e 163): texturas e lista oficial de materiais.
-- **Aprovação visual** ao lado das fotos da casa construída de Torres Vedras (tarefa 158).
+- **Interiores** (tarefa 167, Fase 3): entram no AR na versão leve.
 - **Visualizador 3D** para quem não tem AR (tarefa 85):
   - o mais simples é o componente `<model-viewer>` da Google, que mostra o GLB e passa ao AR no Android e no iPhone;
   - é uma dependência nova, por isso é preciso perguntar antes (regra do repositório).

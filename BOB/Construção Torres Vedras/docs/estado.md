@@ -47,7 +47,10 @@ Condensed 2026-10-28 (the old "Where we stopped" chain and the superseded readin
   showed the inside; not a real-façade fact); interior plasterboard flat, no relief or imperfections (`sistema-construtivo.md` §2 finish A, §4 item 3).
 - AR version 3 (Tremolo #A0653C, membrane behind the joints, pergola glulam in the same tone, lawn) filed in
   `step-inside/docs/fase7/README.md`. **Pending (user)**: look at version 3 on the phone next to the photo; approve or
-  comment (hub tasks 157 and 158 in progress).
+  comment (hub tasks 157 and 158 in progress). **Done 2026-11-09: the user approved version 3 ("está aprovada"), task
+  158 concluded.** Left over (defects of the AR / visit model, not of the real house): gaps between the Tremolo boards
+  (hub task 164; the real façade is tongue and groove, no open joints) and the floor at the interior door openings
+  showing cement (task 165).
 - Open: the floor 117.50 / exterior 117.48 check above can use this photo's gravel and paved path (levels not readable).
 
 ## Goal (user 2026-10-15)
