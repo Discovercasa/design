@@ -1,8 +1,8 @@
 {
  "project_id": "torres-vedras",
- "version_id": "torres-vedras-26e7b62-202611090345",
- "source_blend_hash": "sha256:a0d6301b7c42dc0cb2b80deecd3104e69a9b0532471b2426eedc4d378c3ebc77",
- "export_timestamp": "2026-11-09T03:45:00+00:00",
+ "version_id": "torres-vedras-d6bff6c-202611090408",
+ "source_blend_hash": "sha256:a598f8e43d1b4364ab8b0d3a3302514743ddbaf31999b11723add8d412f262fb",
+ "export_timestamp": "2026-11-09T04:08:57+00:00",
  "blender_version": "4.4.3",
  "unreal_target_version": "5.8 (a confirmar na Fase 4)",
  "unit_system": "métrico (1 unidade = 1 m)",
@@ -39,8 +39,8 @@
   {
    "path": "torres-vedras_visita.fbx",
    "type": "fbx",
-   "size_bytes": 2233308,
-   "sha256": "c95edc48c6d4b67ce0390e4dfbb8d4edcb0c7373d0114bd3cbdb5df84fd507ff",
+   "size_bytes": 2231884,
+   "sha256": "51c9b4e0b14d51b904e57fec8e5a139686c50bbed05e7703454dbb15b60e4d26",
    "material_ids": [
     "MAT_BOARD_OSB",
     "MAT_CONCRETE_SLAB",
@@ -51,7 +51,7 @@
     "MAT_GLASS_FROSTED",
     "MAT_INSULATION_MINERAL_WOOL",
     "MAT_INT_PLASTER_PAINTED__WHITE",
-    "MAT_LANDSCAPE_SOIL",
+    "MAT_LANDSCAPE_GRASS",
     "MAT_MEMBRANE_BREATHER",
     "MAT_METAL_FLASHING__RAL7016",
     "MAT_METAL_GALVANIZED",
@@ -67,8 +67,8 @@
   {
    "path": "torres-vedras_visita.glb",
    "type": "glb",
-   "size_bytes": 112036424,
-   "sha256": "723df555567cbfb77bce74998e5cdb9074832331ed6bcafeace0f3684e2e22ec",
+   "size_bytes": 110766668,
+   "sha256": "22c9154472fd381215d48c6d033066339364d5af86a6e3082bcfba726d4244c2",
    "material_ids": [
     "MAT_BOARD_OSB",
     "MAT_CONCRETE_SLAB",
@@ -79,7 +79,7 @@
     "MAT_GLASS_FROSTED",
     "MAT_INSULATION_MINERAL_WOOL",
     "MAT_INT_PLASTER_PAINTED__WHITE",
-    "MAT_LANDSCAPE_SOIL",
+    "MAT_LANDSCAPE_GRASS",
     "MAT_MEMBRANE_BREATHER",
     "MAT_METAL_FLASHING__RAL7016",
     "MAT_METAL_GALVANIZED",
@@ -95,8 +95,8 @@
   {
    "path": "torres-vedras_visita.usdz",
    "type": "usdz",
-   "size_bytes": 97795172,
-   "sha256": "3f8068223f10919ed91c48f88f3547a2228d2507b88f450beb20dbddb831dd40",
+   "size_bytes": 96469741,
+   "sha256": "d9141ca85a825a58d77693d7d30ac09aa54117615322d194e4f3814fc16b2c92",
    "material_ids": [
     "MAT_BOARD_OSB",
     "MAT_CONCRETE_SLAB",
@@ -107,7 +107,7 @@
     "MAT_GLASS_FROSTED",
     "MAT_INSULATION_MINERAL_WOOL",
     "MAT_INT_PLASTER_PAINTED__WHITE",
-    "MAT_LANDSCAPE_SOIL",
+    "MAT_LANDSCAPE_GRASS",
     "MAT_MEMBRANE_BREATHER",
     "MAT_METAL_FLASHING__RAL7016",
     "MAT_METAL_GALVANIZED",
@@ -123,7 +123,7 @@
  ],
  "texturas": {
   "ficheiros": 26,
-  "bytes": 94932902
+  "bytes": 93606914
  },
  "warnings": [
   "fbx: os bytes mudam entre exportações (data no ficheiro), o conteúdo é igual",
@@ -148,7 +148,7 @@
     "MAT_GLASS_FROSTED",
     "MAT_INSULATION_MINERAL_WOOL",
     "MAT_INT_PLASTER_PAINTED__WHITE",
-    "MAT_LANDSCAPE_SOIL",
+    "MAT_LANDSCAPE_GRASS",
     "MAT_MEMBRANE_BREATHER",
     "MAT_METAL_FLASHING__RAL7016",
     "MAT_METAL_GALVANIZED",
@@ -220,7 +220,7 @@
      "MAT_GLASS_FROSTED",
      "MAT_INSULATION_MINERAL_WOOL",
      "MAT_INT_PLASTER_PAINTED__WHITE",
-     "MAT_LANDSCAPE_SOIL",
+     "MAT_LANDSCAPE_GRASS",
      "MAT_MEMBRANE_BREATHER",
      "MAT_METAL_FLASHING__RAL7016",
      "MAT_METAL_GALVANIZED",
@@ -234,8 +234,8 @@
     "imagens": 26,
     "imagens_em_falta": [],
     "imagem": {
-     "diferenca_media": 0.0404,
-     "pixeis_diferentes": 0.009,
+     "diferenca_media": 0.045,
+     "pixeis_diferentes": 0.0089,
      "silhueta_diferente": 0.0,
      "cobertura": 0.398
     },
@@ -259,7 +259,7 @@
      "MAT_GLASS_FROSTED",
      "MAT_INSULATION_MINERAL_WOOL",
      "MAT_INT_PLASTER_PAINTED__WHITE",
-     "MAT_LANDSCAPE_SOIL",
+     "MAT_LANDSCAPE_GRASS",
      "MAT_MEMBRANE_BREATHER",
      "MAT_METAL_FLASHING__RAL7016",
      "MAT_METAL_GALVANIZED",
@@ -273,7 +273,7 @@
     "imagens": 26,
     "imagens_em_falta": [],
     "imagem": {
-     "diferenca_media": 0.0402,
+     "diferenca_media": 0.0447,
      "pixeis_diferentes": 0.0092,
      "silhueta_diferente": 0.0,
      "cobertura": 0.398
@@ -298,7 +298,7 @@
      "MAT_GLASS_FROSTED",
      "MAT_INSULATION_MINERAL_WOOL",
      "MAT_INT_PLASTER_PAINTED__WHITE",
-     "MAT_LANDSCAPE_SOIL",
+     "MAT_LANDSCAPE_GRASS",
      "MAT_MEMBRANE_BREATHER",
      "MAT_METAL_FLASHING__RAL7016",
      "MAT_METAL_GALVANIZED",
@@ -312,8 +312,8 @@
     "imagens": 26,
     "imagens_em_falta": [],
     "imagem": {
-     "diferenca_media": 0.0395,
-     "pixeis_diferentes": 0.0028,
+     "diferenca_media": 0.0444,
+     "pixeis_diferentes": 0.0034,
      "silhueta_diferente": 0.0,
      "cobertura": 0.398
     },

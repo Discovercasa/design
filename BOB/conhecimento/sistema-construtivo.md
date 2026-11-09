@@ -298,6 +298,13 @@ revisions A "Dimensões para execução" … E "Cobertura e Módulos - Correçã
        OPEN — the user offered to send a photo of the real Tremolo (pending). Provisional in the AR catalogue: texture
        rotated to vertical, narrower boards (tile 1 m), lighter colour #8E6A48. ⚠ "finer" vs the recorded 135 mm useful
        width: to be settled with the photo (a photo may show a narrower profile or a visual impression only).
+       (superseded 2026-11-09 for colour and width, see registo-2026-3 "photo of the built house")
+     - **Colour and joints from the photo of the built TV house (user 2026-11-09):** the photo (not stored in Git) shows a
+       warm reddish-brown, cedar-like tone, sampled ≈ #C0935C in sun and ≈ #895332 in shade (AR version 3 uses #A0653C):
+       lighter and more orange than the dark brown first used, which settles "mais claro" vs "marron". Board width kept at
+       135 mm useful (Piveteau 22×135, from records), read as "mais fino" relative to the first wide texture.
+       The gaps the user reported ("havia pequenos gaps no tremolo ...") were an AR-model bug (gaps between the model's
+       cladding pieces), not a fact about the real façade: the Piveteau tongue and groove profile above stands.
      - **Contra-ripado**: the user's rule of 2026-09-24 — "we do a slatted against slatted with 30x20mm … so the zone
        between tgem is a breathable zone" (draft: 30×20 casquinha, 35 cm). TV: "Nesta casa só levou ripado na horizontal
        e não levou o contra-ripado" (TV's config has none). The standard keeps the vertical contra-ripado (tools: 30×20
@@ -477,7 +484,9 @@ escolher a cobertura que quiser. Mesma lógica das garagens para anexos." (detai
    ignífugo** near heat; options wood (vertical boards on battens + counter-battens, horizontal boards on battens only —
    ventilated: "slatted against slatted if it it vertical wood or just slatted if it is horizontal wood to create the
    breathable box", 2026-09-24), ceramic, others. Joint compound per 100 m² ≈ 2 bags 1H + 1,5 bags 24H, paper tape,
-   corner beads. Promise (8): "Mias tarde vou ter fornecer uma lista de materiais para acabamentos interiores".
+   corner beads. **Look (user 2026-11-09, TV): "o gesso cartonado do interior é plano não tem relevo nem imperfeições"**
+   — smooth painted plasterboard, no relief or visible joints (Q3/Q4 skim finish; model and AR with a plain flat
+   material, no bump texture). Promise (8): "Mias tarde vou ter fornecer uma lista de materiais para acabamentos interiores".
    ⚠ (ours) On an exterior wall the OSB 15 is the airtight / vapour layer: battens, boxes and fixings through it sealed.
 
 ## 5. Floors and ceilings

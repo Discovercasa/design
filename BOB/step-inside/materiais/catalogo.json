@@ -68,8 +68,8 @@
    },
    "textura": {
     "tile_m": [
-     1.0,
-     1.0
+     2.16,
+     1.08
     ],
     "mapas": [
      "base_color",
@@ -86,7 +86,7 @@
      "descarregado": "2026-11-09",
      "pasta_local": "_trabalho/step-inside/texturas/ambientcg/WoodSiding009/"
     },
-    "nota": "textura gratuita provisória; trocar por fotos do produto real quando houver (tarefa 156)",
+    "nota": "WoodSiding009 tem 8 tábuas na altura da imagem (2:1): rodada 90° e com 1,08 m na horizontal dá tábuas de 135 mm (Tremolo Piveteau 22×135, perfil útil); cor tingida",
     "rotacao_uv": 90
    },
    "variantes": {
@@ -95,9 +95,9 @@
      "roughness": 0.8
     },
     "DOUGLAS_BROWN": {
-     "base_color": "#8E6A48",
+     "base_color": "#A0653C",
      "roughness": 0.7,
-     "nota": "Tremolo vertical, mais fino e mais claro do que a primeira versão (utilizador 2026-11-09); cor e largura a confirmar com uma foto"
+     "nota": "Tremolo vertical, castanho-avermelhado quente: cor medida na foto da casa de Torres Vedras construída (ao sol ≈ #C0935C, à sombra ≈ #895332; utilizador 2026-11-09)"
     }
    }
   },
@@ -1094,9 +1094,10 @@
    },
    "variantes": {
     "GLULAM": {
-     "base_color": "#C9A06A",
+     "base_color": "#A8743F",
      "roughness": 0.75,
-     "visivel": true
+     "visivel": true,
+     "nota": "pérgola: o mesmo tom quente da fachada na foto de Torres Vedras"
     }
    }
   },
@@ -1139,7 +1140,7 @@
   {
    "id": "MAT_MEMBRANE_BREATHER",
    "categoria": "estrutura",
-   "visivel": false,
+   "visivel": true,
    "nome": {
     "pt": "Membrana respirável / impermeável",
     "en": "Breather / waterproof membrane"
@@ -1164,7 +1165,8 @@
      "visivel": true,
      "nota": "placa impermeável dobrada no topo das platibandas: vê-se de fora"
     }
-   }
+   },
+   "nota_visivel": "fica atrás do revestimento exterior: sem ela via-se o interior pelas frestas entre as peças do revestimento no modelo AR (utilizador 2026-11-09)"
   },
   {
    "id": "MAT_INSULATION_MINERAL_WOOL",

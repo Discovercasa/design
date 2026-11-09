@@ -9,11 +9,11 @@ Orçamento (Google Scene Viewer  especificação §12.1): ideal até 50 000 tri�
 
 | Variante | Para quê | Triângulos (antes) | Materiais | Maior textura | GLB | USDZ | Dimensões (m) |
 |---|---|---|---|---|---|---|---|
-| casa | 1:1 no terreno real, para andar à volta | 9430 (9438) | 7 | 1024 px | 1,4 MB | 1,1 MB | [13.099, 11.249, 7.532] |
-| maquete | com o terreno, em ponto pequeno sobre uma mesa | 10066 (10074) | 8 | 1024 px | 2,1 MB | 1,6 MB | [53.369, 51.497, 10.5] |
+| casa | 1:1 no terreno real, para andar à volta | 9698 (9822) | 8 | 1024 px | 1,4 MB | 1,1 MB | [13.099, 11.249, 7.532] |
+| maquete | com o terreno, em ponto pequeno sobre uma mesa | 10334 (10458) | 9 | 1024 px | 2,1 MB | 1,6 MB | [53.369, 51.497, 10.5] |
 
 **Simplificação:**
-- tiram-se as camadas que não se veem de fora (`MAT_BOARD_OSB`, `MAT_INSULATION_MINERAL_WOOL`, `MAT_INSULATION_XPS`, `MAT_MEMBRANE_BREATHER`, `MAT_METAL_GALVANIZED`, `MAT_SCREED`, `MAT_TIMBER_STRUCTURE`);
+- tiram-se as camadas que não se veem de fora (`MAT_BOARD_OSB`, `MAT_INSULATION_MINERAL_WOOL`, `MAT_INSULATION_XPS`, `MAT_METAL_GALVANIZED`, `MAT_SCREED`, `MAT_TIMBER_STRUCTURE`);
 - junta-se um objeto por material;
 - juntam-se as faces no mesmo plano;
 - as texturas descem a 1024 px (cor) e 512 px (relevo e rugosidade), em JPEG.
@@ -26,9 +26,9 @@ Orçamento (Google Scene Viewer  especificação §12.1): ideal até 50 000 tri�
 
 **Reabertos num Blender limpo** (triângulos, dimensões, texturas):
 
-- casa glb: 9430 triângulos, [13.099, 11.249, 7.532] m, 13 texturas, 0 em falta
-- casa usdz: 9430 triângulos, [13.099, 11.249, 7.532] m, 13 texturas, 0 em falta
-- maquete glb: 10066 triângulos, [53.369, 51.497, 10.5] m, 16 texturas, 0 em falta
-- maquete usdz: 10066 triângulos, [53.369, 51.497, 10.5] m, 16 texturas, 0 em falta
+- casa glb: 9698 triângulos, [13.099, 11.249, 7.532] m, 13 texturas, 0 em falta
+- casa usdz: 9698 triângulos, [13.099, 11.249, 7.532] m, 13 texturas, 0 em falta
+- maquete glb: 10334 triângulos, [53.369, 51.497, 10.5] m, 16 texturas, 0 em falta
+- maquete usdz: 10334 triângulos, [53.369, 51.497, 10.5] m, 16 texturas, 0 em falta
 
 **Por testar:** abrir em telemóveis reais (Scene Viewer num Android, Quick Look num iPhone) e medir o tempo de carregamento e a qualidade ao lado das fotos da casa construída (tarefas 84 e 158).
