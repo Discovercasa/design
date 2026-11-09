@@ -1503,3 +1503,14 @@ When this file passes about 1 500 lines, continue in `registo-conversas-<year>-<
 - Context: answers "Limpo do histórico do Git as coordenadas reais do Sobral (exige reescrever o histórico)?" (see the repository-hygiene note in the previous entry). Claude judged it beneficial (public repo; one value was the exact corner of house P; only two commits, a day old; same kind of purge as the old drawings on 2026-11-07) and did it on 2026-11-09: the 7 Step Inside Phase 2 commits after 1ec62bd were rewritten (git filter-branch tree filter replacing the real values with the synthetic ones already in use; final tree identical), force-pushed with a lease (main 63ba2e7), old local refs pruned.
 - Filed in: `Construção Sobral/docs/estado.md` → repository-hygiene bullet updated; `conhecimento/insights.md` → purge item (a) gets the two extra SHAs.
 - PENDING: GitHub can still serve the two old commits by SHA (bc09b0d, 04d198a) until GitHub Support purges them: add them to the same pending GitHub Support request as the old drawings' commits (only the user / an org owner can ask). Anyone with an older clone of main must reset it to origin/main.
+
+### 2026-11-09 — Next step? (Step Inside Phase 3) [Step Inside]
+> next step qual é?
+- Context: status question. Claude answered: Step Inside Phase 3 (materials and export), and asked whether to start.
+- Filed in: nothing new.
+
+### 2026-11-09 — Start Phase 3; the user will link the official materials list; common list for third parties [Step Inside]
+> sim podes começar, um pormenor durante esta próxima semana eu vou associar a nossa listagem de materiais oficiais para teres uma noção real sendo que se formos vender a terceiros precisamos de uma listagem comum para construções diferentes da Discovercasa
+- Context: answers "start Phase 3?". Phase 3 started 2026-11-09 with a builder-agnostic common catalogue `step-inside/materiais/catalogo.json` (45 master IDs `MAT_<MASTER>`, variants `MAT_<MASTER>__<VARIANT>`, PBR values) plus one mapping per builder `step-inside/materiais/mapeamentos/<builder>.json` (DiscoverCasa: 44 products -> 33 IDs, INFERRED from `ferramentas/modelo/sistema_construtivo.json`).
+- Filed in: `conhecimento/discovercasa.md` -> Step Inside (product decision: common material list for third parties; pending official list); `conhecimento/insights.md` -> 2026-11-09 stable material ID entry; nothing for the rulebook.
+- PENDING (user, during the week of 2026-11-09): associate DiscoverCasa's OFFICIAL materials list; then the DiscoverCasa mapping becomes CONFIRMED. Hub task 163 (Phase 3). Items to settle then: see `discovercasa.md` Step Inside note (names used by the visit models but missing from `sistema_construtivo.json`; pergola "Telha").

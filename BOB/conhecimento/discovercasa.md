@@ -78,6 +78,17 @@ Why Claude learns the method; "vamos passo a passo" — an overall idea, then an
    Phase 3, relief as normal maps, baked ambient occlusion, frames and glass modelled; approved next to photos of the built
    Torres Vedras house. AR will not reach Unreal realism (`insights.md`). Open: photos of the real materials from the user.
    (Decision 18 in the "still open" lists above is now closed.)
+   **Phase 3 started 2026-11-09 (user: "sim podes começar"); product decision — common material list:** Step Inside may be
+   sold to third parties (other builders), so materials use a COMMON list valid for constructions different from
+   DiscoverCasa's ("se formos vender a terceiros precisamos de uma listagem comum para construções diferentes da
+   Discovercasa"). Implemented as the common catalogue `step-inside/materiais/catalogo.json` (45 master IDs `MAT_<MASTER>`,
+   variants `MAT_<MASTER>__<VARIANT>`, builder-agnostic, PBR values) + one mapping per builder
+   `step-inside/materiais/mapeamentos/<builder>.json` (DiscoverCasa: 44 products -> 33 IDs). **Pending from the user
+   (week of 2026-11-09, hub task 163):** associate DiscoverCasa's OFFICIAL materials list; the DiscoverCasa mapping is
+   now INFERRED (from `ferramentas/modelo/sistema_construtivo.json`) and becomes CONFIRMED with it. To settle when it
+   arrives: names the visit models use that are not in that JSON's materials list ("Betão", "OSB", "Painel sandwich
+   RAL 7016", "Madeira 160x80", "Madeira 200x100" — they come from the layers / house configs), and the pergola
+   "Telha" (still "cerâmica ou painel imitação telha (a confirmar)", JSON line 251). JSON not changed.
    **Phase 1 started 2026-11-07** ("Contrato de dados e qualidade de entrada", hub checkpoint 21 em curso): schema
    `step-inside/schema/fontes_projeto.schema.json`, tools `step-inside/ferramentas/fontes/`, 15 tests, report
    `step-inside/docs/fase1/`, test projects Torres Vedras (report WARNING, 202 CONFIRMED / 2 INFERRED / 10 MISSING) and
@@ -134,7 +145,7 @@ Agreed from the user-supplied "HIERARQUIA_E_ROADMAP_INTEGRADO_DISCOVERCASA" docu
 - Only the contracts needed now (architecture BYH → Builder; quantities Listagem → Orçamentação with stable product
   codes), not a full multi-organisation platform / 9-module contract; checkpoints stay as they are (Smart Land phases
   not merged); BYH and Step Inside phase 0 audits done jointly.
-- Open business decision: sell BYH / Step Inside to third parties? (Design accounts come from the Hub.)
+- Open business decision: sell BYH / Step Inside to third parties? (Step Inside: the user's 2026-11-09 wording "se formos vender a terceiros" shows the sale is being kept open, not decided; Phase 3 materials are builder-agnostic for that reason.) (Design accounts come from the Hub.)
 
 ## Social media (user 2026-11-06)
 - Instagram/Facebook posts are planned in advance in a Google Sheets workbook ("DiscoverCasa Post Mensal - publicações"):
