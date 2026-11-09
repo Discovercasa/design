@@ -71,3 +71,16 @@ words (`registo-conversas*.md`). When this file passes about 1 500 lines, contin
 - Pending: the user confirms DiscoverCasa's rule for the floor at interior doors (continuous vs transition profile /
   threshold) and the exterior threshold (Q23); the user's check of AR v4 on the phone.
 
+### 2026-11-09 — Interior doors: the floor is continuous [Torres Vedras, Sobral]
+> Sim, contínuo
+- Context: answer to "Nas portas interiores, o pavimento continua por baixo da porta?" (choices: «Sim, contínuo» /
+  «Leva perfil ou soleira»); follows the entry above (OPEN item under Q23).
+- Filed in: `conhecimento/perguntas-por-obra.md` → Q23: interior-door part CONFIRMED (continuous floor under interior
+  doors); the position of a change of finish stays INFERRED (under the door leaf, our choice); exterior threshold stays
+  open. `conhecimento/sistema-construtivo.md` → §5 Floors: one line (floor continuous under interior doors).
+  `step-inside/docs/fase2`, `fase7`, hub task 165 and `blender_visita.py` comment: done by the caller.
+- Pending: (a) exterior-door threshold (Q23); (b) production-model quantity gap: `ferramentas/modelo/camadas.py`
+  `pavimentos()` (~lines 1018-1026) lays each room's floor finish only over the usable area (room minus wall linings), so
+  the strip under each interior door (≈ 0,87 × wall thickness, ≈ 0,1 m² per door) is neither modelled nor in the material
+  list; to be proposed to the user (model change, not done).
+

@@ -204,8 +204,8 @@ o código.
   chão.
   - A porta PI2.08 do Sobral mede aberta só 12 cm acima do piso. Agora conta como porta pelo tipo das fontes.
   - Torres Vedras: 10 portas com chão novo e 5 que já tinham chão ou soleira. Sobral: 11. Nenhuma ficou sem chão.
-- **A confirmar com o utilizador:** se o pavimento continua por baixo da porta (é INFERRED) e que soleira levam as
-  portas exteriores (pergunta 23).
+- **Confirmado** pelo utilizador («Sim, contínuo»): o pavimento continua por baixo das portas interiores. Falta a
+  soleira das portas exteriores (pergunta 23).
 
 **AR:** PASS nas duas casas, com a exportação da Fase 3 a passar outra vez.
 
@@ -235,7 +235,8 @@ outra vez com 410 e `verify_jwt`; a chave foi apagada).
   - oclusão ambiente (sombra suave dos cantos);
   - terreno sem a repetição visível da textura;
   - borda do terreno da maquete mais limpa.
-- **Pavimento nas portas:** confirmar a regra (contínuo por baixo da porta; soleira das portas exteriores).
+- **Soleira das portas exteriores** (pergunta 23 por obra). O pavimento das portas interiores é contínuo
+  (confirmado a 2026-11-09).
 - **Um modelo por piso** nas casas de dois ou mais pisos (tarefa 166).
 - **Fotos e materiais reais** (tarefas 156 e 163): texturas e lista oficial de materiais.
 - **Interiores** (tarefa 167, Fase 3): entram no AR na versão leve.

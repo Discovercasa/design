@@ -252,6 +252,7 @@ circled (`discovercasa.md`).
   `step-inside/ferramentas/visita/juntas.py`.
   (b) **No floor in a door opening.** Each room's floor finish is modelled up to the wall faces, so a door opening has no floor
   (slab visible; upstairs a hole down to the ceiling below). The visit model adds the floor in each door, each side's floor
-  to the middle of the wall — INFERRED, not stated by the user (§10). Check, not a fact: the floor-finish quantity may miss
-  the strips under doors (≈ 0,12 m² per interior door); asked in PO Q23, §15 ("To ask when it first arises") → visit model
-  only; production model and quantities unchanged.
+  to the middle of the wall. Since 2026-11-09 the rule is CONFIRMED by the user («Sim, contínuo»: the floor runs on under an
+  interior door, §10); only the change point between two different finishes (under the leaf, ours) stays inferred. The
+  production-model gap remains: `camadas.pavimentos()` leaves the strip under each interior door (≈ 0,1 m²) out of the
+  model and the material list → deviation X21 (§15), to propose to the user; the visit model already has it.

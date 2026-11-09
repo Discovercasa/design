@@ -190,7 +190,10 @@ O ficheiro de produção não muda. Na visita, sem as camadas escondidas, aparec
     porta.
   - Uma porta exterior leva o pavimento interior até à face de fora: a soleira está por definir (pergunta 23 por
     obra).
-  - É INFERRED: falta a regra da DiscoverCasa para o pavimento nas portas interiores.
+  - **Confirmado** pelo utilizador a 2026-11-09 («Sim, contínuo»): nas portas interiores o pavimento continua por
+    baixo da porta. Pôr a mudança de acabamento debaixo da folha foi escolha nossa (INFERRED).
+  - O modelo de produção ainda não tem esta faixa: o pavimento de cada divisão fica na área útil, por isso a lista
+    de material não conta o chão por baixo das portas.
 
 ### Verificações e resultado
 

@@ -1,7 +1,7 @@
 # Método DiscoverCasa — o que o construtor ainda assume ou faz diferente (§15, X1–X20) (parte de conhecimento/metodo-construtivo.md, v8.8; split from 10 in v8.8)
 
 ### What the builder still assumes or does differently from this rulebook
-(Part of §15; the questions to the user are in `10-pontos-abertos.md`. Deviations X1–X20 are cited from 03, 04, 05, 06, 08, 10.)
+(Part of §15; the questions to the user are in `10-pontos-abertos.md`. Deviations X1–X21 are cited from 03, 04, 05, 06, 08, 10.)
 
 **With the company's module drawing** (cfg `modulos_reais` → `modulos_dc.py`, [TV] v5 on) `casa_planta.py` takes the
 modules as drawn and adds: the beams cut to the inner length (= the rule); "fantasma" parapet panels for the layers; the
@@ -101,6 +101,10 @@ base, no flashing at the ledger, tiles on the slats).
     stands `platibanda.folga` 0,05 over the plane's top (`casa_planta`: `z_plat` = `z_topo_max` + 0,05) → at the highest wall
     it may stand ≈ 7 cm past the parapet top, through the chapéu. Fix: stop it under the chapéu's inner leg (the leg lapping
     over it), or raise the parapet on one-água roofs (≈ 0,15 upstand — general practice).
+  - **X21** (§10, L74; 2026-11-09) Floor finish under interior doors: the rule is confirmed (continuous under the door) but
+    `camadas.pavimentos()` (~lines 1018-1026) lays each room's finish only over its usable area → the strip under each
+    interior door (≈ 0,87 m × wall thickness ≈ 0,1 m²) is missing from the model and the material list. Not fixed; to propose
+    to the user (extend each room's finish to the middle of the wall at door openings). The visit model already does it.
 - [SB] from the engineer's drawings: `estrutura_dc.py` (beams 0 → D on the amarração, purlins ≤ 1,2 tilted, the eave one on
   the beams, prumos on every beam, empenas, verges 0,12) + `camadas.cobertura` (rectangle only: gutter flat, downpipes 0,30
   from the ends at the eave line ≈ 0,25 off the frame running to Z 0 — the "ligeiramente acima" and the swan-neck missing).

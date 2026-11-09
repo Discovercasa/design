@@ -567,9 +567,10 @@ def bvh_com_donos(obs):
 
 
 # Doors: the floor finish of each room stops at the wall face, so the opening showed the slab («o chão na zona das
-# portas está em cimento», user 2026-11-09) — or, upstairs, a hole down to the ceiling below. The floor of the room
-# on each side runs on to the middle of the wall (a change of finish falls under the door leaf); an exterior door
-# takes the inside floor to the outside face (the threshold is not defined: question 23 per project).
+# portas está em cimento», user 2026-11-09) — or, upstairs, a hole down to the ceiling below. The floor runs on under
+# an interior door (user 2026-11-09: «Sim, contínuo»): each side's floor to the middle of the wall (a change of finish
+# under the door leaf: ours); an exterior door takes the inside floor to the outside face (the threshold is not
+# defined: question 23 per project).
 BVH_PISOS, DONOS_PISOS = bvh_com_donos(objetos("ARCH_FLOORS"))
 BAIXO = Vector((0, 0, -1))
 
