@@ -52,6 +52,34 @@ Cada ficheiro é reaberto num Blender limpo para conferir os triângulos, as dim
 os experimentar no telemóvel. Para clientes vão precisar de links privados com validade, a ver na Fase 6 ou com o
 armazenamento privado do Supabase. Nada é publicado sem autorização.
 
+## Teste pelo hub (2026-11-09)
+
+O utilizador pediu: «sim adiciona uma secção de teste onde tem essas componentes».
+
+O projeto Step Inside no hub (design.discovercasa.pt) tem agora a secção **«Teste do AR no telemóvel»**:
+- **Carregar:** o botão «Modelo AR» carrega ficheiros `.usdz` e `.glb`. Ficam como documentos do tipo `ar`, no mesmo
+  armazenamento privado dos outros documentos (migração `supabase/migrations/0015_documentos_ar.sql`).
+  - O título «Obra · variante» agrupa-os por obra.
+- **iPhone / iPad:** cada `.usdz` tem o botão «Ver em AR · iPhone».
+  - É um `<a rel="ar">` cujo único filho é uma imagem, como o Safari exige para abrir o AR Quick Look.
+  - O link é assinado e dura 1 hora. É preparado antes do toque, porque o Safari só abre o Quick Look a partir de um
+    toque num link verdadeiro.
+- **Android:** cada `.glb` tem o botão «Ver em AR · Android», um link `intent://` para o Google Scene Viewer em modo
+  AR, com regresso à página do hub.
+- **O que verificar:**
+  - tamanho (uma porta ≈ 2,1 m);
+  - assenta no chão;
+  - orientação;
+  - tempo de abertura;
+  - aspeto dos materiais.
+
+  O resultado escreve-se na tarefa «Testar em pelo menos um iPhone e um Android reais».
+- **Sem dependências novas:** só links. O visualizador 3D para quem não tem AR (tarefa 85) continua por fazer.
+- **Teste automático:** `tests/hub.spec.mjs` («Step Inside: teste do AR»), no computador e no telemóvel.
+
+**Falta** carregar os 8 ficheiros no hub. Tem de ser com a conta do utilizador, porque a conta vem do Hub e o Claude
+não entra com palavras-passe.
+
 ## Em falta
 
 - **Telemóveis reais** (tarefa 84):

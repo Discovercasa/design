@@ -21,6 +21,7 @@
   ],
   "metodo": "Funciona com projetos de qualquer arquiteto ou construtor; reutiliza os leitores e a geração 3D que já existem; nunca inventa cotas (NEEDS_HUMAN_REVIEW).",
   "app": null,
+  "teste_ar": true,
   "organizacao": { "codigo": "BOB/step-inside/ (fontes, terreno, modelo de visita, testes)", "publicado": "ainda sem página própria", "ramo": "step-inside/<fase>-<tarefa>" },
   "ligacoes": [
     { "com": "builder", "texto": "Opcional: nas obras Discovercasa parte-se do modelo do Builder; os projetos de outros arquitetos entram diretamente." },

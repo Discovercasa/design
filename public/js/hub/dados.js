@@ -194,7 +194,8 @@ export function feitosDe(id) {
 // ---------------------------------------------------------------- documentos (armazenamento privado "documentos")
 export const documentosDe = (id, tipo) => E.documentos.filter((d) => d.projeto === id && (!tipo || d.tipo === tipo));
 const chaveFicheiro = (nome) => nome.normalize('NFKD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9._-]+/g, '-').replace(/-{2,}/g, '-').replace(/^[-.]+|[-.]+$/g, '') || 'ficheiro';
-const MIMES = { pdf: 'application/pdf', md: 'text/plain; charset=utf-8', txt: 'text/plain; charset=utf-8', csv: 'text/csv', png: 'image/png', jpg: 'image/jpeg', jpeg: 'image/jpeg', webp: 'image/webp' };
+const MIMES = { pdf: 'application/pdf', md: 'text/plain; charset=utf-8', txt: 'text/plain; charset=utf-8', csv: 'text/csv', png: 'image/png', jpg: 'image/jpeg', jpeg: 'image/jpeg', webp: 'image/webp',
+  usdz: 'model/vnd.usdz+zip', glb: 'model/gltf-binary' };   // AR: the phone's viewer needs the right type
 export async function carregarDocumento(projetoId, tipo, ficheiro, titulo, descricao) {
   const ext = (ficheiro.name.split('.').pop() || '').toLowerCase();
   const mime = MIMES[ext] || ficheiro.type || 'application/octet-stream';
@@ -206,10 +207,16 @@ export async function carregarDocumento(projetoId, tipo, ficheiro, titulo, descr
   if (error) { await sb().storage.from('documentos').remove([caminho]); throw error; }
 }
 export async function urlDocumento(doc) {
-  const descarregar = !/^(application\/pdf|text\/|image\/)/.test(doc.mime || '');
+  const descarregar = !/^(application\/pdf|text\/|image\/|model\/)/.test(doc.mime || '');
   const { data, error } = await sb().storage.from('documentos').createSignedUrl(doc.caminho, 300, descarregar ? { download: doc.nome_ficheiro } : undefined);
   if (error) throw error;
   return data.signedUrl;
+}
+// AR models (Step Inside): a signed link that the phone's AR viewer opens directly (Quick Look / Scene Viewer fetch it)
+export async function urlAR(doc, segundos = 3600) {
+  const { data, error } = await sb().storage.from('documentos').createSignedUrl(doc.caminho, segundos);
+  if (error) throw error;
+  return new URL(data.signedUrl, location.href).href;   // absolute: Scene Viewer fetches it from another app
 }
 export async function apagarDocumento(doc) {
   const { error } = await sb().from('documentos').delete().eq('id', doc.id);

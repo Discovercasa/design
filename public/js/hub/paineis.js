@@ -261,7 +261,19 @@ export function htmlGaveta(sep, sugestoes, abertas, erro) {
     <div class="gaveta-corpo">${corpo}</div></div>`;
 }
 // carregar documentos (um ou vários ficheiros de uma vez)
-export function dlgDocumento(projetoId) {
+export function dlgDocumento(projetoId, tipo) {
+  if (tipo === 'ar') return `<form data-form="documento" data-projeto="${projetoId}">${cabeca('Acrescentar modelo AR', esc(nomeProjeto(projetoId)) + ' · fica guardado em privado, só para quem entra no Design.')}
+    <div class="dlg-corpo">
+      <input type="hidden" name="tipo" value="ar">
+      <p class="fraco mini">Ficheiros <code>.usdz</code> (iPhone / iPad) e <code>.glb</code> (Android). Título: «Obra · variante», por exemplo «Torres Vedras · casa 1:1», para os agrupar por obra.</p>
+      <label class="campo-grupo"><span>Ficheiros</span><input class="campo" type="file" name="ficheiros" accept=".usdz,.glb,model/vnd.usdz+zip,model/gltf-binary" multiple required></label>
+      <ul class="ficheiros-escolhidos" data-escolhidos></ul>
+      <label class="campo-grupo"><span>Título <small>(se for um só ficheiro; vazio = o nome do ficheiro)</small></span><input class="campo" name="titulo" maxlength="200"></label>
+      <label class="campo-grupo"><span>Descrição <small>(opcional)</small></span><textarea class="campo" name="descricao" maxlength="2000" style="min-height:64px"></textarea></label>
+      <p class="erro-msg pequeno" role="alert"></p>
+    </div>
+    <div class="dlg-rodape"><button class="btn texto" type="button" data-acao="fechar-dlg">Cancelar</button><button class="btn primario" type="submit">Carregar</button></div>
+  </form>`;
   return `<form data-form="documento" data-projeto="${projetoId}">${cabeca('Acrescentar documento', esc(nomeProjeto(projetoId)) + ' · fica guardado em privado, só para quem entra no Design.')}
     <div class="dlg-corpo">
       <div class="segmentado" role="group" aria-label="Tipo de documento">

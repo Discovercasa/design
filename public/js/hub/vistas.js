@@ -128,6 +128,7 @@ export function paginaProjeto(p) {
         ${cps.length ? `<ol class="workflow">${cps.map((c, i) => passo(c, i)).join('')}</ol>` : '<p class="vazio">Ainda sem checkpoints. Acrescenta o primeiro objetivo deste projeto.</p>'}
       </section>
       ${documentos(p)}
+      ${p.teste_ar ? testeAR(p) : ''}
       ${p.pipeline ? pipeline(p) : ''}
     </div>
 
@@ -288,6 +289,48 @@ function documentos(p) {
     </div>
   </section>`;
 }
+// ---------------------------------------------------------------- Step Inside: teste do AR no telemóvel
+// USDZ -> iPhone / iPad (AR Quick Look: an <a rel="ar"> whose only child is an image, opened in Safari);
+// GLB -> Android (Google Scene Viewer through an intent: link). The links are signed and temporary; app.js fills them.
+const IMG_AR_IPHONE = "data:image/svg+xml," + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="196" height="40" viewBox="0 0 196 40"><rect width="196" height="40" rx="9" fill="#1f2937"/><text x="98" y="25" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="14" font-weight="600" fill="#fff" text-anchor="middle">Ver em AR · iPhone</text></svg>');
+function linhaAR(d) {
+  const ios = /\.usdz$/i.test(d.nome_ficheiro);
+  const titulo = d.titulo.includes(' · ') ? d.titulo.split(' · ').slice(1).join(' · ') : d.titulo;
+  const botao = ios
+    ? `<a rel="ar" href="#" class="ar-ios" data-ar="${d.id}" data-ar-tipo="ios" aria-disabled="true"><img src="${IMG_AR_IPHONE}" alt="Ver em AR no iPhone: ${esc(titulo)}" width="196" height="40"></a>`
+    : `<a href="#" class="btn primario pequeno" data-ar="${d.id}" data-ar-tipo="android" aria-disabled="true">${ic('app', 'ic-sm')}Ver em AR · Android</a>`;
+  return `<li class="doc" id="doc-${d.id}">
+    <span class="doc-tipo" aria-hidden="true">${esc(extensao(d.nome_ficheiro))}</span>
+    <div class="doc-corpo"><p class="doc-titulo">${esc(titulo)} ${novo('documento', d.id)}</p>
+      <p class="doc-meta">${esc(d.nome_ficheiro)} · ${tamanho(d.tamanho)} · ${ios ? 'iPhone / iPad (Quick Look)' : 'Android (Scene Viewer)'}</p>
+      ${d.descricao ? `<p class="doc-desc">${esc(d.descricao)}</p>` : ''}</div>
+    <div class="doc-acoes">${botao}
+      ${E.eu.editar ? `<button class="icone-botao" type="button" data-acao="apagar-doc" data-id="${d.id}" aria-label="Apagar ${esc(titulo)}" title="Apagar">${ic('apagar', 'ic-sm')}</button>` : ''}</div>
+  </li>`;
+}
+function testeAR(p) {
+  const docs = documentosDe(p.id, 'ar');
+  const grupos = new Map();   // "Torres Vedras · casa (1:1)" agrupa por obra
+  for (const d of docs) { const g = d.titulo.includes(' · ') ? d.titulo.split(' · ')[0] : 'Modelos'; if (!grupos.has(g)) grupos.set(g, []); grupos.get(g).push(d); }
+  const tarefa = E.tarefas.find((t) => t.projeto === p.id && /iPhone e um Android/.test(t.titulo));
+  const lista = !docs.length
+    ? `<p class="vazio pequeno">Ainda sem modelos AR. ${E.eu.editar ? 'Carrega os ficheiros <code>.usdz</code> (iPhone) e <code>.glb</code> (Android) com o botão «Modelo AR».' : ''}</p>`
+    : [...grupos].map(([g, l]) => `<details class="doc-grupo" open><summary>${esc(g)} <span class="fraco num">${l.length}</span></summary><ul class="docs-lista">${l.map(linhaAR).join('')}</ul></details>`).join('');
+  return `<section class="seccao" id="teste-ar" aria-labelledby="t-ar">
+    <div class="seccao-cabeca"><div><h2 id="t-ar">Teste do AR no telemóvel</h2><p>Abre esta página no telemóvel e toca no botão do modelo: a casa aparece à escala real no sítio onde apontares. Os modelos ficam em privado e cada link dura uma hora.</p></div>
+      ${E.eu.editar ? `<button class="btn" type="button" data-acao="acrescentar-doc" data-projeto="${p.id}" data-tipo-doc="ar">${ic('mais')}Modelo AR</button>` : ''}</div>
+    <div class="docs-grelha">
+      <div class="docs-tipo"><div class="docs-tipo-cabeca"><h3>Modelos <span class="fraco num">${docs.length}</span></h3><p class="fraco mini">«casa»: à escala 1:1, pousa no chão e anda-se à volta. «maquete»: com o terreno, para ver em ponto pequeno.</p></div>${lista}</div>
+      <div class="docs-tipo"><div class="docs-tipo-cabeca"><h3>Como testar</h3><p class="fraco mini">iPhone ou iPad: abre no Safari e toca em «Ver em AR · iPhone». Android: abre no Chrome e toca em «Ver em AR · Android» (precisa da app Google e de um telemóvel com ARCore).</p></div>
+        <ul class="lista-simples">
+          ${['A casa fica do tamanho certo? (mede uma porta: ≈ 2,1 m)', 'Assenta no chão, sem flutuar nem afundar?', 'Está virada como esperavas (fachadas, entrada)?', 'Quanto tempo demora a abrir?', 'Os materiais parecem reais ou «de plástico»?'].map((x) => `<li>${ic('certo', 'ic-sm')}<span class="pequeno">${x}</span></li>`).join('')}
+        </ul>
+        ${tarefa ? `<p class="pequeno" style="margin-top:10px"><a href="#/projeto/${p.slug}/t-${tarefa.id}">${ic('comentario', 'ic-sm')}Escrever o resultado do teste na tarefa «${esc(tarefa.titulo)}»</a></p>` : ''}
+      </div>
+    </div>
+  </section>`;
+}
+
 // tarefas de outros projetos que sugerem usar esta app: aparecem também aqui
 function pedidos(p) {
   const lista = E.tarefas.filter((t) => t.app_sugerida === p.id && t.projeto !== p.id && t.estado !== 'concluida');
