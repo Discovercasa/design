@@ -405,3 +405,35 @@ test('em direto: o que outra pessoa muda aparece sem recarregar, em todos os sí
   await expect(page.locator('.projeto-linha').nth(3)).toContainText('4 de 15 checkpoints');
   await expect(page.locator('#contador')).not.toBeHidden();
 });
+
+test('Step Inside: teste do AR — carregar modelos e abrir no Quick Look / Scene Viewer', async ({ page }) => {
+  await abrir(page, { rota: '/#/projeto/step-inside' });
+  const sec = page.locator('#teste-ar');
+  await expect(sec.getByRole('heading', { name: 'Teste do AR no telemóvel' })).toBeVisible();
+  await expect(sec).toContainText('Ainda sem modelos AR');
+  for (const [nome, mime] of [['torres-vedras_ar_casa.usdz', 'model/vnd.usdz+zip'], ['torres-vedras_ar_casa.glb', 'model/gltf-binary']]) {
+    await sec.getByRole('button', { name: 'Modelo AR' }).click();
+    const dlg = page.locator('#dlg');
+    await expect(dlg.getByRole('heading', { name: 'Acrescentar modelo AR' })).toBeVisible();
+    await dlg.getByLabel('Ficheiros').setInputFiles({ name: nome, mimeType: mime, buffer: Buffer.from('modelo') });
+    await dlg.getByLabel(/Título/).fill('Torres Vedras · casa 1:1');
+    await dlg.getByRole('button', { name: 'Carregar' }).click();
+    await expect(dlg).toBeHidden();
+  }
+  const docs = await db(page, () => window.__fake.db.documentos.filter((d) => d.tipo === 'ar').map((d) => [d.caminho, d.mime]));
+  expect(docs[0][0]).toMatch(/^plataforma_cliente\/ar\/[a-z0-9]+__torres-vedras_ar_casa\.usdz$/);
+  expect(docs.map((d) => d[1])).toEqual(['model/vnd.usdz+zip', 'model/gltf-binary']);
+  await expect(sec.locator('details.doc-grupo summary')).toHaveText(/Torres Vedras\s*2/);
+  // iPhone: <a rel="ar"> with an image as its only child, pointing at the signed file
+  const ios = sec.locator('a[rel="ar"]');
+  await expect(ios).not.toHaveAttribute('aria-disabled', 'true');
+  await expect(ios).toHaveAttribute('href', /\/__ficheiro\?c=plataforma_cliente%2Far%2F.+\.usdz$/);
+  expect(await ios.evaluate((a) => a.children.length === 1 && a.firstElementChild.tagName === 'IMG')).toBe(true);
+  // Android: Scene Viewer intent with the signed GLB, AR first, coming back to this page
+  const android = sec.getByRole('link', { name: /Ver em AR · Android/ });
+  await expect(android).toHaveAttribute('href', /^intent:\/\/arvr\.google\.com\/scene-viewer\/1\.0\?file=http.+__ficheiro.+\.glb&mode=ar_preferred.+package=com\.google\.android\.googlequicksearchbox.+;end;$/);
+  // the documents section does not list the AR models
+  await expect(page.locator('#documentos')).not.toContainText('torres-vedras_ar_casa');
+  await captura(page, 'step-inside-teste-ar');
+  await sec.screenshot({ path: `capturas/step-inside-teste-ar-seccao-${test.info().project.name}.png` });
+});

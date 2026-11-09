@@ -97,6 +97,7 @@ function desenhar(mudouRota) {
   hidratar(v);
   const calc = $('form[data-form="calculadora"]', v);
   if (calc) V.calcular(calc, r.p.cambio.usd_eur);
+  prepararAR(v);
   if (mudouRota) {
     window.scrollTo(0, 0);
     entrar($$('.projeto-linha, .passo, .cabeca-pagina, .projeto-cabeca, .cta-app, .bloco-lateral, .novidade, .cartoes-pessoal > *, .social-barra, .mes, .obra, .visita', v));
@@ -161,6 +162,11 @@ $('.marca').addEventListener('click', async (e) => {
 
 // âncoras dentro da página (ex.: #decisoes-abertas) não mudam a rota
 document.addEventListener('click', (e) => {
+  if (e.target.closest('[data-ar][aria-disabled]')) {   // AR link still being prepared (signed URL)
+    e.preventDefault();
+    aviso('A preparar o link do modelo AR… tenta outra vez dentro de um segundo.', { icone: 'info', duracao: 3 });
+    return;
+  }
   const a = e.target.closest('a[href^="#"]:not([href^="#/"])');
   if (!a) return;
   const el = document.getElementById(a.getAttribute('href').slice(1));
@@ -320,6 +326,29 @@ async function tentar(fn, form) {
     return false;
   }
 }
+// Step Inside: fill the AR buttons with signed links (an hour) — the tap must open the viewer straight away
+// (Safari only starts AR Quick Look from a real link tap, so the link cannot be fetched after the tap)
+const LINKS_AR = new Map();   // doc id -> { url, ate }
+async function prepararAR(raiz) {
+  for (const a of $$('[data-ar]', raiz)) {
+    const id = Number(a.dataset.ar);
+    const d = E.documentos.find((x) => x.id === id);
+    if (!d) continue;
+    try {
+      let l = LINKS_AR.get(id);
+      if (!l || l.ate < Date.now() + 5 * 60 * 1000) { l = { url: await D.urlAR(d), ate: Date.now() + 60 * 60 * 1000 }; LINKS_AR.set(id, l); }
+      if (a.dataset.arTipo === 'ios') a.href = l.url;
+      else {
+        const titulo = d.titulo.replace(/\s+/g, ' ');
+        const volta = location.href.split('#')[0] + '#/projeto/' + (rota().p || {}).slug;
+        a.href = 'intent://arvr.google.com/scene-viewer/1.0?file=' + encodeURIComponent(l.url) + '&mode=ar_preferred&title=' + encodeURIComponent(titulo)
+          + '#Intent;scheme=https;package=com.google.android.googlequicksearchbox;action=android.intent.action.VIEW;S.browser_fallback_url=' + encodeURIComponent(volta) + ';end;';
+      }
+      a.removeAttribute('aria-disabled');
+    } catch (err) { a.title = 'Não foi possível preparar o link: ' + (err.message || err); }
+  }
+}
+
 async function depois() { try { await D.carregarNotificacoes(); } catch (_) {} atualizarContador(); desenhar(false); }
 
 document.addEventListener('click', async (e) => {
@@ -336,7 +365,7 @@ document.addEventListener('click', async (e) => {
       return;
     }
     case 'acrescentar': return abrirDialogo(dlg, P.dlgAcrescentar(el.dataset.projeto || (rota().p || {}).id, null, el.dataset.tipo));
-    case 'acrescentar-doc': return abrirDialogo(dlg, P.dlgDocumento(el.dataset.projeto), { estreito: true });
+    case 'acrescentar-doc': return abrirDialogo(dlg, P.dlgDocumento(el.dataset.projeto, el.dataset.tipoDoc), { estreito: true });
     case 'tipo-doc': {
       const f = el.closest('form'); f.elements.tipo.value = el.dataset.valor;
       $$('[data-acao="tipo-doc"]', f).forEach((b) => b.setAttribute('aria-pressed', b === el));
