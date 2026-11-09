@@ -145,6 +145,10 @@ he answers (`metodo-construtivo.md`). Condensed 2026-10-28 (history in git).
   walls, median 1 mm) — **applied**.
 - **2026-11-09** — Contours exported as "3D" polylines at z = 0 carry no heights: never use them as heights (use the
   3D points / height texts) — **applied**.
+- **2026-11-09** — A stable technical material ID independent of the builder and of the client-facing name (spec §3.4)
+  lets the same visit pipeline serve third parties: each builder only adds a mapping file
+  (`step-inside/materiais/mapeamentos/<builder>.json`) to the common catalogue — `discovercasa.md` Step Inside —
+  **applied** (Phase 3).
 
 ## Recorded, not yet told (raise when it fits)
 - **2026-10-16** — lameladas cut from stock waste a lot (8,50 from 13,5 m: ≈ 1,1 m³ at TV) → order to length or a 17 m

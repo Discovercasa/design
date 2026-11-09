@@ -1,5 +1,6 @@
 {
  "obra": "torres-vedras",
+ "construtor": "discovercasa",
  "casa_blend": "Construção Torres Vedras/modelos/casa/Casa_TorresVedras.blend",
  "modelo": {
   "avisos": [],
@@ -14,6 +15,39 @@
    "ARCH_PERGOLA": 4,
    "STRUCT_TIMBER": 880,
    "ARCH_LABELS": 8
+  },
+  "materiais": {
+   "sem_mapa": [
+    {
+     "material": "Etiqueta",
+     "categoria": "ARCH_LABELS",
+     "objetos": 8
+    }
+   ],
+   "usados": {
+    "MAT_BOARD_OSB": 25,
+    "MAT_CONCRETE_SLAB": 1,
+    "MAT_DOOR_GARAGE_SECTIONAL__RAL7016": 1,
+    "MAT_FLOOR_VINYL_WOOD": 8,
+    "MAT_FRAME_ALUMINIUM__RAL7016": 19,
+    "MAT_GLASS_CLEAR": 6,
+    "MAT_GLASS_FROSTED": 2,
+    "MAT_INSULATION_MINERAL_WOOL": 58,
+    "MAT_INT_PLASTER_PAINTED__WHITE": 27,
+    "MAT_MEMBRANE_BREATHER": 17,
+    "MAT_METAL_FLASHING__RAL7016": 42,
+    "MAT_METAL_GALVANIZED": 24,
+    "MAT_METAL_GUTTER__DARK_GREY": 7,
+    "MAT_ROOF_SANDWICH_TRAPEZOIDAL__RAL8004": 37,
+    "MAT_ROOF_TILE_CERAMIC__TERRACOTTA": 1,
+    "MAT_TIMBER_STRUCTURE": 803,
+    "MAT_WOOD_CLADDING__DOUGLAS_BROWN": 17,
+    "MAT_WOOD_CLADDING__PINE_NATURAL": 17,
+    "MAT_LANDSCAPE_SOIL": 1
+   },
+   "estados": {
+    "INFERRED": 1112
+   }
   },
   "dimensoes_modelo": {
    "estrutura_planta_m": [
@@ -198,6 +232,7 @@
  "dif_dimensoes_estrutura_m": 0.001,
  "resultado": "WARNING",
  "motivos": [
+  "materiais provisórios: mapeados a partir do sistema construtivo até chegar a lista oficial",
   "36 choques entre peças de madeira > 8 mm no modelo de produção (verificar.py)",
   "implantação: cota_pavimento INFERRED",
   "implantação: plataforma INFERRED",

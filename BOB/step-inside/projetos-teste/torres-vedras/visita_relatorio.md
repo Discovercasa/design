@@ -2,6 +2,7 @@
 
 **Resultado: WARNING**
 
+- materiais provisórios: mapeados a partir do sistema construtivo até chegar a lista oficial
 - 36 choques entre peças de madeira > 8 mm no modelo de produção (verificar.py)
 - implantação: cota_pavimento INFERRED
 - implantação: plataforma INFERRED
@@ -52,6 +53,34 @@ Cada objeto tem `si_id` = `<coleção>/<nome do objeto>` (os nomes vêm dos dese
 - **Terreno existente sob a casa** (antes da plataforma): entre -0,68 e 0,76 m da laje; acima do pavimento em 20 % da área.
 - **Casa e terreno** (625 pontos sob a casa): terreno entre -0,03 e -0,00 m da laje; acima do pavimento em 0 % da área.
 - **Plataforma:** terreno plano dentro do contorno da plataforma (124 vértices do terreno ajustados).
+
+## Materiais (catálogo comum `MAT_*`)
+
+Os materiais de produção foram trocados pelos do catálogo comum (`step-inside/materiais/catalogo.json`, mapeamento `mapeamentos/discovercasa.json`). Estados dos mapeamentos usados: INFERRED 1112.
+
+| ID | Objetos |
+|---|---|
+| `MAT_BOARD_OSB` | 25 |
+| `MAT_CONCRETE_SLAB` | 1 |
+| `MAT_DOOR_GARAGE_SECTIONAL__RAL7016` | 1 |
+| `MAT_FLOOR_VINYL_WOOD` | 8 |
+| `MAT_FRAME_ALUMINIUM__RAL7016` | 19 |
+| `MAT_GLASS_CLEAR` | 6 |
+| `MAT_GLASS_FROSTED` | 2 |
+| `MAT_INSULATION_MINERAL_WOOL` | 58 |
+| `MAT_INT_PLASTER_PAINTED__WHITE` | 27 |
+| `MAT_MEMBRANE_BREATHER` | 17 |
+| `MAT_METAL_FLASHING__RAL7016` | 42 |
+| `MAT_METAL_GALVANIZED` | 24 |
+| `MAT_METAL_GUTTER__DARK_GREY` | 7 |
+| `MAT_ROOF_SANDWICH_TRAPEZOIDAL__RAL8004` | 37 |
+| `MAT_ROOF_TILE_CERAMIC__TERRACOTTA` | 1 |
+| `MAT_TIMBER_STRUCTURE` | 803 |
+| `MAT_WOOD_CLADDING__DOUGLAS_BROWN` | 17 |
+| `MAT_WOOD_CLADDING__PINE_NATURAL` | 17 |
+| `MAT_LANDSCAPE_SOIL` | 1 |
+
+**Sem correspondência:** Etiqueta (ARCH_LABELS, 8)
 
 ## Ficheiros (só no PC)
 

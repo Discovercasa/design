@@ -123,6 +123,80 @@ for f in ("STRUCT_TIMBER", "ARCH_OPTIONS", "ARCH_LABELS"):  # not part of the vi
     layer_col(vl.layer_collection, f).exclude = True
 OUT["objetos_por_categoria"] = {k: len(c.objects) for k, c in grupos.items() if len(c.objects)}
 
+# ------------------------------------------------------------------ 1b. common catalogue materials (Phase 3)
+TAB = run.get("materiais") or {}
+MATS = {}
+
+
+def _lin(h):
+    c = [int(h[i:i + 2], 16) / 255 for i in (1, 3, 5)]
+    return [x / 12.92 if x <= 0.04045 else ((x + 0.055) / 1.055) ** 2.4 for x in c]
+
+
+def mat_catalogo(e):
+    """One Blender material per catalogue ID (master + variant): Principled BSDF with the catalogue's PBR values."""
+    if e["id"] in MATS:
+        return MATS[e["id"]]
+    m = bpy.data.materials.get(e["id"]) or bpy.data.materials.new(e["id"])
+    m.use_nodes = True
+    bsdf = next((n for n in m.node_tree.nodes if n.type == "BSDF_PRINCIPLED"), None)
+    p = e["pbr"]
+    cor = _lin(p["base_color"])
+    a = p.get("opacity", 1.0)
+    if bsdf:
+        bsdf.inputs["Base Color"].default_value = (*cor, 1.0)
+        bsdf.inputs["Roughness"].default_value = p["roughness"]
+        bsdf.inputs["Metallic"].default_value = p["metallic"]
+        bsdf.inputs["Alpha"].default_value = a
+    m.diffuse_color = (*cor, a)
+    m.roughness = p["roughness"]
+    m.metallic = p["metallic"]
+    if a < 1.0:
+        if hasattr(m, "surface_render_method"):
+            m.surface_render_method = "BLENDED"
+        elif hasattr(m, "blend_method"):
+            m.blend_method = "BLEND"
+    m["si_mat_id"] = e["id"]
+    m["si_mestre"] = e["mestre"]
+    m["si_variante"] = e["variante"]
+    MATS[e["id"]] = m
+    return m
+
+
+def aplicar_materiais(obs):
+    sem, usados, estados = {}, {}, {}
+    for ob in obs:
+        if not hasattr(ob, "material_slots"):
+            continue
+        ids = []
+        for slot in ob.material_slots:
+            if not slot.material:
+                continue
+            nome = slot.material.get("si_producao", slot.material.name)
+            e = TAB.get(nome)
+            if not e:
+                k = (nome, ob.get("si_categoria", ""))
+                sem[k] = sem.get(k, 0) + 1
+                continue
+            novo = mat_catalogo(e)
+            novo["si_producao"] = nome if nome != e["id"] else novo.get("si_producao", "")
+            slot.link = "OBJECT" if slot.link == "OBJECT" else "DATA"
+            slot.material = novo
+            ids.append(e["id"])
+            usados[e["id"]] = usados.get(e["id"], 0) + 1
+            estados[e["estado"]] = estados.get(e["estado"], 0) + 1
+        if ids:
+            ob["si_mat_id"] = ids[0]
+            if len(set(ids)) > 1:
+                ob["si_mat_ids"] = ",".join(sorted(set(ids)))
+    return sem, usados, estados
+
+
+if TAB:
+    _sem, _us, _est = aplicar_materiais([o for o in bpy.data.objects if o.name in cats])
+    OUT["materiais"] = {"sem_mapa": [{"material": k[0], "categoria": k[1], "objetos": n} for k, n in sorted(_sem.items())],
+                        "usados": dict(sorted(_us.items())), "estados": _est}
+
 
 def objetos(*categorias, malhas=True):
     return [o for k in categorias for o in grupos[k].objects if not malhas or o.type == "MESH"]
@@ -292,6 +366,12 @@ if run.get("terreno_blend"):
         grupos[cat].objects.link(ob)
         ob["si_categoria"] = cat
         ob["si_id"] = f"{cat}/{ob.name}"
+    if TAB:
+        _sem, _us, _est = aplicar_materiais([o for o in dst.objects if o is not None])
+        OUT.setdefault("materiais", {"sem_mapa": [], "usados": {}, "estados": {}})
+        for k, n in _us.items():
+            OUT["materiais"]["usados"][k] = OUT["materiais"]["usados"].get(k, 0) + n
+        OUT["materiais"]["sem_mapa"] += [{"material": k[0], "categoria": k[1], "objetos": n} for k, n in _sem.items()]
     alvo = run.get("superficie", "existente").upper()
     cand = [o for o in grupos["SITE_TERRAIN"].objects if o.name.endswith(alvo)] or list(grupos["SITE_TERRAIN"].objects)
     terreno = cand[0] if cand else None
@@ -414,8 +494,7 @@ if terreno is None and G:
     cx, cy = ((c[0] + c[1]) / 2).x, ((c[0] + c[1]) / 2).y
     z = G.get("z", 0.0)
     me.from_pydata([(cx - h, cy - h, z), (cx + h, cy - h, z), (cx + h, cy + h, z), (cx - h, cy + h, z)], [], [(0, 1, 2, 3)])
-    mat = bpy.data.materials.new("MAT_SITE_PLACEHOLDER")
-    mat.diffuse_color = (0.6, 0.6, 0.58, 1.0)
+    mat = mat_catalogo(TAB["MAT_SITE_PLACEHOLDER"]) if "MAT_SITE_PLACEHOLDER" in TAB else bpy.data.materials.new("MAT_SITE_PLACEHOLDER")
     me.materials.append(mat)
     ob = bpy.data.objects.new("SITE_GROUND_PLACEHOLDER", me)
     ob["si_categoria"] = "SITE_GROUND_PLACEHOLDER"
