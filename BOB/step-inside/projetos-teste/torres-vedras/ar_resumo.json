@@ -15,7 +15,7 @@
  "variantes": [
   {
    "variante": "casa",
-   "objetos": 15,
+   "objetos": 17,
    "materiais": [
     "MAT_CONCRETE_SLAB",
     "MAT_DOOR_GARAGE_SECTIONAL__RAL7016",
@@ -26,6 +26,8 @@
     "MAT_INT_PLASTER_PAINTED__WHITE",
     "MAT_MEMBRANE_BREATHER",
     "MAT_METAL_FLASHING__RAL7016",
+    "MAT_METAL_FLASHING__RAL8004",
+    "MAT_METAL_GUTTER__BLACK",
     "MAT_METAL_GUTTER__DARK_GREY",
     "MAT_ROOF_SANDWICH_TRAPEZOIDAL__RAL8004",
     "MAT_ROOF_TILE_CERAMIC__TERRACOTTA",
@@ -33,8 +35,8 @@
     "MAT_WOOD_CLADDING__DOUGLAS_BROWN",
     "MAT_WOOD_CLADDING__PINE_NATURAL"
    ],
-   "triangulos": 22166,
-   "triangulos_antes_de_simplificar": 24868,
+   "triangulos": 22468,
+   "triangulos_antes_de_simplificar": 25188,
    "imagens": {
     "Chipboard004_2K-JPG_Color.jpg": [
      1024,
@@ -156,18 +158,18 @@
    "ficheiros": {
     "glb": {
      "ficheiro": "torres-vedras_ar_casa.glb",
-     "bytes": 2215512,
-     "sha256": "5e896ed0ae1d3be82d1388c5f0676c580220f0767589f0b3e2ed6e8700bd7b5a"
+     "bytes": 2238868,
+     "sha256": "bc21408a5a9be8b97f1996b1921a9b6826963366b2faa62a25a871d09fdbd228"
     },
     "usdz": {
      "ficheiro": "torres-vedras_ar_casa.usdz",
-     "bytes": 1949893,
-     "sha256": "9eba7fd91ad1442a6986877a227da8b598a2f959512787a636c1d1099bbbdcbd"
+     "bytes": 1965604,
+     "sha256": "7d022d86339485a449264e01b272582f09f0aa6276072dc13de78ca7c6fc6d56"
     }
    },
    "reimportacao": {
     "glb": {
-     "triangulos": 22166,
+     "triangulos": 22468,
      "dimensoes": [
       19.261,
       21.691,
@@ -183,6 +185,8 @@
       "MAT_INT_PLASTER_PAINTED__WHITE",
       "MAT_MEMBRANE_BREATHER",
       "MAT_METAL_FLASHING__RAL7016",
+      "MAT_METAL_FLASHING__RAL8004",
+      "MAT_METAL_GUTTER__BLACK",
       "MAT_METAL_GUTTER__DARK_GREY",
       "MAT_ROOF_SANDWICH_TRAPEZOIDAL__RAL8004",
       "MAT_ROOF_TILE_CERAMIC__TERRACOTTA",
@@ -195,7 +199,7 @@
      "erro": null
     },
     "usdz": {
-     "triangulos": 22166,
+     "triangulos": 22468,
      "dimensoes": [
       19.261,
       21.691,
@@ -211,6 +215,8 @@
       "MAT_INT_PLASTER_PAINTED__WHITE",
       "MAT_MEMBRANE_BREATHER",
       "MAT_METAL_FLASHING__RAL7016",
+      "MAT_METAL_FLASHING__RAL8004",
+      "MAT_METAL_GUTTER__BLACK",
       "MAT_METAL_GUTTER__DARK_GREY",
       "MAT_ROOF_SANDWICH_TRAPEZOIDAL__RAL8004",
       "MAT_ROOF_TILE_CERAMIC__TERRACOTTA",
@@ -226,7 +232,7 @@
   },
   {
    "variante": "maquete",
-   "objetos": 16,
+   "objetos": 18,
    "materiais": [
     "MAT_CONCRETE_SLAB",
     "MAT_DOOR_GARAGE_SECTIONAL__RAL7016",
@@ -238,6 +244,8 @@
     "MAT_LANDSCAPE_GRASS",
     "MAT_MEMBRANE_BREATHER",
     "MAT_METAL_FLASHING__RAL7016",
+    "MAT_METAL_FLASHING__RAL8004",
+    "MAT_METAL_GUTTER__BLACK",
     "MAT_METAL_GUTTER__DARK_GREY",
     "MAT_ROOF_SANDWICH_TRAPEZOIDAL__RAL8004",
     "MAT_ROOF_TILE_CERAMIC__TERRACOTTA",
@@ -245,8 +253,8 @@
     "MAT_WOOD_CLADDING__DOUGLAS_BROWN",
     "MAT_WOOD_CLADDING__PINE_NATURAL"
    ],
-   "triangulos": 26721,
-   "triangulos_antes_de_simplificar": 29423,
+   "triangulos": 27023,
+   "triangulos_antes_de_simplificar": 29743,
    "imagens": {
     "Chipboard004_2K-JPG_Color.jpg": [
      1024,
@@ -368,18 +376,18 @@
    "ficheiros": {
     "glb": {
      "ficheiro": "torres-vedras_ar_maquete.glb",
-     "bytes": 3119448,
-     "sha256": "9e6d25943d59050c3e283900aba0b971e9dc08ab8bf29f9c9b3525221faab3c0"
+     "bytes": 3142804,
+     "sha256": "eee6f6f3bed0d24523dae0cdf4138907f49b4bf1519fefe759b4635cdf49a72e"
     },
     "usdz": {
      "ficheiro": "torres-vedras_ar_maquete.usdz",
-     "bytes": 2630774,
-     "sha256": "adb263d47d1d30aa93fac139e05b2e62d7edf27abd490b3f72094cadcd702092"
+     "bytes": 2646486,
+     "sha256": "6c190f0e6d76b90fd68a3afc3da2cb2c767ac6a4e702d18d89f951b767ed2d75"
     }
    },
    "reimportacao": {
     "glb": {
-     "triangulos": 26721,
+     "triangulos": 27023,
      "dimensoes": [
       60.263,
       58.26,
@@ -396,6 +404,8 @@
       "MAT_LANDSCAPE_GRASS",
       "MAT_MEMBRANE_BREATHER",
       "MAT_METAL_FLASHING__RAL7016",
+      "MAT_METAL_FLASHING__RAL8004",
+      "MAT_METAL_GUTTER__BLACK",
       "MAT_METAL_GUTTER__DARK_GREY",
       "MAT_ROOF_SANDWICH_TRAPEZOIDAL__RAL8004",
       "MAT_ROOF_TILE_CERAMIC__TERRACOTTA",
@@ -408,7 +418,7 @@
      "erro": null
     },
     "usdz": {
-     "triangulos": 26721,
+     "triangulos": 27023,
      "dimensoes": [
       60.263,
       58.26,
@@ -425,6 +435,8 @@
       "MAT_LANDSCAPE_GRASS",
       "MAT_MEMBRANE_BREATHER",
       "MAT_METAL_FLASHING__RAL7016",
+      "MAT_METAL_FLASHING__RAL8004",
+      "MAT_METAL_GUTTER__BLACK",
       "MAT_METAL_GUTTER__DARK_GREY",
       "MAT_ROOF_SANDWICH_TRAPEZOIDAL__RAL8004",
       "MAT_ROOF_TILE_CERAMIC__TERRACOTTA",

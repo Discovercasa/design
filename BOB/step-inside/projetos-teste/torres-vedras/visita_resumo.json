@@ -10,10 +10,10 @@
    "ARCH_WALLS_INT": 66,
    "ARCH_FLOORS": 8,
    "ARCH_CEILINGS": 40,
-   "ARCH_ROOF": 116,
+   "ARCH_ROOF": 119,
    "ARCH_OPENINGS": 50,
    "ARCH_PERGOLA": 25,
-   "STRUCT_TIMBER": 859,
+   "STRUCT_TIMBER": 855,
    "ARCH_LABELS": 8
   },
   "materiais": {
@@ -35,19 +35,21 @@
     "MAT_INSULATION_MINERAL_WOOL": 58,
     "MAT_INT_PLASTER_PAINTED__WHITE": 27,
     "MAT_MEMBRANE_BREATHER": 17,
-    "MAT_METAL_FLASHING__RAL7016": 42,
+    "MAT_METAL_FLASHING__RAL7016": 41,
+    "MAT_METAL_FLASHING__RAL8004": 4,
     "MAT_METAL_GALVANIZED": 24,
-    "MAT_METAL_GUTTER__DARK_GREY": 7,
+    "MAT_METAL_GUTTER__BLACK": 3,
+    "MAT_METAL_GUTTER__DARK_GREY": 4,
     "MAT_ROOF_SANDWICH_TRAPEZOIDAL__RAL8004": 37,
     "MAT_ROOF_TILE_CERAMIC__TERRACOTTA": 1,
-    "MAT_TIMBER_STRUCTURE": 782,
+    "MAT_TIMBER_STRUCTURE": 778,
     "MAT_TIMBER_STRUCTURE__GLULAM": 21,
     "MAT_WOOD_CLADDING__DOUGLAS_BROWN": 17,
     "MAT_WOOD_CLADDING__PINE_NATURAL": 17,
     "MAT_LANDSCAPE_GRASS": 1
    },
    "estados": {
-    "INFERRED": 1112
+    "INFERRED": 1111
    },
    "texturas_em_falta": [],
    "com_textura": [
@@ -58,6 +60,8 @@
     "MAT_FRAME_ALUMINIUM__RAL7016",
     "MAT_LANDSCAPE_GRASS",
     "MAT_METAL_FLASHING__RAL7016",
+    "MAT_METAL_FLASHING__RAL8004",
+    "MAT_METAL_GUTTER__BLACK",
     "MAT_METAL_GUTTER__DARK_GREY",
     "MAT_ROOF_SANDWICH_TRAPEZOIDAL__RAL8004",
     "MAT_ROOF_TILE_CERAMIC__TERRACOTTA",
@@ -98,7 +102,7 @@
    "z_min_m": -0.2
   },
   "malhas": {
-   "verificadas": 330,
+   "verificadas": 333,
    "abertas": [],
    "n_abertas": 0,
    "normais_invertidas": [],
@@ -169,18 +173,10 @@
   },
   "chao_vaos": {
    "portas": 15,
-   "criados": 10,
-   "ja_com_chao": 5,
+   "criados": 2,
+   "ja_com_chao": 13,
    "sem_chao": [],
    "detalhe": [
-    {
-     "abertura": "P02#0",
-     "pavimento": "MAT_FLOOR_VINYL_WOOD",
-     "z": [
-      -0.005,
-      0.005
-     ]
-    },
     {
      "abertura": "P03#2",
      "pavimento": "MAT_FLOOR_VINYL_WOOD",
@@ -190,63 +186,7 @@
      ]
     },
     {
-     "abertura": "P05#0",
-     "pavimento": "MAT_FLOOR_VINYL_WOOD",
-     "z": [
-      -0.005,
-      0.005
-     ]
-    },
-    {
-     "abertura": "P08#0",
-     "pavimento": "MAT_FLOOR_VINYL_WOOD",
-     "z": [
-      -0.005,
-      0.005
-     ]
-    },
-    {
-     "abertura": "P10#0",
-     "pavimento": "MAT_FLOOR_VINYL_WOOD",
-     "z": [
-      -0.005,
-      0.005
-     ]
-    },
-    {
      "abertura": "P11#0",
-     "pavimento": "MAT_FLOOR_VINYL_WOOD",
-     "z": [
-      -0.005,
-      0.005
-     ]
-    },
-    {
-     "abertura": "P13#0",
-     "pavimento": "MAT_FLOOR_VINYL_WOOD",
-     "z": [
-      -0.005,
-      0.005
-     ]
-    },
-    {
-     "abertura": "P15#0",
-     "pavimento": "MAT_FLOOR_VINYL_WOOD",
-     "z": [
-      -0.005,
-      0.005
-     ]
-    },
-    {
-     "abertura": "P17#0",
-     "pavimento": "MAT_FLOOR_VINYL_WOOD",
-     "z": [
-      -0.005,
-      0.005
-     ]
-    },
-    {
-     "abertura": "P17#1",
      "pavimento": "MAT_FLOOR_VINYL_WOOD",
      "z": [
       -0.005,

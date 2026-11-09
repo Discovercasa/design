@@ -146,8 +146,9 @@ faz-me essas perguntas", and on a missing answer "senão vai com o default de 2,
   INFERRED (our choice, not stated): where the finish changes between rooms (e.g. vinyl to ceramic) the change falls under
   the door leaf, each side's finish running to the middle of the wall (visit/AR model). Exterior doors: the visit model
   takes the inside floor to the outside face; the exterior threshold stays OPEN (above). Answer → the visit model
-  (`step-inside/ferramentas/visita/`) and the production model's door-floor rule. PENDING: the production model
-  (`camadas.py` `pavimentos()`) does not yet lay the floor strip under interior doors (see the log 2026-11-09).
+  (`step-inside/ferramentas/visita/`) and the production model's door-floor rule. CLOSED 2026-11-09 ("Sim,
+  corrige"): the production model (`camadas.py` `pavimentos()`) now lays the floor under interior doors to the middle of
+  the wall (TV vinyl +0,9 m², Sobral Tipo 1 +0,6 m²); exterior doors left out.
 - Feeds: §3 "Every opening gets remates …"; §9 "Opening reveals inside"; §11. Answer → cfg
   `camadas.caixilharia.remates`; thresholds not in the tools; `docs/materiais.md`.
 

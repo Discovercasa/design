@@ -192,8 +192,9 @@ O ficheiro de produção não muda. Na visita, sem as camadas escondidas, aparec
     obra).
   - **Confirmado** pelo utilizador a 2026-11-09 («Sim, contínuo»): nas portas interiores o pavimento continua por
     baixo da porta. Pôr a mudança de acabamento debaixo da folha foi escolha nossa (INFERRED).
-  - O modelo de produção ainda não tem esta faixa: o pavimento de cada divisão fica na área útil, por isso a lista
-    de material não conta o chão por baixo das portas.
+  - Desde a versão 4.1 (2026-11-09, «Sim, corrige») é o **modelo de produção** que põe este chão
+    (`camadas.faixas_portas`), e a lista de material passa a contá-lo. O modelo de visita só acrescenta o das portas
+    exteriores; nas interiores serve de verificação.
 
 ### Verificações e resultado
 

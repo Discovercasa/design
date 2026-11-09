@@ -21,13 +21,13 @@
     "MAT_FLOOR_VINYL_WOOD",
     "MAT_INT_PLASTER_PAINTED__WHITE",
     "MAT_MEMBRANE_BREATHER",
-    "MAT_METAL_FLASHING__RAL7016",
+    "MAT_METAL_FLASHING__RAL8004",
     "MAT_METAL_GUTTER__DARK_GREY",
-    "MAT_ROOF_SANDWICH_TILE__RAL7016",
+    "MAT_ROOF_SANDWICH_TILE__RAL8004",
     "MAT_WALL_RENDER__WHITE"
    ],
-   "triangulos": 9214,
-   "triangulos_antes_de_simplificar": 9942,
+   "triangulos": 10634,
+   "triangulos_antes_de_simplificar": 11374,
    "imagens": {
     "Chipboard004_2K-JPG_Color.jpg": [
      1024,
@@ -138,38 +138,38 @@
    "dimensoes": [
     13.099,
     11.249,
-    7.532
+    7.543
    ],
    "origem": "centro da planta da casa, no pavimento acabado do rés do chão",
    "z_min": -0.2,
    "ficheiros": {
     "glb": {
      "ficheiro": "sobral-tipo1_ar_casa.glb",
-     "bytes": 1303488,
-     "sha256": "b140bb892d31012fdd1ac6e4a4e3661c4dabe2175af3475fee5530e3cabd45e6"
+     "bytes": 1380300,
+     "sha256": "f315af0ea7661a7908c95ef9fdd8a8238e0c712bf3cfc1450308ff5f64341a23"
     },
     "usdz": {
      "ficheiro": "sobral-tipo1_ar_casa.usdz",
-     "bytes": 1097339,
-     "sha256": "c3e81d9de2c2d9a9d6e75eb56175b5f4384cfbdffb6b7b97022d4fb22c0341cb"
+     "bytes": 1148919,
+     "sha256": "de35fabd608e5637c3a2b11862118874fe455d8cff765cca47fba9e61f4a207f"
     }
    },
    "reimportacao": {
     "glb": {
-     "triangulos": 9214,
+     "triangulos": 10634,
      "dimensoes": [
       13.099,
       11.249,
-      7.532
+      7.543
      ],
      "materiais": [
       "MAT_CONCRETE_SLAB",
       "MAT_FLOOR_VINYL_WOOD",
       "MAT_INT_PLASTER_PAINTED__WHITE",
       "MAT_MEMBRANE_BREATHER",
-      "MAT_METAL_FLASHING__RAL7016",
+      "MAT_METAL_FLASHING__RAL8004",
       "MAT_METAL_GUTTER__DARK_GREY",
-      "MAT_ROOF_SANDWICH_TILE__RAL7016",
+      "MAT_ROOF_SANDWICH_TILE__RAL8004",
       "MAT_WALL_RENDER__WHITE"
      ],
      "imagens": 13,
@@ -177,20 +177,20 @@
      "erro": null
     },
     "usdz": {
-     "triangulos": 9214,
+     "triangulos": 10634,
      "dimensoes": [
       13.099,
       11.249,
-      7.532
+      7.543
      ],
      "materiais": [
       "MAT_CONCRETE_SLAB",
       "MAT_FLOOR_VINYL_WOOD",
       "MAT_INT_PLASTER_PAINTED__WHITE",
       "MAT_MEMBRANE_BREATHER",
-      "MAT_METAL_FLASHING__RAL7016",
+      "MAT_METAL_FLASHING__RAL8004",
       "MAT_METAL_GUTTER__DARK_GREY",
-      "MAT_ROOF_SANDWICH_TILE__RAL7016",
+      "MAT_ROOF_SANDWICH_TILE__RAL8004",
       "MAT_WALL_RENDER__WHITE"
      ],
      "imagens": 13,
@@ -208,13 +208,13 @@
     "MAT_INT_PLASTER_PAINTED__WHITE",
     "MAT_LANDSCAPE_SOIL",
     "MAT_MEMBRANE_BREATHER",
-    "MAT_METAL_FLASHING__RAL7016",
+    "MAT_METAL_FLASHING__RAL8004",
     "MAT_METAL_GUTTER__DARK_GREY",
-    "MAT_ROOF_SANDWICH_TILE__RAL7016",
+    "MAT_ROOF_SANDWICH_TILE__RAL8004",
     "MAT_WALL_RENDER__WHITE"
    ],
-   "triangulos": 9850,
-   "triangulos_antes_de_simplificar": 10578,
+   "triangulos": 11270,
+   "triangulos_antes_de_simplificar": 12010,
    "imagens": {
     "Chipboard004_2K-JPG_Color.jpg": [
      1024,
@@ -332,18 +332,18 @@
    "ficheiros": {
     "glb": {
      "ficheiro": "sobral-tipo1_ar_maquete.glb",
-     "bytes": 1989836,
-     "sha256": "70446e44204ffb5f43272b9ccf959ebde39391ffbb37797c6f05f6b9c571dd21"
+     "bytes": 2066652,
+     "sha256": "ec9a8447f818a82c68076e27db5249536f83b96f47bd393a50f4bc5e64e298c9"
     },
     "usdz": {
      "ficheiro": "sobral-tipo1_ar_maquete.usdz",
-     "bytes": 1613472,
-     "sha256": "b94a04c5df68f0152bceae44ac86f78ea895c88e275669ca59b20d0639eb3979"
+     "bytes": 1665203,
+     "sha256": "5bdce6133194ea4110eb7614168a05216a59e14cef14e4798b1d8618e1d4c266"
     }
    },
    "reimportacao": {
     "glb": {
-     "triangulos": 9850,
+     "triangulos": 11270,
      "dimensoes": [
       53.369,
       51.497,
@@ -355,9 +355,9 @@
       "MAT_INT_PLASTER_PAINTED__WHITE",
       "MAT_LANDSCAPE_SOIL",
       "MAT_MEMBRANE_BREATHER",
-      "MAT_METAL_FLASHING__RAL7016",
+      "MAT_METAL_FLASHING__RAL8004",
       "MAT_METAL_GUTTER__DARK_GREY",
-      "MAT_ROOF_SANDWICH_TILE__RAL7016",
+      "MAT_ROOF_SANDWICH_TILE__RAL8004",
       "MAT_WALL_RENDER__WHITE"
      ],
      "imagens": 16,
@@ -365,7 +365,7 @@
      "erro": null
     },
     "usdz": {
-     "triangulos": 9850,
+     "triangulos": 11270,
      "dimensoes": [
       53.369,
       51.497,
@@ -377,9 +377,9 @@
       "MAT_INT_PLASTER_PAINTED__WHITE",
       "MAT_LANDSCAPE_SOIL",
       "MAT_MEMBRANE_BREATHER",
-      "MAT_METAL_FLASHING__RAL7016",
+      "MAT_METAL_FLASHING__RAL8004",
       "MAT_METAL_GUTTER__DARK_GREY",
-      "MAT_ROOF_SANDWICH_TILE__RAL7016",
+      "MAT_ROOF_SANDWICH_TILE__RAL8004",
       "MAT_WALL_RENDER__WHITE"
      ],
      "imagens": 16,

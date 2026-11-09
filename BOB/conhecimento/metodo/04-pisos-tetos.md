@@ -120,9 +120,10 @@
 - Ground floor: vinyl straight on the base (§1); upper floor: vinyl on the OSB 22 (§5) — confirmed.
 - Ceramics in kitchens and WCs — company website, not said by the user — assumed.
 - **At an interior door the floor finish runs on under the door** (continuous: no threshold, no break) — user 2026-11-09
-  «Sim, contínuo» (to "Nas portas interiores, o pavimento continua por baixo da porta?") — confirmed — **NOT applied in
-  the production model**: `camadas.pavimentos()` lays each room's finish only over its usable area, so the strip under each
-  interior door (≈ 0,87 m × wall thickness ≈ 0,1 m²) is neither modelled nor in the material list (deviation X21, §15); the
-  visit model (step-inside) already adds it. Exterior-door threshold: still open (PO Q23, §3).
+  «Sim, contínuo» (to "Nas portas interiores, o pavimento continua por baixo da porta?") — confirmed — **applied in
+  the production model since 2026-11-09** (`camadas.faixas_portas()`, called by `pavimentos()`; each room's floor goes to the
+  middle of the wall in every interior door with a room on both sides, also in XPS and betonilha on the ground floor; doors
+  from `portas_paineis` + `portas_virtuais`, stored in `casa.portas_salas`; finish objects carry `area_sob_portas_m2`;
+  Torres Vedras vinyl 151,6 → 152,5 m²; deviation X21 fixed, §15). Exterior-door threshold: still open (PO Q23, §3).
 - Where the finish changes between the two rooms (vinyl 5 / ceramic 10 + glue): position of the change (under the door leaf)
   — ours, INFERRED / open; whether a transition profile is used — open; build-ups levelled — general practice — not in the tools.

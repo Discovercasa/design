@@ -10,7 +10,7 @@
    "ARCH_WALLS_INT": 81,
    "ARCH_FLOORS": 26,
    "ARCH_CEILINGS": 58,
-   "ARCH_ROOF": 33,
+   "ARCH_ROOF": 29,
    "STRUCT_TIMBER": 705,
    "ARCH_OPTIONS": 24,
    "ARCH_LABELS": 12
@@ -32,10 +32,10 @@
     "MAT_INSULATION_XPS": 9,
     "MAT_INT_PLASTER_PAINTED__WHITE": 24,
     "MAT_MEMBRANE_BREATHER": 4,
-    "MAT_METAL_FLASHING__RAL7016": 5,
+    "MAT_METAL_FLASHING__RAL8004": 1,
     "MAT_METAL_GALVANIZED": 34,
     "MAT_METAL_GUTTER__DARK_GREY": 6,
-    "MAT_ROOF_SANDWICH_TILE__RAL7016": 22,
+    "MAT_ROOF_SANDWICH_TILE__RAL8004": 22,
     "MAT_SCREED": 5,
     "MAT_TIMBER_STRUCTURE": 645,
     "MAT_WALL_RENDER__WHITE": 4,
@@ -44,7 +44,7 @@
     "MAT_LANDSCAPE_SOIL": 1
    },
    "estados": {
-    "INFERRED": 886
+    "INFERRED": 882
    },
    "texturas_em_falta": [],
    "com_textura": [
@@ -52,9 +52,9 @@
     "MAT_CONCRETE_SLAB",
     "MAT_FLOOR_VINYL_WOOD",
     "MAT_LANDSCAPE_SOIL",
-    "MAT_METAL_FLASHING__RAL7016",
+    "MAT_METAL_FLASHING__RAL8004",
     "MAT_METAL_GUTTER__DARK_GREY",
-    "MAT_ROOF_SANDWICH_TILE__RAL7016",
+    "MAT_ROOF_SANDWICH_TILE__RAL8004",
     "MAT_TIMBER_STRUCTURE",
     "MAT_WALL_RENDER__WHITE",
     "MAT_WOOD_CLADDING__DOUGLAS_BROWN",
@@ -87,11 +87,11 @@
     -0.076,
     -0.075
    ],
-   "altura_total_m": 8.492,
+   "altura_total_m": 8.503,
    "z_min_m": -1.0
   },
   "malhas": {
-   "verificadas": 217,
+   "verificadas": 213,
    "abertas": [],
    "n_abertas": 0,
    "normais_invertidas": [],
@@ -222,18 +222,10 @@
   },
   "chao_vaos": {
    "portas": 11,
-   "criados": 11,
-   "ja_com_chao": 0,
+   "criados": 5,
+   "ja_com_chao": 6,
    "sem_chao": [],
    "detalhe": [
-    {
-     "abertura": "PI1.08#0",
-     "pavimento": "MAT_FLOOR_VINYL_WOOD",
-     "z": [
-      0.005,
-      0.16
-     ]
-    },
     {
      "abertura": "PE1.04#0",
      "pavimento": "MAT_FLOOR_VINYL_WOOD",
@@ -268,46 +260,6 @@
     },
     {
      "abertura": "PE1.13#0",
-     "pavimento": "MAT_FLOOR_VINYL_WOOD",
-     "z": [
-      0.005,
-      0.16
-     ]
-    },
-    {
-     "abertura": "PI2.01#0",
-     "pavimento": "MAT_FLOOR_VINYL_WOOD",
-     "z": [
-      2.983,
-      3.122
-     ]
-    },
-    {
-     "abertura": "PI2.04#0",
-     "pavimento": "MAT_FLOOR_VINYL_WOOD",
-     "z": [
-      2.983,
-      3.122
-     ]
-    },
-    {
-     "abertura": "PI2.05#0",
-     "pavimento": "MAT_FLOOR_VINYL_WOOD",
-     "z": [
-      2.983,
-      3.122
-     ]
-    },
-    {
-     "abertura": "PI2.08#0",
-     "pavimento": "MAT_FLOOR_VINYL_WOOD",
-     "z": [
-      3.083,
-      3.122
-     ]
-    },
-    {
-     "abertura": "PD1.01#0",
      "pavimento": "MAT_FLOOR_VINYL_WOOD",
      "z": [
       0.005,

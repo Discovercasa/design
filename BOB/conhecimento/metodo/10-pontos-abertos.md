@@ -174,7 +174,7 @@ Other items (numbers kept):
 - A porta-janela de batente — window (estore) or door (none)? (§3).
 - A tiled house roof on request — build-up, slope, weight (§7).
 - The floor finish at an **interior door opening**: RESOLVED 2026-11-09 («Sim, contínuo») — it runs on under the door
-  (§10; L74; production-model gap = X21). Still open: the exterior-door threshold (PO Q23, §3); where the finish changes
+  (§10; L74; production-model gap X21: fixed 2026-11-09, `camadas.faixas_portas`). Still open: the exterior-door threshold (PO Q23, §3); where the finish changes
   between two rooms (under the door leaf, ours) and whether a transition profile is used (§10).
 ### [SB] open (Sobral paused, "estará para avançar brevemente")
 - Vigas de amarração on the ground-floor walls under the floor joists (with an afinação?) (§4); living-room joists at 0,50

@@ -1,8 +1,8 @@
 {
  "project_id": "torres-vedras",
- "version_id": "torres-vedras-8554ba5-202611091426",
- "source_blend_hash": "sha256:020102171da83b2d7b238257b924fd07fa88b624d96fe8683e356d80b91e6497",
- "export_timestamp": "2026-11-09T14:26:13+00:00",
+ "version_id": "torres-vedras-12c32d4-202611091519",
+ "source_blend_hash": "sha256:f2df1bd89c6f5c169af6fbb557239e9ed71226069c41268324158f99e0c44aff",
+ "export_timestamp": "2026-11-09T15:19:21+00:00",
  "blender_version": "4.4.3",
  "unreal_target_version": "5.8 (a confirmar na Fase 4)",
  "unit_system": "métrico (1 unidade = 1 m)",
@@ -39,8 +39,8 @@
   {
    "path": "torres-vedras_visita.fbx",
    "type": "fbx",
-   "size_bytes": 2243740,
-   "sha256": "3ea15c9dfc2e0d010d60967b8bc9039a75b7e69fe81280587f17c2f48d1d7251",
+   "size_bytes": 2243308,
+   "sha256": "15961a31a7433fbeb967b7c37b8e6a2a816a75b887627b8d3e7102cfd6b20c72",
    "material_ids": [
     "MAT_BOARD_OSB",
     "MAT_CONCRETE_SLAB",
@@ -54,7 +54,9 @@
     "MAT_LANDSCAPE_GRASS",
     "MAT_MEMBRANE_BREATHER",
     "MAT_METAL_FLASHING__RAL7016",
+    "MAT_METAL_FLASHING__RAL8004",
     "MAT_METAL_GALVANIZED",
+    "MAT_METAL_GUTTER__BLACK",
     "MAT_METAL_GUTTER__DARK_GREY",
     "MAT_ROOF_SANDWICH_TRAPEZOIDAL__RAL8004",
     "MAT_ROOF_TILE_CERAMIC__TERRACOTTA",
@@ -67,8 +69,8 @@
   {
    "path": "torres-vedras_visita.glb",
    "type": "glb",
-   "size_bytes": 110783624,
-   "sha256": "42ed1bd024d77893ab621827d03d210c5d9c61cf91f5511a27348cf309014483",
+   "size_bytes": 110804620,
+   "sha256": "84e579d4827a3c8cb6ec91a89a107f68c261fdf9de642a0e901fe90f8e4ff004",
    "material_ids": [
     "MAT_BOARD_OSB",
     "MAT_CONCRETE_SLAB",
@@ -82,7 +84,9 @@
     "MAT_LANDSCAPE_GRASS",
     "MAT_MEMBRANE_BREATHER",
     "MAT_METAL_FLASHING__RAL7016",
+    "MAT_METAL_FLASHING__RAL8004",
     "MAT_METAL_GALVANIZED",
+    "MAT_METAL_GUTTER__BLACK",
     "MAT_METAL_GUTTER__DARK_GREY",
     "MAT_ROOF_SANDWICH_TRAPEZOIDAL__RAL8004",
     "MAT_ROOF_TILE_CERAMIC__TERRACOTTA",
@@ -95,8 +99,8 @@
   {
    "path": "torres-vedras_visita.usdz",
    "type": "usdz",
-   "size_bytes": 96477232,
-   "sha256": "41cece8a06abfe485b842aee59bb160467a25147c5c18ec831c419ba0883ecd6",
+   "size_bytes": 96482610,
+   "sha256": "512590744dcbd05190627ee6ff8a3277773dc68a06b224263a3ed7e3d2a6e902",
    "material_ids": [
     "MAT_BOARD_OSB",
     "MAT_CONCRETE_SLAB",
@@ -110,7 +114,9 @@
     "MAT_LANDSCAPE_GRASS",
     "MAT_MEMBRANE_BREATHER",
     "MAT_METAL_FLASHING__RAL7016",
+    "MAT_METAL_FLASHING__RAL8004",
     "MAT_METAL_GALVANIZED",
+    "MAT_METAL_GUTTER__BLACK",
     "MAT_METAL_GUTTER__DARK_GREY",
     "MAT_ROOF_SANDWICH_TRAPEZOIDAL__RAL8004",
     "MAT_ROOF_TILE_CERAMIC__TERRACOTTA",
@@ -131,8 +137,8 @@
  ],
  "validation": {
   "referencia": {
-   "objetos": 349,
-   "triangulos": 53847,
+   "objetos": 344,
+   "triangulos": 54095,
    "dimensoes": [
     80.899,
     82.831,
@@ -151,7 +157,9 @@
     "MAT_LANDSCAPE_GRASS",
     "MAT_MEMBRANE_BREATHER",
     "MAT_METAL_FLASHING__RAL7016",
+    "MAT_METAL_FLASHING__RAL8004",
     "MAT_METAL_GALVANIZED",
+    "MAT_METAL_GUTTER__BLACK",
     "MAT_METAL_GUTTER__DARK_GREY",
     "MAT_ROOF_SANDWICH_TRAPEZOIDAL__RAL8004",
     "MAT_ROOF_TILE_CERAMIC__TERRACOTTA",
@@ -161,8 +169,8 @@
    ],
    "imagens": 26,
    "casa": {
-    "objetos": 348,
-    "triangulos": 45656,
+    "objetos": 343,
+    "triangulos": 45904,
     "caixa_min": [
      8.37,
      10.712,
@@ -190,7 +198,9 @@
      "MAT_INT_PLASTER_PAINTED__WHITE",
      "MAT_MEMBRANE_BREATHER",
      "MAT_METAL_FLASHING__RAL7016",
+     "MAT_METAL_FLASHING__RAL8004",
      "MAT_METAL_GALVANIZED",
+     "MAT_METAL_GUTTER__BLACK",
      "MAT_METAL_GUTTER__DARK_GREY",
      "MAT_ROOF_SANDWICH_TRAPEZOIDAL__RAL8004",
      "MAT_ROOF_TILE_CERAMIC__TERRACOTTA",
@@ -203,8 +213,8 @@
   },
   "reimportacao": {
    "fbx": {
-    "objetos": 349,
-    "triangulos": 53847,
+    "objetos": 344,
+    "triangulos": 54095,
     "dimensoes": [
      80.899,
      82.831,
@@ -223,7 +233,9 @@
      "MAT_LANDSCAPE_GRASS",
      "MAT_MEMBRANE_BREATHER",
      "MAT_METAL_FLASHING__RAL7016",
+     "MAT_METAL_FLASHING__RAL8004",
      "MAT_METAL_GALVANIZED",
+     "MAT_METAL_GUTTER__BLACK",
      "MAT_METAL_GUTTER__DARK_GREY",
      "MAT_ROOF_SANDWICH_TRAPEZOIDAL__RAL8004",
      "MAT_ROOF_TILE_CERAMIC__TERRACOTTA",
@@ -234,16 +246,16 @@
     "imagens": 26,
     "imagens_em_falta": [],
     "imagem": {
-     "diferenca_media": 0.045,
-     "pixeis_diferentes": 0.0087,
+     "diferenca_media": 0.0449,
+     "pixeis_diferentes": 0.0086,
      "silhueta_diferente": 0.0,
      "cobertura": 0.398
     },
     "erro_caixa_m": 0.0
    },
    "glb": {
-    "objetos": 349,
-    "triangulos": 53847,
+    "objetos": 344,
+    "triangulos": 54095,
     "dimensoes": [
      80.899,
      82.831,
@@ -262,7 +274,9 @@
      "MAT_LANDSCAPE_GRASS",
      "MAT_MEMBRANE_BREATHER",
      "MAT_METAL_FLASHING__RAL7016",
+     "MAT_METAL_FLASHING__RAL8004",
      "MAT_METAL_GALVANIZED",
+     "MAT_METAL_GUTTER__BLACK",
      "MAT_METAL_GUTTER__DARK_GREY",
      "MAT_ROOF_SANDWICH_TRAPEZOIDAL__RAL8004",
      "MAT_ROOF_TILE_CERAMIC__TERRACOTTA",
@@ -274,15 +288,15 @@
     "imagens_em_falta": [],
     "imagem": {
      "diferenca_media": 0.0447,
-     "pixeis_diferentes": 0.0092,
+     "pixeis_diferentes": 0.0091,
      "silhueta_diferente": 0.0,
      "cobertura": 0.398
     },
     "erro_caixa_m": 0.0
    },
    "usdz": {
-    "objetos": 349,
-    "triangulos": 53847,
+    "objetos": 344,
+    "triangulos": 54095,
     "dimensoes": [
      80.899,
      82.831,
@@ -301,7 +315,9 @@
      "MAT_LANDSCAPE_GRASS",
      "MAT_MEMBRANE_BREATHER",
      "MAT_METAL_FLASHING__RAL7016",
+     "MAT_METAL_FLASHING__RAL8004",
      "MAT_METAL_GALVANIZED",
+     "MAT_METAL_GUTTER__BLACK",
      "MAT_METAL_GUTTER__DARK_GREY",
      "MAT_ROOF_SANDWICH_TRAPEZOIDAL__RAL8004",
      "MAT_ROOF_TILE_CERAMIC__TERRACOTTA",

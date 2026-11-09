@@ -834,7 +834,51 @@ def salas(casa, piso, S):
     comps = [c for c in grid.componentes() if grid.area(c) >= cfg.get("area_min", 0.1)
              and not any(i in (0, grid.nx - 1) or j in (0, grid.ny - 1) for i, j in c)]
     comps.sort(key=lambda c: (round(grid.centro(c)[1] * 2) / 2, grid.centro(c)[0]))
+    casa.portas_salas = getattr(casa, "portas_salas", {})
+    casa.portas_salas[piso] = portas_virtuais(virt, cfg.get("porta_max", 1.05), espessura_max=0.2) + portas_paineis(pan)
     return grid, pan, [(f"P{piso}.{k:02d}", c) for k, c in enumerate(comps, 1)]
+
+
+def portas_paineis(pan):
+    """Door openings inside wall panels (a module or plan wall with its door), as plan rectangles (x0, x1, y0, y1):
+    the opening along the wall by the panel's footprint across it."""
+    out = []
+    for P in pan:
+        if P.fantasma:
+            continue
+        x0, x1, y0, y1 = P.pegada()
+        for u0, u1, _v0, _v1, k in P.aberturas:
+            if k != "porta":
+                continue
+            a, b = sorted((P.s_de_u(u0), P.s_de_u(u1)))
+            out.append((a, b, y0, y1) if abs(P.ux) > 0.5 else (x0, x1, a, b))
+    return out
+
+
+def faixas_portas(grid, lista, portas, rev, folga=0.03):
+    """The floor under the interior doors (user 2026-11-09: «Sim, contínuo» — it runs on under the door).
+
+    Each room's floor goes on to the middle of the wall in the doorway: per room, [(base, acabamento)] — the build-up
+    reaches the doorway piece itself, the finish also covers the lining's width (`rev`) where the room's finish stops
+    short of it. A change of finish so falls under the door leaf (ours, INFERRED). A doorway with outside (no room) on
+    one side, an exterior door, is left out: its threshold is not defined (perguntas-por-obra Q23)."""
+    dono = {cel: nome for nome, comp in lista for cel in comp}
+    out = {}
+    for x0, x1, y0, y1 in portas:
+        if x1 - x0 >= y1 - y0:  # the wall runs along x: the door is crossed along y
+            m, xm = (y0 + y1) / 2, (x0 + x1) / 2
+            lados = ((grid.celula(xm, y0 - rev - folga), (x0, x1, y0, m), (x0, x1, y0 - rev, m)),
+                     (grid.celula(xm, y1 + rev + folga), (x0, x1, m, y1), (x0, x1, m, y1 + rev)))
+        else:
+            m, ym = (x0 + x1) / 2, (y0 + y1) / 2
+            lados = ((grid.celula(x0 - rev - folga, ym), (x0, m, y0, y1), (x0 - rev, m, y0, y1)),
+                     (grid.celula(x1 + rev + folga, ym), (m, x1, y0, y1), (m, x1 + rev, y0, y1)))
+        quem = [dono.get(c) for c, _b, _f in lados]
+        if not all(quem):
+            continue
+        for nome, (_c, base, acab) in zip(quem, lados):
+            out.setdefault(nome, []).append((base, acab))
+    return out
 
 
 def interior(casa, S, out, resumo):
@@ -994,15 +1038,17 @@ def pavimentos(casa, S, out, resumo):
     tot = {}
     for piso in casa.pisos:
         grid, lista = casa.salas[piso]
+        faixas = faixas_portas(grid, lista, getattr(casa, "portas_salas", {}).get(piso, []), rev)
         for nome, comp in lista:
             area_util = 0.0
             fin = acab_de(grid, comp)
             ids["acab"] = colecao_acab(fin)
+            portas = faixas.get(nome, [])
             if piso == 0:
                 z = 0.0
                 for cam in P["piso0"]["camadas"]:
                     e = (fin0 - fin["espessura"] - z) if cam["espessura"] == "resto" else cam["espessura"]
-                    rs = grid.retangulos(comp, 0.0)
+                    rs = grid.retangulos(comp, 0.0) + [list(b) for b, _a in portas]
                     a = sum((r[1] - r[0]) * (r[3] - r[2]) for r in rs)
                     pecas = [prisma([(r[0], r[2], z), (r[1], r[2], z), (r[1], r[3], z), (r[0], r[3], z)], (0, 0, e))
                              for r in rs]
@@ -1019,13 +1065,16 @@ def pavimentos(casa, S, out, resumo):
             if piso == 1 and ab:
                 rs = [q for r in rs for q in menos_retangulo(r, ab)]
             e = fin["espessura"]
-            area_util = sum((r[1] - r[0]) * (r[3] - r[2]) for r in rs)
+            area_util = sum((r[1] - r[0]) * (r[3] - r[2]) for r in rs)  # the room's usable area (labels, rooms list)
+            rs = rs + [list(a_) for _b, a_ in portas]                    # + the floor under its doors
+            area_acab = sum((r[1] - r[0]) * (r[3] - r[2]) for r in rs)
             pecas = [prisma([(r[0], r[2], z_fin), (r[1], r[2], z_fin), (r[1], r[3], z_fin), (r[0], r[3], z_fin)], (0, 0, e))
                      for r in rs if (r[1] - r[0]) > 0.01 and (r[3] - r[2]) > 0.01]
             out.objeto(f"{fin['nome']} | {nome}", ids["acab"], fin["material"], pecas,
-                       props_camada(fin, area_m2=area_util, divisao=nome, piso=piso, espessura_m=e))
+                       props_camada(fin, area_m2=area_acab, divisao=nome, piso=piso, espessura_m=e,
+                                    **({"area_sob_portas_m2": round(area_acab - area_util, 3)} if portas else {})))
             t = tot.setdefault(ids["acab"], [fin["nome"], {"area": 0.0, "comp": 0.0, "n": 0}])[1]
-            t["area"] += area_util
+            t["area"] += area_acab
             t["n"] += len(pecas)
             r0 = max(grid.retangulos(comp), key=lambda r: (r[1] - r[0]) * (r[3] - r[2]))  # label inside the room
             cx, cy = (r0[0] + r0[1]) / 2, (r0[2] + r0[3]) / 2

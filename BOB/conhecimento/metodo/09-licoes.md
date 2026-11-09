@@ -254,5 +254,6 @@ circled (`discovercasa.md`).
   (slab visible; upstairs a hole down to the ceiling below). The visit model adds the floor in each door, each side's floor
   to the middle of the wall. Since 2026-11-09 the rule is CONFIRMED by the user («Sim, contínuo»: the floor runs on under an
   interior door, §10); only the change point between two different finishes (under the leaf, ours) stays inferred. The
-  production-model gap remains: `camadas.pavimentos()` leaves the strip under each interior door (≈ 0,1 m²) out of the
-  model and the material list → deviation X21 (§15), to propose to the user; the visit model already has it.
+  production-model gap is CLOSED 2026-11-09 (user «Sim, corrige», deviation X21 fixed): `camadas.faixas_portas()` adds the
+  strip under each interior door to the finish (and to XPS / betonilha on the ground floor), so the production model and the
+  visit model now agree; exterior doors stay out (Q23).

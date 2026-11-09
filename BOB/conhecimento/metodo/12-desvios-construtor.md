@@ -101,10 +101,16 @@ base, no flashing at the ledger, tiles on the slats).
     stands `platibanda.folga` 0,05 over the plane's top (`casa_planta`: `z_plat` = `z_topo_max` + 0,05) → at the highest wall
     it may stand ≈ 7 cm past the parapet top, through the chapéu. Fix: stop it under the chapéu's inner leg (the leg lapping
     over it), or raise the parapet on one-água roofs (≈ 0,15 upstand — general practice).
-  - **X21** (§10, L74; 2026-11-09) Floor finish under interior doors: the rule is confirmed (continuous under the door) but
-    `camadas.pavimentos()` (~lines 1018-1026) lays each room's finish only over its usable area → the strip under each
-    interior door (≈ 0,87 m × wall thickness ≈ 0,1 m²) is missing from the model and the material list. Not fixed; to propose
-    to the user (extend each room's finish to the middle of the wall at door openings). The visit model already does it.
+  - **X21** (§10, L74; 2026-11-09) **FIXED 2026-11-09** (user «Sim, corrige»). Floor finish under interior doors: the rule is
+    confirmed (continuous under the door) but `camadas.pavimentos()` laid each room's finish only over its usable area → the
+    strip under each interior door (≈ 0,87 m × wall thickness ≈ 0,1 m²) was missing from the model and the material list.
+    Fix: `camadas.portas_paineis(pan)` (door openings of kind 'porta' inside panels) + the doorway gaps between panels
+    (`portas_virtuais`, thickness ≤ 0,2) are stored per floor in `casa.portas_salas` by `salas()`; `faixas_portas()` gives each
+    room's floor up to the middle of the wall in every door with a room on both sides; `pavimentos()` adds the strips to the
+    finish (and on the ground floor to the build-up layers: XPS, betonilha). Exterior doors left out (threshold open, Q23).
+    Room usable areas unchanged; finish objects carry `area_sob_portas_m2`. Results (validar issues 0): Torres Vedras vinyl
+    151,6 → 152,5 m² (8 doors); Sobral Tipo 1 vinyl 101,9 → 102,5 m², XPS/betonilha 55,2 → 55,3 m². The visit model's
+    independent check finds every interior door already floored by the production model.
 - [SB] from the engineer's drawings: `estrutura_dc.py` (beams 0 → D on the amarração, purlins ≤ 1,2 tilted, the eave one on
   the beams, prumos on every beam, empenas, verges 0,12) + `camadas.cobertura` (rectangle only: gutter flat, downpipes 0,30
   from the ends at the eave line ≈ 0,25 off the frame running to Z 0 — the "ligeiramente acima" and the swan-neck missing).

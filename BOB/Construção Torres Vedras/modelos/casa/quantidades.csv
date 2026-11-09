@@ -1,24 +1,24 @@
 colecao;seccao_ou_camada;pecas;comprimento_m;volume_m3;area_m2;unidade_compra;quantidade_compra
-1.1 Piso 0 | Paredes exteriores;110x35;233;475.6;1.834;;;
-1.1 Piso 0 | Paredes exteriores;110x75;51;140.3;1.15;;;
+1.1 Piso 0 | Paredes exteriores;110x35;228;478.4;1.845;;;
+1.1 Piso 0 | Paredes exteriores;110x75;50;140.5;1.152;;;
 "1.10 Pérgola (lameladas autoclave; secções e inclinação as";160x160;18;64.7;1.646;;;
 "1.10 Pérgola (lameladas autoclave; secções e inclinação as";160x75;2;13.9;0.167;;;
 "1.10 Pérgola (lameladas autoclave; secções e inclinação as";70x30;1;301.8;0.634;;;
 1.2 Piso 0 | Paredes interiores;110x75;24;46.5;0.383;;;
 1.2 Piso 0 | Paredes interiores;75x35;207;375.7;0.986;;;
 1.6 Amarração 11x7,5 (face interior) e afinação;110x75;18;103.5;0.854;;;
-1.7 Lameladas 200x100;200x100;18;170.5;3.41;;;
-"1.9 Madres (11x7,5; cumeeira 22x7,5 sobre a ala), prumos e cal";110x75;227;187.7;1.588;;;
+1.7 Lameladas 200x100;200x100;18;166.5;3.331;;;
+"1.9 Madres (11x7,5; cumeeira 22x7,5 sobre a ala), prumos e cal";110x75;229;187.7;1.588;;;
 "1.9 Madres (11x7,5; cumeeira 22x7,5 sobre a ala), prumos e cal";220x75;4;12.7;0.21;;;
-TOTAL madeira;;803;1892.9;12.86;;;
+TOTAL madeira;;799;1891.9;12.8;;;
 2.1 OSB 9 mm;OSB 9 mm;151;;;166.0;placa 1250x2500;59
 2.2 Membrana Traspir 95;Membrana Traspir 95;34;;;166.1;rolo 1,5 x 50 m;3
-2.3.1 Ripado 37,5x35 (A);Ripado 37,5x35 (A);198;555.2;;;;
+2.3.1 Ripado 37,5x35 (A);Ripado 37,5x35 (A);191;554.6;;;;
 2.3.2 Forro Tremolo 22x135 (A);Forro Tremolo 22x135 (A);631;1342.6;;164.8;tábua 4,0 m;370
-3.1 Lã mineral Volcalis Comfort;Lã mineral Volcalis Comfort;330;;16.306;226.0;;
+3.1 Lã mineral Volcalis Comfort;Lã mineral Volcalis Comfort;324;;16.297;225.9;;
 3.2 OSB 15 mm;OSB 15 mm;493;;;318.9;placa 1250x2500;113
 3.3 Pladur 13 mm;Pladur 13 mm;257;;;311.0;placa 1200x2600;110
-4.2 Revestimento de piso | Vinílico;Vinílico;8;;;151.6;;
+4.2 Revestimento de piso | Vinílico;Vinílico;8;;;152.5;;
 5.1 Réguas de suspensão;Réguas de suspensão;385;90.7;;;;
 5.2 Perfis de teto;Perfis de teto;87;361.3;;;;
 5.3 Cantoneira perimetral 30x30;Cantoneira perimetral 30x30;54;148.2;;;barra 3 m;50
@@ -28,10 +28,11 @@ TOTAL madeira;;803;1892.9;12.86;;;
 6.3 Caleiras, chapéus, remates e tubos de queda;Caleira oculta;3;34.6;;;;
 6.3 Caleiras, chapéus, remates e tubos de queda;Chapéu de platibanda;27;56.9;;;;
 6.3 Caleiras, chapéus, remates e tubos de queda;Cumeeira;1;17.1;;;;
-6.3 Caleiras, chapéus, remates e tubos de queda;Tubo de queda (no revestimento);4;11.5;;;;
+6.3 Caleiras, chapéus, remates e tubos de queda;Saída da caleira oculta (bocal);3;;;;;
+6.3 Caleiras, chapéus, remates e tubos de queda;Tubo de queda (no revestimento);4;11.1;;;;
 6.4.1 Platibanda (face da cobertura) | OSB 15 mm;OSB 15 mm;19;;;5.0;placa 1250x2500;2
 6.4.2 Platibanda (face da cobertura) | Membrana Traspir 95;Membrana Traspir 95;11;;;5.0;rolo 1,5 x 50 m;1
-6.4.3 Platibanda (face da cobertura) | Ripado 37,5x35;Ripado 37,5x35;13;11.2;;;;
+6.4.3 Platibanda (face da cobertura) | Ripado 37,5x35;Ripado 37,5x35;35;15.9;;;;
 6.4.4 Platibanda (face da cobertura) | Forro Tremolo 22x135;Forro Tremolo 22x135;156;38.4;;5.0;tábua 4,0 m;11
 7.1 Aros e folhas (alumínio);Caixilharia;11;;;31.7;;
 7.2 Vidros;Caixilharia;8;;;20.7;;
