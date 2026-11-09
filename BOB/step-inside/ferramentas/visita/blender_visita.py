@@ -612,6 +612,46 @@ def caixa_malha(nome, blocos):
     return me
 
 
+def topo_pavimento(a, s0, s1, n0, n1, z0):
+    """The finished floor beside a door (the higher side), or None."""
+    zs_ = []
+    for nn in (n0 - 0.25, n1 + 0.25):
+        h = BVH_PISOS.ray_cast(ponto(a, (s0 + s1) / 2, nn, z0 + 0.4), BAIXO, 1.0) if BVH_PISOS else (None,)
+        if h[0] is not None:
+            zs_.append(h[0].z)
+    return max(zs_) if zs_ else None
+
+
+BVH_EXT, _ = bvh_com_donos(objetos("ARCH_WALLS_EXT"))
+
+
+def lado_exterior(a, ss, z):
+    """+1 / -1: the side of the wall axis where the exterior layers are (cladding, render), beside the opening; 0 for
+    an interior wall."""
+    dr = Vector((0, 1, 0)) if a["eixo"] == "x" else Vector((1, 0, 0))
+    faixa_ = a.get("espessura", 0.16) / 2 + 0.12
+    for s_ in ss:
+        p0 = ponto(a, s_, a["posicao"] - 0.8, z)
+        ds, o, rest = [], p0.copy(), 1.6
+        while rest > 0 and BVH_EXT:
+            h = BVH_EXT.ray_cast(o, dr, rest)
+            if h[0] is None:
+                break
+            d = (h[0] - p0).dot(dr)
+            if abs(d - 0.8) < faixa_:
+                ds.append(d - 0.8)
+            o = h[0] + dr * 1e-4
+            rest = 1.6 - d - 1e-4
+        if ds:
+            m = sum(ds) / len(ds)
+            return 1 if m > 0 else -1
+    return 0
+
+
+CX = {"face": 0.06, "profundidade": 0.07, "vidro": 0.024}  # sistema_construtivo.json caixilharia (assumed profiles)
+CX_AL = TAB.get("Alumínio RAL 7016")
+CX_VD = TAB.get("Vidro")
+caixilhos = []
 aberturas_obs = [caixa([o]) for o in objetos("ARCH_OPENINGS")]
 forros, saltados = [], 0
 chaos, portas_com_chao = [], 0
@@ -704,7 +744,40 @@ for a in run.get("aberturas", []) if TAB else []:
     cats[ob.name] = ("ARCH_REVEALS", "gerado: forro dos vãos")
     forros.append({"abertura": f"{a['parede']}#{a['id']}", "largura": round(s1 - s0, 3), "altura": round(z1 - z0, 3),
                    "espessura_parede": round(n1 - n0, 3)})
+    # an exterior opening with nothing in it (a house without its window table in the production model) gets the
+    # company's standard frame and glass (perguntas-por-obra Q12: aluminium RAL 7016, double glazing): a visual
+    # stand-in, INFERRED — the type of each opening (fixed, tilt, sliding, panel door) comes with the project's table
+    lado = lado_exterior(a, (s0 - 0.06, s1 + 0.06), zm)
+    if lado and CX_AL and CX_VD:
+        n_out = min(max(a["posicao"] + lado * a.get("espessura", 0.16) / 2, n0), n1)
+        n_in = n_out - lado * CX["profundidade"]
+        nm_ = (n_out + n_in) / 2
+        zb = z0
+        if porta:  # a door's frame stands on its floor
+            zb = max([zt_ for _na, _nb, _zb, zt_, _p in pecas_chao] or [topo_pavimento(a, s0, s1, n0, n1, z0) or z0])
+        F = CX["face"]
+        aro = [(s0, s0 + F, zb, z1), (s1 - F, s1, zb, z1), (s0, s1, z1 - F, z1), (s0, s1, zb, zb + F)]
+        if s1 - s0 > 1.6:  # a wide opening: two leaves
+            aro.append(((s0 + s1 - F) / 2, (s0 + s1 + F) / 2, zb, z1))
+        for nome, mat, blocos in (
+                (f"Caixilho do vão {a['parede']}#{a['id']}", CX_AL,
+                 [(ponto(a, sa, n_out, za), ponto(a, sb, n_in, zb_)) for sa, sb, za, zb_ in aro]),
+                (f"Vidro do vão {a['parede']}#{a['id']}", CX_VD,
+                 [(ponto(a, s0 + F, nm_ - CX["vidro"] / 2, zb + F), ponto(a, s1 - F, nm_ + CX["vidro"] / 2, z1 - F))])):
+            me = caixa_malha(nome, blocos)
+            ob = bpy.data.objects.new(nome, me)
+            grupos["ARCH_OPENINGS"].objects.link(ob)
+            me.materials.append(mat_catalogo(mat))
+            ob["si_categoria"] = "ARCH_OPENINGS"
+            ob["si_id"] = f"ARCH_OPENINGS/{nome}"
+            ob["si_mat_id"] = mat["id"]
+            ob["si_material"] = "caixilharia padrão (gerada)"
+            cats[ob.name] = ("ARCH_OPENINGS", "gerado: caixilharia padrão nos vãos exteriores sem caixilho")
+        caixilhos.append({"abertura": f"{a['parede']}#{a['id']}", "porta": porta, "largura": round(s1 - s0, 3),
+                          "altura": round(z1 - zb, 3)})
 OUT["forros_vaos"] = {"criados": len(forros), "ja_com_remates": saltados, "detalhe": forros[:40]}
+OUT["caixilharia_gerada"] = {"vaos": len(caixilhos), "material": [CX_AL and CX_AL["id"], CX_VD and CX_VD["id"]],
+                             "estado": "INFERRED", "detalhe": caixilhos[:40]}
 # check, independent of how the pieces were made: straight down from the middle of every door, the first thing hit
 # is a floor (or a threshold) at the finished level, not the slab or the void of the floor below
 _bvh_f, _donos_f = bvh_com_donos(objetos("ARCH_FLOORS", "ARCH_OPENINGS", "ARCH_FOUNDATION", "ARCH_CEILINGS"))

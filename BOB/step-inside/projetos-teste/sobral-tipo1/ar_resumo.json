@@ -15,10 +15,18 @@
  "variantes": [
   {
    "variante": "casa",
-   "objetos": 8,
+   "base": "casa",
+   "piso": null,
+   "niveis": [
+    0.0,
+    2.962
+   ],
+   "objetos": 10,
    "materiais": [
     "MAT_CONCRETE_SLAB",
     "MAT_FLOOR_VINYL_WOOD",
+    "MAT_FRAME_ALUMINIUM__RAL7016",
+    "MAT_GLASS_CLEAR",
     "MAT_INT_PLASTER_PAINTED__WHITE",
     "MAT_MEMBRANE_BREATHER",
     "MAT_METAL_FLASHING__RAL8004",
@@ -26,8 +34,8 @@
     "MAT_ROOF_SANDWICH_TILE__RAL8004",
     "MAT_WALL_RENDER__WHITE"
    ],
-   "triangulos": 10634,
-   "triangulos_antes_de_simplificar": 11374,
+   "triangulos": 11354,
+   "triangulos_antes_de_simplificar": 12094,
    "imagens": {
     "Chipboard004_2K-JPG_Color.jpg": [
      1024,
@@ -65,6 +73,14 @@
      512,
      512
     ],
+    "Metal027_2K-JPG_Roughness.jpg": [
+     512,
+     512
+    ],
+    "Metal027_2K-JPG_NormalGL.jpg": [
+     512,
+     512
+    ],
     "Ground037_2K-JPG_Color.jpg": [
      1024,
      1024
@@ -74,14 +90,6 @@
      512
     ],
     "Ground037_2K-JPG_NormalGL.jpg": [
-     512,
-     512
-    ],
-    "Metal027_2K-JPG_Roughness.jpg": [
-     512,
-     512
-    ],
-    "Metal027_2K-JPG_NormalGL.jpg": [
      512,
      512
     ],
@@ -145,18 +153,18 @@
    "ficheiros": {
     "glb": {
      "ficheiro": "sobral-tipo1_ar_casa.glb",
-     "bytes": 1380300,
-     "sha256": "f315af0ea7661a7908c95ef9fdd8a8238e0c712bf3cfc1450308ff5f64341a23"
+     "bytes": 1424104,
+     "sha256": "0b894dc4c7a5df4b682b05e05cc6275d3eea45812909db6122fd2504c6fdfc12"
     },
     "usdz": {
      "ficheiro": "sobral-tipo1_ar_casa.usdz",
-     "bytes": 1148919,
-     "sha256": "de35fabd608e5637c3a2b11862118874fe455d8cff765cca47fba9e61f4a207f"
+     "bytes": 1184669,
+     "sha256": "d4bc3d418131ee0ea9d86e688d92f556f942dceaa2753bfae06ce884217e29c5"
     }
    },
    "reimportacao": {
     "glb": {
-     "triangulos": 10634,
+     "triangulos": 11354,
      "dimensoes": [
       13.099,
       11.249,
@@ -165,6 +173,8 @@
      "materiais": [
       "MAT_CONCRETE_SLAB",
       "MAT_FLOOR_VINYL_WOOD",
+      "MAT_FRAME_ALUMINIUM__RAL7016",
+      "MAT_GLASS_CLEAR",
       "MAT_INT_PLASTER_PAINTED__WHITE",
       "MAT_MEMBRANE_BREATHER",
       "MAT_METAL_FLASHING__RAL8004",
@@ -177,7 +187,7 @@
      "erro": null
     },
     "usdz": {
-     "triangulos": 10634,
+     "triangulos": 11354,
      "dimensoes": [
       13.099,
       11.249,
@@ -186,6 +196,8 @@
      "materiais": [
       "MAT_CONCRETE_SLAB",
       "MAT_FLOOR_VINYL_WOOD",
+      "MAT_FRAME_ALUMINIUM__RAL7016",
+      "MAT_GLASS_CLEAR",
       "MAT_INT_PLASTER_PAINTED__WHITE",
       "MAT_MEMBRANE_BREATHER",
       "MAT_METAL_FLASHING__RAL8004",
@@ -201,10 +213,18 @@
   },
   {
    "variante": "maquete",
-   "objetos": 9,
+   "base": "maquete",
+   "piso": null,
+   "niveis": [
+    0.0,
+    2.962
+   ],
+   "objetos": 11,
    "materiais": [
     "MAT_CONCRETE_SLAB",
     "MAT_FLOOR_VINYL_WOOD",
+    "MAT_FRAME_ALUMINIUM__RAL7016",
+    "MAT_GLASS_CLEAR",
     "MAT_INT_PLASTER_PAINTED__WHITE",
     "MAT_LANDSCAPE_SOIL",
     "MAT_MEMBRANE_BREATHER",
@@ -213,8 +233,8 @@
     "MAT_ROOF_SANDWICH_TILE__RAL8004",
     "MAT_WALL_RENDER__WHITE"
    ],
-   "triangulos": 11270,
-   "triangulos_antes_de_simplificar": 12010,
+   "triangulos": 11990,
+   "triangulos_antes_de_simplificar": 12730,
    "imagens": {
     "Chipboard004_2K-JPG_Color.jpg": [
      1024,
@@ -252,6 +272,14 @@
      512,
      512
     ],
+    "Metal027_2K-JPG_Roughness.jpg": [
+     512,
+     512
+    ],
+    "Metal027_2K-JPG_NormalGL.jpg": [
+     512,
+     512
+    ],
     "Ground037_2K-JPG_Color.jpg": [
      1024,
      1024
@@ -261,14 +289,6 @@
      512
     ],
     "Ground037_2K-JPG_NormalGL.jpg": [
-     512,
-     512
-    ],
-    "Metal027_2K-JPG_Roughness.jpg": [
-     512,
-     512
-    ],
-    "Metal027_2K-JPG_NormalGL.jpg": [
      512,
      512
     ],
@@ -332,18 +352,18 @@
    "ficheiros": {
     "glb": {
      "ficheiro": "sobral-tipo1_ar_maquete.glb",
-     "bytes": 2066652,
-     "sha256": "ec9a8447f818a82c68076e27db5249536f83b96f47bd393a50f4bc5e64e298c9"
+     "bytes": 2110456,
+     "sha256": "cca1659504399e84f3afd8a54df98a9653385d2d6169848a44ddc065b42e4172"
     },
     "usdz": {
      "ficheiro": "sobral-tipo1_ar_maquete.usdz",
-     "bytes": 1665203,
-     "sha256": "5bdce6133194ea4110eb7614168a05216a59e14cef14e4798b1d8618e1d4c266"
+     "bytes": 1700709,
+     "sha256": "5582d54ae1636dfbd6b71912a1ab4cdb6afb2dc6cf3718a6e0d68e437b6a090e"
     }
    },
    "reimportacao": {
     "glb": {
-     "triangulos": 11270,
+     "triangulos": 11990,
      "dimensoes": [
       53.369,
       51.497,
@@ -352,6 +372,8 @@
      "materiais": [
       "MAT_CONCRETE_SLAB",
       "MAT_FLOOR_VINYL_WOOD",
+      "MAT_FRAME_ALUMINIUM__RAL7016",
+      "MAT_GLASS_CLEAR",
       "MAT_INT_PLASTER_PAINTED__WHITE",
       "MAT_LANDSCAPE_SOIL",
       "MAT_MEMBRANE_BREATHER",
@@ -365,7 +387,7 @@
      "erro": null
     },
     "usdz": {
-     "triangulos": 11270,
+     "triangulos": 11990,
      "dimensoes": [
       53.369,
       51.497,
@@ -374,6 +396,8 @@
      "materiais": [
       "MAT_CONCRETE_SLAB",
       "MAT_FLOOR_VINYL_WOOD",
+      "MAT_FRAME_ALUMINIUM__RAL7016",
+      "MAT_GLASS_CLEAR",
       "MAT_INT_PLASTER_PAINTED__WHITE",
       "MAT_LANDSCAPE_SOIL",
       "MAT_MEMBRANE_BREATHER",
@@ -383,6 +407,781 @@
       "MAT_WALL_RENDER__WHITE"
      ],
      "imagens": 16,
+     "imagens_em_falta": [],
+     "erro": null
+    }
+   }
+  },
+  {
+   "variante": "casa_piso0",
+   "base": "casa",
+   "piso": 0,
+   "niveis": [
+    0.0,
+    2.962
+   ],
+   "objetos": 10,
+   "materiais": [
+    "MAT_CONCRETE_SLAB",
+    "MAT_FLOOR_VINYL_WOOD",
+    "MAT_FRAME_ALUMINIUM__RAL7016",
+    "MAT_GLASS_CLEAR",
+    "MAT_INT_PLASTER_PAINTED__WHITE",
+    "MAT_MEMBRANE_BREATHER",
+    "MAT_METAL_FLASHING__RAL8004",
+    "MAT_METAL_GUTTER__DARK_GREY",
+    "MAT_ROOF_SANDWICH_TILE__RAL8004",
+    "MAT_WALL_RENDER__WHITE"
+   ],
+   "triangulos": 4130,
+   "triangulos_antes_de_simplificar": 4540,
+   "imagens": {
+    "Chipboard004_2K-JPG_Color.jpg": [
+     1024,
+     1024
+    ],
+    "Chipboard004_2K-JPG_Roughness.jpg": [
+     512,
+     512
+    ],
+    "Chipboard004_2K-JPG_NormalGL.jpg": [
+     512,
+     512
+    ],
+    "Concrete046_2K-JPG_Color.jpg": [
+     1024,
+     1024
+    ],
+    "Concrete046_2K-JPG_Roughness.jpg": [
+     512,
+     512
+    ],
+    "Concrete046_2K-JPG_NormalGL.jpg": [
+     512,
+     512
+    ],
+    "WoodFloor051_2K-JPG_Color.jpg": [
+     1024,
+     1024
+    ],
+    "WoodFloor051_2K-JPG_Roughness.jpg": [
+     512,
+     512
+    ],
+    "WoodFloor051_2K-JPG_NormalGL.jpg": [
+     512,
+     512
+    ],
+    "Metal027_2K-JPG_Roughness.jpg": [
+     512,
+     512
+    ],
+    "Metal027_2K-JPG_NormalGL.jpg": [
+     512,
+     512
+    ],
+    "Ground037_2K-JPG_Color.jpg": [
+     1024,
+     1024
+    ],
+    "Ground037_2K-JPG_Roughness.jpg": [
+     512,
+     512
+    ],
+    "Ground037_2K-JPG_NormalGL.jpg": [
+     512,
+     512
+    ],
+    "RoofingTiles006_2K-JPG_Roughness.jpg": [
+     512,
+     512
+    ],
+    "RoofingTiles006_2K-JPG_NormalGL.jpg": [
+     512,
+     512
+    ],
+    "MAT_TIMBER_STRUCTURE_E2BE86_Color.jpg": [
+     1024,
+     1024
+    ],
+    "Wood096_2K-JPG_Roughness.jpg": [
+     512,
+     512
+    ],
+    "Wood096_2K-JPG_NormalGL.jpg": [
+     512,
+     512
+    ],
+    "MAT_WALL_RENDER__WHITE_F4F3EE_Color.jpg": [
+     1024,
+     1024
+    ],
+    "Plaster001_2K-JPG_Roughness.jpg": [
+     512,
+     512
+    ],
+    "Plaster001_2K-JPG_NormalGL.jpg": [
+     512,
+     512
+    ],
+    "MAT_WOOD_CLADDING__DOUGLAS_BROWN_A0653C_Color.jpg": [
+     1024,
+     512
+    ],
+    "WoodSiding009_2K-JPG_Roughness.jpg": [
+     512,
+     256
+    ],
+    "WoodSiding009_2K-JPG_NormalGL.jpg": [
+     512,
+     256
+    ],
+    "MAT_WOOD_CLADDING__PINE_NATURAL_EBD5A6_Color.jpg": [
+     1024,
+     512
+    ]
+   },
+   "textura_maior": 1024,
+   "dimensoes": [
+    13.099,
+    11.249,
+    3.152
+   ],
+   "origem": "centro da planta da casa, no pavimento acabado do piso 0",
+   "z_min": -0.2,
+   "ficheiros": {
+    "glb": {
+     "ficheiro": "sobral-tipo1_ar_casa_piso0.glb",
+     "bytes": 933204,
+     "sha256": "d87f8fb5c019bc80a2bf6dedb743ee703ae9534269186b9ece1cf28912730493"
+    },
+    "usdz": {
+     "ficheiro": "sobral-tipo1_ar_casa_piso0.usdz",
+     "bytes": 874676,
+     "sha256": "b3c881563ac1a68eb4d8f99d9659d236130e809ac2d8cd2f42a6a9dcc88a32ab"
+    }
+   },
+   "reimportacao": {
+    "glb": {
+     "triangulos": 4130,
+     "dimensoes": [
+      13.099,
+      11.249,
+      3.152
+     ],
+     "materiais": [
+      "MAT_CONCRETE_SLAB",
+      "MAT_FLOOR_VINYL_WOOD",
+      "MAT_FRAME_ALUMINIUM__RAL7016",
+      "MAT_GLASS_CLEAR",
+      "MAT_INT_PLASTER_PAINTED__WHITE",
+      "MAT_MEMBRANE_BREATHER",
+      "MAT_METAL_GUTTER__DARK_GREY",
+      "MAT_WALL_RENDER__WHITE"
+     ],
+     "imagens": 11,
+     "imagens_em_falta": [],
+     "erro": null
+    },
+    "usdz": {
+     "triangulos": 4130,
+     "dimensoes": [
+      13.099,
+      11.249,
+      3.152
+     ],
+     "materiais": [
+      "MAT_CONCRETE_SLAB",
+      "MAT_FLOOR_VINYL_WOOD",
+      "MAT_FRAME_ALUMINIUM__RAL7016",
+      "MAT_GLASS_CLEAR",
+      "MAT_INT_PLASTER_PAINTED__WHITE",
+      "MAT_MEMBRANE_BREATHER",
+      "MAT_METAL_FLASHING__RAL8004",
+      "MAT_METAL_GUTTER__DARK_GREY",
+      "MAT_ROOF_SANDWICH_TILE__RAL8004",
+      "MAT_WALL_RENDER__WHITE"
+     ],
+     "imagens": 13,
+     "imagens_em_falta": [],
+     "erro": null
+    }
+   }
+  },
+  {
+   "variante": "maquete_piso0",
+   "base": "maquete",
+   "piso": 0,
+   "niveis": [
+    0.0,
+    2.962
+   ],
+   "objetos": 11,
+   "materiais": [
+    "MAT_CONCRETE_SLAB",
+    "MAT_FLOOR_VINYL_WOOD",
+    "MAT_FRAME_ALUMINIUM__RAL7016",
+    "MAT_GLASS_CLEAR",
+    "MAT_INT_PLASTER_PAINTED__WHITE",
+    "MAT_LANDSCAPE_SOIL",
+    "MAT_MEMBRANE_BREATHER",
+    "MAT_METAL_FLASHING__RAL8004",
+    "MAT_METAL_GUTTER__DARK_GREY",
+    "MAT_ROOF_SANDWICH_TILE__RAL8004",
+    "MAT_WALL_RENDER__WHITE"
+   ],
+   "triangulos": 3766,
+   "triangulos_antes_de_simplificar": 3982,
+   "imagens": {
+    "Chipboard004_2K-JPG_Color.jpg": [
+     1024,
+     1024
+    ],
+    "Chipboard004_2K-JPG_Roughness.jpg": [
+     512,
+     512
+    ],
+    "Chipboard004_2K-JPG_NormalGL.jpg": [
+     512,
+     512
+    ],
+    "Concrete046_2K-JPG_Color.jpg": [
+     1024,
+     1024
+    ],
+    "Concrete046_2K-JPG_Roughness.jpg": [
+     512,
+     512
+    ],
+    "Concrete046_2K-JPG_NormalGL.jpg": [
+     512,
+     512
+    ],
+    "WoodFloor051_2K-JPG_Color.jpg": [
+     1024,
+     1024
+    ],
+    "WoodFloor051_2K-JPG_Roughness.jpg": [
+     512,
+     512
+    ],
+    "WoodFloor051_2K-JPG_NormalGL.jpg": [
+     512,
+     512
+    ],
+    "Metal027_2K-JPG_Roughness.jpg": [
+     512,
+     512
+    ],
+    "Metal027_2K-JPG_NormalGL.jpg": [
+     512,
+     512
+    ],
+    "Ground037_2K-JPG_Color.jpg": [
+     1024,
+     1024
+    ],
+    "Ground037_2K-JPG_Roughness.jpg": [
+     512,
+     512
+    ],
+    "Ground037_2K-JPG_NormalGL.jpg": [
+     512,
+     512
+    ],
+    "RoofingTiles006_2K-JPG_Roughness.jpg": [
+     512,
+     512
+    ],
+    "RoofingTiles006_2K-JPG_NormalGL.jpg": [
+     512,
+     512
+    ],
+    "MAT_TIMBER_STRUCTURE_E2BE86_Color.jpg": [
+     1024,
+     1024
+    ],
+    "Wood096_2K-JPG_Roughness.jpg": [
+     512,
+     512
+    ],
+    "Wood096_2K-JPG_NormalGL.jpg": [
+     512,
+     512
+    ],
+    "MAT_WALL_RENDER__WHITE_F4F3EE_Color.jpg": [
+     1024,
+     1024
+    ],
+    "Plaster001_2K-JPG_Roughness.jpg": [
+     512,
+     512
+    ],
+    "Plaster001_2K-JPG_NormalGL.jpg": [
+     512,
+     512
+    ],
+    "MAT_WOOD_CLADDING__DOUGLAS_BROWN_A0653C_Color.jpg": [
+     1024,
+     512
+    ],
+    "WoodSiding009_2K-JPG_Roughness.jpg": [
+     512,
+     256
+    ],
+    "WoodSiding009_2K-JPG_NormalGL.jpg": [
+     512,
+     256
+    ],
+    "MAT_WOOD_CLADDING__PINE_NATURAL_EBD5A6_Color.jpg": [
+     1024,
+     512
+    ]
+   },
+   "textura_maior": 1024,
+   "dimensoes": [
+    53.369,
+    51.497,
+    10.5
+   ],
+   "origem": "centro da planta da casa, no pavimento acabado do rés do chão",
+   "z_min": -2.88,
+   "ficheiros": {
+    "glb": {
+     "ficheiro": "sobral-tipo1_ar_maquete_piso0.glb",
+     "bytes": 1571712,
+     "sha256": "c15ee554724da2489b3f08774a55676af2aa104d5c1b54a6526bd842d2bf560e"
+    },
+    "usdz": {
+     "ficheiro": "sobral-tipo1_ar_maquete_piso0.usdz",
+     "bytes": 1343164,
+     "sha256": "180bad8e5af90919b2e0791c7c27290789a36ab976fe82c29965746e7b2cad34"
+    }
+   },
+   "reimportacao": {
+    "glb": {
+     "triangulos": 3766,
+     "dimensoes": [
+      53.369,
+      51.497,
+      10.5
+     ],
+     "materiais": [
+      "MAT_CONCRETE_SLAB",
+      "MAT_FLOOR_VINYL_WOOD",
+      "MAT_FRAME_ALUMINIUM__RAL7016",
+      "MAT_GLASS_CLEAR",
+      "MAT_INT_PLASTER_PAINTED__WHITE",
+      "MAT_LANDSCAPE_SOIL",
+      "MAT_MEMBRANE_BREATHER",
+      "MAT_METAL_GUTTER__DARK_GREY",
+      "MAT_WALL_RENDER__WHITE"
+     ],
+     "imagens": 14,
+     "imagens_em_falta": [],
+     "erro": null
+    },
+    "usdz": {
+     "triangulos": 3766,
+     "dimensoes": [
+      53.369,
+      51.497,
+      10.5
+     ],
+     "materiais": [
+      "MAT_CONCRETE_SLAB",
+      "MAT_FLOOR_VINYL_WOOD",
+      "MAT_FRAME_ALUMINIUM__RAL7016",
+      "MAT_GLASS_CLEAR",
+      "MAT_INT_PLASTER_PAINTED__WHITE",
+      "MAT_LANDSCAPE_SOIL",
+      "MAT_MEMBRANE_BREATHER",
+      "MAT_METAL_FLASHING__RAL8004",
+      "MAT_METAL_GUTTER__DARK_GREY",
+      "MAT_ROOF_SANDWICH_TILE__RAL8004",
+      "MAT_WALL_RENDER__WHITE"
+     ],
+     "imagens": 16,
+     "imagens_em_falta": [],
+     "erro": null
+    }
+   }
+  },
+  {
+   "variante": "casa_piso1",
+   "base": "casa",
+   "piso": 1,
+   "niveis": [
+    0.0,
+    2.962
+   ],
+   "objetos": 7,
+   "materiais": [
+    "MAT_CONCRETE_SLAB",
+    "MAT_FLOOR_VINYL_WOOD",
+    "MAT_FRAME_ALUMINIUM__RAL7016",
+    "MAT_GLASS_CLEAR",
+    "MAT_INT_PLASTER_PAINTED__WHITE",
+    "MAT_MEMBRANE_BREATHER",
+    "MAT_WALL_RENDER__WHITE"
+   ],
+   "triangulos": 4242,
+   "triangulos_antes_de_simplificar": 4704,
+   "imagens": {
+    "Chipboard004_2K-JPG_Color.jpg": [
+     1024,
+     1024
+    ],
+    "Chipboard004_2K-JPG_Roughness.jpg": [
+     512,
+     512
+    ],
+    "Chipboard004_2K-JPG_NormalGL.jpg": [
+     512,
+     512
+    ],
+    "Concrete046_2K-JPG_Color.jpg": [
+     1024,
+     1024
+    ],
+    "Concrete046_2K-JPG_Roughness.jpg": [
+     512,
+     512
+    ],
+    "Concrete046_2K-JPG_NormalGL.jpg": [
+     512,
+     512
+    ],
+    "WoodFloor051_2K-JPG_Color.jpg": [
+     1024,
+     1024
+    ],
+    "WoodFloor051_2K-JPG_Roughness.jpg": [
+     512,
+     512
+    ],
+    "WoodFloor051_2K-JPG_NormalGL.jpg": [
+     512,
+     512
+    ],
+    "Metal027_2K-JPG_Roughness.jpg": [
+     512,
+     512
+    ],
+    "Metal027_2K-JPG_NormalGL.jpg": [
+     512,
+     512
+    ],
+    "Ground037_2K-JPG_Color.jpg": [
+     1024,
+     1024
+    ],
+    "Ground037_2K-JPG_Roughness.jpg": [
+     512,
+     512
+    ],
+    "Ground037_2K-JPG_NormalGL.jpg": [
+     512,
+     512
+    ],
+    "RoofingTiles006_2K-JPG_Roughness.jpg": [
+     512,
+     512
+    ],
+    "RoofingTiles006_2K-JPG_NormalGL.jpg": [
+     512,
+     512
+    ],
+    "MAT_TIMBER_STRUCTURE_E2BE86_Color.jpg": [
+     1024,
+     1024
+    ],
+    "Wood096_2K-JPG_Roughness.jpg": [
+     512,
+     512
+    ],
+    "Wood096_2K-JPG_NormalGL.jpg": [
+     512,
+     512
+    ],
+    "MAT_WALL_RENDER__WHITE_F4F3EE_Color.jpg": [
+     1024,
+     1024
+    ],
+    "Plaster001_2K-JPG_Roughness.jpg": [
+     512,
+     512
+    ],
+    "Plaster001_2K-JPG_NormalGL.jpg": [
+     512,
+     512
+    ],
+    "MAT_WOOD_CLADDING__DOUGLAS_BROWN_A0653C_Color.jpg": [
+     1024,
+     512
+    ],
+    "WoodSiding009_2K-JPG_Roughness.jpg": [
+     512,
+     256
+    ],
+    "WoodSiding009_2K-JPG_NormalGL.jpg": [
+     512,
+     256
+    ],
+    "MAT_WOOD_CLADDING__PINE_NATURAL_EBD5A6_Color.jpg": [
+     1024,
+     512
+    ]
+   },
+   "textura_maior": 1024,
+   "dimensoes": [
+    10.011,
+    6.261,
+    4.476
+   ],
+   "origem": "centro da planta da casa, no pavimento acabado do piso 1",
+   "z_min": -0.2,
+   "ficheiros": {
+    "glb": {
+     "ficheiro": "sobral-tipo1_ar_casa_piso1.glb",
+     "bytes": 697936,
+     "sha256": "dfd59677bd34aa1fafc6ab96da05cc3f4c66b6fbdb3c8a513fb4c192830325b3"
+    },
+    "usdz": {
+     "ficheiro": "sobral-tipo1_ar_casa_piso1.usdz",
+     "bytes": 808895,
+     "sha256": "657cc1ad7d377b7a0404ee8edf279cba20f788959811c318b1b75abcb7ed903d"
+    }
+   },
+   "reimportacao": {
+    "glb": {
+     "triangulos": 4242,
+     "dimensoes": [
+      10.011,
+      6.261,
+      4.476
+     ],
+     "materiais": [
+      "MAT_FLOOR_VINYL_WOOD",
+      "MAT_FRAME_ALUMINIUM__RAL7016",
+      "MAT_GLASS_CLEAR",
+      "MAT_INT_PLASTER_PAINTED__WHITE",
+      "MAT_MEMBRANE_BREATHER",
+      "MAT_WALL_RENDER__WHITE"
+     ],
+     "imagens": 8,
+     "imagens_em_falta": [],
+     "erro": null
+    },
+    "usdz": {
+     "triangulos": 4242,
+     "dimensoes": [
+      10.011,
+      6.261,
+      4.476
+     ],
+     "materiais": [
+      "MAT_CONCRETE_SLAB",
+      "MAT_FLOOR_VINYL_WOOD",
+      "MAT_FRAME_ALUMINIUM__RAL7016",
+      "MAT_GLASS_CLEAR",
+      "MAT_INT_PLASTER_PAINTED__WHITE",
+      "MAT_MEMBRANE_BREATHER",
+      "MAT_WALL_RENDER__WHITE"
+     ],
+     "imagens": 11,
+     "imagens_em_falta": [],
+     "erro": null
+    }
+   }
+  },
+  {
+   "variante": "maquete_piso1",
+   "base": "maquete",
+   "piso": 1,
+   "niveis": [
+    0.0,
+    2.962
+   ],
+   "objetos": 8,
+   "materiais": [
+    "MAT_CONCRETE_SLAB",
+    "MAT_FLOOR_VINYL_WOOD",
+    "MAT_FRAME_ALUMINIUM__RAL7016",
+    "MAT_GLASS_CLEAR",
+    "MAT_INT_PLASTER_PAINTED__WHITE",
+    "MAT_LANDSCAPE_SOIL",
+    "MAT_MEMBRANE_BREATHER",
+    "MAT_WALL_RENDER__WHITE"
+   ],
+   "triangulos": 7608,
+   "triangulos_antes_de_simplificar": 8170,
+   "imagens": {
+    "Chipboard004_2K-JPG_Color.jpg": [
+     1024,
+     1024
+    ],
+    "Chipboard004_2K-JPG_Roughness.jpg": [
+     512,
+     512
+    ],
+    "Chipboard004_2K-JPG_NormalGL.jpg": [
+     512,
+     512
+    ],
+    "Concrete046_2K-JPG_Color.jpg": [
+     1024,
+     1024
+    ],
+    "Concrete046_2K-JPG_Roughness.jpg": [
+     512,
+     512
+    ],
+    "Concrete046_2K-JPG_NormalGL.jpg": [
+     512,
+     512
+    ],
+    "WoodFloor051_2K-JPG_Color.jpg": [
+     1024,
+     1024
+    ],
+    "WoodFloor051_2K-JPG_Roughness.jpg": [
+     512,
+     512
+    ],
+    "WoodFloor051_2K-JPG_NormalGL.jpg": [
+     512,
+     512
+    ],
+    "Metal027_2K-JPG_Roughness.jpg": [
+     512,
+     512
+    ],
+    "Metal027_2K-JPG_NormalGL.jpg": [
+     512,
+     512
+    ],
+    "Ground037_2K-JPG_Color.jpg": [
+     1024,
+     1024
+    ],
+    "Ground037_2K-JPG_Roughness.jpg": [
+     512,
+     512
+    ],
+    "Ground037_2K-JPG_NormalGL.jpg": [
+     512,
+     512
+    ],
+    "RoofingTiles006_2K-JPG_Roughness.jpg": [
+     512,
+     512
+    ],
+    "RoofingTiles006_2K-JPG_NormalGL.jpg": [
+     512,
+     512
+    ],
+    "MAT_TIMBER_STRUCTURE_E2BE86_Color.jpg": [
+     1024,
+     1024
+    ],
+    "Wood096_2K-JPG_Roughness.jpg": [
+     512,
+     512
+    ],
+    "Wood096_2K-JPG_NormalGL.jpg": [
+     512,
+     512
+    ],
+    "MAT_WALL_RENDER__WHITE_F4F3EE_Color.jpg": [
+     1024,
+     1024
+    ],
+    "Plaster001_2K-JPG_Roughness.jpg": [
+     512,
+     512
+    ],
+    "Plaster001_2K-JPG_NormalGL.jpg": [
+     512,
+     512
+    ],
+    "MAT_WOOD_CLADDING__DOUGLAS_BROWN_A0653C_Color.jpg": [
+     1024,
+     512
+    ],
+    "WoodSiding009_2K-JPG_Roughness.jpg": [
+     512,
+     256
+    ],
+    "WoodSiding009_2K-JPG_NormalGL.jpg": [
+     512,
+     256
+    ],
+    "MAT_WOOD_CLADDING__PINE_NATURAL_EBD5A6_Color.jpg": [
+     1024,
+     512
+    ]
+   },
+   "textura_maior": 1024,
+   "dimensoes": [
+    53.369,
+    51.497,
+    10.5
+   ],
+   "origem": "centro da planta da casa, no pavimento acabado do rés do chão",
+   "z_min": -2.88,
+   "ficheiros": {
+    "glb": {
+     "ficheiro": "sobral-tipo1_ar_maquete_piso1.glb",
+     "bytes": 1779164,
+     "sha256": "8c7e11d2c8d2704c3d6118e19a0c0f790bc5b99d4d5737a3487a7fa9fc80e91f"
+    },
+    "usdz": {
+     "ficheiro": "sobral-tipo1_ar_maquete_piso1.usdz",
+     "bytes": 1456753,
+     "sha256": "c10d7344223fd7de7820d66e8df1f7add1919e0f57fbec7ca9c66c25386af586"
+    }
+   },
+   "reimportacao": {
+    "glb": {
+     "triangulos": 7608,
+     "dimensoes": [
+      53.369,
+      51.497,
+      10.5
+     ],
+     "materiais": [
+      "MAT_CONCRETE_SLAB",
+      "MAT_FLOOR_VINYL_WOOD",
+      "MAT_FRAME_ALUMINIUM__RAL7016",
+      "MAT_GLASS_CLEAR",
+      "MAT_INT_PLASTER_PAINTED__WHITE",
+      "MAT_LANDSCAPE_SOIL",
+      "MAT_MEMBRANE_BREATHER",
+      "MAT_WALL_RENDER__WHITE"
+     ],
+     "imagens": 14,
+     "imagens_em_falta": [],
+     "erro": null
+    },
+    "usdz": {
+     "triangulos": 7608,
+     "dimensoes": [
+      53.369,
+      51.497,
+      10.5
+     ],
+     "materiais": [
+      "MAT_CONCRETE_SLAB",
+      "MAT_FLOOR_VINYL_WOOD",
+      "MAT_FRAME_ALUMINIUM__RAL7016",
+      "MAT_GLASS_CLEAR",
+      "MAT_INT_PLASTER_PAINTED__WHITE",
+      "MAT_LANDSCAPE_SOIL",
+      "MAT_MEMBRANE_BREATHER",
+      "MAT_WALL_RENDER__WHITE"
+     ],
+     "imagens": 14,
      "imagens_em_falta": [],
      "erro": null
     }

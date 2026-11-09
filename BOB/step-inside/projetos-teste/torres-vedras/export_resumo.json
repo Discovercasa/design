@@ -1,8 +1,8 @@
 {
  "project_id": "torres-vedras",
- "version_id": "torres-vedras-12c32d4-202611091519",
- "source_blend_hash": "sha256:f2df1bd89c6f5c169af6fbb557239e9ed71226069c41268324158f99e0c44aff",
- "export_timestamp": "2026-11-09T15:19:21+00:00",
+ "version_id": "torres-vedras-3c5454a-202611091621",
+ "source_blend_hash": "sha256:35da780ffdd585905b79417e72deb2d270396572bb1d3fb0461443498f96c082",
+ "export_timestamp": "2026-11-09T16:21:13+00:00",
  "blender_version": "4.4.3",
  "unreal_target_version": "5.8 (a confirmar na Fase 4)",
  "unit_system": "métrico (1 unidade = 1 m)",
@@ -40,7 +40,7 @@
    "path": "torres-vedras_visita.fbx",
    "type": "fbx",
    "size_bytes": 2243308,
-   "sha256": "15961a31a7433fbeb967b7c37b8e6a2a816a75b887627b8d3e7102cfd6b20c72",
+   "sha256": "bc8293907f89cac8913e367c55454c8fc4a14c2c40cbabbaf60eba960845a732",
    "material_ids": [
     "MAT_BOARD_OSB",
     "MAT_CONCRETE_SLAB",
@@ -99,8 +99,8 @@
   {
    "path": "torres-vedras_visita.usdz",
    "type": "usdz",
-   "size_bytes": 96482610,
-   "sha256": "512590744dcbd05190627ee6ff8a3277773dc68a06b224263a3ed7e3d2a6e902",
+   "size_bytes": 96482408,
+   "sha256": "52b6b069d4175c5305291bdb0693352b44144b4e8fbaa83fb2d0b7946e872fa6",
    "material_ids": [
     "MAT_BOARD_OSB",
     "MAT_CONCRETE_SLAB",

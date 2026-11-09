@@ -171,6 +171,15 @@
     }
    ]
   },
+  "caixilharia_gerada": {
+   "vaos": 0,
+   "material": [
+    "MAT_FRAME_ALUMINIUM__RAL7016",
+    "MAT_GLASS_CLEAR"
+   ],
+   "estado": "INFERRED",
+   "detalhe": []
+  },
   "chao_vaos": {
    "portas": 15,
    "criados": 2,

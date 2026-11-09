@@ -43,6 +43,10 @@ class TestOrcamento(unittest.TestCase):
     def test_casa_a_flutuar(self):  # the phone sets the lowest point on the ground
         self.assertIn("flutuar", ar.avaliar(var(z_min=-1.0), FICH, reimp())[0][0])
         self.assertEqual(ar.avaliar(var(variante="maquete", z_min=-3.0), FICH, reimp())[0], [])
+        # one storey at 1:1 (houses of two or more storeys, 2026-11-09): the same rule, by its base variant
+        self.assertIn("flutuar", ar.avaliar(var(variante="casa_piso1", base="casa", piso=1, z_min=-3.2), FICH, reimp())[0][0])
+        self.assertEqual(ar.avaliar(var(variante="casa_piso1", base="casa", piso=1), FICH, reimp())[0], [])
+        self.assertEqual(ar.avaliar(var(variante="maquete_piso1", base="maquete", piso=1, z_min=-3.0), FICH, reimp())[0], [])
 
     def test_reabrir_com_escala_errada(self):
         self.assertTrue(ar.avaliar(var(), FICH, reimp(dims=(10.0, 7.0, 6.0)))[0])

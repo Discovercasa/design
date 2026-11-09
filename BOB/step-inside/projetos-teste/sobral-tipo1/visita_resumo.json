@@ -51,6 +51,7 @@
     "MAT_BOARD_OSB",
     "MAT_CONCRETE_SLAB",
     "MAT_FLOOR_VINYL_WOOD",
+    "MAT_FRAME_ALUMINIUM__RAL7016",
     "MAT_LANDSCAPE_SOIL",
     "MAT_METAL_FLASHING__RAL8004",
     "MAT_METAL_GUTTER__DARK_GREY",
@@ -217,6 +218,88 @@
      "largura": 0.86,
      "altura": 2.16,
      "espessura_parede": 0.104
+    }
+   ]
+  },
+  "caixilharia_gerada": {
+   "vaos": 12,
+   "material": [
+    "MAT_FRAME_ALUMINIUM__RAL7016",
+    "MAT_GLASS_CLEAR"
+   ],
+   "estado": "INFERRED",
+   "detalhe": [
+    {
+     "abertura": "PE1.12#0",
+     "porta": false,
+     "largura": 0.68,
+     "altura": 0.54
+    },
+    {
+     "abertura": "PE1.04#0",
+     "porta": true,
+     "largura": 1.1,
+     "altura": 2.52
+    },
+    {
+     "abertura": "PE1.05#0",
+     "porta": true,
+     "largura": 1.14,
+     "altura": 2.52
+    },
+    {
+     "abertura": "PE1.06#0",
+     "porta": true,
+     "largura": 1.1,
+     "altura": 2.52
+    },
+    {
+     "abertura": "PE1.08#0",
+     "porta": true,
+     "largura": 1.33,
+     "altura": 2.52
+    },
+    {
+     "abertura": "PE1.13#0",
+     "porta": true,
+     "largura": 1.1,
+     "altura": 2.52
+    },
+    {
+     "abertura": "PE2.11#0",
+     "porta": false,
+     "largura": 1.13,
+     "altura": 1.2
+    },
+    {
+     "abertura": "PE2.01#0",
+     "porta": false,
+     "largura": 1.11,
+     "altura": 1.08
+    },
+    {
+     "abertura": "PE2.04#0",
+     "porta": false,
+     "largura": 1.1,
+     "altura": 1.2
+    },
+    {
+     "abertura": "PE2.05#0",
+     "porta": false,
+     "largura": 1.14,
+     "altura": 1.2
+    },
+    {
+     "abertura": "PE2.06#0",
+     "porta": false,
+     "largura": 1.1,
+     "altura": 1.2
+    },
+    {
+     "abertura": "PE2.08#0",
+     "porta": false,
+     "largura": 0.66,
+     "altura": 0.98
     }
    ]
   },

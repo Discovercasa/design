@@ -430,6 +430,10 @@ def relatorio_md(r, decl):
         L.append("- **Juntas dos acabamentos** (o modelo de produção desenha cada tábua e placa com a sua junta; em obra "
                  "ficam fechadas): fechadas " + (", ".join(f"{k} {v}" for k, v in sorted(jt["fechadas"].items())) or "nenhuma")
                  + f"; por fechar {jt['restantes']}.")
+    cg = m.get("caixilharia_gerada")
+    if cg and cg["vaos"]:
+        L.append(f"- **Caixilharia padrão nos vãos exteriores sem caixilho** (INFERRED: alumínio RAL 7016 e vidro duplo, "
+                 f"pergunta 12 por obra; o tipo de cada vão vem da tabela de vãos do projeto): {cg['vaos']} vãos.")
     cv = m.get("chao_vaos")
     if cv:
         L.append(f"- **Chão nos vãos das portas:** {cv['portas']} portas; chão acrescentado em {cv['criados']} peças, "

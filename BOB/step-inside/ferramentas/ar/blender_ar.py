@@ -2,11 +2,16 @@
 
     blender --background visita.blend --python blender_ar.py -- run.json
 
-run.json = {"variante": "casa" | "maquete", "ocultos": [MAT ids not seen from outside], "raio_terreno_m": 20,
-            "textura_max": 1024, "glb": path, "usdz": path, "resumo": path}
+run.json = {"variante": "casa" | "maquete", "piso": None | k, "ocultos": [MAT ids not seen from outside],
+            "raio_terreno_m": 20, "textura_max": 1024, "glb": path, "usdz": path, "resumo": path}
   casa     the house alone at 1:1, origin at the centre of its footprint on the finished ground floor: placed on the
            real ground, the client walks around it
   maquete  the house with the terrain around it (cropped), same origin: seen scaled down on a table
+  piso k   (houses of two or more storeys, user 2026-11-09: «como é que o cliente pode ver o piso de cima ou o de
+           baixo»): casa → storey k alone at 1:1, from 0,2 m under its floor to just under the next floor (the top
+           storey without its roof), set down so its floor is at the origin — the client walks inside it on the real
+           ground; maquete → the house open down to storey k (what is above cut off, its ceilings and roof left out),
+           on the terrain. The storeys are the levels of the visible floor finishes (resumo "niveis").
 Steps: drop what is not seen (excluded collections, hidden layers: OSB, wool, membranes, structure…), join the meshes
 per material (few draw calls), merge coplanar faces (same shape, fewer triangles), scale the textures down, move the
 origin, export GLB (Scene Viewer) and USDZ (Quick Look). No baked shadows (spec §8: the viewers draw them).
@@ -51,6 +56,45 @@ pisos = [o for o in casa if o.get("si_categoria") == "ARCH_FLOORS"]
 z0 = min(max((o.matrix_world @ Vector(c)).z for c in o.bound_box) for o in pisos) if pisos else lo.z
 origem = Vector(((lo.x + hi.x) / 2, (lo.y + hi.y) / 2, z0))
 
+
+def caixa_mundo(o):
+    pts = [o.matrix_world @ Vector(c) for c in o.bound_box]
+    return Vector(map(min, *pts)), Vector(map(max, *pts))
+
+
+# storeys: the levels of the visible floor finishes (relative to the origin), with at least 4 m² of floor each
+tops = []
+for o in pisos:
+    a_, b_ = caixa_mundo(o)
+    tops.append((b_.z - origem.z, (b_.x - a_.x) * (b_.y - a_.y)))
+grupos_n = []
+for z, ar_ in sorted(tops):
+    if grupos_n and z - grupos_n[-1][0] < 0.3:
+        grupos_n[-1][1] += ar_
+    else:
+        grupos_n.append([z, ar_])
+niveis = [round(z, 3) for z, ar_ in grupos_n if ar_ >= 4.0]
+PISO = run.get("piso")
+corte_sup = corte_inf = None
+desce = 0.0
+if PISO is not None:
+    if PISO + 1 < len(niveis):
+        corte_sup = niveis[PISO + 1] - 0.01   # just under the next storey's floor finish
+    topo = PISO == len(niveis) - 1
+    tirar = []
+    for o in manter:
+        cat = o.get("si_categoria", "")
+        a_, b_ = caixa_mundo(o)
+        if topo and cat == "ARCH_ROOF":
+            tirar.append(o)  # the top storey without its roof
+        elif run["variante"] == "maquete" and cat == "ARCH_CEILINGS" and a_.z - origem.z >= niveis[PISO] - 0.05 and \
+                (corte_sup is None or b_.z - origem.z <= corte_sup + 0.05):
+            tirar.append(o)  # the table model is open from above: no ceiling over the storey shown
+    manter = [o for o in manter if o not in tirar]
+    if run["variante"] == "casa":
+        corte_inf = niveis[PISO] - run.get("corte_abaixo_m", 0.2)
+        desce = niveis[PISO]
+
 # 2. bake every kept object into one mesh per material, in coordinates relative to the origin
 porm = {}
 for o in manter:
@@ -81,13 +125,30 @@ for nome, partes in porm.items():
         fora = [f for f in bm.faces if any(
             max(abs(v.co.x) - (hi.x - lo.x) / 2, abs(v.co.y) - (hi.y - lo.y) / 2) > raio for v in f.verts)]
         bmesh.ops.delete(bm, geom=fora, context="FACES")
-    if run["variante"] == "casa":
+    terreno = nome.startswith("MAT_LANDSCAPE") or (partes and partes[0][2] and partes[0][2].name.startswith("MAT_LANDSCAPE"))
+    if run["variante"] == "casa" and PISO is None:
         # the phone sets the model's lowest point on the real ground: nothing may hang below it (the indicative
         # foundation goes ~1 m down). Cut at corte_abaixo_m under the finished floor: the plinth stays visible.
         corte = -run.get("corte_abaixo_m", 0.2)
         if bm.verts and min(v.co.z for v in bm.verts) < corte:
             geom = bm.verts[:] + bm.edges[:] + bm.faces[:]
             bmesh.ops.bisect_plane(bm, geom=geom, dist=1e-5, plane_co=(0, 0, corte), plane_no=(0, 0, 1), clear_inner=True)
+    if PISO is not None and not terreno:
+        # one storey: cut above (and, at 1:1, below) and close the cut, so no wall is seen hollow from above
+        for z_c, acima in ((corte_sup, True), (corte_inf, False)):
+            if z_c is None or not bm.verts:
+                continue
+            zs_ = [v.co.z for v in bm.verts]
+            if (acima and max(zs_) <= z_c) or (not acima and min(zs_) >= z_c):
+                continue
+            geom = bm.verts[:] + bm.edges[:] + bm.faces[:]
+            r_ = bmesh.ops.bisect_plane(bm, geom=geom, dist=1e-5, plane_co=(0, 0, z_c), plane_no=(0, 0, 1),
+                                        clear_outer=acima, clear_inner=not acima)
+            cortadas = [e for e in r_["geom_cut"] if isinstance(e, bmesh.types.BMEdge) and e.is_valid and e.is_boundary]
+            if cortadas:
+                bmesh.ops.holes_fill(bm, edges=cortadas, sides=0)
+        if desce:
+            bmesh.ops.translate(bm, verts=bm.verts, vec=(0, 0, -desce))
     tri_antes += sum(len(f.verts) - 2 for f in bm.faces)
     bmesh.ops.remove_doubles(bm, verts=bm.verts, dist=0.0005)
     # no coplanar merging: it saved < 2 % of the triangles and its T-junctions showed as hairline cracks (2026-11-09)
@@ -134,11 +195,14 @@ bpy.ops.wm.usd_export(filepath=run["usdz"], visible_objects_only=True, export_ma
                       generate_materialx_network=False)
 caixa = [list(map(min, *[o.bound_box[i] for o in col.objects for i in range(8)])),
          list(map(max, *[o.bound_box[i] for o in col.objects for i in range(8)]))]
-json.dump({"variante": run["variante"], "objetos": len(col.objects), "materiais": sorted(o.name for o in col.objects),
+nome_var = run["variante"] + (f"_piso{PISO}" if PISO is not None else "")
+json.dump({"variante": nome_var, "base": run["variante"], "piso": PISO, "niveis": niveis,
+           "objetos": len(col.objects), "materiais": sorted(o.name for o in col.objects),
            "triangulos": tri, "triangulos_antes_de_simplificar": tri_antes, "imagens": imgs,
            "textura_maior": max((max(s) for s in imgs.values()), default=0),
            "dimensoes": [round(b - a, 3) for a, b in zip(*caixa)],
-           "origem": "centro da planta da casa, no pavimento acabado do rés do chão",
+           "origem": "centro da planta da casa, no pavimento acabado " + (
+               f"do piso {PISO}" if PISO is not None and run["variante"] == "casa" else "do rés do chão"),
            "z_min": round(min(o.bound_box[i][2] for o in col.objects for i in range(8)), 3)},
           open(run["resumo"], "w", encoding="utf-8"), ensure_ascii=False, indent=1)
 print("AR_OK", tri)

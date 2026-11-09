@@ -7,14 +7,14 @@
 
 Gerado por `step-inside/ferramentas/exportar/exportar.py` a partir do modelo de visita. Os ficheiros e o `manifest.json` completo ficam só no PC (`_trabalho/step-inside/<obra>/export/a/`).
 
-- Versão: `torres-vedras-12c32d4-202611091519` · Blender 4.4.3 · Unreal alvo 5.8 (a confirmar na Fase 4)
+- Versão: `torres-vedras-3c5454a-202611091621` · Blender 4.4.3 · Unreal alvo 5.8 (a confirmar na Fase 4)
 - Fonte: 344 objetos, 54095 triângulos, 21 materiais, 26 imagens; caixa [80.899, 82.831, 6.226] m
 
 | Ficheiro | Para quê | Tamanho | SHA-256 | Determinístico |
 |---|---|---|---|---|
-| `torres-vedras_visita.fbx` | Unreal (Fases 4–5) | 2,2 MB | `15961a31a743…` | conteúdo igual |
+| `torres-vedras_visita.fbx` | Unreal (Fases 4–5) | 2,2 MB | `bc8293907f89…` | conteúdo igual |
 | `torres-vedras_visita.glb` | AR Android / visualizador 3D | 110,8 MB | `84e579d4827a…` | sim (bytes iguais) |
-| `torres-vedras_visita.usdz` | AR Quick Look (iPhone) | 96,5 MB | `512590744dcb…` | conteúdo igual |
+| `torres-vedras_visita.usdz` | AR Quick Look (iPhone) | 96,5 MB | `52b6b069d417…` | conteúdo igual |
 | texturas do FBX | textura PBR do FBX (ficheiro separado, spec §4.2) | 93,6 MB | 26 ficheiros | — |
 
 ## Reimportação (Blender limpo) e comparação

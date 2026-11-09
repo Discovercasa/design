@@ -184,6 +184,8 @@ O ficheiro de produção não muda. Na visita, sem as camadas escondidas, aparec
     longo de pelo menos 1 cm).
   - Os pavimentos e a pérgola ficam como estão.
 - **Forros dos vãos** (`ARCH_REVEALS`): ombreiras, padieira e peitoril (Fase 7, versão 2).
+- **Caixilharia padrão** nos vãos exteriores sem caixilho (Fase 7, versão 5): alumínio RAL 7016 e vidro (pergunta 12
+  por obra), INFERRED até chegar a tabela de vãos do projeto.
 - **Chão nos vãos das portas:** o pavimento de cada divisão para na face da parede, e o vão mostrava a laje ou,
   no piso de cima, um buraco.
   - O pavimento de cada lado continua até ao meio da parede. Uma mudança de acabamento fica debaixo da folha da
