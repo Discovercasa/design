@@ -54,3 +54,20 @@ words (`registo-conversas*.md`). When this file passes about 1 500 lines, contin
   proposal to confirm with the user), 167 (scope: only what DiscoverCasa delivers vs also furniture; model source;
   downloads need authorization); the team member's feedback in task 84.
 
+### 2026-11-09 — Go ahead with the two defects (Tremolo gaps, floor at doors) [Torres Vedras, Sobral]
+> Sim, começa
+- Context: answer to "Começo pelos dois defeitos (frestas no Tremolo e chão nas portas)?" (hub tasks 164 and 165).
+- Filed in: `step-inside/docs/fase7/README.md` → «Versão 4» and `step-inside/docs/fase2/README.md` → «O que a visita
+  acrescenta ao modelo de produção» (done by the caller; `plataforma_cliente.json` updated, tasks 164/165 concluded,
+  AR v4 uploaded, same 8 documents). Cause of the gaps (measured by rays): the production model draws each Tremolo
+  board 129 mm wide with a 6 mm `junta` (Pladur 2 mm) so pieces can be counted; without the hidden layers each joint
+  was a slit in the visit/AR model. Fix in the visit model only: `step-inside/ferramentas/visita/juntas.py` closes the
+  joints of finish layers in walls / ceilings / roof (floors, pergola untouched); the production JSON is unchanged. The
+  real façade is tongue and groove (already recorded), consistent. Door floors: the finish stopped at the wall face, so
+  doors showed the slab (TV 5 mm below the vinyl; Sobral a 16 cm step; Sobral upper floor a hole down to the
+  ground-floor ceiling); fix = each side's floor runs to the middle of the wall, exterior doors take the inside floor
+  to the outside face. This rule is INFERRED, not stated by the user.
+  `conhecimento/perguntas-por-obra.md` → Q23: new OPEN item "floor at interior door openings" with this default.
+- Pending: the user confirms DiscoverCasa's rule for the floor at interior doors (continuous vs transition profile /
+  threshold) and the exterior threshold (Q23); the user's check of AR v4 on the phone.
+

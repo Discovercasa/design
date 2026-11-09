@@ -316,6 +316,86 @@ if TAB:
     OUT["materiais"] = {"sem_mapa": [{"material": k[0], "categoria": k[1], "objetos": n} for k, n in sorted(_sem.items())],
                         "usados": dict(sorted(_us.items())), "estados": _est}
 
+# ------------------------------------------------------------------ 1c. close the joints of the finish layers
+# The production model draws each board / sheet with its joint (Tremolo 6 mm, Pladur 2 mm) so the pieces can be
+# counted; on site the joints are closed (tongue and groove; taped and filled). Without the hidden layers behind, a
+# joint is a slit into the wall (user 2026-11-09). Rule and tests: juntas.py. Floors and the pergola keep their gaps.
+sys.path.insert(0, str(Path(sys.argv[sys.argv.index("--python") + 1]).resolve().parent))
+import juntas as J  # noqa: E402
+
+FECHAR_JUNTAS = ("ARCH_WALLS_EXT", "ARCH_WALLS_INT", "ARCH_CEILINGS", "ARCH_ROOF")
+
+
+def ilhas_e_caixas(ob, bm):
+    """The loose pieces of a mesh (islands of faces) and their boxes in model coordinates."""
+    M = ob.matrix_world
+    ilhas, visto = [], set()
+    for f in bm.faces:
+        if f in visto:
+            continue
+        pilha, vs = [f], set()
+        visto.add(f)
+        while pilha:
+            g = pilha.pop()
+            vs.update(g.verts)
+            for e in g.edges:
+                for h in e.link_faces:
+                    if h not in visto:
+                        visto.add(h)
+                        pilha.append(h)
+        ilhas.append(list(vs))
+    caixas = []
+    for vs in ilhas:
+        pts = [M @ v.co for v in vs]
+        caixas.append((tuple(min(p[k] for p in pts) for k in range(3)), tuple(max(p[k] for p in pts) for k in range(3))))
+    return ilhas, caixas
+
+
+def fechar_juntas(ob):
+    """Each piece grows half the joint towards its neighbours (juntas.extensoes). Returns (closed, left after)."""
+    bm = bmesh.new()
+    bm.from_mesh(ob.data)
+    M = ob.matrix_world
+    R_inv = M.to_3x3().inverted()
+    n = 0
+    for _passo in range(3):  # a grown piece can meet a neighbour it did not overlap before: pass again
+        ilhas, caixas = ilhas_e_caixas(ob, bm)
+        ext, k = J.extensoes(caixas)
+        if not k:
+            break
+        n += k
+        for i, lados in ext.items():
+            lo, hi = caixas[i]
+            for v in ilhas[i]:
+                p = M @ v.co
+                d = Vector((0, 0, 0))
+                for (a, s), dist in lados.items():
+                    if s > 0 and p[a] >= hi[a] - 1e-4:
+                        d[a] += dist
+                    elif s < 0 and p[a] <= lo[a] + 1e-4:
+                        d[a] -= dist
+                if d.length:
+                    v.co += R_inv @ d
+    resto = J.extensoes(ilhas_e_caixas(ob, bm)[1])[1] if n else 0
+    bm.to_mesh(ob.data)
+    bm.free()
+    return n, resto
+
+
+_jf, _jr, _partilhadas = {}, 0, 0
+for _cat in FECHAR_JUNTAS:
+    for _ob in grupos[_cat].objects:
+        if _ob.type != "MESH" or not _ob.data.polygons:
+            continue
+        if _ob.data.users > 1:  # a shared mesh would be changed for every object that uses it
+            _partilhadas += 1
+            continue
+        _n, _r = fechar_juntas(_ob)
+        if _n:
+            _jf[_cat] = _jf.get(_cat, 0) + _n
+        _jr += _r
+OUT["juntas"] = {"fechadas": _jf, "restantes": _jr, "malhas_partilhadas_ignoradas": _partilhadas}
+
 
 def objetos(*categorias, malhas=True):
     return [o for k in categorias for o in grupos[k].objects if not malhas or o.type == "MESH"]
@@ -472,9 +552,71 @@ def ponto(a, s, n, z):
     return Vector((s, n, z)) if a["eixo"] == "x" else Vector((n, s, z))
 
 
+def bvh_com_donos(obs):
+    vs, ps, donos = [], [], []
+    for ob in obs:
+        me = ob.evaluated_get(dg).to_mesh()
+        k0 = len(vs)
+        mw = ob.matrix_world
+        vs += [mw @ v.co for v in me.vertices]
+        for p in me.polygons:
+            ps.append([k0 + i for i in p.vertices])
+            donos.append(ob)
+        ob.evaluated_get(dg).to_mesh_clear()
+    return (BVHTree.FromPolygons(vs, ps), donos) if ps else (None, [])
+
+
+# Doors: the floor finish of each room stops at the wall face, so the opening showed the slab («o chão na zona das
+# portas está em cimento», user 2026-11-09) — or, upstairs, a hole down to the ceiling below. The floor of the room
+# on each side runs on to the middle of the wall (a change of finish falls under the door leaf); an exterior door
+# takes the inside floor to the outside face (the threshold is not defined: question 23 per project).
+BVH_PISOS, DONOS_PISOS = bvh_com_donos(objetos("ARCH_FLOORS"))
+BAIXO = Vector((0, 0, -1))
+
+
+def chao_do_vao(a, s0, s1, n0, n1, z0):
+    """For a door: the floor pieces to add [(n_a, n_b, z_bottom, z_top, floor object)], or [] when the opening
+    already has a floor (or a threshold) or there is no floor next to it."""
+    if not BVH_PISOS:
+        return []
+    sm = (s0 + s1) / 2
+    lados = []
+    for nn in (n0 - 0.25, n1 + 0.25):
+        h = BVH_PISOS.ray_cast(ponto(a, sm, nn, z0 + 0.4), BAIXO, 1.0)
+        lados.append((h[0].z, DONOS_PISOS[h[2]]) if h[0] is not None else None)
+    tem = [x for x in lados if x]
+    if not tem:
+        return []
+    z_top = max(x[0] for x in tem)
+    hc = BVH_CHAO.ray_cast(ponto(a, sm, (n0 + n1) / 2, z0 + 0.4), BAIXO, 1.0)
+    if hc[0] is not None and hc[0].z >= z_top - 0.003:
+        return []
+    z_bot = min(z0 - E_FORRO, min(x[0] for x in tem) - 0.01)
+    nm = (n0 + n1) / 2
+    if len(tem) == 2 and tem[0][1].active_material != tem[1][1].active_material:
+        return [(n0, nm, z_bot, tem[0][0], tem[0][1]), (nm, n1, z_bot, tem[1][0], tem[1][1])]
+    return [(n0, n1, z_bot, z_top, max(tem, key=lambda x: x[0])[1])]
+
+
+def caixa_malha(nome, blocos):
+    bm = bmesh.new()
+    for c1, c2 in blocos:
+        lo_p, hi_p = Vector(map(min, c1, c2)), Vector(map(max, c1, c2))
+        r = bmesh.ops.create_cube(bm, size=1.0)
+        for v in r["verts"]:
+            v.co = Vector((lo_p[i] + (v.co[i] + 0.5) * (hi_p[i] - lo_p[i]) for i in range(3)))
+    me = bpy.data.meshes.new(nome)
+    bm.to_mesh(me)
+    bm.free()
+    return me
+
+
 aberturas_obs = [caixa([o]) for o in objetos("ARCH_OPENINGS")]
 forros, saltados = [], 0
+chaos, portas_com_chao = [], 0
 E_FORRO = 0.015
+BVH_CHAO, _ = bvh_com_donos(objetos("ARCH_FLOORS", "ARCH_OPENINGS"))
+portas_meio = []
 for a in run.get("aberturas", []) if TAB else []:
     if a.get("espessura", 0.16) < 0.01:  # an opening with no wall (e.g. an open passage added by the architecture)
         continue
@@ -515,24 +657,40 @@ for a in run.get("aberturas", []) if TAB else []:
     caixa_vao = (ponto(a, s0, n0, z0), ponto(a, s1, n1, z1))
     lo_v = Vector(map(min, *caixa_vao))
     hi_v = Vector(map(max, *caixa_vao))
+    porta = z0 <= zp + 0.1 or a.get("tipo") == "porta"  # a door may measure open only above a plate left across it
+    z_base = z0  # where the jambs start
+    if porta:
+        portas_meio.append((f"{a['parede']}#{a['id']}", ponto(a, (s0 + s1) / 2, (n0 + n1) / 2, z0 + 0.4)))
+        pecas_chao = chao_do_vao(a, s0, s1, n0, n1, z0)
+        if not pecas_chao:
+            portas_com_chao += 1
+        for k, (na, nb, zb_, zt_, piso) in enumerate(pecas_chao):
+            nome = f"Chão do vão {a['parede']}#{a['id']}" + (f" ({'ab'[k]})" if len(pecas_chao) > 1 else "")
+            me = caixa_malha(nome, [(ponto(a, s0, na, zb_), ponto(a, s1, nb, zt_))])
+            ob = bpy.data.objects.new(nome, me)
+            grupos["ARCH_FLOORS"].objects.link(ob)
+            if piso.active_material:
+                me.materials.append(piso.active_material)
+            ob["si_categoria"] = "ARCH_FLOORS"
+            ob["si_id"] = f"ARCH_FLOORS/{nome}"
+            ob["si_material"] = piso.get("si_material", "")
+            if piso.get("si_mat_id"):
+                ob["si_mat_id"] = piso["si_mat_id"]
+            cats[ob.name] = ("ARCH_FLOORS", "gerado: chão dos vãos das portas")
+            chaos.append({"abertura": f"{a['parede']}#{a['id']}", "pavimento": piso.get("si_mat_id") or piso.name,
+                          "z": [round(zb_, 3), round(zt_, 3)]})
+            z_base = min(z_base, zb_)
     if any(b and all(b[0][i] < hi_v[i] + 0.02 and b[1][i] > lo_v[i] - 0.02 for i in range(3)) for b in aberturas_obs):
         saltados += 1
         continue
-    pecas = [(s0 - E_FORRO, s0, z0 - (E_FORRO if z0 > zp + 0.1 else 0), z1 + E_FORRO),   # jamb
-             (s1, s1 + E_FORRO, z0 - (E_FORRO if z0 > zp + 0.1 else 0), z1 + E_FORRO),   # jamb
+    zj = z0 - E_FORRO if not porta else z_base  # a door's jambs go down to its floor (no slit at the bottom)
+    pecas = [(s0 - E_FORRO, s0, zj, z1 + E_FORRO),                                       # jamb
+             (s1, s1 + E_FORRO, zj, z1 + E_FORRO),                                       # jamb
              (s0 - E_FORRO, s1 + E_FORRO, z1, z1 + E_FORRO)]                              # head
-    if z0 > zp + 0.1:
+    if not porta:
         pecas.append((s0 - E_FORRO, s1 + E_FORRO, z0 - E_FORRO, z0))                      # sill
-    bm = bmesh.new()
-    for sa, sb, za, zb in pecas:
-        c1, c2 = ponto(a, sa, n0, za), ponto(a, sb, n1, zb)
-        lo_p, hi_p = Vector(map(min, c1, c2)), Vector(map(max, c1, c2))
-        r = bmesh.ops.create_cube(bm, size=1.0)
-        for v in r["verts"]:
-            v.co = Vector((lo_p[i] + (v.co[i] + 0.5) * (hi_p[i] - lo_p[i]) for i in range(3)))
-    me = bpy.data.meshes.new(f"Forro do vão {a['parede']}#{a['id']}")
-    bm.to_mesh(me)
-    bm.free()
+    me = caixa_malha(f"Forro do vão {a['parede']}#{a['id']}",
+                     [(ponto(a, sa, n0, za), ponto(a, sb, n1, zb)) for sa, sb, za, zb in pecas])
     ob = bpy.data.objects.new(me.name, me)
     grupos["ARCH_REVEALS"].objects.link(ob)
     ob["si_categoria"] = "ARCH_REVEALS"
@@ -546,6 +704,16 @@ for a in run.get("aberturas", []) if TAB else []:
     forros.append({"abertura": f"{a['parede']}#{a['id']}", "largura": round(s1 - s0, 3), "altura": round(z1 - z0, 3),
                    "espessura_parede": round(n1 - n0, 3)})
 OUT["forros_vaos"] = {"criados": len(forros), "ja_com_remates": saltados, "detalhe": forros[:40]}
+# check, independent of how the pieces were made: straight down from the middle of every door, the first thing hit
+# is a floor (or a threshold) at the finished level, not the slab or the void of the floor below
+_bvh_f, _donos_f = bvh_com_donos(objetos("ARCH_FLOORS", "ARCH_OPENINGS", "ARCH_FOUNDATION", "ARCH_CEILINGS"))
+sem_chao = []
+for _nome, _p in portas_meio:
+    _h = _bvh_f.ray_cast(_p, BAIXO, 3.0) if _bvh_f else (None,)
+    if _h[0] is None or _donos_f[_h[2]].get("si_categoria") not in ("ARCH_FLOORS", "ARCH_OPENINGS"):
+        sem_chao.append({"abertura": _nome, "bate_em": _donos_f[_h[2]].name if _h[0] is not None else None})
+OUT["chao_vaos"] = {"portas": len(portas_meio), "criados": len(chaos), "ja_com_chao": portas_com_chao,
+                    "sem_chao": sem_chao, "detalhe": chaos[:40]}
 
 # ------------------------------------------------------------------ 3. place the house on the site
 C = run.get("colocacao")

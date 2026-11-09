@@ -67,6 +67,16 @@
     "MAT_WOOD_CLADDING__PINE_NATURAL"
    ]
   },
+  "juntas": {
+   "fechadas": {
+    "ARCH_WALLS_EXT": 775,
+    "ARCH_WALLS_INT": 755,
+    "ARCH_CEILINGS": 278,
+    "ARCH_ROOF": 153
+   },
+   "restantes": 0,
+   "malhas_partilhadas_ignoradas": 0
+  },
   "dimensoes_modelo": {
    "estrutura_planta_m": [
     17.5,
@@ -154,6 +164,94 @@
      "largura": 0.86,
      "altura": 2.0,
      "espessura_parede": 0.129
+    }
+   ]
+  },
+  "chao_vaos": {
+   "portas": 15,
+   "criados": 10,
+   "ja_com_chao": 5,
+   "sem_chao": [],
+   "detalhe": [
+    {
+     "abertura": "P02#0",
+     "pavimento": "MAT_FLOOR_VINYL_WOOD",
+     "z": [
+      -0.005,
+      0.005
+     ]
+    },
+    {
+     "abertura": "P03#2",
+     "pavimento": "MAT_FLOOR_VINYL_WOOD",
+     "z": [
+      -0.005,
+      0.005
+     ]
+    },
+    {
+     "abertura": "P05#0",
+     "pavimento": "MAT_FLOOR_VINYL_WOOD",
+     "z": [
+      -0.005,
+      0.005
+     ]
+    },
+    {
+     "abertura": "P08#0",
+     "pavimento": "MAT_FLOOR_VINYL_WOOD",
+     "z": [
+      -0.005,
+      0.005
+     ]
+    },
+    {
+     "abertura": "P10#0",
+     "pavimento": "MAT_FLOOR_VINYL_WOOD",
+     "z": [
+      -0.005,
+      0.005
+     ]
+    },
+    {
+     "abertura": "P11#0",
+     "pavimento": "MAT_FLOOR_VINYL_WOOD",
+     "z": [
+      -0.005,
+      0.005
+     ]
+    },
+    {
+     "abertura": "P13#0",
+     "pavimento": "MAT_FLOOR_VINYL_WOOD",
+     "z": [
+      -0.005,
+      0.005
+     ]
+    },
+    {
+     "abertura": "P15#0",
+     "pavimento": "MAT_FLOOR_VINYL_WOOD",
+     "z": [
+      -0.005,
+      0.005
+     ]
+    },
+    {
+     "abertura": "P17#0",
+     "pavimento": "MAT_FLOOR_VINYL_WOOD",
+     "z": [
+      -0.005,
+      0.005
+     ]
+    },
+    {
+     "abertura": "P17#1",
+     "pavimento": "MAT_FLOOR_VINYL_WOOD",
+     "z": [
+      -0.005,
+      0.005
+     ]
     }
    ]
   },

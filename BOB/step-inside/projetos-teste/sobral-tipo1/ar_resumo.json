@@ -26,8 +26,8 @@
     "MAT_ROOF_SANDWICH_TILE__RAL7016",
     "MAT_WALL_RENDER__WHITE"
    ],
-   "triangulos": 9698,
-   "triangulos_antes_de_simplificar": 9822,
+   "triangulos": 9214,
+   "triangulos_antes_de_simplificar": 9942,
    "imagens": {
     "Chipboard004_2K-JPG_Color.jpg": [
      1024,
@@ -145,18 +145,18 @@
    "ficheiros": {
     "glb": {
      "ficheiro": "sobral-tipo1_ar_casa.glb",
-     "bytes": 1415772,
-     "sha256": "a9bd09e16a55cba0d6640ad85df2f1d0ff5b207bdcdef65f433a2d4e2b8ee375"
+     "bytes": 1303488,
+     "sha256": "b140bb892d31012fdd1ac6e4a4e3661c4dabe2175af3475fee5530e3cabd45e6"
     },
     "usdz": {
      "ficheiro": "sobral-tipo1_ar_casa.usdz",
-     "bytes": 1124099,
-     "sha256": "35e1158a219e15ce92b2c1a8eed47673c23e783c0cfa0e70ea3325b234fd9ee1"
+     "bytes": 1097339,
+     "sha256": "c3e81d9de2c2d9a9d6e75eb56175b5f4384cfbdffb6b7b97022d4fb22c0341cb"
     }
    },
    "reimportacao": {
     "glb": {
-     "triangulos": 9698,
+     "triangulos": 9214,
      "dimensoes": [
       13.099,
       11.249,
@@ -177,7 +177,7 @@
      "erro": null
     },
     "usdz": {
-     "triangulos": 9698,
+     "triangulos": 9214,
      "dimensoes": [
       13.099,
       11.249,
@@ -213,8 +213,8 @@
     "MAT_ROOF_SANDWICH_TILE__RAL7016",
     "MAT_WALL_RENDER__WHITE"
    ],
-   "triangulos": 10334,
-   "triangulos_antes_de_simplificar": 10458,
+   "triangulos": 9850,
+   "triangulos_antes_de_simplificar": 10578,
    "imagens": {
     "Chipboard004_2K-JPG_Color.jpg": [
      1024,
@@ -332,18 +332,18 @@
    "ficheiros": {
     "glb": {
      "ficheiro": "sobral-tipo1_ar_maquete.glb",
-     "bytes": 2102120,
-     "sha256": "a739ef0e24fa354f6b9a023f5909834642fa5c6508fa49b549ddff6aab073ef2"
+     "bytes": 1989836,
+     "sha256": "70446e44204ffb5f43272b9ccf959ebde39391ffbb37797c6f05f6b9c571dd21"
     },
     "usdz": {
      "ficheiro": "sobral-tipo1_ar_maquete.usdz",
-     "bytes": 1640224,
-     "sha256": "f1cbff4ab4ebfe91be53503210f23f24599bac722f41c0ecea0be0a6b77a70f5"
+     "bytes": 1613472,
+     "sha256": "b94a04c5df68f0152bceae44ac86f78ea895c88e275669ca59b20d0639eb3979"
     }
    },
    "reimportacao": {
     "glb": {
-     "triangulos": 10334,
+     "triangulos": 9850,
      "dimensoes": [
       53.369,
       51.497,
@@ -365,7 +365,7 @@
      "erro": null
     },
     "usdz": {
-     "triangulos": 10334,
+     "triangulos": 9850,
      "dimensoes": [
       53.369,
       51.497,

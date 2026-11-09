@@ -49,6 +49,8 @@ Cada objeto tem `si_id` = `<coleção>/<nome do objeto>` (os nomes vêm dos dese
 - **Dimensões:** estrutura do modelo 9,861 × 6,110 m; fontes 9,860 × 6,110 m (diferença 0,001 m). Contorno acabado 10,011 × 6,261 m; contorno da implantação 10,020 × 6,255 m (diferença 0,009 m).
 - **Malhas:** 217 objetos visíveis; abertas 0, normais para dentro 0, repetidos 0.
 - **Aberturas:** 19 das fontes procuradas no modelo (raios horizontais através da parede, de 0,3 a 2,0 m acima do piso); fechadas: 0. Controlo: 40 troços de parede cheia, vistos como abertos: 0.
+- **Juntas dos acabamentos** (o modelo de produção desenha cada tábua e placa com a sua junta; em obra ficam fechadas): fechadas ARCH_CEILINGS 243, ARCH_WALLS_EXT 940, ARCH_WALLS_INT 521; por fechar 0.
+- **Chão nos vãos das portas:** 11 portas; chão acrescentado em 11 peças, 0 já tinham chão ou soleira; sem chão (raio a descer do meio do vão): 0.
 - **Choques da madeira** (verificar.py, > 8 mm): 0 em 364 peças.
 - **Terreno existente sob a casa** (antes da plataforma): entre 0,89 e 2,55 m da laje; acima do pavimento em 100 % da área.
 - **Casa e terreno** (625 pontos sob a casa): terreno entre -0,02 e 0,01 m da laje; acima do pavimento em 0 % da área.

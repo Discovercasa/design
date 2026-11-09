@@ -1,8 +1,8 @@
 {
  "project_id": "sobral-tipo1",
- "version_id": "sobral-tipo1-d6bff6c-202611090410",
- "source_blend_hash": "sha256:9aa573313331abe710041b0530a3558c61e5a356b4406e986d7995d339dcf526",
- "export_timestamp": "2026-11-09T04:10:42+00:00",
+ "version_id": "sobral-tipo1-8554ba5-202611091427",
+ "source_blend_hash": "sha256:6ee0288482b80595908ed80ef0f80643a77328a055a19b7b5b47ba99a5264e75",
+ "export_timestamp": "2026-11-09T14:27:20+00:00",
  "blender_version": "4.4.3",
  "unreal_target_version": "5.8 (a confirmar na Fase 4)",
  "unit_system": "métrico (1 unidade = 1 m)",
@@ -39,8 +39,8 @@
   {
    "path": "sobral-tipo1_visita.fbx",
    "type": "fbx",
-   "size_bytes": 1995932,
-   "sha256": "aadd202fbf3bc5316cf0c3cede071658c8a60920c193f2b2e5d61db5e0cae673",
+   "size_bytes": 2016540,
+   "sha256": "de0ffd528431fc11514ffba0544f9942b2df2a70e618c31a9df636a837e1a98d",
    "material_ids": [
     "MAT_BOARD_OSB",
     "MAT_CONCRETE_SLAB",
@@ -62,8 +62,8 @@
   {
    "path": "sobral-tipo1_visita.glb",
    "type": "glb",
-   "size_bytes": 105981204,
-   "sha256": "89702238e5c1677862f3f83fb27d4dcd0de497d237ec44258251cd23b3be863a",
+   "size_bytes": 105998932,
+   "sha256": "0738212a3b4405024761f788b3b8588341ca358fd79c3f5a671f996bc2a4ad11",
    "material_ids": [
     "MAT_BOARD_OSB",
     "MAT_CONCRETE_SLAB",
@@ -85,8 +85,8 @@
   {
    "path": "sobral-tipo1_visita.usdz",
    "type": "usdz",
-   "size_bytes": 94402139,
-   "sha256": "9d2410a134acd6904fb2928291555fbf15dc486cb8d398826f1940dc12ab8bf1",
+   "size_bytes": 94404691,
+   "sha256": "35a8f4a75b9ae3403b7af142c0264d724dd816baaa71d7442c70e7e1ac6cb43d",
    "material_ids": [
     "MAT_BOARD_OSB",
     "MAT_CONCRETE_SLAB",
@@ -116,8 +116,8 @@
  ],
  "validation": {
   "referencia": {
-   "objetos": 236,
-   "triangulos": 51534,
+   "objetos": 247,
+   "triangulos": 51654,
    "dimensoes": [
     409.727,
     276.992,
@@ -141,8 +141,8 @@
    ],
    "imagens": 19,
    "casa": {
-    "objetos": 235,
-    "triangulos": 35120,
+    "objetos": 246,
+    "triangulos": 35240,
     "caixa_min": [
      -16.819,
      48.671,
@@ -178,8 +178,8 @@
   },
   "reimportacao": {
    "fbx": {
-    "objetos": 236,
-    "triangulos": 51534,
+    "objetos": 247,
+    "triangulos": 51654,
     "dimensoes": [
      409.727,
      276.992,
@@ -204,16 +204,16 @@
     "imagens": 19,
     "imagens_em_falta": [],
     "imagem": {
-     "diferenca_media": 0.0428,
-     "pixeis_diferentes": 0.0141,
+     "diferenca_media": 0.0427,
+     "pixeis_diferentes": 0.014,
      "silhueta_diferente": 0.0,
      "cobertura": 0.65
     },
     "erro_caixa_m": 0.0
    },
    "glb": {
-    "objetos": 236,
-    "triangulos": 51534,
+    "objetos": 247,
+    "triangulos": 51654,
     "dimensoes": [
      409.727,
      276.992,
@@ -238,7 +238,7 @@
     "imagens": 19,
     "imagens_em_falta": [],
     "imagem": {
-     "diferenca_media": 0.0401,
+     "diferenca_media": 0.0402,
      "pixeis_diferentes": 0.0,
      "silhueta_diferente": 0.0,
      "cobertura": 0.65
@@ -246,8 +246,8 @@
     "erro_caixa_m": 0.0
    },
    "usdz": {
-    "objetos": 236,
-    "triangulos": 51534,
+    "objetos": 247,
+    "triangulos": 51654,
     "dimensoes": [
      409.727,
      276.992,
@@ -273,7 +273,7 @@
     "imagens_em_falta": [],
     "imagem": {
      "diferenca_media": 0.042,
-     "pixeis_diferentes": 0.0083,
+     "pixeis_diferentes": 0.0082,
      "silhueta_diferente": 0.0004,
      "cobertura": 0.65
     },
