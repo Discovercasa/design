@@ -79,7 +79,7 @@ he answers (`metodo-construtivo.md`). Condensed 2026-10-28 (history in git).
   5 files were purged from the whole history of Discovercasa/design (`main`, `hub/inicio-projetos` force-pushed),
   `.gitignore` now has `*.dwg` / `*.skp`; files kept locally and the 4 DWG in the hub's private storage; backup bundle
   of the old history local only. **Open:** (a) GitHub serves the old commits by SHA until GitHub Support purges them
-  (only the user / an org owner can ask); (b) old clones must be re-cloned, else a push brings the files back; (c) the
+  (only the user / an org owner can ask; add also the Sobral-coordinates commits bc09b0d, 04d198a, history rewritten 2026-11-09); (b) old clones must be re-cloned, else a push brings the files back; (c) the
   Sobral `.skp` is not in the hub's documents — the user can upload it there.
 - **2026-11-07** — Step Inside phase order: the spec runs Unreal (Phases 4–5) before AR (Phase 7), but this PC (i7-4790K,
   16 GB DDR3, GTX 1050 Ti 4 GB, Z97 board) cannot serve Unreal 5 and a GPU alone is not advised → do Phase 7 (AR, GLB /
