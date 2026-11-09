@@ -113,3 +113,6 @@ words (`registo-conversas*.md`). When this file passes about 1 500 lines, contin
 > e a secção de AR não aparece no HUB no desktop, foi propositado?
 - Context: question. Answer: not removed; the live site shows AR on desktop; the user's page was an old open tab (still had the pre-today phase text). The hub does not refresh itself on a new deploy; reload fixes it. Filed in: `public/dados/novidades.json` (hub news, 2026-11-09). Possible improvement: auto-refresh/notice on a new deploy.
 
+> Sim, avisa
+- Context: answer to "Ponho o hub a avisar quando há uma versão nova para recarregar?" (the old-open-tab case above). Filed in: nothing in BOB (code in the design repo: `public/js/hub/app.js` stores the ETag of every hub file loaded, compares every 3 minutes and when the tab is shown again, and shows a persistent toast «Há uma versão nova do hub. Recarrega a página para a veres.» with a «Recarregar» button; test `tests/hub.spec.mjs` «versão nova publicada…»; hub news in `public/dados/novidades.json`). Closes the improvement suggested in the entry above.
+

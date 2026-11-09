@@ -61,6 +61,47 @@ async function arrancar(sessao) {
   relogio = setInterval(atualizar, 60000);   // reserva, se a ligação em direto cair
   if (!E.erro) D.ouvirMudancas(emDireto);
   document.addEventListener('visibilitychange', () => { if (!document.hidden) atualizar(); });
+  guardarVersao();
+}
+
+// ---------------------------------------------------------------- versão nova do hub publicada
+// Uma janela aberta mostra a versão em que foi aberta: o hub não se recarrega sozinho. Ao abrir guarda-se a
+// assinatura (ETag) dos ficheiros do hub que a página carregou; de 3 em 3 minutos (no relógio de atualizar e ao voltar
+// à janela) compara-se com a do site e, se mudou, um aviso deixa recarregar (utilizador, 2026-11-09: «Sim, avisa»).
+const VERSAO_CADA = 3 * 60 * 1000;
+let versao = null, versaoVista = 0, versaoAvisada = false;
+function ficheirosDoHub() {
+  // o que a página carregou (os módulos importados só aparecem aqui) + o que a própria página declara
+  const urls = [...(performance.getEntriesByType ? performance.getEntriesByType('resource').map((r) => r.name) : []),
+    ...$$('script[src], link[rel="stylesheet"][href]').map((el) => el.src || el.href)];
+  const caminhos = urls.map((n) => { try { return new URL(n, location.href); } catch (_) { return null; } })
+    .filter((u) => u && u.origin === location.origin && /^\/(js\/hub\/|css\/|dados\/)/.test(u.pathname)).map((u) => u.pathname);
+  return [...new Set([...Object.keys(versao || {}), ...caminhos])];
+}
+async function assinaturas(caminhos) {
+  const out = {};
+  await Promise.all(caminhos.map(async (c) => {
+    try {
+      const r = await fetch(c, { method: 'HEAD', cache: 'no-store' });
+      if (r.ok) out[c] = r.headers.get('etag') || r.headers.get('last-modified') || '';
+    } catch (_) { /* sem rede: fica para a próxima */ }
+  }));
+  return out;
+}
+async function guardarVersao() {
+  versao = await assinaturas(ficheirosDoHub());
+  versaoVista = Date.now();
+}
+async function verificarVersao() {
+  if (!versao || versaoAvisada || document.hidden || Date.now() - versaoVista < VERSAO_CADA) return;
+  versaoVista = Date.now();
+  const agora = await assinaturas(ficheirosDoHub());
+  const mudou = Object.keys(agora).some((c) => versao[c] && agora[c] && agora[c] !== versao[c]);
+  Object.keys(agora).forEach((c) => { if (!versao[c]) versao[c] = agora[c]; });   // carregados depois (outra página)
+  if (!mudou || versaoAvisada) return;
+  versaoAvisada = true;
+  aviso('Há uma versão nova do hub. Recarrega a página para a veres.', { icone: 'info', duracao: 0,
+    acoes: [{ rotulo: 'Recarregar', fazer: () => location.reload() }] });
 }
 
 // ---------------------------------------------------------------- navegação e rotas
@@ -181,6 +222,7 @@ function atualizarContador() {
   $('#b-notificacoes').setAttribute('aria-label', n ? `Notificações (${n} por ler)` : 'Notificações');
 }
 async function atualizar() {
+  verificarVersao();
   if (E.erro || document.hidden) return;
   try {
     const novas = await D.carregarNotificacoes();
