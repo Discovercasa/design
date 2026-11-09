@@ -241,3 +241,17 @@ circled (`discovercasa.md`).
   chose was silently shorter (a 3,60 4-leaf window with estore at pé direito 2,40: − 10,7 cm under a hidden roof). Rule: the
   opening is never lowered — exposed roof, the whole house rises; hidden roof, the lintel sits on the opening up to the module
   top → §3 → `casa_planta.construir` (a760ce8). Left: `estrutura_dc.py` from engineer drawings keeps the drawings' heights.
+- **L74** (step-inside visit / AR, 2026-11-09; found by the user in the AR test of Torres Vedras and Sobral; source
+  `step-inside/docs/fase7/README.md` «Versão 4», `step-inside/docs/fase2/README.md` «O que a visita acrescenta ao modelo de
+  produção») — two production-model habits that look wrong once the model is used to SHOW the house:
+  (a) **Finish-layer joints as slits.** The production model draws each piece of a finish layer with its `junta`
+  (sistema_construtivo.json: Tremolo 6 mm between the 129 mm boards, Pladur 2 mm, OSB 3 mm) so pieces can be counted. That
+  joint is a counting artefact: the real Tremolo (Piveteau 22×135) is tongue and groove and plasterboard joints are taped and
+  filled. With the hidden layers removed, each joint is a slit into the wall ("gaps no tremolo"). Rule: visualisation models
+  (visit, AR, renders) close finish-layer joints; the production file keeps them (§8, §9, L10) →
+  `step-inside/ferramentas/visita/juntas.py`.
+  (b) **No floor in a door opening.** Each room's floor finish is modelled up to the wall faces, so a door opening has no floor
+  (slab visible; upstairs a hole down to the ceiling below). The visit model adds the floor in each door, each side's floor
+  to the middle of the wall — INFERRED, not stated by the user (§10). Check, not a fact: the floor-finish quantity may miss
+  the strips under doors (≈ 0,12 m² per interior door); asked in PO Q23, §15 ("To ask when it first arises") → visit model
+  only; production model and quantities unchanged.

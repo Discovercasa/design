@@ -178,6 +178,52 @@ fluxo de trabalho. A equipa foi avisada no hub de que pode testar e escrever na 
 - **Escolha do piso:** no hub, com um botão por piso. O Quick Look e o Scene Viewer não têm botões dentro do modelo.
 - **Visualizador 3D (tarefa 85) e Unreal:** o piso escolhe-se num menu e sobem-se as escadas.
 
+## Versão 4: frestas do Tremolo e chão das portas (2026-11-09)
+
+O utilizador disse «Sim, começa» para as tarefas 164 e 165. As duas causas foram medidas no modelo antes de mudar
+o código.
+
+**Frestas do Tremolo (tarefa 164).**
+- **Medição:** um varrimento por raios nas fachadas de Torres Vedras via a membrana numa fresta vertical em toda a
+  altura, entre todas as tábuas.
+- **Causa:** o modelo de produção desenha cada tábua com 129 mm e uma junta de 6 mm (`junta` em
+  `sistema_construtivo.json`), para as contar. O Pladur tem juntas de 2 mm.
+- **Correção:** o modelo de visita fecha as juntas dos acabamentos (`ferramentas/visita/juntas.py`, ver a Fase 2).
+  - Juntas fechadas: Torres Vedras 1 961, Sobral 1 704. Nenhuma ficou por fechar.
+  - Uma tábua cortada estreita (39 mm ao lado de um vão) também conta: a espessura é a das peças vizinhas.
+- **Verificação:** varrimento de 2 em 2 mm nas quatro fachadas de Torres Vedras, a 4 alturas. A membrana atrás do
+  Tremolo já não aparece em nenhum ponto.
+- **Fachada real:** macho-fêmea, sem juntas abertas. A textura continua a mostrar a linha entre as tábuas de 135 mm.
+
+**Chão das portas (tarefa 165).**
+- **Medição:** o raio a descer do meio de cada porta batia na laje.
+  - Torres Vedras: o vinílico está 5 mm acima da laje.
+  - Sobral: um degrau de 16 cm.
+  - Piso de cima do Sobral: atravessava até ao teto do rés do chão.
+- **Correção:** chão em cada porta, com o pavimento de cada lado até ao meio da parede, e aros que descem até ao
+  chão.
+  - A porta PI2.08 do Sobral mede aberta só 12 cm acima do piso. Agora conta como porta pelo tipo das fontes.
+  - Torres Vedras: 10 portas com chão novo e 5 que já tinham chão ou soleira. Sobral: 11. Nenhuma ficou sem chão.
+- **A confirmar com o utilizador:** se o pavimento continua por baixo da porta (é INFERRED) e que soleira levam as
+  portas exteriores (pergunta 23).
+
+**AR:** PASS nas duas casas, com a exportação da Fase 3 a passar outra vez.
+
+| Casa | Variante | Triângulos | GLB | USDZ |
+|---|---|---|---|---|
+| Torres Vedras | casa | 22 166 | 2,2 MB | 1,9 MB |
+| Torres Vedras | maquete | 26 721 | 3,1 MB | 2,6 MB |
+| Sobral Tipo 1 | casa | 9 214 | 1,3 MB | 1,1 MB |
+| Sobral Tipo 1 | maquete | 9 850 | 2,0 MB | 1,6 MB |
+
+Há menos triângulos do que na versão 3: com as juntas fechadas, as peças encostam e o AR junta os vértices.
+
+**Hub:** os 8 ficheiros passaram à versão 4, nos mesmos links (função temporária com chave de uso único, desligada
+outra vez com 410 e `verify_jwt`; a chave foi apagada).
+
+**Imagens de verificação** (só no PC): `_trabalho/step-inside/torres-vedras/ar/v4_tremolo*.png` e
+`v4_porta_P05.png`; `_trabalho/step-inside/sobral-tipo1/ar/v4_porta_PI2.04.png`.
+
 ## Em falta
 
 - **Telemóveis reais** (tarefa 84):
@@ -189,9 +235,7 @@ fluxo de trabalho. A equipa foi avisada no hub de que pode testar e escrever na 
   - oclusão ambiente (sombra suave dos cantos);
   - terreno sem a repetição visível da textura;
   - borda do terreno da maquete mais limpa.
-- **Defeitos da versão 3:**
-  - frestas entre as tábuas do Tremolo (tarefa 164);
-  - cimento à vista no chão dos vãos das portas interiores (tarefa 165).
+- **Pavimento nas portas:** confirmar a regra (contínuo por baixo da porta; soleira das portas exteriores).
 - **Um modelo por piso** nas casas de dois ou mais pisos (tarefa 166).
 - **Fotos e materiais reais** (tarefas 156 e 163): texturas e lista oficial de materiais.
 - **Interiores** (tarefa 167, Fase 3): entram no AR na versão leve.

@@ -319,6 +319,12 @@ def avaliar(r, campos, terreno_gate):
         avisos.append(f"{ms['n_abertas']} objetos com malha aberta")
     if ms.get("n_duplicados"):
         avisos.append(f"{ms['n_duplicados']} objetos repetidos no mesmo sítio")
+    sc = r["modelo"].get("chao_vaos", {}).get("sem_chao", [])
+    if sc:
+        avisos.append(f"{len(sc)} portas sem chão no vão: " + ", ".join(x["abertura"] for x in sc[:8]))
+    jr = r["modelo"].get("juntas", {}).get("restantes")
+    if jr:
+        avisos.append(f"{jr} juntas por fechar entre peças dos acabamentos")
     fech = r["modelo"].get("aberturas", {}).get("fechadas", [])
     if fech:
         rever.append(f"{len(fech)} aberturas das fontes estão fechadas no modelo: "
@@ -419,6 +425,16 @@ def relatorio_md(r, decl):
           f"parede, de 0,3 a 2,0 m acima do piso); fechadas: {len(m['aberturas']['fechadas'])}. Controlo: "
           f"{m['aberturas'].get('controlo_paredes_cheias', 0)} troços de parede cheia, vistos como abertos: "
           f"{len(m['aberturas'].get('controlo_abertas_por_engano', []))}."]
+    jt = m.get("juntas")
+    if jt:
+        L.append("- **Juntas dos acabamentos** (o modelo de produção desenha cada tábua e placa com a sua junta; em obra "
+                 "ficam fechadas): fechadas " + (", ".join(f"{k} {v}" for k, v in sorted(jt["fechadas"].items())) or "nenhuma")
+                 + f"; por fechar {jt['restantes']}.")
+    cv = m.get("chao_vaos")
+    if cv:
+        L.append(f"- **Chão nos vãos das portas:** {cv['portas']} portas; chão acrescentado em {cv['criados']} peças, "
+                 f"{cv['ja_com_chao']} já tinham chão ou soleira; sem chão (raio a descer do meio do vão): "
+                 f"{len(cv['sem_chao'])}.")
     ch = r.get("choques_madeira", {})
     L.append(f"- **Choques da madeira** (verificar.py, > 8 mm): " + (ch.get("erro") or
              f"{ch.get('choques')} em {ch.get('pecas')} peças" + (f" — {', '.join(f'{k}: {v}' for k, v in ch['por_tipo'].items())}"

@@ -173,6 +173,9 @@ Other items (numbers kept):
 - Interior modules up to 3 m (2,75 kept); 6-bay 2,65 exterior plain modules — show them (§2).
 - A porta-janela de batente — window (estore) or door (none)? (§3).
 - A tiled house roof on request — build-up, slope, weight (§7).
+- The floor finish at an **interior door opening** — does it run through the door (each side's floor to the middle of the
+  wall) or stop at the wall faces; if it runs through, the floor-finish quantity misses ≈ 0,12 m² per interior door (§10;
+  PO Q23; L74 — the visit model's reading is inferred).
 ### [SB] open (Sobral paused, "estará para avançar brevemente")
 - Vigas de amarração on the ground-floor walls under the floor joists (with an afinação?) (§4); living-room joists at 0,50
   (§5); keep pitch or keep ridge (SB #22, §7).

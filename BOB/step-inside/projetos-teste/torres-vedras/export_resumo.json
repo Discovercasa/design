@@ -1,8 +1,8 @@
 {
  "project_id": "torres-vedras",
- "version_id": "torres-vedras-d6bff6c-202611090408",
- "source_blend_hash": "sha256:a598f8e43d1b4364ab8b0d3a3302514743ddbaf31999b11723add8d412f262fb",
- "export_timestamp": "2026-11-09T04:08:57+00:00",
+ "version_id": "torres-vedras-8554ba5-202611091426",
+ "source_blend_hash": "sha256:020102171da83b2d7b238257b924fd07fa88b624d96fe8683e356d80b91e6497",
+ "export_timestamp": "2026-11-09T14:26:13+00:00",
  "blender_version": "4.4.3",
  "unreal_target_version": "5.8 (a confirmar na Fase 4)",
  "unit_system": "métrico (1 unidade = 1 m)",
@@ -39,8 +39,8 @@
   {
    "path": "torres-vedras_visita.fbx",
    "type": "fbx",
-   "size_bytes": 2231884,
-   "sha256": "51c9b4e0b14d51b904e57fec8e5a139686c50bbed05e7703454dbb15b60e4d26",
+   "size_bytes": 2243740,
+   "sha256": "3ea15c9dfc2e0d010d60967b8bc9039a75b7e69fe81280587f17c2f48d1d7251",
    "material_ids": [
     "MAT_BOARD_OSB",
     "MAT_CONCRETE_SLAB",
@@ -67,8 +67,8 @@
   {
    "path": "torres-vedras_visita.glb",
    "type": "glb",
-   "size_bytes": 110766668,
-   "sha256": "22c9154472fd381215d48c6d033066339364d5af86a6e3082bcfba726d4244c2",
+   "size_bytes": 110783624,
+   "sha256": "42ed1bd024d77893ab621827d03d210c5d9c61cf91f5511a27348cf309014483",
    "material_ids": [
     "MAT_BOARD_OSB",
     "MAT_CONCRETE_SLAB",
@@ -95,8 +95,8 @@
   {
    "path": "torres-vedras_visita.usdz",
    "type": "usdz",
-   "size_bytes": 96469741,
-   "sha256": "d9141ca85a825a58d77693d7d30ac09aa54117615322d194e4f3814fc16b2c92",
+   "size_bytes": 96477232,
+   "sha256": "41cece8a06abfe485b842aee59bb160467a25147c5c18ec831c419ba0883ecd6",
    "material_ids": [
     "MAT_BOARD_OSB",
     "MAT_CONCRETE_SLAB",
@@ -131,8 +131,8 @@
  ],
  "validation": {
   "referencia": {
-   "objetos": 339,
-   "triangulos": 53727,
+   "objetos": 349,
+   "triangulos": 53847,
    "dimensoes": [
     80.899,
     82.831,
@@ -161,8 +161,8 @@
    ],
    "imagens": 26,
    "casa": {
-    "objetos": 338,
-    "triangulos": 45536,
+    "objetos": 348,
+    "triangulos": 45656,
     "caixa_min": [
      8.37,
      10.712,
@@ -203,8 +203,8 @@
   },
   "reimportacao": {
    "fbx": {
-    "objetos": 339,
-    "triangulos": 53727,
+    "objetos": 349,
+    "triangulos": 53847,
     "dimensoes": [
      80.899,
      82.831,
@@ -235,15 +235,15 @@
     "imagens_em_falta": [],
     "imagem": {
      "diferenca_media": 0.045,
-     "pixeis_diferentes": 0.0089,
+     "pixeis_diferentes": 0.0087,
      "silhueta_diferente": 0.0,
      "cobertura": 0.398
     },
     "erro_caixa_m": 0.0
    },
    "glb": {
-    "objetos": 339,
-    "triangulos": 53727,
+    "objetos": 349,
+    "triangulos": 53847,
     "dimensoes": [
      80.899,
      82.831,
@@ -281,8 +281,8 @@
     "erro_caixa_m": 0.0
    },
    "usdz": {
-    "objetos": 339,
-    "triangulos": 53727,
+    "objetos": 349,
+    "triangulos": 53847,
     "dimensoes": [
      80.899,
      82.831,
@@ -313,7 +313,7 @@
     "imagens_em_falta": [],
     "imagem": {
      "diferenca_media": 0.0444,
-     "pixeis_diferentes": 0.0034,
+     "pixeis_diferentes": 0.0033,
      "silhueta_diferente": 0.0,
      "cobertura": 0.398
     },

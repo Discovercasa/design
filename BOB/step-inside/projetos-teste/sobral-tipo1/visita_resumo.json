@@ -61,6 +61,15 @@
     "MAT_WOOD_CLADDING__PINE_NATURAL"
    ]
   },
+  "juntas": {
+   "fechadas": {
+    "ARCH_WALLS_EXT": 940,
+    "ARCH_WALLS_INT": 521,
+    "ARCH_CEILINGS": 243
+   },
+   "restantes": 0,
+   "malhas_partilhadas_ignoradas": 0
+  },
   "dimensoes_modelo": {
    "estrutura_planta_m": [
     9.861,
@@ -208,6 +217,102 @@
      "largura": 0.86,
      "altura": 2.16,
      "espessura_parede": 0.104
+    }
+   ]
+  },
+  "chao_vaos": {
+   "portas": 11,
+   "criados": 11,
+   "ja_com_chao": 0,
+   "sem_chao": [],
+   "detalhe": [
+    {
+     "abertura": "PI1.08#0",
+     "pavimento": "MAT_FLOOR_VINYL_WOOD",
+     "z": [
+      0.005,
+      0.16
+     ]
+    },
+    {
+     "abertura": "PE1.04#0",
+     "pavimento": "MAT_FLOOR_VINYL_WOOD",
+     "z": [
+      0.005,
+      0.16
+     ]
+    },
+    {
+     "abertura": "PE1.05#0",
+     "pavimento": "MAT_FLOOR_VINYL_WOOD",
+     "z": [
+      0.005,
+      0.16
+     ]
+    },
+    {
+     "abertura": "PE1.06#0",
+     "pavimento": "MAT_FLOOR_VINYL_WOOD",
+     "z": [
+      0.005,
+      0.16
+     ]
+    },
+    {
+     "abertura": "PE1.08#0",
+     "pavimento": "MAT_FLOOR_VINYL_WOOD",
+     "z": [
+      0.005,
+      0.16
+     ]
+    },
+    {
+     "abertura": "PE1.13#0",
+     "pavimento": "MAT_FLOOR_VINYL_WOOD",
+     "z": [
+      0.005,
+      0.16
+     ]
+    },
+    {
+     "abertura": "PI2.01#0",
+     "pavimento": "MAT_FLOOR_VINYL_WOOD",
+     "z": [
+      2.983,
+      3.122
+     ]
+    },
+    {
+     "abertura": "PI2.04#0",
+     "pavimento": "MAT_FLOOR_VINYL_WOOD",
+     "z": [
+      2.983,
+      3.122
+     ]
+    },
+    {
+     "abertura": "PI2.05#0",
+     "pavimento": "MAT_FLOOR_VINYL_WOOD",
+     "z": [
+      2.983,
+      3.122
+     ]
+    },
+    {
+     "abertura": "PI2.08#0",
+     "pavimento": "MAT_FLOOR_VINYL_WOOD",
+     "z": [
+      3.083,
+      3.122
+     ]
+    },
+    {
+     "abertura": "PD1.01#0",
+     "pavimento": "MAT_FLOOR_VINYL_WOOD",
+     "z": [
+      0.005,
+      0.16
+     ]
     }
    ]
   },

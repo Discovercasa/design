@@ -175,6 +175,23 @@ levantamento, em vez de `coordenadas` / `cota` / `canto` usa-se:
 
 A Fase 3 liga `si_material` aos IDs `MAT_*`. A casa fica pendurada num único Empty, `HOUSE_ROOT`, colocado no lote.
 
+### O que a visita acrescenta ao modelo de produção (2026-11-09)
+
+O ficheiro de produção não muda. Na visita, sem as camadas escondidas, apareciam defeitos que a obra não tem:
+- **Juntas fechadas** (`juntas.py`): o modelo de produção desenha cada peça de um acabamento com a sua junta
+  (Tremolo 6 mm, Pladur 2 mm), para contar as peças. Em obra as juntas ficam fechadas (macho-fêmea; fita e massa).
+  - Nas paredes, tetos e cobertura, cada peça cresce meia junta para a vizinha no mesmo plano (lado a lado ao
+    longo de pelo menos 1 cm).
+  - Os pavimentos e a pérgola ficam como estão.
+- **Forros dos vãos** (`ARCH_REVEALS`): ombreiras, padieira e peitoril (Fase 7, versão 2).
+- **Chão nos vãos das portas:** o pavimento de cada divisão para na face da parede, e o vão mostrava a laje ou,
+  no piso de cima, um buraco.
+  - O pavimento de cada lado continua até ao meio da parede. Uma mudança de acabamento fica debaixo da folha da
+    porta.
+  - Uma porta exterior leva o pavimento interior até à face de fora: a soleira está por definir (pergunta 23 por
+    obra).
+  - É INFERRED: falta a regra da DiscoverCasa para o pavimento nas portas interiores.
+
 ### Verificações e resultado
 
 | Verificação | Como | Dá |
@@ -185,6 +202,8 @@ A Fase 3 liga `si_material` aos IDs `MAT_*`. A casa fica pendurada num único Em
 | Duplicados | Mesma caixa, mesmo número de vértices e mesmo material | WARNING |
 | Aberturas | Raios horizontais através de cada parede, de 0,3 a 2,0 m acima do piso, em 3 pontos do vão; só contam as paredes (o vidro e os caixilhos estão lá de propósito) | NEEDS_HUMAN_REVIEW se um vão das fontes estiver fechado |
 | Controlo do teste | O mesmo teste num troço de parede cheia tem de dar fechado. Paredes baixas só abaixo da sua altura (alçado do engenheiro). | NEEDS_HUMAN_REVIEW se falhar |
+| Juntas | Depois de as fechar, procuram-se outra vez juntas entre peças do mesmo plano | WARNING se ficar alguma |
+| Chão das portas | Raio a descer do meio de cada porta: tem de bater num pavimento (ou soleira), não na laje nem no teto de baixo | WARNING se faltar |
 | Choques da madeira | `verificar.py` (> 8 mm) | WARNING (problema do modelo de produção) |
 | Casa e terreno | Terreno sob a casa contra a laje, antes e depois da plataforma | WARNING |
 | Terreno | Resultado de `terreno.py` | WARNING / NEEDS_HUMAN_REVIEW |

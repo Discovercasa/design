@@ -33,8 +33,8 @@
     "MAT_WOOD_CLADDING__DOUGLAS_BROWN",
     "MAT_WOOD_CLADDING__PINE_NATURAL"
    ],
-   "triangulos": 24098,
-   "triangulos_antes_de_simplificar": 24748,
+   "triangulos": 22166,
+   "triangulos_antes_de_simplificar": 24868,
    "imagens": {
     "Chipboard004_2K-JPG_Color.jpg": [
      1024,
@@ -156,18 +156,18 @@
    "ficheiros": {
     "glb": {
      "ficheiro": "torres-vedras_ar_casa.glb",
-     "bytes": 2591644,
-     "sha256": "12f91a4918fea872d301527acb61151cd3d6bed687c8edf7b9c9b26744138999"
+     "bytes": 2215512,
+     "sha256": "5e896ed0ae1d3be82d1388c5f0676c580220f0767589f0b3e2ed6e8700bd7b5a"
     },
     "usdz": {
      "ficheiro": "torres-vedras_ar_casa.usdz",
-     "bytes": 2058384,
-     "sha256": "6dbb01ac83a9f93201eff615cfe0febed962cd0e5f271f64722136ef0535c452"
+     "bytes": 1949893,
+     "sha256": "9eba7fd91ad1442a6986877a227da8b598a2f959512787a636c1d1099bbbdcbd"
     }
    },
    "reimportacao": {
     "glb": {
-     "triangulos": 24098,
+     "triangulos": 22166,
      "dimensoes": [
       19.261,
       21.691,
@@ -195,7 +195,7 @@
      "erro": null
     },
     "usdz": {
-     "triangulos": 24098,
+     "triangulos": 22166,
      "dimensoes": [
       19.261,
       21.691,
@@ -245,8 +245,8 @@
     "MAT_WOOD_CLADDING__DOUGLAS_BROWN",
     "MAT_WOOD_CLADDING__PINE_NATURAL"
    ],
-   "triangulos": 28653,
-   "triangulos_antes_de_simplificar": 29303,
+   "triangulos": 26721,
+   "triangulos_antes_de_simplificar": 29423,
    "imagens": {
     "Chipboard004_2K-JPG_Color.jpg": [
      1024,
@@ -368,18 +368,18 @@
    "ficheiros": {
     "glb": {
      "ficheiro": "torres-vedras_ar_maquete.glb",
-     "bytes": 3496248,
-     "sha256": "007981b7738917ec01452d644cf9be189496f82b289e90de241c0325bc4ccbc2"
+     "bytes": 3119448,
+     "sha256": "9e6d25943d59050c3e283900aba0b971e9dc08ab8bf29f9c9b3525221faab3c0"
     },
     "usdz": {
      "ficheiro": "torres-vedras_ar_maquete.usdz",
-     "bytes": 2739157,
-     "sha256": "5c2f43f101c7f2edcdceaedf4d49976e2841538c725d723e2b3370eba2a598b9"
+     "bytes": 2630774,
+     "sha256": "adb263d47d1d30aa93fac139e05b2e62d7edf27abd490b3f72094cadcd702092"
     }
    },
    "reimportacao": {
     "glb": {
-     "triangulos": 28653,
+     "triangulos": 26721,
      "dimensoes": [
       60.263,
       58.26,
@@ -408,7 +408,7 @@
      "erro": null
     },
     "usdz": {
-     "triangulos": 28653,
+     "triangulos": 26721,
      "dimensoes": [
       60.263,
       58.26,
