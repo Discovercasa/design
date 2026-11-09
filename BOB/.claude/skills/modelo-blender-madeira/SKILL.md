@@ -57,7 +57,9 @@ No module drawings: the walls come from the plan, everything else from the Disco
    within EPS gave a vertex millions of metres up). Audit a change with every configurator shape × roof × slope × eave.
    Configured houses (`para_construtor`): interior walls meeting end to end make a corner (X through, Y against —
    `casa_planta` `cantos_int`); `faces_interiores` {side: finish} = an outside wall's inner face (exterior panels get
-   `acabamentos`); `pavimentos` [{ponto, acabamento}] = a room's floor (`camadas.pavimentos`, a collection per finish);
+   `acabamentos`); `pavimentos` [{ponto, acabamento}] = a room's floor (`camadas.pavimentos`, a collection per finish;
+   each room's floor runs on to the middle of the wall under every interior door — user 2026-11-09 «Sim, contínuo»,
+   `camadas.faixas_portas`; exterior doors wait for the threshold, PO Q23);
    under an exposed roof the rough top may reach the pé direito and the exterior modules rise (the ceiling suspension)
    when the lintel over the highest opening needs it (a note); beirado clamped to 0,20–0,50 (JSON `beirado_min` /
    `beirado_max`; max 0,50 since 2026-10-28). Hidden roof: `cobertura_escondida` picks one água (`uma_agua`) or two

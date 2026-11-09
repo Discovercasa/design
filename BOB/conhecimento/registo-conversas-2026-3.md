@@ -84,3 +84,22 @@ words (`registo-conversas*.md`). When this file passes about 1 500 lines, contin
   the strip under each interior door (≈ 0,87 × wall thickness, ≈ 0,1 m² per door) is neither modelled nor in the material
   list; to be proposed to the user (model change, not done).
 
+### 2026-11-09 — Correct the production model: floor under the doors [Torres Vedras, Sobral]
+> Sim, corrige
+- Context: answer to "Corrijo já o modelo de produção para contar o chão por baixo das portas?" (the pending item (b) of
+  the entry above).
+- Filed in: `conhecimento/perguntas-por-obra.md` → Q23: PENDING (production model) closed 2026-11-09.
+  `Construção Torres Vedras/docs/estado.md` and `Construção Sobral/docs/estado.md` → decision log: production model
+  regenerated 2026-11-09 (floor under interior doors counted; quantities file also carries the 06-07/11 builder changes).
+  `step-inside/docs/fase7` «Versão 4.1», `fase2`, hub task 165 and AR v4.1: done by the caller.
+- Done (by the caller): `ferramentas/modelo/camadas.py` new `portas_paineis` + `faixas_portas`; `salas()` stores
+  `casa.portas_salas[piso]`; `pavimentos()` extends each room's floor (finish; on the ground floor also the build-up
+  layers) to the middle of the wall in each interior door; exterior doors left out (threshold open, Q23); usable room
+  areas unchanged; finish objects carry `area_sob_portas_m2`. Rebuilt: TV vinyl 151,6 → 152,5 m² (8 interior doors);
+  Sobral Tipo 1 vinyl 101,9 → 102,5 m², XPS 60 and betonilha 55,2 → 55,3 m²; validar issues 0.
+- Side effect: the committed production outputs dated 2026-10-30, so the rebuild also brought in the builder changes of
+  2026-11-06/07 (vergas; parapet roof-side face; hidden-gutter outlets 'Saída da caleira oculta (bocal)'; sandwich
+  panel name 'Painel sandwich Munditelha'; Sobral option A ripado 413,7 → 633,5 m; TV timber total 1892,9 → 1891,9 m;
+  'Remate lateral' gone in Sobral). Verified with the old `camadas.py` on the same geometry: only the floor rows are
+  from this fix.
+

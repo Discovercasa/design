@@ -96,6 +96,11 @@ gutters; document generator first run) · v6.5 to rebuild (beams inside).
   head ≈ 1,75) read roughly from the 1:200 elevations.
 
 ## Decision log (TV; short quotes — full words in the registo)
+- 2026-11-09 — Production model regenerated ("Sim, corrige"): the floor under interior doors is now modelled and counted
+  (vinyl 151,6 → 152,5 m², 8 interior doors; exterior doors left out, threshold open). The quantities file
+  (`modelos/casa/quantidades.csv`) also now reflects the builder changes of 06–07/11 that had not reached it since
+  2026-10-30: vergas, parapet roof-side face, hidden-gutter outlets ('Saída da caleira oculta (bocal)'), sandwich panel
+  name 'Painel sandwich Munditelha', timber total 1892,9 → 1891,9 m. Keep this in mind when comparing material lists.
 - 2026-10-15 — A house already built; model it and compare with the real materials; Sobral paused. Drawings: estudo
   prévio 1:200 (architecture, site plan, retaining wall, survey). Always the DiscoverCasa method, not the architect's P1
   ("nós usamos o nosso método construtivo sempre portanto segue o nosso"). No SketchUp of this house; "desenhos de

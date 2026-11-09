@@ -224,6 +224,46 @@ outra vez com 410 e `verify_jwt`; a chave foi apagada).
 **Imagens de verificação** (só no PC): `_trabalho/step-inside/torres-vedras/ar/v4_tremolo*.png` e
 `v4_porta_P05.png`; `_trabalho/step-inside/sobral-tipo1/ar/v4_porta_PI2.04.png`.
 
+## Versão 4.1: o chão das portas no modelo de produção (2026-11-09)
+
+O utilizador confirmou «Sim, contínuo» (o pavimento continua por baixo das portas interiores) e, para a correção
+do modelo de produção, «Sim, corrige».
+
+**Construtor:** `ferramentas/modelo/camadas.py`, funções `faixas_portas` e `portas_paineis`.
+- **Que portas conta:**
+  - os vãos entre painéis;
+  - as portas dentro de um painel.
+- **O que faz:** o pavimento de cada divisão (e, no rés do chão, as camadas por baixo) continua até ao meio da
+  parede.
+- **Portas exteriores:** ficam de fora, porque a soleira está por definir (pergunta 23).
+- **Área útil das divisões:** não muda.
+- **Lista de material:**
+
+| Casa | Vinílico | XPS e betonilha |
+|---|---|---|
+| Torres Vedras | 151,6 → 152,5 m² (8 portas) | — |
+| Sobral Tipo 1 | 101,9 → 102,5 m² | 55,2 → 55,3 m² |
+
+**Verificação independente:** no modelo de visita, todas as portas interiores já trazem chão do modelo de produção
+(Torres Vedras 13 de 15, Sobral 6 de 11). As restantes são as portas exteriores.
+- **Melhoria no Sobral:** duas passagens do piso de cima, entre módulos, não estão nas fontes, por isso a versão 4
+  não lhes pôs chão. Agora também o têm.
+- **Validação:** issues 0 nas duas casas.
+- **AR:** PASS. Triângulos e tamanhos:
+  - Torres Vedras: casa 22 468 (2,2 MB), maquete 27 023 (3,1 MB);
+  - Sobral: casa 10 634 (1,4 MB), maquete 11 270 (2,1 MB).
+- **Hub:** os 8 ficheiros passaram à versão 4.1 (mesmo procedimento; função desligada outra vez e chave apagada).
+
+**Outras diferenças ao gerar de novo os modelos:** os ficheiros de produção no Git eram de 2026-10-30. Gerá-los agora
+traz também as mudanças do construtor de 06 e 07/11, que nunca lhes tinham chegado:
+- vergas;
+- face da platibanda do lado da cobertura;
+- saídas das caleiras ocultas;
+- nome do painel sandwich;
+- ripado da opção A do Sobral 413,7 → 633,5 m.
+
+Correr o construtor antigo nos mesmos ficheiros confirmou que só as linhas do pavimento vêm desta correção.
+
 ## Em falta
 
 - **Telemóveis reais** (tarefa 84):

@@ -80,6 +80,11 @@ storeys (upper floor Z 3,117, +0,139) · 2026-10-15 central floor beam removed; 
   Review re-saved the user's copy at 16:33 (157 bytes smaller), kept outside Git — the user's choice.
 
 ## Decision log (Sobral; short quotes — full words in the registo)
+- 2026-11-09 — Production model (Tipo 1) regenerated ("Sim, corrige"): the floor under interior doors is now modelled
+  and counted (vinyl 101,9 → 102,5 m²; XPS 60 floor and betonilha 55,2 → 55,3 m²; exterior doors left out). The
+  quantities file (`modelos/tipo1/quantidades.csv`) also now reflects the builder changes of 06–07/11 that had not reached
+  it since 2026-10-30: vergas, parapet roof-side face, hidden-gutter outlets, sandwich panel name 'Painel sandwich
+  Munditelha', option A ripado 413,7 → 633,5 m, 'Remate lateral' gone. Keep this in mind when comparing material lists.
 - 2026-09-23 — The drawings are module fabrication drawings; the foundation fixing is handled separately. Roof plan read
   as true length (section FF' and gable elevations). Blender files saved with the lowest installed Blender ≥ 4.4.
 - 2026-09-24 — Build-up layers by the DiscoverCasa standard, not the drawings' OSB 12 (the company is aware of the

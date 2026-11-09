@@ -9,8 +9,8 @@ Orçamento (Google Scene Viewer  especificação §12.1): ideal até 50 000 tri�
 
 | Variante | Para quê | Triângulos (antes) | Materiais | Maior textura | GLB | USDZ | Dimensões (m) |
 |---|---|---|---|---|---|---|---|
-| casa | 1:1 no terreno real, para andar à volta | 9214 (9942) | 8 | 1024 px | 1,3 MB | 1,1 MB | [13.099, 11.249, 7.532] |
-| maquete | com o terreno, em ponto pequeno sobre uma mesa | 9850 (10578) | 9 | 1024 px | 2,0 MB | 1,6 MB | [53.369, 51.497, 10.5] |
+| casa | 1:1 no terreno real, para andar à volta | 10634 (11374) | 8 | 1024 px | 1,4 MB | 1,1 MB | [13.099, 11.249, 7.543] |
+| maquete | com o terreno, em ponto pequeno sobre uma mesa | 11270 (12010) | 9 | 1024 px | 2,1 MB | 1,7 MB | [53.369, 51.497, 10.5] |
 
 **Simplificação:**
 - tiram-se as camadas que não se veem de fora (`MAT_BOARD_OSB`, `MAT_INSULATION_MINERAL_WOOL`, `MAT_INSULATION_XPS`, `MAT_METAL_GALVANIZED`, `MAT_SCREED`, `MAT_TIMBER_STRUCTURE`);
@@ -26,9 +26,9 @@ Orçamento (Google Scene Viewer  especificação §12.1): ideal até 50 000 tri�
 
 **Reabertos num Blender limpo** (triângulos, dimensões, texturas):
 
-- casa glb: 9214 triângulos, [13.099, 11.249, 7.532] m, 13 texturas, 0 em falta
-- casa usdz: 9214 triângulos, [13.099, 11.249, 7.532] m, 13 texturas, 0 em falta
-- maquete glb: 9850 triângulos, [53.369, 51.497, 10.5] m, 16 texturas, 0 em falta
-- maquete usdz: 9850 triângulos, [53.369, 51.497, 10.5] m, 16 texturas, 0 em falta
+- casa glb: 10634 triângulos, [13.099, 11.249, 7.543] m, 13 texturas, 0 em falta
+- casa usdz: 10634 triângulos, [13.099, 11.249, 7.543] m, 13 texturas, 0 em falta
+- maquete glb: 11270 triângulos, [53.369, 51.497, 10.5] m, 16 texturas, 0 em falta
+- maquete usdz: 11270 triângulos, [53.369, 51.497, 10.5] m, 16 texturas, 0 em falta
 
 **Por testar:** abrir em telemóveis reais (Scene Viewer num Android, Quick Look num iPhone) e medir o tempo de carregamento e a qualidade ao lado das fotos da casa construída (tarefas 84 e 158).

@@ -27,10 +27,10 @@ Gerado por `step-inside/ferramentas/visita/visita.py` a partir de `visita.json`.
 | ARCH_LABELS | 8 | não (fica no ficheiro) |
 | ARCH_OPENINGS | 50 | sim |
 | ARCH_PERGOLA | 25 | sim |
-| ARCH_ROOF | 116 | sim |
+| ARCH_ROOF | 119 | sim |
 | ARCH_WALLS_EXT | 24 | sim |
 | ARCH_WALLS_INT | 66 | sim |
-| STRUCT_TIMBER | 859 | não (fica no ficheiro) |
+| STRUCT_TIMBER | 855 | não (fica no ficheiro) |
 
 Cada objeto tem `si_id` = `<coleção>/<nome do objeto>` (os nomes vêm dos desenhos e não mudam), `si_categoria`, `si_colecao_producao` e `si_material`.
 
@@ -47,10 +47,10 @@ Cada objeto tem `si_id` = `<coleção>/<nome do objeto>` (os nomes vêm dos dese
 ## Verificações
 
 - **Dimensões:** estrutura do modelo 17,500 × 10,999 m; fontes 17,501 × 11,000 m (diferença 0,001 m). Contorno acabado 17,632 × 11,132 m.
-- **Malhas:** 330 objetos visíveis; abertas 0, normais para dentro 0, repetidos 0.
+- **Malhas:** 333 objetos visíveis; abertas 0, normais para dentro 0, repetidos 0.
 - **Aberturas:** 19 das fontes procuradas no modelo (raios horizontais através da parede, de 0,3 a 2,0 m acima do piso); fechadas: 0. Controlo: 14 troços de parede cheia, vistos como abertos: 0.
 - **Juntas dos acabamentos** (o modelo de produção desenha cada tábua e placa com a sua junta; em obra ficam fechadas): fechadas ARCH_CEILINGS 278, ARCH_ROOF 153, ARCH_WALLS_EXT 775, ARCH_WALLS_INT 755; por fechar 0.
-- **Chão nos vãos das portas:** 15 portas; chão acrescentado em 10 peças, 5 já tinham chão ou soleira; sem chão (raio a descer do meio do vão): 0.
+- **Chão nos vãos das portas:** 15 portas; chão acrescentado em 2 peças, 13 já tinham chão ou soleira; sem chão (raio a descer do meio do vão): 0.
 - **Choques da madeira** (verificar.py, > 8 mm): 36 em 736 peças — Prumo x Prumo: 18, Amarração x Viga: 10, Amarração x Amarração: 5, PI x PI: 3.
 - **Terreno existente sob a casa** (antes da plataforma): entre -0,68 e 0,76 m da laje; acima do pavimento em 20 % da área.
 - **Casa e terreno** (625 pontos sob a casa): terreno entre -0,03 e -0,00 m da laje; acima do pavimento em 0 % da área.
@@ -58,7 +58,7 @@ Cada objeto tem `si_id` = `<coleção>/<nome do objeto>` (os nomes vêm dos dese
 
 ## Materiais (catálogo comum `MAT_*`)
 
-Os materiais de produção foram trocados pelos do catálogo comum (`step-inside/materiais/catalogo.json`, mapeamento `mapeamentos/discovercasa.json`). Estados dos mapeamentos usados: INFERRED 1112.
+Os materiais de produção foram trocados pelos do catálogo comum (`step-inside/materiais/catalogo.json`, mapeamento `mapeamentos/discovercasa.json`). Estados dos mapeamentos usados: INFERRED 1111.
 
 | ID | Objetos | Textura |
 |---|---|---|
@@ -72,12 +72,14 @@ Os materiais de produção foram trocados pelos do catálogo comum (`step-inside
 | `MAT_INSULATION_MINERAL_WOOL` | 58 | — |
 | `MAT_INT_PLASTER_PAINTED__WHITE` | 27 | — |
 | `MAT_MEMBRANE_BREATHER` | 17 | — |
-| `MAT_METAL_FLASHING__RAL7016` | 42 | sim |
+| `MAT_METAL_FLASHING__RAL7016` | 41 | sim |
+| `MAT_METAL_FLASHING__RAL8004` | 4 | sim |
 | `MAT_METAL_GALVANIZED` | 24 | — |
-| `MAT_METAL_GUTTER__DARK_GREY` | 7 | sim |
+| `MAT_METAL_GUTTER__BLACK` | 3 | sim |
+| `MAT_METAL_GUTTER__DARK_GREY` | 4 | sim |
 | `MAT_ROOF_SANDWICH_TRAPEZOIDAL__RAL8004` | 37 | sim |
 | `MAT_ROOF_TILE_CERAMIC__TERRACOTTA` | 1 | sim |
-| `MAT_TIMBER_STRUCTURE` | 782 | sim |
+| `MAT_TIMBER_STRUCTURE` | 778 | sim |
 | `MAT_TIMBER_STRUCTURE__GLULAM` | 21 | sim |
 | `MAT_WOOD_CLADDING__DOUGLAS_BROWN` | 17 | sim |
 | `MAT_WOOD_CLADDING__PINE_NATURAL` | 17 | sim |
