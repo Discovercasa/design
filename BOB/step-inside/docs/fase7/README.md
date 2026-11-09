@@ -386,6 +386,10 @@ O utilizador disse «avança com a próxima tarefa»: os três pontos que faltav
 
 **Imagens de verificação:** só no PC, em `_trabalho/step-inside/<obra>/ar/v6_*.png` (e `v5_maquete_antes.png`).
 
+**No hub:** o utilizador autorizou o carregamento («Sim, carrega»). Os 16 ficheiros da versão 6 substituíram os
+documentos 42–57 do Teste do AR, nos mesmos links, com os tamanhos confirmados. Depois, a função temporária voltou a
+estar desligada e a chave foi apagada. A equipa foi avisada na tarefa 84.
+
 ## Em falta
 
 - **Telemóveis reais** (tarefa 84):
