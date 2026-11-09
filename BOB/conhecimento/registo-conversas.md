@@ -1534,3 +1534,15 @@ When this file passes about 1 500 lines, continue in `registo-conversas-<year>-<
 - Filed in: `step-inside/docs/fase7/README.md`; hub tasks 82, 83, 157.
 - PENDING (user): open the files on an iPhone and/or Android and say how they look (scale, sits on the ground, orientation, loading time) (tasks 84, 158).
 - Open items: glass and frames in the Sobral openings; ambient occlusion; terrain texture repetition. A web 3D fallback viewer (Google's model-viewer) would be a new dependency: must ask the user first.
+
+### 2026-11-09 — How to test the AR through the hub [Step Inside]
+> como é que posso testar através do HUB ? Não parece nenhum sítio onde possa clicar para testar
+- Context: the AR files had only been sent in the chat; the hub had no place to test them. Claude proposed AR buttons in the hub.
+- Filed in: `step-inside/docs/fase7/README.md` (see next entry); hub task 84.
+
+### 2026-11-09 — Add a test section with the AR components in the hub [Step Inside]
+> sim adiciona uma secção de teste onde tem essas componentes
+- Context: answers the proposal of AR buttons in the hub. Done the same day: the Step Inside project page in the hub (design.discovercasa.pt) has a new section "Teste do AR no telemóvel": button «Modelo AR» uploads .usdz/.glb as private project documents of a new type 'ar' (migration `supabase/migrations/0015_documentos_ar.sql`, applied); each .usdz gets «Ver em AR · iPhone» (Safari AR Quick Look, signed link 1 h), each .glb «Ver em AR · Android» (Google Scene Viewer intent); a checklist (size: a door ≈ 2.1 m, sits on the ground, orientation, opening time, materials) and a link to write the result in task 84. No new dependency. Playwright test added (desktop + phone).
+- Filed in: `step-inside/docs/fase7/README.md`, hub task 84.
+- PENDING (user): upload the 8 AR files in that section (needs their hub account) and test on the phone (task 84).
+- Repo hygiene (found while running the hub tests): the existing test "Início: o estado dos posts vem fresco ao mudar de página" in `tests/notificacoes.spec.mjs` fails on 2026-11-09 also WITHOUT this change (likely date-dependent); not fixed; worth a look in the social/hub work.
