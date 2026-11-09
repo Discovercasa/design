@@ -51,12 +51,105 @@
    "controlo_abertas_por_engano": [],
    "controlo_detalhe": []
   },
-  "chao_provisorio": {
-   "z": 0.0,
-   "tamanho_m": 60.0
+  "colocacao": {
+   "pavimento_rc_modelo_m": 0.005,
+   "rotacao_graus": 317.863,
+   "z_laje": 117.495
+  },
+  "casa_terreno_existente": {
+   "amostras": 625,
+   "fora_do_terreno": 0,
+   "terreno_menos_laje_min_m": -0.68,
+   "terreno_menos_laje_max_m": 0.76,
+   "fracao_terreno_acima_do_pavimento": 0.2
+  },
+  "plataforma": {
+   "vertices_rebaixados_ou_subidos": 124,
+   "z": 117.48
+  },
+  "casa_terreno": {
+   "amostras": 625,
+   "fora_do_terreno": 0,
+   "terreno_menos_laje_min_m": -0.03,
+   "terreno_menos_laje_max_m": -0.0,
+   "fracao_terreno_acima_do_pavimento": 0.0
   }
  },
- "implantacao": {},
+ "implantacao": {
+  "posicao": {
+   "valor": "só no PC",
+   "unidade": "",
+   "tipo": "referencial",
+   "estado": "CONFIRMED",
+   "metodo": "geometria",
+   "fonte": {
+    "documento": "Levantamento topográfico F00.0.dxf",
+    "folha": null,
+    "local": "tramas das paredes, camada 0_PROP.trama",
+    "data": ""
+   },
+   "nota": "paredes do modelo ajustadas às tramas das paredes da planta: 154 de 163 pontos sobre as paredes (mediana 0,001 m, p90 0,038 m); a segunda orientação só tem 79",
+   "conflitos": []
+  },
+  "rotacao_graus": {
+   "valor": 317.863,
+   "unidade": "°",
+   "tipo": "geometria",
+   "estado": "CONFIRMED",
+   "metodo": "geometria",
+   "fonte": {
+    "documento": "Levantamento topográfico F00.0.dxf",
+    "folha": null,
+    "local": "tramas das paredes, camada 0_PROP.trama",
+    "data": ""
+   },
+   "nota": "eixo X do modelo medido a partir do eixo das abcissas do sistema de coordenadas",
+   "conflitos": []
+  },
+  "cota_pavimento": {
+   "valor": 117.5,
+   "unidade": "m",
+   "tipo": "nivel",
+   "estado": "INFERRED",
+   "metodo": "texto",
+   "fonte": {
+    "documento": "Levantamento topográfico F00.0.dwg (DXF)",
+    "folha": null,
+    "local": "camada 0_PROP.aux.cotas: '117.50' dentro da casa; '117,5' nos alçados, com '120,6' no topo",
+    "data": ""
+   },
+   "nota": "cota do pavimento acabado do rés do chão (±0,00) lida nas cotas da proposta; também há '117.48' junto da casa (exterior?): confirmar",
+   "conflitos": []
+  },
+  "plataforma": {
+   "valor": {
+    "margem_m": 1.5,
+    "cota": 117.48
+   },
+   "unidade": "",
+   "tipo": "terreno",
+   "estado": "INFERRED",
+   "metodo": "geometria",
+   "fonte": {
+    "documento": "Levantamento topográfico F00.0.dwg (DXF)",
+    "folha": null,
+    "local": "camada 0_PROP.aux.cotas: '117.48' junto da casa (4 vezes) e '117,48' nos alçados",
+    "data": ""
+   },
+   "nota": "o levantamento é de antes da obra (março de 2024): à volta da casa o terreno fica plano à cota exterior desenhada, numa faixa de 1,5 m (modelação aproximada; a casa já está construída: confirmar com as fotos)",
+   "conflitos": []
+  },
+  "pavimento_acima_laje": {
+   "valor": 0.005,
+   "unidade": "m",
+   "tipo": "nivel",
+   "estado": "CONFIRMED",
+   "metodo": "calculo",
+   "fonte": null,
+   "nota": "medido no modelo: topo do pavimento acabado do rés do chão sobre o topo da laje",
+   "conflitos": []
+  }
+ },
  "dimensoes_fontes": {
   "comprimento": {
    "valor": 17.501,
@@ -101,11 +194,14 @@
   },
   "maior_cm": 7.5
  },
- "terreno": null,
+ "terreno": "WARNING",
  "dif_dimensoes_estrutura_m": 0.001,
  "resultado": "WARNING",
  "motivos": [
   "36 choques entre peças de madeira > 8 mm no modelo de produção (verificar.py)",
-  "chão provisório plano: não é terreno (falta o levantamento)"
+  "implantação: cota_pavimento INFERRED",
+  "implantação: plataforma INFERRED",
+  "terreno existente entre -0,68 e 0,76 m da laje sob a casa: a plataforma (modelação simplificada) corrige-o no modelo",
+  "terreno: WARNING"
  ]
 }

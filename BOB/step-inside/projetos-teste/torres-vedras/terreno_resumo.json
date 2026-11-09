@@ -1,0 +1,241 @@
+{
+ "obra": "torres-vedras",
+ "resultado": "WARNING",
+ "motivos": [
+  "precisao: em falta",
+  "pontos_controlo: em falta"
+ ],
+ "terreno": {
+  "fonte": {
+   "valor": "DXF: Levantamento topográfico F00.0.dxf",
+   "unidade": "",
+   "tipo": "terreno",
+   "estado": "CONFIRMED",
+   "metodo": "texto",
+   "fonte": {
+    "documento": "Levantamento topográfico F00.0.dxf",
+    "folha": null,
+    "local": "DXF convertido do DWG do levantamento (camadas POINTS, CV, CVD, 0_Limites_Terreno)",
+    "data": ""
+   },
+   "nota": "",
+   "conflitos": []
+  },
+  "crs": {
+   "valor": "EPSG:3763",
+   "unidade": "",
+   "tipo": "referencial",
+   "estado": "CONFIRMED",
+   "metodo": "texto",
+   "fonte": {
+    "documento": "Levantamento topográfico F00.0.dxf",
+    "folha": null,
+    "local": "DXF convertido do DWG do levantamento (camadas POINTS, CV, CVD, 0_Limites_Terreno)",
+    "data": ""
+   },
+   "nota": "declarado no próprio ficheiro",
+   "conflitos": []
+  },
+  "datum_vertical": {
+   "valor": "altitudes ortométricas (ligação à rede GNSS com correção ao geóide)",
+   "unidade": "",
+   "tipo": "terreno",
+   "estado": "CONFIRMED",
+   "metodo": "texto",
+   "fonte": {
+    "documento": "Levantamento topográfico F00.0.dwg (DXF)",
+    "folha": null,
+    "local": "legenda: 'Ligação á Rede GNSS no Sistema de coordenadas ETRS89/PTM06 (correção ao Geóide)'",
+    "data": ""
+   },
+   "nota": "a correção ao geóide dá altitudes ortométricas (datum altimétrico nacional, Cascais); o nome do modelo de geóide não está escrito",
+   "conflitos": []
+  },
+  "unidade_horizontal": {
+   "valor": "m",
+   "unidade": "m",
+   "tipo": "terreno",
+   "estado": "CONFIRMED",
+   "metodo": "texto",
+   "fonte": {
+    "documento": "Levantamento topográfico F00.0.dwg (DXF)",
+    "folha": null,
+    "local": "camada GPS: 'E=…m.', 'N=…m.'; EPSG:3763 é em metros",
+    "data": ""
+   },
+   "nota": "o DXF não tem $INSUNITS; os rótulos GNSS e o sistema dizem metros",
+   "conflitos": []
+  },
+  "unidade_vertical": {
+   "valor": "m",
+   "unidade": "m",
+   "tipo": "terreno",
+   "estado": "CONFIRMED",
+   "metodo": "texto",
+   "fonte": {
+    "documento": "Levantamento topográfico F00.0.dwg (DXF)",
+    "folha": null,
+    "local": "camada GPS: 'h=…m.'",
+    "data": ""
+   },
+   "nota": "",
+   "conflitos": []
+  },
+  "limite_lote": {
+   "valor": {
+    "area_m2": 1665,
+    "perimetro_m": 162,
+    "vertices": 19,
+    "coordenadas": "só no PC (terreno_local.json)"
+   },
+   "unidade": "",
+   "tipo": "terreno",
+   "estado": "INFERRED",
+   "metodo": "geometria",
+   "fonte": {
+    "documento": "Levantamento topográfico F00.0.dxf",
+    "folha": null,
+    "local": "DXF convertido do DWG do levantamento (camadas POINTS, CV, CVD, 0_Limites_Terreno)",
+    "data": ""
+   },
+   "nota": "linha tracejada «LIMITE DO TERRENO» reconstruída a partir dos traços",
+   "conflitos": []
+  },
+  "data_levantamento": {
+   "valor": "março de 2024",
+   "unidade": "",
+   "tipo": "terreno",
+   "estado": "CONFIRMED",
+   "metodo": "texto",
+   "fonte": {
+    "documento": "Levantamento topográfico F00.0.dwg (DXF)",
+    "folha": null,
+    "local": "carimbo do levantamento: 'LEVANTAMENTO TOPOGRAFICO' / 'MARÇO 2024'",
+    "data": ""
+   },
+   "nota": "as folhas do arquiteto são de junho e julho de 2024",
+   "conflitos": []
+  },
+  "precisao": {
+   "valor": null,
+   "unidade": "",
+   "tipo": "terreno",
+   "estado": "MISSING",
+   "metodo": "nenhum",
+   "fonte": null,
+   "nota": "precisão não declarada pelo topógrafo; ver a coerência medida no relatório",
+   "conflitos": []
+  },
+  "pontos_controlo": {
+   "valor": null,
+   "unidade": "",
+   "tipo": "terreno",
+   "estado": "MISSING",
+   "metodo": "nenhum",
+   "fonte": null,
+   "nota": "sem marcos nem estações com coordenadas; verificação interna: 92 dos 93 pontos GNSS com E/N/h escritos (camada GPS) coincidem com os pontos 3D do desenho a menos de 1 cm",
+   "conflitos": []
+  }
+ },
+ "leitura": [
+  {
+   "superficie": "existente",
+   "ficheiro": "Levantamento topográfico F00.0.dxf",
+   "formato": "DXF",
+   "folha": null,
+   "contagens": {
+    "entidades": {
+     "TEXT": 372,
+     "LWPOLYLINE": 13,
+     "POINT": 278,
+     "POLYLINE": 160
+    },
+    "pontos": 278,
+    "curvas": 0,
+    "quebras": 0,
+    "linhas_2d": 173,
+    "faces": 0,
+    "rotulos_numericos": 0,
+    "copias_do_levantamento": 3,
+    "gnss_escritos": 93,
+    "gnss_que_coincidem": 92,
+    "gnss_junto_da_copia_usada": 83,
+    "pontos_na_copia_usada": 92,
+    "curvas_2d_usadas": 54
+   },
+   "avisos": [
+    "$INSUNITS ausente ou 0: o DXF não diz a unidade",
+    "o ficheiro tem 3 cópias do levantamento; usada a que tem à volta os pontos GNSS escritos que coincidem com os pontos 3D (83 de 92), com 15 m à volta do limite (92 de 278 pontos)"
+   ],
+   "georef": null
+  }
+ ],
+ "controlo_xy_implantacao": [],
+ "superficies": [
+  {
+   "id": "existente",
+   "nome": "Terreno existente (levantamento topográfico GNSS)",
+   "pontos": 92,
+   "excluidos_por_decisao": 0,
+   "duplicados_com_cotas_diferentes": [],
+   "validacao_cruzada": {
+    "n": 81,
+    "media": -0.002,
+    "media_abs": 0.104,
+    "rmse": 0.151,
+    "p50": 0.073,
+    "p95": 0.329,
+    "max": 0.554
+   },
+   "limite_pico_m": 1.0,
+   "curvas": {
+    "linhas": 54,
+    "com_cota_por_rotulo": 0,
+    "com_cota_pelo_tin": 54,
+    "sem_cota": 0,
+    "rotulos_em_conflito": 0,
+    "equidistancia_mestras": 1.0,
+    "equidistancia": 0.2,
+    "razao_comprimentos_intermedias_mestras": null,
+    "desvio_ao_longo_da_curva_p50": null,
+    "retiradas_por_incoerencia": 0,
+    "com_cota_final": 54
+   },
+   "curvas_vs_pontos": {
+    "n": 79,
+    "media": 0.003,
+    "media_abs": 0.032,
+    "rmse": 0.041,
+    "p50": 0.026,
+    "p95": 0.092,
+    "max": 0.118
+   },
+   "limite_desacordo_curvas_m": 1.0,
+   "incerteza_xy_m": 1.0,
+   "pontos_afastados": [],
+   "pontos_a_rever": [],
+   "picos_confirmados_pelas_curvas": [],
+   "cruzamentos_de_curvas": 0,
+   "triangulos_aparados": 124,
+   "aresta_max_borda_m": 5.64,
+   "malha": {
+    "vertices": 4073,
+    "triangulos": 8009,
+    "area_planta_m2": 2671.8,
+    "area_m2": 2686.1,
+    "extensao_m": [
+     80.9,
+     82.8
+    ],
+    "z_min": 115.3,
+    "z_max": 121.52,
+    "faces_para_baixo": 0,
+    "faces_verticais": 1,
+    "inclinacao_graus_p50": 7.2,
+    "inclinacao_graus_p95": 23.9,
+    "inclinacao_graus_max": 87.1
+   }
+  }
+ ],
+ "origem_local": "guardada só no PC (_trabalho/step-inside/<obra>/terreno/terreno_local.json)"
+}

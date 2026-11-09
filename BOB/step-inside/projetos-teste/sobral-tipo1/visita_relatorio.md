@@ -41,7 +41,7 @@ Cada objeto tem `si_id` = `<coleção>/<nome do objeto>` (os nomes vêm dos dese
 | rotacao_graus | 0,00 | INFERRED | inferencia | o contorno da casa é um retângulo alinhado com a quadrícula (lado maior E-O, como o modelo); falta confirmar se a casa está virada como no desenho do engenheiro (0°) ou rodada 180° |
 | pavimento_acima_laje | 0,16 | CONFIRMED | calculo | pavimento acabado do rés do chão a Z 0,16 sobre o topo da laje (modelo DiscoverCasa) |
 | contorno_desenho_m | 10,02 × 6,25 | CONFIRMED | geometria | contorno exterior acabado da casa na implantação |
-| plataforma | area_m2 189,6, vertices 8, cota laje + 0,00 m | INFERRED | geometria | modelação simplificada (folha 4): o lote P fica plano à cota do topo da laje dentro do contorno desenhado à volta da casa; os muros e taludes da modelação ainda não estão no modelo |
+| plataforma | area_m2 189,60, vertices 8, cota laje + 0,00 m | INFERRED | geometria | modelação simplificada (folha 4): o lote P fica plano à cota do topo da laje dentro do contorno desenhado à volta da casa; os muros e taludes da modelação ainda não estão no modelo |
 
 ## Verificações
 

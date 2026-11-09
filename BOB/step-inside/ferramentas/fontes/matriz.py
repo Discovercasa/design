@@ -23,7 +23,7 @@ FORMATOS = {
     ".pdf": (DIRECT, "ferramentas/dwfx/leitor_pdf.py",
              "PDF vetorial (plot): dá os mesmos traços do DWFx, sem texto. Digitalizado ou imagem: REFERENCE_ONLY."),
     ".json": (DIRECT, "ferramentas/configurador/para_construtor.py", "JSON do configurador (Build Your House)."),
-    ".dwg": (CONVERT, "exportar para DWFx ou PDF vetorial (AutoCAD / DWG TrueView)",
+    ".dwg": (CONVERT, "exportar para DWFx ou PDF vetorial (AutoCAD / DWG TrueView); terreno: DXF pelo ODA File Converter",
              "Sem leitor. O DWG tem a informação toda (camadas, 3D, cotas como objetos), mas é um formato fechado."),
     ".dxf": (DIRECT, "step-inside/ferramentas/terreno/leitores.py (terreno)",
              "DXF ASCII: pontos 3D, polilinhas 3D, curvas com elevação, faces 3D (Fase 2). Plantas em DXF: exportar para "

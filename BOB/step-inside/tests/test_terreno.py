@@ -504,3 +504,93 @@ class TestLevantamentoSobral(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+def _dxf(entidades):
+    """A minimal ASCII DXF from [(type, [(code, value)])]."""
+    linhas = ["0", "SECTION", "2", "ENTITIES"]
+    for tipo, cs in entidades:
+        linhas += ["0", tipo]
+        for c, v in cs:
+            linhas += [str(c), str(v)]
+    return "\n".join(linhas + ["0", "ENDSEC", "0", "EOF"]) + "\n"
+
+
+class TestDxfLevantamento(unittest.TestCase):
+    """What the real survey DXF of Torres Vedras taught (2026-11-08): contours as 3D polylines with z = 0, the CRS in a
+    legend text, GNSS labels E= / N= / h=, several copies of the survey in model space."""
+
+    def setUp(self):
+        self.td = tempfile.TemporaryDirectory()
+        self.d = Path(self.td.name)
+
+    def tearDown(self):
+        self.td.cleanup()
+
+    def ler(self, ents, **kw):
+        p = self.d / "s.dxf"
+        p.write_text(_dxf(ents), encoding="utf-8")
+        return leitores.ler(p, **kw)
+
+    def test_polilinha_3d_com_cotas_zero_e_2d(self):
+        ents = [("POLYLINE", [(8, "CV"), (66, 1), (70, 8)]),
+                ("VERTEX", [(8, "CV"), (10, 0), (20, 0), (30, 0)]), ("VERTEX", [(8, "CV"), (10, 5), (20, 0), (30, 0)]),
+                ("SEQEND", [(8, "CV")])]
+        lev = self.ler(ents)
+        self.assertEqual([l["tipo"] for l in lev["linhas"]], ["linha2d"])
+        self.assertEqual(lev["pontos"], [])
+
+    def test_crs_escrito_e_rotulos_gnss(self):
+        ents = [("TEXT", [(8, "LEG"), (10, 0), (20, 0), (1, "COORDENADAS ETRS89/PT-TM06 (Projec: tmerc - EPSG:3763)")]),
+                ("TEXT", [(8, "GPS"), (10, 1), (20, 1), (1, "E=-10000.123m.")]),
+                ("TEXT", [(8, "GPS"), (10, 1), (20, 1), (1, "N=-20000.456m.")]),
+                ("TEXT", [(8, "GPS"), (10, 1), (20, 1), (1, "h=100.25m.")])]
+        lev = self.ler(ents)
+        self.assertEqual(lev["crs"]["epsg"], "3763")
+        self.assertEqual(lev["gnss"], [[-10000.123, -20000.456, 100.25]])
+
+    def test_escolher_copia_pelos_pontos_gnss(self):
+        quadrado = [[0, 0], [20, 0], [20, 20], [0, 20]]
+        copia = [[x + 100, y + 100] for x, y in quadrado]
+        lev = {"pontos": [[5, 5, 10.0], [15, 15, 11.0], [105, 105, 10.0], [115, 115, 11.0], [40, 40, 12.0]],
+               "linhas": [{"tipo": "linha2d", "pts": [[1, 1, None], [9, 9, None], [60, 60, None]], "camada": "CV"}],
+               "limites": [copia, quadrado], "gnss": [[5, 5, 10.0], [15, 15, 11.0]], "avisos": [], "contagens": {}}
+        terreno.escolher_copia(lev, 15.0)
+        self.assertEqual(lev["limites"], [quadrado])
+        self.assertEqual(sorted(p[2] for p in lev["pontos"]), [10.0, 11.0])  # (40, 40) is 28 m away: dropped
+        self.assertEqual(lev["linhas"][0]["pts"], [[1, 1, None], [9, 9, None]])  # cut where it leaves the zone
+        self.assertEqual(lev["contagens"]["copias_do_levantamento"], 2)
+
+    def test_sem_gnss_avisa(self):
+        lev = {"pontos": [], "linhas": [], "limites": [[[0, 0], [1, 0], [1, 1]], [[5, 5], [6, 5], [6, 6]]],
+               "gnss": [], "avisos": [], "contagens": {}}
+        terreno.escolher_copia(lev, 15.0)
+        self.assertEqual(len(lev["limites"]), 2)
+        self.assertTrue(lev["avisos"])
+
+
+class TestAjustePlanta(unittest.TestCase):
+    """The model's walls fitted to the walls' hatches of a site plan: a 10 × 6 m box with a middle wall, turned 30°."""
+
+    def test_recupera_rotacao_e_origem(self):
+        import ajuste
+        paredes = [{"eixo": "x", "inicio": 0, "fim": 10, "posicao": 0.08, "espessura": 0.16},
+                   {"eixo": "x", "inicio": 0, "fim": 10, "posicao": 5.92, "espessura": 0.16},
+                   {"eixo": "y", "inicio": 0, "fim": 6, "posicao": 0.08, "espessura": 0.16},
+                   {"eixo": "y", "inicio": 0, "fim": 6, "posicao": 9.92, "espessura": 0.16},
+                   {"eixo": "y", "inicio": 0, "fim": 6, "posicao": 4.0, "espessura": 0.1}]
+        loc = []
+        for k in range(0, 101, 4):  # hatch vertices sit on the wall faces (model coordinates)
+            loc += [(k / 10, 0.0), (k / 10, 0.16), (k / 10, 5.84), (k / 10, 6.0)]
+        for k in range(2, 59, 4):
+            loc += [(0.0, k / 10), (0.16, k / 10), (9.84, k / 10), (10.0, k / 10), (3.95, k / 10), (4.05, k / 10)]
+        th = math.radians(30)
+        T = (-11000.0, -21000.0)
+        pts = [(math.cos(th) * x - math.sin(th) * y + T[0], math.sin(th) * x + math.cos(th) * y + T[1]) for x, y in loc]
+        pts += [(T[0] + 30, T[1] + 30), (T[0] - 12, T[1] + 4)]  # other hatches nearby
+        r = ajuste.ajustar(pts, paredes)
+        self.assertAlmostEqual(r["rotacao_graus"], 30.0, delta=0.15)
+        self.assertLess(math.dist(r["origem"], T), 0.02)
+        self.assertGreaterEqual(r["inliers"], len(loc) - 2)
+        x, y = ajuste.mundo(r, 10, 6)  # the far corner lands where it should
+        self.assertLess(math.dist((x, y), (math.cos(th) * 10 - math.sin(th) * 6 + T[0], math.sin(th) * 10 + math.cos(th) * 6 + T[1])), 0.06)

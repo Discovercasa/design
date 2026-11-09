@@ -363,7 +363,7 @@ for S in run["superficies"]:
         if f.normal.z < 0:
             f.normal_flip()
     bm.normal_update()
-    para_baixo = sum(1 for f in bm.faces if f.normal.z <= 0)
+    para_baixo = sum(1 for f in bm.faces if f.normal.z < -1e-6)
     verticais = sum(1 for f in bm.faces if abs(f.normal.z) < 0.05)
     inclin = sorted(math.degrees(math.acos(min(1.0, f.normal.z))) for f in bm.faces if f.calc_area() > 0)
     area = sum(f.calc_area() for f in bm.faces)
