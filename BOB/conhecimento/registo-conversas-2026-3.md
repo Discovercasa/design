@@ -103,3 +103,13 @@ words (`registo-conversas*.md`). When this file passes about 1 500 lines, contin
   'Remate lateral' gone in Sobral). Verified with the old `camadas.py` on the same geometry: only the floor rows are
   from this fix.
 
+### 2026-11-09 — Hub UI: notification popover scroll, phase display order, phase-text accordion, AR on desktop [Step Inside, hub]
+> no hub quando passamos sobre uma notificação com o rato desaparece que está por ler mas não deve levar de volta ao inicio senão não se consegue ler a notificação. Sei que antecipamos a fase 7 mas deve permanecer no lugar da fase 7 e não mexer na ordem visualmente. apenas mostrar que estamos a progredir na fase 7 e é isso.
+- Context: user's own observation on the hub. Filed in: nothing in BOB (code fix in the design repo: `public/js/hub/app.js` `redesenharPop()` redraws the popover only when something changed and keeps the scroll; test `tests/notificacoes.spec.mjs`). Phase order: `conhecimento/discovercasa.md` (Phase order line) and `step-inside/docs/fase7/README.md` → display order = phase numbers; work order unchanged. Step Inside checkpoints in Supabase: Fase 7 back to position 8 (after Fase 6), still "em curso".
+
+> (with a screenshot of the Step Inside project page, the long phase-status paragraph circled) colocaste aqui este texto que ocupa demasiado espaço marca-o como aquilo que ele representa num acordion
+- Context: the long `fase_detalhe` text on the project page. Filed in: nothing in BOB (code: closed accordion «Ponto de situação das fases», `public/js/hub/vistas.js`, `public/css/hub.css`, for every project; test `tests/hub.spec.mjs`).
+
+> e a secção de AR não aparece no HUB no desktop, foi propositado?
+- Context: question. Answer: not removed; the live site shows AR on desktop; the user's page was an old open tab (still had the pre-today phase text). The hub does not refresh itself on a new deploy; reload fixes it. Filed in: `public/dados/novidades.json` (hub news, 2026-11-09). Possible improvement: auto-refresh/notice on a new deploy.
+

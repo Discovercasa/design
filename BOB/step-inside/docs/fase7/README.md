@@ -2,6 +2,7 @@
 
 Tarefas do hub 82 a 85, 157 e 158. Especificação §8, §12.1, §13 Fase 7 e §14.3. A ordem foi decidida a 2026-11-07:
 o AR vem logo depois da Fase 3 e tem de ser realista, «não aparentar ter materiais simples».
+Ordem de apresentação (2026-11-09): no hub as fases aparecem pela numeração (0…9), a Fase 7 no seu lugar, após a Fase 6; a ordem de trabalho (2 → 3 → 7 → 4 …) não mudou.
 
 **Critério de saída:** o AR abre e coloca o modelo corretamente nos telemóveis suportados.
 

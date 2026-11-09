@@ -1,5 +1,15 @@
 [
   {
+    "dia": "2026-11-09",
+    "titulo": "Notificações sem saltos e ponto de situação fechado",
+    "itens": [
+      "Ver uma notificação com o rato já não faz a lista voltar ao início: fica onde estavas a ler.",
+      "O texto longo do estado das fases fica num acordeão, «Ponto de situação das fases», por baixo da descrição do projeto.",
+      "Step Inside: a Fase 7 (AR no telemóvel) volta ao seu lugar na lista; continua em curso.",
+      "Se uma secção nova não aparecer, recarrega a página: uma janela aberta há muito tempo mostra a versão em que foi aberta."
+    ]
+  },
+  {
     "dia": "2026-11-06",
     "titulo": "Notificações por ver",
     "itens": [

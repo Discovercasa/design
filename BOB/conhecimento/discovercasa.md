@@ -76,7 +76,8 @@ Why Claude learns the method; "vamos passo a passo" — an overall idea, then an
    Unreal Phases 4–5 (order 0, 1, 2, 3, 7, 4, 5, 6, 8, 9). **Requirement (user):** the AR must be realistic too — "não tanto
    como nos óculos VR mas ter um nível de realismo bom e não aparentar ter materiais simples": real PBR textures from
    Phase 3, relief as normal maps, baked ambient occlusion, frames and glass modelled; approved next to photos of the built
-   Torres Vedras house. AR will not reach Unreal realism (`insights.md`). Open: photos of the real materials from the user.
+   Torres Vedras house. **Clarified 2026-11-09 (user):** that is the WORK order only; the hub shows the phases in the
+   phase-number order 0…9 (Fase 7 stays in its place, after Fase 6, marked "em curso"). AR will not reach Unreal realism (`insights.md`). Open: photos of the real materials from the user.
    (Decision 18 in the "still open" lists above is now closed.)
    **Phase 3 started 2026-11-09 (user: "sim podes começar"); product decision — common material list:** Step Inside may be
    sold to third parties (other builders), so materials use a COMMON list valid for constructions different from

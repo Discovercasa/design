@@ -284,6 +284,11 @@ a.chip:hover { border-color: var(--linha-forte); color: var(--tinta); }
 .projeto-cabeca { display: grid; gap: 16px; margin-bottom: 40px; max-width: 76ch; }
 .projeto-cabeca .linha { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
 .projeto-cabeca .descricao { font-size: 1.0625rem; color: var(--tinta-2); line-height: 1.6; }
+/* o ponto de situação das fases (texto longo) fica fechado por baixo da descrição (utilizador, 2026-11-09) */
+details.situacao { border: 1px solid var(--linha); border-radius: var(--r2); padding: 10px 14px; }
+details.situacao summary { cursor: pointer; font-size: 0.9375rem; font-weight: 500; color: var(--tinta-2); }
+details.situacao[open] summary { margin-bottom: 10px; }
+details.situacao p { line-height: 1.6; }
 .cta-app {
   display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; padding: 20px 24px;
   border-radius: var(--r2); border: 1px solid var(--linha); background: var(--superficie); margin-bottom: 40px;

@@ -112,7 +112,7 @@ export function paginaProjeto(p) {
     <div class="linha"><h1>${esc(p.nome)}</h1><span class="fase">${esc(p.fase)}</span></div>
     ${p.nome_antigo ? `<p class="fraco pequeno">Antes: ${esc(p.nome_antigo)}</p>` : ''}
     <p class="descricao">${esc(p.descricao)}</p>
-    <p class="suave pequeno">${esc(p.fase_detalhe)}</p>
+    ${p.fase_detalhe ? `<details class="situacao"><summary>Ponto de situação das fases</summary><p class="suave pequeno">${esc(p.fase_detalhe)}</p></details>` : ''}
   </div>
   ${p.app ? `<div class="cta-app"><div><h3>${esc(p.nome)} está online</h3><p>Lê primeiro em que ponto está e o próximo passo; depois abre a aplicação.</p></div>
     <a class="btn primario grande" href="${esc(p.app.url)}" target="_blank" rel="noopener" title="Abre noutra janela">${esc(p.app.rotulo)}${ic('abrir')}<span class="so-leitor"> (abre noutra janela)</span></a></div>` : ''}

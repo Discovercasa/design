@@ -204,7 +204,7 @@ function emDireto(tabela) {
       novas.slice(0, 3).forEach((n) => aviso(esc(n.texto), { icone: 'sino', acoes: [{ rotulo: 'Ver', fazer: () => { marcarNotif(n.id, true); irNotif(n.projeto, n.ref_tipo, n.ref_id); } }] }));
       atualizarContador();
       const pop = $('#pop-notificacoes');
-      if (!pop.hidden && !pop.querySelector('[data-espera]')) pop.innerHTML = P.htmlNotificacoes();   // outra janela viu uma
+      if (!pop.hidden && !pop.querySelector('[data-espera]')) redesenharPop(pop);   // outra janela viu uma
       if (!dlg.open && !document.activeElement.matches('input, textarea, select')) desenhar(false);
       SO.aoMudar();
       refrescarAnexosDlg();
@@ -213,6 +213,19 @@ function emDireto(tabela) {
   }, 350);
 }
 
+// a lista de notificações desenhada outra vez no mesmo sítio: só quando mudou alguma coisa e sem perder a posição.
+// Ver uma com o rato volta pela ligação em direto; redesenhar a lista do início não deixava ler a notificação
+// (utilizador, 2026-11-09).
+const chavePop = () => E.notificacoes.map((n) => `${n.id}${D.ehPorVer(n) ? '*' : ''}${E.lidas.has(n.id) ? 'v' : ''}`).join(',');
+function redesenharPop(pop) {
+  const k = chavePop();
+  if (pop.dataset.chave === k) return;
+  const corpo = pop.querySelector('.pop-corpo'), y = corpo ? corpo.scrollTop : 0;
+  pop.innerHTML = P.htmlNotificacoes();
+  pop.dataset.chave = k;
+  const novo = pop.querySelector('.pop-corpo');
+  if (novo) novo.scrollTop = y;
+}
 // notificação vista (ou de novo por ver): a linha e o contador mudam já; a base de dados guarda-o
 async function marcarNotif(id, lida) {
   if (!id) return;
@@ -221,6 +234,7 @@ async function marcarNotif(id, lida) {
   if (linha && n) linha.outerHTML = P.linhaNotif(n);
   const resumo = $('#pop-notificacoes [data-por-ver]'), k = D.naoLidas().length;
   if (resumo) resumo.textContent = k ? `${k} por ver` : 'Tudo visto';
+  if (linha) $('#pop-notificacoes').dataset.chave = chavePop();  // a lista já mostra este estado
   atualizarContador();
 }
 // com o rato: vista depois de 0,6 s por cima (no telemóvel não há hover: abre-se ou toca-se no ponto)
@@ -288,7 +302,11 @@ function fecharPops() {
 }
 const novidadeNova = () => { try { return !!novidades[0] && localStorage.getItem('hub-novidades-vista') !== novidades[0].dia; } catch (_) { return false; } };
 function marcarNovidadesVistas() { try { if (novidades[0]) localStorage.setItem('hub-novidades-vista', novidades[0].dia); } catch (_) {} }
-$('#b-notificacoes').addEventListener('click', (e) => { e.stopPropagation(); abrirPop(e.currentTarget, $('#pop-notificacoes'), P.htmlNotificacoes()); });
+$('#b-notificacoes').addEventListener('click', (e) => {
+  e.stopPropagation();
+  abrirPop(e.currentTarget, $('#pop-notificacoes'), P.htmlNotificacoes());
+  $('#pop-notificacoes').dataset.chave = chavePop();
+});
 $('#b-perfil').addEventListener('click', (e) => { e.stopPropagation(); abrirPop(e.currentTarget, $('#pop-perfil'), P.htmlPerfil(novidadeNova())); });
 $('#b-sugestoes').addEventListener('click', () => { abrirDialogo(gaveta, P.htmlGaveta(sug.sep, sug.lista, sug.abertas, sug.erro)); carregarSugestoes(); });
 document.addEventListener('click', (e) => { if (!e.target.closest('.pop')) fecharPops(); });
@@ -479,7 +497,7 @@ document.addEventListener('click', async (e) => {
       if (await tentar(() => D.apagarCheckpoint(id))) { fecharDialogo(dlg); depois(); }
       return;
     case 'fechar-dlg': return fecharDialogo(el.closest('dialog'));
-    case 'ler-todas': await D.marcarNotificacoesLidas(); atualizarContador(); $('#pop-notificacoes').innerHTML = P.htmlNotificacoes(); return;
+    case 'ler-todas': await D.marcarNotificacoesLidas(); atualizarContador(); redesenharPop($('#pop-notificacoes')); return;
     case 'ir-notif': fecharPops(); marcarNotif(Number(el.dataset.notif), true); return irNotif(el.dataset.projeto, el.dataset.ref, el.dataset.id);
     case 'alternar-lida': return marcarNotif(id, !E.lidas.has(id) && D.ehPorVer(E.notificacoes.find((n) => n.id === id)));
     case 'sair': await sb.auth.signOut(); location.replace('/'); return;
