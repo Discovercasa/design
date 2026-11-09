@@ -45,7 +45,22 @@
    },
    "estados": {
     "INFERRED": 886
-   }
+   },
+   "texturas_em_falta": [],
+   "com_textura": [
+    "MAT_BOARD_OSB",
+    "MAT_CONCRETE_SLAB",
+    "MAT_FLOOR_VINYL_WOOD",
+    "MAT_INT_PLASTER_PAINTED__WHITE",
+    "MAT_LANDSCAPE_SOIL",
+    "MAT_METAL_FLASHING__RAL7016",
+    "MAT_METAL_GUTTER__DARK_GREY",
+    "MAT_ROOF_SANDWICH_TILE__RAL7016",
+    "MAT_TIMBER_STRUCTURE",
+    "MAT_WALL_RENDER__WHITE",
+    "MAT_WOOD_CLADDING__DOUGLAS_BROWN",
+    "MAT_WOOD_CLADDING__PINE_NATURAL"
+   ]
   },
   "dimensoes_modelo": {
    "estrutura_planta_m": [

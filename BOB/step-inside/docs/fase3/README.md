@@ -49,17 +49,36 @@ Um produto sem correspondência aparece no relatório do modelo de visita e pede
 - **Falhas:** nenhum material visível ficou sem correspondência. Só as etiquetas das divisões, que não entram na
   visita, ficaram de fora.
 
+## Texturas (2026-11-09, autorizado: «Sim, descarrega»)
+
+- **Origem:** 16 texturas gratuitas **CC0** do ambientCG, em 2K JPG (359 MB), para 26 materiais do catálogo.
+  - Escolhidas limpas e modernas, sem envelhecimento.
+  - Cada material tem no catálogo a fonte, o *asset*, a licença, o tamanho real (`tile_m`) e a pasta local.
+- **Onde ficam:** as imagens ficam **só no PC**, em `_trabalho/step-inside/texturas/` (fora do Git). Noutro PC:
+  `python step-inside/ferramentas/materiais/texturas.py` volta a descarregá-las, verifica o tamanho anunciado e só
+  extrai imagens.
+- **Três usos:**
+  - `cor`: a cor da própria textura (telha, madeira, terreno);
+  - `tingir`: a textura levada à cor do catálogo ou da variante, por exemplo reboco branco ou ripado de pinho ou de
+    Douglas. Como o GLB e o USDZ não deixam clarear uma textura no material, a cópia tingida é gravada como imagem
+    (`texturas/derivadas/`);
+  - `relevo`: a cor lisa do produto com o relevo (normal) e a rugosidade da textura. Serve para metais lacados e
+    painéis RAL, e a cor RAL fica exata.
+- **UVs à escala real:** cada objeto recebe UVs à escala real, por projeção em caixa, em metros a dividir por
+  `tile_m`. São medidas no referencial da casa, para a textura continuar de um objeto para o seguinte. O terreno usa
+  as coordenadas do terreno.
+- **Resultado nos dois modelos de visita:**
+  - pré-visualização em EEVEE com sol;
+  - GLB de cerca de 110 MB, com as texturas 2K embebidas. O AR (Fase 7) terá de baixar para cerca de 10 MB.
+- **Provisório:** as texturas da DiscoverCasa passam às fotos dos produtos reais quando houver (tarefa 156). O terreno
+  ainda mostra a repetição da textura e está claro demais (a afinar na Fase 7).
+
 ## A seguir
 
-1. **Texturas reais** (tarefa 156), de uma de duas fontes:
-   - fotos dos materiais reais, a pedir ao utilizador;
-   - bibliotecas CC0, para descarregar com autorização.
-
-   Os mapas são cor, normal e rugosidade, em 2K, e o tamanho real de cada textura é o `tile_m` do catálogo.
-2. **Coordenadas de textura (UV)** à escala real em cada objeto. O gerador de produção não as tem.
-3. **Predefinições de exportação** (tarefa 63): FBX para o Unreal, GLB para Android e USDZ para iPhone, em metros, com
+1. Fotos dos materiais reais da DiscoverCasa para substituir as CC0.
+2. **Predefinições de exportação** (tarefa 63): FBX para o Unreal, GLB para Android e USDZ para iPhone, em metros, com
    origem e eixos fixos.
-4. **`manifest.json`** (tarefa 64), com os campos da §4.3:
+3. **`manifest.json`** (tarefa 64), com os campos da §4.3:
    - IDs do projeto e da versão;
    - hash do `.blend`;
    - versões;
@@ -69,4 +88,4 @@ Um produto sem correspondência aparece no relatório do modelo de visita e pede
    - avisos;
    - estado da validação;
    - origem do terreno.
-5. **Reimportação e comparação visual** (tarefa 65).
+4. **Reimportação e comparação visual** (tarefa 65).

@@ -89,6 +89,9 @@ Why Claude learns the method; "vamos passo a passo" — an overall idea, then an
    arrives: names the visit models use that are not in that JSON's materials list ("Betão", "OSB", "Painel sandwich
    RAL 7016", "Madeira 160x80", "Madeira 200x100" — they come from the layers / house configs), and the pergola
    "Telha" (still "cerâmica ou painel imitação telha (a confirmar)", JSON line 251). JSON not changed.
+   **Textures (2026-11-09, user: "Sim, descarrega"):** 16 free CC0 ambientCG packs (2K, 359 MB, PC only, git-ignored) are
+   linked to 26 catalogue materials and both visit models are textured. **Still pending from the user:** photos of the real
+   DiscoverCasa materials (ripado, capoto, painel da cobertura, caixilharia); the CC0 textures stand in meanwhile (hub task 156).
    **Phase 1 started 2026-11-07** ("Contrato de dados e qualidade de entrada", hub checkpoint 21 em curso): schema
    `step-inside/schema/fontes_projeto.schema.json`, tools `step-inside/ferramentas/fontes/`, 15 tests, report
    `step-inside/docs/fase1/`, test projects Torres Vedras (report WARNING, 202 CONFIRMED / 2 INFERRED / 10 MISSING) and

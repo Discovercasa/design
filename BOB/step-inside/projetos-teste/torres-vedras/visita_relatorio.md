@@ -58,27 +58,27 @@ Cada objeto tem `si_id` = `<coleção>/<nome do objeto>` (os nomes vêm dos dese
 
 Os materiais de produção foram trocados pelos do catálogo comum (`step-inside/materiais/catalogo.json`, mapeamento `mapeamentos/discovercasa.json`). Estados dos mapeamentos usados: INFERRED 1112.
 
-| ID | Objetos |
-|---|---|
-| `MAT_BOARD_OSB` | 25 |
-| `MAT_CONCRETE_SLAB` | 1 |
-| `MAT_DOOR_GARAGE_SECTIONAL__RAL7016` | 1 |
-| `MAT_FLOOR_VINYL_WOOD` | 8 |
-| `MAT_FRAME_ALUMINIUM__RAL7016` | 19 |
-| `MAT_GLASS_CLEAR` | 6 |
-| `MAT_GLASS_FROSTED` | 2 |
-| `MAT_INSULATION_MINERAL_WOOL` | 58 |
-| `MAT_INT_PLASTER_PAINTED__WHITE` | 27 |
-| `MAT_MEMBRANE_BREATHER` | 17 |
-| `MAT_METAL_FLASHING__RAL7016` | 42 |
-| `MAT_METAL_GALVANIZED` | 24 |
-| `MAT_METAL_GUTTER__DARK_GREY` | 7 |
-| `MAT_ROOF_SANDWICH_TRAPEZOIDAL__RAL8004` | 37 |
-| `MAT_ROOF_TILE_CERAMIC__TERRACOTTA` | 1 |
-| `MAT_TIMBER_STRUCTURE` | 803 |
-| `MAT_WOOD_CLADDING__DOUGLAS_BROWN` | 17 |
-| `MAT_WOOD_CLADDING__PINE_NATURAL` | 17 |
-| `MAT_LANDSCAPE_SOIL` | 1 |
+| ID | Objetos | Textura |
+|---|---|---|
+| `MAT_BOARD_OSB` | 25 | sim |
+| `MAT_CONCRETE_SLAB` | 1 | sim |
+| `MAT_DOOR_GARAGE_SECTIONAL__RAL7016` | 1 | sim |
+| `MAT_FLOOR_VINYL_WOOD` | 8 | sim |
+| `MAT_FRAME_ALUMINIUM__RAL7016` | 19 | sim |
+| `MAT_GLASS_CLEAR` | 6 | — |
+| `MAT_GLASS_FROSTED` | 2 | — |
+| `MAT_INSULATION_MINERAL_WOOL` | 58 | — |
+| `MAT_INT_PLASTER_PAINTED__WHITE` | 27 | sim |
+| `MAT_MEMBRANE_BREATHER` | 17 | — |
+| `MAT_METAL_FLASHING__RAL7016` | 42 | sim |
+| `MAT_METAL_GALVANIZED` | 24 | — |
+| `MAT_METAL_GUTTER__DARK_GREY` | 7 | sim |
+| `MAT_ROOF_SANDWICH_TRAPEZOIDAL__RAL8004` | 37 | sim |
+| `MAT_ROOF_TILE_CERAMIC__TERRACOTTA` | 1 | sim |
+| `MAT_TIMBER_STRUCTURE` | 803 | sim |
+| `MAT_WOOD_CLADDING__DOUGLAS_BROWN` | 17 | sim |
+| `MAT_WOOD_CLADDING__PINE_NATURAL` | 17 | sim |
+| `MAT_LANDSCAPE_SOIL` | 1 | sim |
 
 **Sem correspondência:** Etiqueta (ARCH_LABELS, 8)
 
