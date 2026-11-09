@@ -1,0 +1,41 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "https://design.discovercasa.pt/step-inside/schema/manifest.schema.json",
+ "title": "Step Inside · manifest de exportação (Fase 3)",
+ "description": "The verifiable link between what was produced and what will be published (spec §4.3). One per export. Field names follow the spec (English) so other tools can read them.",
+ "type": "object",
+ "required": ["project_id", "version_id", "source_blend_hash", "export_timestamp", "blender_version", "unreal_target_version",
+              "unit_system", "coordinate_system", "origin_transform", "assets", "warnings", "validation_status", "terrain_source"],
+ "properties": {
+  "project_id": {"type": "string"},
+  "version_id": {"type": "string"},
+  "source_blend_hash": {"type": "string", "description": "sha256:<hex> of the visit .blend"},
+  "export_timestamp": {"type": "string"},
+  "blender_version": {"type": "string"},
+  "unreal_target_version": {"type": "string"},
+  "unit_system": {"type": "string"},
+  "coordinate_system": {"type": "object"},
+  "origin_transform": {"type": "object"},
+  "material_catalogue": {"type": "object"},
+  "assets": {"type": "array", "items": {"$ref": "#/$defs/asset"}},
+  "warnings": {"type": "array", "items": {"type": "string"}},
+  "validation_status": {"type": "string", "enum": ["PASS", "WARNING", "NEEDS_HUMAN_REVIEW", "FAIL"]},
+  "validation": {"type": "object"},
+  "terrain_source": {"type": ["object", "null"]}
+ },
+ "$defs": {
+  "asset": {
+   "type": "object",
+   "required": ["path", "type", "size_bytes", "sha256", "material_ids", "version", "purpose"],
+   "properties": {
+    "path": {"type": "string", "description": "relative to the export folder"},
+    "type": {"type": "string", "enum": ["fbx", "glb", "usdz", "texture", "render"]},
+    "size_bytes": {"type": "integer"},
+    "sha256": {"type": "string"},
+    "material_ids": {"type": "array", "items": {"type": "string"}},
+    "version": {"type": "string"},
+    "purpose": {"type": "string"}
+   }
+  }
+ }
+}
