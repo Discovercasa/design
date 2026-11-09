@@ -51,6 +51,14 @@ def validar(cat, mp=None):
         if not m.get("nome", {}).get("pt"):
             erros.append(f"{i}: falta o nome em português")
         _pbr_ok(m.get("pbr", {}), i, erros)
+        tx = m.get("textura") or {}
+        if not (isinstance(tx.get("tile_m"), list) and len(tx["tile_m"]) == 2 and all(t > 0 for t in tx["tile_m"])):
+            erros.append(f"{i}: textura.tile_m tem de ser [largura, altura] em metros")
+        if tx.get("fonte"):
+            if tx.get("uso") not in ("cor", "tingir", "relevo"):
+                erros.append(f"{i}: textura.uso tem de ser cor, tingir ou relevo")
+            if not tx["fonte"].get("licenca"):
+                erros.append(f"{i}: textura sem licença")
         for v, p in (m.get("variantes") or {}).items():
             if not VARIANTE.match(v):
                 erros.append(f"{i}__{v}: variante inválida")
@@ -75,7 +83,8 @@ def resolver(cat, mp):
     out = {}
     for m in cat["materiais"]:
         out[m["id"]] = {"id": m["id"], "mestre": m["id"], "variante": "", "pbr": dict(m["pbr"]), "visivel": m["visivel"],
-                        "categoria": m["categoria"], "estado": "CONFIRMED", "fonte": {"documento": "catalogo.json"}, "nota": ""}
+                        "categoria": m["categoria"], "estado": "CONFIRMED", "fonte": {"documento": "catalogo.json"}, "nota": "",
+                        "textura": m.get("textura") or {}}
     for nome, e in mp["materiais"].items():
         mestre, _, var = e["mat"].partition("__")
         m = por_id[mestre]
@@ -84,7 +93,8 @@ def resolver(cat, mp):
         pbr.update(e.get("pbr", {}))  # a product's own colour, when the official list gives one
         out[nome] = {"id": e["mat"], "mestre": mestre, "variante": var, "pbr": pbr, "visivel": m["visivel"],
                      "categoria": m["categoria"], "estado": e.get("estado", mp.get("estado_padrao", "INFERRED")),
-                     "fonte": e.get("fonte", mp.get("fonte_padrao")), "nota": e.get("nota", "")}
+                     "fonte": e.get("fonte", mp.get("fonte_padrao")), "nota": e.get("nota", ""),
+                     "textura": e.get("textura") or m.get("textura") or {}}
     return out
 
 

@@ -329,6 +329,9 @@ def avaliar(r, campos, terreno_gate):
         if vis:
             rever.append("materiais sem correspondência no catálogo: " + ", ".join(f"{x['material']} ({x['categoria']})"
                                                                               for x in vis[:6]))
+        if mt.get("texturas_em_falta"):
+            avisos.append("texturas do catálogo em falta neste PC: " + ", ".join(mt["texturas_em_falta"]) +
+                          " (descarregar para _trabalho/step-inside/texturas/)")
         if mt["estados"].get("INFERRED"):
             avisos.append("materiais provisórios: mapeados a partir do sistema construtivo até chegar a lista oficial")
     ab = r["modelo"].get("aberturas", {})
@@ -443,7 +446,10 @@ def relatorio_md(r, decl):
               f"mapeamento `mapeamentos/{r.get('construtor', 'discovercasa')}.json`). Estados dos mapeamentos usados: "
               + ", ".join(f"{k} {v}" for k, v in sorted(mt["estados"].items())) + ".", "",
               "| ID | Objetos |", "|---|---|"]
-        L += [f"| `{k}` | {v} |" for k, v in mt["usados"].items()]
+        com_tex = set(mt.get("com_textura", []))
+        L[-1] = "|---|---|---|"
+        L[-2] = "| ID | Objetos | Textura |"
+        L += [f"| `{k}` | {v} | {'sim' if k in com_tex else '—'} |" for k, v in mt["usados"].items()]
         if mt["sem_mapa"]:
             L += ["", "**Sem correspondência:** " + ", ".join(f"{x['material']} ({x['categoria']}, {x['objetos']})"
                                                              for x in mt["sem_mapa"])]
@@ -501,7 +507,8 @@ def main():
     run = {"casa_blend": str(casa_blend), "terreno_blend": str(terreno_blend) if terreno_blend else "",
            "superficie": (T or {}).get("superficie", "existente"), "colocacao": coloc, "plataforma": pl,
            "pavimento_acima_laje": (campos.get("pavimento_acima_laje") or {}).get("valor", 0.16),
-           "chao_provisorio": decl.get("chao_provisorio"), "materiais": tabela_mat,
+           "chao_provisorio": decl.get("chao_provisorio"), "materiais": tabela_mat, "bob_dir": str(BOB),
+           "texturas": decl.get("texturas", True),
            "aberturas": aberturas(fontes_doc), "paredes_cheias": paredes_cheias(fontes_doc, alturas_paredes(cfg_path, cfg)), "blend": str(local / "visita.blend"), "glb": str(local / "visita.glb"),
            "preview": str(local / "preview.png"), "saida": str(local / "visita_modelo.json")}
     with tempfile.NamedTemporaryFile("w", suffix=".json", delete=False, encoding="utf-8") as fh:

@@ -16,6 +16,7 @@ run.json: see visita.py. Coordinates are local to the site origin (Blender keeps
 import json
 import math
 import sys
+from pathlib import Path
 
 import bmesh
 import bpy
@@ -133,8 +134,83 @@ def _lin(h):
     return [x / 12.92 if x <= 0.04045 else ((x + 0.055) / 1.055) ** 2.4 for x in c]
 
 
+BOB_DIR = Path(run.get("bob_dir", "."))
+DERIVADAS = BOB_DIR / "_trabalho" / "step-inside" / "texturas" / "derivadas"
+FALTAM_TEXTURAS = set()
+
+
+def _imagem(caminho, non_color=False):
+    img = bpy.data.images.load(str(caminho), check_existing=True)
+    if non_color:
+        img.colorspace_settings.name = "Non-Color"
+    return img
+
+
+def _tingida(img, alvo_hex, nome):
+    """A copy of the colour texture with its mean moved to the catalogue colour (cached as JPEG on the PC):
+    GLB / USDZ cannot brighten a texture in the material, so the tint is baked into the image."""
+    import numpy as np
+    DERIVADAS.mkdir(parents=True, exist_ok=True)
+    f = DERIVADAS / f"{nome}_Color.jpg"
+    if f.exists() and f.stat().st_mtime > Path(img.filepath_from_user()).stat().st_mtime:
+        return _imagem(f)
+    w, h = img.size
+    px = np.empty(w * h * 4, dtype=np.float32)
+    img.pixels.foreach_get(px)
+    px = px.reshape(-1, 4)
+    media = px[:, :3].mean(axis=0)
+    alvo = np.array(_lin(alvo_hex), dtype=np.float32)
+    fator = np.clip(alvo / np.maximum(media, 1e-4), 0.0, 8.0)
+    px[:, :3] = np.clip(px[:, :3] * fator, 0.0, 1.0)
+    nova = bpy.data.images.new(f"{nome}_Color", w, h)
+    nova.pixels.foreach_set(px.ravel())
+    nova.filepath_raw = str(f)
+    nova.file_format = "JPEG"
+    nova.save()
+    bpy.data.images.remove(nova)
+    return _imagem(f)
+
+
+def _texturas(e, m, bsdf):
+    """Image nodes for the catalogue texture (Phase 3): colour (own / tinted) or flat colour + relief, normal, roughness."""
+    tx = e.get("textura") or {}
+    fonte = tx.get("fonte")
+    if not fonte:
+        return False
+    pasta = BOB_DIR / fonte["pasta_local"]
+    ficheiros = {k: next(iter(sorted(pasta.glob(f"*_{k}.jpg"))), None) for k in ("Color", "NormalGL", "Roughness")}
+    if not pasta.exists() or not ficheiros["Color"]:
+        FALTAM_TEXTURAS.add(fonte["asset"])
+        return False
+    nt = m.node_tree
+    uso = tx.get("uso", "cor")
+    x = -700
+    if uso in ("cor", "tingir"):
+        img = _imagem(ficheiros["Color"])
+        if uso == "tingir":
+            img = _tingida(img, e["pbr"]["base_color"], e["id"])
+        n = nt.nodes.new("ShaderNodeTexImage")
+        n.image, n.location = img, (x, 300)
+        nt.links.new(n.outputs["Color"], bsdf.inputs["Base Color"])
+    if ficheiros["Roughness"]:
+        n = nt.nodes.new("ShaderNodeTexImage")
+        n.image, n.location = _imagem(ficheiros["Roughness"], True), (x, 0)
+        nt.links.new(n.outputs["Color"], bsdf.inputs["Roughness"])
+    if ficheiros["NormalGL"]:
+        n = nt.nodes.new("ShaderNodeTexImage")
+        n.image, n.location = _imagem(ficheiros["NormalGL"], True), (x, -300)
+        nm = nt.nodes.new("ShaderNodeNormalMap")
+        nm.location = (-300, -300)
+        nt.links.new(n.outputs["Color"], nm.inputs["Color"])
+        nt.links.new(nm.outputs["Normal"], bsdf.inputs["Normal"])
+    m["si_textura"] = f"{fonte['biblioteca']}:{fonte['asset']} ({fonte['licenca']}, {uso})"
+    m["si_tile_m"] = list(tx.get("tile_m", [1.0, 1.0]))
+    return True
+
+
 def mat_catalogo(e):
-    """One Blender material per catalogue ID (master + variant): Principled BSDF with the catalogue's PBR values."""
+    """One Blender material per catalogue ID (master + variant): Principled BSDF with the catalogue's PBR values and,
+    when the catalogue has one, its texture."""
     if e["id"] in MATS:
         return MATS[e["id"]]
     m = bpy.data.materials.get(e["id"]) or bpy.data.materials.new(e["id"])
@@ -159,8 +235,39 @@ def mat_catalogo(e):
     m["si_mat_id"] = e["id"]
     m["si_mestre"] = e["mestre"]
     m["si_variante"] = e["variante"]
+    m["si_tile_m"] = list((e.get("textura") or {}).get("tile_m", [1.0, 1.0]))
+    if bsdf and run.get("texturas", True):
+        _texturas(e, m, bsdf)
     MATS[e["id"]] = m
     return m
+
+
+def uv_real(ob, ref=None):
+    """UVs in real metres divided by the material's tile size: box projection by the face's main axis, in the frame
+    `ref` (the house root, so textures run on across the house's objects; the world for the terrain)."""
+    if ob.type != "MESH" or not ob.data.polygons:
+        return
+    mat = ob.active_material
+    tile = list(mat.get("si_tile_m", [1.0, 1.0])) if mat else [1.0, 1.0]
+    M = (ref.inverted() if ref else Matrix.Identity(4)) @ ob.matrix_world
+    R = M.to_3x3()
+    bm = bmesh.new()
+    bm.from_mesh(ob.data)
+    uv = bm.loops.layers.uv.verify()
+    for f in bm.faces:
+        n = (R @ f.normal)
+        ax = max(range(3), key=lambda i: abs(n[i]))
+        for lp in f.loops:
+            p = M @ lp.vert.co
+            if ax == 2:      # horizontal face: plan
+                u, v = p.x, p.y
+            elif ax == 0:    # facing east / west
+                u, v = p.y, p.z
+            else:            # facing north / south
+                u, v = p.x, p.z
+            lp[uv].uv = (u / tile[0], v / tile[1])
+    bm.to_mesh(ob.data)
+    bm.free()
 
 
 def aplicar_materiais(obs):
@@ -503,16 +610,48 @@ if terreno is None and G:
     grupos["SITE_TERRAIN"].objects.link(ob)
     OUT["chao_provisorio"] = {"z": z, "tamanho_m": 2 * h}
 
+# ------------------------------------------------------------------ 4b. real-scale UVs (textures)
+if TAB and run.get("texturas", True):
+    raiz_m = root.matrix_world.copy()
+    vistos_me = set()
+    for ob in bpy.data.objects:
+        if ob.type != "MESH" or ob.data.name in vistos_me:
+            continue
+        vistos_me.add(ob.data.name)
+        if ob.get("si_categoria", "").startswith("SITE"):
+            uv_real(ob)
+        elif ob.name in cats:
+            if ob.data.users > 1:
+                ob.data = ob.data.copy()  # shared mesh: UVs depend on where each copy sits
+            uv_real(ob, raiz_m)
+    OUT.setdefault("materiais", {})["texturas_em_falta"] = sorted(FALTAM_TEXTURAS)
+    OUT["materiais"]["com_textura"] = sorted(k for k, m in MATS.items() if m.get("si_textura"))
+
 # ------------------------------------------------------------------ 5. save, GLB, preview
 for nome in ("SITE_LIMIT",):
     layer_col(vl.layer_collection, nome).exclude = False
 mat_t = bpy.data.materials.get("MAT_SITE_TERRAIN")
-sc.render.engine = "BLENDER_WORKBENCH"
-sc.display.shading.light = "STUDIO"
-sc.display.shading.color_type = "MATERIAL"
-sc.display.shading.show_cavity = True
-sc.display.shading.show_shadows = True
 sc.render.resolution_x, sc.render.resolution_y = 1600, 1000
+if run.get("texturas", True) and TAB:
+    motores = [i.identifier for i in bpy.types.RenderSettings.bl_rna.properties["engine"].enum_items]
+    sc.render.engine = "BLENDER_EEVEE_NEXT" if "BLENDER_EEVEE_NEXT" in motores else "BLENDER_EEVEE"
+    sol = bpy.data.objects.new("PREVIEW_SUN", bpy.data.lights.new("PREVIEW_SUN", "SUN"))
+    sol.data.energy = 2.5
+    sol.rotation_euler = (math.radians(50), math.radians(10), math.radians(-35))
+    sc.collection.objects.link(sol)
+    sc.world = sc.world or bpy.data.worlds.new("World")
+    sc.world.use_nodes = True
+    bg = next((n for n in sc.world.node_tree.nodes if n.type == "BACKGROUND"), None)
+    if bg:
+        bg.inputs["Color"].default_value = (0.55, 0.65, 0.8, 1.0)
+        bg.inputs["Strength"].default_value = 0.5
+    sc.view_settings.view_transform = "AgX" if "AgX" in [i.identifier for i in sc.view_settings.bl_rna.properties["view_transform"].enum_items] else "Filmic"
+else:
+    sc.render.engine = "BLENDER_WORKBENCH"
+    sc.display.shading.light = "STUDIO"
+    sc.display.shading.color_type = "MATERIAL"
+    sc.display.shading.show_cavity = True
+    sc.display.shading.show_shadows = True
 if run.get("glb"):
     bpy.ops.export_scene.gltf(filepath=run["glb"], export_format="GLB", use_visible=True, export_extras=True)
 if run.get("preview"):

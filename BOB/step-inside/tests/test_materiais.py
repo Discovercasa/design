@@ -49,3 +49,31 @@ class TestCatalogo(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TestTexturas(unittest.TestCase):
+    def setUp(self):
+        self.cat, self.mp = materiais.ler("discovercasa")
+
+    def test_texturas_com_licenca_e_uso(self):
+        com = [m for m in self.cat["materiais"] if (m.get("textura") or {}).get("fonte")]
+        self.assertGreaterEqual(len(com), 20)
+        for m in com:
+            f = m["textura"]["fonte"]
+            self.assertEqual(f["licenca"], "CC0 1.0 Universal")
+            self.assertTrue(f["pasta_local"].startswith("_trabalho/"))  # images never in Git
+            self.assertIn(m["textura"]["uso"], ("cor", "tingir", "relevo"))
+
+    def test_metais_lacados_so_relevo(self):
+        t = materiais.resolver(self.cat, self.mp)
+        for nome in ("Remate RAL 7016", "Alumínio RAL 7016", "Painel sandwich RAL 7016"):
+            self.assertEqual(t[nome]["textura"]["uso"], "relevo")  # the RAL colour stays exact
+
+    def test_uso_invalido_detetado(self):
+        cat = copy.deepcopy(self.cat)
+        m = next(x for x in cat["materiais"] if (x.get("textura") or {}).get("fonte"))
+        m["textura"]["uso"] = "pintar"
+        m["textura"]["fonte"]["licenca"] = ""
+        erros = " | ".join(materiais.validar(cat))
+        self.assertIn("textura.uso", erros)
+        self.assertIn("sem licença", erros)
