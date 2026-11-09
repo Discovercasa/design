@@ -409,6 +409,34 @@ async function prepararAR(raiz) {
   }
 }
 
+// Step Inside: the 3D viewer for who has no AR — Google's <model-viewer> (a new dependency, authorised 2026-11-09),
+// loaded only the first time a model is opened
+const MODEL_VIEWER = 'https://cdn.jsdelivr.net/npm/@google/model-viewer@4.0.0/dist/model-viewer.min.js';
+let modelViewer = null;
+function carregarModelViewer() {
+  if (customElements.get('model-viewer')) return Promise.resolve();
+  return modelViewer || (modelViewer = new Promise((ok, falha) => {
+    const s = document.createElement('script');
+    s.type = 'module';
+    s.src = MODEL_VIEWER;
+    s.onload = () => customElements.whenDefined('model-viewer').then(ok);
+    s.onerror = () => { modelViewer = null; falha(new Error('o visualizador não carregou (sem rede?)')); };
+    document.head.append(s);
+  }));
+}
+async function verEm3D(id) {
+  const d = E.documentos.find((x) => x.id === id);
+  if (!d) return;
+  const ios = E.documentos.find((x) => x.tipo === 'ar' && x.projeto === d.projeto && x.titulo === d.titulo && /\.usdz$/i.test(x.nome_ficheiro));
+  abrirDialogo(dlg, P.htmlVisor3D(d));
+  try {
+    const [url, urlIos] = await Promise.all([D.urlAR(d), ios ? D.urlAR(ios) : null, carregarModelViewer()]);
+    if (dlg.open && dlg.querySelector('[data-a-carregar]')) dlg.innerHTML = P.htmlVisor3D(d, url, urlIos);
+  } catch (err) {
+    if (dlg.open) dlg.innerHTML = P.htmlVisor3D(d, null, null, err.message || String(err));
+  }
+}
+
 async function depois() { try { await D.carregarNotificacoes(); } catch (_) {} atualizarContador(); desenhar(false); }
 
 document.addEventListener('click', async (e) => {
@@ -431,6 +459,7 @@ document.addEventListener('click', async (e) => {
       $$('[data-acao="tipo-doc"]', f).forEach((b) => b.setAttribute('aria-pressed', b === el));
       return;
     }
+    case 'ver-3d': return verEm3D(id);
     case 'abrir-doc': {
       const d = E.documentos.find((x) => x.id === id);
       const janela = window.open('about:blank', '_blank');  // já, para o browser não bloquear a janela

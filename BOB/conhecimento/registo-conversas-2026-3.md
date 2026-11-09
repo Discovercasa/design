@@ -125,3 +125,8 @@ words (`registo-conversas*.md`). When this file passes about 1 500 lines, contin
 - Decision (INFERRED, not confirmed): the Sobral visit model adds the company STANDARD frame (aluminium RAL 7016, double glazing; `perguntas-por-obra.md` Q12 default) in the 12 exterior openings that had none (5 full-height doors, 7 windows); the entrance door would be a flat panel by the standard. Production model and quantities unchanged.
 - Pending: Sobral window table (type, size per opening; Q12/Q13) to replace the standard frames in the visit/AR model → `Construção Sobral/docs/estado.md` → Open questions.
 
+### 2026-11-09 — OK for the model-viewer component (3D viewer, task 85) [Step Inside, hub]
+> Sim, podes
+- Context: answer to "Posso usar o componente model-viewer para o visualizador 3D (tarefa 85)?". This is the user's authorisation of a NEW DEPENDENCY in the Design repo (rule «Não acrescentar dependências sem perguntar»): Google's `<model-viewer>` 4.0.0, loaded from cdn.jsdelivr.net only when a model is opened.
+- Filed in: nothing in BOB (code in the design repo: hub «Teste do AR», button «Ver em 3D» per GLB model opens a dialog with model-viewer, camera controls, its own AR button on AR phones, same signed private links, USDZ as ios-src; `public/js/hub/app.js` verEm3D/carregarModelViewer, `paineis.js` htmlVisor3D, test `tests/hub.spec.mjs`; documented in `step-inside/docs/fase7/README.md` «Visualizador 3D…» and hub news). Hub task 85 concluded with a notification. Closes the "model-viewer needs OK (85)" item of the entry above.
+
