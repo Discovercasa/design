@@ -406,6 +406,33 @@ test('em direto: o que outra pessoa muda aparece sem recarregar, em todos os sí
   await expect(page.locator('#contador')).not.toBeHidden();
 });
 
+test('versão nova publicada: um aviso deixa recarregar a página', async ({ page }) => {
+  // pedido de 2026-11-09 («Sim, avisa»): uma janela aberta há muito mostrava a versão antiga (sem a secção do AR)
+  let etag = '"v1"';
+  await page.route('**/js/hub/app.js', (r) => (r.request().method() === 'HEAD'
+    ? r.fulfill({ status: 200, headers: { etag }, body: '' }) : r.continue()));
+  await page.clock.install();
+  const primeira = page.waitForRequest((q) => q.method() === 'HEAD' && q.url().endsWith('/js/hub/app.js'));
+  const erros = await abrir(page, { rota: '/#/projeto/step-inside' });
+  await expect(page.locator('#vista h1')).toBeVisible();
+  await primeira;
+  const aviso = page.locator('.aviso', { hasText: 'Há uma versão nova do hub' });
+  // nada mudou: sem aviso
+  await page.clock.fastForward('04:00');
+  await page.waitForTimeout(300);
+  await expect(aviso).toHaveCount(0);
+  // publica-se uma versão nova: aviso que fica até se recarregar ou fechar
+  etag = '"v2"';
+  await page.clock.fastForward('04:00');
+  await expect(aviso).toBeVisible();
+  await page.clock.fastForward('00:30');
+  await expect(aviso).toBeVisible();
+  await Promise.all([page.waitForEvent('load'), aviso.getByRole('button', { name: 'Recarregar' }).click()]);
+  await expect(page.locator('#vista h1')).toBeVisible();
+  await expect(aviso).toHaveCount(0);
+  expect(erros).toEqual([]);
+});
+
 test('projeto: o ponto de situação das fases fica fechado num acordeão', async ({ page }) => {
   // pedido de 2026-11-09: «este texto que ocupa demasiado espaço marca-o como aquilo que ele representa num acordion»
   await abrir(page, { rota: '/#/projeto/step-inside' });
