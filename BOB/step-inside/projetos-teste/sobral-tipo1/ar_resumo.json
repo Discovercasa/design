@@ -21,8 +21,9 @@
     0.0,
     2.962
    ],
-   "objetos": 10,
+   "objetos": 11,
    "materiais": [
+    "AR_OCLUSAO",
     "MAT_CONCRETE_SLAB",
     "MAT_FLOOR_VINYL_WOOD",
     "MAT_FRAME_ALUMINIUM__RAL7016",
@@ -34,9 +35,13 @@
     "MAT_ROOF_SANDWICH_TILE__RAL8004",
     "MAT_WALL_RENDER__WHITE"
    ],
-   "triangulos": 11354,
+   "triangulos": 13286,
    "triangulos_antes_de_simplificar": 12094,
    "imagens": {
+    "AR_OCLUSAO": [
+     2048,
+     2048
+    ],
     "Chipboard004_2K-JPG_Color.jpg": [
      1024,
      1024
@@ -142,7 +147,18 @@
      512
     ]
    },
-   "textura_maior": 1024,
+   "oclusao": {
+    "faces_candidatas": 3863,
+    "faces": 964,
+    "triangulos": 1932,
+    "px": 2048,
+    "distancia_m": 1.0,
+    "forca": 0.7,
+    "afastamento_m": 0.005
+   },
+   "maquete_base": {},
+   "terreno_cozido": {},
+   "textura_maior": 2048,
    "dimensoes": [
     13.099,
     11.249,
@@ -153,24 +169,25 @@
    "ficheiros": {
     "glb": {
      "ficheiro": "sobral-tipo1_ar_casa.glb",
-     "bytes": 1424104,
-     "sha256": "0b894dc4c7a5df4b682b05e05cc6275d3eea45812909db6122fd2504c6fdfc12"
+     "bytes": 3126188,
+     "sha256": "771f5676fa3b2f0df39dc06a59ae0eaafa2d00e36ff9425462fe6d595aa29c77"
     },
     "usdz": {
      "ficheiro": "sobral-tipo1_ar_casa.usdz",
-     "bytes": 1184669,
-     "sha256": "d4bc3d418131ee0ea9d86e688d92f556f942dceaa2753bfae06ce884217e29c5"
+     "bytes": 1830106,
+     "sha256": "3de4dbffcbd1129e32dc96d06fce523f2943673125132c2558b5c72c9fbfee02"
     }
    },
    "reimportacao": {
     "glb": {
-     "triangulos": 11354,
+     "triangulos": 13286,
      "dimensoes": [
       13.099,
       11.249,
       7.543
      ],
      "materiais": [
+      "AR_OCLUSAO",
       "MAT_CONCRETE_SLAB",
       "MAT_FLOOR_VINYL_WOOD",
       "MAT_FRAME_ALUMINIUM__RAL7016",
@@ -182,18 +199,19 @@
       "MAT_ROOF_SANDWICH_TILE__RAL8004",
       "MAT_WALL_RENDER__WHITE"
      ],
-     "imagens": 13,
+     "imagens": 14,
      "imagens_em_falta": [],
      "erro": null
     },
     "usdz": {
-     "triangulos": 11354,
+     "triangulos": 13286,
      "dimensoes": [
       13.099,
       11.249,
       7.543
      ],
      "materiais": [
+      "AR_OCLUSAO",
       "MAT_CONCRETE_SLAB",
       "MAT_FLOOR_VINYL_WOOD",
       "MAT_FRAME_ALUMINIUM__RAL7016",
@@ -205,7 +223,7 @@
       "MAT_ROOF_SANDWICH_TILE__RAL8004",
       "MAT_WALL_RENDER__WHITE"
      ],
-     "imagens": 13,
+     "imagens": 14,
      "imagens_em_falta": [],
      "erro": null
     }
@@ -219,8 +237,10 @@
     0.0,
     2.962
    ],
-   "objetos": 11,
+   "objetos": 13,
    "materiais": [
+    "AR_OCLUSAO",
+    "MAQUETE_BASE",
     "MAT_CONCRETE_SLAB",
     "MAT_FLOOR_VINYL_WOOD",
     "MAT_FRAME_ALUMINIUM__RAL7016",
@@ -233,9 +253,13 @@
     "MAT_ROOF_SANDWICH_TILE__RAL8004",
     "MAT_WALL_RENDER__WHITE"
    ],
-   "triangulos": 11990,
-   "triangulos_antes_de_simplificar": 12730,
+   "triangulos": 14594,
+   "triangulos_antes_de_simplificar": 12974,
    "imagens": {
+    "AR_OCLUSAO": [
+     2048,
+     2048
+    ],
     "Chipboard004_2K-JPG_Color.jpg": [
      1024,
      1024
@@ -279,6 +303,10 @@
     "Metal027_2K-JPG_NormalGL.jpg": [
      512,
      512
+    ],
+    "AR_TERRENO": [
+     2048,
+     1984
     ],
     "Ground037_2K-JPG_Color.jpg": [
      1024,
@@ -341,35 +369,75 @@
      512
     ]
    },
-   "textura_maior": 1024,
+   "oclusao": {
+    "faces_candidatas": 3928,
+    "faces": 1009,
+    "triangulos": 2026,
+    "px": 2048,
+    "distancia_m": 1.0,
+    "forca": 0.7,
+    "afastamento_m": 0.005
+   },
+   "maquete_base": {
+    "retangulo_m": [
+     -26.77,
+     -25.85,
+     26.77,
+     25.85
+    ],
+    "z_base_m": -4.56,
+    "faces_laterais": 166,
+    "margens_m": [
+     20.0,
+     20.0,
+     20.0,
+     20.0
+    ]
+   },
+   "terreno_cozido": {
+    "MAT_LANDSCAPE_SOIL": {
+     "px": [
+      2048,
+      1984
+     ],
+     "textura_base": "Ground037_2K-JPG_Color.jpg",
+     "tile_m": [
+      3.0,
+      3.0
+     ]
+    }
+   },
+   "textura_maior": 2048,
    "dimensoes": [
-    53.369,
-    51.497,
-    10.5
+    53.549,
+    51.699,
+    13.143
    ],
    "origem": "centro da planta da casa, no pavimento acabado do rés do chão",
-   "z_min": -2.88,
+   "z_min": -4.56,
    "ficheiros": {
     "glb": {
      "ficheiro": "sobral-tipo1_ar_maquete.glb",
-     "bytes": 2110456,
-     "sha256": "cca1659504399e84f3afd8a54df98a9653385d2d6169848a44ddc065b42e4172"
+     "bytes": 4567436,
+     "sha256": "d47d44a42c98c2d54ea02e971d7c15eb72e34adf4eee3cc76a0d6cd938a32a78"
     },
     "usdz": {
      "ficheiro": "sobral-tipo1_ar_maquete.usdz",
-     "bytes": 1700709,
-     "sha256": "5582d54ae1636dfbd6b71912a1ab4cdb6afb2dc6cf3718a6e0d68e437b6a090e"
+     "bytes": 2227983,
+     "sha256": "48297eec8e9c3c28a843f4cfa0274b27bc1034ff66e987eec8a03c8e076d8a8e"
     }
    },
    "reimportacao": {
     "glb": {
-     "triangulos": 11990,
+     "triangulos": 14594,
      "dimensoes": [
-      53.369,
-      51.497,
-      10.5
+      53.549,
+      51.699,
+      13.143
      ],
      "materiais": [
+      "AR_OCLUSAO",
+      "MAQUETE_BASE",
       "MAT_CONCRETE_SLAB",
       "MAT_FLOOR_VINYL_WOOD",
       "MAT_FRAME_ALUMINIUM__RAL7016",
@@ -382,18 +450,20 @@
       "MAT_ROOF_SANDWICH_TILE__RAL8004",
       "MAT_WALL_RENDER__WHITE"
      ],
-     "imagens": 16,
+     "imagens": 15,
      "imagens_em_falta": [],
      "erro": null
     },
     "usdz": {
-     "triangulos": 11990,
+     "triangulos": 14594,
      "dimensoes": [
-      53.369,
-      51.497,
-      10.5
+      53.549,
+      51.699,
+      13.143
      ],
      "materiais": [
+      "AR_OCLUSAO",
+      "MAQUETE_BASE",
       "MAT_CONCRETE_SLAB",
       "MAT_FLOOR_VINYL_WOOD",
       "MAT_FRAME_ALUMINIUM__RAL7016",
@@ -406,7 +476,7 @@
       "MAT_ROOF_SANDWICH_TILE__RAL8004",
       "MAT_WALL_RENDER__WHITE"
      ],
-     "imagens": 16,
+     "imagens": 15,
      "imagens_em_falta": [],
      "erro": null
     }
@@ -420,8 +490,9 @@
     0.0,
     2.962
    ],
-   "objetos": 10,
+   "objetos": 11,
    "materiais": [
+    "AR_OCLUSAO",
     "MAT_CONCRETE_SLAB",
     "MAT_FLOOR_VINYL_WOOD",
     "MAT_FRAME_ALUMINIUM__RAL7016",
@@ -433,9 +504,13 @@
     "MAT_ROOF_SANDWICH_TILE__RAL8004",
     "MAT_WALL_RENDER__WHITE"
    ],
-   "triangulos": 4130,
+   "triangulos": 5410,
    "triangulos_antes_de_simplificar": 4540,
    "imagens": {
+    "AR_OCLUSAO": [
+     2048,
+     2048
+    ],
     "Chipboard004_2K-JPG_Color.jpg": [
      1024,
      1024
@@ -541,10 +616,21 @@
      512
     ]
    },
-   "textura_maior": 1024,
+   "oclusao": {
+    "faces_candidatas": 2007,
+    "faces": 638,
+    "triangulos": 1280,
+    "px": 2048,
+    "distancia_m": 1.0,
+    "forca": 0.7,
+    "afastamento_m": 0.005
+   },
+   "maquete_base": {},
+   "terreno_cozido": {},
+   "textura_maior": 2048,
    "dimensoes": [
-    13.099,
-    11.249,
+    13.104,
+    11.254,
     3.152
    ],
    "origem": "centro da planta da casa, no pavimento acabado do piso 0",
@@ -552,24 +638,25 @@
    "ficheiros": {
     "glb": {
      "ficheiro": "sobral-tipo1_ar_casa_piso0.glb",
-     "bytes": 933204,
-     "sha256": "d87f8fb5c019bc80a2bf6dedb743ee703ae9534269186b9ece1cf28912730493"
+     "bytes": 2599416,
+     "sha256": "d01a22d1467e748ad7d6f45efa30fec02a36e3e9ee79992e672ba8943996c03f"
     },
     "usdz": {
      "ficheiro": "sobral-tipo1_ar_casa_piso0.usdz",
-     "bytes": 874676,
-     "sha256": "b3c881563ac1a68eb4d8f99d9659d236130e809ac2d8cd2f42a6a9dcc88a32ab"
+     "bytes": 1470523,
+     "sha256": "3494903d8b115a30869e8b397106d25c56803a86dafe9da191cce42e3d708939"
     }
    },
    "reimportacao": {
     "glb": {
-     "triangulos": 4130,
+     "triangulos": 5410,
      "dimensoes": [
-      13.099,
-      11.249,
+      13.104,
+      11.254,
       3.152
      ],
      "materiais": [
+      "AR_OCLUSAO",
       "MAT_CONCRETE_SLAB",
       "MAT_FLOOR_VINYL_WOOD",
       "MAT_FRAME_ALUMINIUM__RAL7016",
@@ -579,18 +666,19 @@
       "MAT_METAL_GUTTER__DARK_GREY",
       "MAT_WALL_RENDER__WHITE"
      ],
-     "imagens": 11,
+     "imagens": 12,
      "imagens_em_falta": [],
      "erro": null
     },
     "usdz": {
-     "triangulos": 4130,
+     "triangulos": 5410,
      "dimensoes": [
-      13.099,
-      11.249,
+      13.104,
+      11.254,
       3.152
      ],
      "materiais": [
+      "AR_OCLUSAO",
       "MAT_CONCRETE_SLAB",
       "MAT_FLOOR_VINYL_WOOD",
       "MAT_FRAME_ALUMINIUM__RAL7016",
@@ -602,7 +690,7 @@
       "MAT_ROOF_SANDWICH_TILE__RAL8004",
       "MAT_WALL_RENDER__WHITE"
      ],
-     "imagens": 13,
+     "imagens": 14,
      "imagens_em_falta": [],
      "erro": null
     }
@@ -616,8 +704,10 @@
     0.0,
     2.962
    ],
-   "objetos": 11,
+   "objetos": 13,
    "materiais": [
+    "AR_OCLUSAO",
+    "MAQUETE_BASE",
     "MAT_CONCRETE_SLAB",
     "MAT_FLOOR_VINYL_WOOD",
     "MAT_FRAME_ALUMINIUM__RAL7016",
@@ -630,9 +720,13 @@
     "MAT_ROOF_SANDWICH_TILE__RAL8004",
     "MAT_WALL_RENDER__WHITE"
    ],
-   "triangulos": 3766,
-   "triangulos_antes_de_simplificar": 3982,
+   "triangulos": 5402,
+   "triangulos_antes_de_simplificar": 4226,
    "imagens": {
+    "AR_OCLUSAO": [
+     2048,
+     2048
+    ],
     "Chipboard004_2K-JPG_Color.jpg": [
      1024,
      1024
@@ -676,6 +770,10 @@
     "Metal027_2K-JPG_NormalGL.jpg": [
      512,
      512
+    ],
+    "AR_TERRENO": [
+     2048,
+     1984
     ],
     "Ground037_2K-JPG_Color.jpg": [
      1024,
@@ -738,35 +836,75 @@
      512
     ]
    },
-   "textura_maior": 1024,
+   "oclusao": {
+    "faces_candidatas": 1574,
+    "faces": 525,
+    "triangulos": 1058,
+    "px": 2048,
+    "distancia_m": 1.0,
+    "forca": 0.7,
+    "afastamento_m": 0.005
+   },
+   "maquete_base": {
+    "retangulo_m": [
+     -26.77,
+     -25.85,
+     26.77,
+     25.85
+    ],
+    "z_base_m": -4.56,
+    "faces_laterais": 166,
+    "margens_m": [
+     20.0,
+     20.0,
+     20.0,
+     20.0
+    ]
+   },
+   "terreno_cozido": {
+    "MAT_LANDSCAPE_SOIL": {
+     "px": [
+      2048,
+      1984
+     ],
+     "textura_base": "Ground037_2K-JPG_Color.jpg",
+     "tile_m": [
+      3.0,
+      3.0
+     ]
+    }
+   },
+   "textura_maior": 2048,
    "dimensoes": [
-    53.369,
-    51.497,
-    10.5
+    53.549,
+    51.699,
+    13.143
    ],
    "origem": "centro da planta da casa, no pavimento acabado do rés do chão",
-   "z_min": -2.88,
+   "z_min": -4.56,
    "ficheiros": {
     "glb": {
      "ficheiro": "sobral-tipo1_ar_maquete_piso0.glb",
-     "bytes": 1571712,
-     "sha256": "c15ee554724da2489b3f08774a55676af2aa104d5c1b54a6526bd842d2bf560e"
+     "bytes": 3995832,
+     "sha256": "074b527e42f980aa24aa934322833ac9b6c65bc94d5f866241b8b382e7cd115b"
     },
     "usdz": {
      "ficheiro": "sobral-tipo1_ar_maquete_piso0.usdz",
-     "bytes": 1343164,
-     "sha256": "180bad8e5af90919b2e0791c7c27290789a36ab976fe82c29965746e7b2cad34"
+     "bytes": 1793213,
+     "sha256": "725c116504bcab99b0aacacced80d2d780e2dbcc97a0ee46545da6db55f1a288"
     }
    },
    "reimportacao": {
     "glb": {
-     "triangulos": 3766,
+     "triangulos": 5402,
      "dimensoes": [
-      53.369,
-      51.497,
-      10.5
+      53.549,
+      51.699,
+      13.143
      ],
      "materiais": [
+      "AR_OCLUSAO",
+      "MAQUETE_BASE",
       "MAT_CONCRETE_SLAB",
       "MAT_FLOOR_VINYL_WOOD",
       "MAT_FRAME_ALUMINIUM__RAL7016",
@@ -777,18 +915,20 @@
       "MAT_METAL_GUTTER__DARK_GREY",
       "MAT_WALL_RENDER__WHITE"
      ],
-     "imagens": 14,
+     "imagens": 13,
      "imagens_em_falta": [],
      "erro": null
     },
     "usdz": {
-     "triangulos": 3766,
+     "triangulos": 5402,
      "dimensoes": [
-      53.369,
-      51.497,
-      10.5
+      53.549,
+      51.699,
+      13.143
      ],
      "materiais": [
+      "AR_OCLUSAO",
+      "MAQUETE_BASE",
       "MAT_CONCRETE_SLAB",
       "MAT_FLOOR_VINYL_WOOD",
       "MAT_FRAME_ALUMINIUM__RAL7016",
@@ -801,7 +941,7 @@
       "MAT_ROOF_SANDWICH_TILE__RAL8004",
       "MAT_WALL_RENDER__WHITE"
      ],
-     "imagens": 16,
+     "imagens": 15,
      "imagens_em_falta": [],
      "erro": null
     }
@@ -815,8 +955,9 @@
     0.0,
     2.962
    ],
-   "objetos": 7,
+   "objetos": 8,
    "materiais": [
+    "AR_OCLUSAO",
     "MAT_CONCRETE_SLAB",
     "MAT_FLOOR_VINYL_WOOD",
     "MAT_FRAME_ALUMINIUM__RAL7016",
@@ -825,9 +966,13 @@
     "MAT_MEMBRANE_BREATHER",
     "MAT_WALL_RENDER__WHITE"
    ],
-   "triangulos": 4242,
+   "triangulos": 5554,
    "triangulos_antes_de_simplificar": 4704,
    "imagens": {
+    "AR_OCLUSAO": [
+     2048,
+     2048
+    ],
     "Chipboard004_2K-JPG_Color.jpg": [
      1024,
      1024
@@ -933,10 +1078,21 @@
      512
     ]
    },
-   "textura_maior": 1024,
+   "oclusao": {
+    "faces_candidatas": 2087,
+    "faces": 656,
+    "triangulos": 1312,
+    "px": 2048,
+    "distancia_m": 1.0,
+    "forca": 0.7,
+    "afastamento_m": 0.005
+   },
+   "maquete_base": {},
+   "terreno_cozido": {},
+   "textura_maior": 2048,
    "dimensoes": [
-    10.011,
-    6.261,
+    10.021,
+    6.271,
     4.476
    ],
    "origem": "centro da planta da casa, no pavimento acabado do piso 1",
@@ -944,24 +1100,25 @@
    "ficheiros": {
     "glb": {
      "ficheiro": "sobral-tipo1_ar_casa_piso1.glb",
-     "bytes": 697936,
-     "sha256": "dfd59677bd34aa1fafc6ab96da05cc3f4c66b6fbdb3c8a513fb4c192830325b3"
+     "bytes": 2326628,
+     "sha256": "4e3676db50c83669187f40051a433478da61f54a864d4349a591b0bcd86d77fc"
     },
     "usdz": {
      "ficheiro": "sobral-tipo1_ar_casa_piso1.usdz",
-     "bytes": 808895,
-     "sha256": "657cc1ad7d377b7a0404ee8edf279cba20f788959811c318b1b75abcb7ed903d"
+     "bytes": 1394806,
+     "sha256": "b0459cf75073fe8e18f3f624e342502d404a0c1bc6ff45c0665cfbbf7757d750"
     }
    },
    "reimportacao": {
     "glb": {
-     "triangulos": 4242,
+     "triangulos": 5554,
      "dimensoes": [
-      10.011,
-      6.261,
+      10.021,
+      6.271,
       4.476
      ],
      "materiais": [
+      "AR_OCLUSAO",
       "MAT_FLOOR_VINYL_WOOD",
       "MAT_FRAME_ALUMINIUM__RAL7016",
       "MAT_GLASS_CLEAR",
@@ -969,18 +1126,19 @@
       "MAT_MEMBRANE_BREATHER",
       "MAT_WALL_RENDER__WHITE"
      ],
-     "imagens": 8,
+     "imagens": 9,
      "imagens_em_falta": [],
      "erro": null
     },
     "usdz": {
-     "triangulos": 4242,
+     "triangulos": 5554,
      "dimensoes": [
-      10.011,
-      6.261,
+      10.021,
+      6.271,
       4.476
      ],
      "materiais": [
+      "AR_OCLUSAO",
       "MAT_CONCRETE_SLAB",
       "MAT_FLOOR_VINYL_WOOD",
       "MAT_FRAME_ALUMINIUM__RAL7016",
@@ -989,7 +1147,7 @@
       "MAT_MEMBRANE_BREATHER",
       "MAT_WALL_RENDER__WHITE"
      ],
-     "imagens": 11,
+     "imagens": 12,
      "imagens_em_falta": [],
      "erro": null
     }
@@ -1003,8 +1161,10 @@
     0.0,
     2.962
    ],
-   "objetos": 8,
+   "objetos": 10,
    "materiais": [
+    "AR_OCLUSAO",
+    "MAQUETE_BASE",
     "MAT_CONCRETE_SLAB",
     "MAT_FLOOR_VINYL_WOOD",
     "MAT_FRAME_ALUMINIUM__RAL7016",
@@ -1014,9 +1174,13 @@
     "MAT_MEMBRANE_BREATHER",
     "MAT_WALL_RENDER__WHITE"
    ],
-   "triangulos": 7608,
-   "triangulos_antes_de_simplificar": 8170,
+   "triangulos": 10000,
+   "triangulos_antes_de_simplificar": 8414,
    "imagens": {
+    "AR_OCLUSAO": [
+     2048,
+     2048
+    ],
     "Chipboard004_2K-JPG_Color.jpg": [
      1024,
      1024
@@ -1060,6 +1224,10 @@
     "Metal027_2K-JPG_NormalGL.jpg": [
      512,
      512
+    ],
+    "AR_TERRENO": [
+     2048,
+     1984
     ],
     "Ground037_2K-JPG_Color.jpg": [
      1024,
@@ -1122,35 +1290,75 @@
      512
     ]
    },
-   "textura_maior": 1024,
+   "oclusao": {
+    "faces_candidatas": 3480,
+    "faces": 903,
+    "triangulos": 1814,
+    "px": 2048,
+    "distancia_m": 1.0,
+    "forca": 0.7,
+    "afastamento_m": 0.005
+   },
+   "maquete_base": {
+    "retangulo_m": [
+     -26.77,
+     -25.85,
+     26.77,
+     25.85
+    ],
+    "z_base_m": -4.56,
+    "faces_laterais": 166,
+    "margens_m": [
+     20.0,
+     20.0,
+     20.0,
+     20.0
+    ]
+   },
+   "terreno_cozido": {
+    "MAT_LANDSCAPE_SOIL": {
+     "px": [
+      2048,
+      1984
+     ],
+     "textura_base": "Ground037_2K-JPG_Color.jpg",
+     "tile_m": [
+      3.0,
+      3.0
+     ]
+    }
+   },
+   "textura_maior": 2048,
    "dimensoes": [
-    53.369,
-    51.497,
-    10.5
+    53.549,
+    51.699,
+    13.143
    ],
    "origem": "centro da planta da casa, no pavimento acabado do rés do chão",
-   "z_min": -2.88,
+   "z_min": -4.56,
    "ficheiros": {
     "glb": {
      "ficheiro": "sobral-tipo1_ar_maquete_piso1.glb",
-     "bytes": 1779164,
-     "sha256": "8c7e11d2c8d2704c3d6118e19a0c0f790bc5b99d4d5737a3487a7fa9fc80e91f"
+     "bytes": 4173700,
+     "sha256": "008664039c0fdc7d16517b4d42af8de10f8e878125e494f398587c177c348970"
     },
     "usdz": {
      "ficheiro": "sobral-tipo1_ar_maquete_piso1.usdz",
-     "bytes": 1456753,
-     "sha256": "c10d7344223fd7de7820d66e8df1f7add1919e0f57fbec7ca9c66c25386af586"
+     "bytes": 1951254,
+     "sha256": "303984448d1d8ffeda48228ca8695b415b3db22d6c1a76476790f3386a5992cc"
     }
    },
    "reimportacao": {
     "glb": {
-     "triangulos": 7608,
+     "triangulos": 10000,
      "dimensoes": [
-      53.369,
-      51.497,
-      10.5
+      53.549,
+      51.699,
+      13.143
      ],
      "materiais": [
+      "AR_OCLUSAO",
+      "MAQUETE_BASE",
       "MAT_CONCRETE_SLAB",
       "MAT_FLOOR_VINYL_WOOD",
       "MAT_FRAME_ALUMINIUM__RAL7016",
@@ -1160,18 +1368,20 @@
       "MAT_MEMBRANE_BREATHER",
       "MAT_WALL_RENDER__WHITE"
      ],
-     "imagens": 14,
+     "imagens": 13,
      "imagens_em_falta": [],
      "erro": null
     },
     "usdz": {
-     "triangulos": 7608,
+     "triangulos": 10000,
      "dimensoes": [
-      53.369,
-      51.497,
-      10.5
+      53.549,
+      51.699,
+      13.143
      ],
      "materiais": [
+      "AR_OCLUSAO",
+      "MAQUETE_BASE",
       "MAT_CONCRETE_SLAB",
       "MAT_FLOOR_VINYL_WOOD",
       "MAT_FRAME_ALUMINIUM__RAL7016",
@@ -1181,7 +1391,7 @@
       "MAT_MEMBRANE_BREATHER",
       "MAT_WALL_RENDER__WHITE"
      ],
-     "imagens": 14,
+     "imagens": 13,
      "imagens_em_falta": [],
      "erro": null
     }

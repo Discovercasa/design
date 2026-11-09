@@ -14,11 +14,14 @@ run.json = {"variante": "casa" | "maquete", "piso": None | k, "ocultos": [MAT id
            on the terrain. The storeys are the levels of the visible floor finishes (resumo "niveis").
 Steps: drop what is not seen (excluded collections, hidden layers: OSB, wool, membranes, structure…), join the meshes
 per material (few draw calls), merge coplanar faces (same shape, fewer triangles), scale the textures down, move the
-origin, export GLB (Scene Viewer) and USDZ (Quick Look). No baked shadows (spec §8: the viewers draw them).
+origin, export GLB (Scene Viewer) and USDZ (Quick Look). The sun's shadow is not baked (spec §8: the viewers draw
+it); the ambient occlusion is (task 157, 2026-11-09): a thin film on the shaded faces (2d), and in the table model the
+ground (2c), cut as a clean block (2b, maquete.py).
 """
 import json
 import math
 import sys
+from pathlib import Path
 
 import bmesh
 import bpy
@@ -96,12 +99,13 @@ if PISO is not None:
         desce = niveis[PISO]
 
 # 2. bake every kept object into one mesh per material, in coordinates relative to the origin
-porm = {}
+porm, CATS = {}, {}
 for o in manter:
     me = o.evaluated_get(dg).to_mesh()
     M = Matrix.Translation(-origem) @ o.matrix_world
     mat = o.active_material
     porm.setdefault(mat.name if mat else "_sem", []).append((me.copy(), M, mat))
+    CATS.setdefault(mat.name if mat else "_sem", set()).add(o.get("si_categoria", ""))
     o.evaluated_get(dg).to_mesh_clear()
 for o in list(bpy.data.objects):
     bpy.data.objects.remove(o, do_unlink=True)
@@ -111,6 +115,10 @@ sc = bpy.context.scene
 col = bpy.data.collections.new("AR")
 sc.collection.children.link(col)
 raio = run.get("raio_terreno_m", 20.0)
+sys.path.insert(0, str(Path(sys.argv[sys.argv.index("--python") + 1]).resolve().parent))
+import maquete as MQ  # noqa: E402
+
+RET, TERRENOS = None, []
 tri_antes = 0
 for nome, partes in porm.items():
     bm = bmesh.new()
@@ -120,12 +128,24 @@ for nome, partes in porm.items():
             pass
         bm.from_mesh(me)
         bpy.data.meshes.remove(me)
-    if nome == "MAT_LANDSCAPE_SOIL" or (partes and partes[0][2] and partes[0][2].name.startswith("MAT_LANDSCAPE")):
-        # table model: keep the ground within `raio` of the house footprint
-        fora = [f for f in bm.faces if any(
-            max(abs(v.co.x) - (hi.x - lo.x) / 2, abs(v.co.y) - (hi.y - lo.y) / 2) > raio for v in f.verts)]
-        bmesh.ops.delete(bm, geom=fora, context="FACES")
     terreno = nome.startswith("MAT_LANDSCAPE") or (partes and partes[0][2] and partes[0][2].name.startswith("MAT_LANDSCAPE"))
+    if terreno:
+        # table model: a clean rectangular block (maquete.py) — the largest rectangle around the house, at most `raio`
+        # beyond it, that the survey covers; cut straight. Fallback: the old crop (whole triangles within `raio`).
+        tris = [((f.verts[0].co.x, f.verts[0].co.y), (f.verts[k].co.x, f.verts[k].co.y),
+                 (f.verts[k + 1].co.x, f.verts[k + 1].co.y)) for f in bm.faces for k in range(1, len(f.verts) - 1)]
+        RET = RET or MQ.retangulo(tris, (lo.x - origem.x, lo.y - origem.y, hi.x - origem.x, hi.y - origem.y), raio)
+        if RET:
+            for ax, val, s in ((0, RET[0], -1), (0, RET[2], 1), (1, RET[1], -1), (1, RET[3], 1)):
+                co_, no_ = [0.0, 0.0, 0.0], [0.0, 0.0, 0.0]
+                co_[ax], no_[ax] = val, float(s)
+                geom = bm.verts[:] + bm.edges[:] + bm.faces[:]
+                bmesh.ops.bisect_plane(bm, geom=geom, dist=1e-5, plane_co=co_, plane_no=no_, clear_outer=True)
+            TERRENOS.append(nome)
+        else:
+            fora = [f for f in bm.faces if any(
+                max(abs(v.co.x) - (hi.x - lo.x) / 2, abs(v.co.y) - (hi.y - lo.y) / 2) > raio for v in f.verts)]
+            bmesh.ops.delete(bm, geom=fora, context="FACES")
     if run["variante"] == "casa" and PISO is None:
         # the phone sets the model's lowest point on the real ground: nothing may hang below it (the indicative
         # foundation goes ~1 m down). Cut at corte_abaixo_m under the finished floor: the plinth stays visible.
@@ -164,14 +184,327 @@ for nome, partes in porm.items():
     ob["si_mat_id"] = nome
     col.objects.link(ob)
 
-# 3. textures down to textura_max (colour) and half of it for normal / roughness
+
+# 2b-2d. Realism (task 157): the table model as a clean block, its ground baked once (no visible repetition, the
+# house's soft shadow on it) and a soft shadow in the corners of the house (ambient occlusion). Baked with Cycles.
+def _lin(h):
+    h = h.lstrip("#")
+    return tuple((x / 12.92 if x <= 0.04045 else ((x + 0.055) / 1.055) ** 2.4)
+                 for x in (int(h[i:i + 2], 16) / 255 for i in (0, 2, 4)))
+
+
+def material_simples(nome, cor, rugosidade=0.95):
+    m = bpy.data.materials.new(nome)
+    m.use_nodes = True
+    b = m.node_tree.nodes.get("Principled BSDF")
+    b.inputs["Base Color"].default_value = (*cor, 1.0)
+    b.inputs["Roughness"].default_value = rugosidade
+    return m
+
+
+def sk(sockets, ident):
+    return next(s for s in sockets if s.identifier == ident)
+
+
+def cycles(amostras):
+    sc.render.engine = "CYCLES"
+    sc.cycles.device = "CPU"
+    sc.cycles.samples = amostras
+    sc.render.bake.margin = 4
+
+
+def cozer(ob, tipo):
+    for o in col.objects:
+        o.select_set(False)
+    ob.select_set(True)
+    vl.objects.active = ob
+    bpy.ops.object.bake(type=tipo, margin=4, use_clear=False, target="IMAGE_TEXTURES")
+
+
+def caixa_z(obs):
+    return min(min(o.bound_box[i][2] for i in range(8)) for o in obs)
+
+
+# 2b. the block: vertical sides from the straight cut down to a flat bottom under everything (it sits flat on a table;
+# the ground used to end in a saw-tooth edge). Colour: the catalogue's soil (run "cor_base_maquete").
+BASE = {}
+if RET and TERRENOS:
+    z_base = caixa_z(list(col.objects)) - run.get("base_abaixo_m", 0.3)
+    arestas = []
+    for nome in TERRENOS:
+        bm = bmesh.new()
+        bm.from_mesh(bpy.data.objects[nome].data)
+        arestas += [(tuple(e.verts[0].co), tuple(e.verts[1].co)) for e in bm.edges if e.is_boundary]
+        bm.free()
+    quads, fundo = MQ.saia(arestas, RET, z_base)
+    vs, fs = [], []
+    for q in quads + [fundo]:
+        fs.append(tuple(range(len(vs), len(vs) + len(q))))
+        vs += q
+    me = bpy.data.meshes.new("MAQUETE_BASE")
+    me.from_pydata(vs, [], fs)
+    me.materials.append(material_simples("MAQUETE_BASE", _lin(run.get("cor_base_maquete", "#73624A"))))
+    ob = bpy.data.objects.new("MAQUETE_BASE", me)
+    ob["si_mat_id"] = "MAQUETE_BASE"
+    col.objects.link(ob)
+    BASE = {"retangulo_m": [round(x, 2) for x in RET], "z_base_m": round(z_base, 2), "faces_laterais": len(quads),
+            "margens_m": [round(x, 2) for x in (lo.x - origem.x - RET[0], RET[2] - (hi.x - origem.x),
+                                                 lo.y - origem.y - RET[1], RET[3] - (hi.y - origem.y))]}
+
+# 2c. the ground of the table model baked into one picture over the block: the catalogue texture at its real size mixed
+# with a second, larger and turned copy through a noise mask, a broad colour variation, and the house's ambient
+# occlusion — the 2-3 m tile no longer shows as a pattern, and the house sits on its soft shadow.
+TERRENO = {}
+if RET and TERRENOS and run.get("cozer_terreno", True):
+    TPX = run.get("terreno_px", 2048)
+    w_m, h_m = RET[2] - RET[0], RET[3] - RET[1]
+    W = TPX if w_m >= h_m else max(256, int(round(TPX * w_m / h_m / 64)) * 64)
+    H = TPX if h_m >= w_m else max(256, int(round(TPX * h_m / w_m / 64)) * 64)
+    cycles(run.get("terreno_amostras", 16))
+    for nome in TERRENOS:
+        ob = bpy.data.objects[nome]
+        me = ob.data
+        m0 = me.materials[0]
+        b0 = next((n for n in m0.node_tree.nodes if n.type == "BSDF_PRINCIPLED"), None) if m0.use_nodes else None
+        lk = b0.inputs["Base Color"].links if b0 else []
+        img0 = lk[0].from_node.image if lk and lk[0].from_node.type == "TEX_IMAGE" else None
+        cor0 = tuple(b0.inputs["Base Color"].default_value[:3]) if b0 else (0.3, 0.3, 0.3)
+        rug0 = b0.inputs["Roughness"].default_value if b0 else 0.95
+        tile = list(m0.get("si_tile_m", [2.0, 2.0]))
+        while len(me.uv_layers) > 1:
+            me.uv_layers.remove(me.uv_layers[-1])
+        uvl = me.uv_layers[0] if me.uv_layers else me.uv_layers.new(name="UVMap")
+        for lp in me.loops:
+            co = me.vertices[lp.vertex_index].co
+            uvl.data[lp.index].uv = ((co.x - RET[0]) / w_m, (co.y - RET[1]) / h_m)
+        alvo = bpy.data.images.new("AR_TERRENO", W, H)
+        alvo.file_format = "JPEG"
+        mb = bpy.data.materials.new("AR_COZER_TERRENO")
+        mb.use_nodes = True
+        N, L = mb.node_tree.nodes, mb.node_tree.links
+        for n in list(N):
+            N.remove(n)
+        out = N.new("ShaderNodeOutputMaterial")
+        em = N.new("ShaderNodeEmission")
+        L.new(em.outputs["Emission"], out.inputs["Surface"])
+        geo = N.new("ShaderNodeNewGeometry")
+
+        def camada(escala, ang, dx, dy):
+            mp = N.new("ShaderNodeMapping")
+            mp.vector_type = "POINT"
+            mp.inputs["Location"].default_value = (dx, dy, 0.0)
+            mp.inputs["Rotation"].default_value = (0.0, 0.0, math.radians(ang))
+            mp.inputs["Scale"].default_value = (1 / (tile[0] * escala), 1 / (tile[1] * escala), 1.0)
+            L.new(geo.outputs["Position"], mp.inputs["Vector"])
+            tx = N.new("ShaderNodeTexImage")
+            tx.image = img0
+            L.new(mp.outputs["Vector"], tx.inputs["Vector"])
+            return tx.outputs["Color"]
+
+        def ruido(escala, de, ate, para0, para1, detalhe=2.0):
+            ns = N.new("ShaderNodeTexNoise")
+            ns.inputs["Scale"].default_value = escala
+            ns.inputs["Detail"].default_value = detalhe
+            L.new(geo.outputs["Position"], ns.inputs["Vector"])
+            mr = N.new("ShaderNodeMapRange")
+            mr.inputs["From Min"].default_value, mr.inputs["From Max"].default_value = de, ate
+            mr.inputs["To Min"].default_value, mr.inputs["To Max"].default_value = para0, para1
+            L.new(ns.outputs["Fac"], mr.inputs["Value"])
+            return mr.outputs["Result"]
+
+        def mistura(tipo, fator, a_, b_):
+            mx = N.new("ShaderNodeMix")
+            mx.data_type, mx.blend_type = "RGBA", tipo
+            if isinstance(fator, float):
+                sk(mx.inputs, "Factor_Float").default_value = fator
+            else:
+                L.new(fator, sk(mx.inputs, "Factor_Float"))
+            L.new(a_, sk(mx.inputs, "A_Color"))
+            L.new(b_, sk(mx.inputs, "B_Color"))
+            return sk(mx.outputs, "Result_Color")
+
+        if img0:
+            cor = mistura("MIX", ruido(0.15, 0.42, 0.58, 0.0, 1.0), camada(1.0, 0.0, 0.0, 0.0), camada(2.3, 37.0, 0.31, 0.71))
+        else:
+            rgb = N.new("ShaderNodeRGB")
+            rgb.outputs[0].default_value = (*cor0, 1.0)
+            cor = rgb.outputs[0]
+        cor = mistura("MULTIPLY", 1.0, cor, ruido(0.05, 0.35, 0.65, 0.9, 1.08, 1.0))
+        ao = N.new("ShaderNodeAmbientOcclusion")
+        ao.samples = 16
+        ao.inputs["Distance"].default_value = run.get("ao_distancia_terreno_m", 1.5)
+        L.new(cor, ao.inputs["Color"])
+        L.new(ao.outputs["Color"], em.inputs["Color"])
+        t = N.new("ShaderNodeTexImage")
+        t.image = alvo
+        N.active = t
+        me.materials[0] = mb
+        cozer(ob, "EMIT")
+        m0.name = m0.name + "_tile"
+        mf = bpy.data.materials.new(nome)
+        mf.use_nodes = True
+        b = mf.node_tree.nodes.get("Principled BSDF")
+        t = mf.node_tree.nodes.new("ShaderNodeTexImage")
+        t.image = alvo
+        mf.node_tree.links.new(t.outputs["Color"], b.inputs["Base Color"])
+        b.inputs["Roughness"].default_value = rug0
+        me.materials[0] = mf
+        TERRENO[nome] = {"px": [W, H], "textura_base": img0.name if img0 else None, "tile_m": tile}
+
+# 2d. ambient occlusion of the house: Quick Look (iPhone) reads one set of UVs only, and the house's textures repeat
+# on theirs, so the shading cannot go in the texture. A thin film ("AR_OCLUSAO") a few mm off each surface carries it:
+# black, its transparency baked from the ambient occlusion (own UVs), so it darkens the corners, the eaves, under the
+# pergola and the window reveals. Only the faces that get some shade keep their film.
+OCL = {}
+if run.get("oclusao", True):
+    import numpy as np
+
+    AO_D, FORCA = run.get("ao_distancia_m", 1.0), run.get("ao_forca", 0.7)
+    EPS, APX = run.get("ao_afastamento_m", 0.005), run.get("ao_px", 2048)
+    sc.world = sc.world or bpy.data.worlds.new("W")
+    sc.world.light_settings.distance = AO_D
+
+    def transparente(o):
+        m = o.active_material
+        return bool(m) and (getattr(m, "surface_render_method", "") == "BLENDED" or getattr(m, "blend_method", "") == "BLEND")
+
+    fontes = [o for o in col.objects if o.name not in TERRENOS and o.name != "MAQUETE_BASE" and not transparente(o)]
+    vidros = [o for o in col.objects if transparente(o)]
+    bm = bmesh.new()
+    for o in fontes:
+        n0 = len(bm.faces)
+        bm.from_mesh(o.data)
+        if "ARCH_ROOF" in CATS.get(o.name, ()):
+            # the roof covering keeps its film only underneath (the eaves): on top it faces the open sky and its only
+            # shade was a hard, broken line at the lip of each row of tiles (Sobral, 2026-11-09); the tile relief is
+            # already in the texture
+            bm.faces.ensure_lookup_table()
+            bm.normal_update()
+            bmesh.ops.delete(bm, geom=[f for f in bm.faces[n0:] if f.normal.z > -0.7], context="FACES")
+    bm.normal_update()
+    bmesh.ops.delete(bm, geom=[f for f in bm.faces if f.calc_area() < 1e-6], context="FACES")
+    bmesh.ops.split_edges(bm, edges=[e for e in bm.edges if e.calc_face_angle(10.0) > math.radians(10)])
+    bm.normal_update()
+    for v in bm.verts:
+        n_ = Vector()
+        for f in v.link_faces:
+            n_ += f.normal * f.calc_area()
+        if n_.length > 1e-12:
+            v.co += n_.normalized() * EPS
+    me = bpy.data.meshes.new("AR_OCLUSAO")
+    bm.to_mesh(me)
+    bm.free()
+    while me.uv_layers:
+        me.uv_layers.remove(me.uv_layers[0])
+    me.uv_layers.new(name="UVMap")
+    me.materials.clear()
+    ob = bpy.data.objects.new("AR_OCLUSAO", me)
+    col.objects.link(ob)
+    chao = None
+    if run["variante"] == "casa":  # the phone sets the model on the real ground: shade the walls' feet
+        z_ = caixa_z(fontes)
+        mc = bpy.data.meshes.new("_chao")
+        mc.from_pydata([(-200, -200, z_), (200, -200, z_), (200, 200, z_), (-200, 200, z_)], [], [(0, 1, 2, 3)])
+        chao = bpy.data.objects.new("_chao", mc)
+        col.objects.link(chao)
+    for o in vidros:
+        o.hide_render = True  # glass lets the light in
+
+    def desembrulhar():
+        for o in col.objects:
+            o.select_set(False)
+        ob.select_set(True)
+        vl.objects.active = ob
+        bpy.ops.object.mode_set(mode="EDIT")
+        bpy.ops.mesh.select_all(action="SELECT")
+        bpy.ops.uv.smart_project(angle_limit=math.radians(30), island_margin=0.004, area_weight=0.0,
+                                 correct_aspect=True, scale_to_bounds=False)
+        bpy.ops.object.mode_set(mode="OBJECT")
+
+    def cozer_ao(px, amostras):
+        img = bpy.data.images.new("_ao", px, px, is_data=True)
+        img.generated_color = (1.0, 1.0, 1.0, 1.0)
+        m = bpy.data.materials.new("_ao")
+        m.use_nodes = True
+        t = m.node_tree.nodes.new("ShaderNodeTexImage")
+        t.image = img
+        m.node_tree.nodes.active = t
+        me.materials.clear()
+        me.materials.append(m)
+        cycles(amostras)
+        cozer(ob, "AO")
+        return np.array(img.pixels[:], dtype=np.float32).reshape(px, px, 4)[..., 0]
+
+    def ao_por_face(a):
+        H_, W_ = a.shape
+        uv = me.uv_layers.active.data
+        res = []
+        for p in me.polygons:
+            us = [(uv[i].uv.x, uv[i].uv.y) for i in p.loop_indices]
+            cu, cv = sum(u[0] for u in us) / len(us), sum(u[1] for u in us) / len(us)
+            # the shade often lies in a thin line along an edge (a step, a corner): sample next to corners and edges
+            bordas = us + [((a_[0] + b_[0]) / 2, (a_[1] + b_[1]) / 2) for a_, b_ in zip(us, us[1:] + us[:1])]
+            pts = [(cu, cv)] + [(x * k + cu * (1 - k), y * k + cv * (1 - k)) for x, y in bordas for k in (0.5, 0.85, 0.97)]
+            vals = [a[min(H_ - 1, max(0, int(y * H_))), min(W_ - 1, max(0, int(x * W_)))] for x, y in pts]
+            res.append((min(vals), max(vals)))
+        return res
+
+    faces0 = len(me.polygons)
+    desembrulhar()
+    a = cozer_ao(max(512, APX // 2), 24)
+    tirar = {i for i, (mn, mx_) in enumerate(ao_por_face(a)) if mn >= 0.97 or mx_ <= 0.12}  # unshaded / enclosed
+    bm = bmesh.new()
+    bm.from_mesh(me)
+    bm.faces.ensure_lookup_table()
+    bmesh.ops.delete(bm, geom=[bm.faces[i] for i in tirar], context="FACES")
+    bm.to_mesh(me)
+    bm.free()
+    desembrulhar()
+    a = cozer_ao(APX, run.get("ao_amostras", 64))
+    a = sum(np.roll(np.roll(a, dy, 0), dx, 1) for dy in (-1, 0, 1) for dx in (-1, 0, 1)) / 9.0  # soften the bake noise
+    rgba = np.zeros((APX, APX, 4), dtype=np.float32)
+    rgba[..., 3] = np.clip(FORCA * (1.0 - a), 0.0, 1.0)
+    imgf = bpy.data.images.new("AR_OCLUSAO", APX, APX, alpha=True)
+    imgf.pixels.foreach_set(rgba.ravel())
+    imgf.file_format = "PNG"
+    mf = bpy.data.materials.new("AR_OCLUSAO")
+    mf.use_nodes = True
+    b = mf.node_tree.nodes.get("Principled BSDF")
+    t = mf.node_tree.nodes.new("ShaderNodeTexImage")
+    t.image = imgf
+    mf.node_tree.links.new(t.outputs["Color"], b.inputs["Base Color"])
+    mf.node_tree.links.new(t.outputs["Alpha"], b.inputs["Alpha"])
+    b.inputs["Roughness"].default_value = 1.0
+    b.inputs["Metallic"].default_value = 0.0
+    if "Specular IOR Level" in b.inputs:
+        b.inputs["Specular IOR Level"].default_value = 0.0
+    if hasattr(mf, "surface_render_method"):
+        mf.surface_render_method = "BLENDED"
+    else:
+        mf.blend_method = "BLEND"
+    mf.use_backface_culling = True
+    me.materials.clear()
+    me.materials.append(mf)
+    ob["si_mat_id"] = "AR_OCLUSAO"
+    for o in vidros:
+        o.hide_render = False
+    if chao:
+        bpy.data.objects.remove(chao, do_unlink=True)
+    me.calc_loop_triangles()
+    OCL = {"faces_candidatas": faces0, "faces": len(me.polygons), "triangulos": len(me.loop_triangles),
+           "px": APX, "distancia_m": AO_D, "forca": FORCA, "afastamento_m": EPS}
+
+# 3. textures down to textura_max (colour) and half of it for normal / roughness; the baked pictures (AR_*) keep their
+# size (≤ 2048)
 tmax = run.get("textura_max", 1024)
 imgs = {}
 for m in bpy.data.materials:
     if not m.use_nodes or m.users == 0:
         continue
     for n in m.node_tree.nodes:
-        if n.type == "TEX_IMAGE" and n.image and n.image.name not in imgs:
+        if n.type == "TEX_IMAGE" and n.image and n.image.name.startswith("AR_"):
+            imgs[n.image.name] = list(n.image.size)
+        elif n.type == "TEX_IMAGE" and n.image and n.image.name not in imgs:
             img = n.image
             alvo = tmax if img.colorspace_settings.name != "Non-Color" else max(256, tmax // 2)
             if max(img.size) > alvo:
@@ -199,6 +532,7 @@ nome_var = run["variante"] + (f"_piso{PISO}" if PISO is not None else "")
 json.dump({"variante": nome_var, "base": run["variante"], "piso": PISO, "niveis": niveis,
            "objetos": len(col.objects), "materiais": sorted(o.name for o in col.objects),
            "triangulos": tri, "triangulos_antes_de_simplificar": tri_antes, "imagens": imgs,
+           "oclusao": OCL, "maquete_base": BASE, "terreno_cozido": TERRENO,
            "textura_maior": max((max(s) for s in imgs.values()), default=0),
            "dimensoes": [round(b - a, 3) for a, b in zip(*caixa)],
            "origem": "centro da planta da casa, no pavimento acabado " + (

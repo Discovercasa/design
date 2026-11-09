@@ -5,7 +5,8 @@ iPhone Quick Look, light enough for the phone (spec §8, §12.1).
 
 Two variants per house, from the visit model (blender_ar.py):
   casa     the house alone at 1:1 — placed on the real ground, the client walks around it
-  maquete  the house with the terrain within raio_terreno_m — viewed scaled down on a table
+  maquete  the house on a clean block of terrain (at most raio_terreno_m around it) — viewed scaled down on a table
+Both carry the baked ambient occlusion (task 157; --sem-oclusao skips it for a quick run).
 Budget (Google Scene Viewer reference, spec §12.1): ideal 30–50k triangles, at most 100k; textures ≤ 2048; file
 about 10 MB. Each file is re-opened in a clean Blender (scale, axes, materials, textures).
 
@@ -45,6 +46,13 @@ def ocultos(construtor):
     return sorted(out)
 
 
+def cor_terra(construtor):
+    """The catalogue's soil colour: the sides of the table model's block."""
+    cat, _ = materiais.ler(construtor)
+    m = next((m for m in cat["materiais"] if m["id"] == "MAT_LANDSCAPE_SOIL"), None)
+    return m["pbr"]["base_color"] if m else "#73624A"
+
+
 def avaliar(v, ficheiros, reimp):
     falhas, avisos = [], []
     t = v["triangulos"]
@@ -81,6 +89,7 @@ def main():
     ap.add_argument("visita")
     ap.add_argument("--textura-max", type=int, default=1024)
     ap.add_argument("--raio-terreno", type=float, default=20.0)
+    ap.add_argument("--sem-oclusao", action="store_true", help="skip the ambient occlusion bake (quicker)")
     a = ap.parse_args()
     vp = Path(a.visita).resolve()
     decl = comum.ler_json(vp)
@@ -91,6 +100,7 @@ def main():
     pasta = BOB / "_trabalho" / "step-inside" / obra / "ar"
     pasta.mkdir(parents=True, exist_ok=True)
     oc = ocultos(decl.get("construtor", "discovercasa"))
+    terra = cor_terra(decl.get("construtor", "discovercasa"))
     from ferramentas.comum import correr_blender
     variantes, falhas, avisos = [], [], []
     # casa and maquete; then, for a house of two or more storeys, each storey (1:1 and table model): the storeys come
@@ -102,7 +112,8 @@ def main():
         glb, usdz, res = pasta / f"{obra}_ar_{nome}.glb", pasta / f"{obra}_ar_{nome}.usdz", pasta / f"_{nome}.json"
         with tempfile.NamedTemporaryFile("w", suffix=".json", delete=False, encoding="utf-8") as fh:
             json.dump({"variante": var, "piso": piso, "ocultos": oc, "raio_terreno_m": a.raio_terreno,
-                       "textura_max": a.textura_max, "glb": str(glb), "usdz": str(usdz), "resumo": str(res)}, fh)
+                       "textura_max": a.textura_max, "glb": str(glb), "usdz": str(usdz), "resumo": str(res),
+                       "cor_base_maquete": terra, "oclusao": not a.sem_oclusao}, fh)
             rp = fh.name
         code, out = correr_blender(AQUI / "blender_ar.py", [rp], blend=blend)
         Path(rp).unlink(missing_ok=True)
@@ -166,7 +177,17 @@ def relatorio(r, decl):
           f"- as texturas descem a {r['textura_max']} px (cor) e {max(256, r['textura_max'] // 2)} px (relevo e "
           "rugosidade), em JPEG.",
           "",
-          "**Sem sombras gravadas:** o Scene Viewer e o Quick Look desenham-nas.",
+          "**Sombras:** a do sol não fica gravada (o Scene Viewer e o Quick Look desenham-na). Fica gravada a "
+          "**oclusão ambiente** (sombra suave dos cantos, dos beirais, dos vãos e debaixo da pérgola) numa película "
+          "fina (`AR_OCLUSAO`), a 5 mm de cada superfície: preta, com a transparência tirada da oclusão, com UVs "
+          "próprios. Assim funciona também no iPhone, que só lê um conjunto de UVs (as texturas da casa repetem-se "
+          "nos seus). Só as faces com alguma sombra levam película; a cobertura só por baixo (beirais).",
+          "",
+          "**Maquete:** um bloco de terreno com a borda direita. O retângulo é o maior à volta da casa, até ao raio, "
+          "que o levantamento cobre todo; os lados descem a um fundo plano (cor da terra do catálogo), por isso "
+          "assenta direito na mesa. O chão é cozido numa só imagem por cima do bloco: a textura do catálogo à escala "
+          "real misturada com uma cópia maior e rodada, uma variação larga de cor e a sombra suave da casa. Já não "
+          "se vê o padrão a repetir.",
           "",
           "**Origem:** centro da planta da casa, no pavimento acabado do rés do chão (escala real em metros).",
           "",

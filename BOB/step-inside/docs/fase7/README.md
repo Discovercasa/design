@@ -326,17 +326,73 @@ O utilizador autorizou a dependência nova («Sim, podes»).
 - **Verificado:** com o componente verdadeiro e os modelos reais de Torres Vedras (casa) e do Sobral (maquete do
   piso 1). Num browser sem GPU a luz fica um pouco lavada; a confirmar num computador normal.
 
+## Versão 6: sombra dos cantos, terreno e borda da maquete (tarefa 157, 2026-11-09)
+
+O utilizador disse «avança com a próxima tarefa»: os três pontos que faltavam na tarefa 157.
+
+**Oclusão ambiente (sombra suave dos cantos).**
+- **Porquê:** sem ela, as paredes brancas do interior ficam todas com a mesma luz. No visualizador 3D, os cantos
+  desapareciam: duas paredes pareciam uma só superfície. Os telemóveis também iluminam por igual.
+- **Problema:** o caminho normal (mapa de oclusão num segundo conjunto de UVs) não serve no iPhone, porque o Quick Look
+  só lê um conjunto de UVs. As texturas da casa repetem-se nos seus, por isso a sombra também não pode ir na textura.
+- **Solução:** uma película fina, `AR_OCLUSAO`, a 5 mm de cada superfície. É preta e a sua transparência é cozida da
+  oclusão (Cycles, distância 1 m, força 0,7), com UVs próprios, em PNG de 2048 px.
+  - Só ficam as faces com alguma sombra (cerca de um quarto): ver a tabela abaixo.
+  - A cobertura só leva película por baixo (beirais). Em cima, a única sombra era uma linha dura e partida em cada
+    fiada de telha, que parecia sujidade; o relevo das telhas já está na textura.
+  - O vidro não faz sombra. Na casa 1:1 o cozimento usa um chão provisório, para as paredes escurecerem junto ao chão
+    real.
+- **Verificado:** no `<model-viewer>` (o motor do «Ver em 3D»), com e sem a película:
+  - os cantos do interior e os vãos das janelas passam a ler-se;
+  - sem riscas nem cintilação nas paredes.
+  - O USDZ leva a mesma película: textura com transparência e um só conjunto de UVs (`st`).
+
+**Borda da maquete.**
+- **Antes:** a borda era em serra, porque o recorte apagava os triângulos inteiros do levantamento.
+- **Agora:** um bloco retangular, como uma maquete de arquitetura (`ferramentas/ar/maquete.py`, testado).
+  - O retângulo é o maior à volta da casa, até ao raio, que o levantamento cobre todo (sem entalhes).
+  - O terreno é cortado a direito e os lados descem a um fundo plano, 0,3 m abaixo do ponto mais baixo, na cor da
+    terra do catálogo. A maquete assenta direita na mesa.
+
+**Terreno sem repetição.**
+- **Antes:** a textura do catálogo repetia-se a cada 2–3 m, e na maquete via-se o padrão (riscas em diagonal no
+  Sobral).
+- **Agora:** o chão da maquete é cozido numa só imagem por cima do bloco (até 2048 px), com:
+  - a textura à escala real misturada com uma cópia 2,3 vezes maior e rodada 37°, através de uma máscara de ruído;
+  - uma variação larga de cor;
+  - a sombra suave da casa no chão.
+
+**Resultados (PASS nas duas casas):** tudo reabre com os mesmos triângulos e sem texturas em falta.
+
+| Casa | Variante | Triângulos | Dos quais película | GLB | USDZ | Bloco da maquete |
+|---|---|---|---|---|---|---|
+| Torres Vedras | casa | 24 572 | 2 104 | 3,9 MB | 2,6 MB | — |
+| Torres Vedras | maquete | 26 449 | 2 024 | 4,8 MB | 2,9 MB | 1,5–5 m à volta da casa |
+| Sobral Tipo 1 | casa | 13 286 | 1 932 | 3,1 MB | 1,8 MB | — |
+| Sobral Tipo 1 | maquete | 14 594 | 2 026 | 4,6 MB | 2,2 MB | 20 m em todos os lados |
+| Sobral Tipo 1 | casa_piso0 | 5 410 | 1 280 | 2,6 MB | 1,5 MB | — |
+| Sobral Tipo 1 | casa_piso1 | 5 554 | 1 312 | 2,3 MB | 1,4 MB | — |
+| Sobral Tipo 1 | maquete_piso0 | 5 402 | 1 058 | 4,0 MB | 1,8 MB | 20 m |
+| Sobral Tipo 1 | maquete_piso1 | 10 000 | 1 814 | 4,2 MB | 2,0 MB | 20 m |
+
+- Os ficheiros cresceram 0,5–2,5 MB: a imagem da película (PNG) e, nas maquetes, a do chão. Continuam abaixo dos
+  10 MB do alvo. No USDZ as duas imagens descem a 1024 px (`usdz_downscale_size`).
+- **Torres Vedras:** o levantamento acaba de forma irregular perto da casa, por isso o maior retângulo coberto deixa
+  só 1,5–5 m de relva à volta (a versão 5 ia até 20 m, com a borda em serra). Alternativa, se se quiser mais jardim:
+  seguir o contorno do levantamento com lados direitos.
+- **Visto de passagem:** o Tremolo de Torres Vedras mostra uma linha horizontal a meia altura. É a emenda da
+  textura de madeira (repete-se a cada 2,16 m ao longo da tábua), não da película. As tábuas reais são inteiras na
+  altura da parede.
+
+**Imagens de verificação:** só no PC, em `_trabalho/step-inside/<obra>/ar/v6_*.png` (e `v5_maquete_antes.png`).
+
 ## Em falta
 
 - **Telemóveis reais** (tarefa 84):
   - abrir no Scene Viewer de um Android e no Quick Look de um iPhone;
   - confirmar a escala, a posição no chão e a orientação;
-  - medir o tempo de carregamento.
-- **Mais realismo** (tarefa 157):
-  - vidro e caixilho no Sobral: feitos na versão 5 com o padrão (INFERRED), falta a tabela de vãos;
-  - oclusão ambiente (sombra suave dos cantos);
-  - terreno sem a repetição visível da textura;
-  - borda do terreno da maquete mais limpa.
+  - medir o tempo de carregamento;
+  - ver a película de sombra (versão 6) no iPhone.
 - **Soleira das portas exteriores** (pergunta 23 por obra). O pavimento das portas interiores é contínuo
   (confirmado a 2026-11-09).
 - **Tabela de vãos do Sobral:** o tipo de cada vão, para trocar a caixilharia padrão (INFERRED) pela real.
