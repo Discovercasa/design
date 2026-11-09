@@ -77,8 +77,22 @@ O projeto Step Inside no hub (design.discovercasa.pt) tem agora a secção **«T
 - **Sem dependências novas:** só links. O visualizador 3D para quem não tem AR (tarefa 85) continua por fazer.
 - **Teste automático:** `tests/hub.spec.mjs` («Step Inside: teste do AR»), no computador e no telemóvel.
 
-**Falta** carregar os 8 ficheiros no hub. Tem de ser com a conta do utilizador, porque a conta vem do Hub e o Claude
-não entra com palavras-passe.
+**Carregamento dos modelos (2026-11-09).** O utilizador pediu «sim … podem ficar disponíveis para qualquer pessoa
+testar com acesso ao HUB de Design».
+- Os 8 ficheiros foram carregados por uma Edge Function temporária, `carregar-ar`, no Supabase do Design.
+  - Foi protegida por uma chave de uso único, que não ficou no repositório.
+  - Depois do carregamento passou a um *stub* que responde 410 (como `carregar-documentos-iniciais`); fica `verify_jwt`.
+- Ficaram 8 documentos `ar` (ids 42–49), já com os tipos certos:
+  - `model/vnd.usdz+zip` para o iPhone;
+  - `model/gltf-binary` para o Android.
+- Títulos:
+  - «Torres Vedras · casa 1:1»;
+  - «Torres Vedras · maquete»;
+  - «Sobral Tipo 1 (lote P) · casa 1:1»;
+  - «Sobral Tipo 1 (lote P) · maquete».
+- Quem entra no hub do Design vê-os e abre-os em AR.
+- **Atualizações:** quando os modelos mudarem, carregam-se de novo pelo botão «Modelo AR». Na Fase 6 isto passa a
+  automático.
 
 ## Em falta
 
