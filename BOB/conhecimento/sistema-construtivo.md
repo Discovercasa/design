@@ -293,6 +293,11 @@ revisions A "Dimensões para execução" … E "Cobertura e Módulos - Correçã
      Cladding **Piveteau TREMOLO Douglas** (French Douglas fir, autoclave class 3.2, "marron"), tongue and groove 22 mm ×
      135 mm useful × 4 m; fixing Turbosharp 4×50 torx; finish wax nº 55 + Velatura Nogueira (Froschemie). Battens' wood
      and treatment: OPEN.
+     - **Look of the real Tremolo (user 2026-11-09, after the AR test):** vertical, **finer (narrower boards) and
+       lighter** than the dark horizontal wood texture first used in the AR models. Real board width, tone and colour:
+       OPEN — the user offered to send a photo of the real Tremolo (pending). Provisional in the AR catalogue: texture
+       rotated to vertical, narrower boards (tile 1 m), lighter colour #8E6A48. ⚠ "finer" vs the recorded 135 mm useful
+       width: to be settled with the photo (a photo may show a narrower profile or a visual impression only).
      - **Contra-ripado**: the user's rule of 2026-09-24 — "we do a slatted against slatted with 30x20mm … so the zone
        between tgem is a breathable zone" (draft: 30×20 casquinha, 35 cm). TV: "Nesta casa só levou ripado na horizontal
        e não levou o contra-ripado" (TV's config has none). The standard keeps the vertical contra-ripado (tools: 30×20

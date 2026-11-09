@@ -94,6 +94,41 @@ testar com acesso ao HUB de Design».
 - **Atualizações:** quando os modelos mudarem, carregam-se de novo pelo botão «Modelo AR». Na Fase 6 isto passa a
   automático.
 
+## Correções depois do primeiro teste no telemóvel (2026-11-09)
+
+O utilizador reportou três problemas.
+
+**1. Paredes abertas nas portas e linhas no teto e nas paredes.**
+- **Causa:** sem as camadas escondidas, a parede fica com duas peles. Num vão vê-se o interior, e a textura de
+  «estuque pintado» tinha fissuras.
+- **Correção:** o modelo de visita cria um **forro em cada vão** (`ARCH_REVEALS`: ombreiras, padieira e peitoril).
+  - O vão real é medido com raios (largura e altura livres) e a espessura da parede só dentro da faixa da própria
+    parede, para não apanhar a parede de um canto.
+  - O forro entra 15 mm na parede, por isso o vão não fica mais estreito.
+  - Ficam de fora os vãos que já têm remates no modelo (as janelas e portas exteriores de Torres Vedras) e as
+    passagens sem parede (a `PORTA_EXTRA` da lavandaria do Sobral).
+  - Resultado: Torres Vedras 8 forros, Sobral 18.
+  - Verificado por raio: do meio de cada porta interior de Torres Vedras, de lado, o raio batia a 1,4–2,7 m dentro
+    da parede ou não batia em nada; agora bate no forro a 0,43 m, que é meia largura.
+- O Pladur pintado passa a cor lisa.
+- O AR deixou de juntar faces coplanares: poupava menos de 2 % dos triângulos e deixava frestas finas.
+
+**2. Pérgola com falhas nas vigas e um espaço entre o teto e o telhado.**
+- **Causa:** as 21 peças da pérgola estão na coleção da estrutura (`1.10 Pérgola`), que não entra na visita. E a
+  «Membrana de topo» das platibandas era tratada como escondida.
+- **Correção:** a regra `estrutura_a_vista` no mapeamento do construtor põe a pérgola na visita com o produto
+  «Madeira pérgola» (lamelada).
+- A variante escura da membrana (`MAT_MEMBRANE_BREATHER__DARK`) passou a visível.
+
+**3. Tremolo.**
+- O revestimento da DiscoverCasa é um Tremolo **vertical, mais fino e mais claro**.
+- Por agora a textura de madeira roda 90° (`rotacao_uv`), as tábuas ficam mais estreitas (`tile_m` 1 m) e a cor
+  mais clara (#8E6A48).
+- **A acertar com uma foto do Tremolo real**, que o utilizador ofereceu.
+
+**Nos testes:** os 8 ficheiros do hub foram substituídos pela versão 2, no mesmo documento e com o mesmo link (a
+função temporária foi desligada outra vez). A exportação da Fase 3 e o AR voltaram a passar nas duas casas.
+
 ## Em falta
 
 - **Telemóveis reais** (tarefa 84):

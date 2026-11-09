@@ -66,7 +66,7 @@ Os materiais de produção foram trocados pelos do catálogo comum (`step-inside
 | `MAT_FLOOR_VINYL_WOOD` | 12 | sim |
 | `MAT_INSULATION_MINERAL_WOOL` | 69 | — |
 | `MAT_INSULATION_XPS` | 9 | — |
-| `MAT_INT_PLASTER_PAINTED__WHITE` | 24 | sim |
+| `MAT_INT_PLASTER_PAINTED__WHITE` | 24 | — |
 | `MAT_MEMBRANE_BREATHER` | 4 | — |
 | `MAT_METAL_FLASHING__RAL7016` | 5 | sim |
 | `MAT_METAL_GALVANIZED` | 34 | — |

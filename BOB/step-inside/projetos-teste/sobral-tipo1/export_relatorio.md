@@ -7,23 +7,23 @@
 
 Gerado por `step-inside/ferramentas/exportar/exportar.py` a partir do modelo de visita. Os ficheiros e o `manifest.json` completo ficam só no PC (`_trabalho/step-inside/<obra>/export/a/`).
 
-- Versão: `sobral-tipo1-ccc3f10-202611090124` · Blender 4.4.3 · Unreal alvo 5.8 (a confirmar na Fase 4)
-- Fonte: 218 objetos, 50790 triângulos, 14 materiais, 22 imagens; caixa [409.727, 276.992, 100.88] m
+- Versão: `sobral-tipo1-26e7b62-202611090343` · Blender 4.4.3 · Unreal alvo 5.8 (a confirmar na Fase 4)
+- Fonte: 236 objetos, 51534 triângulos, 14 materiais, 19 imagens; caixa [409.727, 276.992, 100.88] m
 
 | Ficheiro | Para quê | Tamanho | SHA-256 | Determinístico |
 |---|---|---|---|---|
-| `sobral-tipo1_visita.fbx` | Unreal (Fases 4–5) | 1,9 MB | `6ecc7c195880…` | conteúdo igual |
-| `sobral-tipo1_visita.glb` | AR Android / visualizador 3D | 112,8 MB | `3b2bf682a05d…` | sim (bytes iguais) |
-| `sobral-tipo1_visita.usdz` | AR Quick Look (iPhone) | 100,4 MB | `3771dfdd9242…` | conteúdo igual |
-| texturas do FBX | textura PBR do FBX (ficheiro separado, spec §4.2) | 97,5 MB | 22 ficheiros | — |
+| `sobral-tipo1_visita.fbx` | Unreal (Fases 4–5) | 2,0 MB | `f6407ed23cab…` | conteúdo igual |
+| `sobral-tipo1_visita.glb` | AR Android / visualizador 3D | 106,0 MB | `1d99f37365c1…` | sim (bytes iguais) |
+| `sobral-tipo1_visita.usdz` | AR Quick Look (iPhone) | 94,4 MB | `baa470508c47…` | conteúdo igual |
+| texturas do FBX | textura PBR do FBX (ficheiro separado, spec §4.2) | 91,5 MB | 19 ficheiros | — |
 
 ## Reimportação (Blender limpo) e comparação
 
 | Formato | Objetos | Triângulos | Caixa (m) | Erro da caixa | Materiais | Imagens (em falta) | Píxeis diferentes | Silhueta |
 |---|---|---|---|---|---|---|---|---|
-| fbx | 218 | 50790 | [409.727, 276.992, 100.88] | 0.0 | 14 | 22 (0) | 1.4 % | 0.00 % |
-| glb | 218 | 50790 | [409.727, 276.992, 100.88] | 0.0 | 14 | 22 (0) | 0.0 % | 0.00 % |
-| usdz | 218 | 50790 | [409.727, 276.992, 100.88] | 0.0 | 14 | 22 (0) | 0.8 % | 0.04 % |
+| fbx | 236 | 51534 | [409.727, 276.992, 100.88] | 0.0 | 14 | 19 (0) | 1.4 % | 0.00 % |
+| glb | 236 | 51534 | [409.727, 276.992, 100.88] | 0.0 | 14 | 19 (0) | 0.0 % | 0.00 % |
+| usdz | 236 | 51534 | [409.727, 276.992, 100.88] | 0.0 | 14 | 19 (0) | 0.8 % | 0.04 % |
 
 ## Sistemas de coordenadas
 

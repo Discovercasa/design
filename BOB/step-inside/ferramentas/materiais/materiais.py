@@ -62,7 +62,7 @@ def validar(cat, mp=None):
         for v, p in (m.get("variantes") or {}).items():
             if not VARIANTE.match(v):
                 erros.append(f"{i}__{v}: variante inválida")
-            _pbr_ok({k: x for k, x in p.items() if k != "visivel"}, f"{i}__{v}", erros, completo=False)
+            _pbr_ok({k: x for k, x in p.items() if k not in ("visivel", "nota")}, f"{i}__{v}", erros, completo=False)
     if mp:
         for nome, e in mp["materiais"].items():
             mestre, _, var = e["mat"].partition("__")
@@ -89,7 +89,7 @@ def resolver(cat, mp):
         mestre, _, var = e["mat"].partition("__")
         m = por_id[mestre]
         pbr = dict(m["pbr"])
-        pbr.update({k: x for k, x in ((m.get("variantes") or {}).get(var, {})).items() if k != "visivel"})
+        pbr.update({k: x for k, x in ((m.get("variantes") or {}).get(var, {})).items() if k not in ("visivel", "nota")})
         pbr.update(e.get("pbr", {}))  # a product's own colour, when the official list gives one
         out[nome] = {"id": e["mat"], "mestre": mestre, "variante": var, "pbr": pbr, "visivel": m["visivel"],
                      "categoria": m["categoria"], "estado": e.get("estado", mp.get("estado_padrao", "INFERRED")),

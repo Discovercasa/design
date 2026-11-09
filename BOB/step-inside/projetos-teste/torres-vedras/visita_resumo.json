@@ -12,8 +12,8 @@
    "ARCH_CEILINGS": 40,
    "ARCH_ROOF": 116,
    "ARCH_OPENINGS": 50,
-   "ARCH_PERGOLA": 4,
-   "STRUCT_TIMBER": 880,
+   "ARCH_PERGOLA": 25,
+   "STRUCT_TIMBER": 859,
    "ARCH_LABELS": 8
   },
   "materiais": {
@@ -40,7 +40,8 @@
     "MAT_METAL_GUTTER__DARK_GREY": 7,
     "MAT_ROOF_SANDWICH_TRAPEZOIDAL__RAL8004": 37,
     "MAT_ROOF_TILE_CERAMIC__TERRACOTTA": 1,
-    "MAT_TIMBER_STRUCTURE": 803,
+    "MAT_TIMBER_STRUCTURE": 782,
+    "MAT_TIMBER_STRUCTURE__GLULAM": 21,
     "MAT_WOOD_CLADDING__DOUGLAS_BROWN": 17,
     "MAT_WOOD_CLADDING__PINE_NATURAL": 17,
     "MAT_LANDSCAPE_SOIL": 1
@@ -55,13 +56,13 @@
     "MAT_DOOR_GARAGE_SECTIONAL__RAL7016",
     "MAT_FLOOR_VINYL_WOOD",
     "MAT_FRAME_ALUMINIUM__RAL7016",
-    "MAT_INT_PLASTER_PAINTED__WHITE",
     "MAT_LANDSCAPE_SOIL",
     "MAT_METAL_FLASHING__RAL7016",
     "MAT_METAL_GUTTER__DARK_GREY",
     "MAT_ROOF_SANDWICH_TRAPEZOIDAL__RAL8004",
     "MAT_ROOF_TILE_CERAMIC__TERRACOTTA",
     "MAT_TIMBER_STRUCTURE",
+    "MAT_TIMBER_STRUCTURE__GLULAM",
     "MAT_WOOD_CLADDING__DOUGLAS_BROWN",
     "MAT_WOOD_CLADDING__PINE_NATURAL"
    ]
@@ -87,7 +88,7 @@
    "z_min_m": -0.2
   },
   "malhas": {
-   "verificadas": 309,
+   "verificadas": 330,
    "abertas": [],
    "n_abertas": 0,
    "normais_invertidas": [],
@@ -101,6 +102,60 @@
    "controlo_paredes_cheias": 14,
    "controlo_abertas_por_engano": [],
    "controlo_detalhe": []
+  },
+  "forros_vaos": {
+   "criados": 8,
+   "ja_com_remates": 11,
+   "detalhe": [
+    {
+     "abertura": "P02#0",
+     "largura": 0.86,
+     "altura": 2.0,
+     "espessura_parede": 0.129
+    },
+    {
+     "abertura": "P05#0",
+     "largura": 0.86,
+     "altura": 2.0,
+     "espessura_parede": 0.13
+    },
+    {
+     "abertura": "P08#0",
+     "largura": 0.86,
+     "altura": 2.0,
+     "espessura_parede": 0.13
+    },
+    {
+     "abertura": "P10#0",
+     "largura": 0.86,
+     "altura": 2.0,
+     "espessura_parede": 0.137
+    },
+    {
+     "abertura": "P13#0",
+     "largura": 0.86,
+     "altura": 2.0,
+     "espessura_parede": 0.13
+    },
+    {
+     "abertura": "P15#0",
+     "largura": 0.86,
+     "altura": 2.0,
+     "espessura_parede": 0.13
+    },
+    {
+     "abertura": "P17#0",
+     "largura": 0.86,
+     "altura": 2.0,
+     "espessura_parede": 0.129
+    },
+    {
+     "abertura": "P17#1",
+     "largura": 0.86,
+     "altura": 2.0,
+     "espessura_parede": 0.129
+    }
+   ]
   },
   "colocacao": {
    "pavimento_rc_modelo_m": 0.005,

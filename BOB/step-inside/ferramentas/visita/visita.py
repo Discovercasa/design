@@ -254,7 +254,7 @@ def aberturas(fontes_doc):
                 continue
             out.append({"parede": p["id"], "id": a["id"], "tipo": a["tipo"]["valor"], "eixo": p["eixo"],
                         "posicao": p["posicao"]["valor"], "inicio": a["inicio"]["valor"], "fim": a["fim"]["valor"],
-                        "espessura": p["espessura"]["valor"] or 0.16, "z_piso": zp})
+                        "espessura": 0.16 if p["espessura"]["valor"] is None else p["espessura"]["valor"], "z_piso": zp})
     return out
 
 
@@ -508,6 +508,7 @@ def main():
            "superficie": (T or {}).get("superficie", "existente"), "colocacao": coloc, "plataforma": pl,
            "pavimento_acima_laje": (campos.get("pavimento_acima_laje") or {}).get("valor", 0.16),
            "chao_provisorio": decl.get("chao_provisorio"), "materiais": tabela_mat, "bob_dir": str(BOB),
+           "estrutura_a_vista": mp.get("estrutura_a_vista", []),
            "texturas": decl.get("texturas", True),
            "aberturas": aberturas(fontes_doc), "paredes_cheias": paredes_cheias(fontes_doc, alturas_paredes(cfg_path, cfg)), "blend": str(local / "visita.blend"), "glb": str(local / "visita.glb"),
            "preview": str(local / "preview.png"), "saida": str(local / "visita_modelo.json")}

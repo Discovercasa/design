@@ -1,8 +1,8 @@
 {
  "project_id": "sobral-tipo1",
- "version_id": "sobral-tipo1-ccc3f10-202611090124",
- "source_blend_hash": "sha256:47e8e5b7136c9cc3304c513797ece762967fea2f9e31f93cd0c7c2d28c82f485",
- "export_timestamp": "2026-11-09T01:24:10+00:00",
+ "version_id": "sobral-tipo1-26e7b62-202611090343",
+ "source_blend_hash": "sha256:626a5a2d93da0e6b5443b1e39a119f9e28739c14d5fd8f1f7cf4fa922249911f",
+ "export_timestamp": "2026-11-09T03:43:46+00:00",
  "blender_version": "4.4.3",
  "unreal_target_version": "5.8 (a confirmar na Fase 4)",
  "unit_system": "métrico (1 unidade = 1 m)",
@@ -39,8 +39,8 @@
   {
    "path": "sobral-tipo1_visita.fbx",
    "type": "fbx",
-   "size_bytes": 1937692,
-   "sha256": "6ecc7c1958806da4cab83cfe63c18feb6ade1433175bc5c9260292140c4889ad",
+   "size_bytes": 1995884,
+   "sha256": "f6407ed23cab3274f9d8a4bd40a462791182054e948f93fc6f47483174f2f6f0",
    "material_ids": [
     "MAT_BOARD_OSB",
     "MAT_CONCRETE_SLAB",
@@ -62,8 +62,8 @@
   {
    "path": "sobral-tipo1_visita.glb",
    "type": "glb",
-   "size_bytes": 112771136,
-   "sha256": "3b2bf682a05d6d724125c1b77dbbbcb6fb79213367d2b6eef92fbd8defbe4cfc",
+   "size_bytes": 105981200,
+   "sha256": "1d99f37365c188c3a398f78b9a855e143034e22c1939d7fbda435ef28c9cc481",
    "material_ids": [
     "MAT_BOARD_OSB",
     "MAT_CONCRETE_SLAB",
@@ -85,8 +85,8 @@
   {
    "path": "sobral-tipo1_visita.usdz",
    "type": "usdz",
-   "size_bytes": 100427013,
-   "sha256": "3771dfdd9242079a8b5748ddb4ef6162ab4db616de0c2ee793c2cf0a5466c78a",
+   "size_bytes": 94402114,
+   "sha256": "baa470508c47c860582c5088cf67ba26cfb0ab4abd0d82ea520210123021e2af",
    "material_ids": [
     "MAT_BOARD_OSB",
     "MAT_CONCRETE_SLAB",
@@ -107,8 +107,8 @@
   }
  ],
  "texturas": {
-  "ficheiros": 22,
-  "bytes": 97548557
+  "ficheiros": 19,
+  "bytes": 91489713
  },
  "warnings": [
   "fbx: os bytes mudam entre exportações (data no ficheiro), o conteúdo é igual",
@@ -116,8 +116,8 @@
  ],
  "validation": {
   "referencia": {
-   "objetos": 218,
-   "triangulos": 50790,
+   "objetos": 236,
+   "triangulos": 51534,
    "dimensoes": [
     409.727,
     276.992,
@@ -139,10 +139,10 @@
     "MAT_SCREED",
     "MAT_WALL_RENDER__WHITE"
    ],
-   "imagens": 22,
+   "imagens": 19,
    "casa": {
-    "objetos": 217,
-    "triangulos": 34376,
+    "objetos": 235,
+    "triangulos": 35120,
     "caixa_min": [
      -16.819,
      48.671,
@@ -173,13 +173,13 @@
      "MAT_SCREED",
      "MAT_WALL_RENDER__WHITE"
     ],
-    "imagens": 19
+    "imagens": 16
    }
   },
   "reimportacao": {
    "fbx": {
-    "objetos": 218,
-    "triangulos": 50790,
+    "objetos": 236,
+    "triangulos": 51534,
     "dimensoes": [
      409.727,
      276.992,
@@ -201,7 +201,7 @@
      "MAT_SCREED",
      "MAT_WALL_RENDER__WHITE"
     ],
-    "imagens": 22,
+    "imagens": 19,
     "imagens_em_falta": [],
     "imagem": {
      "diferenca_media": 0.0428,
@@ -212,8 +212,8 @@
     "erro_caixa_m": 0.0
    },
    "glb": {
-    "objetos": 218,
-    "triangulos": 50790,
+    "objetos": 236,
+    "triangulos": 51534,
     "dimensoes": [
      409.727,
      276.992,
@@ -235,7 +235,7 @@
      "MAT_SCREED",
      "MAT_WALL_RENDER__WHITE"
     ],
-    "imagens": 22,
+    "imagens": 19,
     "imagens_em_falta": [],
     "imagem": {
      "diferenca_media": 0.0401,
@@ -246,8 +246,8 @@
     "erro_caixa_m": 0.0
    },
    "usdz": {
-    "objetos": 218,
-    "triangulos": 50790,
+    "objetos": 236,
+    "triangulos": 51534,
     "dimensoes": [
      409.727,
      276.992,
@@ -269,7 +269,7 @@
      "MAT_SCREED",
      "MAT_WALL_RENDER__WHITE"
     ],
-    "imagens": 22,
+    "imagens": 19,
     "imagens_em_falta": [],
     "imagem": {
      "diferenca_media": 0.042,

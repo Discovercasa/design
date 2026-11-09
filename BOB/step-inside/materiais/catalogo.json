@@ -68,8 +68,8 @@
    },
    "textura": {
     "tile_m": [
-     2.0,
-     2.0
+     1.0,
+     1.0
     ],
     "mapas": [
      "base_color",
@@ -86,7 +86,8 @@
      "descarregado": "2026-11-09",
      "pasta_local": "_trabalho/step-inside/texturas/ambientcg/WoodSiding009/"
     },
-    "nota": "textura gratuita provisória; trocar por fotos do produto real quando houver (tarefa 156)"
+    "nota": "textura gratuita provisória; trocar por fotos do produto real quando houver (tarefa 156)",
+    "rotacao_uv": 90
    },
    "variantes": {
     "PINE_NATURAL": {
@@ -94,8 +95,9 @@
      "roughness": 0.8
     },
     "DOUGLAS_BROWN": {
-     "base_color": "#6E4B31",
-     "roughness": 0.7
+     "base_color": "#8E6A48",
+     "roughness": 0.7,
+     "nota": "Tremolo vertical, mais fino e mais claro do que a primeira versão (utilizador 2026-11-09); cor e largura a confirmar com uma foto"
     }
    }
   },
@@ -972,22 +974,10 @@
      1.5,
      1.5
     ],
-    "mapas": [
-     "base_color",
-     "normal",
-     "roughness"
-    ],
-    "uso": "tingir",
-    "fonte": {
-     "biblioteca": "ambientCG",
-     "asset": "PaintedPlaster017",
-     "resolucao": "2K-JPG",
-     "url": "https://ambientcg.com/view?id=PaintedPlaster017",
-     "licenca": "CC0 1.0 Universal",
-     "descarregado": "2026-11-09",
-     "pasta_local": "_trabalho/step-inside/texturas/ambientcg/PaintedPlaster017/"
-    },
-    "nota": "textura gratuita provisória; trocar por fotos do produto real quando houver (tarefa 156)"
+    "mapas": [],
+    "uso": null,
+    "fonte": null,
+    "nota": "Pladur pintado é liso: cor lisa (2026-11-09, utilizador: linhas no teto e nas paredes)"
    },
    "variantes": {
     "WHITE": {
@@ -1170,7 +1160,9 @@
    "variantes": {
     "DARK": {
      "base_color": "#2B2E31",
-     "roughness": 0.9
+     "roughness": 0.9,
+     "visivel": true,
+     "nota": "placa impermeável dobrada no topo das platibandas: vê-se de fora"
     }
    }
   },
