@@ -392,5 +392,7 @@ decisions stay (the history is in git).
   admin) to `%LOCALAPPDATA%\Programs\ODAFileConverter` on the company PC. Command:
   `ODAFileConverter.exe <DWG folder> <DXF folder> ACAD2018 DXF 0 1 "*.DWG"`. Converted DXF stay next to the DWG in
   `desenhos/`; `*.dxf` is in `.gitignore` (client drawings). DWG TrueView was not needed.
+- 2026-11-09 — test material (AR models) can be open to everyone with Design hub access (user; same as the private
+  'documentos' storage). The one-time key only protected the temporary upload function, not who can view.
 - 2026-11-08 — The user may supply more documents on Sobral and Torres Vedras ("em principio eu consigo te arranjar mais
   documentos sobre ambas as obras"): pending, Claude says which are most useful (see the two projects' `estado.md`).

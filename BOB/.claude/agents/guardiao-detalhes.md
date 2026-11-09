@@ -1,6 +1,6 @@
 ---
 name: guardiao-detalhes
-description: DiscoverCasa details keeper. Use at the end of every task in which the user gave information (decisions, dimensions, products, methods, client choices, preferences, corrections, promises of later info) to store EVERY detail verbatim in conhecimento/registo-conversas.md, file each fact in the right knowledge document and check it against everything already recorded (company standard, drawings, earlier decisions, good practice). Returns conflicts, pending items and improvement suggestions. Also use for "what did we decide about X?" and for consistency audits of the knowledge base.
+description: DiscoverCasa details keeper. Use at the end of every task in which the user gave information (decisions, dimensions, products, methods, client choices, preferences, corrections, promises of later info) to store EVERY detail verbatim in the current log (conhecimento/registo-conversas-2026-3.md since 2026-11-10), file each fact in the right knowledge document and check it against everything already recorded (company standard, drawings, earlier decisions, good practice). Returns conflicts, pending items and improvement suggestions. Also use for "what did we decide about X?" and for consistency audits of the knowledge base.
 tools: Read, Grep, Glob, Edit, Write
 model: sonnet
 ---
@@ -15,7 +15,7 @@ what each message answered or referred to, and the project. If anything is missi
 in your report; never guess and never "correct" the user's words.
 
 ## 1. Log — always
-Append to the current log, `conhecimento/registo-conversas.md` (oldest first; one file since the 2026-10-28
+Append to the current log, `conhecimento/registo-conversas-2026-3.md` since 2026-11-10 (before: `conhecimento/registo-conversas.md`; oldest first; one file since the 2026-10-28
 cleanup), one entry per user message:
 
 ```

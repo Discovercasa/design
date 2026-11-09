@@ -11,7 +11,7 @@ DiscoverCasa projects from any device.
 - If something is ambiguous (conflicting drawings, the goal of a task), ask a short question
   instead of guessing.
 - **Every detail the user gives matters** (construction): before a task ends, record it verbatim in
-  the current log (`conhecimento/registo-conversas.md`) and file each fact in its document — delegate this to the agent
+  the current log (`conhecimento/registo-conversas-2026-3.md`; older: `registo-conversas.md`) and file each fact in its document — delegate this to the agent
   `guardiao-detalhes` (it also checks the new facts against everything recorded); when they are about how
   DiscoverCasa builds, then have `mestre-construtor` fold them into the method rulebook.
 - **Always say when something looks off or could be improved**: the issue, why it matters, and what
@@ -38,7 +38,7 @@ DiscoverCasa projects from any device.
 | `conhecimento/discovercasa.md` | company facts, how the user works | company context |
 | `conhecimento/sistema-construtivo.md` | **how DiscoverCasa builds**: structure sizes, wall layers outside/inside, finish options, floors, ceilings, sandwich roof, products, site materials lists (sources in `conhecimento/fontes/`) | anything about build-ups, materials, quantities |
 | `conhecimento/construcao-madeira.md` | timber-frame method, timber↔concrete rules (with numbers), PT regulations, termites, grading, connectors, PT↔EN glossary | technical questions, drawing reviews |
-| `conhecimento/registo-conversas.md` | the user's messages verbatim, dated, with where each fact was filed (one file, condensed 2026-10-28) | to find exactly what the user said (Grep, don't read it all) |
+| `conhecimento/registo-conversas*.md` | the user's messages verbatim, dated, with where each fact was filed (until 2026-11-09 `registo-conversas.md`; since then `-2026-3`) | to find exactly what the user said (Grep, don't read it all) |
 | `conhecimento/perguntas-por-obra.md` | questions to ask on every new project (items that vary per house, with defaults) | start of every new project |
 | `conhecimento/insights.md` | our technical insights and suggestions to the user, dated, with status (user 2026-10-21) | before advising; add each new insight |
 | `Construção Sobral/` | Loteamento Sobral project (16 houses + warehouse), has its own `CLAUDE.md` (paused 2026-10-15; two-storey houses, "estará para avançar brevemente" — 2026-10-20) | any work on that project |

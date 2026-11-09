@@ -3,7 +3,7 @@
 What varies from house to house, to ask the user **at the start of every new project**, in one message. Kept by the
 agent `mestre-construtor` with the rulebook `conhecimento/metodo-construtivo.md` (each item lists the rules it feeds:
 `§n` + the rule's bold title, lessons `Ln`; the rulebook marks those rules **PO Qn**). Facts and sources:
-`sistema-construtivo.md`; his words: `registo-conversas.md`. Condensed 2026-10-28 (history in git).
+`sistema-construtivo.md`; their words: `registo-conversas*.md`. Condensed 2026-10-28 (history in git).
 
 Why: user 2026-10-20 "Para cada obra aquelas anotações que te fui dizendo que depende de obra para obra anota e
 faz-me essas perguntas", and on a missing answer "senão vai com o default de 2,5 cm".
@@ -13,7 +13,7 @@ faz-me essas perguntas", and on a missing answer "senão vai com o default de 2,
   default in brackets so he answers only what differs ("o resto default"). The **Qn ids are fixed references**: a new
   item takes the next free id in its section (Q23 sits in D) — renumber only in the message. Skip the items *só se
   aplicável* the project does not have, and any item its documents already answer (say which document).
-- Before asking, Grep `registo-conversas.md` and the project's `docs/estado.md`: do not re-ask what he already said
+- Before asking, Grep `registo-conversas.md` and the project's `docs/estado.md`: do not re-ask what they already said
   for this house (L13). Questions about a drawing detail go with its image and label, one point per question (§0).
 - **No answer → use the default and say so** ("usei o default de …"). Record each answer with its certainty
   (confirmed / tentative "acho que" / default used) in the project's `docs/estado.md` and the config key named below.

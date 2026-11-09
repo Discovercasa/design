@@ -10,6 +10,8 @@ one line each — the analysis lives in the docs named under "Filed in". The ful
 (before 2026-10-28; it was split in `registo-conversas.md` + `registo-conversas-2026-2.md`, now merged here).
 When this file passes about 1 500 lines, continue in `registo-conversas-<year>-<n>.md` and link it here.
 
+**Continued in [`registo-conversas-2026-3.md`](registo-conversas-2026-3.md) from 2026-11-10** (this file reached ~1 560 lines on 2026-11-09).
+
 ### 2026-09-23 — Who DiscoverCasa is [geral]
 > So basically i want you to understand that we Discovercasa are a company that does construction, we build houses from zero and deliver them to the clients ready to live in. Our biggest difference in Portugal from the other construction company is that we build our houses with wood structure. So i am delegating a simple task of just going to the browser and inform yourself about this method of construction a bit. After that i will give you some documents that i want you to analyze and understand deeply about one project we are about to start. I will give you the documents about the wood structure of the house for you to analyze. This wood structure gets placed on top of a foundation base made of concrete. If you ever have any doubts feel free to ask anything
 - Filed in: `discovercasa.md`; research → `construcao-madeira.md`.
@@ -1546,3 +1548,14 @@ When this file passes about 1 500 lines, continue in `registo-conversas-<year>-<
 - Filed in: `step-inside/docs/fase7/README.md`, hub task 84.
 - PENDING (user): upload the 8 AR files in that section (needs their hub account) and test on the phone (task 84).
 - Repo hygiene (found while running the hub tests): the existing test "Início: o estado dos posts vem fresco ao mudar de página" in `tests/notificacoes.spec.mjs` fails on 2026-11-09 also WITHOUT this change (likely date-dependent); not fixed; worth a look in the social/hub work.
+
+### 2026-11-09 — Can the files be made available in the hub, without pointless downloads? [Step Inside]
+> É possível disponibilizares os ficheiros lá no HUB de forma a não ter que andar a fazer downloads a toa ? É apenas uma questão
+- Context: Claude explained it is possible with a temporary upload function in the Design Supabase (as was done for the initial documents), and asked whether to do it.
+- Filed in: `step-inside/docs/fase7/README.md` (see next entry); hub task 84.
+
+### 2026-11-09 — AR test models open to anyone with Design hub access; no one-time key needed [Step Inside]
+> ok parece-me bem mas não necessitas de adicionar a chave de uso único para já podem ficar disponíveis para uqalquer pessoa testar com acesso ao HUB de Design sem problema
+- Context/decision: the AR test models may be available to anyone with access to the Design hub (that is how the private 'documentos' storage already works). Claude explained the one-time key only protects the temporary upload function (otherwise anyone on the internet could write into the storage), not who can view the files, and kept it. Done: Edge Function `carregar-ar` deployed temporarily, the 8 AR models uploaded as hub documents of type 'ar' (ids 42-49: Torres Vedras · casa 1:1 / maquete, Sobral Tipo 1 (lote P) · casa 1:1 / maquete; .usdz and .glb each, correct MIME types), then the function replaced by a 410 stub with JWT required (verified: refuses), and the key deleted from the PC. Hub task 84 updated + notification.
+- Filed in: `step-inside/docs/fase7/README.md`; `conhecimento/discovercasa.md` (access rule line).
+- PENDING (user): open the hub on the phone, Step Inside > Teste do AR, tap «Ver em AR», and report (task 84).
