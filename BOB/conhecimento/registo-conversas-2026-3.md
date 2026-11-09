@@ -17,4 +17,19 @@ words (`registo-conversas*.md`). When this file passes about 1 500 lines, contin
   `conhecimento/sistema-construtivo.md` → finish option A, "Look of the real Tremolo" (vertical, finer, lighter;
   photo pending); bugs 1-2 are AR-export issues (openings lined, pergola timber visible), no method change.
 - Pending: the user's photo of the real Tremolo (look, board width, colour) — replaces the provisional #8E6A48.
+  (closed 2026-11-09, see the next entry)
+
+### 2026-11-09 — Photo of the built Torres Vedras house: colour, AR gaps bug, flat plasterboard [Torres Vedras]
+> esta é na realidade a casa de torres vedras, e tinha-me esquecido de mencionar um ponto, havia pequenos gaps no tremolo e conseguia-se ver o interior através desses pequenos gaps
+> o gesso cartonado do interior é plano não tem relevo nem imperfeições
+- Context: sent with a photo of the built house (marketing photo, garden side; not stored in Git), after the AR
+  test entry above (bug 3, Tremolo look). The "gaps" sentence is one more AR bug ("tinha-me esquecido de mencionar um
+  ponto"): gaps between the cladding pieces of the 3D model showed the interior once the membrane was removed in the
+  AR. Not a statement about the real façade (Piveteau 22×135 tongue and groove stands). Fix: the membrane behind the
+  cladding stays visible in the AR, so the gaps between model pieces no longer show the interior.
+- Filed in: `Construção Torres Vedras/docs/estado.md` → "As-built look: photo of the built house" (colours, pergola,
+  surroundings, reference for task 158); `conhecimento/sistema-construtivo.md` → §2 finish A (colour from the photo,
+  note that the gaps were an AR bug) and §4 item 3 (smooth plasterboard);
+  `step-inside/docs/fase7/README.md` → AR version 3 (done by the caller).
+- Pending: the user approves or comments on AR version 3 (phone, next to the photo).
 

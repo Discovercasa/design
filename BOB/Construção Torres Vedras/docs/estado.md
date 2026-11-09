@@ -36,6 +36,20 @@ Condensed 2026-10-28 (the old "Where we stopped" chain and the superseded readin
   on 2026-11-08: "em principio eu consigo te arranjar mais documentos sobre ambas as obras" — ask for photos of the
   built house and its surroundings, and as-built levels of floor and exterior).
 
+## As-built look: photo of the built house (2026-11-09)
+- Photo of the built house, seen from the garden (marketing photo with the DiscoverCasa logo), received 2026-11-09;
+  **not stored in the repo**. It is the reference for the Step Inside AR visual approval (hub task 158).
+- Shows: vertical Tremolo in a warm reddish-brown, cedar-like tone (sampled ≈ #C0935C in sun, ≈ #895332 in shade);
+  timber pergola posts and beams in the same tone; pergola roof with a red tile-effect edge; lawn round the house, a
+  gravel area and a light paved path; dark window and door frames; flat roof hidden behind the clad parapet with a
+  thin dark cap.
+- User: "esta é na realidade a casa de torres vedras"; an AR-model bug (gaps between the model's cladding pieces
+  showed the inside; not a real-façade fact); interior plasterboard flat, no relief or imperfections (`sistema-construtivo.md` §2 finish A, §4 item 3).
+- AR version 3 (Tremolo #A0653C, membrane behind the joints, pergola glulam in the same tone, lawn) filed in
+  `step-inside/docs/fase7/README.md`. **Pending (user)**: look at version 3 on the phone next to the photo; approve or
+  comment (hub tasks 157 and 158 in progress).
+- Open: the floor 117.50 / exterior 117.48 check above can use this photo's gravel and paved path (levels not readable).
+
 ## Goal (user 2026-10-15)
 Model this built house with the DiscoverCasa method and check that the model's materials are close to what was really
 used and that the structure matches the finished work, "de forma a ficares realmente a construir as nossas casas como

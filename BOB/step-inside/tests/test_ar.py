@@ -54,7 +54,8 @@ class TestOcultos(unittest.TestCase):
         for m in ("MAT_BOARD_OSB", "MAT_INSULATION_MINERAL_WOOL", "MAT_TIMBER_STRUCTURE"):
             self.assertIn(m, oc)
         self.assertNotIn("MAT_TIMBER_STRUCTURE__GLULAM", oc)  # the pergola's timber is seen
-        # seen through the open joints of the cladding (user 2026-11-09: "pequenos gaps no tremolo") and on parapet tops
+        # behind the cladding (without it the AR showed the interior through small gaps between cladding pieces,
+        # user 2026-11-09: "pequenos gaps no tremolo") and on parapet tops
         self.assertNotIn("MAT_MEMBRANE_BREATHER", oc)
         self.assertNotIn("MAT_MEMBRANE_BREATHER__DARK", oc)
         self.assertNotIn("MAT_WALL_RENDER__WHITE", oc)

@@ -144,8 +144,10 @@ ainda:
 - **Erro corrigido:** as texturas tingidas ficavam em cache pelo nome do material, por isso uma cor nova não mudava
   nada. Agora a chave inclui a cor.
 
-**Frestas no Tremolo:** eram as juntas abertas entre tábuas, com a membrana de trás retirada. `MAT_MEMBRANE_BREATHER`
-passou a visível: vê-se a membrana, como na casa real.
+**Frestas no Tremolo:** eram um defeito do modelo AR. Entre as peças do revestimento do modelo havia pequenas
+aberturas, e sem a membrana de trás via-se o interior por elas. A fachada real é de macho-fêmea, sem juntas
+abertas. `MAT_MEMBRANE_BREATHER` passou a visível, por trás do revestimento, e as frestas deixam de mostrar o
+interior.
 
 **Pérgola:** a madeira lamelada passou ao mesmo tom quente (#A8743F).
 
