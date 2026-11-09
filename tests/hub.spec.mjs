@@ -471,6 +471,17 @@ test('Step Inside: teste do AR — carregar modelos e abrir no Quick Look / Scen
   // Android: Scene Viewer intent with the signed GLB, AR first, coming back to this page
   const android = sec.getByRole('link', { name: /Ver em AR · Android/ });
   await expect(android).toHaveAttribute('href', /^intent:\/\/arvr\.google\.com\/scene-viewer\/1\.0\?file=http.+__ficheiro.+\.glb&mode=ar_preferred.+package=com\.google\.android\.googlequicksearchbox.+;end;$/);
+  // without AR (tarefa 85, 2026-11-09): «Ver em 3D» opens the GLB in Google's <model-viewer>, with the USDZ for iPhone
+  await page.route('**/@google/model-viewer@*/**', (r) => r.fulfill({ contentType: 'text/javascript',
+    body: "customElements.define('model-viewer', class extends HTMLElement {});" }));
+  await sec.getByRole('button', { name: 'Ver em 3D' }).click();
+  const mv = page.locator('#dlg model-viewer');
+  await expect(mv).toHaveAttribute('src', /\/__ficheiro\?c=plataforma_cliente%2Far%2F.+\.glb$/);
+  await expect(mv).toHaveAttribute('ios-src', /\.usdz$/);
+  await expect(mv).toHaveAttribute('camera-controls', '');
+  await expect(page.locator('#dlg')).toContainText('Visualizador 3D para quem não tem AR');
+  await page.locator('#dlg').getByRole('button', { name: 'Fechar' }).click();
+  await expect(page.locator('#dlg')).toBeHidden();
   // the documents section does not list the AR models
   await expect(page.locator('#documentos')).not.toContainText('torres-vedras_ar_casa');
   await captura(page, 'step-inside-teste-ar');

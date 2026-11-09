@@ -75,7 +75,7 @@ O projeto Step Inside no hub (design.discovercasa.pt) tem agora a secção **«T
   - aspeto dos materiais.
 
   O resultado escreve-se na tarefa «Testar em pelo menos um iPhone e um Android reais».
-- **Sem dependências novas:** só links. O visualizador 3D para quem não tem AR (tarefa 85) continua por fazer.
+- **Sem dependências novas:** só links. O visualizador 3D para quem não tem AR (tarefa 85) veio depois, com o `<model-viewer>` (ver abaixo).
 - **Teste automático:** `tests/hub.spec.mjs` («Step Inside: teste do AR»), no computador e no telemóvel.
 
 **Carregamento dos modelos (2026-11-09).** O utilizador pediu «sim … podem ficar disponíveis para qualquer pessoa
@@ -311,6 +311,21 @@ São 8 documentos novos (ids 50–57). A casa e a maquete do Sobral (ids 46–49
 
 **Imagens de verificação** (só no PC): `_trabalho/step-inside/sobral-tipo1/ar/v5_*.png`.
 
+## Visualizador 3D para quem não tem AR (tarefa 85, 2026-11-09)
+
+O utilizador autorizou a dependência nova («Sim, podes»).
+- **No hub:** no Teste do AR, cada modelo GLB tem o botão «Ver em 3D». Abre-o numa janela do próprio hub com o
+  componente `<model-viewer>` da Google, versão 4.0.0 fixada, a partir do jsDelivr.
+  - O componente só é carregado da primeira vez que se abre um modelo.
+  - Usa os mesmos links assinados e privados dos botões de AR, e o USDZ da mesma variante como `ios-src`.
+- **Como se usa:** roda-se com o rato ou o dedo e aproxima-se com a roda ou dois dedos.
+- **No telemóvel:** num telemóvel com AR, o botão do próprio visualizador passa ao AR (WebXR, Scene Viewer ou Quick
+  Look). Serve também de alternativa aos botões de AR.
+- **Código:** `public/js/hub/app.js` (`verEm3D`, `carregarModelViewer`) e `paineis.js` (`htmlVisor3D`).
+- **Teste:** `tests/hub.spec.mjs` («teste do AR»), com o componente simulado.
+- **Verificado:** com o componente verdadeiro e os modelos reais de Torres Vedras (casa) e do Sobral (maquete do
+  piso 1). Num browser sem GPU a luz fica um pouco lavada; a confirmar num computador normal.
+
 ## Em falta
 
 - **Telemóveis reais** (tarefa 84):
@@ -327,6 +342,3 @@ São 8 documentos novos (ids 50–57). A casa e a maquete do Sobral (ids 46–49
 - **Tabela de vãos do Sobral:** o tipo de cada vão, para trocar a caixilharia padrão (INFERRED) pela real.
 - **Fotos e materiais reais** (tarefas 156 e 163): texturas e lista oficial de materiais.
 - **Interiores** (tarefa 167, Fase 3): entram no AR na versão leve.
-- **Visualizador 3D** para quem não tem AR (tarefa 85):
-  - o mais simples é o componente `<model-viewer>` da Google, que mostra o GLB e passa ao AR no Android e no iPhone;
-  - é uma dependência nova, por isso é preciso perguntar antes (regra do repositório).

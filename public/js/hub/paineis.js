@@ -28,6 +28,19 @@ export function linhaNotif(n) {
   </div>`;
 }
 
+// ---------------------------------------------------------------- Step Inside: visualizador 3D (sem AR)
+// O modelo AR aberto no próprio hub com o <model-viewer> da Google (autorizado a 2026-11-09: «Sim, podes»): rodar,
+// aproximar e, num telemóvel com AR, passar ao AR pelo botão do próprio visualizador.
+export function htmlVisor3D(d, url, urlIos, erro) {
+  const titulo = d.titulo.replace(/\s+/g, ' ');
+  const corpo = erro ? `<p class="vazio pequeno">Não foi possível abrir o modelo: ${esc(erro)}</p>`
+    : !url ? '<p class="vazio pequeno" data-a-carregar>A carregar o modelo…</p>'
+    : `<model-viewer src="${esc(url)}"${urlIos ? ` ios-src="${esc(urlIos)}"` : ''} alt="Modelo 3D: ${esc(titulo)}" camera-controls
+        touch-action="pan-y" shadow-intensity="1" exposure="1" ar ar-modes="webxr scene-viewer quick-look"></model-viewer>
+      <p class="fraco mini" style="margin-top:8px">Arrasta para rodar; roda do rato ou dois dedos para aproximar. Num telemóvel com AR, o botão no canto passa ao AR.</p>`;
+  return `${cabeca(esc(titulo), 'Visualizador 3D para quem não tem AR')}<div class="visor-3d">${corpo}</div>`;
+}
+
 // ---------------------------------------------------------------- menu do perfil
 export function htmlPerfil(novidadeNova) {
   return `<div class="menu">
