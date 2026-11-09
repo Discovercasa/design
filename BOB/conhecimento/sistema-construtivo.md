@@ -492,6 +492,8 @@ escolher a cobertura que quiser. Mesma lógica das garagens para anexos." (detai
 ## 5. Floors and ceilings
 - **Floor finish per room** (confirmed 2026-10-22): "a pessoa pode aplicar pavimento que desejar na divisão que desejar e
   não ter que aplicar ou cerâmico ou vinil na casa toda" — usually **vinyl plank**.
+  - **Interior doors**: the floor is **continuous under the door** ("Sim, contínuo", 2026-11-09); where the finish
+    changes between rooms, the change under the door leaf is our inference (not stated). Exterior threshold: open (Q23).
 - **Ground floor** (2026-10-09, "when is just one floor"): **vinyl straight on the foundation base** — the DiscoverCasa
   base (TV: "Pavimento sobre a nossa base de fundação", 2026-10-15 — not the architect's slab on void formers). The base
   itself: "base de fundação eu explicarei mais tarde" (2026-10-13, promise); "uma laje representativa para já não tem

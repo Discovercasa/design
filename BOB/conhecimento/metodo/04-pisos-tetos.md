@@ -119,5 +119,10 @@
   collection per finish, levelled to one finished floor).
 - Ground floor: vinyl straight on the base (§1); upper floor: vinyl on the OSB 22 (§5) — confirmed.
 - Ceramics in kitchens and WCs — company website, not said by the user — assumed.
-- At a change of floor between rooms (vinyl 5 / ceramic 10 + glue) a transition profile and the build-ups levelled —
-  general practice — not in the tools.
+- **At an interior door the floor finish runs on under the door** (continuous: no threshold, no break) — user 2026-11-09
+  «Sim, contínuo» (to "Nas portas interiores, o pavimento continua por baixo da porta?") — confirmed — **NOT applied in
+  the production model**: `camadas.pavimentos()` lays each room's finish only over its usable area, so the strip under each
+  interior door (≈ 0,87 m × wall thickness ≈ 0,1 m²) is neither modelled nor in the material list (deviation X21, §15); the
+  visit model (step-inside) already adds it. Exterior-door threshold: still open (PO Q23, §3).
+- Where the finish changes between the two rooms (vinyl 5 / ceramic 10 + glue): position of the change (under the door leaf)
+  — ours, INFERRED / open; whether a transition profile is used — open; build-ups levelled — general practice — not in the tools.

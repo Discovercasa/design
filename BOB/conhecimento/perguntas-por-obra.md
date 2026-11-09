@@ -141,12 +141,13 @@ faz-me essas perguntas", and on a missing answer "senão vai com o default de 2,
   JSON `caixilharia.remates`): folded aluminium 2 mm in the frame colour, a 3 cm flange, a sill with a 3 cm drip; inside
   13 mm Pladur (H1 in wet rooms); no threshold modelled — flag it. Mention when relevant: the remate is not the seal
   (three planes), head flashing with a drip, end dams, a threshold with a fall and tray (Q22).
-- OPEN (added 2026-11-09): **the floor at interior door openings** — continuous under the door, or a transition profile /
-  threshold (soleira) where the finishes change? DiscoverCasa's rule is not recorded. Visit/AR model default (INFERRED,
-  not confirmed by the user): in each door the floor finish of each side runs to the middle of the wall (a change of
-  finish falls under the door leaf); exterior doors take the inside floor to the outside face because the exterior
-  threshold is undefined (above). Ask with Q23; answer → the visit model (`step-inside/ferramentas/visita/`) and the
-  production model's door-floor rule. Source: the Torres Vedras / Sobral AR test (user 2026-11-09, see the log).
+- **Floor at interior door openings — CONFIRMED 2026-11-09** ("Sim, contínuo", to "Nas portas interiores, o pavimento
+  continua por baixo da porta?"): the floor is continuous under interior doors, no profile / soleira asked for. Still
+  INFERRED (our choice, not stated): where the finish changes between rooms (e.g. vinyl to ceramic) the change falls under
+  the door leaf, each side's finish running to the middle of the wall (visit/AR model). Exterior doors: the visit model
+  takes the inside floor to the outside face; the exterior threshold stays OPEN (above). Answer → the visit model
+  (`step-inside/ferramentas/visita/`) and the production model's door-floor rule. PENDING: the production model
+  (`camadas.py` `pavimentos()`) does not yet lay the floor strip under interior doors (see the log 2026-11-09).
 - Feeds: §3 "Every opening gets remates …"; §9 "Opening reveals inside"; §11. Answer → cfg
   `camadas.caixilharia.remates`; thresholds not in the tools; `docs/materiais.md`.
 
