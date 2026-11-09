@@ -373,3 +373,10 @@ decisions stay (the history is in git).
   data were removed from the records that day (company NIF, engineer OET ID, site addresses, licensing process number,
   architects' / client's names, a personal email) — "Tudo o que seja esse tipo de informações podes eliminar dos nossos
   registos visto que são fúteis para nós".
+- 2026-11-08 — **Tool: ODA File Converter 27.10** (free, signed by Open Design Alliance), installed at the user's request
+  ("Instala o conversor ODA", answering how to get the survey DXF): extracted with `msiexec /a` (no system install, no
+  admin) to `%LOCALAPPDATA%\Programs\ODAFileConverter` on the company PC. Command:
+  `ODAFileConverter.exe <DWG folder> <DXF folder> ACAD2018 DXF 0 1 "*.DWG"`. Converted DXF stay next to the DWG in
+  `desenhos/`; `*.dxf` is in `.gitignore` (client drawings). DWG TrueView was not needed.
+- 2026-11-08 — The user may supply more documents on Sobral and Torres Vedras ("em principio eu consigo te arranjar mais
+  documentos sobre ambas as obras"): pending, Claude says which are most useful (see the two projects' `estado.md`).

@@ -29,8 +29,8 @@ DiscoverCasa projects from any device.
 - Paths in BOB's docs, skills and agents are relative to `BOB/`: run BOB's tools from `BOB/` (`cd BOB`).
 - **Every new project: ask the per-project questions** of `conhecimento/perguntas-por-obra.md` (what
   changes from house to house; use the stated default when unanswered) — the user asked for it 2026-10-20.
-- The repo is public (Discovercasa/design, folder `BOB/`): never write NIF, addresses, phone numbers,
-  engineer IDs or personal names; client drawings (`desenhos/`, source PDFs, `*.dwg`, `*.skp`) stay local, not in Git (user 2026-10-30; `*.dwg`/`*.skp` ignored and purged from history 2026-11-07).
+- The repo is public (Discovercasa/design, folder `BOB/`): never write NIF, addresses, real site coordinates (survey E/N, M/P), phone numbers,
+  engineer IDs or personal names; client drawings (`desenhos/`, source PDFs, `*.dwg`, `*.dxf`, `*.skp`) stay local, not in Git (user 2026-10-30; `*.dwg`/`*.skp` ignored and purged from history 2026-11-07; `*.dxf` ignored 2026-11-09).
 
 ## Map (read only what the task needs)
 | Path | Contents | Read when |

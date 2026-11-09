@@ -34,6 +34,14 @@ storeys (upper floor Z 3,117, +0,139) · 2026-10-15 central floor beam removed; 
   0°, or turned 180°); (2) confirm with the surveyor the coordinate system, vertical datum, survey date and precision;
   (3) the terrain modelling of sheet 4 (walls, banks, roads) is not modelled yet — only a flat platform at slab level
   around the house.
+- **More documents offered 2026-11-08** ("em principio eu consigo te arranjar mais documentos sobre ambas as obras"):
+  pending — tell the user which are most useful: the surveyor's original survey file (DWG/DXF/LandXML) with coordinate
+  system, vertical datum, date and precision (answers (2)); the implantation / modelação DWG; anything showing which way
+  the houses face (may answer (1), orientation of house P).
+- **Repository hygiene (open, user decision):** real grid coordinates of the Sobral survey sheet and the written corner
+  coordinates of house P were included by mistake in two pushed commits of 2026-11-08 (a Step Inside test file and a code
+  docstring). They were replaced by synthetic values on 2026-11-09; the history still holds them until the user decides
+  on a purge (same pending GitHub Support step as the old drawings). Values not written here.
 - **Raised 2026-11-07 (Step Inside Phase 1 report, `step-inside/projetos-teste/sobral-tipo1/relatorio.md`; not answered):**
   (a) Tipo 1 laundry ("Lavandaria 0.5"): the east side is open 1,40 m with a door of unknown type — the config note says
   "porta (de correr?)": which door type? (b) panel PI1.08 has an opening 1,50 m clear high: door or another kind of

@@ -138,6 +138,13 @@ he answers (`metodo-construtivo.md`). Condensed 2026-10-28 (history in git).
   (beyond what the slope explains) are set aside for a person to look at — **applied**.
 - **2026-11-08** — Placing a house: written corner coordinates + the outline on the implantation sheet give a dimension
   check of the finished model (Sobral house P: model 10.011 × 6.261 m vs drawing 10.02 × 6.255 m) — **applied**.
+- **2026-11-09** — CAD survey files may hold several shifted copies of the survey in model space (one per sheet; Torres
+  Vedras: 3 copies ≈ 100 m apart): pick the copy whose written GNSS coordinates match the drawn points — **applied**.
+- **2026-11-09** — When the architect's proposal is drawn over the survey in real coordinates, fitting the model's walls
+  to the walls' hatches places the house exactly, with no corner labels needed (Torres Vedras: 154 of 163 points on the
+  walls, median 1 mm) — **applied**.
+- **2026-11-09** — Contours exported as "3D" polylines at z = 0 carry no heights: never use them as heights (use the
+  3D points / height texts) — **applied**.
 
 ## Recorded, not yet told (raise when it fits)
 - **2026-10-16** — lameladas cut from stock waste a lot (8,50 from 13,5 m: ≈ 1,1 m³ at TV) → order to length or a 17 m

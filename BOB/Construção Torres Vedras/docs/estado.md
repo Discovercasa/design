@@ -23,10 +23,18 @@ Condensed 2026-10-28 (the old "Where we stopped" chain and the superseded readin
   The checker `ferramentas/modelo/verificar.py` reports 36 timber clashes > 8 mm in the production model (mostly
   Prumo × Prumo and the tie beam/amarração) — the known builder defects of hub tasks 137, 139, 140 (Construtor ›
   "Corrigir defeitos geométricos conhecidos"), not a Step Inside issue.
-- Terrain still missing: the survey's heights are only in the DWG (DWFx/PDF carry outlines) → needs a DXF export (or
-  LandXML/XYZ from the surveyor); hub task 159 (blocked, waiting on the user). DWG TrueView 2026 is on the company PC
-  but Autodesk's documentation says it only saves DWG (not verified on the PC); the free ODA File Converter would
-  convert DWG→DXF but needs the user's permission to install.
+- Terrain (superseded 2026-11-09, see registo 2026-11-08 "Instala o conversor ODA"): was missing because the heights
+  are only in the DWG; the user had the free ODA File Converter installed and the survey DWG was converted to DXF.
+  **Done 2026-11-09** (WARNING: only the survey's precision and control points are missing, not written anywhere);
+  hub task 159 done. Facts of the survey: `desenhos.md` note 2026-11-09.
+- House placed on the lot by fitting the model's walls to the proposal's wall hatches (154 of 163 points on the walls,
+  median 1 mm, rotation 317.86° in PT-TM06): position and rotation CONFIRMED. Floor level 117.50 (INFERRED: vinyl laid
+  directly on the slab, 5 mm, measured in the model). The survey predates construction (March 2024) and the existing
+  ground under the house ranged from 0.68 m below to 0.76 m above the slab, so a flat 1.5 m strip at the drawn exterior
+  level 117.48 surrounds the house (approximate).
+- Open: confirm floor 117.50 / exterior 117.48 (e.g. with photos of the built house; the user offered more documents
+  on 2026-11-08: "em principio eu consigo te arranjar mais documentos sobre ambas as obras" — ask for photos of the
+  built house and its surroundings, and as-built levels of floor and exterior).
 
 ## Goal (user 2026-10-15)
 Model this built house with the DiscoverCasa method and check that the model's materials are close to what was really
