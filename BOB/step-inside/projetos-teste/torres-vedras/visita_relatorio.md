@@ -26,11 +26,11 @@ Gerado por `step-inside/ferramentas/visita/visita.py` a partir de `visita.json`.
 | ARCH_FOUNDATION | 1 | sim |
 | ARCH_LABELS | 8 | não (fica no ficheiro) |
 | ARCH_OPENINGS | 50 | sim |
-| ARCH_PERGOLA | 4 | sim |
+| ARCH_PERGOLA | 25 | sim |
 | ARCH_ROOF | 116 | sim |
 | ARCH_WALLS_EXT | 24 | sim |
 | ARCH_WALLS_INT | 66 | sim |
-| STRUCT_TIMBER | 880 | não (fica no ficheiro) |
+| STRUCT_TIMBER | 859 | não (fica no ficheiro) |
 
 Cada objeto tem `si_id` = `<coleção>/<nome do objeto>` (os nomes vêm dos desenhos e não mudam), `si_categoria`, `si_colecao_producao` e `si_material`.
 
@@ -47,7 +47,7 @@ Cada objeto tem `si_id` = `<coleção>/<nome do objeto>` (os nomes vêm dos dese
 ## Verificações
 
 - **Dimensões:** estrutura do modelo 17,500 × 10,999 m; fontes 17,501 × 11,000 m (diferença 0,001 m). Contorno acabado 17,632 × 11,132 m.
-- **Malhas:** 309 objetos visíveis; abertas 0, normais para dentro 0, repetidos 0.
+- **Malhas:** 330 objetos visíveis; abertas 0, normais para dentro 0, repetidos 0.
 - **Aberturas:** 19 das fontes procuradas no modelo (raios horizontais através da parede, de 0,3 a 2,0 m acima do piso); fechadas: 0. Controlo: 14 troços de parede cheia, vistos como abertos: 0.
 - **Choques da madeira** (verificar.py, > 8 mm): 36 em 736 peças — Prumo x Prumo: 18, Amarração x Viga: 10, Amarração x Amarração: 5, PI x PI: 3.
 - **Terreno existente sob a casa** (antes da plataforma): entre -0,68 e 0,76 m da laje; acima do pavimento em 20 % da área.
@@ -68,14 +68,15 @@ Os materiais de produção foram trocados pelos do catálogo comum (`step-inside
 | `MAT_GLASS_CLEAR` | 6 | — |
 | `MAT_GLASS_FROSTED` | 2 | — |
 | `MAT_INSULATION_MINERAL_WOOL` | 58 | — |
-| `MAT_INT_PLASTER_PAINTED__WHITE` | 27 | sim |
+| `MAT_INT_PLASTER_PAINTED__WHITE` | 27 | — |
 | `MAT_MEMBRANE_BREATHER` | 17 | — |
 | `MAT_METAL_FLASHING__RAL7016` | 42 | sim |
 | `MAT_METAL_GALVANIZED` | 24 | — |
 | `MAT_METAL_GUTTER__DARK_GREY` | 7 | sim |
 | `MAT_ROOF_SANDWICH_TRAPEZOIDAL__RAL8004` | 37 | sim |
 | `MAT_ROOF_TILE_CERAMIC__TERRACOTTA` | 1 | sim |
-| `MAT_TIMBER_STRUCTURE` | 803 | sim |
+| `MAT_TIMBER_STRUCTURE` | 782 | sim |
+| `MAT_TIMBER_STRUCTURE__GLULAM` | 21 | sim |
 | `MAT_WOOD_CLADDING__DOUGLAS_BROWN` | 17 | sim |
 | `MAT_WOOD_CLADDING__PINE_NATURAL` | 17 | sim |
 | `MAT_LANDSCAPE_SOIL` | 1 | sim |

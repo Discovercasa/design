@@ -90,9 +90,7 @@ for nome, partes in porm.items():
             bmesh.ops.bisect_plane(bm, geom=geom, dist=1e-5, plane_co=(0, 0, corte), plane_no=(0, 0, 1), clear_inner=True)
     tri_antes += sum(len(f.verts) - 2 for f in bm.faces)
     bmesh.ops.remove_doubles(bm, verts=bm.verts, dist=0.0005)
-    # merge coplanar neighbours (same shape, fewer triangles); UVs are box projections, so they stay continuous
-    bmesh.ops.dissolve_limit(bm, angle_limit=math.radians(0.5), verts=bm.verts, edges=bm.edges,
-                             delimit={"MATERIAL", "UV"})
+    # no coplanar merging: it saved < 2 % of the triangles and its T-junctions showed as hairline cracks (2026-11-09)
     me = bpy.data.meshes.new(nome)
     bm.to_mesh(me)
     bm.free()

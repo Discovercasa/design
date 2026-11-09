@@ -2,51 +2,160 @@
  "_doc": "DiscoverCasa products -> common catalogue IDs (catalogo.json). Keys are the material names the house generator uses (ferramentas/modelo/sistema_construtivo.json and the layers). PROVISIONAL: built from sistema_construtivo.json (name, colour, roughness) until the official DiscoverCasa materials list arrives (user 2026-11-09: 'durante esta próxima semana eu vou associar a nossa listagem de materiais oficiais'); then each entry becomes CONFIRMED with the official product as its source. Another builder gets its own file next to this one, mapping its products to the same IDs.",
  "construtor": "discovercasa",
  "estado_padrao": "INFERRED",
- "fonte_padrao": {"documento": "ferramentas/modelo/sistema_construtivo.json (nome, cor, rugosidade)", "folha": null, "local": "materiais", "data": "2026-11-09"},
+ "fonte_padrao": {
+  "documento": "ferramentas/modelo/sistema_construtivo.json (nome, cor, rugosidade)",
+  "folha": null,
+  "local": "materiais",
+  "data": "2026-11-09"
+ },
  "materiais": {
-  "Reboco branco": {"mat": "MAT_WALL_RENDER__WHITE", "nota": "opção B: ETICS / capoto branco"},
-  "Ripa casquinha": {"mat": "MAT_WOOD_CLADDING__PINE_NATURAL"},
-  "Douglas marron": {"mat": "MAT_WOOD_CLADDING__DOUGLAS_BROWN"},
-  "Cortiça": {"mat": "MAT_CORK_CLADDING"},
-  "Painel sandwich Munditelha": {"mat": "MAT_ROOF_SANDWICH_TILE__RAL8004", "nota": "Mundiperfil Munditelha, cor telha RAL 8004"},
-  "Painel sandwich RAL 7016": {"mat": "MAT_ROOF_SANDWICH_TILE__RAL7016", "nota": "Sobral Tipo 1: painel imitação telha, cinzento escuro"},
-  "Painel sandwich 5 ondas": {"mat": "MAT_ROOF_SANDWICH_TRAPEZOIDAL__RAL8004", "nota": "cobertura oculta"},
-  "Telha": {"mat": "MAT_ROOF_TILE_CERAMIC__TERRACOTTA", "nota": "telha da pérgola: cerâmica ou painel imitação telha (a confirmar no sistema construtivo)"},
-  "Remate RAL 7016": {"mat": "MAT_METAL_FLASHING__RAL7016"},
-  "Remate cor da cobertura": {"mat": "MAT_METAL_FLASHING__RAL8004"},
-  "Chapa cor telha": {"mat": "MAT_METAL_FLASHING__RAL8004", "nota": "forro da caleira oculta"},
-  "Caleira": {"mat": "MAT_METAL_GUTTER__DARK_GREY"},
-  "Saída de caleira": {"mat": "MAT_METAL_GUTTER__BLACK"},
-  "Membrana de topo": {"mat": "MAT_MEMBRANE_BREATHER__DARK"},
-  "Alumínio": {"mat": "MAT_FRAME_ALUMINIUM__NATURAL"},
-  "Alumínio RAL 7016": {"mat": "MAT_FRAME_ALUMINIUM__RAL7016"},
-  "Vidro": {"mat": "MAT_GLASS_CLEAR"},
-  "Vidro fosco": {"mat": "MAT_GLASS_FROSTED"},
-  "Portão seccionado RAL 7016": {"mat": "MAT_DOOR_GARAGE_SECTIONAL__RAL7016"},
-  "Vinílico": {"mat": "MAT_FLOOR_VINYL_WOOD"},
-  "Cerâmico": {"mat": "MAT_FLOOR_CERAMIC"},
-  "Microcimento": {"mat": "MAT_FLOOR_MICROCEMENT"},
-  "Madeira interior": {"mat": "MAT_INT_WOOD"},
-  "Azulejo": {"mat": "MAT_INT_WALL_TILE"},
-  "Pladur N": {"mat": "MAT_INT_PLASTER_PAINTED__WHITE"},
-  "Pladur H1 (hidrófugo)": {"mat": "MAT_INT_PLASTER_PAINTED__WHITE", "nota": "pintado fica igual ao normal; a cor verde do modelo de produção só distingue o tipo de placa"},
-  "Pladur F (ignífugo)": {"mat": "MAT_INT_PLASTER_PAINTED__WHITE", "nota": "pintado fica igual ao normal; a cor rosa do modelo de produção só distingue o tipo de placa"},
-  "Betonilha": {"mat": "MAT_SCREED"},
-  "XPS": {"mat": "MAT_INSULATION_XPS"},
-  "Lã mineral": {"mat": "MAT_INSULATION_MINERAL_WOOL"},
-  "OSB": {"mat": "MAT_BOARD_OSB"},
-  "OSB 9": {"mat": "MAT_BOARD_OSB"},
-  "OSB 15": {"mat": "MAT_BOARD_OSB"},
-  "Traspir 95": {"mat": "MAT_MEMBRANE_BREATHER"},
-  "Aço galvanizado": {"mat": "MAT_METAL_GALVANIZED"},
-  "Betão": {"mat": "MAT_CONCRETE_SLAB"},
-  "Madeira pérgola": {"mat": "MAT_TIMBER_STRUCTURE__GLULAM", "nota": "lamelada com tratamento autoclave, à vista"},
-  "Madeira apoio cobertura": {"mat": "MAT_TIMBER_STRUCTURE"},
-  "Madeira 110x35": {"mat": "MAT_TIMBER_STRUCTURE"},
-  "Madeira 75x35": {"mat": "MAT_TIMBER_STRUCTURE"},
-  "Madeira 110x75": {"mat": "MAT_TIMBER_STRUCTURE"},
-  "Madeira 220x75": {"mat": "MAT_TIMBER_STRUCTURE"},
-  "Madeira 160x80": {"mat": "MAT_TIMBER_STRUCTURE"},
-  "Madeira 200x100": {"mat": "MAT_TIMBER_STRUCTURE"}
- }
+  "Reboco branco": {
+   "mat": "MAT_WALL_RENDER__WHITE",
+   "nota": "opção B: ETICS / capoto branco"
+  },
+  "Ripa casquinha": {
+   "mat": "MAT_WOOD_CLADDING__PINE_NATURAL"
+  },
+  "Douglas marron": {
+   "mat": "MAT_WOOD_CLADDING__DOUGLAS_BROWN"
+  },
+  "Cortiça": {
+   "mat": "MAT_CORK_CLADDING"
+  },
+  "Painel sandwich Munditelha": {
+   "mat": "MAT_ROOF_SANDWICH_TILE__RAL8004",
+   "nota": "Mundiperfil Munditelha, cor telha RAL 8004"
+  },
+  "Painel sandwich RAL 7016": {
+   "mat": "MAT_ROOF_SANDWICH_TILE__RAL7016",
+   "nota": "Sobral Tipo 1: painel imitação telha, cinzento escuro"
+  },
+  "Painel sandwich 5 ondas": {
+   "mat": "MAT_ROOF_SANDWICH_TRAPEZOIDAL__RAL8004",
+   "nota": "cobertura oculta"
+  },
+  "Telha": {
+   "mat": "MAT_ROOF_TILE_CERAMIC__TERRACOTTA",
+   "nota": "telha da pérgola: cerâmica ou painel imitação telha (a confirmar no sistema construtivo)"
+  },
+  "Remate RAL 7016": {
+   "mat": "MAT_METAL_FLASHING__RAL7016"
+  },
+  "Remate cor da cobertura": {
+   "mat": "MAT_METAL_FLASHING__RAL8004"
+  },
+  "Chapa cor telha": {
+   "mat": "MAT_METAL_FLASHING__RAL8004",
+   "nota": "forro da caleira oculta"
+  },
+  "Caleira": {
+   "mat": "MAT_METAL_GUTTER__DARK_GREY"
+  },
+  "Saída de caleira": {
+   "mat": "MAT_METAL_GUTTER__BLACK"
+  },
+  "Membrana de topo": {
+   "mat": "MAT_MEMBRANE_BREATHER__DARK"
+  },
+  "Alumínio": {
+   "mat": "MAT_FRAME_ALUMINIUM__NATURAL"
+  },
+  "Alumínio RAL 7016": {
+   "mat": "MAT_FRAME_ALUMINIUM__RAL7016"
+  },
+  "Vidro": {
+   "mat": "MAT_GLASS_CLEAR"
+  },
+  "Vidro fosco": {
+   "mat": "MAT_GLASS_FROSTED"
+  },
+  "Portão seccionado RAL 7016": {
+   "mat": "MAT_DOOR_GARAGE_SECTIONAL__RAL7016"
+  },
+  "Vinílico": {
+   "mat": "MAT_FLOOR_VINYL_WOOD"
+  },
+  "Cerâmico": {
+   "mat": "MAT_FLOOR_CERAMIC"
+  },
+  "Microcimento": {
+   "mat": "MAT_FLOOR_MICROCEMENT"
+  },
+  "Madeira interior": {
+   "mat": "MAT_INT_WOOD"
+  },
+  "Azulejo": {
+   "mat": "MAT_INT_WALL_TILE"
+  },
+  "Pladur N": {
+   "mat": "MAT_INT_PLASTER_PAINTED__WHITE"
+  },
+  "Pladur H1 (hidrófugo)": {
+   "mat": "MAT_INT_PLASTER_PAINTED__WHITE",
+   "nota": "pintado fica igual ao normal; a cor verde do modelo de produção só distingue o tipo de placa"
+  },
+  "Pladur F (ignífugo)": {
+   "mat": "MAT_INT_PLASTER_PAINTED__WHITE",
+   "nota": "pintado fica igual ao normal; a cor rosa do modelo de produção só distingue o tipo de placa"
+  },
+  "Betonilha": {
+   "mat": "MAT_SCREED"
+  },
+  "XPS": {
+   "mat": "MAT_INSULATION_XPS"
+  },
+  "Lã mineral": {
+   "mat": "MAT_INSULATION_MINERAL_WOOL"
+  },
+  "OSB": {
+   "mat": "MAT_BOARD_OSB"
+  },
+  "OSB 9": {
+   "mat": "MAT_BOARD_OSB"
+  },
+  "OSB 15": {
+   "mat": "MAT_BOARD_OSB"
+  },
+  "Traspir 95": {
+   "mat": "MAT_MEMBRANE_BREATHER"
+  },
+  "Aço galvanizado": {
+   "mat": "MAT_METAL_GALVANIZED"
+  },
+  "Betão": {
+   "mat": "MAT_CONCRETE_SLAB"
+  },
+  "Madeira pérgola": {
+   "mat": "MAT_TIMBER_STRUCTURE__GLULAM",
+   "nota": "lamelada com tratamento autoclave, à vista"
+  },
+  "Madeira apoio cobertura": {
+   "mat": "MAT_TIMBER_STRUCTURE"
+  },
+  "Madeira 110x35": {
+   "mat": "MAT_TIMBER_STRUCTURE"
+  },
+  "Madeira 75x35": {
+   "mat": "MAT_TIMBER_STRUCTURE"
+  },
+  "Madeira 110x75": {
+   "mat": "MAT_TIMBER_STRUCTURE"
+  },
+  "Madeira 220x75": {
+   "mat": "MAT_TIMBER_STRUCTURE"
+  },
+  "Madeira 160x80": {
+   "mat": "MAT_TIMBER_STRUCTURE"
+  },
+  "Madeira 200x100": {
+   "mat": "MAT_TIMBER_STRUCTURE"
+  }
+ },
+ "estrutura_a_vista": [
+  {
+   "colecao_contem": "Pérgola",
+   "produto": "Madeira pérgola",
+   "nota": "a estrutura da pérgola vê-se: entra na visita (utilizador 2026-11-09: falhas nas vigas da pérgola)"
+  }
+ ]
 }

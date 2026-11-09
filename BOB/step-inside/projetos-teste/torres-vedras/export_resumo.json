@@ -1,8 +1,8 @@
 {
  "project_id": "torres-vedras",
- "version_id": "torres-vedras-ccc3f10-202611090125",
- "source_blend_hash": "sha256:cb1cdf72605a28e3fdee13f546b44895128e6044a9389b2682cb264490a8e0c0",
- "export_timestamp": "2026-11-09T01:25:46+00:00",
+ "version_id": "torres-vedras-26e7b62-202611090345",
+ "source_blend_hash": "sha256:a0d6301b7c42dc0cb2b80deecd3104e69a9b0532471b2426eedc4d378c3ebc77",
+ "export_timestamp": "2026-11-09T03:45:00+00:00",
  "blender_version": "4.4.3",
  "unreal_target_version": "5.8 (a confirmar na Fase 4)",
  "unit_system": "métrico (1 unidade = 1 m)",
@@ -39,8 +39,8 @@
   {
    "path": "torres-vedras_visita.fbx",
    "type": "fbx",
-   "size_bytes": 2116636,
-   "sha256": "d7284c499458c0b62caae7238dd59912381ea54530a5db9ca203e9568f1b72d1",
+   "size_bytes": 2233308,
+   "sha256": "c95edc48c6d4b67ce0390e4dfbb8d4edcb0c7373d0114bd3cbdb5df84fd507ff",
    "material_ids": [
     "MAT_BOARD_OSB",
     "MAT_CONCRETE_SLAB",
@@ -58,6 +58,7 @@
     "MAT_METAL_GUTTER__DARK_GREY",
     "MAT_ROOF_SANDWICH_TRAPEZOIDAL__RAL8004",
     "MAT_ROOF_TILE_CERAMIC__TERRACOTTA",
+    "MAT_TIMBER_STRUCTURE__GLULAM",
     "MAT_WOOD_CLADDING__DOUGLAS_BROWN",
     "MAT_WOOD_CLADDING__PINE_NATURAL"
    ],
@@ -66,8 +67,8 @@
   {
    "path": "torres-vedras_visita.glb",
    "type": "glb",
-   "size_bytes": 109136332,
-   "sha256": "9a6289f763215723aa4895451008396fa06abc8ceeca4c0c0b1ef4d8d12d5da3",
+   "size_bytes": 112036424,
+   "sha256": "723df555567cbfb77bce74998e5cdb9074832331ed6bcafeace0f3684e2e22ec",
    "material_ids": [
     "MAT_BOARD_OSB",
     "MAT_CONCRETE_SLAB",
@@ -85,6 +86,7 @@
     "MAT_METAL_GUTTER__DARK_GREY",
     "MAT_ROOF_SANDWICH_TRAPEZOIDAL__RAL8004",
     "MAT_ROOF_TILE_CERAMIC__TERRACOTTA",
+    "MAT_TIMBER_STRUCTURE__GLULAM",
     "MAT_WOOD_CLADDING__DOUGLAS_BROWN",
     "MAT_WOOD_CLADDING__PINE_NATURAL"
    ],
@@ -93,8 +95,8 @@
   {
    "path": "torres-vedras_visita.usdz",
    "type": "usdz",
-   "size_bytes": 95918502,
-   "sha256": "d3ce4864476d685c02686a7192d99ede654486245365a4fd87ee5df8bde07cb9",
+   "size_bytes": 97795172,
+   "sha256": "3f8068223f10919ed91c48f88f3547a2228d2507b88f450beb20dbddb831dd40",
    "material_ids": [
     "MAT_BOARD_OSB",
     "MAT_CONCRETE_SLAB",
@@ -112,6 +114,7 @@
     "MAT_METAL_GUTTER__DARK_GREY",
     "MAT_ROOF_SANDWICH_TRAPEZOIDAL__RAL8004",
     "MAT_ROOF_TILE_CERAMIC__TERRACOTTA",
+    "MAT_TIMBER_STRUCTURE__GLULAM",
     "MAT_WOOD_CLADDING__DOUGLAS_BROWN",
     "MAT_WOOD_CLADDING__PINE_NATURAL"
    ],
@@ -120,7 +123,7 @@
  ],
  "texturas": {
   "ficheiros": 26,
-  "bytes": 93098177
+  "bytes": 94932902
  },
  "warnings": [
   "fbx: os bytes mudam entre exportações (data no ficheiro), o conteúdo é igual",
@@ -128,8 +131,8 @@
  ],
  "validation": {
   "referencia": {
-   "objetos": 310,
-   "triangulos": 52839,
+   "objetos": 339,
+   "triangulos": 53727,
    "dimensoes": [
     80.899,
     82.831,
@@ -152,13 +155,14 @@
     "MAT_METAL_GUTTER__DARK_GREY",
     "MAT_ROOF_SANDWICH_TRAPEZOIDAL__RAL8004",
     "MAT_ROOF_TILE_CERAMIC__TERRACOTTA",
+    "MAT_TIMBER_STRUCTURE__GLULAM",
     "MAT_WOOD_CLADDING__DOUGLAS_BROWN",
     "MAT_WOOD_CLADDING__PINE_NATURAL"
    ],
    "imagens": 26,
    "casa": {
-    "objetos": 309,
-    "triangulos": 44648,
+    "objetos": 338,
+    "triangulos": 45536,
     "caixa_min": [
      8.37,
      10.712,
@@ -190,6 +194,7 @@
      "MAT_METAL_GUTTER__DARK_GREY",
      "MAT_ROOF_SANDWICH_TRAPEZOIDAL__RAL8004",
      "MAT_ROOF_TILE_CERAMIC__TERRACOTTA",
+     "MAT_TIMBER_STRUCTURE__GLULAM",
      "MAT_WOOD_CLADDING__DOUGLAS_BROWN",
      "MAT_WOOD_CLADDING__PINE_NATURAL"
     ],
@@ -198,8 +203,8 @@
   },
   "reimportacao": {
    "fbx": {
-    "objetos": 310,
-    "triangulos": 52839,
+    "objetos": 339,
+    "triangulos": 53727,
     "dimensoes": [
      80.899,
      82.831,
@@ -222,6 +227,7 @@
      "MAT_METAL_GUTTER__DARK_GREY",
      "MAT_ROOF_SANDWICH_TRAPEZOIDAL__RAL8004",
      "MAT_ROOF_TILE_CERAMIC__TERRACOTTA",
+     "MAT_TIMBER_STRUCTURE__GLULAM",
      "MAT_WOOD_CLADDING__DOUGLAS_BROWN",
      "MAT_WOOD_CLADDING__PINE_NATURAL"
     ],
@@ -236,8 +242,8 @@
     "erro_caixa_m": 0.0
    },
    "glb": {
-    "objetos": 310,
-    "triangulos": 52839,
+    "objetos": 339,
+    "triangulos": 53727,
     "dimensoes": [
      80.899,
      82.831,
@@ -260,6 +266,7 @@
      "MAT_METAL_GUTTER__DARK_GREY",
      "MAT_ROOF_SANDWICH_TRAPEZOIDAL__RAL8004",
      "MAT_ROOF_TILE_CERAMIC__TERRACOTTA",
+     "MAT_TIMBER_STRUCTURE__GLULAM",
      "MAT_WOOD_CLADDING__DOUGLAS_BROWN",
      "MAT_WOOD_CLADDING__PINE_NATURAL"
     ],
@@ -274,8 +281,8 @@
     "erro_caixa_m": 0.0
    },
    "usdz": {
-    "objetos": 310,
-    "triangulos": 52839,
+    "objetos": 339,
+    "triangulos": 53727,
     "dimensoes": [
      80.899,
      82.831,
@@ -298,6 +305,7 @@
      "MAT_METAL_GUTTER__DARK_GREY",
      "MAT_ROOF_SANDWICH_TRAPEZOIDAL__RAL8004",
      "MAT_ROOF_TILE_CERAMIC__TERRACOTTA",
+     "MAT_TIMBER_STRUCTURE__GLULAM",
      "MAT_WOOD_CLADDING__DOUGLAS_BROWN",
      "MAT_WOOD_CLADDING__PINE_NATURAL"
     ],

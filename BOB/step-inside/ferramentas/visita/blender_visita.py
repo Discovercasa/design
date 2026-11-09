@@ -32,7 +32,8 @@ CATEGORIA = {"0": "ARCH_FOUNDATION", "1": "STRUCT_TIMBER", "2": "ARCH_WALLS_EXT"
              "4": "ARCH_FLOORS", "5": "ARCH_CEILINGS", "6": "ARCH_ROOF", "7": "ARCH_OPENINGS", "8": "ARCH_PERGOLA",
              "9": "ARCH_LABELS"}
 VISIVEIS = ("ARCH_FOUNDATION", "ARCH_WALLS_EXT", "ARCH_WALLS_INT", "ARCH_FLOORS", "ARCH_CEILINGS", "ARCH_ROOF",
-            "ARCH_OPENINGS", "ARCH_PERGOLA")
+            "ARCH_OPENINGS", "ARCH_REVEALS", "ARCH_PERGOLA")
+A_VISTA = run.get("estrutura_a_vista", [])  # structure that is seen (e.g. the pergola): {"colecao_contem", "produto"}
 sc = bpy.context.scene
 vl = bpy.context.view_layer
 raiz_prod = [c for c in sc.collection.children]
@@ -91,13 +92,18 @@ for ob in list(bpy.data.objects):
     cat = CATEGORIA.get(topo.name.split(" ", 1)[0], "ARCH_OTHER") if topo else "ARCH_OTHER"
     if oculta_cadeia(col) and cat not in ("ARCH_LABELS",):
         cat = "ARCH_OPTIONS" if cat in VISIVEIS else cat
+    if cat == "STRUCT_TIMBER":
+        regra = next((r for r in A_VISTA if r["colecao_contem"] in col.name), None)
+        if regra:  # exposed structure: part of the visit, with the builder's product for it
+            cat = "ARCH_PERGOLA" if "rgola" in col.name else "ARCH_OTHER"
+            ob["si_produto_forcado"] = regra["produto"]
     cats[ob.name] = (cat, col.name)
 
 VISITA = bpy.data.collections.new("VISITA")
 sc.collection.children.link(VISITA)
 grupos = {}
 for nome, filhos in (("SITE", ("SITE_TERRAIN", "SITE_LIMIT")),
-                     ("HOUSE", VISIVEIS + ("STRUCT_TIMBER", "ARCH_OPTIONS", "ARCH_LABELS", "ARCH_OTHER"))):
+                     ("HOUSE", VISIVEIS + ("STRUCT_TIMBER", "ARCH_OPTIONS", "ARCH_LABELS", "ARCH_OTHER"))):  # noqa
     g = bpy.data.collections.new(nome)
     VISITA.children.link(g)
     for f in filhos:
@@ -204,7 +210,6 @@ def _texturas(e, m, bsdf):
         nt.links.new(n.outputs["Color"], nm.inputs["Color"])
         nt.links.new(nm.outputs["Normal"], bsdf.inputs["Normal"])
     m["si_textura"] = f"{fonte['biblioteca']}:{fonte['asset']} ({fonte['licenca']}, {uso})"
-    m["si_tile_m"] = list(tx.get("tile_m", [1.0, 1.0]))
     return True
 
 
@@ -236,6 +241,8 @@ def mat_catalogo(e):
     m["si_mestre"] = e["mestre"]
     m["si_variante"] = e["variante"]
     m["si_tile_m"] = list((e.get("textura") or {}).get("tile_m", [1.0, 1.0]))
+    if (e.get("textura") or {}).get("rotacao_uv"):
+        m["si_rotacao_uv"] = int(e["textura"]["rotacao_uv"])
     if bsdf and run.get("texturas", True):
         _texturas(e, m, bsdf)
     MATS[e["id"]] = m
@@ -249,6 +256,7 @@ def uv_real(ob, ref=None):
         return
     mat = ob.active_material
     tile = list(mat.get("si_tile_m", [1.0, 1.0])) if mat else [1.0, 1.0]
+    girar = bool(mat and mat.get("si_rotacao_uv"))  # boards running vertical (e.g. Tremolo)
     M = (ref.inverted() if ref else Matrix.Identity(4)) @ ob.matrix_world
     R = M.to_3x3()
     bm = bmesh.new()
@@ -265,6 +273,8 @@ def uv_real(ob, ref=None):
                 u, v = p.y, p.z
             else:            # facing north / south
                 u, v = p.x, p.z
+            if girar and ax != 2:
+                u, v = v, u
             lp[uv].uv = (u / tile[0], v / tile[1])
     bm.to_mesh(ob.data)
     bm.free()
@@ -279,7 +289,7 @@ def aplicar_materiais(obs):
         for slot in ob.material_slots:
             if not slot.material:
                 continue
-            nome = slot.material.get("si_producao", slot.material.name)
+            nome = ob.get("si_produto_forcado") or slot.material.get("si_producao", slot.material.name)
             e = TAB.get(nome)
             if not e:
                 k = (nome, ob.get("si_categoria", ""))
@@ -428,6 +438,112 @@ OUT["aberturas"] = {"verificadas": len(vaos), "fechadas": [v for v in vaos if no
                     "controlo_paredes_cheias": len(controlo),
                     "controlo_abertas_por_engano": [c["parede"] for c in controlo if c["aberta"]],
                     "controlo_detalhe": [c for c in controlo if c["aberta"]]}
+
+# ------------------------------------------------------------------ 2b. reveals: line every opening across the wall
+# Without the hidden layers (studs, OSB, wool) the wall is two skins: at a door or window you see into the wall.
+# The real hole is measured with rays (clear height and width), the wall faces next to it, and a thin lining
+# (recessed into the wall, so the opening does not shrink) closes jambs, head and sill. Openings that already have
+# trims in the model (frames / "remates" in ARCH_OPENINGS) are left as they are.
+def hits_atraves(p0, dr, comp):
+    """Distances of every hit along the ray (walls BVH)."""
+    out, o, rest = [], p0.copy(), comp
+    while rest > 0 and BVH_CASA:
+        h = BVH_CASA.ray_cast(o, dr, rest)
+        if h[0] is None:
+            break
+        d = (h[0] - p0).dot(dr)
+        out.append(d)
+        o = h[0] + dr * 1e-4
+        rest = comp - d - 1e-4
+    return out
+
+
+def vao_aberto(a, s, z):
+    if a["eixo"] == "x":
+        p0, dr, eixo = Vector((s, a["posicao"] - 1.0, z)), Vector((0, 1, 0)), Vector((s, a["posicao"], z))
+    else:
+        p0, dr, eixo = Vector((a["posicao"] - 1.0, s, z)), Vector((1, 0, 0)), Vector((a["posicao"], s, z))
+    return livre(p0, dr, 2.0, eixo, max(0.12, a.get("espessura", 0.16) / 2 + 0.12))
+
+
+def ponto(a, s, n, z):
+    return Vector((s, n, z)) if a["eixo"] == "x" else Vector((n, s, z))
+
+
+aberturas_obs = [caixa([o]) for o in objetos("ARCH_OPENINGS")]
+forros, saltados = [], 0
+E_FORRO = 0.015
+for a in run.get("aberturas", []) if TAB else []:
+    if a.get("espessura", 0.16) < 0.01:  # an opening with no wall (e.g. an open passage added by the architecture)
+        continue
+    sc_ = (a["inicio"] + a["fim"]) / 2
+    zp = a["z_piso"]
+    zs = [zp + 0.02 * k for k in range(1, 161)]
+    abertos = [z for z in zs if vao_aberto(a, sc_, z)]
+    if not abertos:
+        continue
+    # the open run that holds the middle of the opening
+    meio = abertos[len(abertos) // 2]
+    z0 = z1 = meio
+    while any(abs(z - (z0 - 0.02)) < 1e-6 for z in abertos):
+        z0 -= 0.02
+    while any(abs(z - (z1 + 0.02)) < 1e-6 for z in abertos):
+        z1 += 0.02
+    zm = (z0 + z1) / 2
+    s0 = s1 = sc_
+    while s0 > a["inicio"] - 0.5 and vao_aberto(a, s0 - 0.01, zm):
+        s0 -= 0.01
+    while s1 < a["fim"] + 0.5 and vao_aberto(a, s1 + 0.01, zm):
+        s1 += 0.01
+    # wall faces next to the opening (first and last hit across the wall)
+    # only hits within this wall's band (structure + finishes), so a wall meeting at a corner is not counted;
+    # of the two sides, the thinner reading is the wall itself
+    faixa = a.get("espessura", 0.16) / 2 + 0.09
+    faces = []
+    for s_ in (s0 - 0.06, s1 + 0.06):
+        p0 = ponto(a, s_, a["posicao"] - 0.8, zm)
+        dr = Vector((0, 1, 0)) if a["eixo"] == "x" else Vector((1, 0, 0))
+        hs = [d for d in hits_atraves(p0, dr, 1.6) if abs(d - 0.8) < faixa]
+        if len(hs) >= 2:
+            faces.append((min(hs) - 0.8, max(hs) - 0.8))
+    if not faces:
+        continue
+    f_ = min(faces, key=lambda f: f[1] - f[0])
+    n0, n1 = a["posicao"] + f_[0], a["posicao"] + f_[1]
+    caixa_vao = (ponto(a, s0, n0, z0), ponto(a, s1, n1, z1))
+    lo_v = Vector(map(min, *caixa_vao))
+    hi_v = Vector(map(max, *caixa_vao))
+    if any(b and all(b[0][i] < hi_v[i] + 0.02 and b[1][i] > lo_v[i] - 0.02 for i in range(3)) for b in aberturas_obs):
+        saltados += 1
+        continue
+    pecas = [(s0 - E_FORRO, s0, z0 - (E_FORRO if z0 > zp + 0.1 else 0), z1 + E_FORRO),   # jamb
+             (s1, s1 + E_FORRO, z0 - (E_FORRO if z0 > zp + 0.1 else 0), z1 + E_FORRO),   # jamb
+             (s0 - E_FORRO, s1 + E_FORRO, z1, z1 + E_FORRO)]                              # head
+    if z0 > zp + 0.1:
+        pecas.append((s0 - E_FORRO, s1 + E_FORRO, z0 - E_FORRO, z0))                      # sill
+    bm = bmesh.new()
+    for sa, sb, za, zb in pecas:
+        c1, c2 = ponto(a, sa, n0, za), ponto(a, sb, n1, zb)
+        lo_p, hi_p = Vector(map(min, c1, c2)), Vector(map(max, c1, c2))
+        r = bmesh.ops.create_cube(bm, size=1.0)
+        for v in r["verts"]:
+            v.co = Vector((lo_p[i] + (v.co[i] + 0.5) * (hi_p[i] - lo_p[i]) for i in range(3)))
+    me = bpy.data.meshes.new(f"Forro do vão {a['parede']}#{a['id']}")
+    bm.to_mesh(me)
+    bm.free()
+    ob = bpy.data.objects.new(me.name, me)
+    grupos["ARCH_REVEALS"].objects.link(ob)
+    ob["si_categoria"] = "ARCH_REVEALS"
+    ob["si_id"] = f"ARCH_REVEALS/{a['parede']}#{a['id']}"
+    e = TAB.get("Pladur N") or TAB.get("MAT_INT_PLASTER_PAINTED__WHITE")
+    if e:
+        me.materials.append(mat_catalogo(e))
+        ob["si_mat_id"] = e["id"]
+        ob["si_material"] = "forro do vão (gerado)"
+    cats[ob.name] = ("ARCH_REVEALS", "gerado: forro dos vãos")
+    forros.append({"abertura": f"{a['parede']}#{a['id']}", "largura": round(s1 - s0, 3), "altura": round(z1 - z0, 3),
+                   "espessura_parede": round(n1 - n0, 3)})
+OUT["forros_vaos"] = {"criados": len(forros), "ja_com_remates": saltados, "detalhe": forros[:40]}
 
 # ------------------------------------------------------------------ 3. place the house on the site
 C = run.get("colocacao")

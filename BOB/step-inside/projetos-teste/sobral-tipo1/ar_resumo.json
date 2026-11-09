@@ -9,7 +9,6 @@
   "MAT_INSULATION_MINERAL_WOOL",
   "MAT_INSULATION_XPS",
   "MAT_MEMBRANE_BREATHER",
-  "MAT_MEMBRANE_BREATHER__DARK",
   "MAT_METAL_GALVANIZED",
   "MAT_SCREED",
   "MAT_TIMBER_STRUCTURE"
@@ -27,8 +26,8 @@
     "MAT_ROOF_SANDWICH_TILE__RAL7016",
     "MAT_WALL_RENDER__WHITE"
    ],
-   "triangulos": 8686,
-   "triangulos_antes_de_simplificar": 8694,
+   "triangulos": 9430,
+   "triangulos_antes_de_simplificar": 9438,
    "imagens": {
     "Chipboard004_2K-JPG_Color.jpg": [
      1024,
@@ -65,18 +64,6 @@
     "WoodFloor051_2K-JPG_NormalGL.jpg": [
      512,
      512
-    ],
-    "MAT_INT_PLASTER_PAINTED__WHITE_Color.jpg": [
-     1024,
-     512
-    ],
-    "PaintedPlaster017_2K-JPG_Roughness.jpg": [
-     512,
-     256
-    ],
-    "PaintedPlaster017_2K-JPG_NormalGL.jpg": [
-     512,
-     256
     ],
     "Ground037_2K-JPG_Color.jpg": [
      1024,
@@ -158,18 +145,18 @@
    "ficheiros": {
     "glb": {
      "ficheiro": "sobral-tipo1_ar_casa.glb",
-     "bytes": 1459764,
-     "sha256": "66556eb4f3cca2f3d3eb420026f878f119915d4fe4db3a4572f1e969a2edf851"
+     "bytes": 1397712,
+     "sha256": "6f3e2ab6aa53e0c1525b7f1cf499940718e7980d9a247e37e8ee7de722994da7"
     },
     "usdz": {
      "ficheiro": "sobral-tipo1_ar_casa.usdz",
-     "bytes": 1187188,
-     "sha256": "28a5efaad38e45c4ba35809a0dd2976b8ec6d4f7209f32b377d12671fd5c6ac2"
+     "bytes": 1110290,
+     "sha256": "5c6720f94b92d6f421d5690516ce41fd1c16f8c16c36e12a26373a46ba489bf6"
     }
    },
    "reimportacao": {
     "glb": {
-     "triangulos": 8686,
+     "triangulos": 9430,
      "dimensoes": [
       13.099,
       11.249,
@@ -184,12 +171,12 @@
       "MAT_ROOF_SANDWICH_TILE__RAL7016",
       "MAT_WALL_RENDER__WHITE"
      ],
-     "imagens": 16,
+     "imagens": 13,
      "imagens_em_falta": [],
      "erro": null
     },
     "usdz": {
-     "triangulos": 8686,
+     "triangulos": 9430,
      "dimensoes": [
       13.099,
       11.249,
@@ -204,7 +191,7 @@
       "MAT_ROOF_SANDWICH_TILE__RAL7016",
       "MAT_WALL_RENDER__WHITE"
      ],
-     "imagens": 16,
+     "imagens": 13,
      "imagens_em_falta": [],
      "erro": null
     }
@@ -223,8 +210,8 @@
     "MAT_ROOF_SANDWICH_TILE__RAL7016",
     "MAT_WALL_RENDER__WHITE"
    ],
-   "triangulos": 9165,
-   "triangulos_antes_de_simplificar": 9330,
+   "triangulos": 10066,
+   "triangulos_antes_de_simplificar": 10074,
    "imagens": {
     "Chipboard004_2K-JPG_Color.jpg": [
      1024,
@@ -261,18 +248,6 @@
     "WoodFloor051_2K-JPG_NormalGL.jpg": [
      512,
      512
-    ],
-    "MAT_INT_PLASTER_PAINTED__WHITE_Color.jpg": [
-     1024,
-     512
-    ],
-    "PaintedPlaster017_2K-JPG_Roughness.jpg": [
-     512,
-     256
-    ],
-    "PaintedPlaster017_2K-JPG_NormalGL.jpg": [
-     512,
-     256
     ],
     "Ground037_2K-JPG_Color.jpg": [
      1024,
@@ -354,18 +329,18 @@
    "ficheiros": {
     "glb": {
      "ficheiro": "sobral-tipo1_ar_maquete.glb",
-     "bytes": 2128848,
-     "sha256": "67adc0c747a5e0f0fec07f0142f938eb753bef758bb95363fe677d82cb10e59b"
+     "bytes": 2084064,
+     "sha256": "c391d230f0f5f1b38816d06b14b602fd80205e1db38e95a20f67c0f268e219b4"
     },
     "usdz": {
      "ficheiro": "sobral-tipo1_ar_maquete.usdz",
-     "bytes": 1685289,
-     "sha256": "c62b34a382f4f0b6acc57218cacc22cad0cab4bfe6d6d68e12cf0ba65faf1052"
+     "bytes": 1626393,
+     "sha256": "e812f2811fbfbc303563a21b6ddb3deefb3a2dba1d300990dc830dcd02e0bc45"
     }
    },
    "reimportacao": {
     "glb": {
-     "triangulos": 9165,
+     "triangulos": 10066,
      "dimensoes": [
       53.369,
       51.497,
@@ -381,12 +356,12 @@
       "MAT_ROOF_SANDWICH_TILE__RAL7016",
       "MAT_WALL_RENDER__WHITE"
      ],
-     "imagens": 19,
+     "imagens": 16,
      "imagens_em_falta": [],
      "erro": null
     },
     "usdz": {
-     "triangulos": 9165,
+     "triangulos": 10066,
      "dimensoes": [
       53.369,
       51.497,
@@ -402,7 +377,7 @@
       "MAT_ROOF_SANDWICH_TILE__RAL7016",
       "MAT_WALL_RENDER__WHITE"
      ],
-     "imagens": 19,
+     "imagens": 16,
      "imagens_em_falta": [],
      "erro": null
     }

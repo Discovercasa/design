@@ -7,23 +7,23 @@
 
 Gerado por `step-inside/ferramentas/exportar/exportar.py` a partir do modelo de visita. Os ficheiros e o `manifest.json` completo ficam só no PC (`_trabalho/step-inside/<obra>/export/a/`).
 
-- Versão: `torres-vedras-ccc3f10-202611090125` · Blender 4.4.3 · Unreal alvo 5.8 (a confirmar na Fase 4)
-- Fonte: 310 objetos, 52839 triângulos, 18 materiais, 26 imagens; caixa [80.899, 82.831, 6.226] m
+- Versão: `torres-vedras-26e7b62-202611090345` · Blender 4.4.3 · Unreal alvo 5.8 (a confirmar na Fase 4)
+- Fonte: 339 objetos, 53727 triângulos, 19 materiais, 26 imagens; caixa [80.899, 82.831, 6.226] m
 
 | Ficheiro | Para quê | Tamanho | SHA-256 | Determinístico |
 |---|---|---|---|---|
-| `torres-vedras_visita.fbx` | Unreal (Fases 4–5) | 2,1 MB | `d7284c499458…` | conteúdo igual |
-| `torres-vedras_visita.glb` | AR Android / visualizador 3D | 109,1 MB | `9a6289f76321…` | sim (bytes iguais) |
-| `torres-vedras_visita.usdz` | AR Quick Look (iPhone) | 95,9 MB | `d3ce4864476d…` | conteúdo igual |
-| texturas do FBX | textura PBR do FBX (ficheiro separado, spec §4.2) | 93,1 MB | 26 ficheiros | — |
+| `torres-vedras_visita.fbx` | Unreal (Fases 4–5) | 2,2 MB | `c95edc48c6d4…` | conteúdo igual |
+| `torres-vedras_visita.glb` | AR Android / visualizador 3D | 112,0 MB | `723df555567c…` | sim (bytes iguais) |
+| `torres-vedras_visita.usdz` | AR Quick Look (iPhone) | 97,8 MB | `3f8068223f10…` | conteúdo igual |
+| texturas do FBX | textura PBR do FBX (ficheiro separado, spec §4.2) | 94,9 MB | 26 ficheiros | — |
 
 ## Reimportação (Blender limpo) e comparação
 
 | Formato | Objetos | Triângulos | Caixa (m) | Erro da caixa | Materiais | Imagens (em falta) | Píxeis diferentes | Silhueta |
 |---|---|---|---|---|---|---|---|---|
-| fbx | 310 | 52839 | [80.899, 82.831, 6.226] | 0.0 | 18 | 26 (0) | 0.9 % | 0.00 % |
-| glb | 310 | 52839 | [80.899, 82.831, 6.226] | 0.0 | 18 | 26 (0) | 0.9 % | 0.00 % |
-| usdz | 310 | 52839 | [80.899, 82.831, 6.226] | 0.0 | 18 | 26 (0) | 0.3 % | 0.00 % |
+| fbx | 339 | 53727 | [80.899, 82.831, 6.226] | 0.0 | 19 | 26 (0) | 0.9 % | 0.00 % |
+| glb | 339 | 53727 | [80.899, 82.831, 6.226] | 0.0 | 19 | 26 (0) | 0.9 % | 0.00 % |
+| usdz | 339 | 53727 | [80.899, 82.831, 6.226] | 0.0 | 19 | 26 (0) | 0.3 % | 0.00 % |
 
 ## Sistemas de coordenadas
 

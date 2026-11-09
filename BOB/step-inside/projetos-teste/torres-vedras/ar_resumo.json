@@ -9,7 +9,6 @@
   "MAT_INSULATION_MINERAL_WOOL",
   "MAT_INSULATION_XPS",
   "MAT_MEMBRANE_BREATHER",
-  "MAT_MEMBRANE_BREATHER__DARK",
   "MAT_METAL_GALVANIZED",
   "MAT_SCREED",
   "MAT_TIMBER_STRUCTURE"
@@ -17,7 +16,7 @@
  "variantes": [
   {
    "variante": "casa",
-   "objetos": 13,
+   "objetos": 14,
    "materiais": [
     "MAT_CONCRETE_SLAB",
     "MAT_DOOR_GARAGE_SECTIONAL__RAL7016",
@@ -30,11 +29,12 @@
     "MAT_METAL_GUTTER__DARK_GREY",
     "MAT_ROOF_SANDWICH_TRAPEZOIDAL__RAL8004",
     "MAT_ROOF_TILE_CERAMIC__TERRACOTTA",
+    "MAT_TIMBER_STRUCTURE__GLULAM",
     "MAT_WOOD_CLADDING__DOUGLAS_BROWN",
     "MAT_WOOD_CLADDING__PINE_NATURAL"
    ],
-   "triangulos": 22888,
-   "triangulos_antes_de_simplificar": 23288,
+   "triangulos": 23812,
+   "triangulos_antes_de_simplificar": 24176,
    "imagens": {
     "Chipboard004_2K-JPG_Color.jpg": [
      1024,
@@ -80,18 +80,6 @@
      512,
      512
     ],
-    "MAT_INT_PLASTER_PAINTED__WHITE_Color.jpg": [
-     1024,
-     512
-    ],
-    "PaintedPlaster017_2K-JPG_Roughness.jpg": [
-     512,
-     256
-    ],
-    "PaintedPlaster017_2K-JPG_NormalGL.jpg": [
-     512,
-     256
-    ],
     "Ground037_2K-JPG_Color.jpg": [
      1024,
      1024
@@ -135,6 +123,10 @@
     "Wood096_2K-JPG_NormalGL.jpg": [
      512,
      512
+    ],
+    "MAT_TIMBER_STRUCTURE__GLULAM_Color.jpg": [
+     1024,
+     1024
     ],
     "MAT_WOOD_CLADDING__DOUGLAS_BROWN_Color.jpg": [
      1024,
@@ -164,18 +156,18 @@
    "ficheiros": {
     "glb": {
      "ficheiro": "torres-vedras_ar_casa.glb",
-     "bytes": 2516124,
-     "sha256": "c1d1cdaad139df1a892d416d1d977d903447dc6a6883378cc44ee6c1181d9fea"
+     "bytes": 2584316,
+     "sha256": "7a6c97f485f64b987f56fca7557409ddc84274ee748e2a80d77a7ce6708f6d1b"
     },
     "usdz": {
      "ficheiro": "torres-vedras_ar_casa.usdz",
-     "bytes": 1995766,
-     "sha256": "3fde246a66f9c1c0913b3fcec7ac990c85a462aa95cb0151b7b81207bcd5000c"
+     "bytes": 2062018,
+     "sha256": "a0fce8f87ed5253ee3f497e1585d6ad890715d8263cdb259601dd8cd11b7808a"
     }
    },
    "reimportacao": {
     "glb": {
-     "triangulos": 22888,
+     "triangulos": 23812,
      "dimensoes": [
       19.261,
       21.691,
@@ -193,6 +185,7 @@
       "MAT_METAL_GUTTER__DARK_GREY",
       "MAT_ROOF_SANDWICH_TRAPEZOIDAL__RAL8004",
       "MAT_ROOF_TILE_CERAMIC__TERRACOTTA",
+      "MAT_TIMBER_STRUCTURE__GLULAM",
       "MAT_WOOD_CLADDING__DOUGLAS_BROWN",
       "MAT_WOOD_CLADDING__PINE_NATURAL"
      ],
@@ -201,7 +194,7 @@
      "erro": null
     },
     "usdz": {
-     "triangulos": 22888,
+     "triangulos": 23812,
      "dimensoes": [
       19.261,
       21.691,
@@ -219,6 +212,7 @@
       "MAT_METAL_GUTTER__DARK_GREY",
       "MAT_ROOF_SANDWICH_TRAPEZOIDAL__RAL8004",
       "MAT_ROOF_TILE_CERAMIC__TERRACOTTA",
+      "MAT_TIMBER_STRUCTURE__GLULAM",
       "MAT_WOOD_CLADDING__DOUGLAS_BROWN",
       "MAT_WOOD_CLADDING__PINE_NATURAL"
      ],
@@ -230,7 +224,7 @@
   },
   {
    "variante": "maquete",
-   "objetos": 14,
+   "objetos": 15,
    "materiais": [
     "MAT_CONCRETE_SLAB",
     "MAT_DOOR_GARAGE_SECTIONAL__RAL7016",
@@ -244,11 +238,12 @@
     "MAT_METAL_GUTTER__DARK_GREY",
     "MAT_ROOF_SANDWICH_TRAPEZOIDAL__RAL8004",
     "MAT_ROOF_TILE_CERAMIC__TERRACOTTA",
+    "MAT_TIMBER_STRUCTURE__GLULAM",
     "MAT_WOOD_CLADDING__DOUGLAS_BROWN",
     "MAT_WOOD_CLADDING__PINE_NATURAL"
    ],
-   "triangulos": 25236,
-   "triangulos_antes_de_simplificar": 27843,
+   "triangulos": 28367,
+   "triangulos_antes_de_simplificar": 28731,
    "imagens": {
     "Chipboard004_2K-JPG_Color.jpg": [
      1024,
@@ -294,18 +289,6 @@
      512,
      512
     ],
-    "MAT_INT_PLASTER_PAINTED__WHITE_Color.jpg": [
-     1024,
-     512
-    ],
-    "PaintedPlaster017_2K-JPG_Roughness.jpg": [
-     512,
-     256
-    ],
-    "PaintedPlaster017_2K-JPG_NormalGL.jpg": [
-     512,
-     256
-    ],
     "Ground037_2K-JPG_Color.jpg": [
      1024,
      1024
@@ -350,6 +333,10 @@
      512,
      512
     ],
+    "MAT_TIMBER_STRUCTURE__GLULAM_Color.jpg": [
+     1024,
+     1024
+    ],
     "MAT_WOOD_CLADDING__DOUGLAS_BROWN_Color.jpg": [
      1024,
      512
@@ -378,18 +365,18 @@
    "ficheiros": {
     "glb": {
      "ficheiro": "torres-vedras_ar_maquete.glb",
-     "bytes": 3311056,
-     "sha256": "c6f931e15125b7091ba437573b8c6a845971caf23b36375520228d3c734b9260"
+     "bytes": 3631800,
+     "sha256": "b9805d738b113a0bf9d9c2bb0c13b52954e43becf254cdf8042a0b10aaa90248"
     },
     "usdz": {
      "ficheiro": "torres-vedras_ar_maquete.usdz",
-     "bytes": 2583519,
-     "sha256": "9b9ca728387a9476ac9f7a0ca7dc3a43ca225ee8b9f93d985ccc6407a1b5add5"
+     "bytes": 2857750,
+     "sha256": "045fd7176d25dbeccb9dd2db3526b0f3fb49ef042968f9ea7b6b38e1ce06e458"
     }
    },
    "reimportacao": {
     "glb": {
-     "triangulos": 25236,
+     "triangulos": 28367,
      "dimensoes": [
       60.263,
       58.26,
@@ -408,6 +395,7 @@
       "MAT_METAL_GUTTER__DARK_GREY",
       "MAT_ROOF_SANDWICH_TRAPEZOIDAL__RAL8004",
       "MAT_ROOF_TILE_CERAMIC__TERRACOTTA",
+      "MAT_TIMBER_STRUCTURE__GLULAM",
       "MAT_WOOD_CLADDING__DOUGLAS_BROWN",
       "MAT_WOOD_CLADDING__PINE_NATURAL"
      ],
@@ -416,7 +404,7 @@
      "erro": null
     },
     "usdz": {
-     "triangulos": 25236,
+     "triangulos": 28367,
      "dimensoes": [
       60.263,
       58.26,
@@ -435,6 +423,7 @@
       "MAT_METAL_GUTTER__DARK_GREY",
       "MAT_ROOF_SANDWICH_TRAPEZOIDAL__RAL8004",
       "MAT_ROOF_TILE_CERAMIC__TERRACOTTA",
+      "MAT_TIMBER_STRUCTURE__GLULAM",
       "MAT_WOOD_CLADDING__DOUGLAS_BROWN",
       "MAT_WOOD_CLADDING__PINE_NATURAL"
      ],

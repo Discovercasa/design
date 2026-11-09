@@ -51,7 +51,6 @@
     "MAT_BOARD_OSB",
     "MAT_CONCRETE_SLAB",
     "MAT_FLOOR_VINYL_WOOD",
-    "MAT_INT_PLASTER_PAINTED__WHITE",
     "MAT_LANDSCAPE_SOIL",
     "MAT_METAL_FLASHING__RAL7016",
     "MAT_METAL_GUTTER__DARK_GREY",
@@ -97,6 +96,120 @@
    "controlo_paredes_cheias": 40,
    "controlo_abertas_por_engano": [],
    "controlo_detalhe": []
+  },
+  "forros_vaos": {
+   "criados": 18,
+   "ja_com_remates": 0,
+   "detalhe": [
+    {
+     "abertura": "PI1.08#0",
+     "largura": 0.69,
+     "altura": 1.56,
+     "espessura_parede": 0.138
+    },
+    {
+     "abertura": "PE1.12#0",
+     "largura": 0.68,
+     "altura": 0.54,
+     "espessura_parede": 0.213
+    },
+    {
+     "abertura": "PE1.04#0",
+     "largura": 1.1,
+     "altura": 2.66,
+     "espessura_parede": 0.213
+    },
+    {
+     "abertura": "PE1.05#0",
+     "largura": 1.14,
+     "altura": 2.66,
+     "espessura_parede": 0.213
+    },
+    {
+     "abertura": "PE1.06#0",
+     "largura": 1.1,
+     "altura": 2.66,
+     "espessura_parede": 0.213
+    },
+    {
+     "abertura": "PE1.08#0",
+     "largura": 1.33,
+     "altura": 2.66,
+     "espessura_parede": 0.22
+    },
+    {
+     "abertura": "PE1.13#0",
+     "largura": 1.1,
+     "altura": 2.66,
+     "espessura_parede": 0.213
+    },
+    {
+     "abertura": "PI2.01#0",
+     "largura": 0.88,
+     "altura": 2.32,
+     "espessura_parede": 0.13
+    },
+    {
+     "abertura": "PI2.04#0",
+     "largura": 0.88,
+     "altura": 2.32,
+     "espessura_parede": 0.13
+    },
+    {
+     "abertura": "PI2.05#0",
+     "largura": 0.78,
+     "altura": 2.32,
+     "espessura_parede": 0.13
+    },
+    {
+     "abertura": "PI2.08#0",
+     "largura": 0.88,
+     "altura": 2.22,
+     "espessura_parede": 0.13
+    },
+    {
+     "abertura": "PE2.11#0",
+     "largura": 1.13,
+     "altura": 1.2,
+     "espessura_parede": 0.213
+    },
+    {
+     "abertura": "PE2.01#0",
+     "largura": 1.11,
+     "altura": 1.08,
+     "espessura_parede": 0.213
+    },
+    {
+     "abertura": "PE2.04#0",
+     "largura": 1.1,
+     "altura": 1.2,
+     "espessura_parede": 0.213
+    },
+    {
+     "abertura": "PE2.05#0",
+     "largura": 1.14,
+     "altura": 1.2,
+     "espessura_parede": 0.213
+    },
+    {
+     "abertura": "PE2.06#0",
+     "largura": 1.1,
+     "altura": 1.2,
+     "espessura_parede": 0.213
+    },
+    {
+     "abertura": "PE2.08#0",
+     "largura": 0.66,
+     "altura": 0.98,
+     "espessura_parede": 0.213
+    },
+    {
+     "abertura": "PD1.01#0",
+     "largura": 0.86,
+     "altura": 2.16,
+     "espessura_parede": 0.104
+    }
+   ]
   },
   "colocacao": {
    "canto_modelo": [
