@@ -383,7 +383,11 @@ $('#b-sugestoes').addEventListener('click', () => { abrirDialogo(gaveta, P.htmlG
 document.addEventListener('click', (e) => { if (!e.target.closest('.pop')) fecharPops(); });
 document.addEventListener('keydown', (e) => { if (e.key === 'Escape') fecharPops(); });
 [dlg, gaveta].forEach((d) => {
-  d.addEventListener('click', (e) => { if (e.target === d) fecharDialogo(d); });  // clique fora
+  // clique fora: only when the press also started outside (team note 2026-11-10: turning the 3D model and letting go
+  // past the dialog's edge counted as a click outside, closed the dialog and the drag went to the page behind)
+  let baixo = null;
+  d.addEventListener('pointerdown', (e) => { baixo = e.target; });
+  d.addEventListener('click', (e) => { if (e.target === d && baixo === d) fecharDialogo(d); baixo = null; });
   d.addEventListener('cancel', (e) => { e.preventDefault(); fecharDialogo(d); });
 });
 

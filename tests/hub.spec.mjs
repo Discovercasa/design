@@ -575,8 +575,22 @@ test('Step Inside: teste do AR — carregar modelos e abrir no Quick Look / Scen
   await expect(mv).toHaveAttribute('ar-scale', 'fixed');
   await expect(mv.locator('[slot="ar-button"]')).toHaveText('Ver no teu espaço (AR)');
   await expect(page.locator('#dlg')).toContainText('Visualizador 3D para quem não tem AR');
+  // team note 2026-11-10: turning the model and letting go outside the dialog closed it and the page behind took the drag
+  await expect(mv).toHaveAttribute('touch-action', 'none');
+  const caixa = await mv.boundingBox();
+  await page.mouse.move(caixa.x + caixa.width / 2, caixa.y + caixa.height / 2);
+  await page.mouse.down();
+  await page.mouse.move(4, caixa.y + caixa.height / 2, { steps: 5 });
+  await page.mouse.up();
+  await expect(page.locator('#dlg')).toBeVisible();
+  await page.mouse.click(4, 4);   // a real click outside still closes it
+  await expect(page.locator('#dlg')).toBeHidden();
+  await sec.getByRole('button', { name: 'Ver em 3D' }).click();
+  await expect(page.locator('#dlg model-viewer')).toBeVisible();
   await page.locator('#dlg').getByRole('button', { name: 'Fechar' }).click();
   await expect(page.locator('#dlg')).toBeHidden();
+  // Android diagnosis: Google's own sample through the same Scene Viewer intent (opens → our file; closes → the phone)
+  await expect(sec.locator('[data-ar-exemplo]')).toHaveAttribute('href', /^intent:\/\/arvr\.google\.com\/scene-viewer\/1\.0\?file=https%3A%2F%2Fmodelviewer\.dev%2Fshared-assets%2Fmodels%2FAstronaut\.glb&mode=ar_preferred.+%3Far-android%3D0.+;end;$/);
   // the documents section does not list the AR models
   await expect(page.locator('#documentos')).not.toContainText('torres-vedras_ar_casa');
   await captura(page, 'step-inside-teste-ar');
