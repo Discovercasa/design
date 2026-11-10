@@ -270,4 +270,13 @@ The team's notes on hub task 84 (written in the hub by [membro da equipa] on 202
 - Fix: `step-inside/ferramentas/ar/scene_viewer.py` (strips unsupported non-required extensions + checks the validator rules), called by `ar.py` after each export; tests `step-inside/tests/test_ar.py` TestSceneViewer; both houses regenerated (no errors; warning: materials 11–13 Sobral, 18–20 Torres Vedras vs 10 recommended). Hub notice text changed (asks for the diagnosis instead of blaming the phone).
 - Not yet verified on a phone (no Android at Claude's side; Google's validator only runs on its web page).
 - Filed in: `step-inside/docs/fase7/README.md` «Versão 7.3» (by the caller); `conhecimento/insights.md` (2026-11-10, Scene Viewer extensions). Supersedes the 2026-11-10 hypothesis (phone / Google app) in the entries above.
-- Pending: user's authorisation to upload the six new GLBs (hub documents 43, 45, 47, 49, 51, 53) via the temporary function; then a team test on an Android; then resolve note 10. Improvement: reduce materials to ≤ 10 (2 transparent) per model. Office PC restart (Docker/Firecrawl) postponed, maybe 2026-11-11.
+- Pending: (done 2026-11-10, see the next entry: upload of the six new GLBs authorised and carried out) a team test on an Android; then resolve note 10. Improvement: reduce materials to ≤ 10 (2 transparent) per model. Office PC restart (Docker/Firecrawl) postponed, maybe 2026-11-11.
+
+### 2026-11-10 — Android AR version 7.3 loaded in the hub [Step Inside Phase 7]
+> Sim, carrega
+- Context: answers «Autorizas a função temporária para carregar os 6 GLB corrigidos no hub (Torres Vedras: casa e maquete; Sobral: casa, maquete, piso 0 e piso 1)?»
+- Done: temporary Edge Function `carregar-ar` (eleventh use, one-time key, limited to GLB documents 43, 45, 47, 49, 51, 53) deployed, used, and replaced by the 410 stub (verify_jwt true); refusal 401 confirmed; key deleted. The six GLBs replaced in the same links with version 7.3 (without KHR_materials_specular; each checked against the Scene Viewer rules before upload; sizes in storage match; MIME model/gltf-binary). USDZ unchanged.
+- Notification 88 on task 84 asks the team to try «Ver em AR» on an Android and, if it still fails, run the on-phone diagnosis. Note 10 stays open until that test. Hub novidade «AR no Android: encontrada a causa»; client-platform project phase text updated.
+- Also checked: the firecrawl MCP server (firecrawl-mcp 3.38.0) connected in this session; with FIRECRAWL_API_URL set it never uses Firecrawl's hosted keyless service (code check), so nothing goes to firecrawl.dev; its tools work only once the local Firecrawl runs (after the PC restart).
+- Filed in: `step-inside/docs/fase7/README.md` (by the caller); hub (tasks/notes/novidade).
+- Pending: Android test by the team, then resolve note 10; PC restart for Docker/Firecrawl.

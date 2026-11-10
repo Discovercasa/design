@@ -238,8 +238,8 @@ test('perfil: área pessoal, definições (nome, tema), novidades e sair', async
   await captura(page, 'inicio-escuro');
   await page.getByRole('button', { name: 'Perfil' }).click();
   await page.locator('#pop-perfil').getByRole('menuitem', { name: /Novidades/ }).click();
-  await expect(page.locator('.novidade').first()).toContainText('AR: o chão do Sobral, quatro modelos e o diagnóstico do Android');
-  await expect(page.locator('.novidade').nth(1)).toContainText('Materiais e preços do Hub');
+  await expect(page.locator('.novidade').first()).toContainText('AR no Android: encontrada a causa');
+  await expect(page.locator('.novidade').nth(1)).toContainText('AR: o chão do Sobral, quatro modelos e o diagnóstico do Android');
   await page.getByRole('button', { name: 'Perfil' }).click();
   await page.locator('#pop-perfil').getByRole('menuitem', { name: 'Sair' }).click();
   await expect(page.getByRole('button', { name: 'Entrar com a conta do Hub' })).toBeVisible();

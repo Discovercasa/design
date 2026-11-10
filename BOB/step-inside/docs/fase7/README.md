@@ -570,8 +570,10 @@ sequer chega a aparecer o menu seguinte».
 Fica o aviso de materiais: Sobral 11–13 (2 transparentes) e Torres Vedras 18–20 (3 transparentes), contra os 10
 recomendados. A Google só o recomenda; juntar materiais fica como melhoria.
 
-**No hub:** carregar os seis GLB novos (Torres Vedras 43 e 45; Sobral 47, 49, 51 e 53); falta autorizar a função
-temporária. O aviso do hub quando o Scene Viewer não abre pede agora o diagnóstico, em vez de culpar o telemóvel.
+**No hub (2026-11-10, autorizado pelo utilizador: «Sim, carrega»):** os seis GLB novos (Torres Vedras 43 e 45;
+Sobral 47, 49, 51 e 53) substituíram os antigos nos mesmos links, com a descrição «versão 7.3». Os USDZ ficaram como
+estavam. A função temporária voltou a estar desligada (recusa 401 confirmada) e a chave foi apagada. A equipa foi
+avisada na tarefa 84; a nota 10 fica aberta até ao teste num Android. O aviso do hub quando o Scene Viewer não abre pede agora o diagnóstico, em vez de culpar o telemóvel.
 
 ## Em falta
 
