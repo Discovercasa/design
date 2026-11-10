@@ -105,7 +105,11 @@ test('notificações: ver uma com o rato lá em baixo não faz a lista voltar ao
 test('Início: o estado dos posts vem fresco ao mudar de página (mesmo sem a ligação em direto)', async ({ page }) => {
   await abrir(page, '/#/social');
   // outra pessoa publica o post desta semana noutro aparelho e a ligação em direto desta janela falhou (nada avisa)
-  await db(page, () => { const p = window.__fake.db.posts.find((x) => x.titulo === 'Gaia - Aumento estrutura'); p.estado = 'publicado'; });
+  // (o post passa para a semana de hoje: o fixture tem-no na semana 1 do mês e o teste falhava no resto do mês)
+  await db(page, () => {
+    const p = window.__fake.db.posts.find((x) => x.titulo === 'Gaia - Aumento estrutura'), h = new Date();
+    Object.assign(p, { mes: `${h.getFullYear()}-${String(h.getMonth() + 1).padStart(2, '0')}-01`, semana: Math.min(5, Math.ceil(h.getDate() / 7)), estado: 'publicado' });
+  });
   await page.getByRole('navigation', { name: 'Secções' }).getByRole('link', { name: 'Início' }).click();
   const social = page.locator('section', { has: page.getByRole('heading', { name: 'Redes sociais', level: 2 }) });
   await expect(social.locator('.bloco-lateral').first()).toContainText('Publicado');

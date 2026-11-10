@@ -204,9 +204,11 @@ def plataforma(decl, origem, z_laje, campos):
     pts = [georef.aplicar(g["coef"], q) for q in poly]
     if pts[0] == pts[-1]:
         pts = pts[:-1]
-    z = z_laje + PL.get("acima_da_laje", 0.0)
+    # default 2 cm under the slab top: level with it, the ground coincided with the slab where it runs past the walls
+    # and the two flickered (Sobral, team note on the AR test, 2026-11-10)
+    z = z_laje + PL.get("acima_da_laje", -0.02)
     area = abs(sum(pts[i][0] * pts[(i + 1) % len(pts)][1] - pts[(i + 1) % len(pts)][0] * pts[i][1] for i in range(len(pts)))) / 2
-    campos["plataforma"] = campo({"area_m2": round(area, 1), "vertices": len(pts), "cota": ("laje + %.2f m" % PL.get("acima_da_laje", 0.0)).replace(".", ",")},
+    campos["plataforma"] = campo({"area_m2": round(area, 1), "vertices": len(pts), "cota": ("laje %+.2f m" % PL.get("acima_da_laje", -0.02)).replace(".", ",")},
                                  INFERRED, "geometria", tipo="terreno",
                                  fonte=fonte(PL["ficheiro"], PL["folha"], "contorno que contém a casa"),
                                  nota=PL.get("nota", "modelação simplificada: terreno plano dentro do contorno"))

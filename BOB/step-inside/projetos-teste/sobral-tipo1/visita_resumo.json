@@ -368,13 +368,13 @@
   },
   "plataforma": {
    "vertices_rebaixados_ou_subidos": 64,
-   "z": 223.72
+   "z": 223.7
   },
   "casa_terreno": {
    "amostras": 625,
    "fora_do_terreno": 0,
-   "terreno_menos_laje_min_m": -0.02,
-   "terreno_menos_laje_max_m": 0.01,
+   "terreno_menos_laje_min_m": -0.03,
+   "terreno_menos_laje_max_m": -0.0,
    "fracao_terreno_acima_do_pavimento": 0.0
   }
  },
@@ -461,7 +461,7 @@
    "valor": {
     "area_m2": 189.6,
     "vertices": 8,
-    "cota": "laje + 0,00 m"
+    "cota": "laje -0,02 m"
    },
    "unidade": "",
    "tipo": "terreno",
@@ -473,7 +473,7 @@
     "local": "contorno que contém a casa",
     "data": ""
    },
-   "nota": "modelação simplificada (folha 4): o lote P fica plano à cota do topo da laje dentro do contorno desenhado à volta da casa; os muros e taludes da modelação ainda não estão no modelo",
+   "nota": "modelação simplificada (folha 4): o lote P fica plano 2 cm abaixo do topo da laje (à cota exata coincidia com a laje e piscava no AR, nota da equipa de 2026-11-10) dentro do contorno desenhado à volta da casa; os muros e taludes da modelação ainda não estão no modelo",
    "conflitos": []
   }
  },

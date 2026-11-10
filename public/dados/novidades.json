@@ -1,6 +1,16 @@
 [
   {
     "dia": "2026-11-10",
+    "titulo": "AR: o chão do Sobral, quatro modelos e o diagnóstico do Android",
+    "itens": [
+      "Sobral: a textura junto ao chão já não pisca (o terreno à volta da casa ficava à mesma altura da laje).",
+      "Sobral no AR fica com quatro modelos: a maquete com terreno, a casa toda sem terreno, o rés do chão e o piso 1 (estes três à escala real).",
+      "Android: o botão do AR abre o Scene Viewer com o link igual ao do visualizador da Google.",
+      "Step Inside › Teste do AR: «Diagnóstico do AR no Android». Num Android, faz os cinco testes, escolhe o que aconteceu em cada um e carrega em «Enviar resultado» (vai para a tarefa do teste)."
+    ]
+  },
+  {
+    "dia": "2026-11-10",
     "titulo": "Materiais e preços do Hub",
     "itens": [
       "Aba nova «Materiais»: os materiais, o preço de cada fornecedor (com desconto e IVA) e o histórico dos preços, vindos do Hub nos dias úteis às 6h. Só de consulta.",

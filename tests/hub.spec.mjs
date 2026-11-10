@@ -238,8 +238,8 @@ test('perfil: área pessoal, definições (nome, tema), novidades e sair', async
   await captura(page, 'inicio-escuro');
   await page.getByRole('button', { name: 'Perfil' }).click();
   await page.locator('#pop-perfil').getByRole('menuitem', { name: /Novidades/ }).click();
-  await expect(page.locator('.novidade').first()).toContainText('Materiais e preços do Hub');
-  await expect(page.locator('.novidade').nth(1)).toContainText('AR: correções do primeiro teste da equipa');
+  await expect(page.locator('.novidade').first()).toContainText('AR: o chão do Sobral, quatro modelos e o diagnóstico do Android');
+  await expect(page.locator('.novidade').nth(1)).toContainText('Materiais e preços do Hub');
   await page.getByRole('button', { name: 'Perfil' }).click();
   await page.locator('#pop-perfil').getByRole('menuitem', { name: 'Sair' }).click();
   await expect(page.getByRole('button', { name: 'Entrar com a conta do Hub' })).toBeVisible();
@@ -563,7 +563,8 @@ test('Step Inside: teste do AR — carregar modelos e abrir no Quick Look / Scen
   // Android: Scene Viewer intent with the signed GLB, AR first, not resizable at 1:1, coming back to this page with a
   // marker when the phone cannot open it
   const android = sec.getByRole('link', { name: /Ver em AR · Android/ });
-  await expect(android).toHaveAttribute('href', /^intent:\/\/arvr\.google\.com\/scene-viewer\/1\.0\?file=http.+__ficheiro.+\.glb&mode=ar_preferred&title=.+&resizable=false#Intent;.*package=com\.google\.android\.googlequicksearchbox.+browser_fallback_url=.+%3Far-android%3D\d+%23%2Fprojeto%2Fstep-inside;end;$/);
+  // since 2026-11-10 built exactly as Google's <model-viewer> 4.0.0 builds it (scene-viewer 1.2, disable_occlusion, file last)
+  await expect(android).toHaveAttribute('href', /^intent:\/\/arvr\.google\.com\/scene-viewer\/1\.2\?c=plataforma_cliente.+&mode=ar_preferred&disable_occlusion=true&resizable=false&title=.+&file=http.+__ficheiro.+\.glb#Intent;.*package=com\.google\.android\.googlequicksearchbox.+browser_fallback_url=.+%3Far-android%3D\d+%23%2Fprojeto%2Fstep-inside;end;$/);
   // without AR (tarefa 85, 2026-11-09): «Ver em 3D» opens the GLB in Google's <model-viewer>, with the USDZ for iPhone
   await page.route('**/@google/model-viewer@*/**', (r) => r.fulfill({ contentType: 'text/javascript',
     body: "customElements.define('model-viewer', class extends HTMLElement {});" }));
@@ -590,7 +591,25 @@ test('Step Inside: teste do AR — carregar modelos e abrir no Quick Look / Scen
   await page.locator('#dlg').getByRole('button', { name: 'Fechar' }).click();
   await expect(page.locator('#dlg')).toBeHidden();
   // Android diagnosis: Google's own sample through the same Scene Viewer intent (opens → our file; closes → the phone)
-  await expect(sec.locator('[data-ar-exemplo]')).toHaveAttribute('href', /^intent:\/\/arvr\.google\.com\/scene-viewer\/1\.0\?file=https%3A%2F%2Fmodelviewer\.dev%2Fshared-assets%2Fmodels%2FAstronaut\.glb&mode=ar_preferred.+%3Far-android%3D0.+;end;$/);
+  await expect(sec.locator('[data-ar-exemplo="A"]')).toHaveAttribute('href', /^intent:\/\/arvr\.google\.com\/scene-viewer\/1\.0\?file=https%3A%2F%2Fmodelviewer\.dev%2Fshared-assets%2Fmodels%2FAstronaut\.glb&mode=ar_preferred.+%3Far-android%3D0.+;end;$/);
+  await expect(sec.locator('[data-ar-exemplo="B"]')).toHaveAttribute('href', /^intent:\/\/arvr\.google\.com\/scene-viewer\/1\.2\?mode=ar_preferred&disable_occlusion=true.+&file=https%3A%2F%2Fmodelviewer\.dev.+Astronaut\.glb#Intent;.+;end;$/);
+  // the Android diagnosis (team notes 7 and 10 on task 84): the tester says what happened in each test and sends it to the task
+  const diag = sec.locator('#diag-ar');
+  await diag.locator('summary').click();
+  await expect(diag.locator('[data-ar-tipo="android-1.0"]')).toHaveAttribute('href', /scene-viewer\/1\.0\?file=/);
+  await expect(diag.locator('[data-ar-tipo="android-1.2"]')).toHaveAttribute('href', /scene-viewer\/1\.2\?/);
+  await expect(diag.locator('#diag-info')).toContainText('Este telemóvel: AR no Chrome (WebXR)');
+  await diag.getByLabel('Resultado do teste A').selectOption('abriu e fechou logo');
+  await diag.getByLabel('Resultado do teste D').selectOption('abriu e mostrou o modelo');
+  await diag.locator('[data-diag-notas]').fill('Telemóvel de teste');
+  await diag.getByRole('button', { name: 'Enviar resultado' }).click();
+  await expect(page.locator('.aviso').filter({ hasText: 'Resultado enviado' })).toBeVisible();
+  const nota = await db(page, () => window.__fake.db.tarefas_notas.at(-1));
+  expect(nota.tipo).toBe('nota');
+  expect(nota.texto).toContain('Diagnóstico do AR no Android');
+  expect(nota.texto).toContain('A. Exemplo da Google · link 1.0: abriu e fechou logo');
+  expect(nota.texto).toContain('D. O nosso modelo · link 1.2 (o do botão agora): abriu e mostrou o modelo');
+  expect(nota.texto).toContain('Notas: Telemóvel de teste');
   // the documents section does not list the AR models
   await expect(page.locator('#documentos')).not.toContainText('torres-vedras_ar_casa');
   await captura(page, 'step-inside-teste-ar');

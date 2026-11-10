@@ -175,7 +175,7 @@ fluxo de trabalho. A equipa foi avisada no hub de que pode testar e escrever na 
 - **Um modelo por piso no Teste do AR:**
   - «Piso 0»: sem o que está por cima;
   - «Piso 1»: sem a cobertura e pousado no chão, para se andar dentro dele à escala real.
-- **Maquete:** um ficheiro por piso, com a casa aberta.
+- **Maquete:** um ficheiro por piso, com a casa aberta. *(Deixou de se fazer na versão 7.2: só uma maquete com terreno.)*
 - **Escolha do piso:** no hub, com um botão por piso. O Quick Look e o Scene Viewer não têm botões dentro do modelo.
 - **Visualizador 3D (tarefa 85) e Unreal:** o piso escolhe-se num menu e sobem-se as escadas.
 
@@ -275,6 +275,8 @@ O utilizador disse «Sim, avança» para as tarefas 166 e 157.
   - O último piso fica sem a cobertura.
   - O pavimento fica na origem: o telemóvel pousa-o no chão e anda-se lá dentro.
 - `maquete_pisoN`: a casa com o terreno, aberta até ao piso N, sem o que está por cima nem os tetos desse piso.
+  *Deixou de se gerar na versão 7.2 (utilizador, 2026-11-10): o Sobral fica com quatro modelos, a maquete com terreno
+  e a casa, o piso 0 e o piso 1 sem terreno. As linhas `maquete_piso*` das tabelas abaixo são históricas.*
 - Os pisos são os níveis dos pavimentos acabados visíveis, com pelo menos 4 m² cada (Sobral: 0 e 2,96 m).
 - Os cortes ficam fechados (`holes_fill`), para as paredes não parecerem ocas vistas de cima.
 - A regra de não flutuar vale também para `casa_pisoN`.
@@ -487,6 +489,50 @@ começar dentro da casa ou dentro de uma parede mas sim com a casa a nossa frent
 | Sobral Tipo 1 | maquete_piso1 | 9 638 | 1 452 | 3,3 MB | 2,0 MB | 20 m |
 
 **Imagens de verificação** (só no PC): `_trabalho/step-inside/<obra>/ar/v7_*.png`.
+
+## Versão 7.2: o chão do Sobral, quatro modelos e o Android (2026-11-10)
+
+Notas que continuavam abertas na tarefa 84, e o pedido do utilizador (2026-11-10): «a textura de sobral que fica junto
+ao chão está bugada», «sobral em AR deve apenas ter uma maquete total da casa com terreno, uma da casa total sem
+terreno, uma do piso 0 e uma do piso 1 ambas sem terreno» e «o AR no android continua sem funcionar».
+
+**Sobral junto ao chão (nota 11).**
+- **Causa:** o lote plano à volta da casa (P, 189,6 m²) ficava à cota exata do topo da laje. No AR, as duas superfícies
+  coincidiam à volta da casa e a textura piscava.
+- **Correção:** o lote fica 2 cm abaixo do topo da laje (`visita.json`: `"acima_da_laje": -0.02`, lido por
+  `visita.py`; antes era fixo em 0). Terreno menos laje junto à casa: −0,03 a 0,00 m (antes −0,02 a +0,01).
+
+**Quatro modelos no Sobral.** Por piso, o `ar.py` só gera o modelo 1:1, sem terreno; as maquetes por piso deixaram
+de se gerar (PASS):
+
+| Variante | O que é | Triângulos | GLB | USDZ |
+|---|---|---|---|---|
+| maquete | a casa toda com o terreno | 14 244 | 3,6 MB | 2,3 MB |
+| casa | a casa toda, 1:1, sem terreno | 12 916 | 2,1 MB | 1,9 MB |
+| casa_piso0 | o rés do chão, 1:1, sem terreno | 5 110 | 1,6 MB | 1,4 MB |
+| casa_piso1 | o piso 1, 1:1, sem terreno | 5 262 | 1,3 MB | 1,3 MB |
+
+No hub: carregar estes quatro (GLB e USDZ) e apagar os documentos «maquete do piso 0/1» (falta autorizar a função
+temporária de carregamento).
+
+**Android (nota 10): revisão de tudo o que foi feito.**
+- **Sintomas:** no primeiro teste o Scene Viewer não abriu nem descarregou nada; no segundo, a transição anima uma
+  fração de segundo e volta ao hub. Quer dizer que o link chega à app Google e o Scene Viewer fecha logo.
+- **O que se encontrou:** o link era o exemplo da documentação da Google (`scene-viewer/1.0?file=…`). O `<model-viewer>`
+  4.0.0 da Google, que funciona nos Android de hoje, faz outro: `scene-viewer/1.2`, a query do próprio URL do modelo
+  copiada para o link, `mode=ar_preferred`, `disable_occlusion=true`, `resizable=false` (1:1), o título e, no fim,
+  `file=`. O botão do hub passou a fazer o link igual (`public/js/hub/ar-android.js`, `intentSceneViewer`).
+- **Outras causas possíveis, que só um Android real separa:** o telemóvel sem «Google Play Services para RA» ou com a
+  app Google desatualizada; o Scene Viewer não conseguir ler o link assinado do Supabase; algo no nosso GLB.
+- **Diagnóstico no telemóvel** (o Claude não tem um Android para testar): em Step Inside › Teste do AR, o painel
+  «Diagnóstico do AR no Android» tem cinco testes:
+  - A/B: o modelo de exemplo da Google, com o link antigo (1.0) e o novo (1.2);
+  - C/D: o nosso modelo, com os mesmos dois links;
+  - E: o nosso modelo no AR do próprio Chrome («Ver em 3D» › «Ver no teu espaço»).
+  O painel também vê sozinho se o Chrome do telemóvel tem AR (WebXR) e se o nosso ficheiro descarrega (estado,
+  tipo, cabeçalho glTF). «Enviar resultado» põe tudo numa nota da tarefa 84, que o Claude lê.
+- **Como ler o resultado:** A e B falham → é o telemóvel (ARCore ou app Google); B abre e D não → é o nosso ficheiro ou
+  o link assinado; D abre → estava resolvido pelo link 1.2.
 
 ## Em falta
 

@@ -23,6 +23,6 @@
                          "nota": "contorno exterior acabado da casa na implantação"}
  },
  "plataforma": {"ficheiro": "SMA_012_arquitectura_pecas_desenhadas.dwfx", "folha": 4, "contem_mm": [490.0, 168.0],
-                "estilo": {"stroke": "#000000", "sw": 0.08}, "acima_da_laje": 0.0,
-                "nota": "modelação simplificada (folha 4): o lote P fica plano à cota do topo da laje dentro do contorno desenhado à volta da casa; os muros e taludes da modelação ainda não estão no modelo"}
+                "estilo": {"stroke": "#000000", "sw": 0.08}, "acima_da_laje": -0.02,
+                "nota": "modelação simplificada (folha 4): o lote P fica plano 2 cm abaixo do topo da laje (à cota exata coincidia com a laje e piscava no AR, nota da equipa de 2026-11-10) dentro do contorno desenhado à volta da casa; os muros e taludes da modelação ainda não estão no modelo"}
 }

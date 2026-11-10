@@ -45,6 +45,7 @@ DiscoverCasa projects from any device.
 | `Construção Torres Vedras/` | house already built — model it from the architecture and compare with the real materials (current focus) | any work on that project |
 | `configurador/` | the client's IKEA-style house configurator (Product vision 4; built into `public/build-your-house/`): spec, Kreativ study | configurator work |
 | `ferramentas/` | Python / PowerShell / Blender tools | via the skills below |
+| `ferramentas/pesquisa/` | web research through a self-hosted Firecrawl (Docker, local only): `firecrawl.py ler/procurar/mapa/rastrear` | reading or searching the web beyond WebFetch/WebSearch |
 | skill `ler-dwfx` | read, render, zoom and measure DWFx drawings | a .dwfx must be read |
 | skill `modelo-blender-madeira` | build/update Blender models from drawings (structure + build-up layers); production documents (Módulos, Cobertura, Listagem de material: `ferramentas/documentos/gerar.py`) | 3D modelling work; documents for a house |
 | agent `guardiao-detalhes` (`.claude/agents/`) | records every detail (log + docs) and checks for conflicts, pending items, improvements | end of every task with new user info; audits |

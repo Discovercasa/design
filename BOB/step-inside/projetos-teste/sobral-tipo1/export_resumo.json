@@ -1,8 +1,8 @@
 {
  "project_id": "sobral-tipo1",
- "version_id": "sobral-tipo1-3c5454a-202611091622",
- "source_blend_hash": "sha256:0b85e2dfc864ead776b470ab24245db240aa850c0874ed5a56aaa3d2837cc1ea",
- "export_timestamp": "2026-11-09T16:22:19+00:00",
+ "version_id": "sobral-tipo1-8232d36-202611101631",
+ "source_blend_hash": "sha256:da7aee68cb4bf09ed4ce7153f38aa64d8c601ada96039ae5b2a38f475cb3bb13",
+ "export_timestamp": "2026-11-10T16:31:08+00:00",
  "blender_version": "4.4.3",
  "unreal_target_version": "5.8 (a confirmar na Fase 4)",
  "unit_system": "métrico (1 unidade = 1 m)",
@@ -39,8 +39,8 @@
   {
    "path": "sobral-tipo1_visita.fbx",
    "type": "fbx",
-   "size_bytes": 2093004,
-   "sha256": "1d88773c0c3ba541b4ee022b53a3250930a85fbe707410d4d0dc417e6ddd9276",
+   "size_bytes": 2093084,
+   "sha256": "0e47074da64a7d1575c8a1f171abf8eff97f049aa1a5dcad1c44ed4b532c70fa",
    "material_ids": [
     "MAT_BOARD_OSB",
     "MAT_CONCRETE_SLAB",
@@ -64,8 +64,8 @@
   {
    "path": "sobral-tipo1_visita.glb",
    "type": "glb",
-   "size_bytes": 106135372,
-   "sha256": "4d7fc6e55de17498a8e068273eea2ebd580ef401db7429c593513e8cedfbdad2",
+   "size_bytes": 106135236,
+   "sha256": "7ad3a3cdf706fbdbc366ca138ff2bc7740402cfa91218765e43711ab9c0eff2d",
    "material_ids": [
     "MAT_BOARD_OSB",
     "MAT_CONCRETE_SLAB",
@@ -89,8 +89,8 @@
   {
    "path": "sobral-tipo1_visita.usdz",
    "type": "usdz",
-   "size_bytes": 94474451,
-   "sha256": "701ef9a889062cd6cfd927ca78d042ae691d9b6c7aa04c1a413377443979a218",
+   "size_bytes": 94474265,
+   "sha256": "6eadd0f91fd6be714573709e06e32bff42b63470a0fae2b4388bfe257efcaa1f",
    "material_ids": [
     "MAT_BOARD_OSB",
     "MAT_CONCRETE_SLAB",
@@ -216,8 +216,8 @@
     "imagens": 19,
     "imagens_em_falta": [],
     "imagem": {
-     "diferenca_media": 0.0433,
-     "pixeis_diferentes": 0.0169,
+     "diferenca_media": 0.0421,
+     "pixeis_diferentes": 0.0111,
      "silhueta_diferente": 0.0,
      "cobertura": 0.65
     },
@@ -288,8 +288,8 @@
     "imagens": 19,
     "imagens_em_falta": [],
     "imagem": {
-     "diferenca_media": 0.0424,
-     "pixeis_diferentes": 0.0105,
+     "diferenca_media": 0.0412,
+     "pixeis_diferentes": 0.0047,
      "silhueta_diferente": 0.0004,
      "cobertura": 0.65
     },

@@ -1,0 +1,32 @@
+# DiscoverCasa override for the self-hosted Firecrawl (copied next to Firecrawl's docker-compose.yaml by iniciar.ps1).
+# - prebuilt images from GHCR instead of building from source (no Node/pnpm build on the PC)
+# - the API answers only on this PC (127.0.0.1): it has no authentication (USE_DB_AUTHENTICATION=false)
+# - smaller memory limits (the office PC has 16 GB; Firecrawl's defaults reserve 8 GB + 4 GB)
+# - the experimental FoundationDB queue is off (it only starts with --profile fdb); the queue uses nuq-postgres
+# Needs Docker Compose >= 2.24 (the !reset / !override tags); Docker Desktop has it.
+services:
+  playwright-service:
+    build: !reset null
+    image: ghcr.io/firecrawl/playwright-service:latest
+    cpus: 2.0
+    mem_limit: 2G
+    memswap_limit: 2G
+
+  api:
+    build: !reset null
+    image: ghcr.io/firecrawl/firecrawl:latest
+    ports: !override
+      - "127.0.0.1:${PORT:-3002}:${INTERNAL_PORT:-3002}"
+    cpus: 2.0
+    mem_limit: 4G
+    memswap_limit: 4G
+
+  nuq-postgres:
+    build: !reset null
+    image: ghcr.io/firecrawl/nuq-postgres:latest
+
+  foundationdb:
+    profiles: ["fdb"]
+
+  foundationdb-init:
+    profiles: ["fdb"]
