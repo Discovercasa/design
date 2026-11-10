@@ -6,6 +6,7 @@ How DiscoverCasa builds a house, ordered like the work on site. Kept by the agen
 version, how to use the book, the section map and the legend; the rules are in `conhecimento/metodo/`, one file per topic,
 text unchanged, § numbers and rule IDs kept ("rulebook §7", "metodo-construtivo.md §13" resolve through the map below).
 
+**Version 8.15, 2026-11-10** — an opening cuts only the faces parallel to its module, never the perpendicular façade at a corner (§3, L75; AR-test model error, fixed in `camadas.aberturas_face`).
 **Version 8.14, 2026-11-07** — the raise applies to houses from a plan only; houses from the engineer's module drawings (`estrutura_dc.py`, Sobral) keep the drawings' module height and heads ≈ 3 cm lower — confirmed exception (user "Sim, ficam"; §3, X1(b)).
 **Version 8.13, 2026-11-07** — **from a plan the modules rise, an opening is never lowered** (user "altera isso e faz com que os módulos subam"; §3, L73, X1 closed for `casa_planta`, a760ce8).
 **Version 8.12, 2026-11-07** — the 110×75 jamb piece over the verga's ends is **confirmed** (user "Sim, confirmo"; §3, L72, §15 item 26).
@@ -41,7 +42,7 @@ request; before it: git) and the original header paragraph in full: `metodo/00-h
 1. Read this index, then **only the topic file(s) the task touches** (map below); roof work: 05 and/or 06 (gutters and downpipes
    of the hidden roof: 11), usually with §6 in 04.
 2. Find a rule by ID or word: `grep -rn "X15" conhecimento/metodo/`. IDs: **E1–E11** exposed-roof build steps (05) ·
-   **L1–L73** lessons (09) · **X1–X20** builder deviations (defined in 12, cited in 03/04/05/06/08/10) · **PO Qn** = question n
+   **L1–L75** lessons (09) · **X1–X20** builder deviations (defined in 12, cited in 03/04/05/06/08/10) · **PO Qn** = question n
    of `conhecimento/perguntas-por-obra.md`. References inside the files ("§7", "L46") keep these numbers.
 3. Writing: a rule goes into its topic file under its §; a new topic = a new file + a row below. The version and its notes
    live only here (a topic file's first line names the version at the split — leave it). Read every file only for a full audit.
@@ -59,7 +60,7 @@ request; before it: git) and the original header paragraph in full: `metodo/00-h
 | 7 | `11-caleiras-tubos-oculta.md` | Hidden roof, the water: caleira oculta (company build, [TV] as built), **downpipes 100 × 50** (count by area, recess), outlet holes, overflow |
 | 8, 9 | `07-paredes-exterior-interior.md` | Exterior walls outside (OSB, Traspir, finishes A/B/C, battens; pergolas, garages, annexes); walls inside (wool, Pladur) |
 | 11, 12, 13 | `08-produtos-limites.md` | Products, brands, purchase units, waste; site consumables; spans and limits the company uses |
-| 14 | `09-licoes.md` | Lessons L1–L72 from model errors: what went wrong → the rule → where it lives |
+| 14 | `09-licoes.md` | Lessons L1–L75 from model errors: what went wrong → the rule → where it lives |
 | 15 | `10-pontos-abertos.md` | Still unknown or assumed: promised, pending, the roof questionnaire (A1–E8), to ask / tell, ours |
 | 15 | `12-desvios-construtor.md` | What the builder still assumes or does differently from the rulebook (X1–X20, other assumptions) |
 | header | `00-historico.md` | The original version paragraph (v8.0–v8.3) |

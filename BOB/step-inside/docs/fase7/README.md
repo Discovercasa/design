@@ -452,11 +452,21 @@ começar dentro da casa ou dentro de uma parede mas sim com a casa a nossa frent
   `resizable=false` e o visualizador 3D com `ar-scale="fixed"`.
 
 **5. «Como se pode ver na imagem está a faltar parte da parede nessa zona».**
-- A foto da nota está no armazenamento privado do hub e o Claude não a consegue abrir.
-- Procura feita sem a foto: raios de fora para os modelos 1:1, a toda a volta.
-  - Torres Vedras: só uma faixa estreita de ripado à vista na ombreira do portão da garagem.
-  - Sobral: a fachada está completa; o interior só se vê pelos vidros e pelas soleiras das portas.
-  - Falta saber em que modelo e onde.
+- A foto da nota está no armazenamento privado do hub e o Claude não a consegue abrir. O utilizador mandou-a na
+  conversa: Torres Vedras, maquete, uma faixa vertical clara ao lado da porta.
+- **Causa (no modelo de produção, `ferramentas/modelo/camadas.py`):**
+  - Cada fachada junta os módulos cuja borda fica no seu plano. O módulo do portão da garagem (M1, Fachada Sul 2)
+    também toca no plano da Fachada Oeste com a ponta, e entrava com os seus 11 cm de espessura.
+  - O vão dele (o portão, até 2,20 m) era passado para a Fachada Oeste: cortava 11 cm × 2,20 m de Tremolo no canto.
+  - Via-se o ripado de pinho, claro.
+- **Correção:** os vãos de um módulo só cortam as faces paralelas a ele (`aberturas_face`).
+  - O módulo perpendicular continua a contar para o revestimento da sua ponta (a ombreira de uma passagem entre
+    módulos leva Pladur). Excluí-lo de vez tirava 7 m² de OSB e Pladur às ombreiras do Sobral.
+  - Torres Vedras: Tremolo 164,8 → 165,0 m² (629 tábuas em vez de 631: dois bocados voltam a ser tábuas inteiras);
+    OSB 9 mm e membrana +0,2 m².
+  - Sobral: sem mudanças.
+- **Verificado:** raios de fora para o modelo de visita e para o AR de Torres Vedras; o ripado já não se vê.
+- **No hub:** os quatro ficheiros de Torres Vedras estão por carregar (a função temporária ficou por autorizar).
 
 **Também corrigido.** Nos modelos de um só piso do Sobral:
 - A laje ficava sem geometria depois do corte. O objeto vazio punha (0,0,0) na caixa do resumo, e a verificação de

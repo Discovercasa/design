@@ -66,6 +66,11 @@ night (modules as D2503 Módulos, battens per the site photo) · v5.1 2026-10-19
 amarração, gable cladding to the panel end, entrance door) · v6.2 (chapéu corners, pergola whole length, 2,5 cm
 clearance, M23) · v6.3 (finished photos: pergola from the garage east, ceramic, remates) · v6.4 (outlet holes in the
 gutters; document generator first run) · v6.5 to rebuild (beams inside).
+- 2026-11-10 production model rebuilt (see registo): a module's openings cut only the faces parallel to it
+  (`camadas.py` `aberturas_face`). Garage door M1's module (Fachada Sul 2) had cut 11 cm × 2,20 m of Tremolo in the
+  west façade at the SW corner (light battens visible in «Ver em 3D», hub task 84). Tremolo 164,8 → 165,0 m² (629
+  boards, was 631), OSB 9 mm and membrane +0,2 m², battens 191 → 188; Sobral unchanged. The perpendicular module
+  keeps the lining of its end (jamb Pladur). Visit model and AR regenerated; the 4 AR files not yet in the hub.
 
 ## Open questions (house-specific; company items are in `sistema-construtivo.md` Pending)
 - D2503 interior modules **2,53** (studs 2,46) vs the rule 2,543 ("à medida certa das vigas amarração") — drawing

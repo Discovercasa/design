@@ -422,9 +422,16 @@ def paineis_da_face(face, paineis, tol=0.02, aparar=True):
     return [t for t in out if t[2] - t[1] > 0.005]
 
 
-def aberturas_face(pf):
+def aberturas_face(pf, face=None):
+    """Openings of the modules behind a face, in face coordinates (s, z). Only modules running along the face: one
+    perpendicular to it touches the face with its end (it stays in pf: it carries the lining of that end, e.g. the
+    jamb of a doorway between modules), but its openings lie in its own plane — mapped onto the face they cut a
+    strip as wide as its thickness (Torres Vedras: the garage door M1 took 11 cm × 2,20 m of Tremolo off the west
+    façade at the corner; team note on the AR test, 2026-11-10: «falta parte da parede»)."""
     rects = []
     for P, lo, hi in pf:
+        if face is not None and (face["o"] == "y") != (abs(P.ux) > 0.5):
+            continue
         for u0, u1, v0, v1, _k in P.aberturas:
             a, b = sorted((P.s_de_u(u0), P.s_de_u(u1)))
             a, b = max(a, lo), min(b, hi)
@@ -644,7 +651,7 @@ def exterior(casa, S, out, resumo):
         usados[nm] = usados.get(nm, 0) + 1
         f["nome"] = nm if usados[nm] == 1 else f"{nm} {usados[nm]}"
         f["pf"] = paineis_da_face(f, pe, aparar=False)
-        f["aberturas"] = aberturas_face(f["pf"])
+        f["aberturas"] = aberturas_face(f["pf"], f)
     for k, e in enumerate((casa.G["cobertura"].get("encostos") or []) if casa.faces else [], 1):
         # a gable over a lower roof: clad like the façade, above that roof (telhado_estrutura.py "encostos")
         faces.append({"o": e["o"], "c": e["c"], "n": e["n"], "s0": e["s0"], "s1": e["s1"], "ka": 0, "kb": 0,
@@ -921,7 +928,7 @@ def interior(casa, S, out, resumo):
             faces = grid.faces(comp)
             for f in faces:
                 f["pf"] = paineis_da_face(f, pan)
-                f["aberturas"] = aberturas_face(f["pf"])
+                f["aberturas"] = aberturas_face(f["pf"], f)
             for cid, cam0, w0, w1_0 in camadas:
                 pecas, tot = [], {"area": 0.0, "comp": 0.0, "n": 0}
                 pecas_alt = {}  # (finish id, its layer) -> (pieces, totals)
