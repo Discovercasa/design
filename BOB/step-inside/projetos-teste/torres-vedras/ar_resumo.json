@@ -1,7 +1,10 @@
 {
  "obra": "torres-vedras",
- "resultado": "PASS",
- "motivos": [],
+ "resultado": "WARNING",
+ "motivos": [
+  "casa glb (Scene Viewer): 18 materiais, 3 com transparência (recomendado pelo Scene Viewer: até 10, 2 com transparência)",
+  "maquete glb (Scene Viewer): 20 materiais, 3 com transparência (recomendado pelo Scene Viewer: até 10, 2 com transparência)"
+ ],
  "textura_max": 1024,
  "raio_terreno_m": 20.0,
  "materiais_ocultos": [
@@ -182,16 +185,25 @@
     "nota": "a fachada da frente fica virada para quem vê (+Z no glTF e no USD)"
    },
    "z_min": -0.2,
+   "scene_viewer": {
+    "extensoes_tiradas": [
+     "KHR_materials_specular"
+    ],
+    "erros": [],
+    "avisos": [
+     "18 materiais, 3 com transparência (recomendado pelo Scene Viewer: até 10, 2 com transparência)"
+    ]
+   },
    "ficheiros": {
     "glb": {
      "ficheiro": "torres-vedras_ar_casa.glb",
-     "bytes": 2939380,
-     "sha256": "5e7c709cde1c2ec442f280e78800be8c7ac849ee14df6f3ec5b15ebe3792f696"
+     "bytes": 2939252,
+     "sha256": "ac10808def84189cc3bd6e4d5c25b8ab9ef0c889f8d39a1dc2efd4400c742ae0"
     },
     "usdz": {
      "ficheiro": "torres-vedras_ar_casa.usdz",
-     "bytes": 2678975,
-     "sha256": "4ca1e620c51585eff75eb50b4360130ac2f1dee13cc7b7ad5e8727efd1b9017d"
+     "bytes": 2678895,
+     "sha256": "9a30d0055dc6c8fbf47f0ffa70792214e40dfac4f3c873a98210999620a5ad1c"
     }
    },
    "reimportacao": {
@@ -461,16 +473,25 @@
     "nota": "a fachada da frente fica virada para quem vê (+Z no glTF e no USD)"
    },
    "z_min": -1.515,
+   "scene_viewer": {
+    "extensoes_tiradas": [
+     "KHR_materials_specular"
+    ],
+    "erros": [],
+    "avisos": [
+     "20 materiais, 3 com transparência (recomendado pelo Scene Viewer: até 10, 2 com transparência)"
+    ]
+   },
    "ficheiros": {
     "glb": {
      "ficheiro": "torres-vedras_ar_maquete.glb",
-     "bytes": 4002680,
-     "sha256": "6ef1c98cb627926cf90ed7d9e71ba65b2765d7674323fdc108ec45906974b96d"
+     "bytes": 4002548,
+     "sha256": "dff74a6dd44d3213fea08195692ebbc0ae5627a31e53a9d714d1dca6e501cc24"
     },
     "usdz": {
      "ficheiro": "torres-vedras_ar_maquete.usdz",
-     "bytes": 3083634,
-     "sha256": "3e7e8ac3811a9e3c124bf6978cf7efdc221418a15b4431ab0a29299d8e915fab"
+     "bytes": 3083665,
+     "sha256": "fa6853f8cfd2c2be76de22a89a9b25d906780ebc48dc67d637b0480048bccfbe"
     }
    },
    "reimportacao": {

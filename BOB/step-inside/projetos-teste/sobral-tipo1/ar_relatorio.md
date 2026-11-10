@@ -1,7 +1,9 @@
 # AR no telemóvel · Sobral · Casa Tipo 1 no lote P
 
-**Resultado: PASS**
+**Resultado: WARNING**
 
+- casa glb (Scene Viewer): 11 materiais, 2 com transparência (recomendado pelo Scene Viewer: até 10, 2 com transparência)
+- maquete glb (Scene Viewer): 13 materiais, 2 com transparência (recomendado pelo Scene Viewer: até 10, 2 com transparência)
 
 Gerado por `step-inside/ferramentas/ar/ar.py` a partir do modelo de visita. Os ficheiros ficam só no PC (`_trabalho/step-inside/<obra>/ar/`).
 
@@ -25,6 +27,8 @@ Orçamento (Google Scene Viewer  especificação §12.1): ideal até 50 000 tri�
 **Maquete:** um bloco de terreno com a borda direita. O retângulo é o maior à volta da casa, até ao raio, que o levantamento cobre todo; os lados descem a um fundo plano (cor da terra do catálogo), por isso assenta direito na mesa. O chão é cozido numa só imagem por cima do bloco: a textura do catálogo à escala real misturada com uma cópia maior e rodada, uma variação larga de cor e a sombra suave da casa. Já não se vê o padrão a repetir.
 
 **Frente e origem** (notas do teste da equipa, 2026-11-10): a casa roda para os seus eixos e para a fachada da entrada ficar virada para quem vê (+Z). Na versão 1:1, a origem — onde o telemóvel pousa o modelo — fica 2 m à frente da casa, ao centro dessa fachada, no pavimento acabado: começa-se à frente da casa, não dentro dela. Na maquete, a origem fica no centro da planta. Fachada da entrada: fachada com mais portas no rés do chão (3) — INFERRED, a entrada não tem nome. Escala real em metros.
+
+**Android (Scene Viewer):** o GLB passa pelas regras do validador da Google (extensões suportadas, uma camada de UV, sem cores por vértice, tamanho, materiais). O Blender escreve `KHR_materials_specular` na película de sombra; o Scene Viewer recusa qualquer extensão que não suporte e o telemóvel voltava ao hub (nota da equipa, 2026-11-10). A extensão sai do GLB (o USDZ fica igual). casa: tiradas KHR_materials_specular; casa_piso0: tiradas KHR_materials_specular; casa_piso1: tiradas KHR_materials_specular; maquete: tiradas KHR_materials_specular.
 
 **Fundação na versão casa:** o telemóvel pousa o ponto mais baixo do modelo no chão real, por isso a fundação indicativa é cortada 0,2 m abaixo do pavimento e o soco fica visível.
 

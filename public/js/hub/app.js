@@ -77,8 +77,9 @@ function arAndroidFalhou() {
   const id = Number(q.get('ar-android'));
   q.delete('ar-android');
   history.replaceState(null, '', location.pathname + (q.toString() ? '?' + q : '') + location.hash);
-  aviso('O Scene Viewer não abriu neste telemóvel. Precisa da app Google atualizada e dos «Serviços Google Play para RA». '
-    + 'Experimenta o visualizador 3D: o botão «Ver no teu espaço» abre o AR no próprio Chrome.',
+  // (2026-11-10: the cause found was in our GLB, an extension Scene Viewer refuses; the phone may still lack the Google app)
+  aviso('O Scene Viewer não abriu o modelo neste telemóvel. Faz o «Diagnóstico do AR no Android» (Teste do AR) e envia '
+    + 'o resultado. Entretanto, o visualizador 3D: o botão «Ver no teu espaço» abre o AR no próprio Chrome.',
     { icone: 'atencao', duracao: 0, acoes: id ? [{ rotulo: 'Abrir em 3D', fazer: () => verEm3D(id) }] : [] });
 }
 

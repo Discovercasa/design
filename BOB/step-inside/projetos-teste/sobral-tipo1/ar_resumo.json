@@ -1,7 +1,10 @@
 {
  "obra": "sobral-tipo1",
- "resultado": "PASS",
- "motivos": [],
+ "resultado": "WARNING",
+ "motivos": [
+  "casa glb (Scene Viewer): 11 materiais, 2 com transparência (recomendado pelo Scene Viewer: até 10, 2 com transparência)",
+  "maquete glb (Scene Viewer): 13 materiais, 2 com transparência (recomendado pelo Scene Viewer: até 10, 2 com transparência)"
+ ],
  "textura_max": 1024,
  "raio_terreno_m": 20.0,
  "materiais_ocultos": [
@@ -172,16 +175,25 @@
     "nota": "a fachada da frente fica virada para quem vê (+Z no glTF e no USD)"
    },
    "z_min": -0.2,
+   "scene_viewer": {
+    "extensoes_tiradas": [
+     "KHR_materials_specular"
+    ],
+    "erros": [],
+    "avisos": [
+     "11 materiais, 2 com transparência (recomendado pelo Scene Viewer: até 10, 2 com transparência)"
+    ]
+   },
    "ficheiros": {
     "glb": {
      "ficheiro": "sobral-tipo1_ar_casa.glb",
-     "bytes": 2149708,
-     "sha256": "240811f9470f02e242c19e0ade3a0e52a3ddaa4ab310911777a772c8dc786aa3"
+     "bytes": 2149596,
+     "sha256": "031170750c3f229b1425cac09a2725abda3c6fd8915615a7eaf09fafcc20b173"
     },
     "usdz": {
      "ficheiro": "sobral-tipo1_ar_casa.usdz",
-     "bytes": 1907395,
-     "sha256": "ea835ad107d8e50774931a729b4440bd90ba3f1d09f4c56884eec348ba30226c"
+     "bytes": 1907424,
+     "sha256": "b99fdfde0285c802da9ec813438d4286d995d980ad237df17c0101de18e31bb1"
     }
    },
    "reimportacao": {
@@ -427,16 +439,25 @@
     "nota": "a fachada da frente fica virada para quem vê (+Z no glTF e no USD)"
    },
    "z_min": -4.56,
+   "scene_viewer": {
+    "extensoes_tiradas": [
+     "KHR_materials_specular"
+    ],
+    "erros": [],
+    "avisos": [
+     "13 materiais, 2 com transparência (recomendado pelo Scene Viewer: até 10, 2 com transparência)"
+    ]
+   },
    "ficheiros": {
     "glb": {
      "ficheiro": "sobral-tipo1_ar_maquete.glb",
-     "bytes": 3585324,
-     "sha256": "6a4f51920f28da0862b09e3b86f23f7f82b6a6b2961b94a66e3b8ea111d695cf"
+     "bytes": 3585212,
+     "sha256": "c51bd10116c28b992c53375d0ce00527bbafdfdb2a6afc9e1059fe76a8c890cd"
     },
     "usdz": {
      "ficheiro": "sobral-tipo1_ar_maquete.usdz",
-     "bytes": 2296854,
-     "sha256": "673d11c54bf723651b96597fd258571dde308cd200d093f9217b7f6598982e65"
+     "bytes": 2296976,
+     "sha256": "bdd149c15b78c52da8ef47dd1d31df3416f83696743a931eff0f68ab9d7a5401"
     }
    },
    "reimportacao": {
@@ -651,16 +672,23 @@
     "nota": "a fachada da frente fica virada para quem vê (+Z no glTF e no USD)"
    },
    "z_min": -0.2,
+   "scene_viewer": {
+    "extensoes_tiradas": [
+     "KHR_materials_specular"
+    ],
+    "erros": [],
+    "avisos": []
+   },
    "ficheiros": {
     "glb": {
      "ficheiro": "sobral-tipo1_ar_casa_piso0.glb",
-     "bytes": 1576508,
-     "sha256": "dacf766b41d2c35fb7bac45981f3450faf963b89ec7b91f9a8932fdc6aa676f9"
+     "bytes": 1576396,
+     "sha256": "cbd1ed5e8ded1f12ae47de489c25ff2f915c1a8eb4048a6c3819b4565f45030c"
     },
     "usdz": {
      "ficheiro": "sobral-tipo1_ar_casa_piso0.usdz",
-     "bytes": 1445815,
-     "sha256": "b822b41f9441d2b7c8f1d0df8e3b8507977c2afc0286419a0f0fdcd95ac685fc"
+     "bytes": 1445818,
+     "sha256": "8e128ddf6f41560408171284965c2a899db6eaa7a074a7c1f9d2189fbf965472"
     }
    },
    "reimportacao": {
@@ -865,16 +893,23 @@
     "nota": "a fachada da frente fica virada para quem vê (+Z no glTF e no USD)"
    },
    "z_min": -0.2,
+   "scene_viewer": {
+    "extensoes_tiradas": [
+     "KHR_materials_specular"
+    ],
+    "erros": [],
+    "avisos": []
+   },
    "ficheiros": {
     "glb": {
      "ficheiro": "sobral-tipo1_ar_casa_piso1.glb",
-     "bytes": 1338400,
-     "sha256": "64512b2fe48165cdf4ce37026027a7d2985c5128bfd2eceb1af9db1acb80e243"
+     "bytes": 1338292,
+     "sha256": "b00a5977ef54cf81862574659264b42ff98cf63fa95ccbad401e77318f0aa5f4"
     },
     "usdz": {
      "ficheiro": "sobral-tipo1_ar_casa_piso1.usdz",
-     "bytes": 1278117,
-     "sha256": "8f3190ae3d7633e9d380e23f76f89ab70fb7d80c0fee41b44bd40e8144507d13"
+     "bytes": 1278047,
+     "sha256": "28d9cb9a4d049a37b3099aa9fe0b87346e158c105f3442102276a2de697a0a51"
     }
    },
    "reimportacao": {

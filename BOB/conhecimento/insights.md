@@ -149,6 +149,12 @@ he answers (`metodo-construtivo.md`). Condensed 2026-10-28 (history in git).
   lets the same visit pipeline serve third parties: each builder only adds a mapping file
   (`step-inside/materiais/mapeamentos/<builder>.json`) to the common catalogue — `discovercasa.md` Step Inside —
   **applied** (Phase 3).
+- **2026-11-10** — Scene Viewer (Android AR) rejects any glTF extension it does not support (UNSUPPORTED_GLTF_EXTENSION_USED;
+  supported: KHR_materials_pbrSpecularGlossiness, KHR_materials_unlit, KHR_texture_transform), even one only in
+  `extensionsUsed`, and silently falls back to the web page (the hub). Blender's glTF exporter adds KHR_materials_*
+  extensions automatically when a Principled BSDF has non-default values (e.g. specular 0 on the occlusion film
+  AR_OCLUSAO) → every GLB meant for Android must pass `step-inside/ferramentas/ar/scene_viewer.py` — `step-inside/docs/fase7/README.md`
+  «Versão 7.3» — **applied 2026-11-10**, waiting for the phone test.
 
 ## Recorded, not yet told (raise when it fits)
 - **2026-10-16** — lameladas cut from stock waste a lot (8,50 from 13,5 m: ≈ 1,1 m³ at TV) → order to length or a 17 m
