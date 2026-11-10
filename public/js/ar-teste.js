@@ -42,7 +42,7 @@ const TESTES = [
   { id: 'N4', nosso: true, nome: 'O nosso modelo · AR do próprio Chrome (WebXR)', webxr: true },
 ];
 const urlDe = (t) => (t.nosso ? E.modelo.u : EXEMPLO_GOOGLE);
-const voltaDe = (id) => location.origin + '/ar-teste.html?volta=' + id;
+const voltaDe = (id) => location.origin + location.pathname + '?volta=' + id;   // /ar-teste on the site (no redirect)
 
 // ---------------------------------------------------------------- what happened (automatic)
 const novaAba = !sessionStorage.getItem('ar-teste-aba');
