@@ -154,7 +154,10 @@ he answers (`metodo-construtivo.md`). Condensed 2026-10-28 (history in git).
   `extensionsUsed`, and silently falls back to the web page (the hub). Blender's glTF exporter adds KHR_materials_*
   extensions automatically when a Principled BSDF has non-default values (e.g. specular 0 on the occlusion film
   AR_OCLUSAO) → every GLB meant for Android must pass `step-inside/ferramentas/ar/scene_viewer.py` — `step-inside/docs/fase7/README.md`
-  «Versão 7.3» — **applied 2026-11-10**, waiting for the phone test.
+  «Versão 7.3» — **applied 2026-11-10**, waiting for the phone test. Update 2026-11-10: server logs proved the Google
+  app never fetched the model, so the extension was not the cause of the symptom (still a real Scene Viewer rule).
+- **2026-11-10** — To debug a phone-only failure without the device, read the Supabase edge logs (user agent per
+  request): they show which app actually fetched the file — **applied 2026-11-10**.
 
 ## Recorded, not yet told (raise when it fits)
 - **2026-10-16** — lameladas cut from stock waste a lot (8,50 from 13,5 m: ≈ 1,1 m³ at TV) → order to length or a 17 m

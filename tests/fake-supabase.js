@@ -163,6 +163,7 @@
     update(v) { this.op = 'update'; this.v = v; return this; }
     delete() { this.op = 'delete'; return this; }
     eq(c, v) { this.f.push((r) => r[c] === v); return this; }
+    ilike(c, pat) { const re = new RegExp('^' + pat.split('%').map((s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('.*') + '$', 'i'); this.f.push((r) => re.test(String(r[c] ?? ''))); return this; }
     order(c, o = {}) { this.ord = [c, o.ascending !== false]; return this; }
     limit(n) { this.lim = n; return this; }
     range(a, b) { this.rng = [a, b]; return this; }

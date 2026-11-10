@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Teste do AR no Android</title>
+<meta name="description" content="Página de teste do AR no Android, fora do hub: diz porque é que o Scene Viewer não abre.">
+<meta name="robots" content="noindex">
+<link rel="icon" href="/img/favicon.png">
+<script>
+  try { const t = localStorage.getItem('hub-tema'); if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t; } catch (_) {}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="/css/hub.css">
+<style>
+  .teste-pagina { max-width: 640px; margin: 0 auto; padding: 24px 16px 64px; }
+  .teste-pagina h1 { font-size: 1.375rem; font-weight: 600; margin: 0 0 6px; }
+  .teste-pagina h2 { font-size: 1rem; font-weight: 600; margin: 24px 0 8px; }
+  .teste-caixa { border: 1px solid var(--linha); border-radius: var(--r2, 12px); background: var(--superficie); padding: 12px 16px; }
+  .teste-info { margin: 0; display: grid; grid-template-columns: max-content 1fr; gap: 4px 12px; font-size: 0.875rem; }
+  .teste-info dt { color: var(--tinta-3); }
+  .teste-info dd { margin: 0; overflow-wrap: anywhere; }
+  .testes { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+  .testes li { border: 1px solid var(--linha); border-radius: var(--r2, 12px); background: var(--superficie); padding: 10px 12px; display: grid; gap: 6px; }
+  .testes .linha { display: flex; gap: 10px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
+  .testes .nome { font-size: 0.9375rem; }
+  .testes .id { font-weight: 600; margin-right: 6px; }
+  .teste-res { font-size: 0.8125rem; color: var(--tinta-2); }
+  .teste-res.mau { color: var(--erro, #b3261e); }
+  .teste-res.bom { color: var(--certo, #1b7f3b); }
+  .teste-conf { display: flex; gap: 8px; flex-wrap: wrap; }
+  model-viewer { width: 100%; height: 220px; background: var(--lateral, transparent); border-radius: 8px; }
+  .estado-envio { margin-top: 8px; }
+  textarea.campo { width: 100%; }
+</style>
+</head>
+<body>
+<main class="teste-pagina">
+  <h1>Teste do AR no Android</h1>
+  <p class="fraco pequeno">Esta página está fora do hub de propósito: separa o que é do telemóvel, do nosso modelo e do hub.
+    No Chrome do Android, toca em cada teste, um de cada vez, e volta a esta página. A página vê sozinha o que aconteceu.
+    No fim, «Enviar para a tarefa do teste».</p>
+
+  <h2>Este telemóvel</h2>
+  <div class="teste-caixa"><dl class="teste-info" id="info"><dt>A verificar…</dt><dd></dd></dl></div>
+
+  <h2>Testes</h2>
+  <ol class="testes" id="testes"></ol>
+
+  <h2>Notas</h2>
+  <textarea class="campo" id="notas" rows="2" placeholder="O que viste (mensagens, ecrãs), se quiseres"></textarea>
+  <div class="botoes" style="margin-top:12px; display:flex; gap:8px; flex-wrap:wrap">
+    <button class="btn primario" type="button" id="enviar">Enviar para a tarefa do teste</button>
+    <button class="btn" type="button" id="copiar">Copiar o resultado</button>
+    <button class="btn texto" type="button" id="limpar">Recomeçar</button>
+  </div>
+  <p class="fraco mini estado-envio" id="estado-envio" aria-live="polite"></p>
+  <p class="fraco mini"><a href="/">Voltar ao hub</a></p>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script src="/js/design-core.js"></script>
+<script type="module" src="/js/ar-teste.js"></script>
+</body>
+</html>
