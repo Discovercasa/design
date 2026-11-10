@@ -3,6 +3,7 @@ import { E, projeto, nomeProjeto, checkpointsDe, tarefasDe, decisaoDaTarefa, dec
 import { img } from './imagens.js';
 import { ic, esc, dia, diaCurto, iniciais, euros } from './util.js';
 import { resumoInicio } from './social.js';
+import { blocoProjeto as blocoMateriais } from './materiais-vista.js';
 
 const ROTULO = { por_fazer: 'Por fazer', em_curso: 'Em curso', bloqueada: 'Bloqueada', concluida: 'Concluída', concluido: 'Concluído' };
 export const abertos = new Set();   // checkpoints abertos (ficam abertos ao redesenhar)
@@ -137,6 +138,7 @@ export function paginaProjeto(p) {
         ${proximos.length ? `<ul class="lista-simples">${proximos.map((t) => `<li>${ic('alvo', 'ic-sm')}<a href="#/projeto/${p.slug}/t-${t.id}" class="pequeno" style="color:inherit">${esc(t.titulo)}</a></li>`).join('')}</ul>` : '<p class="suave pequeno">Nada em aberto.</p>'}
       </section>
       ${pedidos(p)}
+      ${blocoMateriais(p)}
       <section class="bloco-lateral"><h3>Objetivos</h3><ul class="lista-simples">${(p.objetivos || []).map((o) => `<li>${ic('certo', 'ic-sm')}<span class="pequeno">${esc(o)}</span></li>`).join('')}</ul></section>
       <section class="bloco-lateral"><h3>Futuro</h3><ul class="lista-simples">${(p.futuro || []).map((o) => `<li>${ic('seta', 'ic-sm')}<span class="pequeno">${esc(o)}</span></li>`).join('')}</ul></section>
       <section class="bloco-lateral"><h3>Decisões</h3>

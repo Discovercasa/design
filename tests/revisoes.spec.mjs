@@ -195,7 +195,7 @@ test('quem só vê: escreve notas, mas não junta imagens às tarefas nem muda a
 test('Início: decisões em aberto agrupadas por projeto; abas pela ordem nova', async ({ page }) => {
   await abrir(page, { rota: '/#/' });
   await expect(page.getByRole('navigation', { name: 'Secções' }).getByRole('link'))
-    .toHaveText(['Início', 'Gerador de documentos', 'Builder', 'Orçamentação', 'Build Your House', 'Step Inside', 'Redes sociais']);
+    .toHaveText(['Início', 'Gerador de documentos', 'Builder', 'Orçamentação', 'Build Your House', 'Step Inside', 'Materiais', 'Redes sociais']);
   const grupo = page.locator('#decisoes-abertas .decisoes-projeto', { hasText: 'Build Your House' });
   await expect(grupo.locator('li')).toHaveCount(5);
   await expect(grupo).toContainText('Vendemos o Build Your House e o Step Inside a outras empresas?');

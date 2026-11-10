@@ -5,6 +5,7 @@ import { E } from './dados.js';
 import * as V from './vistas.js';
 import * as P from './paineis.js';
 import * as SO from './social.js';
+import * as MV from './materiais-vista.js';
 import { abrirVisor, hidratar, saoImagens } from './imagens.js';
 import { $, $$, ic, esc, iniciais, aviso, abrirDialogo, fecharDialogo, entrar, encherBarras, mov, luz } from './util.js';
 
@@ -127,12 +128,14 @@ function rota() {
   if (a === 'projeto') return { nome: 'projeto', p: D.projetoPorSlug(b), alvo: c };
   if (['pessoal', 'definicoes', 'novidades'].includes(a)) return { nome: a };
   if (a === 'social') return { nome: 'social', sub: b === 'obras' ? 'obras' : 'planeamento', alvo: b === 'obras' ? c : b };
+  if (a === 'materiais') return { nome: 'materiais', alvo: b };
   return { nome: 'inicio' };
 }
 function desenharNav() {
   const r = rota();
   $('#nav').innerHTML = `<a href="#/"${r.nome === 'inicio' ? ' aria-current="page"' : ''}>Início</a>` +
     E.projetos.map((p) => `<a href="#/projeto/${p.slug}"${r.nome === 'projeto' && r.p === p ? ' aria-current="page"' : ''}>${esc(p.nome)}</a>`).join('') +
+    `<a class="nav-separada" href="#/materiais"${r.nome === 'materiais' ? ' aria-current="page"' : ''}>Materiais</a>` +
     `<a class="nav-separada" href="#/social"${r.nome === 'social' ? ' aria-current="page"' : ''}>Redes sociais</a>`;
   const atual = $('#nav [aria-current]');
   if (atual) atual.scrollIntoView({ block: 'nearest', inline: 'nearest' });
@@ -145,8 +148,11 @@ function desenhar(mudouRota) {
   else if (r.nome === 'pessoal') { html = V.pessoal(); document.title = 'Área pessoal · Discovercasa Design'; }
   else if (r.nome === 'definicoes') { html = V.definicoes(!!pedidoInstalar); document.title = 'Definições · Discovercasa Design'; }
   else if (r.nome === 'social') { html = SO.pagina(r.sub); document.title = 'Redes sociais · Discovercasa Design'; }
+  else if (r.nome === 'materiais') { html = MV.pagina(); document.title = 'Materiais · Discovercasa Design'; }
   else if (r.nome === 'novidades') { html = V.novidades(novidades); document.title = 'Novidades · Discovercasa Design'; marcarNovidadesVistas(); }
   else { html = V.inicio(); document.title = 'Início · Discovercasa Design'; }
+  // materials from the Hub (migration 0016): read once, when the Materiais tab or a project that uses them is opened
+  if (MV.precisa() && (r.nome === 'materiais' || (r.nome === 'projeto' && r.p && r.p.materiais))) MV.garantir().then(() => desenhar(false));
   const y = window.scrollY;
   v.innerHTML = aviso_ + html;
   encherBarras(v);
@@ -163,6 +169,13 @@ function desenhar(mudouRota) {
 }
 function irPara(alvo) {
   if (/^(post|obra)-\d+$/.test(alvo || '')) return SO.irPara(alvo);
+  if (/^m-[0-9a-f-]+$/.test(alvo || '')) {   // a material of the Materiais tab: open it
+    const el = document.getElementById(alvo);
+    if (!el) return;
+    el.querySelector('details').open = true;
+    el.scrollIntoView({ block: 'center', behavior: mov() ? 'smooth' : 'auto' });
+    return;
+  }
   const m = /^(t|cp|doc)-(\d+)$/.exec(alvo || '');
   if (!m) return;
   const id = Number(m[2]);
@@ -459,6 +472,17 @@ async function verEm3D(id) {
 
 async function depois() { try { await D.carregarNotificacoes(); } catch (_) {} atualizarContador(); desenhar(false); }
 
+// Materiais tab: search and filters redraw only the list (the search box keeps its focus)
+function filtrarMateriais(e) {
+  const el = e.target.closest('[data-mat]');
+  if (!el || !$('#mat-lista')) return;
+  MV.filtro[el.dataset.mat] = el.value;
+  MV.filtro.limite = 200;
+  $('#mat-lista').innerHTML = MV.lista();
+}
+document.addEventListener('input', filtrarMateriais);
+document.addEventListener('change', filtrarMateriais);
+
 document.addEventListener('click', async (e) => {
   const el = e.target.closest('[data-acao]');
   if (!el || el.matches('select, input[type=checkbox]')) return;
@@ -480,6 +504,8 @@ document.addEventListener('click', async (e) => {
       return;
     }
     case 'ver-3d': return verEm3D(id);
+    case 'mat-csv': return MV.descarregarCSV();
+    case 'mat-mais': MV.filtro.limite += 200; $('#mat-lista').innerHTML = MV.lista(); return;
     case 'abrir-doc': {
       const d = E.documentos.find((x) => x.id === id);
       const janela = window.open('about:blank', '_blank');  // já, para o browser não bloquear a janela

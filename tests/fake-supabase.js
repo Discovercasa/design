@@ -4,6 +4,7 @@
 (function () {
   const fx = window.__FIXTURE || {};
   const fs = window.__FIXTURE_SOCIAL || {};   // redes sociais (migração 0010)
+  const fm = window.__FIXTURE_MATERIAIS || {};   // materiais vindos do Hub (migração 0016, só de consulta)
   const U = window.__UTILIZADOR || { id: 'u-eu', nome: 'Teste Hub', nivel: 'editar' };
   const OUTRO = { id: 'u-outro', nome: 'Colega Teste' };
   const agora = () => new Date().toISOString();
@@ -17,6 +18,8 @@
     obras: fs.obras || [], obras_fases: fs.obras_fases || [], posts: fs.posts || [], posts_media: fs.posts_media || [], posts_comentarios: fs.posts_comentarios || [],
     sugestoes: [{ id: 1, texto: 'Pôr um modo escuro no hub.', ferramenta: 'geral', estado: 'nova', autor_id: OUTRO.id, autor_nome: OUTRO.nome, criada_em: '2026-11-04T09:00:00Z', na_checklist: false, checklist_em: null }],
     sugestoes_comentarios: [],
+    hub_fornecedores: fm.hub_fornecedores || [], hub_materiais: fm.hub_materiais || [],
+    hub_material_precos: fm.hub_material_precos || [], hub_material_precos_historico: fm.hub_material_precos_historico || [],
   };
   const seq = {}; Object.keys(db).forEach((t) => (seq[t] = Math.max(0, ...db[t].map((r) => (typeof r.id === 'number' ? r.id : 0)))));
   let ator = U;  // quem está a agir (para os triggers)
@@ -162,12 +165,14 @@
     eq(c, v) { this.f.push((r) => r[c] === v); return this; }
     order(c, o = {}) { this.ord = [c, o.ascending !== false]; return this; }
     limit(n) { this.lim = n; return this; }
+    range(a, b) { this.rng = [a, b]; return this; }
     single() { this.um = 'single'; return this; }
     maybeSingle() { this.um = 'maybe'; return this; }
     then(ok, falha) { return Promise.resolve().then(() => this.correr()).then(ok, falha); }
     correr() {
       const tab = db[this.t];
       if (!tab) return { data: null, error: { message: `relation "public.${this.t}" does not exist` } };
+      if (this.t.startsWith('hub_') && this.op !== 'select') return { data: null, error: { message: `permission denied for table ${this.t}` } };   // só o Hub escreve
       try {
         let linhas;
         if (this.op === 'insert' || this.op === 'upsert') {
@@ -217,6 +222,7 @@
           if (this.t === 'vistos' || this.t === 'notificacoes_lidas') linhas = linhas.filter((r) => r.utilizador_id === ator.id);
           if (this.ord) { const [c, asc] = this.ord; linhas = [...linhas].sort((a, b) => (a[c] < b[c] ? -1 : a[c] > b[c] ? 1 : 0) * (asc ? 1 : -1)); }
           if (this.lim) linhas = linhas.slice(0, this.lim);
+          if (this.rng) linhas = linhas.slice(this.rng[0], this.rng[1] + 1);
           linhas = linhas.map((r) => {
             const c = copia(r);
             for (const [filho, [pai, fk]] of Object.entries(FILHOS)) if (pai === this.t && new RegExp(filho + '(![a-z_]+)?\\s*\\(').test(this.cols)) c[filho] = copia(db[filho].filter((x) => x[fk] === r.id));

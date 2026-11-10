@@ -1,6 +1,15 @@
 [
   {
     "dia": "2026-11-10",
+    "titulo": "Materiais e preços do Hub",
+    "itens": [
+      "Aba nova «Materiais»: os materiais, o preço de cada fornecedor (com desconto e IVA) e o histórico dos preços, vindos do Hub nos dias úteis às 6h. Só de consulta.",
+      "Procura por nome, designação, dimensões ou fornecedor; filtros por categoria e fornecedor; «Descarregar CSV» para o Excel.",
+      "Orçamentação, Build Your House, Gerador e Step Inside têm um bloco «Materiais do Hub» que diz para que serve a lista em cada projeto."
+    ]
+  },
+  {
+    "dia": "2026-11-10",
     "titulo": "AR: correções do primeiro teste da equipa",
     "itens": [
       "A casa abre de frente para ti: a fachada da entrada virada para o telemóvel e a casa à tua frente, não à tua volta (versão 1:1). As versões 1:1 ficam sempre à escala real.",

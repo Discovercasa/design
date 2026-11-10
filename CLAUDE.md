@@ -35,5 +35,10 @@ Projeto Design da Discovercasa (`design.discovercasa.pt`). Responder em portugu�
   marcá-la concluída / resolvida no hub (Supabase "Design") no mesmo trabalho, com uma notificação para a equipa.
 - **Redes sociais** (aba do hub, `#/social`): planeamento dos posts, aprovação, obras e fases (migrações 0009/0010,
   `public/js/hub/social*.js`). As fotos ficam no armazenamento privado `social`, nunca no Git.
+- **Materiais do Hub** (aba do hub, `#/materiais`; migração 0016, 2026-11-10): materiais, preços por fornecedor e
+  histórico de preços, nas tabelas `hub_*`. O Hub envia-as nos dias úteis às 6h (Lisboa) com a chave de serviço deste
+  projeto. **Só de consulta:** nunca escrever nelas, nunca acrescentar regras de criar/editar/apagar nem mudar colunas
+  sem falar com o Sebastião (o envio do Hub deixava de funcionar). Para as ler (hub e aplicações), usar o módulo comum
+  `public/js/materiais.js`; os projetos que as usam dizem para quê no campo `materiais` do seu JSON.
 - **Repositório público**: nunca dados pessoais nem desenhos de clientes (`*.dwfx`, `*.pdf` estão no `.gitignore`;
   ficam só no PC).

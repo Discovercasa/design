@@ -20,6 +20,7 @@
     "Ideia nossa: o cliente vê em 3D a casa que configurou no Build Your House.",
     "Interiores (portas, cozinha, casas de banho, iluminação, mobiliário) para o cliente caminhar dentro da sua casa, e cada piso à vista nas casas de dois ou mais pisos — pedido de 2026-11-09."
   ],
+  "materiais": "Para ligar o catálogo comum de materiais (MAT_*) aos materiais reais da DiscoverCasa (tarefa 163).",
   "metodo": "Funciona com projetos de qualquer arquiteto ou construtor; reutiliza os leitores e a geração 3D que já existem; nunca inventa cotas (NEEDS_HUMAN_REVIEW).",
   "app": null,
   "teste_ar": true,

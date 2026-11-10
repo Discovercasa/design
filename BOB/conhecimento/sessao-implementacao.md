@@ -39,7 +39,14 @@ pushing to `main` if unsure. Read the repo root `CLAUDE.md` (Design rules: Supab
   Blender steps; `construir_casa.py` runs them.
 - A complete house as reference: Torres Vedras (`modelos/casa/`, GLB `Casa_TorresVedras_Completa.glb`, material
   list `documentos/D2503_Listagem_Material.csv`).
-- Prices: NOT yet (the user will give the price list with suppliers — Product vision item 2).
+- Prices: since 2026-11-10 the price list comes from the Hub (the company's other system) into the Design Supabase,
+  tables `hub_fornecedores`, `hub_materiais`, `hub_material_precos` (price per supplier: unit, discount, VAT, lead time,
+  transport, dimensions…) and `hub_material_precos_historico`, sent on working days at 6:00 Lisbon (migration
+  `supabase/migrations/0016_materiais_hub.sql`). READ ONLY: never write to them nor change their columns (the Hub's
+  send would break). Read them with `public/js/materiais.js` (same origin and session as the apps); the team sees them
+  in the hub's Materiais tab (`#/materiais`), with a CSV download for offline tools. Supplier contacts stay in the Hub.
+  Discount and VAT come as fractions (0.23 = 23 %; first send, 2026-11-10: 54 suppliers, 971 materials of which 74
+  services, 1 090 prices; most materials have no category yet). The module also accepts 0–100.
 
 ## 4. What the user said about the configurator (Product vision item 4)
 "like IKEA Builder / IKEA Kreativ" for DiscoverCasa houses: the client gives the m² → the foundation base appears →
