@@ -310,3 +310,11 @@ The team's notes on hub task 84 (written in the hub by [membro da equipa] on 202
 - Round 2 of the test page (deployed): T1 camera for the site (getUserMedia, exact error), T2 Chrome's AR session directly (requestSession, exact error), G1/N1 Scene Viewer opening in 3D (mode=3d_preferred), G2/N2 opening in AR, G3/N3 Chrome's AR through the viewer (with the console messages); detects a window on top (focus lost without the page hiding); records camera permission and window size; old round-1 results are cleared.
 - Filed in: `conhecimento/insights.md` (2026-11-10, Android AR insight updated); `step-inside/docs/fase7/README.md` (by the caller).
 - Pending: round 2 run on the Android phones (each of the 3), then the fix; the client page must always offer the in-page 3D view when AR cannot open on a phone.
+
+### 2026-11-10 — Android AR: round 2 run on another phone, results not sent [Step Inside Phase 7]
+> ja fiz noutro dispositivo o teste vê e analisa os resultados
+- Context: reply to the previous entry (round 2 of the AR test page to be run on the Android phones).
+- Facts: Supabase edge logs: another Android phone (Chrome 157) opened the round-2 test page at 23:00 (our GLB downloaded: range request 206, then the full file 200 for the «through the viewer» test at 23:01). No note was created and the «Enviar» path never reached the server, so the results stayed on that phone (localStorage).
+- Fix: the test page now sends the result by itself when every available test has a final result, also when the page is reopened later with finished results not yet sent (only once per round); tests added.
+- Filed in: this log only (test-page behaviour; no construction facts).
+- Pending: reopen the test page on that phone (from the hub: Step Inside › Teste do AR › «Abrir a página de teste do AR») so the stored results are sent; or press «Enviar para a tarefa do teste» / «Copiar o resultado».
