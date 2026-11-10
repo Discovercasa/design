@@ -13,8 +13,11 @@ crawls a site and searches the web (DuckDuckGo when no SearXNG is set). It runs 
 | `firecrawl.py` | standard-library CLI for any session: `estado`, `ler URL`, `procurar "texto" [--ler]`, `mapa URL [--filtro]`, `rastrear URL -n 10 --saida pasta` |
 
 ## Setup on a PC (once)
-1. Install **Docker Desktop** for Windows (needs administrator rights and WSL 2, which is already on the office PC).
-   Free for companies under 250 employees and USD 10 M turnover.
+1. Install **Docker Desktop** for Windows (needs administrator rights and WSL 2; the installer sets WSL 2 up and may
+   ask for a restart). Free for companies under 250 employees and USD 10 M turnover.
+   `winget install --id Docker.DockerDesktop -e --source winget --interactive` (someone at the PC must accept the
+   Windows administrator prompt: on 2026-11-10 it was cancelled after about 2 minutes with nobody there, and the install
+   stopped; the office PC's `wsl.exe` was still the old built-in one, without `--status`).
 2. `powershell -ExecutionPolicy Bypass -File BOB/ferramentas/pesquisa/iniciar.ps1` (the first run downloads a few GB of images).
 3. Test: `python BOB/ferramentas/pesquisa/firecrawl.py ler https://example.com`.
 4. Optional, MCP tools inside Claude Code (`firecrawl_scrape`, `firecrawl_search`, `firecrawl_map`, `firecrawl_crawl`...):
@@ -24,6 +27,8 @@ crawls a site and searches the web (DuckDuckGo when no SearXNG is set). It runs 
        "env": { "FIRECRAWL_API_URL": "http://127.0.0.1:3002" } } } }
    ```
    Claude Code asks to approve the server in the next session. Without it, the CLI above does the same work.
+   Office PC (2026-11-10, the user: «sim, regista o MCP do Firecrawl»): written at `BOB Claude/.mcp.json` and at the
+   Design clone's root, both excluded locally; the package is in the npm cache. The tools only work while Firecrawl runs.
 
 ## Rules
 - The API has **no authentication**: it must stay on 127.0.0.1 (the override does it). Never publish the port.
