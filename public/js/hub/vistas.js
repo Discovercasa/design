@@ -326,7 +326,8 @@ function testeAR(p) {
     <div class="docs-grelha">
       <div class="docs-tipo"><div class="docs-tipo-cabeca"><h3>Modelos <span class="fraco num">${docs.length}</span></h3><p class="fraco mini">«casa»: à escala 1:1, pousa no chão e anda-se à volta. «maquete»: com o terreno, para ver em ponto pequeno. Nas casas com mais de um piso: «piso N (1:1)» é só esse piso, sem terreno, pousado no chão para andar lá dentro.</p></div>${lista}${htmlDiagnostico(docs.find((d) => /\.glb$/i.test(d.nome_ficheiro)), p.slug)}</div>
       <div class="docs-tipo"><div class="docs-tipo-cabeca"><h3>Como testar</h3><p class="fraco mini">iPhone ou iPad: abre no Safari e toca em «Ver em AR · iPhone». Android: abre no Chrome e toca em «Ver em AR · Android» (precisa da app Google e de um telemóvel com ARCore). Sem AR (no computador, ou num telemóvel sem AR): «Ver em 3D» abre o modelo aqui, para rodar e aproximar.</p>
-        <p class="fraco mini" style="margin-top:6px">Android, se o AR abrir e fechar logo: usa «Ver em 3D» › «Ver no teu espaço (AR)», que abre o AR no próprio Chrome, sem a app Google, e corre o «Diagnóstico do AR no Android», aqui em baixo: diz-nos onde está o problema.</p></div>
+        <p class="fraco mini" style="margin-top:6px">Android, se o AR abrir e fechar logo: usa «Ver em 3D» › «Ver no teu espaço (AR)», que abre o AR no próprio Chrome, sem a app Google, e faz a «página de teste do AR» (botão ao lado): diz-nos onde está o problema.</p>
+        <p class="aviso-ar pequeno" id="ar-este-telemovel" hidden></p></div>
         <ul class="lista-simples">
           ${['A casa fica do tamanho certo? (mede uma porta: ≈ 2,1 m)', 'Assenta no chão, sem flutuar nem afundar?', 'Está virada como esperavas (fachadas, entrada)?', 'Quanto tempo demora a abrir?', 'Os materiais parecem reais ou «de plástico»?'].map((x) => `<li>${ic('certo', 'ic-sm')}<span class="pequeno">${x}</span></li>`).join('')}
         </ul>

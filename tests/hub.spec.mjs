@@ -565,6 +565,9 @@ test('Step Inside: teste do AR — carregar modelos e abrir no Quick Look / Scen
   const android = sec.getByRole('link', { name: /Ver em AR · Android/ });
   // since 2026-11-10 built exactly as Google's <model-viewer> 4.0.0 builds it (scene-viewer 1.2, disable_occlusion, file last)
   await expect(android).toHaveAttribute('href', /^intent:\/\/arvr\.google\.com\/scene-viewer\/1\.2\?c=plataforma_cliente.+&mode=ar_preferred&disable_occlusion=true&resizable=false&title=.+&file=http.+__ficheiro.+\.glb#Intent;.*package=com\.google\.android\.googlequicksearchbox.+browser_fallback_url=.+%3Far-android%3D\d+%23%2Fprojeto%2Fstep-inside;end;$/);
+  // on an Android, the page says whether this phone has AR (ARCore); the test browser has none
+  if (ehTelemovel()) await expect(sec.locator('#ar-este-telemovel')).toContainText('não tem AR (ARCore)');
+  else await expect(sec.locator('#ar-este-telemovel')).toBeHidden();
   // without AR (tarefa 85, 2026-11-09): «Ver em 3D» opens the GLB in Google's <model-viewer>, with the USDZ for iPhone
   await page.route('**/@google/model-viewer@*/**', (r) => r.fulfill({ contentType: 'text/javascript',
     body: "customElements.define('model-viewer', class extends HTMLElement {});" }));

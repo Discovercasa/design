@@ -446,6 +446,9 @@ async function prepararAR(raiz) {
       a.removeAttribute('aria-disabled');
     } catch (err) { a.title = 'Não foi possível preparar o link: ' + (err.message || err); }
   }));
+  // Android: what this phone can do, on screen (team note 10: the AR bounced back even from «Ver no teu espaço»)
+  const linha = $('#ar-este-telemovel', raiz);
+  if (linha) AA.esteTelemovel().then((i) => { if (i && linha.isConnected) { linha.textContent = AA.textoTelemovel(i); linha.classList.toggle('mau', !i.webxr); linha.hidden = false; } });
 }
 
 // Step Inside: the 3D viewer for who has no AR — Google's <model-viewer> (a new dependency, authorised 2026-11-09),

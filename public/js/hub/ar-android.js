@@ -23,3 +23,30 @@ export function htmlDiagnostico(glb) {
     <div class="botoes" style="margin-top:8px"><a class="btn pequeno" href="#" data-ar="${glb.id}" data-ar-tipo="teste" aria-disabled="true">Abrir a página de teste do AR</a></div>
   </div>`;
 }
+
+/** This phone, seen from the page (Android only; null elsewhere): model, Android version, and whether Chrome has AR
+ *  (WebXR immersive-ar needs ARCore — «Serviços Google Play para RA» — on a supported phone). Run once per page. */
+let telemovel = null;
+export function esteTelemovel() {
+  if (!/Android/i.test(navigator.userAgent)) return Promise.resolve(null);
+  telemovel = telemovel || (async () => {
+    const i = { modelo: null, android: null, webxr: null };
+    try {
+      if (navigator.userAgentData && navigator.userAgentData.getHighEntropyValues) {
+        const v = await navigator.userAgentData.getHighEntropyValues(['model', 'platformVersion']);
+        i.modelo = v.model || null; i.android = v.platformVersion || null;
+      }
+    } catch (_) {}
+    try { i.webxr = !!(navigator.xr && await navigator.xr.isSessionSupported('immersive-ar')); } catch (_) { i.webxr = false; }
+    return i;
+  })();
+  return telemovel;
+}
+export function textoTelemovel(i) {
+  const quem = [i.modelo, i.android && 'Android ' + i.android].filter(Boolean).join(', ') || 'Este Android';
+  return i.webxr
+    ? `${quem}: tem AR (ARCore). Se o Scene Viewer não abrir, usa «Ver em 3D» › «Ver no teu espaço (AR)».`
+    : `${quem}: o Chrome diz que este telemóvel não tem AR (ARCore). Na Play Store, procura «Serviços Google Play para RA» `
+      + 'e instala ou atualiza. Se a Play Store disser que não é compatível, este telemóvel não consegue abrir AR: '
+      + 'só o «Ver em 3D». Depois, faz a página de teste do AR para confirmarmos.';
+}
