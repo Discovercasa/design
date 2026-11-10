@@ -1,6 +1,15 @@
 [
   {
     "dia": "2026-11-10",
+    "titulo": "AR no Android: encontrada a causa",
+    "itens": [
+      "O Android voltava ao hub porque os ficheiros do AR tinham uma extensão que o Scene Viewer da Google recusa (vinha da película de sombra dos cantos). O iPhone aceitava-a.",
+      "Os modelos Android de Torres Vedras e do Sobral foram substituídos nos mesmos links (versão 7.3). Experimentem «Ver em AR» num Android.",
+      "Os modelos novos passam sempre pelas regras do validador da Google antes de serem gerados."
+    ]
+  },
+  {
+    "dia": "2026-11-10",
     "titulo": "AR: o chão do Sobral, quatro modelos e o diagnóstico do Android",
     "itens": [
       "Sobral: a textura junto ao chão já não pisca (o terreno à volta da casa ficava à mesma altura da laje).",
