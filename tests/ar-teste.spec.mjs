@@ -133,3 +133,25 @@ test('página de teste do AR aberta sem o hub: só o exemplo da Google', async (
   await expect(page.locator('#estado-envio')).toHaveText('Faz primeiro pelo menos um teste.');
   expect(erros).toEqual([]);
 });
+
+test('página de teste do AR: com os testes todos feitos, envia sozinha (também ao voltar a abrir)', async ({ page }) => {
+  const erros = await abrir(page, '/ar-teste.html');
+  // a phone that finished round 2 without the hub link (only Google's sample and the two direct tests) and never pressed «Enviar»
+  await page.evaluate(() => {
+    const r = (texto) => ({ estado: 'mau', texto });
+    localStorage.setItem('design-ar-teste', JSON.stringify({ versao: 2, res: { T1: { estado: 'bom', texto: 'a câmara abriu neste site.' },
+      T2: r('a sessão de AR não abriu: NotSupportedError: x'), G1: r('nada aconteceu em 4 s'), G2: r('nada aconteceu em 4 s'),
+      G3: r('o AR do Chrome falhou ao abrir.') }, toque: null, info: null, modelo: null, notas: '' }));
+  });
+  await page.reload();
+  await expect(page.locator('#estado-envio')).toHaveText('Todos os testes feitos: o resultado foi enviado sozinho para a tarefa do teste. Obrigado!');
+  const notas = await page.evaluate(() => window.__fake.db.tarefas_notas.filter((n) => /ronda 2/.test(n.texto)).map((n) => n.texto));
+  expect(notas.length).toBe(1);
+  expect(notas[0]).toContain('T2. O AR do próprio Chrome, direto (diz o erro exato): a sessão de AR não abriu: NotSupportedError: x');
+  // only once
+  await page.reload();
+  await page.waitForTimeout(800);
+  expect(await page.evaluate(() => window.__fake.db.tarefas_notas.filter((n) => /ronda 2/.test(n.texto)).length)).toBe(0);   // fresh fake db after reload
+  await expect(page.locator('#estado-envio')).toHaveText('');
+  expect(erros).toEqual([]);
+});

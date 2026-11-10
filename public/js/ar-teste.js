@@ -24,13 +24,16 @@ function ler() { try { return JSON.parse(localStorage.getItem(CHAVE)) || {}; } c
 function guardar() { try { localStorage.setItem(CHAVE, JSON.stringify(E)); } catch (_) {} }
 const VERSAO = 2;   // round 2 (2026-11-10): other tests under the same ids — old results must not show under new names
 const E = Object.assign({ res: {}, toque: null, info: null, modelo: null, notas: '' }, ler());
-if (E.versao !== VERSAO) Object.assign(E, { versao: VERSAO, res: {}, toque: null, ultimo: null });
+if (E.versao !== VERSAO) Object.assign(E, { versao: VERSAO, res: {}, toque: null, ultimo: null, enviado: null });
 const recarregar = () => Object.assign(E, { res: {}, toque: null }, ler());   // another tab may have written
 
 // our model, from the hub (#u=&t=&doc=&real=): a new model starts a new round of tests
 const h = new URLSearchParams(location.hash.slice(1));
 if (h.get('u')) {
-  Object.assign(E, { modelo: { u: h.get('u'), t: h.get('t') || 'o nosso modelo', doc: Number(h.get('doc')) || null, real: h.get('real') === '1', em: Date.now() }, res: {}, toque: null, info: null });
+  // a new model starts a new round, unless the last round is finished and not sent yet (it is sent first, below)
+  const pendente = E.res && Object.keys(E.res).length && !E.enviado;
+  if (!pendente) Object.assign(E, { res: {}, toque: null, enviado: null });
+  Object.assign(E, { modelo: { u: h.get('u'), t: h.get('t') || 'o nosso modelo', doc: Number(h.get('doc')) || null, real: h.get('real') === '1', em: Date.now() }, info: null });
   guardar();
   history.replaceState(null, '', location.pathname + location.search);
 }
@@ -189,6 +192,7 @@ function montar() {
   $('#notas').value = E.notas || '';
 }
 function atualizar() {
+  if (E.info) setTimeout(talvezEnviar, 0);
   for (const t of TESTES) {
     const r = E.res[t.id], el = $(`[data-res="${t.id}"]`), conf = $(`[data-conf-caixa="${t.id}"]`);
     if (!el) continue;
@@ -239,6 +243,7 @@ async function verificarTelemovel() {
   E.info = i;
   guardar();
   desenharInfo();
+  talvezEnviar();
 }
 
 export function textoResultado() {
@@ -251,7 +256,14 @@ export function textoResultado() {
     `UA: ${i.ua || navigator.userAgent}`].join('\n');
 }
 
-async function enviar() {
+// when every available test has a final result the page sends it by itself (2026-11-10: a phone's results stayed on
+// the phone because nobody pressed «Enviar»); reopening the page sends results that were left behind
+const disponivel = (t) => !(t.nosso && !modeloValido());
+const completo = () => TESTES.filter(disponivel).every((t) => E.res[t.id] && ['bom', 'mau'].includes(E.res[t.id].estado));
+let aEnviar = false;
+function talvezEnviar() { if (aEnviar || E.enviado || !completo()) return; aEnviar = true; enviar(true).finally(() => { aEnviar = false; }); }
+
+async function enviar(auto = false) {
   const estado = $('#estado-envio');
   if (!Object.values(E.res).some((r) => r && r.estado !== 'a-testar')) { estado.textContent = 'Faz primeiro pelo menos um teste.'; return; }
   const sb = window.Design && window.Design.sb;
@@ -263,7 +275,10 @@ async function enviar() {
     const { data: perfil } = await sb.from('perfis').select('nome').eq('id', session.user.id).maybeSingle();
     const { error } = await sb.from('tarefas_notas').insert({ tarefa_id: tarefas[0].id, tipo: 'nota', texto: textoResultado(), autor_nome: (perfil && perfil.nome) || 'Teste do AR' });
     if (error) throw error;
-    estado.textContent = 'Enviado para a tarefa do teste. Obrigado!';
+    recarregar();
+    E.enviado = Date.now();
+    guardar();
+    estado.textContent = auto ? 'Todos os testes feitos: o resultado foi enviado sozinho para a tarefa do teste. Obrigado!' : 'Enviado para a tarefa do teste. Obrigado!';
   } catch (e) { estado.textContent = 'Não consegui enviar (' + (e.message || e) + '). Usa «Copiar o resultado».'; }
 }
 
@@ -283,12 +298,12 @@ document.addEventListener('click', (e) => {
   }
 });
 $('#notas').addEventListener('input', (e) => { E.notas = e.target.value; guardar(); });
-$('#enviar').addEventListener('click', enviar);
+$('#enviar').addEventListener('click', () => enviar());
 $('#copiar').addEventListener('click', async () => {
   try { await navigator.clipboard.writeText(textoResultado()); $('#estado-envio').textContent = 'Copiado.'; }
   catch (_) { $('#notas').value = textoResultado(); $('#estado-envio').textContent = 'Não consegui copiar: o resultado ficou nas notas, copia-o daí.'; }
 });
-$('#limpar').addEventListener('click', () => { Object.assign(E, { res: {}, toque: null, notas: '' }); guardar(); montar(); atualizar(); });
+$('#limpar').addEventListener('click', () => { Object.assign(E, { res: {}, toque: null, notas: '', enviado: null }); guardar(); montar(); atualizar(); });
 
 montar();
 atualizar();
