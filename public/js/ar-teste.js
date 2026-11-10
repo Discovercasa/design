@@ -5,10 +5,13 @@
 //   - it came back through ?volta=<test>  -> Scene Viewer did not open and Chrome followed the fallback link; if the page
 //     went hidden well before it unloaded, an app opened first and sent it back; if not, Chrome never opened an app
 //   - nothing within 4 s                   -> no app opened and no fallback
-// Google's own sample tells the phone apart from our model; Google app vs ARCore vs Chrome's own AR (WebXR) tells which
-// part of the phone fails. Results stay in this phone's localStorage until sent to the test task (Supabase, the person's
+//   - the page lost the focus without going hidden -> a window opened on top (a side or floating window, a sheet)
+// Google's own sample tells the phone apart from our model; Scene Viewer opening in 3D vs in AR, Chrome's own AR through
+// the viewer and directly (with the exact error), and the camera, tell which part of the phone fails. Round 1 (2026-11-10,
+// a Xiaomi with Android 15 and WebXR) failed everything, Google's sample too: the Google app links «did nothing» while
+// «a side window starts to open and closes», the ARCore links fell back at once, Chrome's AR failed. Results stay in this phone's localStorage until sent to the test task (Supabase, the person's
 // own session) or copied. Our model's signed link comes from the hub in the hash, so it never reaches a server log.
-import { EXEMPLO_GOOGLE, intentSceneViewer, intentArcore } from './ar-intent.js';
+import { EXEMPLO_GOOGLE, intentSceneViewer } from './ar-intent.js';
 
 const CHAVE = 'design-ar-teste';
 const MODEL_VIEWER = 'https://cdn.jsdelivr.net/npm/@google/model-viewer@4.0.0/dist/model-viewer.min.js';
@@ -19,7 +22,9 @@ const seg = (ms) => (ms / 1000).toFixed(1).replace('.', ',') + ' s';
 
 function ler() { try { return JSON.parse(localStorage.getItem(CHAVE)) || {}; } catch (_) { return {}; } }
 function guardar() { try { localStorage.setItem(CHAVE, JSON.stringify(E)); } catch (_) {} }
+const VERSAO = 2;   // round 2 (2026-11-10): other tests under the same ids — old results must not show under new names
 const E = Object.assign({ res: {}, toque: null, info: null, modelo: null, notas: '' }, ler());
+if (E.versao !== VERSAO) Object.assign(E, { versao: VERSAO, res: {}, toque: null, ultimo: null });
 const recarregar = () => Object.assign(E, { res: {}, toque: null }, ler());   // another tab may have written
 
 // our model, from the hub (#u=&t=&doc=&real=): a new model starts a new round of tests
@@ -32,14 +37,14 @@ if (h.get('u')) {
 const modeloValido = () => E.modelo && Date.now() - E.modelo.em < LINK_VALIDO_MS;
 
 const TESTES = [
-  { id: 'G1', nome: 'Exemplo da Google · app Google · link 1.0', link: (u, v) => intentSceneViewer(u, { versao: '1.0', titulo: 'Exemplo da Google', volta: v }) },
-  { id: 'G2', nome: 'Exemplo da Google · app Google · link 1.2', link: (u, v) => intentSceneViewer(u, { titulo: 'Exemplo da Google', volta: v }) },
-  { id: 'G3', nome: 'Exemplo da Google · ARCore (só AR, sem a app Google)', link: (u, v) => intentArcore(u, { titulo: 'Exemplo da Google', volta: v }) },
-  { id: 'G4', nome: 'Exemplo da Google · AR do próprio Chrome (WebXR)', webxr: true },
-  { id: 'N1', nosso: true, nome: 'O nosso modelo · app Google · link 1.0', link: (u, v, m) => intentSceneViewer(u, { versao: '1.0', titulo: m.t, real: m.real, volta: v }) },
-  { id: 'N2', nosso: true, nome: 'O nosso modelo · app Google · link 1.2 (o do botão do hub)', link: (u, v, m) => intentSceneViewer(u, { titulo: m.t, real: m.real, volta: v }) },
-  { id: 'N3', nosso: true, nome: 'O nosso modelo · ARCore (só AR, sem a app Google)', link: (u, v, m) => intentArcore(u, { titulo: m.t, real: m.real, volta: v }) },
-  { id: 'N4', nosso: true, nome: 'O nosso modelo · AR do próprio Chrome (WebXR)', webxr: true },
+  { id: 'T1', nome: 'A câmara do telemóvel, neste site', acao: 'camara' },
+  { id: 'T2', nome: 'O AR do próprio Chrome, direto (diz o erro exato)', acao: 'sessao' },
+  { id: 'G1', nome: 'Exemplo da Google · Scene Viewer a abrir em 3D', link: (u, v) => intentSceneViewer(u, { titulo: 'Exemplo da Google', volta: v, modo: '3d_preferred' }) },
+  { id: 'G2', nome: 'Exemplo da Google · Scene Viewer a abrir em AR', link: (u, v) => intentSceneViewer(u, { titulo: 'Exemplo da Google', volta: v }) },
+  { id: 'G3', nome: 'Exemplo da Google · AR do Chrome pelo visualizador', webxr: true },
+  { id: 'N1', nosso: true, nome: 'O nosso modelo · Scene Viewer a abrir em 3D', link: (u, v, m) => intentSceneViewer(u, { titulo: m.t, real: m.real, volta: v, modo: '3d_preferred' }) },
+  { id: 'N2', nosso: true, nome: 'O nosso modelo · Scene Viewer a abrir em AR (o do botão do hub)', link: (u, v, m) => intentSceneViewer(u, { titulo: m.t, real: m.real, volta: v }) },
+  { id: 'N3', nosso: true, nome: 'O nosso modelo · AR do Chrome pelo visualizador', webxr: true },
 ];
 const urlDe = (t) => (t.nosso ? E.modelo.u : EXEMPLO_GOOGLE);
 const voltaDe = (id) => location.origin + location.pathname + '?volta=' + id;   // /ar-teste on the site (no redirect)
@@ -85,16 +90,23 @@ document.addEventListener('visibilitychange', () => {
   }
 });
 window.addEventListener('pagehide', () => { recarregar(); const k = E.toque; if (k && k.saiu == null) { k.saiu = Date.now() - k.t; guardar(); } });
+// a window on top (side/floating window, a system sheet) takes the focus but does not hide the page
+window.addEventListener('blur', () => { recarregar(); const k = E.toque; if (k && k.desfocada == null && Date.now() - k.t < 15000) { k.desfocada = Date.now() - k.t; guardar(); } });
+window.addEventListener('focus', () => { recarregar(); const k = E.toque; if (k && k.desfocada != null && k.focada == null) { k.focada = Date.now() - k.t; guardar(); } });
 
 function tocou(id) {
-  E.toque = { id, t: Date.now(), escondida: null, visivel: null, saiu: null };
+  E.toque = { id, t: Date.now(), escondida: null, visivel: null, saiu: null, desfocada: null, focada: null };
   E.res[id] = { estado: 'a-testar', texto: 'a testar…' };
   guardar();
   atualizar();
   setTimeout(() => {
     recarregar();
     if (E.toque && E.toque.id === id && E.toque.escondida == null && document.visibilityState === 'visible') {
-      E.res[id] = { estado: 'mau', texto: 'nada aconteceu em 4 s: nenhuma app abriu e o Chrome não foi para o link de recurso.' };
+      const k = E.toque;
+      E.res[id] = k.desfocada != null
+        ? { estado: 'mau', texto: `abriu uma janela por cima (sem esconder esta página) ${seg(k.desfocada)} depois do toque`
+            + (k.focada != null ? `, que fechou ao fim de ${seg(k.focada - k.desfocada)}` : ', que ainda não fechou') + '; o Scene Viewer não apareceu.' }
+        : { estado: 'mau', texto: 'nada aconteceu em 4 s: nenhuma app nem janela abriu e o Chrome não foi para o link de recurso.' };
       E.toque = null;
       guardar();
       atualizar();
@@ -129,10 +141,38 @@ async function prepararWebXR(t, caixa) {
   mv.addEventListener('error', () => marcar(t.id, 'mau', 'o modelo não carregou no Chrome.'));
   mv.addEventListener('ar-status', (e) => {
     if (e.detail.status === 'session-started') marcar(t.id, 'bom', 'o AR do Chrome abriu.');
-    else if (e.detail.status === 'failed') marcar(t.id, 'mau', 'o AR do Chrome falhou ao abrir.');
+    else if (e.detail.status === 'failed') marcar(t.id, 'mau', 'o AR do Chrome falhou ao abrir.' + ultimosAvisos());
   });
 }
 function marcar(id, estado, texto) { recarregar(); E.res[id] = { estado, texto }; guardar(); atualizar(); }
+
+// what the viewer and the browser say when AR fails (model-viewer only reports «failed»)
+const avisosConsola = [];
+for (const nivel of ['error', 'warn']) {
+  const original = console[nivel].bind(console);
+  console[nivel] = (...a) => { avisosConsola.push(a.map((x) => (x && x.message) || String(x)).join(' ').slice(0, 200)); if (avisosConsola.length > 6) avisosConsola.shift(); original(...a); };
+}
+window.addEventListener('error', (e) => { avisosConsola.push(String(e.message).slice(0, 200)); });
+window.addEventListener('unhandledrejection', (e) => { avisosConsola.push(String((e.reason && (e.reason.name + ': ' + e.reason.message)) || e.reason).slice(0, 200)); });
+const ultimosAvisos = () => (avisosConsola.length ? ' Mensagens: ' + avisosConsola.slice(-3).join(' | ') : '');
+
+// T1: can this site open the camera at all (Chrome's AR needs it)
+async function testarCamara() {
+  marcar('T1', 'a-testar', 'a pedir a câmara…');
+  try {
+    const st = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
+    st.getTracks().forEach((x) => x.stop());
+    marcar('T1', 'bom', 'a câmara abriu neste site.');
+  } catch (e) { marcar('T1', 'mau', `a câmara não abriu: ${e.name}: ${e.message}`); }
+}
+// T2: Chrome's own AR session, without any viewer, so the exact error shows (called straight from the tap)
+function testarSessao() {
+  if (!navigator.xr) { marcar('T2', 'mau', 'este Chrome não tem WebXR.'); return; }
+  marcar('T2', 'a-testar', 'a abrir a sessão de AR…');
+  navigator.xr.requestSession('immersive-ar', { optionalFeatures: ['local-floor', 'hit-test', 'dom-overlay'], domOverlay: { root: document.body } })
+    .then((s) => { marcar('T2', 'bom', 'a sessão de AR do Chrome abriu (a câmara do AR funcionou); fecha sozinha.'); setTimeout(() => s.end().catch(() => {}), 1500); })
+    .catch((e) => marcar('T2', 'mau', `a sessão de AR não abriu: ${e.name}: ${e.message}`));
+}
 
 // ---------------------------------------------------------------- the page
 function montar() {
@@ -141,6 +181,7 @@ function montar() {
       : t.nosso && !modeloValido() ? 'O link do nosso modelo expirou (dura uma hora): abre outra vez a partir do hub.' : '';
     const acao = falta ? `<span class="fraco mini">${esc(falta)}</span>`
       : t.webxr ? `<button class="btn pequeno" type="button" data-webxr="${t.id}">Preparar</button>`
+      : t.acao ? `<button class="btn primario pequeno" type="button" data-acao-teste="${t.acao}">Testar</button>`
       : `<a class="btn primario pequeno" href="${esc(t.link(urlDe(t), voltaDe(t.id), E.modelo))}" data-teste="${t.id}">Testar</a>`;
     return `<li><div class="linha"><span class="nome"><span class="id">${t.id}</span>${esc(t.nome)}</span>${acao}</div>
       ${t.webxr ? `<div data-caixa="${t.id}"></div>` : ''}<div class="teste-res" data-res="${t.id}"></div><div class="teste-conf" data-conf-caixa="${t.id}"></div></li>`;
@@ -164,6 +205,8 @@ function desenharInfo() {
     ['Chrome', i.chrome || '?'],
     ['Aberto como', i.modo || '?'],
     ['AR do Chrome (WebXR)', i.webxr === true ? 'sim' : i.webxr === false ? 'não' : (i.webxr || '?')],
+    ['Câmara para este site', { granted: 'permitida', denied: 'bloqueada', prompt: 'ainda não pedida' }[i.camara] || i.camara || '?'],
+    ['Janela', i.janela || '?'],
     ['Nosso modelo', E.modelo ? `${E.modelo.t}${modeloValido() ? '' : ' (link expirado)'}` : '— (abre a partir do hub)'],
   ];
   if (E.modelo) linhas.push(['Ficheiro', i.ficheiro || 'a verificar…']);
@@ -183,6 +226,8 @@ async function verificarTelemovel() {
   if (!i.chrome) { const m = navigator.userAgent.match(/Chrome\/([\d.]+)/); i.chrome = m ? m[1] : null; }
   i.modo = matchMedia('(display-mode: standalone)').matches ? 'app instalada no ecrã inicial' : 'separador do Chrome';
   try { i.webxr = !!(navigator.xr && await navigator.xr.isSessionSupported('immersive-ar')); } catch (e) { i.webxr = 'erro: ' + e.message; }
+  try { i.camara = (await navigator.permissions.query({ name: 'camera' })).state; } catch (_) { i.camara = '?'; }
+  i.janela = `${innerWidth}×${innerHeight} de ${screen.width}×${screen.height}`;
   if (modeloValido()) {
     try {
       const r = await fetch(E.modelo.u, { headers: { Range: 'bytes=0-11' }, cache: 'no-store' });
@@ -198,8 +243,8 @@ async function verificarTelemovel() {
 
 export function textoResultado() {
   const i = E.info || {};
-  return ['Teste do AR no Android (página de teste, fora do hub)',
-    `Telemóvel: ${i.modelo || '?'} · Android ${i.android || '?'} · Chrome ${i.chrome || '?'} · ${i.modo || '?'} · AR do Chrome (WebXR): ${i.webxr === true ? 'sim' : i.webxr === false ? 'não' : i.webxr}`,
+  return ['Teste do AR no Android (página de teste, fora do hub, ronda 2)',
+    `Telemóvel: ${i.modelo || '?'} · Android ${i.android || '?'} · Chrome ${i.chrome || '?'} · ${i.modo || '?'} · AR do Chrome (WebXR): ${i.webxr === true ? 'sim' : i.webxr === false ? 'não' : i.webxr} · câmara: ${i.camara || '?'} · janela ${i.janela || '?'}`,
     E.modelo ? `Nosso modelo: ${E.modelo.t} (documento ${E.modelo.doc}) · ficheiro: ${i.ficheiro || '?'}` : 'Nosso modelo: não testado (página aberta sem o hub)',
     ...TESTES.map((t) => `${t.id}. ${t.nome}: ${(E.res[t.id] && E.res[t.id].texto) || '(não testado)'}`),
     `Notas: ${E.notas || '—'}`,
@@ -228,6 +273,8 @@ document.addEventListener('click', (e) => {
   if (a) return tocou(a.dataset.teste);   // no preventDefault: the tap itself opens the app
   const w = e.target.closest('[data-webxr]');
   if (w) { const t = TESTES.find((x) => x.id === w.dataset.webxr); E.res[t.id] = { estado: 'a-testar', texto: 'a preparar…' }; guardar(); atualizar(); return prepararWebXR(t, $(`[data-caixa="${t.id}"]`)); }
+  const x = e.target.closest('[data-acao-teste]');
+  if (x) return x.dataset.acaoTeste === 'camara' ? testarCamara() : testarSessao();
   const c = e.target.closest('[data-conf]');
   if (c) {
     const r = E.res[c.dataset.conf] || {};

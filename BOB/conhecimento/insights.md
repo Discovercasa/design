@@ -160,7 +160,10 @@ he answers (`metodo-construtivo.md`). Condensed 2026-10-28 (history in git).
   request): they show which app actually fetched the file — **applied 2026-11-10**.
 - **2026-11-10** — Android AR needs an ARCore-supported phone with «Serviços Google Play para RA»; on phones without it
   neither Scene Viewer AR nor WebXR AR opens (the page just reloads), so the client page must detect it and offer the
-  3D view («Ver em 3D») — **applied in the hub 2026-11-10**.
+  3D view («Ver em 3D») — **applied in the hub 2026-11-10**. **Updated 2026-11-10 (round 1 of the test page):** WebXR AR
+  was reported as supported on a recent Xiaomi phone (Android 15, Chrome 152) and AR still failed, Google's own sample
+  too; so «supported» is not enough. The client page must fall back to the in-page 3D view automatically when AR does
+  not open, not only when AR is reported missing.
 
 ## Recorded, not yet told (raise when it fits)
 - **2026-10-16** — lameladas cut from stock waste a lot (8,50 from 13,5 m: ≈ 1,1 m³ at TV) → order to length or a 17 m

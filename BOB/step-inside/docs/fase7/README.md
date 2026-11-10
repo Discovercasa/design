@@ -619,6 +619,38 @@ O resultado vai para a tarefa do teste com a sessão da pessoa, ou copia-se.
 - O painel antigo, com escolhas por teste, saiu.
 - Testes: `tests/ar-teste.spec.mjs`.
 
+## Página de teste, ronda 1 e ronda 2 (2026-11-10)
+
+O utilizador: «já testamos em dois 3 dispositivos android diferentes mas isso não deve interessar porque se o cliente
+tiver um dispositivo qualquer tem de conseguir ver sendo que neste caso nenhum deles era de uma gama média/baixa»;
+«acabou agora de fazer o teste falhou todos os steps e apareceu mensagens de erro em todos».
+
+**Ronda 1** (nota 12 da tarefa 84, enviada pela página):
+- Telemóvel: modelo 24115RA8EG (Xiaomi/Redmi pelo código, INFERRED), Android 15, Chrome 152.
+- O Chrome diz que tem AR (WebXR: sim). O nosso ficheiro descarrega (206, GLB válido).
+- Os 8 testes falharam, também com o modelo da própria Google:
+  - app Google (links 1.0 e 1.2): «nada aconteceu em 4 s», e a página nunca ficou escondida. O tester viu que
+    «começa a abrir uma janela lateral e fecha logo»;
+  - ARCore: voltou logo pelo link de recurso, sem nenhuma app abrir;
+  - AR do Chrome pelo visualizador: «falhou ao abrir».
+- **Conclusão:** não é o nosso ficheiro, nem o nosso link, nem o hub. O exemplo da Google falha da mesma maneira,
+  fora do hub. O que falha é o arranque do AR / Scene Viewer no telemóvel.
+- Há relatos públicos de AR a falhar em telemóveis Xiaomi com HyperOS, mesmo em aparelhos da lista do ARCore.
+  Exemplos: Live View do Google Maps e apps de AR.
+
+**Requisito do utilizador:** qualquer Android de cliente tem de conseguir ver a casa. Na página do cliente, quando o
+AR não abre, o visualizador 3D na própria página tem de aparecer sozinho.
+
+**Ronda 2** (a página limpa os resultados da ronda 1), 8 testes:
+- T1: a câmara para o site (`getUserMedia`, com o erro exato);
+- T2: a sessão de AR do Chrome direta (`requestSession('immersive-ar')`, com o erro exato);
+- G1/N1: o Scene Viewer a abrir **em 3D** (`mode=3d_preferred`, sem câmara no arranque);
+- G2/N2: o Scene Viewer a abrir em AR, como até agora;
+- G3/N3: o AR do Chrome pelo visualizador, com as mensagens da consola.
+
+A página também deteta uma janela que abre por cima sem esconder a página (perde o foco). Regista a licença da câmara
+para o site e o tamanho da janela.
+
 ## Em falta
 
 - **Telemóveis reais** (tarefa 84):
