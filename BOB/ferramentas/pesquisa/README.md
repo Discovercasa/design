@@ -18,6 +18,7 @@ crawls a site and searches the web (DuckDuckGo when no SearXNG is set). It runs 
    `winget install --id Docker.DockerDesktop -e --source winget --interactive` (someone at the PC must accept the
    Windows administrator prompt: on 2026-11-10 it was cancelled after about 2 minutes with nobody there, and the install
    stopped; the office PC's `wsl.exe` was still the old built-in one, without `--status`).
+   Office PC: installed 2026-11-10 (by the user, remotely); a restart is needed before the first start.
 2. `powershell -ExecutionPolicy Bypass -File BOB/ferramentas/pesquisa/iniciar.ps1` (the first run downloads a few GB of images).
 3. Test: `python BOB/ferramentas/pesquisa/firecrawl.py ler https://example.com`.
 4. Optional, MCP tools inside Claude Code (`firecrawl_scrape`, `firecrawl_search`, `firecrawl_map`, `firecrawl_crawl`...):

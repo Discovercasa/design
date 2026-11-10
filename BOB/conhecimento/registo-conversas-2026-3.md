@@ -251,4 +251,13 @@ The team's notes on hub task 84 (written in the hub by [membro da equipa] on 202
   - Docker Desktop 4.99.0 (winget package Docker.DockerDesktop, installer from desktop.docker.com, 595 MB, hash checked by winget) downloaded and launched with `--interactive` in a terminal tab. The installer asked for administrator rights (Windows UAC) and the prompt was cancelled after about 2 minutes (nobody accepted it): NOT installed. Someone at the PC must run it again and accept the prompt; the installer sets up WSL 2 (the PC's wsl.exe is the old built-in one) and may ask for a restart. Note: Docker's own installer relaunches itself with `--accept-license` (its standard flow); Docker Desktop is free for companies under 250 employees and USD 10 M turnover.
   - Firecrawl MCP registered on the office PC: `.mcp.json` (firecrawl-mcp@3.38.0, FIRECRAWL_API_URL http://127.0.0.1:3002) at the `BOB Claude` folder and at the Design clone root, both excluded locally (`.git/info/exclude`); package pre-cached with npm. Claude Code asks to approve the server in the next session; the tools work only while Firecrawl runs (after Docker).
 - Filed in: `ferramentas/pesquisa/README.md` (done by the caller); previous Firecrawl entry's Pending updated to point here.
-- Pending: Docker install (user at the PC), then `ferramentas/pesquisa/iniciar.ps1` and a test; approve the firecrawl MCP server in the next session.
+- Pending: Docker install, now done by the user remotely (see the entry of 2026-11-10 «Docker Desktop installed, restart pending»; installed, restart pending); then `ferramentas/pesquisa/iniciar.ps1` and a test; approve the firecrawl MCP server in the next session.
+
+### 2026-11-10 — Docker Desktop installed, restart pending; what Docker is for [tools]
+> usei o teamviewer para instalar e correr o comando mas tenho de dar restart o que nao vou fazer agora. o docker serve para que ?
+- Context: follows the Docker Desktop install attempt (previous entry); the user then asked what Docker is for.
+- Facts:
+  - The user installed Docker Desktop through TeamViewer (remote access to the office PC) by running the winget command; checked: `C:\Program Files\Docker\Docker\Docker Desktop.exe` exists. The PC needs a restart (WSL 2 / virtualisation setup); the user will not restart now. Until then `docker` is not usable and Firecrawl cannot start.
+  - Answered in chat: what Docker is for (runs Firecrawl's pieces — API, workers, headless browser, Redis, RabbitMQ, Postgres — as ready-made isolated containers on this PC, without installing each one on Windows; started/stopped with one command; used only for Firecrawl for now).
+- Filed in: `ferramentas/pesquisa/README.md` → setup step 1 (one line); previous entry's Pending updated.
+- Pending: restart the office PC → open Docker Desktop once (first-start screens) → `ferramentas/pesquisa/iniciar.ps1` → test `firecrawl.py ler https://example.com` → approve the firecrawl MCP server in the next Claude session.
