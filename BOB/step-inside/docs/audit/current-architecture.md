@@ -135,6 +135,13 @@ O plano Pro custa a partir de 25 USD por mês: 8 GB de disco, 100 GB de ficheiro
 - Na Fase 6 é preciso decidir se as casas do Step Inside usam `obras` ou uma tabela nova. As versões, os ficheiros, os
   jobs, as sessões e os links ficam sempre em tabelas novas.
 - Os ficheiros 3D vão para o R2, não para o Supabase Storage (§2.2 da especificação; aqui o limite de 1 GB decide).
+- **Nota de 2026-11-10 (Google Drive):** o utilizador tem 2 TB de Google Drive e perguntou se os ficheiros pesados podiam
+  ficar lá. Análise nossa (não é decisão): o Drive serve para originais, arquivo e cópias (projetos Blender/Unreal, cada
+  versão de casa); não serve para o que o hub e os telemóveis abrem diretamente (ficheiros privados exigem autenticação
+  ou proxy; «qualquer pessoa com o link» estraga os links assinados privados; quotas de descarga e página de verificação
+  de vírus em ficheiros grandes; não é uma CDN). Proposta: Drive para arquivo + Supabase Storage agora ou R2 depois para o
+  que é servido. Uso medido em 2026-11-10: armazenamento 116 MB (documentos 95, social 19,7, anexos 1,3); base de dados
+  15,7 MB de 500 MB. Decisão do hub «Onde guardar os ficheiros 3D pesados?» ainda aberta.
 
 ## 6. Pipeline existente PDF/DWFx → Claude Code → Blender (tarefa 49)
 

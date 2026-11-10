@@ -70,6 +70,10 @@ Why Claude learns the method; "vamos passo a passo" — an overall idea, then an
    checkpoint; nothing bought before Phase 4, the user buys it). Pending from the user: PSU wattage and case, whether the home PC may
    hold client drawings, phase order (Phase 7 before Unreal); the user (2026-11-07) had them noted in hub task 154 and
    asked to proceed.
+   **Storage available (user 2026-11-10):** the company has 2 TB of Google Drive; the user asked whether the heavy 3D files could
+   live there instead of Cloudflare/Supabase. Our analysis (not a decision): Drive for masters, archive and backups;
+   served files (hub, phones, AR) on Supabase Storage now / R2 later. Use measured 2026-11-10: storage 116 MB of 1 GB,
+   database 15,7 MB of 500 MB. Details: `step-inside/docs/audit/current-architecture.md` §5 (2026-11-10 note).
    **Phase 1 done 2026-11-07** (data contract and input quality; hub checkpoint 21 concluido). **Test projects decided
    (user 2026-11-07, "Sobral Tipo 1"; hub decision 17):** Torres Vedras + Sobral Tipo 1 (engineer drawings, flat lot;
    `step-inside/projetos-teste/`). Sobral Tipo 1 report is NEEDS_HUMAN_REVIEW (two open questions filed in
