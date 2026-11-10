@@ -28,13 +28,30 @@ test('página de teste do AR: oito testes, os links certos e o resultado sozinho
   const erros = await abrir(page, '/ar-teste.html#' + new URLSearchParams({ u: NOSSO, t: 'Torres Vedras · casa 1:1', doc: '43', real: '1' }));
   await expect(page.locator('#testes > li')).toHaveCount(8);
   await expect(page).toHaveURL(/\/ar-teste\.html$/);   // the signed link does not stay in the address
-  // Google's sample through the Google app (1.0 and 1.2) and through ARCore; our model the same way
-  await expect(page.locator('[data-teste="G1"]')).toHaveAttribute('href', /^intent:\/\/arvr\.google\.com\/scene-viewer\/1\.0\?file=https%3A%2F%2Fmodelviewer\.dev%2Fshared-assets%2Fmodels%2FAstronaut\.glb&mode=ar_preferred.*package=com\.google\.android\.googlequicksearchbox;.*browser_fallback_url=http%3A%2F%2Flocalhost%3A4321%2Far-teste\.html%3Fvolta%3DG1;end;$/);
+  // round 2: Scene Viewer opening in 3D and in AR (Google's sample and ours), Chrome's AR through the viewer, the camera
+  // and Chrome's AR session directly
+  await expect(page.locator('[data-teste="G1"]')).toHaveAttribute('href', /^intent:\/\/arvr\.google\.com\/scene-viewer\/1\.2\?mode=3d_preferred&disable_occlusion=true.+&file=https%3A%2F%2Fmodelviewer\.dev%2Fshared-assets%2Fmodels%2FAstronaut\.glb#Intent;.*package=com\.google\.android\.googlequicksearchbox;.*browser_fallback_url=http%3A%2F%2Flocalhost%3A4321%2Far-teste\.html%3Fvolta%3DG1;end;$/);
   await expect(page.locator('[data-teste="G2"]')).toHaveAttribute('href', /^intent:\/\/arvr\.google\.com\/scene-viewer\/1\.2\?mode=ar_preferred&disable_occlusion=true.+&file=https%3A%2F%2Fmodelviewer\.dev.+Astronaut\.glb#Intent;/);
-  await expect(page.locator('[data-teste="G3"]')).toHaveAttribute('href', /^intent:\/\/arvr\.google\.com\/scene-viewer\/1\.0\?file=.+Astronaut\.glb&mode=ar_only.*#Intent;scheme=https;package=com\.google\.ar\.core;/);
-  await expect(page.locator('[data-teste="N2"]')).toHaveAttribute('href', /^intent:\/\/arvr\.google\.com\/scene-viewer\/1\.2\?c=plataforma_cliente.+&resizable=false&title=Torres\+Vedras.+&file=http%3A%2F%2Flocalhost%3A4321%2F__ficheiro.+\.glb#Intent;.*googlequicksearchbox/);
-  await expect(page.locator('[data-teste="N3"]')).toHaveAttribute('href', /mode=ar_only&title=.+&resizable=false#Intent;.*package=com\.google\.ar\.core;.*volta%3DN3;end;$/);
-  await expect(page.locator('[data-webxr="G4"]')).toBeVisible();
+  await expect(page.locator('[data-teste="N1"]')).toHaveAttribute('href', /scene-viewer\/1\.2\?c=plataforma_cliente.+&mode=3d_preferred.+&resizable=false&title=Torres\+Vedras.+&file=http%3A%2F%2Flocalhost%3A4321%2F__ficheiro.+\.glb#Intent;/);
+  await expect(page.locator('[data-teste="N2"]')).toHaveAttribute('href', /^intent:\/\/arvr\.google\.com\/scene-viewer\/1\.2\?c=plataforma_cliente.+&mode=ar_preferred.+&resizable=false&title=Torres\+Vedras.+&file=http%3A%2F%2Flocalhost%3A4321%2F__ficheiro.+\.glb#Intent;.*googlequicksearchbox/);
+  await expect(page.locator('[data-webxr="G3"]')).toBeVisible();
+  await expect(page.locator('[data-webxr="N3"]')).toBeVisible();
+  await expect(page.locator('#info')).toContainText('Câmara para este site');
+
+  // the camera and Chrome's AR session, with the exact error (the test browser has neither)
+  await page.locator('#testes > li').filter({ hasText: 'A câmara do telemóvel' }).getByRole('button', { name: 'Testar' }).click();
+  await expect(resultado(page, 'T1')).toContainText(/a câmara (não )?abriu/);
+  await page.locator('#testes > li').filter({ hasText: 'O AR do próprio Chrome, direto' }).getByRole('button', { name: 'Testar' }).click();
+  await expect(resultado(page, 'T2')).toContainText(/sessão de AR não abriu: \w+|não tem WebXR/);
+
+  // a window opens on top without hiding the page (round 1: «começa a abrir uma janela lateral e fecha logo»)
+  await semNavegar(page, 'G2');
+  await page.locator('[data-teste="G2"]').click();
+  await page.evaluate(() => window.dispatchEvent(new Event('blur')));
+  await page.waitForTimeout(300);
+  await page.evaluate(() => window.dispatchEvent(new Event('focus')));
+  await expect(resultado(page, 'G2')).toContainText('abriu uma janela por cima (sem esconder esta página)', { timeout: 6000 });
+  await expect(resultado(page, 'G2')).toContainText('que fechou ao fim de 0,3 s');
   await expect(page.locator('#info')).toContainText('Nosso modelo');
   await expect(page.locator('#info')).toContainText('Torres Vedras · casa 1:1');
 
@@ -56,35 +73,35 @@ test('página de teste do AR: oito testes, os links certos e o resultado sozinho
   // 3. Chrome followed the fallback link after the Google app had opened (the page was hidden well before it unloaded)
   await page.evaluate(() => {
     const e = JSON.parse(localStorage.getItem('design-ar-teste'));
-    e.toque = { id: 'G2', t: Date.now() - 2000, escondida: 250, visivel: null, saiu: 1600 };
+    e.toque = { id: 'N1', t: Date.now() - 2000, escondida: 250, visivel: null, saiu: 1600 };
     localStorage.setItem('design-ar-teste', JSON.stringify(e));
   });
-  await page.goto('/ar-teste.html?volta=G2');
-  await expect(resultado(page, 'G2')).toContainText('voltou pelo link de recurso');
-  await expect(resultado(page, 'G2')).toContainText('Outra app abriu 0,3 s depois do toque');
+  await page.goto('/ar-teste.html?volta=N1');
+  await expect(resultado(page, 'N1')).toContainText('voltou pelo link de recurso');
+  await expect(resultado(page, 'N1')).toContainText('Outra app abriu 0,3 s depois do toque');
   await expect(page).toHaveURL(/\/ar-teste\.html$/);
   // the earlier results are still there (kept on the phone)
-  await expect(resultado(page, 'G1')).toContainText('nada aconteceu');
+  await expect(resultado(page, 'G2')).toContainText('abriu uma janela por cima');
 
   // 4. Chrome went straight to the fallback (no app opened: hidden and unloaded at the same moment)
   await page.evaluate(() => {
     const e = JSON.parse(localStorage.getItem('design-ar-teste'));
-    e.toque = { id: 'N3', t: Date.now() - 500, escondida: 40, visivel: null, saiu: 45 };
+    e.toque = { id: 'G1', t: Date.now() - 500, escondida: 40, visivel: null, saiu: 45 };
     localStorage.setItem('design-ar-teste', JSON.stringify(e));
   });
-  await page.goto('/ar-teste.html?volta=N3');
-  await expect(resultado(page, 'N3')).toContainText('Nenhuma app chegou a abrir');
+  await page.goto('/ar-teste.html?volta=G1');
+  await expect(resultado(page, 'G1')).toContainText('Nenhuma app chegou a abrir');
 
   // 5. the Google app opened, Chrome showed the page again for a moment and then followed the fallback link
-  await semNavegar(page, 'G3');
-  await page.locator('[data-teste="G3"]').click();
+  await semNavegar(page, 'N2');
+  await page.locator('[data-teste="N2"]').click();
   await visibilidade(page, 'hidden');
   await page.waitForTimeout(200);
   await visibilidade(page, 'visible');
   await page.evaluate(() => delete document.visibilityState);
-  await page.goto('/ar-teste.html?volta=G3');
-  await expect(resultado(page, 'G3')).toContainText('voltou pelo link de recurso');
-  await expect(resultado(page, 'G3')).toContainText('Outra app abriu');
+  await page.goto('/ar-teste.html?volta=N2');
+  await expect(resultado(page, 'N2')).toContainText('voltou pelo link de recurso');
+  await expect(resultado(page, 'N2')).toContainText('Outra app abriu');
 
   // 6. send it to the AR test task (the person's own session), with what the page found out
   await page.locator('#notas').fill('Telemóvel de teste');
@@ -94,9 +111,11 @@ test('página de teste do AR: oito testes, os links certos e o resultado sozinho
   const tarefa = await page.evaluate(() => window.__fake.db.tarefas.find((t) => /iPhone e um Android/.test(t.titulo)).id);
   expect(nota.tarefa_id).toBe(tarefa);
   expect(nota.tipo).toBe('nota');
-  expect(nota.texto).toContain('Teste do AR no Android (página de teste, fora do hub)');
-  expect(nota.texto).toContain('G1. Exemplo da Google · app Google · link 1.0: nada aconteceu em 4 s');
-  expect(nota.texto).toContain('N2. O nosso modelo · app Google · link 1.2 (o do botão do hub): abriu outra app e voltou sozinho');
+  expect(nota.texto).toContain('Teste do AR no Android (página de teste, fora do hub, ronda 2)');
+  expect(nota.texto).toContain('G1. Exemplo da Google · Scene Viewer a abrir em 3D: voltou pelo link de recurso');
+  expect(nota.texto).toContain('G2. Exemplo da Google · Scene Viewer a abrir em AR: abriu uma janela por cima');
+  expect(nota.texto).toContain('N2. O nosso modelo · Scene Viewer a abrir em AR (o do botão do hub): voltou pelo link de recurso');
+  expect(nota.texto).toMatch(/T2\. O AR do próprio Chrome, direto \(diz o erro exato\): (a sessão de AR não abriu|este Chrome não tem WebXR)/);
   expect(nota.texto).toContain('Nosso modelo: Torres Vedras · casa 1:1 (documento 43)');
   expect(nota.texto).toContain('Notas: Telemóvel de teste');
   await page.screenshot({ path: `capturas/ar-teste-${test.info().project.name}.png`, fullPage: true });

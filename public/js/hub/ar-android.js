@@ -18,8 +18,8 @@ export function htmlDiagnostico(glb) {
   if (!glb) return '';
   return `<div class="diag-ar" id="diag-ar">
     <p class="pequeno"><b>O AR não abre num Android?</b> Abre a página de teste nesse telemóvel, no Chrome: tem 8 testes de um toque
-      (o exemplo da Google e o nosso modelo, pela app Google, pelo ARCore e pelo AR do Chrome). Vê sozinha o que aconteceu em
-      cada um e envia o resultado para a tarefa do teste.</p>
+      (a câmara, o AR do Chrome e o Scene Viewer a abrir em 3D e em AR, com o exemplo da Google e o nosso modelo). Vê sozinha
+      o que aconteceu em cada um, com a mensagem de erro, e envia o resultado para a tarefa do teste.</p>
     <div class="botoes" style="margin-top:8px"><a class="btn pequeno" href="#" data-ar="${glb.id}" data-ar-tipo="teste" aria-disabled="true">Abrir a página de teste do AR</a></div>
   </div>`;
 }

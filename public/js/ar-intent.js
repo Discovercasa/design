@@ -9,14 +9,15 @@ export const EXEMPLO_GOOGLE = 'https://modelviewer.dev/shared-assets/models/Astr
 const fim = (pacote, volta) => `#Intent;scheme=https;package=${pacote};action=android.intent.action.VIEW;`
   + `S.browser_fallback_url=${encodeURIComponent(volta)};end;`;
 
-/** Scene Viewer through the Google app. `real`: 1:1 model, no pinch-to-scale. `volta`: where Chrome goes if it fails. */
-export function intentSceneViewer(url, { versao = '1.2', titulo = '', real = false, volta = location.href } = {}) {
+/** Scene Viewer through the Google app. `real`: 1:1 model, no pinch-to-scale. `volta`: where Chrome goes if it fails.
+ *  `modo`: 'ar_preferred' (opens in AR) or '3d_preferred' (opens in 3D, AR one tap away — no camera at launch). */
+export function intentSceneViewer(url, { versao = '1.2', titulo = '', real = false, volta = location.href, modo = 'ar_preferred' } = {}) {
   let q;
   if (versao === '1.0') {
-    q = 'file=' + encodeURIComponent(url) + '&mode=ar_preferred' + (titulo ? '&title=' + encodeURIComponent(titulo) : '') + (real ? '&resizable=false' : '');
+    q = 'file=' + encodeURIComponent(url) + '&mode=' + modo + (titulo ? '&title=' + encodeURIComponent(titulo) : '') + (real ? '&resizable=false' : '');
   } else {
     const p = new URLSearchParams(new URL(url).search);
-    p.set('mode', 'ar_preferred');
+    p.set('mode', modo);
     if (!p.has('disable_occlusion')) p.set('disable_occlusion', 'true');
     if (real) p.set('resizable', 'false');
     if (titulo) p.set('title', titulo);
