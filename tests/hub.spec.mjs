@@ -32,7 +32,7 @@ test('sem sessão mostra a entrada com a conta do Hub', async ({ page }) => {
 test('Início: barra de navegação, projetos, ligações, decisões e feito', async ({ page }) => {
   const erros = await abrir(page);
   const nav = page.getByRole('navigation', { name: 'Secções' });
-  await expect(nav.getByRole('link')).toHaveText(['Início', 'Gerador de documentos', 'Builder', 'Orçamentação', 'Build Your House', 'Step Inside', 'Redes sociais']);
+  await expect(nav.getByRole('link')).toHaveText(['Início', 'Gerador de documentos', 'Builder', 'Orçamentação', 'Build Your House', 'Step Inside', 'Materiais', 'Redes sociais']);
   await expect(nav.getByRole('link', { name: 'Início' })).toHaveAttribute('aria-current', 'page');
   await expect(page.getByRole('heading', { level: 1 })).toContainText('Teste');
   const linhas = page.locator('.projeto-linha');
@@ -238,8 +238,8 @@ test('perfil: área pessoal, definições (nome, tema), novidades e sair', async
   await captura(page, 'inicio-escuro');
   await page.getByRole('button', { name: 'Perfil' }).click();
   await page.locator('#pop-perfil').getByRole('menuitem', { name: /Novidades/ }).click();
-  await expect(page.locator('.novidade').first()).toContainText('AR: correções do primeiro teste da equipa');
-  await expect(page.locator('.novidade').nth(1)).toContainText('Notificações sem saltos e ponto de situação fechado');
+  await expect(page.locator('.novidade').first()).toContainText('Materiais e preços do Hub');
+  await expect(page.locator('.novidade').nth(1)).toContainText('AR: correções do primeiro teste da equipa');
   await page.getByRole('button', { name: 'Perfil' }).click();
   await page.locator('#pop-perfil').getByRole('menuitem', { name: 'Sair' }).click();
   await expect(page.getByRole('button', { name: 'Entrar com a conta do Hub' })).toBeVisible();
@@ -443,6 +443,86 @@ test('projeto: o ponto de situação das fases fica fechado num acordeão', asyn
   await sit.locator('summary').click();
   await expect(sit.locator('p')).toBeVisible();
   await expect(sit.locator('p')).toContainText('Fase 7');
+});
+
+// Materiais vindos do Hub (migração 0016, 2026-11-10): só de consulta, o Hub envia-os nos dias úteis às 6h
+const F1 = 'f0000000-0000-4000-8000-000000000001', F2 = 'f0000000-0000-4000-8000-000000000002';
+const A1 = 'a0000000-0000-4000-8000-000000000001', A2 = 'a0000000-0000-4000-8000-000000000002', A3 = 'a0000000-0000-4000-8000-000000000003';
+const P1 = 'b0000000-0000-4000-8000-000000000001', P2 = 'b0000000-0000-4000-8000-000000000002', P3 = 'b0000000-0000-4000-8000-000000000003';
+const MATERIAIS = {
+  hub_fornecedores: [{ id: F1, nome: 'Madeiras do Norte', atualizado_em: '2026-11-11T06:01:00Z' }, { id: F2, nome: 'Isolamentos Lda', atualizado_em: '2026-11-11T06:01:00Z' }],
+  hub_materiais: [
+    { id: A1, nome: 'OSB 3 12 mm', categoria: 'Placas', tipo: 'Painel', atualizado_em: '2026-11-11T06:01:00Z' },
+    { id: A2, nome: 'Lã mineral 140 mm', categoria: 'Isolamentos', tipo: 'Rolo', atualizado_em: '2026-11-11T06:02:00Z' },
+    { id: A3, nome: 'Pladur N 13 mm', categoria: 'Placas', tipo: 'Painel', atualizado_em: '2026-11-11T06:01:00Z' },
+  ],
+  hub_material_precos: [
+    { id: P1, material_id: A1, fornecedor_id: F1, designacao: 'OSB/3 2500x1250x12', dimensoes: '2500 x 1250 x 12', preco: 20, unidade: 'placa', desconto: 10, iva: 23,
+      disponibilidade: 'Em stock', prazo_dias: 3, data_atualizacao: '2026-11-11', transporte: 'Camião', transporte_incluido: 'Não', atualizado_em: '2026-11-11T06:01:00Z' },
+    { id: P2, material_id: A1, fornecedor_id: F2, designacao: 'OSB 12', preco: 19.5, unidade: 'placa', desconto: 0, iva: 0.23, data_atualizacao: '2026-11-10', atualizado_em: '2026-11-11T06:01:00Z' },
+    { id: P3, material_id: A2, fornecedor_id: F2, designacao: 'Rolo 140', preco: 4.2, unidade: 'm²', desconto: 0.05, iva: 23, data_atualizacao: '2026-11-11', atualizado_em: '2026-11-11T06:01:00Z' },
+  ],
+  hub_material_precos_historico: [
+    { id: 'c0000000-0000-4000-8000-000000000001', preco_id: P1, preco: 16, data_atualizacao: '2026-10-01', registado_em: '2026-10-01T06:00:00Z' },
+    { id: 'c0000000-0000-4000-8000-000000000002', preco_id: P1, preco: 20, data_atualizacao: '2026-11-11', registado_em: '2026-11-11T06:00:00Z' },
+  ],
+};
+
+test('Materiais: aba só de consulta — preço por fornecedor, histórico, filtros, CSV e o bloco dos projetos', async ({ page }) => {
+  await page.addInitScript((m) => { window.__FIXTURE_MATERIAIS = m; }, MATERIAIS);
+  const erros = await abrir(page, { rota: '/#/materiais' });
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Materiais e preços');
+  await expect(page.locator('.cabeca-pagina')).toContainText('3 materiais');
+  await expect(page.locator('.cabeca-pagina')).toContainText('2 fornecedores');
+  await expect(page.locator('.mat-cat')).toHaveText([/Isolamentos\s*1/, /Placas\s*2/]);
+  // the cheapest price with the discount (20 € − 10 % = 18 €) and its last change (16 → 20: +25 %)
+  const osb = page.locator(`#m-${A1}`);
+  await expect(osb.locator('summary')).toContainText('desde 18,00 €');
+  await expect(osb.locator('summary')).toContainText('Madeiras do Norte');
+  await expect(osb.locator('summary .mat-var')).toContainText('+25 %');
+  await expect(page.locator(`#m-${A3} summary`)).toContainText('sem preço');
+  await osb.locator('summary').click();
+  const linhas = osb.locator('tbody tr');
+  await expect(linhas).toHaveCount(2);
+  for (const t of ['Madeiras do Norte', '20,00 €', '10 %', '18,00 €', '23 %', '3 dias', 'Em stock']) await expect(linhas.first()).toContainText(t);
+  await expect(linhas.nth(1)).toContainText('19,50 €');   // IVA 0,23 read as 23 %
+  await expect(linhas.nth(1)).toContainText('23 %');
+  await expect(linhas.first().locator('svg.spark')).toHaveCount(1);
+  await captura(page, 'materiais');
+  // search and filters (the box keeps its focus)
+  await page.getByPlaceholder(/Procurar/).fill('la mineral');
+  await expect(page.locator('.mat')).toHaveCount(1);
+  await expect(page.getByPlaceholder(/Procurar/)).toBeFocused();
+  await page.getByPlaceholder(/Procurar/).fill('');
+  await page.getByLabel('Fornecedor').selectOption({ label: 'Isolamentos Lda' });
+  await expect(page.locator('.mat')).toHaveCount(2);
+  await page.getByLabel('Fornecedor').selectOption('');
+  // CSV for Excel and BOB's tools: one line per price, ; and decimal comma
+  const [dl] = await Promise.all([page.waitForEvent('download'), page.getByRole('button', { name: 'Descarregar CSV' }).click()]);
+  expect(dl.suggestedFilename()).toMatch(/^materiais-hub-\d{4}-\d{2}-\d{2}\.csv$/);
+  const csv = readFileSync(await dl.path(), 'utf8');
+  expect(csv.startsWith('﻿Material;Categoria;Tipo;Fornecedor')).toBe(true);
+  expect(csv).toContain('OSB 3 12 mm;Placas;Painel;Madeiras do Norte;OSB/3 2500x1250x12;2500 x 1250 x 12;20;placa;10;18;23');
+  expect(csv.trim().split('\r\n')).toHaveLength(1 + 3 + 1);   // header, 3 prices, Pladur without a price
+  // a deep link opens the material
+  await page.goto(`/#/materiais/m-${A2}`);
+  await expect(page.locator(`#m-${A2} details`)).toHaveAttribute('open', '');
+  // the projects that use the list say what for and link to it
+  await page.goto('/#/projeto/orcamentacao');
+  const bloco = page.locator('.bloco-materiais');
+  await expect(bloco).toContainText('Materiais do Hub');
+  await expect(bloco).toContainText('3 materiais · 2 fornecedores');
+  await expect(bloco.getByRole('link', { name: 'Materiais e preços' })).toHaveAttribute('href', '#/materiais');
+  await page.goto('/#/projeto/builder');
+  await expect(page.locator('.bloco-materiais')).toHaveCount(0);
+  expect(erros).toEqual([]);
+});
+
+test('Materiais: ainda sem dados do Hub — diz quando chegam', async ({ page }) => {
+  const erros = await abrir(page, { rota: '/#/materiais' });
+  await expect(page.locator('.vazio')).toContainText('Ainda sem materiais. O Hub envia a lista nos dias úteis às 6h');
+  await expect(page.getByRole('button', { name: 'Descarregar CSV' })).toHaveCount(0);
+  expect(erros).toEqual([]);
 });
 
 test('Step Inside: o Scene Viewer não abriu no Android — o hub diz porquê e oferece o 3D', async ({ page }) => {

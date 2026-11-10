@@ -5,15 +5,16 @@
   "resumo": "O preço de cada material e fornecedor, com as contas à vista até ao preço final da casa.",
   "descricao": "A partir da Listagem de material de cada casa e da lista de preços de materiais e fornecedores, calcula o preço final: materiais, mão de obra, fundação, caixilharia, especialidades, instalações e pré-instalações, licenciamento e IVA, mostrando como se chega a cada valor.",
   "fase": "Planeado",
-  "fase_detalhe": "À espera da lista de materiais e fornecedores com preços.",
+  "fase_detalhe": "A lista de materiais, fornecedores e preços chega do Hub nos dias úteis às 6h (Lisboa), desde 2026-11-10: aba Materiais do hub, só de consulta, com o histórico dos preços. Falta ligar os preços às quantidades da Listagem de material.",
   "objetivos": [
     "Preço final de qualquer casa em minutos.",
     "Contas transparentes, parcela a parcela."
   ],
   "futuro": [
-    "Receber a lista de preços.",
+    "Ligar os preços do Hub às quantidades da Listagem de material: o preço de cada parcela, com as contas à vista.",
     "Ligar ao Build Your House para o preço em direto."
   ],
+  "materiais": "A lista de preços que a Orçamentação esperava: o preço de cada material por fornecedor, com desconto, IVA e histórico, para multiplicar pelas quantidades da Listagem de material.",
   "metodo": "Usa as quantidades do método Discovercasa.",
   "app": null,
   "organizacao": { "codigo": "ainda por criar (BOB/orcamentacao/)", "publicado": "ainda sem página própria", "ramo": "orcamentacao/<tarefa>" },

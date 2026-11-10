@@ -14,6 +14,7 @@
     "Revisão da Cobertura e da Listagem de material.",
     "Ler DXF e IFC (os mesmos leitores servem o Step Inside)."
   ],
+  "materiais": "Para pôr o fornecedor e o preço em cada linha da Listagem de material.",
   "metodo": "Usa o motor e as regras do Builder.",
   "app": { "url": "/gerador/", "rotulo": "Abrir o Gerador" },
   "organizacao": { "codigo": "BOB/gerador/web/ e BOB/ferramentas/documentos/", "publicado": "public/gerador/", "ramo": "gerador/<tarefa>" },

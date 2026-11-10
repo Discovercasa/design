@@ -37,6 +37,8 @@ Why Claude learns the method; "vamos passo a passo" — an overall idea, then an
    fornecedores onde vais conseguir ter o preço de cada material" (PENDING), showing how the sums are made. The price:
    "materiais, mão de obra, fundação, caixilharia, especialidades, instalações e pré-instalações, licenciamento e IVA"
    (especialidades = the specialty projects — ours; IVA rate not said); "Isso é um passo futuro podes anotar".
+   Update 2026-11-10: the company's prices and suppliers live in the Hub (separate system) and reach Design read-only
+   on working days at 6:00 Lisbon (tables `hub_*`, migration 0016; see registo 2026-11-10). Whether this is the awaited list: open.
 3. **Client platform instead of Enscape + Chaos Cloud**. Today SketchUp → Enscape (VR tours, AR on mobile, 360 renders)
    → Chaos Cloud Virtual Tours shared with clients. Goal: a client area on the website where each client sees their
    house or project whenever they want.

@@ -16,6 +16,7 @@
     "Abrir a clientes, depois da aprovação da Discovercasa.",
     "Funcionar também fora do método Discovercasa (hoje segue o nosso método; fica assim por agora)."
   ],
+  "materiais": "Os preços reais para o preço em direto do configurador, em vez dos provisórios (através da Orçamentação).",
   "metodo": "Segue o método construtivo Discovercasa. No futuro deve funcionar também com outros métodos.",
   "app": { "url": "/build-your-house/", "rotulo": "Abrir o Build Your House" },
   "organizacao": { "codigo": "BOB/configurador/", "publicado": "public/build-your-house/", "ramo": "build-your-house/<tarefa>" },

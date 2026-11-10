@@ -12,6 +12,7 @@ uma página (`#/projeto/<slug>`), um ficheiro de dados, uma pasta de código e u
 | Step Inside (VR/AR) | `plataforma_cliente` | `#/projeto/step-inside` | `public/dados/projetos/plataforma_cliente.json` | `BOB/step-inside/` | (ainda sem página) | `step-inside/<fase>-<tarefa>` |
 | Hub do Design | — | `#/` | `public/dados/novidades.json` | `public/index.html`, `public/js/hub/`, `public/css/hub.css` | `public/` | `hub/<tarefa>` |
 | Redes sociais (do hub) | — (tabelas `obras`, `obras_fases`, `posts`, `posts_media`, `posts_comentarios`) | `#/social`, `#/social/obras` | Supabase (migrações 0009/0010) | `public/js/hub/social*.js`, `public/css/social.css` | `public/` | `hub/<tarefa>` |
+| Materiais do Hub (só de consulta) | — (tabelas `hub_fornecedores`, `hub_materiais`, `hub_material_precos`, `hub_material_precos_historico`, escritas só pelo Hub) | `#/materiais`, `#/materiais/m-<id>` | Supabase (migração 0016) | `public/js/materiais.js` (módulo comum: hub e aplicações), `public/js/hub/materiais-vista.js` | `public/` | `hub/<tarefa>` |
 
 ## Regras
 - **Um ramo por tarefa**, com o prefixo do projeto (ex.: `gerador/ler-dxf`). `main` = o que está online: um push para
