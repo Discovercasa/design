@@ -7,23 +7,23 @@
 
 Gerado por `step-inside/ferramentas/exportar/exportar.py` a partir do modelo de visita. Os ficheiros e o `manifest.json` completo ficam só no PC (`_trabalho/step-inside/<obra>/export/a/`).
 
-- Versão: `sobral-tipo1-3c5454a-202611091622` · Blender 4.4.3 · Unreal alvo 5.8 (a confirmar na Fase 4)
+- Versão: `sobral-tipo1-8232d36-202611101631` · Blender 4.4.3 · Unreal alvo 5.8 (a confirmar na Fase 4)
 - Fonte: 261 objetos, 53902 triângulos, 16 materiais, 19 imagens; caixa [409.727, 276.992, 100.88] m
 
 | Ficheiro | Para quê | Tamanho | SHA-256 | Determinístico |
 |---|---|---|---|---|
-| `sobral-tipo1_visita.fbx` | Unreal (Fases 4–5) | 2,1 MB | `1d88773c0c3b…` | conteúdo igual |
-| `sobral-tipo1_visita.glb` | AR Android / visualizador 3D | 106,1 MB | `4d7fc6e55de1…` | sim (bytes iguais) |
-| `sobral-tipo1_visita.usdz` | AR Quick Look (iPhone) | 94,5 MB | `701ef9a88906…` | conteúdo igual |
+| `sobral-tipo1_visita.fbx` | Unreal (Fases 4–5) | 2,1 MB | `0e47074da64a…` | conteúdo igual |
+| `sobral-tipo1_visita.glb` | AR Android / visualizador 3D | 106,1 MB | `7ad3a3cdf706…` | sim (bytes iguais) |
+| `sobral-tipo1_visita.usdz` | AR Quick Look (iPhone) | 94,5 MB | `6eadd0f91fd6…` | conteúdo igual |
 | texturas do FBX | textura PBR do FBX (ficheiro separado, spec §4.2) | 91,5 MB | 19 ficheiros | — |
 
 ## Reimportação (Blender limpo) e comparação
 
 | Formato | Objetos | Triângulos | Caixa (m) | Erro da caixa | Materiais | Imagens (em falta) | Píxeis diferentes | Silhueta |
 |---|---|---|---|---|---|---|---|---|
-| fbx | 261 | 53902 | [409.727, 276.992, 100.88] | 0.0 | 16 | 19 (0) | 1.7 % | 0.00 % |
+| fbx | 261 | 53902 | [409.727, 276.992, 100.88] | 0.0 | 16 | 19 (0) | 1.1 % | 0.00 % |
 | glb | 261 | 53902 | [409.727, 276.992, 100.88] | 0.0 | 16 | 19 (0) | 0.0 % | 0.00 % |
-| usdz | 261 | 53902 | [409.727, 276.992, 100.88] | 0.0 | 16 | 19 (0) | 1.1 % | 0.04 % |
+| usdz | 261 | 53902 | [409.727, 276.992, 100.88] | 0.0 | 16 | 19 (0) | 0.5 % | 0.04 % |
 
 ## Sistemas de coordenadas
 

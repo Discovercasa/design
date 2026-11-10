@@ -42,7 +42,7 @@ Cada objeto tem `si_id` = `<coleção>/<nome do objeto>` (os nomes vêm dos dese
 | rotacao_graus | 0,00 | INFERRED | inferencia | o contorno da casa é um retângulo alinhado com a quadrícula (lado maior E-O, como o modelo); falta confirmar se a casa está virada como no desenho do engenheiro (0°) ou rodada 180° |
 | pavimento_acima_laje | 0,16 | CONFIRMED | calculo | pavimento acabado do rés do chão a Z 0,16 sobre o topo da laje (modelo DiscoverCasa) |
 | contorno_desenho_m | 10,02 × 6,25 | CONFIRMED | geometria | contorno exterior acabado da casa na implantação |
-| plataforma | area_m2 189,60, vertices 8, cota laje + 0,00 m | INFERRED | geometria | modelação simplificada (folha 4): o lote P fica plano à cota do topo da laje dentro do contorno desenhado à volta da casa; os muros e taludes da modelação ainda não estão no modelo |
+| plataforma | area_m2 189,60, vertices 8, cota laje -0,02 m | INFERRED | geometria | modelação simplificada (folha 4): o lote P fica plano 2 cm abaixo do topo da laje (à cota exata coincidia com a laje e piscava no AR, nota da equipa de 2026-11-10) dentro do contorno desenhado à volta da casa; os muros e taludes da modelação ainda não estão no modelo |
 
 ## Verificações
 
@@ -54,7 +54,7 @@ Cada objeto tem `si_id` = `<coleção>/<nome do objeto>` (os nomes vêm dos dese
 - **Chão nos vãos das portas:** 11 portas; chão acrescentado em 5 peças, 6 já tinham chão ou soleira; sem chão (raio a descer do meio do vão): 0.
 - **Choques da madeira** (verificar.py, > 8 mm): 0 em 364 peças.
 - **Terreno existente sob a casa** (antes da plataforma): entre 0,89 e 2,55 m da laje; acima do pavimento em 100 % da área.
-- **Casa e terreno** (625 pontos sob a casa): terreno entre -0,02 e 0,01 m da laje; acima do pavimento em 0 % da área.
+- **Casa e terreno** (625 pontos sob a casa): terreno entre -0,03 e -0,00 m da laje; acima do pavimento em 0 % da área.
 - **Plataforma:** terreno plano dentro do contorno da plataforma (64 vértices do terreno ajustados).
 
 ## Materiais (catálogo comum `MAT_*`)

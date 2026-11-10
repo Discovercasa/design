@@ -12,9 +12,7 @@ Orçamento (Google Scene Viewer  especificação §12.1): ideal até 50 000 tri�
 | casa | 1:1 no terreno real, para andar à volta | 12916 (12094) | 11 | 1024 px | 2,1 MB | 1,9 MB | [13.099, 11.254, 7.543] |
 | maquete | com o terreno, em ponto pequeno sobre uma mesa | 14244 (12974) | 13 | 2048 px | 3,6 MB | 2,3 MB | [53.549, 51.699, 13.143] |
 | casa_piso0 | piso 0 sozinho à escala 1:1, pousado no chão para andar dentro dele | 5110 (4540) | 9 | 1024 px | 1,6 MB | 1,4 MB | [13.104, 11.249, 3.152] |
-| maquete_piso0 | maquete aberta até ao piso 0 (sem o que está por cima, sem teto) | 5160 (4226) | 11 | 2048 px | 3,0 MB | 1,8 MB | [53.549, 51.699, 13.143] |
 | casa_piso1 | piso 1 sozinho à escala 1:1, pousado no chão para andar dentro dele | 5262 (4704) | 7 | 1024 px | 1,3 MB | 1,3 MB | [10.021, 6.271, 4.476] |
-| maquete_piso1 | maquete aberta até ao piso 1 (sem o que está por cima, sem teto) | 9638 (8414) | 10 | 2048 px | 3,3 MB | 2,0 MB | [53.549, 51.699, 13.143] |
 
 **Simplificação:**
 - tiram-se as camadas que não se veem de fora (`MAT_BOARD_OSB`, `MAT_INSULATION_MINERAL_WOOL`, `MAT_INSULATION_XPS`, `MAT_METAL_GALVANIZED`, `MAT_SCREED`, `MAT_TIMBER_STRUCTURE`);
@@ -32,8 +30,8 @@ Orçamento (Google Scene Viewer  especificação §12.1): ideal até 50 000 tri�
 
 **Pisos** (níveis dos pavimentos acabados, a partir do rés do chão: 0,00 m, 2,96 m):
 - `casa_pisoN`: o piso N sozinho à escala real, de 0,2 m abaixo do pavimento até logo abaixo do piso de cima (o último sem a cobertura), com o pavimento na origem. O telemóvel pousa-o no chão e anda-se lá dentro.
-- `maquete_pisoN`: a casa com o terreno, aberta até ao piso N (o que está por cima é cortado e os tetos desse piso tirados), para ver as divisões de cima.
 - Os cortes são fechados, para as paredes não parecerem ocas vistas de cima.
+- Por piso só há o modelo 1:1, sem terreno (utilizador, 2026-11-10: uma maquete da casa com terreno, a casa sem terreno e cada piso sem terreno). As maquetes por piso deixaram de se gerar.
 
 
 **Reabertos num Blender limpo** (triângulos, dimensões, texturas):
@@ -44,11 +42,7 @@ Orçamento (Google Scene Viewer  especificação §12.1): ideal até 50 000 tri�
 - maquete usdz: 14244 triângulos, [53.549, 51.699, 13.143] m, 15 texturas, 0 em falta
 - casa_piso0 glb: 5110 triângulos, [13.104, 11.249, 3.152] m, 12 texturas, 0 em falta
 - casa_piso0 usdz: 5110 triângulos, [13.104, 11.249, 3.152] m, 12 texturas, 0 em falta
-- maquete_piso0 glb: 5160 triângulos, [53.549, 51.699, 13.143] m, 13 texturas, 0 em falta
-- maquete_piso0 usdz: 5160 triângulos, [53.549, 51.699, 13.143] m, 13 texturas, 0 em falta
 - casa_piso1 glb: 5262 triângulos, [10.021, 6.271, 4.476] m, 9 texturas, 0 em falta
 - casa_piso1 usdz: 5262 triângulos, [10.021, 6.271, 4.476] m, 9 texturas, 0 em falta
-- maquete_piso1 glb: 9638 triângulos, [53.549, 51.699, 13.143] m, 13 texturas, 0 em falta
-- maquete_piso1 usdz: 9638 triângulos, [53.549, 51.699, 13.143] m, 13 texturas, 0 em falta
 
 **Por testar:** abrir em telemóveis reais (Scene Viewer num Android, Quick Look num iPhone) e medir o tempo de carregamento e a qualidade ao lado das fotos da casa construída (tarefas 84 e 158).

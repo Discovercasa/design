@@ -122,7 +122,9 @@ def main():
             raise SystemExit(f"AR ({nome}) falhou")
         v = comum.ler_json(res)
         if var == "casa" and piso is None and len(v.get("niveis", [])) >= 2:
-            fila += [(b, k) for k in range(len(v["niveis"])) for b in ("casa", "maquete")]
+            # per storey only the 1:1 model, without terrain (user 2026-11-10: «uma maquete total da casa com terreno, uma
+            # da casa total sem terreno, uma do piso 0 e uma do piso 1 ambas sem terreno»)
+            fila += [("casa", k) for k in range(len(v["niveis"]))]
         fich = {fmt: {"ficheiro": p.name, "bytes": p.stat().st_size, "sha256": hashlib.sha256(p.read_bytes()).hexdigest()}
                 for fmt, p in (("glb", glb), ("usdz", usdz))}
         cam = {"loc": [-1.6 * max(v["dimensoes"][:2]), -2.0 * max(v["dimensoes"][:2]), 1.1 * max(v["dimensoes"][:2])],
@@ -205,9 +207,9 @@ def relatorio(r, decl):
               "- `casa_pisoN`: o piso N sozinho à escala real, de 0,2 m abaixo do pavimento até logo abaixo do piso de "
               "cima (o último sem a cobertura), com o pavimento na origem. O telemóvel pousa-o no chão e anda-se lá "
               "dentro.",
-              "- `maquete_pisoN`: a casa com o terreno, aberta até ao piso N (o que está por cima é cortado e os tetos "
-              "desse piso tirados), para ver as divisões de cima.",
-              "- Os cortes são fechados, para as paredes não parecerem ocas vistas de cima.", ""]
+              "- Os cortes são fechados, para as paredes não parecerem ocas vistas de cima.",
+              "- Por piso só há o modelo 1:1, sem terreno (utilizador, 2026-11-10: uma maquete da casa com terreno, a "
+              "casa sem terreno e cada piso sem terreno). As maquetes por piso deixaram de se gerar.", ""]
     L += ["",
           "**Reabertos num Blender limpo** (triângulos, dimensões, texturas):", ""]
     for v in r["variantes"]:

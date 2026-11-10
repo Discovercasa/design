@@ -142,6 +142,12 @@ O plano Pro custa a partir de 25 USD por mês: 8 GB de disco, 100 GB de ficheiro
   de vírus em ficheiros grandes; não é uma CDN). Proposta: Drive para arquivo + Supabase Storage agora ou R2 depois para o
   que é servido. Uso medido em 2026-11-10: armazenamento 116 MB (documentos 95, social 19,7, anexos 1,3); base de dados
   15,7 MB de 500 MB. Decisão do hub «Onde guardar os ficheiros 3D pesados?» ainda aberta.
+- **Nota de 2026-11-10 (link do cliente):** visão do utilizador: os projetos desenvolvem-se no hub e depois o cliente recebe
+  um link para uma página com o modelo 3D, várias vistas, tour virtual, outras informações, AR e VR, sempre que quiser.
+  Desenho nosso (não decidido): link com token impossível de adivinhar; a página pede ao servidor links assinados de curta
+  duração para cada ficheiro, por isso os ficheiros ficam privados e o link pode ser revogado ou expirar. Os ficheiros
+  pesados são descarregados e desenhados pelo telemóvel ou browser do cliente: não é pixel streaming (GPU na nuvem a
+  enviar vídeo, pago à hora, fase própria mais tarde). O Drive não serve este acesso direto (ver nota acima).
 
 ## 6. Pipeline existente PDF/DWFx → Claude Code → Blender (tarefa 49)
 

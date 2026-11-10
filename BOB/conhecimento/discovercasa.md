@@ -74,6 +74,10 @@ Why Claude learns the method; "vamos passo a passo" — an overall idea, then an
    live there instead of Cloudflare/Supabase. Our analysis (not a decision): Drive for masters, archive and backups;
    served files (hub, phones, AR) on Supabase Storage now / R2 later. Use measured 2026-11-10: storage 116 MB of 1 GB,
    database 15,7 MB of 500 MB. Details: `step-inside/docs/audit/current-architecture.md` §5 (2026-11-10 note).
+   **Client link vision (user 2026-11-10):** projects are developed in the hub; then the client gets a link to a page with the 3D
+   model, several views, virtual tour, other information, and AR and VR, available whenever the client wants. Our design (not
+   decided by the user): unguessable token link, short-lived signed file links, revocable; heavy files are downloaded and
+   rendered by the client's device, not pixel-streamed (Pixel Streaming is a separate later phase).
    **Phase 1 done 2026-11-07** (data contract and input quality; hub checkpoint 21 concluido). **Test projects decided
    (user 2026-11-07, "Sobral Tipo 1"; hub decision 17):** Torres Vedras + Sobral Tipo 1 (engineer drawings, flat lot;
    `step-inside/projetos-teste/`). Sobral Tipo 1 report is NEEDS_HUMAN_REVIEW (two open questions filed in

@@ -36,6 +36,9 @@ storeys (upper floor Z 3,117, +0,139) · 2026-10-15 central floor beam removed; 
   around the house.
   Since 2026-11-10 (AR version 7) the Sobral AR model turns so that the façade with the most ground-floor doors faces the
   viewer: INFERRED from the doors until the orientation (task 161, item (1)) is known; adjust when answered.
+  **Decision (user 2026-11-10):** Sobral in AR has exactly four models: whole house with terrain (maquete), whole house
+  without terrain (1:1), piso 0 and piso 1, both without terrain (per-storey maquettes dropped; supersedes «Versão 5»).
+  Also: the lot around the house sits 2 cm below the slab top (fixes ground flicker in AR). See `step-inside/docs/fase7/README.md` «Versão 7.2».
 - **Sobral window table pending (2026-11-09):** needed from the user/architect: type and size per exterior opening
   (Q12/Q13; the entrance door would be a flat panel by the standard). Until then the visit/AR model uses INFERRED
   standard frames (aluminium RAL 7016, double glazing) in the 12 openings with no frame (5 full-height doors, 7 windows);
