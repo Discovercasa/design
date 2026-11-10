@@ -54,7 +54,7 @@ Cada objeto tem `si_id` = `<coleção>/<nome do objeto>` (os nomes vêm dos dese
 - **Choques da madeira** (verificar.py, > 8 mm): 36 em 736 peças — Prumo x Prumo: 18, Amarração x Viga: 10, Amarração x Amarração: 5, PI x PI: 3.
 - **Terreno existente sob a casa** (antes da plataforma): entre -0,68 e 0,76 m da laje; acima do pavimento em 20 % da área.
 - **Casa e terreno** (625 pontos sob a casa): terreno entre -0,03 e -0,00 m da laje; acima do pavimento em 0 % da área.
-- **Plataforma:** terreno plano dentro do contorno da plataforma (124 vértices do terreno ajustados).
+- **Plataforma:** terreno plano dentro do contorno da plataforma (130 vértices do terreno ajustados).
 
 ## Materiais (catálogo comum `MAT_*`)
 

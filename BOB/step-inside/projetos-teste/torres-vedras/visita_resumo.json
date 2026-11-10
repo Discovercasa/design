@@ -216,8 +216,9 @@
    "terreno_menos_laje_max_m": 0.76,
    "fracao_terreno_acima_do_pavimento": 0.2
   },
+  "plataforma_inclui_pergola": true,
   "plataforma": {
-   "vertices_rebaixados_ou_subidos": 124,
+   "vertices_rebaixados_ou_subidos": 130,
    "z": 117.48
   },
   "casa_terreno": {

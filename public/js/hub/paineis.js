@@ -36,8 +36,9 @@ export function htmlVisor3D(d, url, urlIos, erro) {
   const corpo = erro ? `<p class="vazio pequeno">Não foi possível abrir o modelo: ${esc(erro)}</p>`
     : !url ? '<p class="vazio pequeno" data-a-carregar>A carregar o modelo…</p>'
     : `<model-viewer src="${esc(url)}"${urlIos ? ` ios-src="${esc(urlIos)}"` : ''} alt="Modelo 3D: ${esc(titulo)}" camera-controls
-        touch-action="pan-y" shadow-intensity="1" exposure="1" ar ar-modes="webxr scene-viewer quick-look"></model-viewer>
-      <p class="fraco mini" style="margin-top:8px">Arrasta para rodar; roda do rato ou dois dedos para aproximar. Num telemóvel com AR, o botão no canto passa ao AR.</p>`;
+        touch-action="pan-y" shadow-intensity="1" exposure="1" ar ar-modes="webxr scene-viewer quick-look" ar-placement="floor"${/1:1/.test(d.titulo) ? ' ar-scale="fixed"' : ''}>
+        <button slot="ar-button" class="btn primario pequeno visor-ar" type="button">Ver no teu espaço (AR)</button></model-viewer>
+      <p class="fraco mini" style="margin-top:8px">Arrasta para rodar; roda do rato ou dois dedos para aproximar. Num telemóvel com AR aparece «Ver no teu espaço»: no Android abre o AR no próprio Chrome (não precisa da app Google).</p>`;
   return `${cabeca(esc(titulo), 'Visualizador 3D para quem não tem AR')}<div class="visor-3d">${corpo}</div>`;
 }
 

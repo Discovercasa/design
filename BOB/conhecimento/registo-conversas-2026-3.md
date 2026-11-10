@@ -142,3 +142,22 @@ words (`registo-conversas*.md`). When this file passes about 1 500 lines, contin
 > Sim, carrega
 - Context: answer to «Autorizas a função temporária para pôr a versão 6 no Teste do AR?» (the auto-mode check had refused deploying the temporary upload function `carregar-ar`; same one-time-key function as for versions 1–5).
 - Filed in: nothing in BOB knowledge docs (an authorisation for one action, not a lasting rule). Done: the function was deployed with a one-time key, the 16 AR v6 files replaced hub documents 42–57 in the same links (sizes checked), then the function went back to the 410 stub with JWT required, the key file was deleted and a refusal (401) confirmed. Hub task 84 and 157 descriptions updated, team notified. Doc: `step-inside/docs/fase7/README.md` «Versão 6» (Claude edits it; do not touch).
+
+### 2026-11-10 — Hub notes on the AR phone test (version 6): fix the bugs and changes [Step Inside, Phase 7]
+> ok já anotei no HUB alguns bugs e coisas a mudar em relação aos testes, lê analisa e corrige ou executa as mudanças necessárias
+
+The team's notes on hub task 84 (written in the hub by [membro da equipa] on 2026-11-10, verbatim):
+1. (bug) «Quando se roda no 3D e mesmo no AR aparecem texturas com glitch a aparecer e a desaparecer, e também com stutter»
+2. (bug, with a photo) «Como se pode ver na imagem está a faltar parte da parede nessa zona»
+3. (bug) «Também na maquete 3D os pilares da pérgola ficam no ar não assentando no chão, algo indica que o terreno foi mal calculado»
+4. (bug) «O AR no android não abriu, nem sequer apareceu que foi descarregado, identifica e analisa o porquê»
+5. (mudar) «No IOS abriu sem problemas e estava bom mas quando se abre a casa deve estar orientado de frente para nós e quando encontra a superfície não devemos começar dentro da casa ou dentro de uma parede mas sim com a casa a nossa frente»
+- Context: the user asks Claude to read the hub notes (task 84, phone test of AR version 6), analyse and fix or do the changes.
+- Filed in: `step-inside/docs/fase7/README.md` «Versão 7» (written by Claude, not rewritten here): AR version 7.
+  (1) cause measured: the AO film (v6) put the film of hidden faces on visible surfaces; the slab top under the 5 mm vinyl floor got its film exactly on the floor surface (153 m² at Torres Vedras) → z-fighting; fix: no film on faces covered within 12 mm; film image 1024 px in the GLB too; stutter not measurable without the phone. Insight: `conhecimento/insights.md` (2026-11-10).
+  (3) cause: the Torres Vedras survey predates the works; the flat platform at the drawn exterior level 117,48 covered only 1,5 m around the walls and the pergola posts stood 5–70 cm above the old ground; fix: the platform includes the pergola (ARCH_PERGOLA) + margin — INFERRED (real graded ground = photos).
+  (4) analysis: the intent link is correct; Chrome followed the fallback (the Google app's Scene Viewer did not open on that phone) and the fallback was the same page, so nothing seemed to happen; fix in the hub: the fallback returns with ?ar-android=<id> and the hub explains and offers «Abrir em 3D»; the 3D viewer has «Ver no teu espaço (AR)» (WebXR in Chrome, no Google app).
+  (5) fix: the AR model turns to the house's own axes and the entrance façade faces the viewer (Torres Vedras: M5 «Sala / Entrada»; Sobral: façade with the most ground-floor doors, INFERRED); 1:1 origin 2 m in front of the house's front-most element; 1:1 models keep real scale (Quick Look #allowsContentScaling=0, Scene Viewer resizable=false, model-viewer ar-scale fixed).
+  (2) not fixed: the photo is in the hub's private storage and Claude cannot open it; ray checks found only a narrow strip of battens at the Torres Vedras garage-door jamb.
+  `Construção Sobral/docs/estado.md` → Open questions (Step Inside Phase 2): line that the AR front is INFERRED from the doors until the orientation (task 161) is known.
+- Pending: (4) which phone and browser the Android test used; (2) which model and where the wall is missing (ask the user); (1) stutter to be judged on the phone with version 7; Sobral orientation (task 161) and real graded ground at Torres Vedras (photos).

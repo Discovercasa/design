@@ -416,6 +416,10 @@ BEIRAL = ("Pérgola", "Viga de apoio à cobertura", "Madre", "Rincão", "Laró",
 est_paredes = caixa([o for o in objetos("STRUCT_TIMBER") if not o.name.startswith(BEIRAL)
                      and not (o.parent and o.parent.name.startswith(BEIRAL))])
 acab = caixa(objetos("ARCH_WALLS_EXT"))
+# what stands on the ground outside the walls: the pergola's posts (team note on the phone test, 2026-11-10: «os
+# pilares da pérgola ficam no ar não assentando no chão»): the platform around the house takes it in too
+pergola = caixa(objetos("ARCH_PERGOLA")) if "ARCH_PERGOLA" in grupos else None
+plat_caixa = acab and (acab if not pergola else (Vector(map(min, acab[0], pergola[0])), Vector(map(max, acab[1], pergola[1]))))
 D = {}
 if est_paredes:
     D["estrutura_planta_m"] = [round(est_paredes[1].x - est_paredes[0].x, 3), round(est_paredes[1].y - est_paredes[0].y, 3)]
@@ -885,11 +889,12 @@ if terreno is not None and PL:
     me = terreno.data
     pts = [(v.co.x, v.co.y) for v in me.vertices]
     zs = [v.co.z for v in me.vertices]
-    if PL.get("contorno_casa"):  # the finished outline + margin, in site coordinates
+    if PL.get("contorno_casa"):  # the finished outline (and the pergola) + margin, in site coordinates
         m = PL.get("margem_m", 1.0)
         mw = root.matrix_world
-        cantos = [(acab[0].x - m, acab[0].y - m), (acab[1].x + m, acab[0].y - m), (acab[1].x + m, acab[1].y + m),
-                  (acab[0].x - m, acab[1].y + m)]
+        pa, pb = plat_caixa
+        cantos = [(pa.x - m, pa.y - m), (pb.x + m, pa.y - m), (pb.x + m, pb.y + m), (pa.x - m, pb.y + m)]
+        OUT["plataforma_inclui_pergola"] = bool(pergola)
         PL["contorno"] = [list((mw @ Vector((x, y, 0)))[:2]) for x, y in cantos]
     poly = PL["contorno"]
 

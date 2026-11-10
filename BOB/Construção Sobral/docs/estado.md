@@ -34,6 +34,8 @@ storeys (upper floor Z 3,117, +0,139) · 2026-10-15 central floor beam removed; 
   0°, or turned 180°); (2) confirm with the surveyor the coordinate system, vertical datum, survey date and precision;
   (3) the terrain modelling of sheet 4 (walls, banks, roads) is not modelled yet — only a flat platform at slab level
   around the house.
+  Since 2026-11-10 (AR version 7) the Sobral AR model turns so that the façade with the most ground-floor doors faces the
+  viewer: INFERRED from the doors until the orientation (task 161, item (1)) is known; adjust when answered.
 - **Sobral window table pending (2026-11-09):** needed from the user/architect: type and size per exterior opening
   (Q12/Q13; the entrance door would be a flat panel by the standard). Until then the visit/AR model uses INFERRED
   standard frames (aluminium RAL 7016, double glazing) in the 12 openings with no frame (5 full-height doors, 7 windows);

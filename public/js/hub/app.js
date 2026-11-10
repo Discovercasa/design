@@ -62,6 +62,22 @@ async function arrancar(sessao) {
   if (!E.erro) D.ouvirMudancas(emDireto);
   document.addEventListener('visibilitychange', () => { if (!document.hidden) atualizar(); });
   guardarVersao();
+  arAndroidFalhou();
+}
+
+// Step Inside: the Android «Ver em AR» opens Google's Scene Viewer through an intent; when the phone cannot open it
+// (no Google app, an old one, another browser), Chrome follows the fallback link — back here with ?ar-android=<doc>.
+// Before (team note, 2026-11-10: «O AR no android não abriu, nem sequer apareceu que foi descarregado») that looked like
+// nothing happened; now it says why and offers the 3D viewer, whose own AR button uses WebXR (no Google app needed).
+function arAndroidFalhou() {
+  const q = new URLSearchParams(location.search);
+  if (!q.has('ar-android')) return;
+  const id = Number(q.get('ar-android'));
+  q.delete('ar-android');
+  history.replaceState(null, '', location.pathname + (q.toString() ? '?' + q : '') + location.hash);
+  aviso('O Scene Viewer não abriu neste telemóvel. Precisa da app Google atualizada e dos «Serviços Google Play para RA». '
+    + 'Experimenta o visualizador 3D: o botão «Ver no teu espaço» abre o AR no próprio Chrome.',
+    { icone: 'atencao', duracao: 0, acoes: id ? [{ rotulo: 'Abrir em 3D', fazer: () => verEm3D(id) }] : [] });
 }
 
 // ---------------------------------------------------------------- versão nova do hub publicada
@@ -389,24 +405,28 @@ async function tentar(fn, form) {
 // Step Inside: fill the AR buttons with signed links (an hour) — the tap must open the viewer straight away
 // (Safari only starts AR Quick Look from a real link tap, so the link cannot be fetched after the tap)
 const LINKS_AR = new Map();   // doc id -> { url, ate }
+// The models at 1:1 keep their real size: Quick Look without pinch-to-scale (#allowsContentScaling=0), Scene Viewer
+// with resizable=false. The links are prepared all at once (they were one after the other: slow on a phone).
 async function prepararAR(raiz) {
-  for (const a of $$('[data-ar]', raiz)) {
+  await Promise.all($$('[data-ar]', raiz).map(async (a) => {
     const id = Number(a.dataset.ar);
     const d = E.documentos.find((x) => x.id === id);
-    if (!d) continue;
+    if (!d) return;
     try {
       let l = LINKS_AR.get(id);
       if (!l || l.ate < Date.now() + 5 * 60 * 1000) { l = { url: await D.urlAR(d), ate: Date.now() + 60 * 60 * 1000 }; LINKS_AR.set(id, l); }
-      if (a.dataset.arTipo === 'ios') a.href = l.url;
+      const real = /1:1/.test(d.titulo);
+      if (a.dataset.arTipo === 'ios') a.href = l.url + (real ? '#allowsContentScaling=0' : '');
       else {
         const titulo = d.titulo.replace(/\s+/g, ' ');
-        const volta = location.href.split('#')[0] + '#/projeto/' + (rota().p || {}).slug;
+        const volta = location.href.split('#')[0].split('?')[0] + '?ar-android=' + id + '#/projeto/' + (rota().p || {}).slug;
         a.href = 'intent://arvr.google.com/scene-viewer/1.0?file=' + encodeURIComponent(l.url) + '&mode=ar_preferred&title=' + encodeURIComponent(titulo)
+          + (real ? '&resizable=false' : '')
           + '#Intent;scheme=https;package=com.google.android.googlequicksearchbox;action=android.intent.action.VIEW;S.browser_fallback_url=' + encodeURIComponent(volta) + ';end;';
       }
       a.removeAttribute('aria-disabled');
     } catch (err) { a.title = 'Não foi possível preparar o link: ' + (err.message || err); }
-  }
+  }));
 }
 
 // Step Inside: the 3D viewer for who has no AR — Google's <model-viewer> (a new dependency, authorised 2026-11-09),
