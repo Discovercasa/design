@@ -512,8 +512,9 @@ de se gerar (PASS):
 | casa_piso0 | o rés do chão, 1:1, sem terreno | 5 110 | 1,6 MB | 1,4 MB |
 | casa_piso1 | o piso 1, 1:1, sem terreno | 5 262 | 1,3 MB | 1,3 MB |
 
-No hub: carregar estes quatro (GLB e USDZ) e apagar os documentos «maquete do piso 0/1» (falta autorizar a função
-temporária de carregamento).
+**No hub (2026-11-10, autorizado pelo utilizador: «Sim, carrega»):** os oito ficheiros (documentos 46–53) foram
+substituídos nos mesmos links e os documentos «maquete do piso 0/1» (54–57) foram apagados, com os ficheiros. A
+função temporária voltou a estar desligada (410, recusa 401 confirmada) e a chave foi apagada. Nota 11 resolvida.
 
 **Android (nota 10): revisão de tudo o que foi feito.**
 - **Sintomas:** no primeiro teste o Scene Viewer não abriu nem descarregou nada; no segundo, a transição anima uma
