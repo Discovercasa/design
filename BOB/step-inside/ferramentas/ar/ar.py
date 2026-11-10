@@ -26,6 +26,7 @@ sys.path.insert(0, str(AQUI.parent / "materiais"))
 sys.path.insert(0, str(AQUI.parent / "exportar"))
 import comum  # noqa: E402
 import materiais  # noqa: E402
+import scene_viewer  # noqa: E402
 from exportar import reimportar  # noqa: E402
 
 BOB = comum.BOB
@@ -121,6 +122,12 @@ def main():
             print(out[-3000:])
             raise SystemExit(f"AR ({nome}) falhou")
         v = comum.ler_json(res)
+        # Android: Scene Viewer refuses extensions it does not support (Blender writes KHR_materials_specular for the
+        # occlusion film) -> drop them from the GLB and check its validator rules (team note on task 84, 2026-11-10)
+        sv = scene_viewer.preparar(glb)
+        v["scene_viewer"] = sv
+        falhas += [f"{nome} glb (Scene Viewer): {e}" for e in sv["erros"]]
+        avisos += [f"{nome} glb (Scene Viewer): {e}" for e in sv["avisos"]]
         if var == "casa" and piso is None and len(v.get("niveis", [])) >= 2:
             # per storey only the 1:1 model, without terrain (user 2026-11-10: «uma maquete total da casa com terreno, uma
             # da casa total sem terreno, uma do piso 0 e uma do piso 1 ambas sem terreno»)
@@ -196,6 +203,13 @@ def relatorio(r, decl):
           "modelo — fica 2 m à frente da casa, ao centro dessa fachada, no pavimento acabado: começa-se à frente da "
           "casa, não dentro dela. Na maquete, a origem fica no centro da planta. Fachada da entrada: "
           + next((v["frente"]["regra"] for v in r["variantes"] if v.get("frente")), "—") + ". Escala real em metros.",
+          "",
+          "**Android (Scene Viewer):** o GLB passa pelas regras do validador da Google (extensões suportadas, uma "
+          "camada de UV, sem cores por vértice, tamanho, materiais). O Blender escreve `KHR_materials_specular` na "
+          "película de sombra; o Scene Viewer recusa qualquer extensão que não suporte e o telemóvel voltava ao hub "
+          "(nota da equipa, 2026-11-10). A extensão sai do GLB (o USDZ fica igual). "
+          + "; ".join(sorted({f"{v['variante']}: tiradas " + (", ".join(v['scene_viewer']['extensoes_tiradas']) or "nenhuma")
+                              for v in r["variantes"] if v.get("scene_viewer")})) + ".",
           "",
           "**Fundação na versão casa:** o telemóvel pousa o ponto mais baixo do modelo no chão real, por isso a "
           "fundação indicativa é cortada 0,2 m abaixo do pavimento e o soco fica visível.",

@@ -535,6 +535,44 @@ função temporária voltou a estar desligada (410, recusa 401 confirmada) e a c
 - **Como ler o resultado:** A e B falham → é o telemóvel (ARCore ou app Google); B abre e D não → é o nosso ficheiro ou
   o link assinado; D abre → estava resolvido pelo link 1.2.
 
+## Versão 7.3: a causa do Android (2026-11-10)
+
+O utilizador, depois da 7.2: «o AR no mobile android continua a não abrir verifica o processo todo de deploy que fizeste
+e encontra a falha. O que acontece é clicamos no botão e depois anima a transição para o ecrã mas volta logo ao hub nem
+sequer chega a aparecer o menu seguinte».
+
+**Revisão do processo todo**, do Blender ao telemóvel:
+- O link (1.2, igual ao `<model-viewer>`), o link assinado (HTTPS, uma hora) e o GLB (glTF 2.0, uma camada de UV,
+  só triângulos, índices de 16 bits, sem cores por vértice, texturas JPEG/PNG até 2048 px, 2–4 MB): tudo dentro das
+  regras.
+- **A falha:** todos os GLB tinham a extensão `KHR_materials_specular`. O Blender escreve-a na película de sombra
+  (`AR_OCLUSAO`, especular 0), desde a versão 6 (09/11), um dia antes do primeiro teste num Android.
+- O validador do Scene Viewer trata qualquer extensão que não suporta como **erro**
+  (`UNSUPPORTED_GLTF_EXTENSION_USED`; suportadas: `KHR_materials_pbrSpecularGlossiness`, `KHR_materials_unlit`,
+  `KHR_texture_transform`; https://developers.google.com/ar/develop/scene-viewer).
+- Quando o Scene Viewer não consegue mostrar o modelo, a app Google manda o Chrome para o link de recurso
+  (`browser_fallback_url`), que é o próprio hub. É o sintoma da nota: a transição anima e volta ao hub.
+- O iPhone (USDZ) e o «Ver em 3D» (three.js) aceitam a extensão; por isso só o Android falhava.
+- A confirmação final é no telemóvel. O validador da Google não existe fora da página dele, e o Claude não tem um
+  Android.
+
+**Correção:** `step-inside/ferramentas/ar/scene_viewer.py`, chamado pelo `ar.py` logo a seguir a cada exportação.
+- Tira do GLB as extensões que o Scene Viewer não suporta (só quando não são obrigatórias; a película continua
+  transparente e a geometria fica igual).
+- Verifica as regras do validador: erro (extensão, cores por vértice, morph targets, mais de uma animação, mais de uma
+  camada de UV, mais de 15 MB); aviso (mais de 10 materiais ou 2 transparentes, texturas acima de 2048 px, mais de
+  100 mil triângulos, mais de 10 MB).
+- Testes: `step-inside/tests/test_ar.py` (`TestSceneViewer`, com um GLB igual ao que o Blender exporta). O GLB do
+  Sobral que estava no hub dá o erro; os novos não.
+- O USDZ não muda.
+
+**Resultado:** as duas casas sem erros. Os GLB ficam cerca de 110 bytes mais pequenos, com os mesmos triângulos.
+Fica o aviso de materiais: Sobral 11–13 (2 transparentes) e Torres Vedras 18–20 (3 transparentes), contra os 10
+recomendados. A Google só o recomenda; juntar materiais fica como melhoria.
+
+**No hub:** carregar os seis GLB novos (Torres Vedras 43 e 45; Sobral 47, 49, 51 e 53); falta autorizar a função
+temporária. O aviso do hub quando o Scene Viewer não abre pede agora o diagnóstico, em vez de culpar o telemóvel.
+
 ## Em falta
 
 - **Telemóveis reais** (tarefa 84):

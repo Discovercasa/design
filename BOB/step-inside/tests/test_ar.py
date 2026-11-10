@@ -10,6 +10,7 @@ AQUI = Path(__file__).resolve().parent
 sys.path.insert(0, str(AQUI.parent / "ferramentas" / "ar"))
 import ar  # noqa: E402
 import maquete  # noqa: E402
+import scene_viewer  # noqa: E402
 
 
 def var(**mod):
@@ -141,6 +142,82 @@ class TestFrente(unittest.TestCase):
 
     def test_sem_portas(self):
         self.assertEqual(maquete.frente([], self.PAREDES, 0.0)[0], (0, -1))
+
+
+def glb_do_blender(extra_ext=None, obrigatorias=None):
+    """A minimal GLB shaped like Blender's export of our AR models: one triangle, a wall material and the ambient
+    occlusion film with KHR_materials_specular (specular 0), as written since version 6 (2026-11-09)."""
+    import struct
+    pos = struct.pack("<9f", 0, 0, 0, 1, 0, 0, 0, 1, 0)
+    ind = struct.pack("<3H", 0, 1, 2) + b"\x00\x00"
+    g = {"asset": {"version": "2.0", "generator": "Khronos glTF Blender I/O v4.4.56"},
+         "extensionsUsed": ["KHR_materials_specular"] + (extra_ext or []),
+         "scene": 0, "scenes": [{"nodes": [0]}], "nodes": [{"mesh": 0, "name": "AR_OCLUSAO"}],
+         "materials": [{"name": "parede", "pbrMetallicRoughness": {"metallicFactor": 0}},
+                       {"name": "AR_OCLUSAO", "alphaMode": "BLEND", "pbrMetallicRoughness": {"metallicFactor": 0},
+                        "extensions": {"KHR_materials_specular": {"specularFactor": 0}}}],
+         "meshes": [{"primitives": [{"attributes": {"POSITION": 0}, "indices": 1, "material": 1}]}],
+         "accessors": [{"bufferView": 0, "componentType": 5126, "count": 3, "type": "VEC3", "min": [0, 0, 0], "max": [1, 1, 0]},
+                       {"bufferView": 1, "componentType": 5123, "count": 3, "type": "SCALAR"}],
+         "bufferViews": [{"buffer": 0, "byteOffset": 0, "byteLength": 36}, {"buffer": 0, "byteOffset": 36, "byteLength": 6}],
+         "buffers": [{"byteLength": 44}]}
+    if obrigatorias:
+        g["extensionsRequired"] = obrigatorias
+    return scene_viewer.escrever(g, pos + ind)
+
+
+class TestSceneViewer(unittest.TestCase):
+    """Android AR (team note on task 84, 2026-11-10): Scene Viewer refuses a model with an extension it does not
+    support (validator ERROR UNSUPPORTED_GLTF_EXTENSION_USED) and Chrome falls back to the hub."""
+
+    def setUp(self):
+        import tempfile
+        self.pasta = Path(tempfile.mkdtemp())
+
+    def caminho(self, dados):
+        p = self.pasta / "m.glb"
+        p.write_bytes(dados)
+        return p
+
+    def test_glb_como_o_blender_exporta_e_recusado(self):
+        g, b = scene_viewer.ler(glb_do_blender())
+        erros, _ = scene_viewer.verificar(g, b, 1000)
+        self.assertEqual(erros, ["extensão KHR_materials_specular não suportada pelo Scene Viewer"])
+
+    def test_preparar_tira_a_extensao_e_o_glb_continua_valido(self):
+        p = self.caminho(glb_do_blender())
+        r = scene_viewer.preparar(p)
+        self.assertEqual((r["extensoes_tiradas"], r["erros"]), (["KHR_materials_specular"], []))
+        g, b = scene_viewer.ler(p.read_bytes())
+        self.assertNotIn("extensionsUsed", g)
+        self.assertNotIn("extensions", g["materials"][1])
+        self.assertEqual(g["materials"][1]["alphaMode"], "BLEND")   # the film keeps its transparency
+        self.assertEqual(len(b), 44)                                 # geometry untouched
+        self.assertEqual(len(p.read_bytes()) % 4, 0)
+
+    def test_extensoes_suportadas_ficam(self):
+        p = self.caminho(glb_do_blender(extra_ext=["KHR_texture_transform"]))
+        scene_viewer.preparar(p)
+        self.assertEqual(scene_viewer.ler(p.read_bytes())[0]["extensionsUsed"], ["KHR_texture_transform"])
+
+    def test_extensao_obrigatoria_nao_se_tira(self):
+        p = self.caminho(glb_do_blender(obrigatorias=["KHR_draco_mesh_compression"]))
+        antes = p.read_bytes()
+        r = scene_viewer.preparar(p)
+        self.assertEqual(p.read_bytes(), antes)
+        self.assertTrue(any("KHR_draco_mesh_compression" in e for e in r["erros"]))
+
+    def test_glb_limpo_nao_muda(self):
+        p = self.caminho(glb_do_blender())
+        scene_viewer.preparar(p)
+        depois = p.read_bytes()
+        self.assertEqual(scene_viewer.preparar(p)["extensoes_tiradas"], [])
+        self.assertEqual(p.read_bytes(), depois)
+
+    def test_avisos_de_materiais(self):
+        g, b = scene_viewer.ler(glb_do_blender())
+        g["materials"] = g["materials"] * 6
+        self.assertTrue(any("12 materiais" in a for a in scene_viewer.verificar(g, b, 1000)[1]))
 
 
 if __name__ == "__main__":
