@@ -290,3 +290,12 @@ The team's notes on hub task 84 (written in the hub by [membro da equipa] on 202
 - Hub novidade «AR no Android: página de teste»; project phase text updated.
 - Filed in: `step-inside/docs/fase7/README.md` «Versão 7.4» (by the caller); `conhecimento/insights.md` (2026-11-10, Scene Viewer updated + new log-debugging insight).
 - Pending: a team member runs the test page on an Android and sends the result; then fix accordingly; note 10 stays open.
+
+### 2026-11-10 — Android AR: fails in the browser and in the installed app; the phone probably has no ARCore [Step Inside Phase 7]
+> nao abriu em nenhum dos dois nem no browser nem na app, aconteceu o que acontecia antes parece que vai abrir mas depois não abre nada
+- Context: result of the Android test after version 7.4 (Supabase edge logs 22:28–22:31).
+- The AR test page was not used (no request from it, no note sent); the tester used the hub's buttons.
+- 22:30:10 the 3D viewer opened (the phone's Chrome downloaded the GLB), then «Ver no teu espaço» → ~7 s later the whole hub page loaded again. The 3D viewer's AR uses Chrome's own AR (WebXR) when the phone supports it and falls back to Scene Viewer otherwise; it bounced too, so Chrome has no WebXR AR on this phone. Again no request from the Google app for the model.
+- Working conclusion (ours, not confirmed): this phone has no working ARCore («Serviços Google Play para RA» missing/outdated, or the phone is not on Google's ARCore list). The same check is now on screen: on Android the hub's AR section shows a line saying whether the phone has AR (ARCore), with what to do (install/update «Serviços Google Play para RA» in the Play Store; if not compatible, the phone cannot do AR, only «Ver em 3D»).
+- Filed in: `conhecimento/insights.md` (2026-11-10, Android AR needs ARCore).
+- Pending: the user to tell the phone model / what that line says / whether the Play Store offers «Serviços Google Play para RA»; run the AR test page if possible. iOS works; on an Android without ARCore the client can only use «Ver em 3D» — worth stating in the client platform plans (a phone-compatibility note on the client page).

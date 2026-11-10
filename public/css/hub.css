@@ -515,6 +515,8 @@ dialog.gaveta::backdrop { background: oklch(0.2 0.01 85 / 0.25); }
 .visor-3d .visor-ar { position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%); }
 
 /* diagnóstico do AR no Android (Teste do AR) */
+.aviso-ar { margin-top: 10px; padding: 10px 12px; border-radius: var(--r2); border: 1px solid var(--linha); background: var(--superficie); }
+.aviso-ar.mau { border-color: var(--erro, #b3261e); }
 .diag-ar { margin-top: 16px; border: 1px solid var(--linha); border-radius: var(--r2); padding: 12px 16px; background: var(--superficie); }
 .diag-ar summary { cursor: pointer; font-weight: 500; font-size: 0.9375rem; }
 .diag-ar > p, .diag-ar > div { margin-top: 8px; }

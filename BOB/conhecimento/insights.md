@@ -158,6 +158,9 @@ he answers (`metodo-construtivo.md`). Condensed 2026-10-28 (history in git).
   app never fetched the model, so the extension was not the cause of the symptom (still a real Scene Viewer rule).
 - **2026-11-10** — To debug a phone-only failure without the device, read the Supabase edge logs (user agent per
   request): they show which app actually fetched the file — **applied 2026-11-10**.
+- **2026-11-10** — Android AR needs an ARCore-supported phone with «Serviços Google Play para RA»; on phones without it
+  neither Scene Viewer AR nor WebXR AR opens (the page just reloads), so the client page must detect it and offer the
+  3D view («Ver em 3D») — **applied in the hub 2026-11-10**.
 
 ## Recorded, not yet told (raise when it fits)
 - **2026-10-16** — lameladas cut from stock waste a lot (8,50 from 13,5 m: ≈ 1,1 m³ at TV) → order to length or a 17 m
