@@ -510,6 +510,8 @@ dialog.gaveta::backdrop { background: oklch(0.2 0.01 85 / 0.25); }
 .doc-acoes { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; justify-content: flex-end; }
 /* Step Inside: visualizador 3D (model-viewer) para quem não tem AR (2026-11-09) */
 .visor-3d model-viewer { display: block; width: 100%; height: min(70vh, 560px); background: var(--lateral); border-radius: var(--r2); }
+/* in the dialog every gesture turns the model: no page scroll, no text selection, no long-press menu */
+.visor-3d model-viewer { touch-action: none; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
 .visor-3d .visor-ar { position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%); }
 
 /* ---------- materiais do Hub (aba Materiais, só de consulta) ---------- */

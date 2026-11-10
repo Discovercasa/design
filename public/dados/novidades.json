@@ -15,7 +15,9 @@
       "A casa abre de frente para ti: a fachada da entrada virada para o telemóvel e a casa à tua frente, não à tua volta (versão 1:1). As versões 1:1 ficam sempre à escala real.",
       "Acabou o pavimento a piscar ao rodar: a sombra suave dos cantos já não se sobrepõe às superfícies.",
       "Torres Vedras: os pilares da pérgola assentam no chão (o terreno à volta da casa ficou plano também debaixo da pérgola).",
-      "Android: se o Scene Viewer não abrir, o hub diz porquê e oferece o visualizador 3D, cujo botão «Ver no teu espaço» abre o AR no próprio Chrome."
+      "Android: se o Scene Viewer não abrir, o hub diz porquê e oferece o visualizador 3D, cujo botão «Ver no teu espaço» abre o AR no próprio Chrome.",
+      "«Ver em 3D»: rodar a casa e largar fora da janela já não a fecha nem mexe na página de trás; no telemóvel todos os gestos rodam a casa.",
+      "Android: em «Como testar» há um modelo de exemplo da Google para saber se o problema é do telemóvel ou do nosso ficheiro."
     ]
   },
   {
