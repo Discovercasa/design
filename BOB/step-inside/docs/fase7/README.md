@@ -575,6 +575,50 @@ Sobral 47, 49, 51 e 53) substituíram os antigos nos mesmos links, com a descri�
 estavam. A função temporária voltou a estar desligada (recusa 401 confirmada) e a chave foi apagada. A equipa foi
 avisada na tarefa 84; a nota 10 fica aberta até ao teste num Android. O aviso do hub quando o Scene Viewer não abre pede agora o diagnóstico, em vez de culpar o telemóvel.
 
+## Versão 7.4: o que os registos do servidor mostram, e a página de teste (2026-11-10)
+
+O utilizador, depois da 7.3: «ainda não funciona, faz um proper debugging de todas as causas que pode ser e verifica
+também que pode estar haver algum tipo de conflito ao abrir no HUB sendo que para ios funciona perfeitamente».
+
+**O que os registos do Supabase provam** (pedidos aos ficheiros AR nas últimas 24 h, por aparelho):
+- iPhone: o Safari pede o link e o próprio Quick Look descarrega o USDZ (`NetworkingExtension … iOS`).
+- Android (dois telemóveis, Chrome 152 e 156): só o Chrome pediu ficheiros (o «Ver em 3D» e o diagnóstico).
+  **A app Google nunca pediu o modelo**, nem com o link 1.0 nem com o 1.2, nem antes nem depois da versão 7.3.
+- Último teste (21:58): o hub preparou os links; cerca de 3 s depois a página carregou toda de novo (nova ligação em
+  direto, os dados todos, o diagnóstico outra vez). Não houve nenhum pedido da app Google pelo meio.
+- Conclusão: a falha é **antes** de descarregar. A extensão corrigida na 7.3 não era a causa deste sintoma (a correção
+  continua certa: com ela o Scene Viewer recusaria o ficheiro depois de o descarregar).
+
+**Causas que ficam, e o que as separa:**
+1. Telemóvel sem a app Google, com ela desativada ou desatualizada, ou sem «Serviços Google Play para RA». O exemplo
+   da Google também falha pela app Google; pelo ARCore ou pelo AR do Chrome pode abrir.
+2. A app Google recebe o pedido mas não o aceita: abre e devolve logo, sem descarregar. Vê-se se outra app abriu e
+   quanto tempo ficou.
+3. Conflito do hub. Exemplos: aberto como app instalada no ecrã inicial (o hub é instalável), ou algo na página. A
+   página de teste está fora do hub e mostra se foi aberta como app instalada.
+4. O nosso link (assinado). O exemplo da Google abre e o nosso não.
+
+**Página de teste:** `public/ar-teste.html` + `public/js/ar-teste.js`, fora do hub, com 8 testes de um toque:
+- G1–G4: o exemplo da Google pela app Google (links 1.0 e 1.2), pelo ARCore (`com.google.ar.core`, só AR) e pelo AR do
+  Chrome (WebXR);
+- N1–N4: o nosso modelo pelos mesmos quatro caminhos.
+
+O que a página regista sozinha:
+- se a página ficou escondida depois do toque (abriu outra app) e quanto tempo;
+- se voltou pelo link de recurso e, nesse caso, se uma app chegou a abrir antes;
+- se não aconteceu nada em 4 s;
+- o modelo do telemóvel, a versão do Android e do Chrome, se está aberta como app instalada e se o Chrome tem WebXR;
+- se o nosso ficheiro descarrega.
+
+O resultado vai para a tarefa do teste com a sessão da pessoa, ou copia-se.
+- O link assinado do nosso modelo vai do hub na parte `#` do endereço: não chega a nenhum servidor e a página tira-o
+  da barra.
+- Os links são do módulo comum `public/js/ar-intent.js`, o mesmo que o hub usa.
+- No hub, o painel do Teste do AR abre a página com o primeiro GLB. O aviso que aparece quando o Scene Viewer volta ao
+  hub tem «Testar este Android».
+- O painel antigo, com escolhas por teste, saiu.
+- Testes: `tests/ar-teste.spec.mjs`.
+
 ## Em falta
 
 - **Telemóveis reais** (tarefa 84):

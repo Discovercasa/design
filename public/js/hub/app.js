@@ -78,9 +78,12 @@ function arAndroidFalhou() {
   q.delete('ar-android');
   history.replaceState(null, '', location.pathname + (q.toString() ? '?' + q : '') + location.hash);
   // (2026-11-10: the cause found was in our GLB, an extension Scene Viewer refuses; the phone may still lack the Google app)
-  aviso('O Scene Viewer não abriu o modelo neste telemóvel. Faz o «Diagnóstico do AR no Android» (Teste do AR) e envia '
-    + 'o resultado. Entretanto, o visualizador 3D: o botão «Ver no teu espaço» abre o AR no próprio Chrome.',
-    { icone: 'atencao', duracao: 0, acoes: id ? [{ rotulo: 'Abrir em 3D', fazer: () => verEm3D(id) }] : [] });
+  const d = E.documentos.find((x) => x.id === id);
+  aviso('O Scene Viewer não abriu o modelo neste telemóvel. «Testar este Android» abre a página de teste do AR: 8 toques, '
+    + 'e o resultado vai sozinho para a tarefa do teste. Entretanto, «Abrir em 3D» › «Ver no teu espaço» usa o AR do próprio Chrome.',
+    { icone: 'atencao', duracao: 0, acoes: [
+      ...(d ? [{ rotulo: 'Testar este Android', fazer: async () => { try { location.href = AA.paginaTeste(await D.urlAR(d), d); } catch (err) { aviso(err.message || String(err), { icone: 'atencao' }); } } }] : []),
+      ...(id ? [{ rotulo: 'Abrir em 3D', fazer: () => verEm3D(id) }] : [])] });
 }
 
 // ---------------------------------------------------------------- versão nova do hub publicada
@@ -436,20 +439,13 @@ async function prepararAR(raiz) {
       if (!l || l.ate < Date.now() + 5 * 60 * 1000) { l = { url: await D.urlAR(d), ate: Date.now() + 60 * 60 * 1000 }; LINKS_AR.set(id, l); }
       const real = /1:1/.test(d.titulo);
       if (a.dataset.arTipo === 'ios') a.href = l.url + (real ? '#allowsContentScaling=0' : '');
-      else {   // Scene Viewer: the button uses the link as Google's <model-viewer> builds it (1.2); the diagnosis also tries 1.0
-        const versao = a.dataset.arTipo === 'android-1.0' ? '1.0' : '1.2';
-        a.href = AA.intentSceneViewer(l.url, { versao, titulo: d.titulo.replace(/\s+/g, ' '), real, volta: AA.voltaPara(id, (rota().p || {}).slug) });
+      else if (a.dataset.arTipo === 'teste') a.href = AA.paginaTeste(l.url, d);   // the Android AR test page (outside the hub)
+      else {   // Scene Viewer: the link as Google's <model-viewer> builds it (1.2)
+        a.href = AA.intentSceneViewer(l.url, { titulo: d.titulo.replace(/\s+/g, ' '), real, volta: AA.voltaPara(id, (rota().p || {}).slug) });
       }
       a.removeAttribute('aria-disabled');
     } catch (err) { a.title = 'Não foi possível preparar o link: ' + (err.message || err); }
   }));
-  // Android diagnosis panel: what this phone supports and whether our signed file downloads (once per page)
-  const info = $('#diag-info', raiz), alvo = $('[data-ar-tipo="android-1.2"]', raiz);
-  if (info && alvo && !AA.diag.info) {
-    const l = LINKS_AR.get(Number(alvo.dataset.ar));
-    await AA.verificar(l && l.url);
-    desenhar(false);
-  }
 }
 
 // Step Inside: the 3D viewer for who has no AR — Google's <model-viewer> (a new dependency, authorised 2026-11-09),
@@ -492,9 +488,6 @@ function filtrarMateriais(e) {
 }
 document.addEventListener('input', filtrarMateriais);
 document.addEventListener('change', filtrarMateriais);
-// Android AR diagnosis: what happened in each test, and the notes (kept across redraws)
-document.addEventListener('change', (e) => { const s = e.target.closest('[data-diag-res]'); if (s) AA.diag.res[s.dataset.diagRes] = s.value; });
-document.addEventListener('input', (e) => { if (e.target.matches('[data-diag-notas]')) AA.diag.notas = e.target.value; });
 
 document.addEventListener('click', async (e) => {
   const el = e.target.closest('[data-acao]');
@@ -517,13 +510,6 @@ document.addEventListener('click', async (e) => {
       return;
     }
     case 'ver-3d': return verEm3D(id);
-    case 'diag-enviar': {
-      const p = rota().p, t = p && AA.tarefaTeste(p.id);
-      if (!t) return aviso('Não encontrei a tarefa do teste do AR.', { icone: 'atencao' });
-      if (!Object.values(AA.diag.res).some(Boolean)) return aviso('Escolhe primeiro o que aconteceu em pelo menos um teste.', { icone: 'info' });
-      if (await tentar(() => D.criarNota(t.id, 'nota', AA.textoResultado()))) aviso('Resultado enviado para a tarefa do teste. Obrigado!', { icone: 'certo' });
-      return desenhar(false);
-    }
     case 'mat-csv': return MV.descarregarCSV();
     case 'mat-mais': MV.filtro.limite += 200; $('#mat-lista').innerHTML = MV.lista(); return;
     case 'abrir-doc': {

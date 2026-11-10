@@ -6,6 +6,12 @@
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "dev", "--prefix", "BOB/configurador/web"],
       "port": 5173
+    },
+    {
+      "name": "hub-local",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["tests/servidor.mjs"],
+      "port": 4321
     }
   ]
 }

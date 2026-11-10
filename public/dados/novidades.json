@@ -1,6 +1,15 @@
 [
   {
     "dia": "2026-11-10",
+    "titulo": "AR no Android: página de teste",
+    "itens": [
+      "Os registos do servidor mostram que a app Google nunca chegou a pedir o modelo: a falha é antes de descarregar, por isso a extensão corrigida na versão 7.3 não explicava o problema.",
+      "Página de teste nova, fora do hub (Step Inside › Teste do AR › «Abrir a página de teste do AR»): 8 testes de um toque, com o exemplo da Google e o nosso modelo, pela app Google, pelo ARCore e pelo AR do Chrome.",
+      "A página vê sozinha o que aconteceu em cada teste e envia o resultado para a tarefa do teste."
+    ]
+  },
+  {
+    "dia": "2026-11-10",
     "titulo": "AR no Android: encontrada a causa",
     "itens": [
       "O Android voltava ao hub porque os ficheiros do AR tinham uma extensão que o Scene Viewer da Google recusa (vinha da película de sombra dos cantos). O iPhone aceitava-a.",
