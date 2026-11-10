@@ -27,6 +27,7 @@ Um produto sem correspondência aparece no relatório do modelo de visita e pede
 
 **DiscoverCasa:** o mapeamento é **provisório** (INFERRED), feito a partir de `ferramentas/modelo/sistema_construtivo.json`.
 - O utilizador vai associar a lista oficial de materiais durante a semana de 2026-11-09.
+- Confirmado em 2026-11-10: a lista oficial chega do Hub (tabelas `hub_*`, `#/materiais`); próximo passo: mapear cada MAT_* para um id de material do Hub.
 - Cada entrada passa então a CONFIRMED, com o produto oficial como fonte.
 
 ## Estado (2026-11-09)
