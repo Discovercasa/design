@@ -164,6 +164,10 @@ he answers (`metodo-construtivo.md`). Condensed 2026-10-28 (history in git).
   was reported as supported on a recent Xiaomi phone (Android 15, Chrome 152) and AR still failed, Google's own sample
   too; so «supported» is not enough. The client page must fall back to the in-page 3D view automatically when AR does
   not open, not only when AR is reported missing.
+  **Confirmed 2026-11-10 (round 2):** the Redmi Note 14 Pro 5G is NOT on Google's ARCore supported-devices list; Chrome
+  said AR supported (only a «maybe»), yet the session failed with NotSupportedError, and Scene Viewer flashed a Google
+  app window and opened nothing. The hub now falls back to the in-page 3D view automatically if the page is not hidden
+  within 3 s after «Ver em AR · Android», with a «Ver na Play Store» button — **applied 2026-11-10**.
 
 ## Recorded, not yet told (raise when it fits)
 - **2026-10-16** — lameladas cut from stock waste a lot (8,50 from 13,5 m: ≈ 1,1 m³ at TV) → order to length or a 17 m

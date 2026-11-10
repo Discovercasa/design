@@ -528,9 +528,9 @@ test('Materiais: ainda sem dados do Hub — diz quando chegam', async ({ page })
 test('Step Inside: o Scene Viewer não abriu no Android — o hub diz porquê e oferece o 3D', async ({ page }) => {
   // the intent's fallback brings the phone back with ?ar-android=<doc> (team note 2026-11-10: «nem sequer apareceu»)
   const erros = await abrir(page, { rota: '/?ar-android=999#/projeto/step-inside' });
-  const av = page.locator('.aviso, [role="status"], [role="alert"]').filter({ hasText: 'O Scene Viewer não abriu' });
+  const av = page.locator('.aviso, [role="status"], [role="alert"]').filter({ hasText: 'O AR não abriu neste telemóvel' });
   await expect(av).toBeVisible();
-  await expect(av.getByRole('button', { name: 'Abrir em 3D' })).toBeVisible();
+  await expect(av.getByRole('button', { name: 'Ver na Play Store' })).toBeVisible();
   await expect(page).not.toHaveURL(/ar-android/);
   await expect(page).toHaveURL(/#\/projeto\/step-inside$/);
   expect(erros).toEqual([]);
@@ -593,6 +593,15 @@ test('Step Inside: teste do AR — carregar modelos e abrir no Quick Look / Scen
   await expect(page.locator('#dlg model-viewer')).toBeVisible();
   await page.locator('#dlg').getByRole('button', { name: 'Fechar' }).click();
   await expect(page.locator('#dlg')).toBeHidden();
+  // the AR did not take over within 3 s (a Redmi Note 14 Pro 5G, not on Google's ARCore list, 2026-11-10): the model
+  // opens in 3D here by itself, with the ARCore link (user: «se o cliente tiver um dispositivo qualquer tem de conseguir ver»)
+  await android.evaluate((a) => a.addEventListener('click', (e) => e.preventDefault()));
+  await android.click();
+  const semAR = page.locator('.aviso').filter({ hasText: 'O AR não abriu neste telemóvel' });
+  await expect(semAR).toBeVisible({ timeout: 5000 });
+  await expect(semAR.getByRole('button', { name: 'Ver na Play Store' })).toBeVisible();
+  await expect(page.locator('#dlg model-viewer')).toBeVisible();
+  await page.locator('#dlg').getByRole('button', { name: 'Fechar' }).click();
   // Android (team note 10, 2026-11-10): the panel opens the AR test page (outside the hub) with our signed GLB in the hash
   const teste = sec.locator('#diag-ar').getByRole('link', { name: 'Abrir a página de teste do AR' });
   await expect(teste).toHaveAttribute('href', /^\/ar-teste\.html#u=http.+__ficheiro.+\.glb&t=Torres\+Vedras.+&doc=\d+&real=1$/);

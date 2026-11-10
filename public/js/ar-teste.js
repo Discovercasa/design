@@ -266,6 +266,8 @@ function talvezEnviar() { if (aEnviar || E.enviado || !completo()) return; aEnvi
 async function enviar(auto = false) {
   const estado = $('#estado-envio');
   if (!Object.values(E.res).some((r) => r && r.estado !== 'a-testar')) { estado.textContent = 'Faz primeiro pelo menos um teste.'; return; }
+  // the same result only once (2026-11-10: four identical notes in 22 s)
+  if (E.enviadoTexto && E.enviadoTexto === textoResultado()) { estado.textContent = 'Este resultado já foi enviado para a tarefa do teste.'; return; }
   const sb = window.Design && window.Design.sb;
   try {
     const { data: { session } } = await sb.auth.getSession();
@@ -277,6 +279,7 @@ async function enviar(auto = false) {
     if (error) throw error;
     recarregar();
     E.enviado = Date.now();
+    E.enviadoTexto = textoResultado();
     guardar();
     estado.textContent = auto ? 'Todos os testes feitos: o resultado foi enviado sozinho para a tarefa do teste. Obrigado!' : 'Enviado para a tarefa do teste. Obrigado!';
   } catch (e) { estado.textContent = 'Não consegui enviar (' + (e.message || e) + '). Usa «Copiar o resultado».'; }

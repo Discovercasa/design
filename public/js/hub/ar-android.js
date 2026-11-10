@@ -44,8 +44,11 @@ export function esteTelemovel() {
 }
 export function textoTelemovel(i) {
   const quem = [i.modelo, i.android && 'Android ' + i.android].filter(Boolean).join(', ') || 'Este Android';
+  // (2026-11-10: on a Redmi Note 14 Pro 5G the Chrome said «AR: yes» and the AR session still failed with
+  // NotSupportedError — the phone is not on Google's ARCore list; Chrome's yes only means «maybe»)
   return i.webxr
-    ? `${quem}: tem AR (ARCore). Se o Scene Viewer não abrir, usa «Ver em 3D» › «Ver no teu espaço (AR)».`
+    ? `${quem}: o Chrome diz que talvez tenha AR. Só funciona se a app «Serviços Google Play para RA» (ARCore) estiver `
+      + 'instalada, e a Google só a dá aos telemóveis da lista dela. Se o AR não abrir, o hub abre o modelo em 3D.'
     : `${quem}: o Chrome diz que este telemóvel não tem AR (ARCore). Na Play Store, procura «Serviços Google Play para RA» `
       + 'e instala ou atualiza. Se a Play Store disser que não é compatível, este telemóvel não consegue abrir AR: '
       + 'só o «Ver em 3D». Depois, faz a página de teste do AR para confirmarmos.';
