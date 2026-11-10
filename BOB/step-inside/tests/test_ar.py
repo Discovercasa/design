@@ -118,5 +118,30 @@ class TestMaquete(unittest.TestCase):
         self.assertLess(normal(fundo)[2], 0)        # the bottom faces down
 
 
+class TestFrente(unittest.TestCase):
+    """Which façade faces the viewer (team note on the phone test, 2026-11-10)."""
+    PAREDES = (0.0, 0.0, 15.0, 8.0)
+
+    def test_porta_de_entrada(self):
+        vaos = [("M3 Sala / Entrada — Janela de correr 2,00 x 2,20 | vidro", (2, -0.1, 0.1), (4, 0.1, 2.3)),
+                ("M5 Sala / Entrada — Porta painel liso 1,04 x 2,20 | aro e fol", (14.9, 3, 0), (15.1, 4, 2.2))]
+        s, regra = maquete.frente(vaos, self.PAREDES, 0.0)
+        self.assertEqual(s, (1, 0))
+        self.assertIn("M5", regra)
+
+    def test_mais_portas_no_res_do_chao(self):
+        vaos = [("Caixilho do vão PE1.04#0", (1, 7.9, 0), (2, 8.1, 2.5)), ("Vidro do vão PE1.04#0", (1.1, 8, 0.1), (1.9, 8, 2.4)),
+                ("Caixilho do vão PE1.05#0", (4, 7.9, 0), (5, 8.1, 2.5)),
+                ("Caixilho do vão PE1.08#0", (14.9, 3, 0), (15.1, 4, 2.5)),
+                ("Caixilho do vão PE2.04#0", (1, -0.1, 3.0), (2, 0.1, 4.2))]   # upstairs window: not a door
+        s, regra = maquete.frente(vaos, self.PAREDES, 0.0)
+        self.assertEqual(s, (0, 1))
+        self.assertIn("(2)", regra)
+        self.assertIn("INFERRED", regra)
+
+    def test_sem_portas(self):
+        self.assertEqual(maquete.frente([], self.PAREDES, 0.0)[0], (0, -1))
+
+
 if __name__ == "__main__":
     unittest.main()

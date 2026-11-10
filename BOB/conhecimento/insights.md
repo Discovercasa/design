@@ -369,3 +369,10 @@ he answers (`metodo-construtivo.md`). Condensed 2026-10-28 (history in git).
   at each tile row). Same version: a clean rectangular maquete and a terrain baked with a 2,3× rotated copy so the 2–3 m
   repetition no longer shows — `step-inside/docs/fase7/README.md` «Versão 6». Risk to check on the phone: a film 5 mm off
   the surface may flicker (z-fighting) or show a dark edge at oblique views.
+- **2026-11-10** — **status: confirmed on the phone test of version 6 (task 84), fixed in AR version 7; not yet told.** A film
+  offset must skip covered faces: a hidden face under a layer as thick as the offset ends up ON the visible surface (the
+  slab top under the 5 mm vinyl floor got its film exactly on the floor: 153 m² at Torres Vedras → glitching textures when
+  rotating) → no film on faces covered within 12 mm; film image 1024 px also in the GLB. The risk noted on 2026-11-09 (z-fighting)
+  was real. Also: a terrain survey that predates the works leaves built elements (pergola posts) hanging above the old
+  ground → the flat platform must include them (INFERRED; real graded ground = photos) — `step-inside/docs/fase7/README.md`
+  «Versão 7».

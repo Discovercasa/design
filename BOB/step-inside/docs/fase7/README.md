@@ -390,6 +390,94 @@ O utilizador disse «avança com a próxima tarefa»: os três pontos que faltav
 documentos 42–57 do Teste do AR, nos mesmos links, com os tamanhos confirmados. Depois, a função temporária voltou a
 estar desligada e a chave foi apagada. A equipa foi avisada na tarefa 84.
 
+## Versão 7: notas do primeiro teste da equipa (2026-11-10)
+
+A equipa testou a versão 6 e deixou cinco notas na tarefa 84 do hub. O utilizador pediu: «lê analisa e corrige ou
+executa as mudanças necessárias».
+
+**1. «Quando se roda no 3D e mesmo no AR aparecem texturas com glitch a aparecer e a desaparecer, e também com
+stutter».**
+- **Causa (medida):** a película de sombra da versão 6 ficava 5 mm à frente de todas as faces, também das escondidas.
+  - A face de cima da laje está por baixo do vinil, que tem 5 mm. A película dela caía exatamente na superfície do
+    pavimento: 153 m² em Torres Vedras.
+  - As duas superfícies no mesmo plano lutavam pelo mesmo píxel (z-fighting), e o pavimento piscava ao rodar.
+  - Um detetor de faces no mesmo plano confirmou que, no modelo de visita, as coincidências estão todas escondidas
+    (vinil em cima da laje, membrana atrás do Tremolo, ripados). Só a película as punha à vista.
+- **Correção:** a película salta as faces tapadas por outra superfície a menos de 12 mm (raios ao longo da normal):
+  - Torres Vedras: 1 196 faces;
+  - coincidências da película: de 153 m² para 0,6 m².
+- **Leveza:** a imagem da película passa a 1024 px também no GLB (como no USDZ).
+- **Stutter:** não foi possível medir sem o telemóvel. Os modelos têm 5–28 mil triângulos e até 4 MB. Se continuar,
+  medir com o telemóvel; o próximo passo seria comprimir as texturas (KTX2).
+
+**2. «Os pilares da pérgola ficam no ar não assentando no chão».**
+- **Causa (medida):** o levantamento de Torres Vedras é anterior à obra. A plataforma plana à cota exterior (117,48)
+  só cobria 1,5 m à volta das paredes. A pérgola sai mais da fachada, e os pilares ficavam 5–70 cm acima do terreno
+  antigo, que desce ao longo da fachada.
+- **Correção:** a plataforma passa a incluir a pérgola (`ARCH_PERGOLA`) mais a margem, no modelo de visita. Os
+  pilares ficam a 1,5 cm do chão: a cota exterior desenhada está 2 cm abaixo do pavimento.
+  - É INFERRED: a forma real do terreno arranjado é a das fotos.
+
+**3. «O AR no android não abriu, nem sequer apareceu que foi descarregado».**
+- **Análise:**
+  - O link segue o formato da Google, o mesmo que o `<model-viewer>` usa.
+  - O hub não corre dentro de uma moldura (`X-Frame-Options: DENY`).
+  - Um toque antes de o link estar pronto já mostrava um aviso.
+  - Portanto, o Chrome tentou abrir o Scene Viewer da app Google e, como não conseguiu, seguiu o link de recurso, que
+    era a própria página do hub: parecia que nada acontecia.
+  - Causas prováveis: a app Google desatualizada ou desativada, sem os «Serviços Google Play para RA», ou outro
+    browser.
+- **Correções no hub:**
+  - O link de recurso volta com `?ar-android=<id>`: o hub diz porque não abriu e oferece «Abrir em 3D».
+  - No visualizador 3D há o botão «Ver no teu espaço (AR)». No Android usa o WebXR do próprio Chrome e não precisa da
+    app Google.
+  - Os links são preparados todos ao mesmo tempo (antes, um a um).
+- **A confirmar:** modelo do telemóvel e browser usados no teste.
+
+**4. «Quando se abre a casa deve estar orientado de frente para nós e quando encontra a superfície não devemos
+começar dentro da casa ou dentro de uma parede mas sim com a casa a nossa frente».**
+- **Causa:** a origem do modelo 1:1 era o centro da planta, e o telemóvel pousa a origem à frente de quem está a ver.
+  Torres Vedras estava ainda rodado cerca de 45° (os eixos do terreno).
+- **Correção:**
+  - A casa é alinhada pelos seus eixos (desfaz-se `HOUSE_ROOT`).
+  - A casa roda para a fachada da entrada ficar virada para quem vê (+Z no glTF e no USD).
+  - Na versão 1:1, a origem fica 2 m à frente do elemento mais saliente dessa fachada, ao centro.
+  - A maquete fica com a origem ao centro, também virada pela entrada. O bloco de terreno fica alinhado com a casa: em
+    Torres Vedras tem agora 7–20 m de relva à volta, em vez de 1,5–5 m.
+- **Fachada da entrada (`maquete.frente`, testado):**
+  - a porta com «entrada» no nome (Torres Vedras: M5 «Sala / Entrada»);
+  - senão, a fachada com mais portas no rés do chão (Sobral: INFERRED, até se saber a orientação, tarefa 161);
+  - senão, a mais comprida.
+- **Escala real nos modelos 1:1:** Quick Look sem «beliscar» (`#allowsContentScaling=0`), Scene Viewer com
+  `resizable=false` e o visualizador 3D com `ar-scale="fixed"`.
+
+**5. «Como se pode ver na imagem está a faltar parte da parede nessa zona».**
+- A foto da nota está no armazenamento privado do hub e o Claude não a consegue abrir.
+- Procura feita sem a foto: raios de fora para os modelos 1:1, a toda a volta.
+  - Torres Vedras: só uma faixa estreita de ripado à vista na ombreira do portão da garagem.
+  - Sobral: a fachada está completa; o interior só se vê pelos vidros e pelas soleiras das portas.
+  - Falta saber em que modelo e onde.
+
+**Também corrigido.** Nos modelos de um só piso do Sobral:
+- A laje ficava sem geometria depois do corte. O objeto vazio punha (0,0,0) na caixa do resumo, e a verificação de
+  reabertura falhava (FAIL). Os objetos vazios já não se exportam.
+- A frente desses modelos mede-se no que o piso guarda. O terraço do rés do chão já não empurra a origem do piso 1.
+
+**Resultados (PASS nas duas casas):**
+
+| Casa | Variante | Triângulos | Dos quais película | GLB | USDZ | Bloco da maquete |
+|---|---|---|---|---|---|---|
+| Torres Vedras | casa | 24 056 | 1 556 | 3,0 MB | 2,7 MB | — |
+| Torres Vedras | maquete | 28 000 | 1 668 | 4,0 MB | 3,1 MB | 7–20 m à volta da casa |
+| Sobral Tipo 1 | casa | 12 916 | 1 714 | 2,2 MB | 1,9 MB | — |
+| Sobral Tipo 1 | maquete | 14 244 | 1 676 | 3,6 MB | 2,3 MB | 20 m em todos os lados |
+| Sobral Tipo 1 | casa_piso0 | 5 110 | 1 064 | 1,6 MB | 1,5 MB | — |
+| Sobral Tipo 1 | casa_piso1 | 5 262 | 1 068 | 1,3 MB | 1,3 MB | — |
+| Sobral Tipo 1 | maquete_piso0 | 5 160 | 816 | 3,0 MB | 1,8 MB | 20 m |
+| Sobral Tipo 1 | maquete_piso1 | 9 638 | 1 452 | 3,3 MB | 2,0 MB | 20 m |
+
+**Imagens de verificação** (só no PC): `_trabalho/step-inside/<obra>/ar/v7_*.png`.
+
 ## Em falta
 
 - **Telemóveis reais** (tarefa 84):

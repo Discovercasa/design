@@ -189,7 +189,11 @@ def relatorio(r, decl):
           "real misturada com uma cópia maior e rodada, uma variação larga de cor e a sombra suave da casa. Já não "
           "se vê o padrão a repetir.",
           "",
-          "**Origem:** centro da planta da casa, no pavimento acabado do rés do chão (escala real em metros).",
+          "**Frente e origem** (notas do teste da equipa, 2026-11-10): a casa roda para os seus eixos e para a "
+          "fachada da entrada ficar virada para quem vê (+Z). Na versão 1:1, a origem — onde o telemóvel pousa o "
+          "modelo — fica 2 m à frente da casa, ao centro dessa fachada, no pavimento acabado: começa-se à frente da "
+          "casa, não dentro dela. Na maquete, a origem fica no centro da planta. Fachada da entrada: "
+          + next((v["frente"]["regra"] for v in r["variantes"] if v.get("frente")), "—") + ". Escala real em metros.",
           "",
           "**Fundação na versão casa:** o telemóvel pousa o ponto mais baixo do modelo no chão real, por isso a "
           "fundação indicativa é cortada 0,2 m abaixo do pavimento e o soco fica visível.",

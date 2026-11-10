@@ -238,8 +238,8 @@ test('perfil: área pessoal, definições (nome, tema), novidades e sair', async
   await captura(page, 'inicio-escuro');
   await page.getByRole('button', { name: 'Perfil' }).click();
   await page.locator('#pop-perfil').getByRole('menuitem', { name: /Novidades/ }).click();
-  await expect(page.locator('.novidade').first()).toContainText('Notificações sem saltos e ponto de situação fechado');
-  await expect(page.locator('.novidade').nth(1)).toContainText('Notificações por ver');
+  await expect(page.locator('.novidade').first()).toContainText('AR: correções do primeiro teste da equipa');
+  await expect(page.locator('.novidade').nth(1)).toContainText('Notificações sem saltos e ponto de situação fechado');
   await page.getByRole('button', { name: 'Perfil' }).click();
   await page.locator('#pop-perfil').getByRole('menuitem', { name: 'Sair' }).click();
   await expect(page.getByRole('button', { name: 'Entrar com a conta do Hub' })).toBeVisible();
@@ -445,6 +445,17 @@ test('projeto: o ponto de situação das fases fica fechado num acordeão', asyn
   await expect(sit.locator('p')).toContainText('Fase 7');
 });
 
+test('Step Inside: o Scene Viewer não abriu no Android — o hub diz porquê e oferece o 3D', async ({ page }) => {
+  // the intent's fallback brings the phone back with ?ar-android=<doc> (team note 2026-11-10: «nem sequer apareceu»)
+  const erros = await abrir(page, { rota: '/?ar-android=999#/projeto/step-inside' });
+  const av = page.locator('.aviso, [role="status"], [role="alert"]').filter({ hasText: 'O Scene Viewer não abriu' });
+  await expect(av).toBeVisible();
+  await expect(av.getByRole('button', { name: 'Abrir em 3D' })).toBeVisible();
+  await expect(page).not.toHaveURL(/ar-android/);
+  await expect(page).toHaveURL(/#\/projeto\/step-inside$/);
+  expect(erros).toEqual([]);
+});
+
 test('Step Inside: teste do AR — carregar modelos e abrir no Quick Look / Scene Viewer', async ({ page }) => {
   await abrir(page, { rota: '/#/projeto/step-inside' });
   const sec = page.locator('#teste-ar');
@@ -466,11 +477,13 @@ test('Step Inside: teste do AR — carregar modelos e abrir no Quick Look / Scen
   // iPhone: <a rel="ar"> with an image as its only child, pointing at the signed file
   const ios = sec.locator('a[rel="ar"]');
   await expect(ios).not.toHaveAttribute('aria-disabled', 'true');
-  await expect(ios).toHaveAttribute('href', /\/__ficheiro\?c=plataforma_cliente%2Far%2F.+\.usdz$/);
+  // a 1:1 model keeps its real size (team note 2026-11-10): no pinch-to-scale in Quick Look
+  await expect(ios).toHaveAttribute('href', /\/__ficheiro\?c=plataforma_cliente%2Far%2F.+\.usdz#allowsContentScaling=0$/);
   expect(await ios.evaluate((a) => a.children.length === 1 && a.firstElementChild.tagName === 'IMG')).toBe(true);
-  // Android: Scene Viewer intent with the signed GLB, AR first, coming back to this page
+  // Android: Scene Viewer intent with the signed GLB, AR first, not resizable at 1:1, coming back to this page with a
+  // marker when the phone cannot open it
   const android = sec.getByRole('link', { name: /Ver em AR · Android/ });
-  await expect(android).toHaveAttribute('href', /^intent:\/\/arvr\.google\.com\/scene-viewer\/1\.0\?file=http.+__ficheiro.+\.glb&mode=ar_preferred.+package=com\.google\.android\.googlequicksearchbox.+;end;$/);
+  await expect(android).toHaveAttribute('href', /^intent:\/\/arvr\.google\.com\/scene-viewer\/1\.0\?file=http.+__ficheiro.+\.glb&mode=ar_preferred&title=.+&resizable=false#Intent;.*package=com\.google\.android\.googlequicksearchbox.+browser_fallback_url=.+%3Far-android%3D\d+%23%2Fprojeto%2Fstep-inside;end;$/);
   // without AR (tarefa 85, 2026-11-09): «Ver em 3D» opens the GLB in Google's <model-viewer>, with the USDZ for iPhone
   await page.route('**/@google/model-viewer@*/**', (r) => r.fulfill({ contentType: 'text/javascript',
     body: "customElements.define('model-viewer', class extends HTMLElement {});" }));
@@ -479,6 +492,8 @@ test('Step Inside: teste do AR — carregar modelos e abrir no Quick Look / Scen
   await expect(mv).toHaveAttribute('src', /\/__ficheiro\?c=plataforma_cliente%2Far%2F.+\.glb$/);
   await expect(mv).toHaveAttribute('ios-src', /\.usdz$/);
   await expect(mv).toHaveAttribute('camera-controls', '');
+  await expect(mv).toHaveAttribute('ar-scale', 'fixed');
+  await expect(mv.locator('[slot="ar-button"]')).toHaveText('Ver no teu espaço (AR)');
   await expect(page.locator('#dlg')).toContainText('Visualizador 3D para quem não tem AR');
   await page.locator('#dlg').getByRole('button', { name: 'Fechar' }).click();
   await expect(page.locator('#dlg')).toBeHidden();

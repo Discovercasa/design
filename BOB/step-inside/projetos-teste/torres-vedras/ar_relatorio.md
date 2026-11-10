@@ -9,8 +9,8 @@ Orçamento (Google Scene Viewer  especificação §12.1): ideal até 50 000 tri�
 
 | Variante | Para quê | Triângulos (antes) | Materiais | Maior textura | GLB | USDZ | Dimensões (m) |
 |---|---|---|---|---|---|---|---|
-| casa | 1:1 no terreno real, para andar à volta | 24572 (25188) | 18 | 2048 px | 3,9 MB | 2,6 MB | [19.261, 21.691, 3.702] |
-| maquete | com o terreno, em ponto pequeno sobre uma mesa | 26449 (26549) | 20 | 2048 px | 4,8 MB | 2,9 MB | [24.455, 30.191, 5.112] |
+| casa | 1:1 no terreno real, para andar à volta | 24056 (25188) | 18 | 1024 px | 2,9 MB | 2,7 MB | [17.667, 13.325, 3.702] |
+| maquete | com o terreno, em ponto pequeno sobre uma mesa | 28000 (27938) | 20 | 2048 px | 4,0 MB | 3,1 MB | [34.665, 43.325, 5.012] |
 
 **Simplificação:**
 - tiram-se as camadas que não se veem de fora (`MAT_BOARD_OSB`, `MAT_INSULATION_MINERAL_WOOL`, `MAT_INSULATION_XPS`, `MAT_METAL_GALVANIZED`, `MAT_SCREED`, `MAT_TIMBER_STRUCTURE`);
@@ -22,16 +22,16 @@ Orçamento (Google Scene Viewer  especificação §12.1): ideal até 50 000 tri�
 
 **Maquete:** um bloco de terreno com a borda direita. O retângulo é o maior à volta da casa, até ao raio, que o levantamento cobre todo; os lados descem a um fundo plano (cor da terra do catálogo), por isso assenta direito na mesa. O chão é cozido numa só imagem por cima do bloco: a textura do catálogo à escala real misturada com uma cópia maior e rodada, uma variação larga de cor e a sombra suave da casa. Já não se vê o padrão a repetir.
 
-**Origem:** centro da planta da casa, no pavimento acabado do rés do chão (escala real em metros).
+**Frente e origem** (notas do teste da equipa, 2026-11-10): a casa roda para os seus eixos e para a fachada da entrada ficar virada para quem vê (+Z). Na versão 1:1, a origem — onde o telemóvel pousa o modelo — fica 2 m à frente da casa, ao centro dessa fachada, no pavimento acabado: começa-se à frente da casa, não dentro dela. Na maquete, a origem fica no centro da planta. Fachada da entrada: porta de entrada (M5 Sala / Entrada). Escala real em metros.
 
 **Fundação na versão casa:** o telemóvel pousa o ponto mais baixo do modelo no chão real, por isso a fundação indicativa é cortada 0,2 m abaixo do pavimento e o soco fica visível.
 
 
 **Reabertos num Blender limpo** (triângulos, dimensões, texturas):
 
-- casa glb: 24572 triângulos, [19.261, 21.691, 3.702] m, 21 texturas, 0 em falta
-- casa usdz: 24572 triângulos, [19.261, 21.691, 3.702] m, 21 texturas, 0 em falta
-- maquete glb: 26449 triângulos, [24.455, 30.191, 5.112] m, 22 texturas, 0 em falta
-- maquete usdz: 26449 triângulos, [24.455, 30.191, 5.112] m, 22 texturas, 0 em falta
+- casa glb: 24056 triângulos, [17.667, 13.325, 3.702] m, 21 texturas, 0 em falta
+- casa usdz: 24056 triângulos, [17.667, 13.325, 3.702] m, 21 texturas, 0 em falta
+- maquete glb: 28000 triângulos, [34.665, 43.325, 5.012] m, 22 texturas, 0 em falta
+- maquete usdz: 28000 triângulos, [34.665, 43.325, 5.012] m, 22 texturas, 0 em falta
 
 **Por testar:** abrir em telemóveis reais (Scene Viewer num Android, Quick Look num iPhone) e medir o tempo de carregamento e a qualidade ao lado das fotos da casa construída (tarefas 84 e 158).

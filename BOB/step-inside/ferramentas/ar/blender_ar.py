@@ -4,9 +4,9 @@
 
 run.json = {"variante": "casa" | "maquete", "piso": None | k, "ocultos": [MAT ids not seen from outside],
             "raio_terreno_m": 20, "textura_max": 1024, "glb": path, "usdz": path, "resumo": path}
-  casa     the house alone at 1:1, origin at the centre of its footprint on the finished ground floor: placed on the
-           real ground, the client walks around it
-  maquete  the house with the terrain around it (cropped), same origin: seen scaled down on a table
+  casa     the house alone at 1:1, its entrance façade facing the viewer, origin 2 m in front of it on the finished
+           ground floor: placed on the real ground, the client starts in front of the house and walks around it
+  maquete  the house on a block of its terrain, origin at the centre of the footprint: seen scaled down on a table
   piso k   (houses of two or more storeys, user 2026-11-09: «como é que o cliente pode ver o piso de cima ou o de
            baixo»): casa → storey k alone at 1:1, from 0,2 m under its floor to just under the next floor (the top
            storey without its roof), set down so its floor is at the origin — the client walks inside it on the real
@@ -48,21 +48,45 @@ for o in list(vl.objects):
 manter_n = {o.name for o in manter}
 casa = [o for o in manter if not o.get("si_categoria", "").startswith("SITE")]
 
-# origin: centre of the house footprint, at the finished ground floor (lowest top of the floors)
-lo = Vector((1e18, 1e18, 1e18))
-hi = -lo
-for o in casa:
-    for c in o.bound_box:
-        w = o.matrix_world @ Vector(c)
-        lo, hi = Vector(map(min, lo, w)), Vector(map(max, hi, w))
+sys.path.insert(0, str(Path(sys.argv[sys.argv.index("--python") + 1]).resolve().parent))
+import maquete as MQ  # noqa: E402
+
+
+# Orientation and origin (team note on the phone test, 2026-11-10: «quando se abre a casa deve estar orientado de
+# frente para nós e quando encontra a superfície não devemos começar dentro da casa ou dentro de uma parede mas sim com
+# a casa a nossa frente»). The phones place the model's origin on the floor in front of the viewer, its front (+Z in
+# glTF and USD = Blender -Y) facing them. So: the house is turned to its own axes (undoing HOUSE_ROOT, its placement on
+# the site) and then so the façade with the entrance (maquete.frente) faces -Y; at 1:1 the origin is `frente_m` in
+# front of the house's front-most element, centred, at the finished ground floor; the table model keeps the centre.
+def caixa_A(obs, A):
+    lo_ = Vector((1e18, 1e18, 1e18))
+    hi_ = -lo_
+    for o in obs:
+        for c in o.bound_box:
+            w = A @ o.matrix_world @ Vector(c)
+            lo_, hi_ = Vector(map(min, lo_, w)), Vector(map(max, hi_, w))
+    return lo_, hi_
+
+
+raiz = bpy.data.objects.get("HOUSE_ROOT")
+A0 = raiz.matrix_world.inverted() if raiz else Matrix.Identity(4)
 pisos = [o for o in casa if o.get("si_categoria") == "ARCH_FLOORS"]
-z0 = min(max((o.matrix_world @ Vector(c)).z for c in o.bound_box) for o in pisos) if pisos else lo.z
-origem = Vector(((lo.x + hi.x) / 2, (lo.y + hi.y) / 2, z0))
+plo, phi = caixa_A([o for o in casa if o.get("si_categoria") == "ARCH_WALLS_EXT"] or casa, A0)
+z0 = min(max((A0 @ o.matrix_world @ Vector(c)).z for c in o.bound_box) for o in pisos) if pisos else plo.z
+vaos = [(o.name, *caixa_A([o], A0)) for o in casa if o.get("si_categoria") == "ARCH_OPENINGS"]
+(fx, fy), FRENTE_REGRA = MQ.frente([(n, tuple(a), tuple(b)) for n, a, b in vaos], (plo.x, plo.y, phi.x, phi.y), z0)
+GIRO = -math.pi / 2 - math.atan2(fy, fx)   # the entrance façade's outward direction onto -Y
+A = Matrix.Rotation(GIRO, 4, "Z") @ A0
+lo, hi = caixa_A(casa, A)
+if run["variante"] == "casa":
+    origem = Vector(((lo.x + hi.x) / 2, lo.y - run.get("frente_m", 2.0), z0))
+else:
+    origem = Vector(((lo.x + hi.x) / 2, (lo.y + hi.y) / 2, z0))
 
 
 def caixa_mundo(o):
-    pts = [o.matrix_world @ Vector(c) for c in o.bound_box]
-    return Vector(map(min, *pts)), Vector(map(max, *pts))
+    """An object's box in the turned frame (A), like the world box before."""
+    return caixa_A([o], A)
 
 
 # storeys: the levels of the visible floor finishes (relative to the origin), with at least 4 m² of floor each
@@ -97,12 +121,17 @@ if PISO is not None:
     if run["variante"] == "casa":
         corte_inf = niveis[PISO] - run.get("corte_abaixo_m", 0.2)
         desce = niveis[PISO]
+        # the front is measured on what this storey keeps (a ground-floor terrace is cut away from the upper storey)
+        fica = [o for o in casa if o in manter and caixa_mundo(o)[1].z - z0 > corte_inf
+                and (corte_sup is None or caixa_mundo(o)[0].z - z0 < corte_sup)]
+        if fica:
+            origem.y = caixa_A(fica, A)[0].y - run.get("frente_m", 2.0)
 
 # 2. bake every kept object into one mesh per material, in coordinates relative to the origin
 porm, CATS = {}, {}
 for o in manter:
     me = o.evaluated_get(dg).to_mesh()
-    M = Matrix.Translation(-origem) @ o.matrix_world
+    M = Matrix.Translation(-origem) @ A @ o.matrix_world
     mat = o.active_material
     porm.setdefault(mat.name if mat else "_sem", []).append((me.copy(), M, mat))
     CATS.setdefault(mat.name if mat else "_sem", set()).add(o.get("si_categoria", ""))
@@ -115,9 +144,6 @@ sc = bpy.context.scene
 col = bpy.data.collections.new("AR")
 sc.collection.children.link(col)
 raio = run.get("raio_terreno_m", 20.0)
-sys.path.insert(0, str(Path(sys.argv[sys.argv.index("--python") + 1]).resolve().parent))
-import maquete as MQ  # noqa: E402
-
 RET, TERRENOS = None, []
 tri_antes = 0
 for nome, partes in porm.items():
@@ -172,6 +198,9 @@ for nome, partes in porm.items():
     tri_antes += sum(len(f.verts) - 2 for f in bm.faces)
     bmesh.ops.remove_doubles(bm, verts=bm.verts, dist=0.0005)
     # no coplanar merging: it saved < 2 % of the triangles and its T-junctions showed as hairline cracks (2026-11-09)
+    if not bm.faces:   # all of it cut away (e.g. the slab in an upper storey): an empty object would put (0,0,0) in boxes
+        bm.free()
+        continue
     me = bpy.data.meshes.new(nome)
     bm.to_mesh(me)
     bm.free()
@@ -360,7 +389,7 @@ if run.get("oclusao", True):
     import numpy as np
 
     AO_D, FORCA = run.get("ao_distancia_m", 1.0), run.get("ao_forca", 0.7)
-    EPS, APX = run.get("ao_afastamento_m", 0.005), run.get("ao_px", 2048)
+    EPS, APX = run.get("ao_afastamento_m", 0.005), run.get("ao_px", 1024)   # 1024: as in the USDZ, lighter on phones
     sc.world = sc.world or bpy.data.worlds.new("W")
     sc.world.light_settings.distance = AO_D
 
@@ -383,6 +412,24 @@ if run.get("oclusao", True):
             bmesh.ops.delete(bm, geom=[f for f in bm.faces[n0:] if f.normal.z > -0.7], context="FACES")
     bm.normal_update()
     bmesh.ops.delete(bm, geom=[f for f in bm.faces if f.calc_area() < 1e-6], context="FACES")
+    # Faces covered by another surface closer than the film's offset get no film (team note on the phone test,
+    # 2026-11-10: «aparecem texturas com glitch a aparecer e a desaparecer»): the slab's top under the 5 mm vinyl floor
+    # put its film exactly on the floor's surface (153 m² at Torres Vedras) and the two fought for each pixel.
+    from mathutils.bvhtree import BVHTree
+    bm_todos = bmesh.new()
+    for o in fontes + vidros:
+        bm_todos.from_mesh(o.data)
+    arvore = BVHTree.FromBMesh(bm_todos)
+    ALCANCE = EPS + run.get("ao_folga_m", 0.007)
+    tapadas = []
+    for f in bm.faces:
+        c = f.calc_center_median()
+        pts = [c] + [c.lerp(v.co, 0.8) for v in f.verts]
+        n_hits = sum(1 for p in pts if arvore.ray_cast(p + f.normal * 1e-4, f.normal, ALCANCE)[0] is not None)
+        if n_hits >= 0.4 * len(pts):
+            tapadas.append(f)
+    bm_todos.free()
+    bmesh.ops.delete(bm, geom=tapadas, context="FACES")
     bmesh.ops.split_edges(bm, edges=[e for e in bm.edges if e.calc_face_angle(10.0) > math.radians(10)])
     bm.normal_update()
     for v in bm.verts:
@@ -491,7 +538,7 @@ if run.get("oclusao", True):
     if chao:
         bpy.data.objects.remove(chao, do_unlink=True)
     me.calc_loop_triangles()
-    OCL = {"faces_candidatas": faces0, "faces": len(me.polygons), "triangulos": len(me.loop_triangles),
+    OCL = {"faces_tapadas": len(tapadas), "faces_candidatas": faces0, "faces": len(me.polygons), "triangulos": len(me.loop_triangles),
            "px": APX, "distancia_m": AO_D, "forca": FORCA, "afastamento_m": EPS}
 
 # 3. textures down to textura_max (colour) and half of it for normal / roughness; the baked pictures (AR_*) keep their
@@ -535,8 +582,11 @@ json.dump({"variante": nome_var, "base": run["variante"], "piso": PISO, "niveis"
            "oclusao": OCL, "maquete_base": BASE, "terreno_cozido": TERRENO,
            "textura_maior": max((max(s) for s in imgs.values()), default=0),
            "dimensoes": [round(b - a, 3) for a, b in zip(*caixa)],
-           "origem": "centro da planta da casa, no pavimento acabado " + (
+           "origem": (f"{run.get('frente_m', 2.0):g} m à frente da casa, ao centro da fachada da entrada"
+                      if run["variante"] == "casa" else "centro da planta da casa") + ", no pavimento acabado " + (
                f"do piso {PISO}" if PISO is not None and run["variante"] == "casa" else "do rés do chão"),
+           "frente": {"regra": FRENTE_REGRA, "rotacao_graus": round(math.degrees(GIRO) % 360, 1),
+                      "nota": "a fachada da frente fica virada para quem vê (+Z no glTF e no USD)"},
            "z_min": round(min(o.bound_box[i][2] for o in col.objects for i in range(8)), 3)},
           open(run["resumo"], "w", encoding="utf-8"), ensure_ascii=False, indent=1)
 print("AR_OK", tri)

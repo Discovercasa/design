@@ -35,12 +35,12 @@
     "MAT_ROOF_SANDWICH_TILE__RAL8004",
     "MAT_WALL_RENDER__WHITE"
    ],
-   "triangulos": 13286,
+   "triangulos": 12916,
    "triangulos_antes_de_simplificar": 12094,
    "imagens": {
     "AR_OCLUSAO": [
-     2048,
-     2048
+     1024,
+     1024
     ],
     "Chipboard004_2K-JPG_Color.jpg": [
      1024,
@@ -148,42 +148,48 @@
     ]
    },
    "oclusao": {
-    "faces_candidatas": 3863,
-    "faces": 964,
-    "triangulos": 1932,
-    "px": 2048,
+    "faces_tapadas": 638,
+    "faces_candidatas": 3158,
+    "faces": 855,
+    "triangulos": 1714,
+    "px": 1024,
     "distancia_m": 1.0,
     "forca": 0.7,
     "afastamento_m": 0.005
    },
    "maquete_base": {},
    "terreno_cozido": {},
-   "textura_maior": 2048,
+   "textura_maior": 1024,
    "dimensoes": [
     13.099,
-    11.249,
+    11.254,
     7.543
    ],
-   "origem": "centro da planta da casa, no pavimento acabado do rés do chão",
+   "origem": "2 m à frente da casa, ao centro da fachada da entrada, no pavimento acabado do rés do chão",
+   "frente": {
+    "regra": "fachada com mais portas no rés do chão (3) — INFERRED, a entrada não tem nome",
+    "rotacao_graus": 0.0,
+    "nota": "a fachada da frente fica virada para quem vê (+Z no glTF e no USD)"
+   },
    "z_min": -0.2,
    "ficheiros": {
     "glb": {
      "ficheiro": "sobral-tipo1_ar_casa.glb",
-     "bytes": 3126188,
-     "sha256": "771f5676fa3b2f0df39dc06a59ae0eaafa2d00e36ff9425462fe6d595aa29c77"
+     "bytes": 2149708,
+     "sha256": "240811f9470f02e242c19e0ade3a0e52a3ddaa4ab310911777a772c8dc786aa3"
     },
     "usdz": {
      "ficheiro": "sobral-tipo1_ar_casa.usdz",
-     "bytes": 1830106,
-     "sha256": "3de4dbffcbd1129e32dc96d06fce523f2943673125132c2558b5c72c9fbfee02"
+     "bytes": 1907534,
+     "sha256": "79aeb1f5ecae09badd9d4da4697da86edb2da3b248d4ba6319e9c7ebbc8a4b2b"
     }
    },
    "reimportacao": {
     "glb": {
-     "triangulos": 13286,
+     "triangulos": 12916,
      "dimensoes": [
       13.099,
-      11.249,
+      11.254,
       7.543
      ],
      "materiais": [
@@ -204,10 +210,10 @@
      "erro": null
     },
     "usdz": {
-     "triangulos": 13286,
+     "triangulos": 12916,
      "dimensoes": [
       13.099,
-      11.249,
+      11.254,
       7.543
      ],
      "materiais": [
@@ -253,12 +259,12 @@
     "MAT_ROOF_SANDWICH_TILE__RAL8004",
     "MAT_WALL_RENDER__WHITE"
    ],
-   "triangulos": 14594,
+   "triangulos": 14244,
    "triangulos_antes_de_simplificar": 12974,
    "imagens": {
     "AR_OCLUSAO": [
-     2048,
-     2048
+     1024,
+     1024
     ],
     "Chipboard004_2K-JPG_Color.jpg": [
      1024,
@@ -370,10 +376,11 @@
     ]
    },
    "oclusao": {
-    "faces_candidatas": 3928,
-    "faces": 1009,
-    "triangulos": 2026,
-    "px": 2048,
+    "faces_tapadas": 673,
+    "faces_candidatas": 3255,
+    "faces": 834,
+    "triangulos": 1676,
+    "px": 1024,
     "distancia_m": 1.0,
     "forca": 0.7,
     "afastamento_m": 0.005
@@ -414,22 +421,27 @@
     13.143
    ],
    "origem": "centro da planta da casa, no pavimento acabado do rés do chão",
+   "frente": {
+    "regra": "fachada com mais portas no rés do chão (3) — INFERRED, a entrada não tem nome",
+    "rotacao_graus": 0.0,
+    "nota": "a fachada da frente fica virada para quem vê (+Z no glTF e no USD)"
+   },
    "z_min": -4.56,
    "ficheiros": {
     "glb": {
      "ficheiro": "sobral-tipo1_ar_maquete.glb",
-     "bytes": 4567436,
-     "sha256": "d47d44a42c98c2d54ea02e971d7c15eb72e34adf4eee3cc76a0d6cd938a32a78"
+     "bytes": 3627164,
+     "sha256": "6ad21734f692f31632285b1bd770033288da4348ed4535fdd2d4161c3b0d815b"
     },
     "usdz": {
      "ficheiro": "sobral-tipo1_ar_maquete.usdz",
-     "bytes": 2227983,
-     "sha256": "48297eec8e9c3c28a843f4cfa0274b27bc1034ff66e987eec8a03c8e076d8a8e"
+     "bytes": 2305798,
+     "sha256": "b0213917e41f20768998e766b43772febb747fdcf914ce721a806d47fbe48042"
     }
    },
    "reimportacao": {
     "glb": {
-     "triangulos": 14594,
+     "triangulos": 14244,
      "dimensoes": [
       53.549,
       51.699,
@@ -455,7 +467,7 @@
      "erro": null
     },
     "usdz": {
-     "triangulos": 14594,
+     "triangulos": 14244,
      "dimensoes": [
       53.549,
       51.699,
@@ -490,7 +502,7 @@
     0.0,
     2.962
    ],
-   "objetos": 11,
+   "objetos": 9,
    "materiais": [
     "AR_OCLUSAO",
     "MAT_CONCRETE_SLAB",
@@ -499,17 +511,15 @@
     "MAT_GLASS_CLEAR",
     "MAT_INT_PLASTER_PAINTED__WHITE",
     "MAT_MEMBRANE_BREATHER",
-    "MAT_METAL_FLASHING__RAL8004",
     "MAT_METAL_GUTTER__DARK_GREY",
-    "MAT_ROOF_SANDWICH_TILE__RAL8004",
     "MAT_WALL_RENDER__WHITE"
    ],
-   "triangulos": 5410,
+   "triangulos": 5110,
    "triangulos_antes_de_simplificar": 4540,
    "imagens": {
     "AR_OCLUSAO": [
-     2048,
-     2048
+     1024,
+     1024
     ],
     "Chipboard004_2K-JPG_Color.jpg": [
      1024,
@@ -617,42 +627,48 @@
     ]
    },
    "oclusao": {
-    "faces_candidatas": 2007,
-    "faces": 638,
-    "triangulos": 1280,
-    "px": 2048,
+    "faces_tapadas": 312,
+    "faces_candidatas": 1660,
+    "faces": 530,
+    "triangulos": 1064,
+    "px": 1024,
     "distancia_m": 1.0,
     "forca": 0.7,
     "afastamento_m": 0.005
    },
    "maquete_base": {},
    "terreno_cozido": {},
-   "textura_maior": 2048,
+   "textura_maior": 1024,
    "dimensoes": [
     13.104,
-    11.254,
+    11.249,
     3.152
    ],
-   "origem": "centro da planta da casa, no pavimento acabado do piso 0",
+   "origem": "2 m à frente da casa, ao centro da fachada da entrada, no pavimento acabado do piso 0",
+   "frente": {
+    "regra": "fachada com mais portas no rés do chão (3) — INFERRED, a entrada não tem nome",
+    "rotacao_graus": 0.0,
+    "nota": "a fachada da frente fica virada para quem vê (+Z no glTF e no USD)"
+   },
    "z_min": -0.2,
    "ficheiros": {
     "glb": {
      "ficheiro": "sobral-tipo1_ar_casa_piso0.glb",
-     "bytes": 2599416,
-     "sha256": "d01a22d1467e748ad7d6f45efa30fec02a36e3e9ee79992e672ba8943996c03f"
+     "bytes": 1576508,
+     "sha256": "dacf766b41d2c35fb7bac45981f3450faf963b89ec7b91f9a8932fdc6aa676f9"
     },
     "usdz": {
      "ficheiro": "sobral-tipo1_ar_casa_piso0.usdz",
-     "bytes": 1470523,
-     "sha256": "3494903d8b115a30869e8b397106d25c56803a86dafe9da191cce42e3d708939"
+     "bytes": 1445949,
+     "sha256": "a1237122ef3f1082a710f3e49029556cc2fe82ecfeba95b2cdcb804208bb1206"
     }
    },
    "reimportacao": {
     "glb": {
-     "triangulos": 5410,
+     "triangulos": 5110,
      "dimensoes": [
       13.104,
-      11.254,
+      11.249,
       3.152
      ],
      "materiais": [
@@ -671,10 +687,10 @@
      "erro": null
     },
     "usdz": {
-     "triangulos": 5410,
+     "triangulos": 5110,
      "dimensoes": [
       13.104,
-      11.254,
+      11.249,
       3.152
      ],
      "materiais": [
@@ -685,12 +701,10 @@
       "MAT_GLASS_CLEAR",
       "MAT_INT_PLASTER_PAINTED__WHITE",
       "MAT_MEMBRANE_BREATHER",
-      "MAT_METAL_FLASHING__RAL8004",
       "MAT_METAL_GUTTER__DARK_GREY",
-      "MAT_ROOF_SANDWICH_TILE__RAL8004",
       "MAT_WALL_RENDER__WHITE"
      ],
-     "imagens": 14,
+     "imagens": 12,
      "imagens_em_falta": [],
      "erro": null
     }
@@ -704,7 +718,7 @@
     0.0,
     2.962
    ],
-   "objetos": 13,
+   "objetos": 11,
    "materiais": [
     "AR_OCLUSAO",
     "MAQUETE_BASE",
@@ -715,17 +729,15 @@
     "MAT_INT_PLASTER_PAINTED__WHITE",
     "MAT_LANDSCAPE_SOIL",
     "MAT_MEMBRANE_BREATHER",
-    "MAT_METAL_FLASHING__RAL8004",
     "MAT_METAL_GUTTER__DARK_GREY",
-    "MAT_ROOF_SANDWICH_TILE__RAL8004",
     "MAT_WALL_RENDER__WHITE"
    ],
-   "triangulos": 5402,
+   "triangulos": 5160,
    "triangulos_antes_de_simplificar": 4226,
    "imagens": {
     "AR_OCLUSAO": [
-     2048,
-     2048
+     1024,
+     1024
     ],
     "Chipboard004_2K-JPG_Color.jpg": [
      1024,
@@ -837,10 +849,11 @@
     ]
    },
    "oclusao": {
-    "faces_candidatas": 1574,
-    "faces": 525,
-    "triangulos": 1058,
-    "px": 2048,
+    "faces_tapadas": 180,
+    "faces_candidatas": 1394,
+    "faces": 404,
+    "triangulos": 816,
+    "px": 1024,
     "distancia_m": 1.0,
     "forca": 0.7,
     "afastamento_m": 0.005
@@ -881,22 +894,27 @@
     13.143
    ],
    "origem": "centro da planta da casa, no pavimento acabado do rés do chão",
+   "frente": {
+    "regra": "fachada com mais portas no rés do chão (3) — INFERRED, a entrada não tem nome",
+    "rotacao_graus": 0.0,
+    "nota": "a fachada da frente fica virada para quem vê (+Z no glTF e no USD)"
+   },
    "z_min": -4.56,
    "ficheiros": {
     "glb": {
      "ficheiro": "sobral-tipo1_ar_maquete_piso0.glb",
-     "bytes": 3995832,
-     "sha256": "074b527e42f980aa24aa934322833ac9b6c65bc94d5f866241b8b382e7cd115b"
+     "bytes": 2970396,
+     "sha256": "0094fab353b985034d441b26a5aefb0cba452febd7fe09e64bc7fed80a10ca4c"
     },
     "usdz": {
      "ficheiro": "sobral-tipo1_ar_maquete_piso0.usdz",
-     "bytes": 1793213,
-     "sha256": "725c116504bcab99b0aacacced80d2d780e2dbcc97a0ee46545da6db55f1a288"
+     "bytes": 1762068,
+     "sha256": "c906cc791c6bebd7ffacce6181ae72acd0fd938a6f879c33af4e2585e2a7e0e3"
     }
    },
    "reimportacao": {
     "glb": {
-     "triangulos": 5402,
+     "triangulos": 5160,
      "dimensoes": [
       53.549,
       51.699,
@@ -920,7 +938,7 @@
      "erro": null
     },
     "usdz": {
-     "triangulos": 5402,
+     "triangulos": 5160,
      "dimensoes": [
       53.549,
       51.699,
@@ -936,12 +954,10 @@
       "MAT_INT_PLASTER_PAINTED__WHITE",
       "MAT_LANDSCAPE_SOIL",
       "MAT_MEMBRANE_BREATHER",
-      "MAT_METAL_FLASHING__RAL8004",
       "MAT_METAL_GUTTER__DARK_GREY",
-      "MAT_ROOF_SANDWICH_TILE__RAL8004",
       "MAT_WALL_RENDER__WHITE"
      ],
-     "imagens": 15,
+     "imagens": 13,
      "imagens_em_falta": [],
      "erro": null
     }
@@ -955,10 +971,9 @@
     0.0,
     2.962
    ],
-   "objetos": 8,
+   "objetos": 7,
    "materiais": [
     "AR_OCLUSAO",
-    "MAT_CONCRETE_SLAB",
     "MAT_FLOOR_VINYL_WOOD",
     "MAT_FRAME_ALUMINIUM__RAL7016",
     "MAT_GLASS_CLEAR",
@@ -966,12 +981,12 @@
     "MAT_MEMBRANE_BREATHER",
     "MAT_WALL_RENDER__WHITE"
    ],
-   "triangulos": 5554,
+   "triangulos": 5262,
    "triangulos_antes_de_simplificar": 4704,
    "imagens": {
     "AR_OCLUSAO": [
-     2048,
-     2048
+     1024,
+     1024
     ],
     "Chipboard004_2K-JPG_Color.jpg": [
      1024,
@@ -1079,39 +1094,45 @@
     ]
    },
    "oclusao": {
-    "faces_candidatas": 2087,
-    "faces": 656,
-    "triangulos": 1312,
-    "px": 2048,
+    "faces_tapadas": 318,
+    "faces_candidatas": 1749,
+    "faces": 534,
+    "triangulos": 1068,
+    "px": 1024,
     "distancia_m": 1.0,
     "forca": 0.7,
     "afastamento_m": 0.005
    },
    "maquete_base": {},
    "terreno_cozido": {},
-   "textura_maior": 2048,
+   "textura_maior": 1024,
    "dimensoes": [
     10.021,
     6.271,
     4.476
    ],
-   "origem": "centro da planta da casa, no pavimento acabado do piso 1",
+   "origem": "2 m à frente da casa, ao centro da fachada da entrada, no pavimento acabado do piso 1",
+   "frente": {
+    "regra": "fachada com mais portas no rés do chão (3) — INFERRED, a entrada não tem nome",
+    "rotacao_graus": 0.0,
+    "nota": "a fachada da frente fica virada para quem vê (+Z no glTF e no USD)"
+   },
    "z_min": -0.2,
    "ficheiros": {
     "glb": {
      "ficheiro": "sobral-tipo1_ar_casa_piso1.glb",
-     "bytes": 2326628,
-     "sha256": "4e3676db50c83669187f40051a433478da61f54a864d4349a591b0bcd86d77fc"
+     "bytes": 1338400,
+     "sha256": "64512b2fe48165cdf4ce37026027a7d2985c5128bfd2eceb1af9db1acb80e243"
     },
     "usdz": {
      "ficheiro": "sobral-tipo1_ar_casa_piso1.usdz",
-     "bytes": 1394806,
-     "sha256": "b0459cf75073fe8e18f3f624e342502d404a0c1bc6ff45c0665cfbbf7757d750"
+     "bytes": 1277995,
+     "sha256": "54dd998b6f7a4b2e1e290b26082cd34a334daff3defa96450803ef62d3804268"
     }
    },
    "reimportacao": {
     "glb": {
-     "triangulos": 5554,
+     "triangulos": 5262,
      "dimensoes": [
       10.021,
       6.271,
@@ -1131,7 +1152,7 @@
      "erro": null
     },
     "usdz": {
-     "triangulos": 5554,
+     "triangulos": 5262,
      "dimensoes": [
       10.021,
       6.271,
@@ -1139,7 +1160,6 @@
      ],
      "materiais": [
       "AR_OCLUSAO",
-      "MAT_CONCRETE_SLAB",
       "MAT_FLOOR_VINYL_WOOD",
       "MAT_FRAME_ALUMINIUM__RAL7016",
       "MAT_GLASS_CLEAR",
@@ -1147,7 +1167,7 @@
       "MAT_MEMBRANE_BREATHER",
       "MAT_WALL_RENDER__WHITE"
      ],
-     "imagens": 12,
+     "imagens": 9,
      "imagens_em_falta": [],
      "erro": null
     }
@@ -1174,12 +1194,12 @@
     "MAT_MEMBRANE_BREATHER",
     "MAT_WALL_RENDER__WHITE"
    ],
-   "triangulos": 10000,
+   "triangulos": 9638,
    "triangulos_antes_de_simplificar": 8414,
    "imagens": {
     "AR_OCLUSAO": [
-     2048,
-     2048
+     1024,
+     1024
     ],
     "Chipboard004_2K-JPG_Color.jpg": [
      1024,
@@ -1291,10 +1311,11 @@
     ]
    },
    "oclusao": {
-    "faces_candidatas": 3480,
-    "faces": 903,
-    "triangulos": 1814,
-    "px": 2048,
+    "faces_tapadas": 494,
+    "faces_candidatas": 2986,
+    "faces": 722,
+    "triangulos": 1452,
+    "px": 1024,
     "distancia_m": 1.0,
     "forca": 0.7,
     "afastamento_m": 0.005
@@ -1335,22 +1356,27 @@
     13.143
    ],
    "origem": "centro da planta da casa, no pavimento acabado do rés do chão",
+   "frente": {
+    "regra": "fachada com mais portas no rés do chão (3) — INFERRED, a entrada não tem nome",
+    "rotacao_graus": 0.0,
+    "nota": "a fachada da frente fica virada para quem vê (+Z no glTF e no USD)"
+   },
    "z_min": -4.56,
    "ficheiros": {
     "glb": {
      "ficheiro": "sobral-tipo1_ar_maquete_piso1.glb",
-     "bytes": 4173700,
-     "sha256": "008664039c0fdc7d16517b4d42af8de10f8e878125e494f398587c177c348970"
+     "bytes": 3258208,
+     "sha256": "fa3726f60f703466f502c57af09549c574ca579ef27de7349a3e27d3d1d900c8"
     },
     "usdz": {
      "ficheiro": "sobral-tipo1_ar_maquete_piso1.usdz",
-     "bytes": 1951254,
-     "sha256": "303984448d1d8ffeda48228ca8695b415b3db22d6c1a76476790f3386a5992cc"
+     "bytes": 2024247,
+     "sha256": "2ae2c2c7c66d6da0c585dd4bed1231daa2eb0467eddd67936db8575a104b71a6"
     }
    },
    "reimportacao": {
     "glb": {
-     "triangulos": 10000,
+     "triangulos": 9638,
      "dimensoes": [
       53.549,
       51.699,
@@ -1373,7 +1399,7 @@
      "erro": null
     },
     "usdz": {
-     "triangulos": 10000,
+     "triangulos": 9638,
      "dimensoes": [
       53.549,
       51.699,

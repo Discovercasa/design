@@ -41,12 +41,12 @@
     "MAT_WOOD_CLADDING__DOUGLAS_BROWN",
     "MAT_WOOD_CLADDING__PINE_NATURAL"
    ],
-   "triangulos": 24572,
+   "triangulos": 24056,
    "triangulos_antes_de_simplificar": 25188,
    "imagens": {
     "AR_OCLUSAO": [
-     2048,
-     2048
+     1024,
+     1024
     ],
     "Chipboard004_2K-JPG_Color.jpg": [
      1024,
@@ -158,42 +158,48 @@
     ]
    },
    "oclusao": {
-    "faces_candidatas": 5660,
-    "faces": 1051,
-    "triangulos": 2104,
-    "px": 2048,
+    "faces_tapadas": 1196,
+    "faces_candidatas": 4476,
+    "faces": 778,
+    "triangulos": 1556,
+    "px": 1024,
     "distancia_m": 1.0,
     "forca": 0.7,
     "afastamento_m": 0.005
    },
    "maquete_base": {},
    "terreno_cozido": {},
-   "textura_maior": 2048,
+   "textura_maior": 1024,
    "dimensoes": [
-    19.261,
-    21.691,
+    17.667,
+    13.325,
     3.702
    ],
-   "origem": "centro da planta da casa, no pavimento acabado do rés do chão",
+   "origem": "2 m à frente da casa, ao centro da fachada da entrada, no pavimento acabado do rés do chão",
+   "frente": {
+    "regra": "porta de entrada (M5 Sala / Entrada)",
+    "rotacao_graus": 0.0,
+    "nota": "a fachada da frente fica virada para quem vê (+Z no glTF e no USD)"
+   },
    "z_min": -0.2,
    "ficheiros": {
     "glb": {
      "ficheiro": "torres-vedras_ar_casa.glb",
-     "bytes": 3892212,
-     "sha256": "17625e89a50cae7acfcb194776c56259418f65870eb340e744c1fa3ef6e74166"
+     "bytes": 2949636,
+     "sha256": "40e98f36f660a94fb91f640f41e144b547a5d03b683c32af82fd04ec33947512"
     },
     "usdz": {
      "ficheiro": "torres-vedras_ar_casa.usdz",
-     "bytes": 2620265,
-     "sha256": "43258f59ddeeb5718866cefc7aecd859d72279a74ae3faab23e0cad01caaab65"
+     "bytes": 2687294,
+     "sha256": "299b473ef13a49fbadcd7b2332cc39df5f0668de7d570ed4dead2b2d1102207a"
     }
    },
    "reimportacao": {
     "glb": {
-     "triangulos": 24572,
+     "triangulos": 24056,
      "dimensoes": [
-      19.261,
-      21.691,
+      17.667,
+      13.325,
       3.702
      ],
      "materiais": [
@@ -221,10 +227,10 @@
      "erro": null
     },
     "usdz": {
-     "triangulos": 24572,
+     "triangulos": 24056,
      "dimensoes": [
-      19.261,
-      21.691,
+      17.667,
+      13.325,
       3.702
      ],
      "materiais": [
@@ -283,12 +289,12 @@
     "MAT_WOOD_CLADDING__DOUGLAS_BROWN",
     "MAT_WOOD_CLADDING__PINE_NATURAL"
    ],
-   "triangulos": 26449,
-   "triangulos_antes_de_simplificar": 26549,
+   "triangulos": 28000,
+   "triangulos_antes_de_simplificar": 27938,
    "imagens": {
     "AR_OCLUSAO": [
-     2048,
-     2048
+     1024,
+     1024
     ],
     "Chipboard004_2K-JPG_Color.jpg": [
      1024,
@@ -404,28 +410,29 @@
     ]
    },
    "oclusao": {
-    "faces_candidatas": 5661,
-    "faces": 1011,
-    "triangulos": 2024,
-    "px": 2048,
+    "faces_tapadas": 1197,
+    "faces_candidatas": 4461,
+    "faces": 834,
+    "triangulos": 1668,
+    "px": 1024,
     "distancia_m": 1.0,
     "forca": 0.7,
     "afastamento_m": 0.005
    },
    "maquete_base": {
     "retangulo_m": [
-     -11.73,
-     -14.35,
-     12.73,
-     15.85
+     -15.83,
+     -26.66,
+     18.83,
+     16.66
     ],
-    "z_base_m": -1.61,
-    "faces_laterais": 299,
+    "z_base_m": -1.52,
+    "faces_laterais": 556,
     "margens_m": [
-     1.5,
-     2.5,
-     3.5,
-     5.0
+     7.0,
+     10.0,
+     20.0,
+     10.0
     ]
    },
    "terreno_cozido": {
@@ -443,31 +450,36 @@
    },
    "textura_maior": 2048,
    "dimensoes": [
-    24.455,
-    30.191,
-    5.112
+    34.665,
+    43.325,
+    5.012
    ],
    "origem": "centro da planta da casa, no pavimento acabado do rés do chão",
-   "z_min": -1.615,
+   "frente": {
+    "regra": "porta de entrada (M5 Sala / Entrada)",
+    "rotacao_graus": 0.0,
+    "nota": "a fachada da frente fica virada para quem vê (+Z no glTF e no USD)"
+   },
+   "z_min": -1.515,
    "ficheiros": {
     "glb": {
      "ficheiro": "torres-vedras_ar_maquete.glb",
-     "bytes": 4791896,
-     "sha256": "24285d909685665e654906256c1d6ecaf52296eb68a3719f17efa87346f5e93d"
+     "bytes": 4027180,
+     "sha256": "b38c302d119a0d68a68bfc54e879588dc479650ea246cbfd2982721d5863dcfc"
     },
     "usdz": {
      "ficheiro": "torres-vedras_ar_maquete.usdz",
-     "bytes": 2912534,
-     "sha256": "321994f66b4252061635a169eccaf44d7e7f4edb25565291c416ca0d31ba765f"
+     "bytes": 3106267,
+     "sha256": "9e5fb75a7b63de0707a731711a1c6aec8d5df6e2385db2d76c38baa831281cfe"
     }
    },
    "reimportacao": {
     "glb": {
-     "triangulos": 26449,
+     "triangulos": 28000,
      "dimensoes": [
-      24.455,
-      30.191,
-      5.112
+      34.665,
+      43.325,
+      5.012
      ],
      "materiais": [
       "AR_OCLUSAO",
@@ -496,11 +508,11 @@
      "erro": null
     },
     "usdz": {
-     "triangulos": 26449,
+     "triangulos": 28000,
      "dimensoes": [
-      24.455,
-      30.191,
-      5.112
+      34.665,
+      43.325,
+      5.012
      ],
      "materiais": [
       "AR_OCLUSAO",

@@ -1,5 +1,15 @@
 [
   {
+    "dia": "2026-11-10",
+    "titulo": "AR: correções do primeiro teste da equipa",
+    "itens": [
+      "A casa abre de frente para ti: a fachada da entrada virada para o telemóvel e a casa à tua frente, não à tua volta (versão 1:1). As versões 1:1 ficam sempre à escala real.",
+      "Acabou o pavimento a piscar ao rodar: a sombra suave dos cantos já não se sobrepõe às superfícies.",
+      "Torres Vedras: os pilares da pérgola assentam no chão (o terreno à volta da casa ficou plano também debaixo da pérgola).",
+      "Android: se o Scene Viewer não abrir, o hub diz porquê e oferece o visualizador 3D, cujo botão «Ver no teu espaço» abre o AR no próprio Chrome."
+    ]
+  },
+  {
     "dia": "2026-11-09",
     "titulo": "Notificações sem saltos e ponto de situação fechado",
     "itens": [

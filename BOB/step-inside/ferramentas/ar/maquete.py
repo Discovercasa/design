@@ -113,3 +113,33 @@ def saia(arestas, ret, z_base, tol=1e-3):
                 break
     fundo = [(x0, y0, z_base), (x0, y1, z_base), (x1, y1, z_base), (x1, y0, z_base)]
     return quads, fundo
+
+
+def frente(vaos, paredes, z_chao):
+    """Which façade faces the viewer when the phone places the model (team note on the test, 2026-11-10: «quando se
+    abre a casa deve estar orientado de frente para nós»). `vaos` = [(name, (x0, y0, z0), (x1, y1, z1))] in the house's
+    own axes, `paredes` = (x0, y0, x1, y1) the outer walls. Returns ((ox, oy) the façade's outward direction, rule):
+      1. the entrance door (a name with «entrada» and «porta», e.g. «M5 Sala / Entrada — Porta painel liso»);
+      2. else the façade with the most ground-floor doors (bottom within 0,15 m of the floor, at least 1,8 m high) —
+         INFERRED, the entrance is not named;
+      3. else the longest façade (south side, -y) — INFERRED."""
+    import re
+
+    def lado(a, b):
+        cx, cy = (a[0] + b[0]) / 2, (a[1] + b[1]) / 2
+        d = {(-1, 0): cx - paredes[0], (1, 0): paredes[2] - cx, (0, -1): cy - paredes[1], (0, 1): paredes[3] - cy}
+        return min(d, key=d.get)
+
+    for nome, a, b in vaos:
+        if re.search("entrada", nome, re.I) and re.search("porta", nome, re.I):
+            return lado(a, b), "porta de entrada (" + re.split(r" [—|-] | \|", nome)[0].strip() + ")"
+    portas = {}
+    for nome, a, b in vaos:
+        if a[2] - z_chao < 0.15 and b[2] - a[2] >= 1.8:
+            vao = re.sub(r"^(Caixilho|Vidro) do vão ", "", nome).split(" ")[0].split("#")[0]
+            portas.setdefault(lado(a, b), set()).add(vao)
+    if portas:
+        s = max(sorted(portas), key=lambda k: len(portas[k]))
+        return s, f"fachada com mais portas no rés do chão ({len(portas[s])}) — INFERRED, a entrada não tem nome"
+    larga = (paredes[2] - paredes[0]) >= (paredes[3] - paredes[1])
+    return ((0, -1) if larga else (-1, 0)), "fachada mais comprida — INFERRED, sem portas no rés do chão"
