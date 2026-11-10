@@ -257,3 +257,9 @@ circled (`discovercasa.md`).
   production-model gap is CLOSED 2026-11-09 (user «Sim, corrige», deviation X21 fixed): `camadas.faixas_portas()` adds the
   strip under each interior door to the finish (and to XPS / betonilha on the ground floor), so the production model and the
   visit model now agree; exterior doors stay out (Q23).
+- **L75** (builder / AR test, 2026-11-10; team note «falta parte da parede») Torres Vedras south-west corner: the garage door
+  M1's module (Fachada Sul 2, 11 cm thick at its end) had its opening (to 2,20 m) mapped onto the west façade → 11 cm × 2,20 m
+  of Tremolo missing and the pine battens showed. Rule: a module's openings cut only the faces parallel to it (§3). Fix:
+  openings on parallel faces only. Excluding perpendicular modules from the face altogether was tried and wrongly removed
+  7 m² of interior OSB / Pladur at the Sobral doorway jambs (the end of the perpendicular module keeps its lining). Effect on
+  TV: Tremolo 164,8 → 165,0 m² (629 boards), OSB 9 mm and membrane +0,2 m²; Sobral unchanged → `camadas.aberturas_face`.

@@ -1,8 +1,8 @@
 {
  "project_id": "torres-vedras",
- "version_id": "torres-vedras-f59e825-202611101413",
- "source_blend_hash": "sha256:f170d547183edb86e6baef26a7b363720763a8f5be434bda31780a11b57771e6",
- "export_timestamp": "2026-11-10T14:13:54+00:00",
+ "version_id": "torres-vedras-7d031fd-202611101552",
+ "source_blend_hash": "sha256:5d506602b69644a39170572118c8103b06aed9da0a384b76253ed0b22c9b2572",
+ "export_timestamp": "2026-11-10T15:52:42+00:00",
  "blender_version": "4.4.3",
  "unreal_target_version": "5.8 (a confirmar na Fase 4)",
  "unit_system": "métrico (1 unidade = 1 m)",
@@ -39,8 +39,8 @@
   {
    "path": "torres-vedras_visita.fbx",
    "type": "fbx",
-   "size_bytes": 2243212,
-   "sha256": "1d55de1f2979ce563a0163e500db3f6a9fd3612c3f29c7d082a449110a800646",
+   "size_bytes": 2241484,
+   "sha256": "3bc43d92a637b84a0f86bd1ca497d6a45a46b701d1a1cbf9c24f7b9205cfd82a",
    "material_ids": [
     "MAT_BOARD_OSB",
     "MAT_CONCRETE_SLAB",
@@ -69,8 +69,8 @@
   {
    "path": "torres-vedras_visita.glb",
    "type": "glb",
-   "size_bytes": 110804428,
-   "sha256": "599f72e5cde04713e72e5c5ea442eeb8ce5fa0365695afaa6605c3df8d951365",
+   "size_bytes": 110793280,
+   "sha256": "f470c896a90f730425ecb70de6d98346bd0a35141c36c8fb3824a30b9845566c",
    "material_ids": [
     "MAT_BOARD_OSB",
     "MAT_CONCRETE_SLAB",
@@ -99,8 +99,8 @@
   {
    "path": "torres-vedras_visita.usdz",
    "type": "usdz",
-   "size_bytes": 96482520,
-   "sha256": "d7af246a283c59979b02b69e36cd857558598c44a016a22f78496c76878af31c",
+   "size_bytes": 96476183,
+   "sha256": "1afa1dac00ff9c14d2a795f798330c631a9fc23bab82f508ce9bfa82dbd44b22",
    "material_ids": [
     "MAT_BOARD_OSB",
     "MAT_CONCRETE_SLAB",
@@ -138,7 +138,7 @@
  "validation": {
   "referencia": {
    "objetos": 344,
-   "triangulos": 54095,
+   "triangulos": 53963,
    "dimensoes": [
     80.899,
     82.831,
@@ -170,7 +170,7 @@
    "imagens": 26,
    "casa": {
     "objetos": 343,
-    "triangulos": 45904,
+    "triangulos": 45772,
     "caixa_min": [
      8.37,
      10.712,
@@ -214,7 +214,7 @@
   "reimportacao": {
    "fbx": {
     "objetos": 344,
-    "triangulos": 54095,
+    "triangulos": 53963,
     "dimensoes": [
      80.899,
      82.831,
@@ -255,7 +255,7 @@
    },
    "glb": {
     "objetos": 344,
-    "triangulos": 54095,
+    "triangulos": 53963,
     "dimensoes": [
      80.899,
      82.831,
@@ -296,7 +296,7 @@
    },
    "usdz": {
     "objetos": 344,
-    "triangulos": 54095,
+    "triangulos": 53963,
     "dimensoes": [
      80.899,
      82.831,

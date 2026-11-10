@@ -189,6 +189,10 @@
   afinação; 110×75 jambs on the module ends) — assumed (after "There are gaps in between the walls … why ?", 2026-10-09;
   how DiscoverCasa closes it: OPEN) — `estrutura_dc.emoldurar_bandeira`. In the company's own drawings every door is inside
   a module — the gap arises only from third-party drawings (SB engineer).
+- A module's openings cut only the cladding / lining faces **parallel** to that module. At a corner the perpendicular
+  module (its end touches the other façade's plane) keeps the lining of its end — e.g. the jamb of a doorway between modules
+  keeps its Pladur — but its openings never cut the perpendicular façade — source: model error found on the AR test,
+  2026-11-10 (L75) — assumed (our reading of the method, no new user fact) — `camadas.aberturas_face`.
 
 ## 4. Top of the walls (afinação, amarração)
 - **Exposed roofs: viga de afinação exterior 110×35 on the exterior modules, then the viga de amarração 110×75 round the

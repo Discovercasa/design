@@ -73,7 +73,7 @@
   },
   "juntas": {
    "fechadas": {
-    "ARCH_WALLS_EXT": 775,
+    "ARCH_WALLS_EXT": 770,
     "ARCH_WALLS_INT": 755,
     "ARCH_CEILINGS": 278,
     "ARCH_ROOF": 153
