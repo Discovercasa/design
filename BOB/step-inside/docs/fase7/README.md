@@ -651,6 +651,28 @@ AR não abre, o visualizador 3D na própria página tem de aparecer sozinho.
 A página também deteta uma janela que abre por cima sem esconder a página (perde o foco). Regista a licença da câmara
 para o site e o tamanho da janela.
 
+**Resultado da ronda 2** (o mesmo telemóvel, notas 13–16 da tarefa 84; as 14–16 repetem a 13):
+- T1: a câmara abriu no site.
+- T2: a sessão de AR do Chrome falhou com `NotSupportedError: The specified session configuration is not supported`.
+  O mesmo Chrome dizia «AR: sim» (`isSessionSupported`): é só um «talvez».
+- G1, G2, N1, N2 (Scene Viewer em 3D e em AR, o exemplo da Google e o nosso): a página perdeu o foco 0,1 s depois do
+  toque e voltou ao fim de 0,2 s. Uma janela da app Google aparece e fecha, e o Scene Viewer nunca abre, nem em 3D.
+- G3/N3 (AR do Chrome pelo visualizador): falhou; o visualizador passou ao modo seguinte.
+- Na ronda 1, o link para o pacote do ARCore não encontrou nenhuma app: o ARCore não está instalado.
+- O Redmi Note 14 Pro 5G (24115RA8EG) **não está na lista de telemóveis compatíveis com ARCore** da Google
+  (https://developers.google.com/ar/devices, lida a 2026-11-10; o Redmi Note 14 e o Note 14 5G estão).
+- **Causa:** este telemóvel não tem o ARCore e a Google não lho dá. Sem ele, nenhum caminho de AR da Google funciona:
+  nem o Scene Viewer, nem o AR do Chrome. Não é corrigível do nosso lado: só o 3D funciona neste telemóvel.
+
+**O que o hub faz agora** (o requisito: qualquer cliente tem de conseguir ver):
+- Depois do toque em «Ver em AR · Android», se a página não ficar escondida em 3 s, o Scene Viewer não tomou conta do
+  ecrã. O hub abre o modelo em 3D na própria página e mostra um aviso: precisa da app «Serviços Google Play para RA»,
+  com o botão «Ver na Play Store», onde se vê se o telemóvel a pode instalar.
+- O mesmo acontece quando o Chrome volta pelo link de recurso.
+- A caixa do telemóvel já não diz «tem AR» quando o Chrome diz que sim. Agora diz que talvez tenha e que precisa da
+  app.
+- A página de teste não envia o mesmo resultado duas vezes.
+
 ## Em falta
 
 - **Telemóveis reais** (tarefa 84):

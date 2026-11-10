@@ -67,24 +67,44 @@ async function arrancar(sessao) {
   arAndroidFalhou();
 }
 
-// Step Inside: the Android «Ver em AR» opens Google's Scene Viewer through an intent; when the phone cannot open it
-// (no Google app, an old one, another browser), Chrome follows the fallback link — back here with ?ar-android=<doc>.
-// Before (team note, 2026-11-10: «O AR no android não abriu, nem sequer apareceu que foi descarregado») that looked like
-// nothing happened; now it says why and offers the 3D viewer, whose own AR button uses WebXR (no Google app needed).
+// Step Inside: the Android «Ver em AR» opens Google's Scene Viewer through an intent. When the phone cannot open it, the
+// page shows the model in 3D by itself (user, 2026-11-10: «se o cliente tiver um dispositivo qualquer tem de conseguir
+// ver»). Two ways it fails (AR test page, 2026-11-10, a Redmi Note 14 Pro 5G, not on Google's ARCore list):
+//   - Chrome follows the fallback link and comes back here with ?ar-android=<doc>;
+//   - the Google app flashes a window for 0.2 s and nothing opens, the page never goes hidden (no fallback at all).
+// Scene Viewer and Chrome's AR both need ARCore («Serviços Google Play para RA»), which Google only offers for the phones
+// on its list: the notice links to it in the Play Store (it says whether this phone can install it).
+const PLAY_ARCORE = 'https://play.google.com/store/apps/details?id=com.google.ar.core';
+function arAndroidNaoAbriu(id) {
+  const d = E.documentos.find((x) => x.id === id);
+  if (d) verEm3D(id);
+  aviso('O AR não abriu neste telemóvel: o AR da Google precisa da app «Serviços Google Play para RA» (ARCore), que só existe '
+    + 'para os telemóveis da lista da Google. Abrimos o modelo em 3D aqui. Na Play Store vês se este telemóvel a pode instalar.',
+    { icone: 'atencao', duracao: 0, acoes: [
+      { rotulo: 'Ver na Play Store', fazer: () => { location.href = PLAY_ARCORE; } },
+      ...(d ? [{ rotulo: 'Testar este Android', fazer: async () => { try { location.href = AA.paginaTeste(await D.urlAR(d), d); } catch (err) { aviso(err.message || String(err), { icone: 'atencao' }); } } }] : [])] });
+}
 function arAndroidFalhou() {
   const q = new URLSearchParams(location.search);
   if (!q.has('ar-android')) return;
   const id = Number(q.get('ar-android'));
   q.delete('ar-android');
   history.replaceState(null, '', location.pathname + (q.toString() ? '?' + q : '') + location.hash);
-  // (2026-11-10: the cause found was in our GLB, an extension Scene Viewer refuses; the phone may still lack the Google app)
-  const d = E.documentos.find((x) => x.id === id);
-  aviso('O Scene Viewer não abriu o modelo neste telemóvel. «Testar este Android» abre a página de teste do AR: 8 toques, '
-    + 'e o resultado vai sozinho para a tarefa do teste. Entretanto, «Abrir em 3D» › «Ver no teu espaço» usa o AR do próprio Chrome.',
-    { icone: 'atencao', duracao: 0, acoes: [
-      ...(d ? [{ rotulo: 'Testar este Android', fazer: async () => { try { location.href = AA.paginaTeste(await D.urlAR(d), d); } catch (err) { aviso(err.message || String(err), { icone: 'atencao' }); } } }] : []),
-      ...(id ? [{ rotulo: 'Abrir em 3D', fazer: () => verEm3D(id) }] : [])] });
+  arAndroidNaoAbriu(id);
 }
+// the tap on «Ver em AR · Android»: if the page has not gone hidden 3 s later, Scene Viewer did not take over
+document.addEventListener('click', (e) => {
+  const a = e.target.closest('a[data-ar-tipo="android"]:not([aria-disabled])');
+  if (!a) return;
+  const id = Number(a.dataset.ar);
+  let escondida = false;
+  const ver = () => { if (document.visibilityState === 'hidden') escondida = true; };
+  document.addEventListener('visibilitychange', ver);
+  setTimeout(() => {
+    document.removeEventListener('visibilitychange', ver);
+    if (!escondida && document.visibilityState === 'visible') arAndroidNaoAbriu(id);
+  }, 3000);
+});
 
 // ---------------------------------------------------------------- versão nova do hub publicada
 // Uma janela aberta mostra a versão em que foi aberta: o hub não se recarrega sozinho. Ao abrir guarda-se a
