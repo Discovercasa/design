@@ -9,10 +9,11 @@
     "dia": "2026-11-11",
     "feito": [
       "Torres Vedras modelada a partir da arquitetura.",
-      "Verificação das madeiras sem Blender (choques, peças fora do sítio)."
+      "Verificação das madeiras sem Blender (choques, peças fora do sítio).,
+      "Primeira página 3D do cliente num só ficheiro HTML: Casa Ribamar, feita a partir do DWG (convertido em DXF), com pisos, cobertura, terreno, aspeto Maquete/Realista e quadro de áreas."
     ],
     "agora": [
-      "Do desenho à página do cliente: o leitor por forma (qualquer cor e estilo de parede) já funciona no Sobral e está no Gerador (11/11); a seguir os ficheiros do utilizador, vários pisos, DWG e o ficheiro HTML para o cliente.",
+      "Do desenho à página do cliente: o leitor por forma (qualquer cor e estilo de parede) já funciona no Sobral e está no Gerador; a página de Ribamar está para revisão (11/11). A seguir: alturas dos vãos pelos alçados, deck e varandas, os PDFs desta casa e a aplicação no hub (largar os desenhos e receber a página).",
       "Corrigir defeitos geométricos conhecidos: anel de amarração, prumos em pares, módulos interiores.",
       "Validar com os materiais realmente gastos em Torres Vedras."
     ],
