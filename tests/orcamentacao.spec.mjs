@@ -21,6 +21,7 @@ const MATERIAIS = {
     mat('TELHA-CER', 'Telha cerâmica')],
   hub_material_precos: [
     preco('OSB-09', F1, 3.33, 'm2'), preco('OSB-09', F2, 3.9, 'm2'),
+    { ...preco('OSB-09', F1, 2.5, 'm2'), data_atualizacao: '2025-01-10' },   // an older price of the same supplier: not used
     preco('FORRO-TREMOLO', F1, 19.45, 'm2', 0, 0),
     preco('MEMB-T95', F1, 64.07, 'un'),
     preco('TETO-PERFIL', F2, 0.83, 'ml', 0.41), preco('TETO-PERFIL', F2, 1.72, 'un', 0.05),   // a 3 m bar: other unit, ignored
@@ -36,7 +37,7 @@ async function abrir(page) {
   await page.addInitScript((m) => { window.__FIXTURE_MATERIAIS = m; }, MATERIAIS);
   await page.route('**/@supabase/supabase-js@*/**', (r) => r.fulfill({ contentType: 'text/javascript', body: FAKE }));
   await page.goto('/orcamentacao/');
-  await expect(page.locator('#estado')).toContainText('Lista do Hub: 5 materiais e 7 preços');
+  await expect(page.locator('#estado')).toContainText('Lista do Hub: 5 materiais e 8 preços');
   return erros;
 }
 

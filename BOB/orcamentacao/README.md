@@ -12,6 +12,7 @@ The price side of DiscoverCasa's applications (hub project `orcamentacao`; owner
   needs a rule there and an entry here, or the tests fail.
 - The calculation is shared: `public/js/orcamento.js` (the Build Your House and the Gerador can use it later), reading
   the Hub tables through `public/js/materiais.js` with the Design session. Prices are never stored in the repo (public).
-- Price rule (2026-11-11, Claude's proposal): the cheapest price with discount among the Hub prices in the link's unit.
+- Price rule (2026-11-11, Claude's proposal): among the Hub prices in the link's unit, each supplier's latest (the Hub keeps
+  older prices of the same supplier as rows of their own), then the cheapest with discount.
 - Not yet: labour, foundation, especialidades, installations, licensing, margin and the house's VAT (hub tasks 42, 43).
 - Publish: `python BOB/ferramentas/construir_site.py --so orcamentacao` → `public/orcamentacao/` (with the login gate).

@@ -87,7 +87,7 @@ function ligacoes() {
     ${Object.entries(g).filter(([, x]) => !x.resumo).map(([cod, x]) => {
       const m = x.hub ? porId.get(x.hub) : null;
       const un = x.unidade;
-      const p = m && m.precos.filter((q) => q.preco_desconto != null && String(q.unidade || '').toLowerCase() === un).sort((a, b) => a.preco_desconto - b.preco_desconto)[0];
+      const p = m && O.precosValidos(m, un)[0];
       const est = !x.hub ? '<span class="chip o-estado">Não está no Hub</span>' : !m ? '<span class="chip o-estado">Material em falta</span>'
         : x.estado === 'CONFIRMED' ? '<span class="chip o-ok">Confirmada</span>' : '<span class="chip o-aviso">A confirmar</span>';
       return `<tr><td><span class="chip o-cod">${esc(cod)}</span></td><td>${esc(x.produto)}<div class="fraco mini">${esc(x.nota || '')}</div></td>

@@ -4,8 +4,9 @@
 //
 // Cada linha da Listagem traz um CÓDIGO estável (BOB/ferramentas/documentos/codigos.py); o ficheiro de ligações
 // (BOB/orcamentacao/ligacoes.json, publicado em /orcamentacao/ligacoes.json) diz, para cada código, o material do Hub,
-// a unidade do preço e como a quantidade da linha passa a essa unidade. Só se usam os preços do Hub nessa unidade; de
-// entre eles, o mais barato com desconto. Nunca se inventa um preço: o que falta aparece com o motivo.
+// a unidade do preço e como a quantidade da linha passa a essa unidade. Só se usam os preços do Hub nessa unidade, o
+// mais recente de cada fornecedor; de entre eles, o mais barato com desconto. Nunca se inventa um preço: o que falta
+// aparece com o motivo.
 
 const NUM = (v) => {
   if (v == null || v === '') return null;
@@ -65,6 +66,18 @@ export function quantidade(linha, q = {}) {
 
 const fracao = (v) => (v == null || v === '' || isNaN(v) ? 0 : Number(v) > 1 ? Number(v) / 100 : Number(v));
 
+/** The prices of a Hub material that count, cheapest first (with discount): only those in `unidade`, and the Hub keeps
+ *  older prices of the same supplier as rows of their own (e.g. April and November), so only each supplier's latest. */
+export function precosValidos(m, unidade) {
+  const un = normalUn(unidade), ultimo = new Map();
+  for (const p of ((m && m.precos) || []).filter((x) => normalUn(x.unidade) === un && x.preco_desconto != null)) {
+    const k = p.fornecedor_id || p.fornecedor || p.id, o = ultimo.get(k);
+    const d = p.data_atualizacao || '', od = o ? o.data_atualizacao || '' : '';
+    if (!o || d > od || (d === od && p.preco_desconto < o.preco_desconto)) ultimo.set(k, p);
+  }
+  return [...ultimo.values()].sort((a, b) => a.preco_desconto - b.preco_desconto);
+}
+
 /** Preço de cada linha. `L` = materiais.carregar(); `lig` = o JSON das ligações.
  *  Estado de cada linha: ok | resumo | sem_codigo | sem_ligacao | fora_do_hub | material_em_falta | unidade | quantidade.
  *  Devolve { linhas, total, total_iva, com_preco, sem_preco, capitulos: [{nome, total, linhas}] }. */
@@ -82,9 +95,7 @@ export function precificar(linhas, lig, L) {
     const m = porId.get(g.hub);
     if (!m) return Object.assign(r, { estado: 'material_em_falta', motivo: 'O material ligado já não está na lista do Hub (mudou ou foi apagado): rever a ligação.' });
     r.material = m;
-    const un = normalUn(g.unidade);
-    const compat = (m.precos || []).filter((p) => normalUn(p.unidade) === un && p.preco_desconto != null)
-      .sort((a, b) => a.preco_desconto - b.preco_desconto);
+    const compat = precosValidos(m, g.unidade);
     r.alternativas = compat.length;
     if (!compat.length) {
       const tem = [...new Set((m.precos || []).map((p) => p.unidade).filter(Boolean))].join(', ') || 'nenhuma';
