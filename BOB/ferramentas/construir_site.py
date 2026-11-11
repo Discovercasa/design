@@ -25,7 +25,8 @@ PORTA = ('  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45
 # the Python the document generator runs in the browser (ferramentas/documentos/de_desenhos.py and what it imports)
 MOTOR_GERADOR = ("ferramentas/__init__.py", "ferramentas/comum.py", "ferramentas/dwfx/__init__.py", "ferramentas/dwfx/leitor*.py",
                  "ferramentas/modelo/*.py", "ferramentas/modelo/sistema_construtivo.json", "ferramentas/documentos/*.py",
-                 "ferramentas/configurador/*.py")
+                 "ferramentas/configurador/*.py", "ferramentas/planta/__init__.py", "ferramentas/planta/analisar.py",
+                 "ferramentas/planta/mascara.py")
 
 
 def corre(*cmd, cwd):

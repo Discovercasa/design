@@ -32,7 +32,21 @@ Why Claude learns the method; "vamos passo a passo" — an overall idea, then an
    `planta_arquitetura.py` needs red walls, blue glazing, magenta swings, axis-parallel walls — a known limit). The user will
    supply the files of the house for this later (pending). The client 3D page has NO «como foi feito» notes; share as an
    HTML file for now (not a link). Proposed by the user: the Builder as its own app page in the hub, like the Gerador
-   («Abrir aplicação», drop the documents, the result appears after some time) — decision pending.
+   («Abrir aplicação», drop the documents, the result appears after some time) — Claude agreed (one reading engine for
+   both apps, a short confirmation screen before the result). Scope refined: "leitura de qualquer tipo de parede e
+   conseguires analisar qualquer tipo de planta" (hub task 171).
+   **First version (2026-11-11):** `ferramentas/planta/analisar.py` (+ `mascara.py`, pure Python, runs in the browser)
+   reads walls by their SHAPE, any colour: the drawing as a 2 cm image → wall mask (poché, hatching, layered walls, the
+   empty core of two-line walls; patterns such as stairs and decking rejected) → wall faces from the drawing's own lines
+   at any angle → walls, openings (door = swing arc solid or dashed, window = glazing or a texture-free span), outside
+   and rooms → scale deduced (door swings, else wall bands) → the axis format for the configurator chain. In the Gerador
+   (`documentos/de_desenhos.py`) it runs where the red reader finds nothing. Checked: Sobral's architecture (no red,
+   hatched timber walls): both plans found at 1:50 (10,0 × 6,3 m), documents generated (also in the browser, 32 s for
+   the sheet); Torres Vedras unchanged (red reader) and read by the new one too with the right region (17,5 × 10,7 m);
+   synthetic tests `ferramentas/planta/test_analisar.py`. Known limits: a two-line wall touching a decking pattern
+   (Torres Vedras wing south wall), site plans with house + terrain in one view, big multi-sheet sets are slow (≈ 4 min
+   on the PC for Sobral's 22 sheets), windows in hatched walls ±0,2 m, oblique walls not yet built by the chain,
+   scanned PDFs, DWG.
    Settings panel wished ("Futuramente"): "um painel onde podemos definir este tipo de coisas, comprimentos dos módulos
    e a sua composição" — today in `sistema_construtivo.json` (`estrutura.divisor`) and each `config.json`.
    **Production documents for every new project** (2026-10-16 night): "quero que sejas capaz de desenvolver um

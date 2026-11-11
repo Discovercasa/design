@@ -30,5 +30,8 @@
  "ferramentas/configurador/__init__.py",
  "ferramentas/configurador/auditar_cobertura.py",
  "ferramentas/configurador/formas.py",
- "ferramentas/configurador/para_construtor.py"
+ "ferramentas/configurador/para_construtor.py",
+ "ferramentas/planta/__init__.py",
+ "ferramentas/planta/analisar.py",
+ "ferramentas/planta/mascara.py"
 ]

@@ -47,7 +47,7 @@ const m2 = (v) => v.toFixed(2).replace(".", ",");
 
 function mostrarPlantas(cs) {
   if (!cs.length) {
-    estado("Não encontrei nenhuma planta com paredes a vermelho neste ficheiro. Se for um PDF digitalizado (uma imagem), não tem linhas para ler: usa o PDF ou o DWFx exportado do AutoCAD.", true);
+    estado("Não encontrei nenhuma planta neste ficheiro. Se for um PDF digitalizado (uma imagem), ainda não o consigo ler: usa o PDF ou o DWFx exportado do programa de desenho. Se for uma planta com paredes oblíquas, ainda não a consigo transformar em casa.", true);
     return;
   }
   estado(`${cs.length === 1 ? "Encontrei 1 planta" : `Encontrei ${cs.length} plantas`}. A primeira é a mais provável.`);

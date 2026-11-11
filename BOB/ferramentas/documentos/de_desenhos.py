@@ -2,10 +2,11 @@
 
     python ferramentas/documentos/de_desenhos.py "<plan>.dwfx|.pdf" [--candidato N] [--escolhas escolhas.json] --saida DIR
 
-1. candidatos(): finds the floor plans on every sheet by themselves — the walls to build are red strokes (licensing
-   convention, planta_arquitetura.py); each cluster of red lines is tried at 1:50 / 1:100 / 1:200 and the scale that
-   gives plausible walls (0,08-0,40 m thick, a house 4-40 m long, closed outside walls) wins. The sheets of these
-   drawings carry their texts as lines, so the scale is not read from the title block: it is deduced.
+1. candidatos(): finds the floor plans on every sheet by themselves, whatever their colours (user 2026-11-11): walls
+   are recognised by their shape (ferramentas/planta/analisar.py: poché, hatching, layers, two lines, any colour), the
+   scale deduced from them; the licensing convention (walls to build as red lines, planta_arquitetura.py) is kept as
+   a second reader for the drawings it reads well. The sheets often carry their texts as lines, so the scale is not
+   read from the title block: it is deduced.
 2. planta_para_casa(): the walls found -> a configured house (the configurator's format, para_construtor.py): the
    outline of the outside faces, its sides in 3 m walls, the openings with the DiscoverCasa defaults (heights of
    conhecimento/perguntas-por-obra.md), the interior walls with their doors.
@@ -16,6 +17,7 @@
 import argparse
 import io
 import json
+import re
 import runpy
 import subprocess
 import sys
@@ -91,10 +93,72 @@ def _nota(doc):
     return len(ps) * (0.3 + tipicas) + sum(len(p["aberturas"]) for p in ps)
 
 
-def candidatos(caminho):
-    """The floor plans found in the drawing, best first: [{folha, nome, regiao, escala, nota, planta}]."""
+def candidatos(caminho, tempo_max=240.0):
+    """The floor plans found in the drawing, best first: [{folha, nome, regiao, escala, nota, planta, leitor}].
+
+    Two readers (user 2026-11-11: «cada projeto pode ter cores diferentes ou então simplesmente não usar o vermelho»,
+    «leitura de qualquer tipo de parede e conseguires analisar qualquer tipo de planta»):
+      - "forma": ferramentas/planta/analisar.py — walls recognised by their shape, any colour, any style (poché,
+        hatching, layers, two lines), the scale deduced; plans whose walls follow two perpendicular directions;
+      - "vermelho": the licensing convention (walls to build as red face lines), kept for the drawings it reads well.
+    The shape reader runs on the sheets where the red one found nothing, within `tempo_max` seconds."""
+    import time
+    from ferramentas.planta import analisar as AP
     d = Pdf(caminho) if str(caminho).lower().endswith(".pdf") else Dwfx(caminho)
     info = {i["folha"]: i for i in d.info()}
+    out = _candidatos_vermelho(caminho, d, info)
+    com_vermelho = {c["folha"] for c in out}
+    t0 = time.time()
+    # 1. every sheet's views (quick), each with the scale its walls suggest; 2. the views of a house's size at that
+    # scale (6–35 m), the most solid first, analysed in depth until the time runs out
+    vistas = []
+    paths_de = {}
+    # sheets named as site, survey, sections, elevations or details last (when the file names its sheets)
+    nao_planta = re.compile(r"IMPLANT|LEVANT|LEV[_\-]|GER[_\-]|GERAL|INF[_\-]|INFRA|MOD[_\-]|MODELA|LOCALIZ|SITUA|"
+                            r"CORTE|[_\-]CT|_CT$|ALÇAD|ALCAD|[_\-]AL|_AL$|PORMEN|INDICE|ÍNDICE|CAPA")
+    ordem = sorted(range(1, len(d.pages) + 1),
+                   key=lambda f: (bool(nao_planta.search((info.get(f, {}).get("nome") or "").upper())), f))
+    for folha in ordem:
+        if folha in com_vermelho or time.time() - t0 > tempo_max / 2:
+            continue
+        try:
+            paths = d.paths(folha, curvas=True)
+        except (ValueError, KeyError, IndexError):
+            continue
+        for r in AP.regioes(paths)[:3]:          # the three most solid views of each sheet
+            alvo = AP.escala_alvo(paths, r[:4], r[4])
+            if not alvo:
+                continue
+            lado = max(r[2] - r[0], r[3] - r[1]) * alvo / 1000
+            if 5.0 <= lado <= 40.0:
+                vistas.append((folha, r, alvo))
+                paths_de[folha] = paths
+    for folha, r, alvo in vistas[:16]:
+        if time.time() - t0 > tempo_max:
+            break
+        try:
+            doc = AP.melhor(paths_de[folha], r[:4], esp_mm=r[4])
+        except (ValueError, ZeroDivisionError, KeyError, IndexError, MemoryError):
+            continue
+        if not doc:
+            continue
+        e = doc.get("eixos")
+        if not e:              # oblique walls: the configurator chain builds square plans only (for now)
+            continue
+        planta = {"origem_desenho": {"dwfx": Path(caminho).name, "folha": folha, "regiao": doc["regiao"],
+                                     "escala": doc["escala"], "rotacao_graus": e["rotacao_graus"], "leitor": "forma"},
+                  "contorno": e["contorno"], "paredes": e["paredes"]}
+        try:                   # only plans that give a house's closed outline are offered
+            contorno_exterior(planta["paredes"])
+        except ValueError:
+            continue
+        out.append({"folha": folha, "nome": info.get(folha, {}).get("nome", ""), "regiao": doc["regiao"],
+                    "escala": doc["escala"], "nota": doc["nota"], "planta": planta, "leitor": "forma"})
+    return sorted(out, key=lambda c: (c["leitor"] != "vermelho", -c["nota"]))
+
+
+def _candidatos_vermelho(caminho, d, info):
+    """Plans drawn with the licensing colour convention (walls to build as red face lines)."""
     out = []
     for folha in range(1, len(d.pages) + 1):
         paths = d.paths(folha)
@@ -109,7 +173,7 @@ def candidatos(caminho):
                 n = _nota(doc)
                 if n and (melhor is None or n > melhor["nota"]):
                     melhor = {"folha": folha, "nome": info.get(folha, {}).get("nome", ""), "regiao": [round(v, 1) for v in regiao],
-                              "escala": esc, "nota": round(n, 1), "planta": doc}
+                              "escala": esc, "nota": round(n, 1), "planta": doc, "leitor": "vermelho"}
             if melhor:
                 out.append(melhor)
     return sorted(out, key=lambda c: -c["nota"])
@@ -312,13 +376,23 @@ def main():
     a = ap.parse_args()
     cs = candidatos(a.dwfx)
     if not cs:
-        raise SystemExit("nenhuma planta encontrada (paredes a vermelho; um PDF digitalizado não tem linhas)")
+        raise SystemExit("nenhuma planta encontrada (um PDF digitalizado, uma imagem, ainda não tem linhas que se leiam)")
     for k, c in enumerate(cs):
         ps = c["planta"]["paredes"]
         print(f"[{k}] folha {c['folha']} {c['nome']}  1:{c['escala']}  {c['planta']['contorno'][1]:.2f} x "
               f"{c['planta']['contorno'][3]:.2f} m  {len(ps)} paredes  nota {c['nota']}")
     esc = json.load(open(a.escolhas, encoding="utf-8")) if a.escolhas else {}
-    casa, avisos = planta_para_casa(cs[a.candidato]["planta"], esc)
+    k = a.candidato
+    while True:   # the first plan (from the chosen one on) that gives a closed outline
+        try:
+            casa, avisos = planta_para_casa(cs[k]["planta"], esc)
+            break
+        except ValueError as e:
+            print(f"  [{k}] não dá uma casa ({e})")
+            k += 1
+            if k >= len(cs):
+                raise SystemExit("nenhuma das plantas encontradas dá o contorno de uma casa")
+    print(f"  usada a planta [{k}]")
     Path(a.saida).mkdir(parents=True, exist_ok=True)
     (Path(a.saida) / "casa.json").write_text(json.dumps(casa, ensure_ascii=False, indent=1), encoding="utf-8")
     for t in avisos:

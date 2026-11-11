@@ -485,3 +485,8 @@ The team's notes on hub task 84 (written in the hub by [membro da equipa] on 202
 - Sharing route for now: the HTML file (not a link).
 - Proposal by the user (decision pending Claude's answer, given in the chat): the Builder gets its own app page in the hub like the Gerador: «Abrir aplicação», drop the documents, the result appears after some time.
 - Filed in: `conhecimento/discovercasa.md` → Product vision 1 (Builder): «Drawing readers and client page (user 2026-11-11)»; `conhecimento/insights.md` → recorded-not-told (reader limits); superseded notes added in `.claude/skills/modelo-blender-madeira/SKILL.md`, `step-inside/docs/audit/current-architecture.md`, `Construção Torres Vedras/docs/desenhos.md` (limited to those drawings). Old log entries untouched.
+
+### 2026-11-11 — Scope of the reader: any wall, any plan [Builder · Gerador]
+> Nem diria leitura das paredes sem cores mas sim leitura de qualquer tipo de parede e conseguires analisar qualquer tipo de planta.
+- Context: answer to Claude's question «Começo já pela leitura das paredes sem cores (tarefa 171)…?» — refines the scope (and is taken as the go-ahead).
+- Filed in: hub task 171 renamed «Analisar qualquer planta e qualquer tipo de parede (corrige também o Gerador)», in progress; the reader's requirement in `conhecimento/discovercasa.md` (Builder, «Drawing readers and client page») stands, now as: any type of wall (two faces, filled/hatched, thick line, multi-layer, oblique, curved) and any type of plan (licensing, programa base, working drawings; several drawings and scales per sheet; rotated); colours and line weights are only clues.

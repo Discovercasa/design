@@ -285,7 +285,8 @@ class Pdf:
                                                                          round(w if rot in (90, 270) else hh, 1)]})
         return out
 
-    def paths(self, folha):
+    def paths(self, folha, curvas=False):
+        """Vector paths of a page; curvas=True follows Bezier curves with points (else only their end points)."""
         pg, h = self.pages[folha - 1]
         x0, y0, x1, y1 = [float(self.obj(v)) for v in h.get("MediaBox", [0, 0, 595, 842])]
         rot = int(h.get("Rotate", 0) or 0) % 360
@@ -304,7 +305,7 @@ class Pdf:
         partes = cont if isinstance(cont, list) else [cont] if cont else []
         dados = b"\n".join(self.dados(self.obj(p)) for p in partes if isinstance(self.obj(p), Stream))
         out = []
-        self._correr(dados, self.obj(h.get("Resources")) or {}, base, out, 0)
+        self._correr(dados, self.obj(h.get("Resources")) or {}, base, out, 0, curvas)
         return out
 
     def glyphs(self, folha):
@@ -335,7 +336,7 @@ class Pdf:
             return None
         return "#%02X%02X%02X" % tuple(max(0, min(255, round(v * 255))) for v in (r, g, b))
 
-    def _correr(self, dados, recursos, ctm, out, nivel):
+    def _correr(self, dados, recursos, ctm, out, nivel, curvas=False):
         if nivel > 8:
             return
         estado = {"ctm": ctm, "s": "#000000", "f": "#000000", "cs_s": "DeviceGray", "cs_f": "DeviceGray", "w": 1.0}
@@ -382,7 +383,22 @@ class Pdf:
                 elif t == "l" and atual:
                     atual[0].append(pt(*args[-2:]))
                 elif t in ("c", "v", "y") and atual:
-                    atual[0].append(pt(*args[-2:]))
+                    if curvas:   # door swings are curves: follow them (1/8 steps)
+                        p0 = atual[0][-1]
+                        n_ = [float(v) for v in args[-6:]] if t == "c" else [float(v) for v in args[-4:]]
+                        if t == "c":
+                            c1, c2, p3 = pt(*n_[0:2]), pt(*n_[2:4]), pt(*n_[4:6])
+                        elif t == "v":
+                            c1, c2, p3 = p0, pt(*n_[0:2]), pt(*n_[2:4])
+                        else:
+                            c1, c2, p3 = pt(*n_[0:2]), pt(*n_[2:4]), pt(*n_[2:4])
+                        for k in range(1, 9):
+                            u = k / 8
+                            a_, b_, c_, d_ = (1 - u) ** 3, 3 * (1 - u) ** 2 * u, 3 * (1 - u) * u * u, u ** 3
+                            atual[0].append((a_ * p0[0] + b_ * c1[0] + c_ * c2[0] + d_ * p3[0],
+                                             a_ * p0[1] + b_ * c1[1] + c_ * c2[1] + d_ * p3[1]))
+                    else:
+                        atual[0].append(pt(*args[-2:]))
                 elif t == "h" and atual:
                     atual[0].append(atual[0][0])
                     atual[1] = True
@@ -445,7 +461,7 @@ class Pdf:
                         m = (a2 * a + b2 * c, a2 * b + b2 * d, c2 * a + d2 * c, c2 * b + d2 * d,
                              e2 * a + f2 * c + e, e2 * b + f2 * d + f)
                         rec = self.obj(x.dic.get("Resources")) or recursos
-                        self._correr(self.dados(x), rec, m, out, nivel + 1)
+                        self._correr(self.dados(x), rec, m, out, nivel + 1, curvas)
                 elif t == "BI":  # inline image: skip to EI
                     for t2, _ in it:
                         if t2 == Op("EI"):
