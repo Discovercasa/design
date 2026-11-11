@@ -394,6 +394,16 @@
    "produto": "Linha de resumo: o preço está nas linhas de cada vão",
    "resumo": true,
    "nota": "Resumo da caixilharia: o preço vai em cada vão."
+  },
+  "AREA-IMPLANTACAO": {
+   "produto": "Área de implantação (contorno da base de fundação)",
+   "resumo": true,
+   "nota": "Dado da obra: serve as parcelas por m² do preço final (fundação, mão de obra, instalações)."
+  },
+  "AREA-CONSTRUCAO": {
+   "produto": "Área de construção (implantação x número de pisos)",
+   "resumo": true,
+   "nota": "Dado da obra: serve as parcelas por m² do preço final (fundação, mão de obra, instalações)."
   }
  }
 }

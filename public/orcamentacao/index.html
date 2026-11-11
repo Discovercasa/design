@@ -64,9 +64,15 @@
       <button id="baixar" class="btn" type="button">Descarregar CSV com preços</button>
     </div>
     <div id="capitulos"></div>
-    <p class="fraco pequeno">Só os materiais da Listagem, ao preço mais baixo com desconto de cada material, sem IVA. Ainda não entram a mão de obra,
-      a fundação, as instalações, as licenças nem a margem, nem o IVA da obra: dependem das tarefas «Definir como se calcula cada parcela do preço»
-      e «Confirmar a taxa de IVA a aplicar».</p>
+    <p class="fraco pequeno">Só os materiais da Listagem, sem IVA: de cada material, o preço mais recente de cada fornecedor e, desses, o mais
+      barato com desconto. As outras parcelas e o IVA da obra estão em «Preço final», abaixo.</p>
+  </section>
+
+  <section class="o-cartao" id="preco" aria-labelledby="t4" hidden>
+    <div class="o-cartao-cabeca"><h2 id="t4">Preço final</h2>
+      <p class="suave">As parcelas do preço, com a conta de cada uma: materiais, caixilharia, fundação, mão de obra, especialidades,
+        instalações e pré-instalações, licenciamento, margem e IVA. Os valores ficam guardados no Design (nunca no código).</p></div>
+    <div id="preco-corpo"></div>
   </section>
 
   <section class="o-cartao" aria-labelledby="t3">

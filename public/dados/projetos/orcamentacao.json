@@ -5,14 +5,14 @@
   "resumo": "O preço de cada material e fornecedor, com as contas à vista até ao preço final da casa.",
   "descricao": "A partir da Listagem de material de cada casa e da lista de preços de materiais e fornecedores, calcula o preço final: materiais, mão de obra, fundação, caixilharia, especialidades, instalações e pré-instalações, licenciamento e IVA, mostrando como se chega a cada valor.",
   "fase": "Protótipo publicado",
-  "fase_detalhe": "Desde 2026-11-11 a página Orçamentação calcula o custo dos materiais de uma obra: larga-se a Listagem de material do Gerador e cada linha (pelo seu código de produto) recebe o preço mais baixo da lista do Hub, com os motivos do que ainda falta. As ligações produto → material do Hub são propostas do Claude, a confirmar. Faltam a mão de obra, a fundação, a margem e o IVA da obra.",
+  "fase_detalhe": "Desde 2026-11-11 a página Orçamentação calcula o custo dos materiais de uma obra (a Listagem de material do Gerador com os preços da lista do Hub, linha a linha) e mostra o preço final parcela a parcela, com a conta de cada uma: caixilharia, fundação, mão de obra, especialidades, instalações, licenciamento, margem e IVA. Faltam os valores dessas parcelas (tarefa «Informação a dar ao Claude para o preço final») e a confirmação das ligações aos materiais do Hub.",
   "objetivos": [
     "Preço final de qualquer casa em minutos.",
     "Contas transparentes, parcela a parcela."
   ],
   "futuro": [
-    "Confirmar as ligações dos produtos aos materiais do Hub e completar o que não está na lista (caixilharia, caleiras, remates RAL 7016, cortiça, betonilha).",
-    "As outras parcelas do preço final (mão de obra, fundação, especialidades, instalações, licenciamento, margem) e o IVA, com as contas à vista.",
+    "Os valores de cada parcela e a taxa de IVA (a dar pela Discovercasa) e completar a lista do Hub com o que falta (caixilharia, caleiras, remates RAL 7016, cortiça, betonilha…).",
+    "Confirmar as ligações dos produtos aos materiais do Hub.",
     "Ligar ao Build Your House para o preço em direto."
   ],
   "materiais": "A lista de preços que a Orçamentação esperava: o preço de cada material por fornecedor, com desconto, IVA e histórico, para multiplicar pelas quantidades da Listagem de material.",

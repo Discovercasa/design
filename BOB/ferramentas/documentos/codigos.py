@@ -57,6 +57,9 @@ PRODUTOS = {
     "REMATE-VAO-INT": "Remate interior dos vãos em Pladur",
     "TELHA-CER": "Telha cerâmica (pérgola)",
     "RESUMO": "Linha de resumo: o preço está nas linhas de cada vão",
+    # the house's data, for the parcels priced per m² (Orçamentação, 2026-11-11): not products, never priced
+    "AREA-IMPLANTACAO": "Área de implantação (contorno da base de fundação)",
+    "AREA-CONSTRUCAO": "Área de construção (implantação x número de pisos)",
 }
 
 # (chapters or None for any, the description starts with, code) — the first match wins; descriptions are the layer
@@ -135,6 +138,18 @@ def codigo(capitulo, descricao, produto=""):
         if any(d.startswith(i) for i in inicios):
             return cod
     return ""
+
+
+def areas(G):
+    """[(code, description, m²)] of the house for the Listagem's «Dados da obra» lines: the foundation outline
+    (G["fundacao"]["contorno"], the modules' outer faces) and that area times the number of floors."""
+    pts = ((G.get("fundacao") or {}).get("contorno")) or G.get("contorno_estrutura") or []
+    if len(pts) < 3:
+        return []
+    a = abs(sum(x0 * y1 - x1 * y0 for (x0, y0), (x1, y1) in zip(pts, pts[1:] + pts[:1]))) / 2
+    pisos = max(1, sum(1 for k in (G.get("niveis") or {}) if re.fullmatch(r"piso\d+", k)))
+    return [("AREA-IMPLANTACAO", PRODUTOS["AREA-IMPLANTACAO"], round(a, 2)),
+            ("AREA-CONSTRUCAO", PRODUTOS["AREA-CONSTRUCAO"] + f": {pisos} piso{'s' if pisos > 1 else ''}", round(a * pisos, 2))]
 
 
 def sem_codigo(linhas):

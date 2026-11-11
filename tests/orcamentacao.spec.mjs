@@ -89,3 +89,55 @@ test('Orçamentação: um CSV antigo sem códigos e um ficheiro errado', async (
   await expect(page.locator('#estado')).toContainText('não parece a Listagem de material');
   expect(erros).toEqual([]);
 });
+
+test('Orçamentação: o preço final, parcela a parcela (quem edita guarda os valores)', async ({ page }) => {
+  const erros = await abrir(page);
+  await page.getByRole('button', { name: 'Usar a de Torres Vedras (D2503)' }).click();
+  const p = page.locator('#preco');
+  await expect(p).toBeVisible();
+  await expect(page.locator('#capitulos h3', { hasText: 'Dados da obra' })).toHaveCount(0);
+  // the areas come from the Listagem: the foundation outline and the openings of the caixilharia
+  await expect(p.getByLabel('Área de construção em m²')).toHaveValue('165,59');
+  await expect(p.getByLabel('Área dos vãos em m²')).toHaveValue('31,68');
+  await expect(p.locator('tr.o-final')).toContainText('Preço final (incompleto)');
+  await expect(p.locator('.o-incompleto')).toContainText('Faltam valores em: Caixilharia, Fundação, Mão de obra');
+  // labour per m² of construction area
+  await p.getByLabel('Valor: Mão de obra').fill('100');
+  await p.getByLabel('Valor: Mão de obra').press('Tab');
+  await expect(page.locator('#preco-guardado')).toHaveText('Guardado: Mão de obra.');
+  const mo = p.locator('tbody tr', { hasText: 'Mão de obra' });
+  await expect(mo).toContainText('165,59 m² × 100,00 €/m²');
+  await expect(mo).toContainText(/16\s?559,00\s€/);
+  // the foundation as a fixed value; VAT at 6 %
+  await p.getByLabel('Como se calcula: Fundação').selectOption('valor_fixo');
+  await expect(page.locator('#preco-guardado')).toHaveText('Guardado: Fundação.');
+  await expect(p.getByLabel('Área: Fundação')).toHaveCount(0);
+  await p.getByLabel('Valor: Fundação').fill('5000');
+  await p.getByLabel('Valor: Fundação').press('Tab');
+  await expect(p.locator('tbody tr', { hasText: 'Fundação' })).toContainText(/5000,00\s€|5\s?000,00\s€/);
+  await p.getByLabel('Valor: IVA').fill('6');
+  await p.getByLabel('Valor: IVA').press('Tab');
+  await expect(p.locator('tbody tr', { hasText: 'IVA' }).last()).toContainText('6 % de');
+  // a wrong number is not saved
+  await p.getByLabel('Valor: Licenciamento').fill('abc');
+  await p.getByLabel('Valor: Licenciamento').press('Tab');
+  await expect(page.locator('#preco-guardado')).not.toHaveText('Guardado: Licenciamento.');
+  // the area can be corrected for this sum only
+  await p.getByLabel('Área de construção em m²').fill('200');
+  await p.getByLabel('Área de construção em m²').press('Tab');
+  await expect(p.locator('tbody tr', { hasText: 'Mão de obra' })).toContainText(/20\s?000,00\s€/);
+  await captura(page, 'orcamentacao-preco');
+  expect(erros).toEqual([]);
+});
+
+test('Orçamentação: quem só vê não muda os valores do preço', async ({ page }) => {
+  await page.addInitScript(() => { window.__UTILIZADOR = { id: 'u-ver', nome: 'Só Vê', nivel: 'ver' }; });
+  const erros = await abrir(page);
+  await page.getByRole('button', { name: 'Usar a de Torres Vedras (D2503)' }).click();
+  const p = page.locator('#preco');
+  await expect(p).toBeVisible();
+  await expect(p.locator('input[data-parcela], select[data-parcela]')).toHaveCount(0);
+  await expect(p.locator('tbody tr', { hasText: 'Mão de obra' })).toContainText('por fornecer');
+  await expect(p.locator('.o-incompleto')).toContainText('Quem pode editar o Design escreve os valores aqui.');
+  expect(erros).toEqual([]);
+});

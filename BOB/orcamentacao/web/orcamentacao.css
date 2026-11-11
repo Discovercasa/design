@@ -47,12 +47,28 @@ tr.o-fora_do_hub .o-estado, tr.o-quantidade .o-estado, tr.o-unidade .o-estado, t
 tr.o-sem_codigo .o-estado, tr.o-material_em_falta .o-estado { color: var(--tinta); background: var(--aviso-suave); border-color: transparent; }
 tr.o-resumo td { color: var(--tinta-3); }
 
+/* the final price */
+.o-areas { display: flex; flex-wrap: wrap; gap: 12px 24px; }
+.o-areas .campo { width: 110px; }
+.o-com-un { display: inline-flex; align-items: center; gap: 6px; }
+.o-como { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.o-como select.campo { width: auto; max-width: 100%; }
+.o-como input.campo { width: 100px; }
+.o-parcelas tfoot td { font-variant-numeric: tabular-nums; border-bottom: 1px solid var(--linha); padding: 10px 12px; }
+.o-parcelas tfoot td.num { text-align: right; }
+.o-parcelas tr.o-final td { font-size: 1.0625rem; font-weight: 600; border-bottom: 0; }
+.o-incompleto { display: block; padding: 12px 16px; border-radius: var(--r2); border: 1px solid; border-color: color-mix(in oklch, var(--aviso) 45%, transparent); background: var(--aviso-suave); color: var(--tinta); }
+.o-incompleto p { margin: 0; }
+
 @media (max-width: 720px) {
   .o-app, .o-so-largo { display: none; }
   .o-cartao { padding: 16px; }
   /* on a phone each line is a small card: description, the Hub material, then the numbers with their labels */
   .o-tabela thead { display: none; }
   .o-tabela, .o-tabela tbody, .o-tabela tr, .o-tabela td { display: block; }
+  .o-parcelas tfoot { display: block; }
+  .o-parcelas tfoot tr { display: flex; justify-content: space-between; gap: 12px; padding: 4px 0; }
+  .o-parcelas tfoot td { border: 0; padding: 2px 0; }
   .o-tabela tr { padding: 12px 0; border-bottom: 1px solid var(--linha); }
   .o-tabela td { border: 0; padding: 2px 0; }
   .o-tabela .o-desc { min-width: 0; max-width: none; }

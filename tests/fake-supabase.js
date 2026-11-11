@@ -20,6 +20,12 @@
     sugestoes_comentarios: [],
     hub_fornecedores: fm.hub_fornecedores || [], hub_materiais: fm.hub_materiais || [],
     hub_material_precos: fm.hub_material_precos || [], hub_material_precos_historico: fm.hub_material_precos_historico || [],
+    // the price parcels (migration 0017): the same nine rows as the migration, no values yet
+    orcamento_parcelas: window.__FIXTURE_ORCAMENTO || [['materiais', 'Materiais', 'materiais_hub', null], ['caixilharia', 'Caixilharia', 'por_m2', 'vaos'],
+      ['fundacao', 'Fundação', 'por_m2', 'implantacao'], ['mao_de_obra', 'Mão de obra', 'por_m2', 'construcao'], ['especialidades', 'Especialidades', 'valor_fixo', null],
+      ['instalacoes', 'Instalações e pré-instalações', 'por_m2', 'construcao'], ['licenciamento', 'Licenciamento', 'valor_fixo', null],
+      ['margem', 'Margem', 'percentagem_subtotal', null], ['iva', 'IVA', 'taxa_iva', null]]
+      .map(([id, nome, metodo, base], i) => ({ id, nome, ordem: i + 1, metodo, base, valor: null, nota: '', atualizado_por_nome: 'Claude', atualizado_em: '2026-11-11T03:00:00Z' })),
   };
   const seq = {}; Object.keys(db).forEach((t) => (seq[t] = Math.max(0, ...db[t].map((r) => (typeof r.id === 'number' ? r.id : 0)))));
   let ator = U;  // quem está a agir (para os triggers)
@@ -31,6 +37,14 @@
     if (typeof avisar === 'function') avisar('notificacoes');
   }
   const antes = {
+    orcamento_parcelas(n, o) {   // migration 0017: RLS "Editar" + the trigger orcamento_parcelas_antes
+      if (ator.nivel && ator.nivel !== 'editar') throw new Error('new row violates row-level security policy for table "orcamento_parcelas"');
+      Object.assign(n, { id: o.id, ordem: o.ordem });
+      if (o.metodo === 'materiais_hub') Object.assign(n, { metodo: o.metodo, valor: null });
+      if (o.metodo === 'taxa_iva') n.metodo = o.metodo;
+      if (n.metodo !== 'por_m2') n.base = null; else if (!n.base) n.base = 'construcao';
+      Object.assign(n, { atualizado_por_nome: nomeAtual(), atualizado_em: agora() });
+    },
     checkpoints(n, o) {
       if (!o) { Object.assign(n, { criado_por: ator.id, criado_por_nome: nomeAtual(), criado_em: agora() }); n.descricao ??= ''; n.ordem ??= 0; n.estado ??= 'por_fazer'; n.concluido_em ??= null; }
       else if (n.estado !== o.estado) n.concluido_em = n.estado === 'concluido' ? hoje() : null;

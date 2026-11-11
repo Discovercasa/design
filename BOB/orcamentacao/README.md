@@ -14,5 +14,14 @@ The price side of DiscoverCasa's applications (hub project `orcamentacao`; owner
   the Hub tables through `public/js/materiais.js` with the Design session. Prices are never stored in the repo (public).
 - Price rule (2026-11-11, Claude's proposal): among the Hub prices in the link's unit, each supplier's latest (the Hub keeps
   older prices of the same supplier as rows of their own), then the cheapest with discount.
-- Not yet: labour, foundation, especialidades, installations, licensing, margin and the house's VAT (hub tasks 42, 43).
+- Final price (hub tasks 42–44, 2026-11-11): the parcels the user listed (materials, caixilharia, foundation, labour,
+  especialidades, installations and pre-installations, licensing, VAT) + a margin (not said by the user: to confirm) live
+  in the Supabase table `orcamento_parcelas` (migration 0017: method, area basis, value; editors change them on the page,
+  everyone with Design access sees them). The company's values never go into this public repo. Methods: € per m² of
+  construction / implantation / opening area, % of materials, fixed value, % of the sum (margin), VAT rate. `compor()` in
+  `public/js/orcamento.js` gives each parcel with its sum shown; a missing value keeps the price «incompleto».
+- Areas: the Listagem CSV ends with «Dados da obra» lines (`AREA-IMPLANTACAO` from the foundation outline,
+  `AREA-CONSTRUCAO` = that x floors); the openings' area is the sum of the caixilharia items. Editable on the page for one sum.
+- What the user still has to give (values, VAT, missing Hub materials): hub task «Informação a dar ao Claude para o preço
+  final» (Orçamentação, one note per item).
 - Publish: `python BOB/ferramentas/construir_site.py --so orcamentacao` → `public/orcamentacao/` (with the login gate).

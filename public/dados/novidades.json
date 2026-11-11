@@ -1,6 +1,16 @@
 [
   {
     "dia": "2026-11-11",
+    "titulo": "Orçamentação: o preço final parcela a parcela",
+    "itens": [
+      "Na página Orçamentação, depois dos materiais, a secção «Preço final» mostra cada parcela com a sua conta: materiais, caixilharia, fundação, mão de obra, especialidades, instalações e pré-instalações, licenciamento, margem e IVA.",
+      "Quem pode editar o Design escolhe como se calcula cada parcela (€ por m² de construção, de implantação ou de vãos, % dos materiais, valor fixo) e escreve o valor: fica guardado para todas as obras, nunca no código.",
+      "As áreas vêm da Listagem de material (contorno da base de fundação e vãos); podem acertar-se para uma conta.",
+      "Enquanto faltar um valor, o preço aparece como «incompleto». O que falta dar está na tarefa «Informação a dar ao Claude para o preço final»."
+    ]
+  },
+  {
+    "dia": "2026-11-11",
     "titulo": "Orçamentação: o custo dos materiais com os preços do Hub",
     "itens": [
       "Página nova, Orçamentação (botão «Abrir a Orçamentação» no projeto): larga-se a Listagem de material do Gerador e cada linha recebe o preço mais baixo da lista do Hub, com a quantidade na unidade do preço, o fornecedor e a data do preço. Dá também o CSV com os preços.",

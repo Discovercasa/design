@@ -53,6 +53,8 @@ pushing to `main` if unsure. Read the repo root `CLAUDE.md` (Design rules: Supab
   price with discount in that unit; every missing price says why); page `/orcamentacao/` (source `orcamentacao/web/`,
   published by `construir_site.py`). Links are INFERRED until the team confirms them. Tests: `orcamentacao/tests/`,
   `tests/orcamentacao.spec.mjs`. A new layer or product in the engine needs a code rule, or the reference test fails.
+  Final price: table `orcamento_parcelas` (migration 0017; values only in the database, never in the repo), `compor()`
+  in `orcamento.js`, section «Preço final» of the page; areas from the Listagem's «Dados da obra» lines.
 
 ## 4. What the user said about the configurator (Product vision item 4)
 "like IKEA Builder / IKEA Kreativ" for DiscoverCasa houses: the client gives the m² → the foundation base appears →

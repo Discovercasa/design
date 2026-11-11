@@ -29,7 +29,7 @@ from ferramentas.documentos.folha import (A4, AZUL, CASTANHO, CINZA, CINZA_CLARO
                                           PRETO, VERDE, VERMELHO, Tabela, Vista, cota_h, cota_v, escala_para, fmt,
                                           folha, logo, seccao)
 from ferramentas.documentos.pdf import PDF, hexcor, largura  # noqa: E402
-from ferramentas.documentos.codigos import codigo  # noqa: E402
+from ferramentas.documentos.codigos import areas, codigo  # noqa: E402
 
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
@@ -1229,6 +1229,8 @@ def doc_listagem(casa, info, caminho_pdf, caminho_csv):
                         f"{it.get('modulo') or it.get('parede', '')} {it.get('divisao', '')} - {it.get('descricao_curta', '')}", it.get("descricao", ""),
                         1, "", round(it["largura"] * it["altura"], 3), "", 1, f"{fmt(it['largura'])}x{fmt(it['altura'])}"
                         + (" + estore" if it.get("estore") else "")])
+        for cod, desc, a in areas(casa.G):  # the house's data, for the parcels priced per m² (Orçamentação)
+            w.writerow(["Dados da obra", cod, desc, "", "", "", a, "", "", ""])
     # PDF (A4 portrait)
     pdf = PDF(titulo=f"{info['obra']} - Listagem de material")
     cols = [("Descrição", 46, "e"), ("Produto / secção", 56, "e"), ("Peças", 12, "d"), ("Comp. m", 15, "d"),

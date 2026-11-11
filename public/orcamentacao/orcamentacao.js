@@ -11,6 +11,7 @@ const num = (v, d = 2) => (v == null ? '' : v.toLocaleString('pt-PT', { maximumF
 const UN = { m2: 'm²', m3: 'm³', ml: 'm', un: 'un' };
 const dia = (t) => (t ? new Date(t).toLocaleDateString('pt-PT', { day: 'numeric', month: 'short', year: 'numeric' }) : '');
 let L = null, LIG = null, res = null, nome = 'listagem';
+let PARCELAS = null, parcelasErro = '', editor = false, dados = {};
 
 function estado(txt, erro = false, ocupado = false) {
   const e = $('estado');
@@ -29,6 +30,14 @@ async function iniciar() {
   if (!L.n.materiais) estado('Ainda não há materiais do Hub (o Hub envia a lista nos dias úteis às 6h). Sem eles não há preços.', true);
   else estado(`Lista do Hub: ${L.n.materiais} materiais e ${L.n.precos} preços${L.atualizado ? `, atualizada a ${dia(L.atualizado)}` : ''}.`);
   ligacoes();
+  // the price parcels (migration 0017): values only in the database, never in this public repo
+  try {
+    const { data: { session } } = await window.Design.sb.auth.getSession();
+    editor = window.Design.nivel(session) === 'editar';
+    const { data, error } = await window.Design.sb.from('orcamento_parcelas').select('*').order('ordem');
+    if (error) throw error;
+    PARCELAS = data;
+  } catch (e) { parcelasErro = e.message || String(e); }
 }
 
 // ------------------------------------------------------------------ the Listagem
@@ -39,7 +48,10 @@ function abrir(texto, nomeFicheiro) {
   if (!L) { estado('A lista do Hub ainda não carregou: tenta daqui a uns segundos.', true); return; }
   nome = (nomeFicheiro || 'listagem').replace(/\.csv$/i, '');
   res = O.precificar(linhas, LIG, L);
+  dados = O.dadosDaObra(linhas);
   mostrar();
+  preco();
+  $('preco').hidden = false;
   $('resultado').hidden = false;
   $('resultado').scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
 }
@@ -53,7 +65,7 @@ function mostrar() {
     <div><b class="num">${res.com_preco} / ${tot}</b><span>Linhas com preço</span></div>
     <div class="${res.sem_preco ? 'o-falta' : ''}"><b class="num">${res.sem_preco}</b><span>Linhas sem preço (motivo em cada uma)</span></div>`;
   const so = $('so-falta').checked;
-  $('capitulos').innerHTML = res.capitulos.map((c) => {
+  $('capitulos').innerHTML = res.capitulos.filter((c) => c.nome !== 'Dados da obra').map((c) => {
     const ls = c.linhas.filter((r) => !so || !['ok', 'resumo'].includes(r.estado));
     if (!ls.length) return '';
     return `<section class="o-cap"><h3>${esc(c.nome)} <span class="num fraco">${eur(c.total)}</span></h3>
@@ -75,6 +87,63 @@ function linha(r) {
     <td class="num" data-rotulo="Quantidade">${num(r.qtd, 2)} ${esc(UN[r.unidade] || r.unidade)}</td>
     <td class="num" data-rotulo="Preço">${eur(r.unitario)}<span class="fraco">/${esc(UN[r.unidade] || r.unidade)}</span>${iva}</td>
     <td class="num" data-rotulo="Total"><b>${eur(r.total)}</b></td></tr>`;
+}
+
+// ------------------------------------------------------------------ the final price, parcel by parcel (tasks 42–44)
+const m2 = (v) => (v == null ? '' : String(Math.round(v * 100) / 100).replace('.', ','));
+const lerNum = (t) => { const n = Number(String(t).trim().replace(/\s/g, '').replace(',', '.')); return String(t).trim() === '' || !Number.isFinite(n) ? null : n; };
+const unidade = (p) => (p.metodo === 'por_m2' ? '€/m²' : ['percentagem_materiais', 'percentagem_subtotal', 'taxa_iva'].includes(p.metodo) ? '%' : '€');
+
+function como(p) {
+  if (p.metodo === 'materiais_hub') return `<span class="pequeno">${esc(O.METODOS[p.metodo])}</span>`;
+  const base = p.metodo === 'por_m2' ? ` de ${esc(O.BASES[p.base || 'construcao'])}` : '';
+  if (!editor) return `<span class="pequeno">${esc(O.METODOS[p.metodo])}${base}: <b>${p.valor == null ? 'por fornecer' : `${esc(num(Number(p.valor)))} ${unidade(p)}`}</b></span>`;
+  const metodos = p.metodo === 'taxa_iva' ? [] : ['por_m2', 'percentagem_materiais', 'valor_fixo', 'percentagem_subtotal'];
+  return `<div class="o-como">
+    ${metodos.length ? `<select class="campo" data-parcela="${esc(p.id)}" data-campo="metodo" aria-label="Como se calcula: ${esc(p.nome)}">${metodos.map((m) => `<option value="${m}"${m === p.metodo ? ' selected' : ''}>${esc(O.METODOS[m])}</option>`).join('')}</select>` : ''}
+    ${p.metodo === 'por_m2' ? `<select class="campo" data-parcela="${esc(p.id)}" data-campo="base" aria-label="Área: ${esc(p.nome)}">${Object.entries(O.BASES).map(([k, t]) => `<option value="${k}"${k === (p.base || 'construcao') ? ' selected' : ''}>${esc(t)}</option>`).join('')}</select>` : ''}
+    <span class="o-com-un"><input class="campo num" inputmode="decimal" data-parcela="${esc(p.id)}" data-campo="valor" value="${p.valor == null ? '' : m2(Number(p.valor))}" placeholder="por fornecer" aria-label="Valor: ${esc(p.nome)}"><span class="fraco">${unidade(p)}</span></span>
+  </div>`;
+}
+
+function preco() {
+  if (parcelasErro || !PARCELAS) {
+    $('preco-corpo').innerHTML = `<p class="vazio">As parcelas do preço ainda não estão disponíveis${parcelasErro ? ` (${esc(parcelasErro)})` : ''}.</p>`;
+    return;
+  }
+  const c = O.compor(res, PARCELAS, dados);
+  const campoArea = (k, rot) => `<label class="campo-grupo"><span>${rot}</span><span class="o-com-un"><input class="campo num" inputmode="decimal" data-area="${k}" value="${m2(dados[k])}" aria-label="${rot} em m²"><span class="fraco">m²</span></span></label>`;
+  const porId = new Map(PARCELAS.map((p) => [p.id, p]));
+  $('preco-corpo').innerHTML = `
+    <div class="o-areas">${campoArea('construcao', 'Área de construção')}${campoArea('implantacao', 'Área de implantação')}${campoArea('vaos', 'Área dos vãos')}</div>
+    <p class="fraco mini">Da Listagem (contorno da base de fundação e vãos da caixilharia). Pode-se acertar aqui: só muda esta conta, não fica guardado.</p>
+    <div class="rolar-x"><table class="tabela o-tabela o-parcelas"><thead><tr><th>Parcela</th><th>Como se calcula</th><th>Conta</th><th class="num">Valor</th></tr></thead><tbody>
+    ${c.linhas.map((l) => `<tr class="${l.falta ? 'o-por-fornecer' : ''}"><td class="o-desc"><b>${esc(l.nome)}</b><div class="fraco mini">${esc(l.nota)}</div></td>
+        <td>${como(porId.get(l.id))}</td>
+        <td class="pequeno">${l.falta ? `<span class="chip o-aviso">${esc(l.falta)}</span>` : esc(l.conta)}</td>
+        <td class="num" data-rotulo="Valor">${l.total == null ? '—' : `<b>${eur(l.total)}</b>`}</td></tr>`).join('')}
+    </tbody><tfoot>
+      <tr><td colspan="3">Soma das parcelas</td><td class="num">${eur(c.subtotal)}</td></tr>
+      <tr><td colspan="3">Margem</td><td class="num">${eur(c.margem)}</td></tr>
+      <tr><td colspan="3">IVA</td><td class="num">${eur(c.iva)}</td></tr>
+      <tr class="o-final"><td colspan="3">Preço final${c.completo ? '' : ' (incompleto)'}</td><td class="num"><b>${eur(c.total)}</b></td></tr>
+    </tfoot></table></div>
+    ${c.completo ? '' : `<div class="nota o-incompleto"><p><b>Ainda não é o preço final.</b>${c.falta.length ? ` Faltam valores em: ${esc(c.falta.join(', '))}.` : ''}${res && res.sem_preco ? ` ${res.sem_preco} linhas da Listagem ainda não têm preço no Hub (ver acima).` : ''}${editor ? ' Os valores escrevem-se aqui e ficam guardados para todas as obras.' : ' Quem pode editar o Design escreve os valores aqui.'}</p></div>`}
+    ${editor ? '<p class="fraco mini" id="preco-guardado" role="status"></p>' : ''}`;
+}
+
+async function guardar(id, campo, valor) {
+  const p = PARCELAS.find((x) => x.id === id);
+  if (!p) return;
+  const muda = { metodo: p.metodo, base: p.base, valor: p.valor, [campo]: valor };
+  const g = $('preco-guardado');
+  if (g) g.textContent = 'A guardar…';
+  const { data, error } = await window.Design.sb.from('orcamento_parcelas').update(muda).eq('id', id).select().single();
+  if (error) { if (g) g.textContent = 'Não foi possível guardar: ' + error.message; return; }
+  Object.assign(p, data || muda);
+  preco();
+  const g2 = $('preco-guardado');
+  if (g2) g2.textContent = `Guardado: ${p.nome}.`;
 }
 
 // ------------------------------------------------------------------ the links (for the team to check)
@@ -108,6 +177,17 @@ zona.addEventListener('drop', (e) => { e.preventDefault(); zona.classList.remove
 $('ficheiro').addEventListener('change', (e) => { ler(e.target.files[0]); e.target.value = ''; });
 $('exemplo').addEventListener('click', () => fetch('./exemplos/D2503_Listagem_Material.csv').then((r) => r.text()).then((t) => abrir(t, 'D2503_Listagem_Material.csv')));
 $('so-falta').addEventListener('change', () => res && mostrar());
+$('preco-corpo').addEventListener('change', (e) => {
+  const t = e.target;
+  if (t.dataset.area) { dados[t.dataset.area] = lerNum(t.value); preco(); return; }
+  if (!t.dataset.parcela) return;
+  if (t.dataset.campo === 'valor') {
+    const v = lerNum(t.value);
+    if (t.value.trim() !== '' && (v == null || v < 0)) { t.setCustomValidity('Escreve um número (ex.: 120 ou 12,5).'); t.reportValidity(); return; }
+    t.setCustomValidity('');
+    guardar(t.dataset.parcela, 'valor', v);
+  } else guardar(t.dataset.parcela, t.dataset.campo, t.value);
+});
 $('baixar').addEventListener('click', () => {
   if (!res) return;
   const a = document.createElement('a');

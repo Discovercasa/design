@@ -73,6 +73,12 @@ class TestCodigos(unittest.TestCase):
         self.assertEqual(sem, [])
         self.assertTrue(all(l["codigo"] in LIG for l in linhas))
 
+    def test_torres_vedras_areas_da_obra(self):
+        linhas = {l["codigo"]: l for l in ler_csv(BOB / "Construção Torres Vedras" / "documentos" / "D2503_Listagem_Material.csv")}
+        # 17,501 x 11,0 minus the 10,778 x 2,498 notch of the foundation outline; one floor
+        self.assertAlmostEqual(float(linhas["AREA-IMPLANTACAO"]["area_m2"]), 165.59, places=2)
+        self.assertEqual(linhas["AREA-CONSTRUCAO"]["area_m2"], linhas["AREA-IMPLANTACAO"]["area_m2"])
+
     def test_casa_configurada_so_a_opcao_escolhida(self):
         """A configured house with an exposed roof (L / T / U) and the capoto facade (B): every line has a code and the
         two facades not chosen (A, C) are not in the purchase list (they listed all three until 2026-11-11)."""

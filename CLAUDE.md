@@ -42,6 +42,7 @@ Projeto Design da Discovercasa (`design.discovercasa.pt`). Responder em portugu�
   `public/js/materiais.js`; os projetos que as usam dizem para quê no campo `materiais` do seu JSON.
 - **Orçamentação** (`/orcamentacao/`, 2026-11-11): cada linha da Listagem de material tem um código de produto estável
   (`BOB/ferramentas/documentos/codigos.py`); `BOB/orcamentacao/ligacoes.json` liga cada código a um material do Hub (só o
-  id: nunca nomes nem preços do Hub no repositório público); o cálculo comum é `public/js/orcamento.js`.
+  id: nunca nomes nem preços do Hub no repositório público); o cálculo comum é `public/js/orcamento.js`. As parcelas do
+  preço final (mão de obra, fundação, margem, IVA…) ficam só na tabela `orcamento_parcelas` (migração 0017), nunca no código.
 - **Repositório público**: nunca dados pessoais nem desenhos de clientes (`*.dwfx`, `*.pdf` estão no `.gitignore`;
   ficam só no PC).

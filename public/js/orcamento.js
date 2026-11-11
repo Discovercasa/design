@@ -124,6 +124,76 @@ export function precificar(linhas, lig, L) {
   };
 }
 
+// ------------------------------------------------------------------ o preço final (tarefas 42, 43 e 44)
+// As parcelas vêm da tabela orcamento_parcelas (migração 0017): método, base e valor de cada uma. Os valores da
+// empresa ficam só na base de dados; um valor null quer dizer «ainda não fornecido» e o preço fica incompleto.
+
+export const BASES = { construcao: 'área de construção', implantacao: 'área de implantação', vaos: 'área dos vãos' };
+export const METODOS = {
+  materiais_hub: 'Listagem de material com os preços do Hub', por_m2: '€ por m²', percentagem_materiais: '% dos materiais',
+  valor_fixo: 'valor fixo por obra', percentagem_subtotal: '% da soma das parcelas', taxa_iva: 'taxa de IVA',
+};
+
+/** As áreas da obra para as parcelas por m²: as linhas «Dados da obra» da Listagem e a área dos vãos (caixilharia). */
+export function dadosDaObra(linhas) {
+  const area = (c) => (linhas.find((l) => l.codigo === c) || {}).area_m2 ?? null;
+  const vaos = linhas.filter((l) => l.codigo === 'CAIXILHARIA').reduce((s, l) => s + (l.area_m2 || 0), 0);
+  return { construcao: area('AREA-CONSTRUCAO'), implantacao: area('AREA-IMPLANTACAO'), vaos: vaos || null };
+}
+
+/** O preço final, parcela a parcela, com a conta de cada uma à vista.
+ *  `res` = precificar(); `parcelas` = linhas de orcamento_parcelas (ordenadas); `dados` = { construcao, implantacao, vaos } m².
+ *  Devolve { linhas: [{ id, nome, metodo, base, valor, quantidade, conta, total, falta }], subtotal, margem, iva, total,
+ *  falta: [nomes], completo }. A margem (% da soma) e o IVA (taxa) aplicam-se por esta ordem, no fim. */
+export function compor(res, parcelas, dados = {}) {
+  const fmt = (v, d = 2) => Number(v).toLocaleString('pt-PT', { maximumFractionDigits: d });
+  const eur = (v) => Number(v).toLocaleString('pt-PT', { style: 'currency', currency: 'EUR' });
+  const linhas = [], falta = [];
+  let subtotal = 0, margem = 0, iva = 0;
+  const ordem = [...parcelas].sort((a, b) => (a.ordem ?? 0) - (b.ordem ?? 0));
+  const porTipo = (t) => ordem.filter((p) => p.metodo === t);
+  const normais = ordem.filter((p) => !['percentagem_subtotal', 'taxa_iva'].includes(p.metodo));
+  const v = (p) => (p.valor == null || p.valor === '' ? null : Number(p.valor));
+  for (const p of normais) {
+    const l = { id: p.id, nome: p.nome, metodo: p.metodo, base: p.base, valor: v(p), quantidade: null, conta: '', total: null, falta: '', nota: p.nota || '' };
+    if (p.metodo === 'materiais_hub') {
+      l.total = res ? res.total : null;
+      l.conta = res ? `${res.com_preco} linhas com preço do Hub` + (res.sem_preco ? ` (${res.sem_preco} ainda sem preço)` : '') : '';
+      if (!res) l.falta = 'falta a Listagem de material';
+    } else if (p.metodo === 'por_m2') {
+      const a = dados[p.base || 'construcao'];
+      l.quantidade = a;
+      if (l.valor == null) l.falta = `falta o valor em € por m² de ${BASES[p.base || 'construcao']}`;
+      else if (!(a > 0)) l.falta = `falta a ${BASES[p.base || 'construcao']}`;
+      else { l.total = a * l.valor; l.conta = `${fmt(a)} m² × ${eur(l.valor)}/m²`; }
+    } else if (p.metodo === 'percentagem_materiais') {
+      if (l.valor == null) l.falta = 'falta a percentagem';
+      else if (!res) l.falta = 'falta a Listagem de material';
+      else { l.total = res.total * l.valor / 100; l.conta = `${fmt(l.valor)} % de ${eur(res.total)}`; }
+    } else if (p.metodo === 'valor_fixo') {
+      if (l.valor == null) l.falta = 'falta o valor';
+      else { l.total = l.valor; l.conta = 'valor fixo por obra'; }
+    }
+    if (l.falta) falta.push(p.nome);
+    else subtotal += l.total || 0;
+    linhas.push(l);
+  }
+  for (const p of porTipo('percentagem_subtotal')) {
+    const l = { id: p.id, nome: p.nome, metodo: p.metodo, base: null, valor: v(p), quantidade: subtotal, conta: '', total: null, falta: '', nota: p.nota || '' };
+    if (l.valor == null) { l.falta = 'falta a percentagem'; falta.push(p.nome); }
+    else { l.total = subtotal * l.valor / 100; margem += l.total; l.conta = `${fmt(l.valor)} % de ${eur(subtotal)}`; }
+    linhas.push(l);
+  }
+  for (const p of porTipo('taxa_iva')) {
+    const base = subtotal + margem;
+    const l = { id: p.id, nome: p.nome, metodo: p.metodo, base: null, valor: v(p), quantidade: base, conta: '', total: null, falta: '', nota: p.nota || '' };
+    if (l.valor == null) { l.falta = 'falta a taxa de IVA'; falta.push(p.nome); }
+    else { l.total = base * l.valor / 100; iva += l.total; l.conta = `${fmt(l.valor)} % de ${eur(base)}`; }
+    linhas.push(l);
+  }
+  return { linhas, subtotal, margem, iva, total: subtotal + margem + iva, falta, completo: !falta.length && !!res && !res.sem_preco };
+}
+
 /** CSV com os preços (separador ;, vírgula decimal, BOM): a Listagem e, por linha, o material, o fornecedor e o custo. */
 export function csv(res) {
   const n = (v, d = 2) => (v == null ? '' : (Math.round(v * 10 ** d) / 10 ** d).toString().replace('.', ','));
