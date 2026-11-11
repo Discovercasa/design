@@ -1,0 +1,399 @@
+{
+ "_doc": "Orçamentação (hub tasks 41, 150, 151): each stable product code of the Listagem de material (ferramentas/documentos/codigos.py) -> the material of the Hub's price list (tables hub_*, read only; only the material id here, never names or prices: this repo is public). 'unidade' = the Hub price unit this link uses (prices in other units are ignored); 'quantidade' = how the line's quantity becomes that unit: base area | comprimento | volume | pecas | compra (purchase units of the Listagem), x fator, / divisor (null = the conversion is missing), volume from comprimento x seccao_m2 when the line has none, arredondar = round up. hub null = not in the Hub list (the line says why). estado INFERRED = Claude's proposal (2026-11-11) for the team to confirm on /orcamentacao/; CONFIRMED once they do. Published to public/orcamentacao/ligacoes.json by ferramentas/construir_site.py.",
+ "atualizado": "2026-11-11",
+ "ligacoes": {
+  "MAD-CASQ": {
+   "produto": "Madeira de casquinha branca seca, cortada à secção (módulos, amarração, madres, vigas)",
+   "hub": "d14ee040-9b5e-45e6-9f2c-1e4dbda91bc9",
+   "unidade": "m3",
+   "quantidade": {
+    "base": "volume"
+   },
+   "estado": "INFERRED",
+   "nota": "Preço por m³ da casquinha branca seca 230x78 (até 5,70 m), cortada às secções da estrutura. O volume é o das peças cortadas: a perda no corte ainda não entra."
+  },
+  "MAD-CASQ-22": {
+   "produto": "Casquinha branca 22x7,5 em peças compridas (madres)",
+   "hub": "fdf5e24b-ea08-40bc-9862-3daba42aee41",
+   "unidade": "m3",
+   "quantidade": {
+    "base": "volume"
+   },
+   "estado": "INFERRED",
+   "nota": "Peças de 6 m ou mais (madres 22x7,5)."
+  },
+  "MAD-LAM": {
+   "produto": "Madeira lamelada 20x10 para interior (lameladas)",
+   "hub": "42e57870-bb17-4d9a-972c-77f41de8a6ff",
+   "unidade": "m3",
+   "quantidade": {
+    "base": "volume"
+   },
+   "estado": "INFERRED",
+   "nota": "Lamelada GL24 sem tratamento (interior). Há também a lamelada 20x10 com autoclave, mais cara."
+  },
+  "MAD-LAM-AUT": {
+   "produto": "Madeira lamelada com tratamento autoclave (pilares e vigas da pérgola)",
+   "hub": "d3cdbcd6-92e5-49cc-ae21-69bedaa45794",
+   "unidade": "m3",
+   "quantidade": {
+    "base": "volume"
+   },
+   "estado": "INFERRED",
+   "nota": "Preço por m³ da lamelada com autoclave 100x160; a secção 16x16 da pérgola não está na lista."
+  },
+  "MAD-AUT": {
+   "produto": "Madeira com tratamento autoclave em secção pequena (ripas da pérgola)",
+   "hub": "2f8c76c9-a431-4d53-ab8d-30289cf0d1af",
+   "unidade": "m3",
+   "quantidade": {
+    "base": "volume"
+   },
+   "estado": "INFERRED",
+   "nota": "Casquinha vermelha com autoclave, preço por m³."
+  },
+  "FERR-BASE-PILAR": {
+   "produto": "Base metálica do pilar da pérgola",
+   "hub": null,
+   "estado": "INFERRED",
+   "nota": "A base metálica do pilar não está na lista do Hub."
+  },
+  "VIGA-APOIO-COB": {
+   "produto": "Vigas de apoio à cobertura em casquinha 110x75",
+   "hub": "d14ee040-9b5e-45e6-9f2c-1e4dbda91bc9",
+   "unidade": "m3",
+   "quantidade": {
+    "base": "volume",
+    "seccao_m2": 0.00825
+   },
+   "estado": "INFERRED",
+   "nota": "Casquinha 110x75; sem volume na linha, conta comprimento x secção."
+  },
+  "OSB-09": {
+   "produto": "OSB3 9 mm",
+   "hub": "c2024ce4-c42d-4468-814e-d70012327b95",
+   "unidade": "m2",
+   "quantidade": {
+    "base": "compra",
+    "fator": 3.125
+   },
+   "estado": "INFERRED",
+   "nota": "Placas compradas (com o desperdício) x 3,125 m² por placa 2500x1250."
+  },
+  "OSB-15": {
+   "produto": "OSB3 15 mm",
+   "hub": "48d1f919-aa91-4464-b5d0-9c0a1a235d82",
+   "unidade": "m2",
+   "quantidade": {
+    "base": "compra",
+    "fator": 3.125
+   },
+   "estado": "INFERRED",
+   "nota": "Placas compradas x 3,125 m²."
+  },
+  "OSB-22": {
+   "produto": "OSB3 22 mm (fundo da caleira oculta)",
+   "hub": "1937e740-80db-4e2d-a840-166b6ed6d193",
+   "unidade": "m2",
+   "quantidade": {
+    "base": "volume",
+    "divisor": 0.022,
+    "fator": 1.1
+   },
+   "estado": "INFERRED",
+   "nota": "Área = volume / 0,022, mais 10 % de desperdício."
+  },
+  "MEMB-T95": {
+   "produto": "Membrana respirável Traspir 95",
+   "hub": "31d14fee-292a-435c-b5a3-5991ea5f550f",
+   "unidade": "un",
+   "quantidade": {
+    "base": "compra"
+   },
+   "estado": "INFERRED",
+   "nota": "Rolos de 1,5 x 50 m (Traspir House HT 95 na lista do Hub; a Listagem diz Traspir 95 T95)."
+  },
+  "RIPA-37x35": {
+   "produto": "Ripado 37,5x35 (viga 75x35 cortada ao meio)",
+   "hub": "d14ee040-9b5e-45e6-9f2c-1e4dbda91bc9",
+   "unidade": "m3",
+   "quantidade": {
+    "base": "volume",
+    "seccao_m2": 0.0013125
+   },
+   "estado": "INFERRED",
+   "nota": "Cortada da casquinha: comprimento x 0,0375 x 0,035."
+  },
+  "RIPA-30x20": {
+   "produto": "Ripado ou contra-ripado 30x20",
+   "hub": "e0fffccd-bfeb-4eac-9a4e-e2c1b69ebe73",
+   "unidade": "un",
+   "quantidade": {
+    "base": "comprimento",
+    "divisor": 4.5,
+    "fator": 1.05,
+    "arredondar": true
+   },
+   "estado": "INFERRED",
+   "nota": "Ripa 3x2 com autoclave em barras de 4,5 m (o sistema construtivo diz casquinha branca 20x30: confirmar qual se compra)."
+  },
+  "FORRO-TREMOLO": {
+   "produto": "Forro exterior Tremolo em Douglas marron 22x135",
+   "hub": "bffbf542-950c-4065-bc08-e99fb6a65a47",
+   "unidade": "m2",
+   "quantidade": {
+    "base": "area",
+    "fator": 1.1
+   },
+   "estado": "INFERRED",
+   "nota": "Área do forro + 10 % de desperdício. Fornecedor espanhol: o IVA vem a 0 % (autoliquidação), o IVA português é pago à parte."
+  },
+  "XPS-60": {
+   "produto": "Isolamento XPS 60 mm",
+   "hub": "5b80aa41-67e3-407f-b7fb-d8a601f6ae9b",
+   "unidade": "un",
+   "quantidade": {
+    "base": "area",
+    "fator": 1.05,
+    "divisor": 1.56,
+    "arredondar": true
+   },
+   "estado": "INFERRED",
+   "nota": "Placas de 2,6 x 0,6 m (1,56 m²), + 5 %."
+  },
+  "CORTICA-60": {
+   "produto": "Aglomerado de cortiça expandida 60 mm (fachada)",
+   "hub": null,
+   "estado": "INFERRED",
+   "nota": "A cortiça de fachada não está na lista do Hub."
+  },
+  "ETICS-REBOCO": {
+   "produto": "Reboco armado e acabamento do capoto (ETICS)",
+   "hub": null,
+   "estado": "INFERRED",
+   "nota": "A massa de capoto está na lista (Weber Therm uno, por saco), mas falta o consumo por m² (sacos, rede, primário e tinta)."
+  },
+  "LA-80": {
+   "produto": "Lã mineral 80 mm entre montantes (paredes)",
+   "hub": "21ba8f09-da0c-44b5-891b-4f313b1629bc",
+   "unidade": "m2",
+   "quantidade": {
+    "base": "area",
+    "fator": 1.05
+   },
+   "estado": "INFERRED",
+   "nota": "Volcalis 80 mm em rolo (a Listagem diz Volcalis Comfort), + 5 %."
+  },
+  "LA-100": {
+   "produto": "Lã mineral 100 mm (tetos e pavimentos entre pisos)",
+   "hub": "e81d0839-b2b5-43e7-8bdb-e20268fbf80b",
+   "unidade": "m2",
+   "quantidade": {
+    "base": "area",
+    "fator": 1.05
+   },
+   "estado": "INFERRED",
+   "nota": "Volcalis 100 mm em rolo, + 5 %."
+  },
+  "PLADUR-13": {
+   "produto": "Placa de gesso cartonado 13 mm (Pladur N; H1 e F nas zonas próprias)",
+   "hub": "fe776e7a-0425-4828-b2c2-6a69008d1bd5",
+   "unidade": "m2",
+   "quantidade": {
+    "base": "compra",
+    "fator": 3.12
+   },
+   "estado": "INFERRED",
+   "nota": "Placas compradas x 3,12 m² (1200x2600). Tudo ao preço da placa normal: as hidrófugas e ignífugas não vêm separadas na Listagem."
+  },
+  "FORRO-MAD-INT": {
+   "produto": "Forro de madeira interior",
+   "hub": null,
+   "estado": "INFERRED",
+   "nota": "O forro de madeira interior ainda não tem produto definido."
+  },
+  "AZULEJO": {
+   "produto": "Azulejo cerâmico 30x60 (paredes de WC e cozinha)",
+   "hub": null,
+   "estado": "INFERRED",
+   "nota": "O azulejo não está na lista do Hub (produto a definir)."
+  },
+  "BETONILHA": {
+   "produto": "Betonilha de regularização",
+   "hub": null,
+   "estado": "INFERRED",
+   "nota": "A betonilha não está na lista do Hub (cimento e areia estão, falta a dosagem)."
+  },
+  "VINILICO": {
+   "produto": "Pavimento vinílico em régua",
+   "hub": "243c46a2-49c0-4584-b44b-2efcea577c60",
+   "unidade": "m2",
+   "quantidade": {
+    "base": "area",
+    "fator": 1.08
+   },
+   "estado": "INFERRED",
+   "nota": "Vitta Floor OAK como referência (o vinílico é escolha do cliente), + 8 %."
+  },
+  "CERAMICO-PAV": {
+   "produto": "Mosaico cerâmico 60x60 (pavimento)",
+   "hub": null,
+   "estado": "INFERRED",
+   "nota": "O mosaico cerâmico não está na lista do Hub (produto a definir)."
+  },
+  "TETO-REGUA": {
+   "produto": "Régua de suspensão do teto falso",
+   "hub": "df6ab136-4839-456a-b967-ea1f03ca1f86",
+   "unidade": "un",
+   "quantidade": {
+    "base": "pecas"
+   },
+   "estado": "INFERRED",
+   "nota": "Uma régua por perfil em cada viga."
+  },
+  "TETO-PERFIL": {
+   "produto": "Perfil de teto TC-47",
+   "hub": "9c2b896e-d5fe-49f8-9a0f-55b1ef51cf74",
+   "unidade": "ml",
+   "quantidade": {
+    "base": "comprimento",
+    "fator": 1.05
+   },
+   "estado": "INFERRED",
+   "nota": "Metros de perfil TC-47, + 5 %."
+  },
+  "TETO-CANTONEIRA": {
+   "produto": "Cantoneira perimetral 30x30 do teto",
+   "hub": "5d6ff7fc-c152-4424-8b03-dad9d133be0f",
+   "unidade": "ml",
+   "quantidade": {
+    "base": "compra",
+    "fator": 3
+   },
+   "estado": "INFERRED",
+   "nota": "Barras de 3 m compradas x 3 m."
+  },
+  "PAINEL-5ONDAS-80": {
+   "produto": "Painel sandwich 5 ondas 80 mm (cobertura oculta)",
+   "hub": "a0a0be49-3e2e-4b69-9c07-528b0275b2b1",
+   "unidade": "m2",
+   "quantidade": {
+    "base": "area"
+   },
+   "estado": "INFERRED",
+   "nota": "Área dos painéis (cortados à medida)."
+  },
+  "PAINEL-TELHA-40": {
+   "produto": "Painel sandwich imitação telha 40 mm (Munditelha)",
+   "hub": "da42b76d-6f33-478d-8d87-ab77fe74a083",
+   "unidade": "m2",
+   "quantidade": {
+    "base": "area"
+   },
+   "estado": "INFERRED",
+   "nota": "Munditelha 40 mm RAL 8004. Outras cores (ex.: RAL 7016 do Sobral) não estão na lista."
+  },
+  "CALEIRA-OCULTA": {
+   "produto": "Caleira oculta em chapa (desenvolvimento 0,80 m)",
+   "hub": null,
+   "estado": "INFERRED",
+   "nota": "A chapa da caleira oculta (desenvolvimento 0,80 m) não está na lista do Hub."
+  },
+  "CALEIRA-BOCAL": {
+   "produto": "Bocal de saída da caleira",
+   "hub": "3c99eb46-a780-4d11-a0a2-ade375e58c60",
+   "unidade": "un",
+   "quantidade": {
+    "base": "pecas"
+   },
+   "estado": "INFERRED",
+   "nota": "Um bocal por saída."
+  },
+  "CALEIRA": {
+   "produto": "Caleira exterior ou à vista",
+   "hub": null,
+   "estado": "INFERRED",
+   "nota": "A caleira exterior não está na lista do Hub."
+  },
+  "TUBO-QUEDA": {
+   "produto": "Tubo de queda",
+   "hub": null,
+   "estado": "INFERRED",
+   "nota": "O tubo de queda (100x50 ou à vista) não está na lista do Hub; há só tubo PVC redondo."
+  },
+  "CUMEEIRA": {
+   "produto": "Remate de cumeeira",
+   "hub": null,
+   "estado": "INFERRED",
+   "nota": "O remate de cumeeira não está na lista do Hub."
+  },
+  "REMATE-COB": {
+   "produto": "Remates da cobertura à vista na cor do painel (rincões, encostos)",
+   "hub": "c2a0c779-85dd-4904-a626-8bf1b58173a9",
+   "unidade": "m2",
+   "quantidade": {
+    "base": "comprimento",
+    "fator": 0.25
+   },
+   "estado": "INFERRED",
+   "nota": "Remate lacado 0,40 RAL 8004, desenvolvimento 0,25 m (o da lista). Rincões e encostos ao mesmo preço por m²."
+  },
+  "CALEIRA-LARO": {
+   "produto": "Caleira de laró (cobertura à vista)",
+   "hub": null,
+   "estado": "INFERRED",
+   "nota": "A caleira de laró não está na lista do Hub."
+  },
+  "REMATE-TOPO": {
+   "produto": "Remate de topo e placa impermeável de topo (cobertura)",
+   "hub": "e723337b-ae6f-471b-a514-7c1d8ecd01d9",
+   "unidade": "m2",
+   "quantidade": {
+    "base": "comprimento",
+    "fator": 0.31
+   },
+   "estado": "INFERRED",
+   "nota": "Remate superior de fecho, desenvolvimento 0,31 m. A placa impermeável de topo entra ao mesmo preço (a confirmar)."
+  },
+  "CHAPEU-PLATIBANDA": {
+   "produto": "Chapéu de platibanda em chapa lacada",
+   "hub": null,
+   "estado": "INFERRED",
+   "nota": "O chapéu da platibanda (chapa lacada RAL 7016) não está na lista do Hub; os remates da lista são RAL 8004 e 8023."
+  },
+  "CAIXILHARIA": {
+   "produto": "Caixilharia: janela, porta ou portão (por vão, com vidro e estore)",
+   "hub": null,
+   "estado": "INFERRED",
+   "nota": "A caixilharia (janelas, portas, portão, vidros e estores) não está na lista do Hub."
+  },
+  "REMATE-VAO-EXT": {
+   "produto": "Remate exterior dos vãos em alumínio quinado",
+   "hub": null,
+   "estado": "INFERRED",
+   "nota": "O remate de vão em alumínio quinado não está na lista do Hub."
+  },
+  "REMATE-VAO-INT": {
+   "produto": "Remate interior dos vãos em Pladur",
+   "hub": null,
+   "estado": "INFERRED",
+   "nota": "Forro do vão em Pladur: falta a profundidade do vão para passar a m²."
+  },
+  "TELHA-CER": {
+   "produto": "Telha cerâmica (pérgola)",
+   "hub": "4e6bc8b1-2a2f-4aea-91cd-e70e35a3a3db",
+   "unidade": "un",
+   "quantidade": {
+    "base": "area",
+    "divisor": null
+   },
+   "estado": "INFERRED",
+   "nota": "A telha está na lista ao preço por telha; falta o número de telhas por m² para fazer a conta."
+  },
+  "RESUMO": {
+   "produto": "Linha de resumo: o preço está nas linhas de cada vão",
+   "resumo": true,
+   "nota": "Resumo da caixilharia: o preço vai em cada vão."
+  }
+ }
+}

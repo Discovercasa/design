@@ -3,11 +3,13 @@ is the working repo for all the applications; this replaces the old publicar_des
 
 - public/build-your-house/ = Vite build of BOB/configurador/web (base /build-your-house/), behind the Design login
 - public/gerador/          = BOB/gerador/web + the Python engine it runs in the browser + three.js (self-hosted)
+- public/orcamentacao/     = BOB/orcamentacao/web + ligacoes.json (product code -> Hub material) + the Torres Vedras
+                             Listagem as the example (prices are read at run time with the Design session, never stored)
 
 Run after changing BOB/configurador/web, BOB/gerador/web or the engine (BOB/ferramentas/...), then commit and push
 as usual: Cloudflare Pages publishes public/ on every push to main.
 
-Usage:  python BOB/ferramentas/construir_site.py [--so configurador | --so gerador]
+Usage:  python BOB/ferramentas/construir_site.py [--so configurador | --so gerador | --so orcamentacao]
 Needs:  Node/npm (first run: npm ci in BOB/configurador/web).
 """
 import json, os, shutil, subprocess, sys
@@ -68,6 +70,17 @@ def gerador(web: Path):
     print(f"public/gerador/: page + {len(lista)} engine files")
 
 
+def orcamentacao():
+    destino = PUBLICO / "orcamentacao"
+    shutil.rmtree(destino, ignore_errors=True)
+    shutil.copytree(BOB / "orcamentacao" / "web", destino)
+    shutil.copy2(BOB / "orcamentacao" / "ligacoes.json", destino / "ligacoes.json")
+    (destino / "exemplos").mkdir()
+    shutil.copy2(BOB / "Construção Torres Vedras" / "documentos" / "D2503_Listagem_Material.csv", destino / "exemplos")
+    com_porta(destino / "index.html")
+    print("public/orcamentacao/: page + links + example")
+
+
 def main():
     if not (PUBLICO / "js" / "porta.js").exists():
         sys.exit("Not inside the Discovercasa/design repo (public/js/porta.js missing).")
@@ -77,6 +90,8 @@ def main():
         configurador(web)
     if so in (None, "gerador"):
         gerador(web)
+    if so in (None, "orcamentacao"):
+        orcamentacao()
     print("Done. Commit and push to main to publish (Cloudflare Pages).")
 
 

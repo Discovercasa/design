@@ -1,0 +1,61 @@
+/* Orçamentação: usa os tokens, a barra de topo, os botões, os chips e as tabelas do hub (/css/hub.css); aqui só o que é desta app. */
+
+.o-app { font-weight: 500; color: var(--tinta); padding-left: 16px; border-left: 1px solid var(--linha-forte); white-space: nowrap; }
+.o-espaco { flex: 1; }
+.o-main { max-width: 1120px; display: grid; gap: 24px; }
+.o-cabeca { display: grid; gap: 8px; margin-bottom: 8px; max-width: 68ch; }
+
+.o-cartao { background: var(--superficie); border: 1px solid var(--linha); border-radius: var(--r2); padding: 24px; display: grid; gap: 16px; min-width: 0; }
+.o-cartao-cabeca { display: grid; gap: 6px; }
+.o-cartao-cabeca p { font-size: 0.9375rem; }
+.o-acoes { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 16px; }
+.o-so { display: inline-flex; align-items: center; gap: 8px; font-size: 0.875rem; color: var(--tinta-2); cursor: pointer; }
+
+/* messages (orcamentacao.js: ajuda / erro / ocupado) */
+.ajuda { color: var(--tinta-2); font-size: 0.9375rem; margin: 0; }
+.erro { color: var(--erro); white-space: pre-wrap; font-size: 0.9375rem; margin: 0; }
+.ocupado { display: inline-flex; align-items: center; gap: 10px; }
+.ocupado::before { content: ""; width: 14px; height: 14px; flex: none; border-radius: 50%; border: 2px solid var(--linha-forte); border-top-color: var(--acao); animation: o-roda .8s linear infinite; }
+@keyframes o-roda { to { transform: rotate(360deg); } }
+:root[data-movimento="reduzido"] .ocupado::before { animation: none; }
+
+#largar {
+  display: grid; justify-items: center; gap: 8px; padding: 32px 16px; text-align: center; cursor: pointer;
+  border: 1.5px dashed var(--linha-forte); border-radius: var(--r2); background: var(--canvas);
+  transition: border-color .15s, background-color .15s;
+}
+#largar:hover, #largar:focus-visible, #largar.por-cima { border-color: var(--acao); background: var(--acao-suave); }
+#largar:focus-visible { outline: 2px solid var(--acao); outline-offset: 2px; }
+.o-largar-ic { width: 28px; height: 28px; fill: none; stroke: var(--tinta-2); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+
+/* the numbers on top reuse .resultado from the hub; the "missing" tile in the warning colour */
+#res-numeros { margin-top: 0; }
+#res-numeros .o-falta b { color: var(--aviso); }
+
+.o-cap { display: grid; gap: 8px; }
+.o-cap + .o-cap { margin-top: 16px; }
+.o-cap h3 { display: flex; justify-content: space-between; gap: 16px; font-size: 1rem; font-weight: 600; }
+.o-tabela td { overflow-wrap: anywhere; }
+.o-tabela .o-desc { min-width: 220px; max-width: 360px; }
+.o-tabela td.num { white-space: nowrap; }
+.o-tabela tr:not(:has(td.num)) td[colspan] { color: var(--tinta-2); }
+.chip.o-cod { font-size: 0.6875rem; font-variant-numeric: tabular-nums; letter-spacing: 0.01em; padding-block: 0; }
+.chip.o-estado { color: var(--tinta-2); }
+.chip.o-aviso { color: var(--tinta); background: var(--aviso-suave); border-color: color-mix(in oklch, var(--aviso) 45%, transparent); }
+.chip.o-ok { color: var(--ok); border-color: color-mix(in oklch, var(--ok) 40%, transparent); }
+tr.o-fora_do_hub .o-estado, tr.o-quantidade .o-estado, tr.o-unidade .o-estado, tr.o-sem_ligacao .o-estado,
+tr.o-sem_codigo .o-estado, tr.o-material_em_falta .o-estado { color: var(--tinta); background: var(--aviso-suave); border-color: transparent; }
+tr.o-resumo td { color: var(--tinta-3); }
+
+@media (max-width: 720px) {
+  .o-app, .o-so-largo { display: none; }
+  .o-cartao { padding: 16px; }
+  /* on a phone each line is a small card: description, the Hub material, then the numbers with their labels */
+  .o-tabela thead { display: none; }
+  .o-tabela, .o-tabela tbody, .o-tabela tr, .o-tabela td { display: block; }
+  .o-tabela tr { padding: 12px 0; border-bottom: 1px solid var(--linha); }
+  .o-tabela td { border: 0; padding: 2px 0; }
+  .o-tabela .o-desc { min-width: 0; max-width: none; }
+  .o-tabela td.num { display: inline-block; text-align: left; margin: 4px 16px 0 0; }
+  .o-tabela td.num[data-rotulo]::before { content: attr(data-rotulo); display: block; font-size: 0.75rem; color: var(--tinta-3); }
+}

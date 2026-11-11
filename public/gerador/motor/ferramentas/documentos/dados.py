@@ -192,11 +192,14 @@ class Casa:
     def camadas_totais(self):
         """Layer objects summed by (collection, layer): pieces, length, area, volume, purchase."""
         nomes = {c["id"]: c["nome"] for c in self.K["colecoes"]}
+        # the exterior finish options not chosen (camadas.py: "Opção B | …" hidden) are in the model to compare, not
+        # to buy: a configured house listed all three facades (2026-11-11)
+        ocultas = [c["id"] for c in self.K["colecoes"] if c.get("visivel") is False]
         tot = {}
         for o in self.objetos:
             pr = o["props"]
             cam = pr.get("camada")
-            if not cam:
+            if not cam or any(o["colecao"] == h or o["colecao"].startswith(h + ".") for h in ocultas):
                 continue
             k = (o["colecao"], cam)
             t = tot.setdefault(k, {"colecao": nomes.get(o["colecao"], o["colecao"]), "camada": cam, "n": 0, "comp": 0.0,

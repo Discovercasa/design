@@ -1,6 +1,16 @@
 [
   {
     "dia": "2026-11-11",
+    "titulo": "Orçamentação: o custo dos materiais com os preços do Hub",
+    "itens": [
+      "Página nova, Orçamentação (botão «Abrir a Orçamentação» no projeto): larga-se a Listagem de material do Gerador e cada linha recebe o preço mais baixo da lista do Hub, com a quantidade na unidade do preço, o fornecedor e a data do preço. Dá também o CSV com os preços.",
+      "Cada linha da Listagem traz agora um código de produto (ex.: OSB-09, FORRO-TREMOLO). O preço liga-se pelo código, não pelo nome: 27 produtos já estão ligados a um material do Hub; 16 ainda não estão na lista do Hub (caixilharia, caleiras, remates RAL 7016, cortiça, betonilha…) e a página diz porquê.",
+      "As ligações são propostas do Claude: a tabela «Ligações dos produtos ao Hub» mostra-as todas para a equipa confirmar.",
+      "Corrigido: a Listagem de uma casa configurada trazia as três fachadas (Tremolo, capoto e cortiça); agora só a escolhida."
+    ]
+  },
+  {
+    "dia": "2026-11-11",
     "titulo": "AR no Android pelo próprio Chrome",
     "itens": [
       "A causa: a app Google tem um erro desde outubro que fecha o Scene Viewer logo ao abrir, em muitos telemóveis (também com o exemplo da própria Google).",

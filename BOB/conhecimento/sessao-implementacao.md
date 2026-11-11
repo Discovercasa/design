@@ -47,6 +47,12 @@ pushing to `main` if unsure. Read the repo root `CLAUDE.md` (Design rules: Supab
   in the hub's Materiais tab (`#/materiais`), with a CSV download for offline tools. Supplier contacts stay in the Hub.
   Discount and VAT come as fractions (0.23 = 23 %; first send, 2026-11-10: 54 suppliers, 971 materials of which 74
   services, 1 090 prices; most materials have no category yet). The module also accepts 0–100.
+- Costing (Orçamentação, 2026-11-11): every Listagem line carries a stable product code (`ferramentas/documentos/codigos.py`,
+  CSV column `codigo`); `orcamentacao/ligacoes.json` links each code to a Hub material id (never names or prices: public
+  repo) with the price unit and how the line's quantity becomes it; `public/js/orcamento.js` prices a Listagem (cheapest
+  price with discount in that unit; every missing price says why); page `/orcamentacao/` (source `orcamentacao/web/`,
+  published by `construir_site.py`). Links are INFERRED until the team confirms them. Tests: `orcamentacao/tests/`,
+  `tests/orcamentacao.spec.mjs`. A new layer or product in the engine needs a code rule, or the reference test fails.
 
 ## 4. What the user said about the configurator (Product vision item 4)
 "like IKEA Builder / IKEA Kreativ" for DiscoverCasa houses: the client gives the m² → the foundation base appears →

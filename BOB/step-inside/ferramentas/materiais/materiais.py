@@ -18,6 +18,9 @@ ID = re.compile(r"^MAT_[A-Z0-9]+(?:_[A-Z0-9]+)*$")
 VARIANTE = re.compile(r"^[A-Z0-9]+(?:_[A-Z0-9]+)*$")
 COR = re.compile(r"^#[0-9A-Fa-f]{6}$")
 ESTADOS = ("CONFIRMED", "INFERRED", "MISSING", "NEEDS_HUMAN_REVIEW")
+# the Listagem product codes (ferramentas/documentos/codigos.py), each linked to the Hub's official materials list in
+# orcamentacao/ligacoes.json (2026-11-11): a mapping entry's "codigos" must be known there
+LIGACOES = Path(__file__).resolve().parents[3] / "orcamentacao" / "ligacoes.json"
 
 
 def ler(construtor="discovercasa"):
@@ -64,7 +67,11 @@ def validar(cat, mp=None):
                 erros.append(f"{i}__{v}: variante inválida")
             _pbr_ok({k: x for k, x in p.items() if k not in ("visivel", "nota")}, f"{i}__{v}", erros, completo=False)
     if mp:
+        codigos = set(json.loads(LIGACOES.read_text(encoding="utf-8"))["ligacoes"]) if LIGACOES.exists() else None
         for nome, e in mp["materiais"].items():
+            for c in e.get("codigos", []):
+                if codigos is not None and c not in codigos:
+                    erros.append(f"{mp['construtor']}: «{nome}»: código de produto {c!r} desconhecido (orcamentacao/ligacoes.json)")
             mestre, _, var = e["mat"].partition("__")
             m = next((x for x in cat["materiais"] if x["id"] == mestre), None)
             if not m:

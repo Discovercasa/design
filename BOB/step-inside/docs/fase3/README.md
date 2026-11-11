@@ -29,6 +29,11 @@ Um produto sem correspondência aparece no relatório do modelo de visita e pede
 - O utilizador vai associar a lista oficial de materiais durante a semana de 2026-11-09.
 - Confirmado em 2026-11-10: a lista oficial chega do Hub (tabelas `hub_*`, `#/materiais`); próximo passo: mapear cada MAT_* para um id de material do Hub.
 - Cada entrada passa então a CONFIRMED, com o produto oficial como fonte.
+- 2026-11-11: cada produto do mapeamento tem os seus `codigos` de produto da Listagem de material
+  (`ferramentas/documentos/codigos.py`); pelo ficheiro `orcamentacao/ligacoes.json`, cada código chega ao material da
+  lista oficial do Hub (27 de 43 produtos estão na lista; os outros dizem porquê). As entradas ficam INFERRED até a
+  equipa confirmar as ligações na página da Orçamentação (`/orcamentacao/`). A lista do Hub não traz cores: a cor de
+  cada produto continua a vir do sistema construtivo.
 
 ## Estado (2026-11-09)
 
