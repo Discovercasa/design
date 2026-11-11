@@ -39,6 +39,10 @@ pushing to `main` if unsure. Read the repo root `CLAUDE.md` (Design rules: Supab
   Blender steps; `construir_casa.py` runs them.
 - A complete house as reference: Torres Vedras (`modelos/casa/`, GLB `Casa_TorresVedras_Completa.glb`, material
   list `documentos/D2503_Listagem_Material.csv`).
+- Team chat (2026-11-11): the hub has a chat (migrations 0018–0021, table `mensagens`, private bucket `chat`). Claude talks
+  to the team there (conversation «Claude», written through the database, no account) and must read the replies in
+  `mensagens` at the start of a session. Awaiting Dinis's answers to hub task 169 items 1–11 → file into
+  `orcamento_parcelas` and the Orçamentação docs.
 - Prices: since 2026-11-10 the price list comes from the Hub (the company's other system) into the Design Supabase,
   tables `hub_fornecedores`, `hub_materiais`, `hub_material_precos` (price per supplier: unit, discount, VAT, lead time,
   transport, dimensions…) and `hub_material_precos_historico`, sent on working days at 6:00 Lisbon (migration

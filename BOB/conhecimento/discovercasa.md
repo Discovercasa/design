@@ -145,6 +145,14 @@ Why Claude learns the method; "vamos passo a passo" — an overall idea, then an
   0004/0005 applied to the Design Supabase after the user's "Sim, aplica"; Playwright 28/28 (simulated database). The user asked for design inspiration from
   GSAP skills, React Bits, taste-skill and impeccable, and a final Playwright check with feedback.
 - **Pending with the user**: confirm the name Step Inside (migrations applied and hub published 2026-11-05).
+- **Team chat (user 2026-11-11)**: icon left of Sugestões; direct and group conversations with text, files, images/videos
+  and audio, visible only to each conversation's members (migrations 0018–0021, private bucket `chat`). Claude has no
+  account: it writes through the database in a conversation marked claude = true («Claude») and reads the replies in
+  table `mensagens` — check it for replies at the start of each hub session. Also done 2026-11-11 (Geral suggestions #4, #5):
+  checkpoints/tasks start collapsed; project pages have tabs (Workflow, Documentos, Teste do AR, Pipeline e custos, Sobre).
+  Tabs are Claude's reading of #5: ask the user whether it is what they wanted.
+- **Awaiting Dinis (asked 2026-11-11 in the chat)**: answers to items 1–11 of hub task 169 (price parcels, missing Hub
+  materials, tiles/capoto conversions): file them into `orcamento_parcelas` (database only) and `orcamentacao/README.md`.
 
 ## App hierarchy (user 2026-11-06)
 Agreed from the user-supplied "HIERARQUIA_E_ROADMAP_INTEGRADO_DISCOVERCASA" document (see registo 2026-11-06):
