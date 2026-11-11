@@ -5,7 +5,20 @@
   "resumo": "Larga a planta de arquitetura e recebe os documentos de produção da obra.",
   "descricao": "Recebe a planta de arquitetura (DWFx ou PDF vetorial), encontra sozinho as plantas, monta a casa com o motor do Builder e devolve três documentos: Módulos, Cobertura e Listagem de material, com uma vista 3D. Corre tudo no browser.",
   "fase": "Protótipo publicado",
-  "fase_detalhe": "Online desde 2026-10-30. O documento Módulos está aprovado; Cobertura e Listagem de material à espera de revisão. Desde 2026-11-11 cada linha do CSV da Listagem traz um código de produto estável (a Orçamentação dá-lhe o preço) e a Listagem de uma casa configurada já só traz a fachada escolhida (trazia as três opções).",
+  "situacao": {
+    "dia": "2026-11-11",
+    "feito": [
+      "Online desde 30/10; documento Módulos aprovado.",
+      "Listagem de material com um código de produto em cada linha e só a fachada escolhida (11/11)."
+    ],
+    "agora": [
+      "Revisão da Discovercasa dos documentos Cobertura e Listagem de material."
+    ],
+    "falta": [
+      "Política de libertação: marcar documentos com erros bloqueantes e rascunhos não aprovados.",
+      "Ler DXF e IFC."
+    ]
+  },
   "objetivos": [
     "Documentos de produção para cada obra nova, sem trabalho manual.",
     "Ler os formatos que os projetistas nos mandam."

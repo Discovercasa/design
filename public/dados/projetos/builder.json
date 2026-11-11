@@ -5,7 +5,22 @@
   "resumo": "Do projeto de arquitetura à casa pronta: estrutura, camadas e quantidades, como nós construímos.",
   "descricao": "Assim que um cliente tem o projeto de arquitetura, a casa fica pronta no Builder: lê as plantas (DWFx ou PDF), monta a estrutura de madeira em módulos sobre a fundação de betão, acrescenta as camadas (OSB, membrana, isolamento, acabamentos, cobertura) e tira as quantidades. É aqui que vive o livro de regras do método Discovercasa.",
   "fase": "Em desenvolvimento",
-  "fase_detalhe": "Torres Vedras modelada a partir da arquitetura; falta comparar com os materiais realmente gastos.",
+  "situacao": {
+    "dia": "2026-11-11",
+    "feito": [
+      "Torres Vedras modelada a partir da arquitetura.",
+      "Verificação das madeiras sem Blender (choques, peças fora do sítio)."
+    ],
+    "agora": [
+      "Corrigir defeitos geométricos conhecidos: anel de amarração, prumos em pares, módulos interiores.",
+      "Validar com os materiais realmente gastos em Torres Vedras."
+    ],
+    "falta": [
+      "A listagem real de materiais de Torres Vedras (tarefa bloqueada até chegar).",
+      "Sobral (casas de dois pisos), quando o loteamento avançar.",
+      "Painel de definições dos módulos."
+    ]
+  },
   "objetivos": [
     "Modelar qualquer casa nova sem erros, já como fica no fim da obra.",
     "Quantidades perto do que a obra realmente gasta.",

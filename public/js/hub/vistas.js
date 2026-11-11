@@ -1,17 +1,22 @@
 // As páginas do hub, desenhadas a partir do estado E (dados.js). Os botões levam data-acao; o app.js trata dos cliques.
-import { E, projeto, nomeProjeto, checkpointsDe, tarefasDe, decisaoDaTarefa, decisoesDe, resumo, feitosDe, chave, documentosDe, anexosDe, notasDe, TIPOS_NOTA, podeMexerNota } from './dados.js';
+import { E, projeto, nomeProjeto, checkpointsDe, tarefasDe, decisaoDaTarefa, decisoesDe, resumo, feitosDe, chave, documentosDe, anexosDe, notasDe, TIPOS_NOTA, podeMexerNota,
+  marcadosEm, criticasDe } from './dados.js';
 import { img } from './imagens.js';
-import { ic, esc, dia, diaCurto, iniciais, euros } from './util.js';
+import { ic, esc, dia, diaCurto, iniciais, euros, ha } from './util.js';
+import { htmlCriticas } from './equipa.js';
 import { resumoInicio } from './social.js';
 import { blocoProjeto as blocoMateriais } from './materiais-vista.js';
 import { htmlDiagnostico } from './ar-android.js';
 
-const ROTULO = { por_fazer: 'Por fazer', em_curso: 'Em curso', bloqueada: 'Bloqueada', concluida: 'Concluída', concluido: 'Concluído' };
-// Sugestão do Geral (2026-11-10): «Quando se abre um projeto as tarefas e checkpoints estarem todos colapsados.»
-// Tudo começa fechado; abre-se com um clique (ou ao chegar por uma ligação a uma tarefa ou checkpoint).
+const ROTULO = { por_fazer: 'Por fazer', em_curso: 'Em curso', bloqueada: 'Bloqueada', por_aprovar: 'À espera de aprovação', concluida: 'Concluída', concluido: 'Concluído' };
+// Sugestão do Geral (2026-11-10) e o utilizador (2026-11-11): «Sempre que abrimos um separador do projeto quero que
+// tudo esteja collapsed, sem nenhuma tarefa visível e apenas o checkpoints» e «As informações ou descrições dentro de cada
+// tarefa devem estar collapsed também … um acordion». Cada vez que se abre um projeto ou uma aba, tudo volta a fechar
+// (app.js chama fecharTudo); dentro da visita fica aberto o que se abriu.
 export const abertos = new Set();   // checkpoints abertos (ficam abertos ao redesenhar)
-export const tarefasAbertas = new Set();   // tarefas com a descrição, imagens e notas à vista
+export const descricoesAbertas = new Set();   // tarefas com a descrição (acordeão) aberta
 export const notasAbertas = new Set();   // tarefas com a lista de notas aberta
+export function fecharTudo() { abertos.clear(); descricoesAbertas.clear(); notasAbertas.clear(); }
 
 const saudacao = () => { const h = new Date().getHours(); return h < 6 ? 'Boa noite' : h < 13 ? 'Bom dia' : h < 20 ? 'Boa tarde' : 'Boa noite'; };
 const novo = (tipo, id) => (E.novos.has(chave(tipo, id)) ? '<span class="chip novo">Novo</span>' : '');
@@ -45,7 +50,8 @@ export function inicio() {
     <div class="projetos" id="lista-projetos">
       ${E.projetos.map((p) => {
         const r = resumo(p.id);
-        return `<a class="projeto-linha" href="${linkProjeto(p.id)}">
+        const atencao = E.tarefas.filter((t) => t.projeto === p.id && ['por_aprovar', 'bloqueada'].includes(t.estado)).length + criticasDe(p.id).filter((c) => c.estado === 'nova').length;
+        return `<a class="projeto-linha" href="${linkProjeto(p.id)}" data-projeto="${p.id}" title="Ver as tarefas em curso e o que precisa de atenção">
           <div><h3>${esc(p.nome)}</h3><p class="suave pequeno">${esc(p.resumo)}</p></div>
           <div class="progresso">
             <div class="linha-topo"><span class="fase">${esc(p.fase)}</span><span class="num suave">${r.feitos} de ${r.total} checkpoints</span></div>
@@ -55,6 +61,7 @@ export function inicio() {
             ${r.atual ? `<span><span class="fraco">Agora</span> <b>${esc(r.atual.titulo)}</b></span>` : '<span class="fraco">Sem checkpoints em aberto</span>'}
             ${r.proxima ? `<span class="suave">Próximo passo: ${esc(r.proxima.titulo)}</span>` : ''}
             ${r.ultimo ? `<span class="fraco">Último feito a ${diaCurto(r.ultimo.dia)}: ${esc(r.ultimo.texto)}</span>` : ''}
+            ${atencao ? `<span class="chip atencao">${ic('atencao', 'ic-sm')}${atencao} ${atencao === 1 ? 'precisa' : 'precisam'} de atenção</span>` : ''}
           </div>
           <span class="seta">${ic('seta')}</span>
         </a>`;
@@ -98,11 +105,11 @@ export function inicio() {
 }
 
 // ---------------------------------------------------------------- página de um projeto
-// Sugestão do Geral (2026-11-10): «Arranjar uma forma de ser mais intuitivo navegar pelo HUB porque as secções estão muito
-// em cima umas das outras juntando muita informação enquanto se dá scroll. Simplificar.» A página de um projeto passou a
-// ter abas (#/projeto/<slug>/<aba>): uma secção de cada vez, em vez de tudo empilhado.
-export const ABAS = { workflow: 'Workflow', documentos: 'Documentos', 'teste-ar': 'Teste do AR', custos: 'Pipeline e custos', sobre: 'Sobre o projeto' };
-export const abasDe = (p) => Object.keys(ABAS).filter((k) => (k !== 'teste-ar' || p.teste_ar) && (k !== 'custos' || p.pipeline));
+// Sugestão do Geral (2026-11-10) «Simplificar» → abas (#/projeto/<slug>/<aba>). O utilizador (2026-11-11): «adiciona
+// apenas as abas pipeline e custos e sobre o projeto dentro da aba do workflow como sub-secções dela, tal como estava
+// anteriormente» — ficam Workflow, Documentos e (no Step Inside) Teste do AR.
+export const ABAS = { workflow: 'Workflow', documentos: 'Documentos', 'teste-ar': 'Teste do AR' };
+export const abasDe = (p) => Object.keys(ABAS).filter((k) => k !== 'teste-ar' || p.teste_ar);
 // a aba de uma rota: o nome da aba, ou a aba onde está o item (t-, cp- → Workflow; doc- → Documentos ou Teste do AR)
 export function abaDe(p, alvo) {
   if (!p) return 'workflow';
@@ -111,21 +118,29 @@ export function abaDe(p, alvo) {
   if (m) { const d = E.documentos.find((x) => x.id === Number(m[1])); return d && d.tipo === 'ar' && p.teste_ar ? 'teste-ar' : 'documentos'; }
   return 'workflow';
 }
+// o ponto de situação do projeto, por tópicos (o utilizador, 2026-11-11: «o objetivo de um ponto de situação é ser por
+// tópicos e preciso e claro»): public/dados/projetos/<id>.json → situacao { dia, feito, agora, falta }
+export function htmlSituacao(p, aberta = false) {
+  const s = p.situacao;
+  if (!s) return '';
+  const g = (titulo, l, cls) => (l && l.length ? `<div class="sit-grupo ${cls}"><h4>${titulo}</h4><ul>${l.map((x) => `<li>${esc(x)}</li>`).join('')}</ul></div>` : '');
+  return `<details class="situacao"${aberta ? ' open' : ''}><summary>Ponto de situação${s.dia ? ` <span class="fraco">· ${dia(s.dia)}</span>` : ''}</summary>
+    <div class="sit">${g('Feito', s.feito, 'feito')}${g('Agora', s.agora, 'agora')}${g('Falta ou à espera', s.falta, 'falta')}</div></details>`;
+}
 export function paginaProjeto(p, aba = 'workflow') {
   const abas = abasDe(p);
   if (!abas.includes(aba)) aba = 'workflow';
-  const cps = checkpointsDe(p.id);
   const r = resumo(p.id);
   const nDocs = documentosDe(p.id).filter((d) => d.tipo !== 'ar').length, nAR = documentosDe(p.id, 'ar').length;
   const conta = { workflow: r.total ? `${r.feitos}/${r.total}` : '', documentos: nDocs || '', 'teste-ar': nAR || '' };
-  const corpo = aba === 'documentos' ? documentos(p) : aba === 'teste-ar' ? testeAR(p) : aba === 'custos' ? pipeline(p) : aba === 'sobre' ? sobre(p) : workflow(p, cps, r);
+  const corpo = aba === 'documentos' ? documentos(p) : aba === 'teste-ar' ? testeAR(p) : workflow(p, r);
 
   return `
   <div class="projeto-cabeca">
     <div class="linha"><h1>${esc(p.nome)}</h1><span class="fase">${esc(p.fase)}</span></div>
     ${p.nome_antigo ? `<p class="fraco pequeno">Antes: ${esc(p.nome_antigo)}</p>` : ''}
     <p class="descricao">${esc(p.descricao)}</p>
-    ${p.fase_detalhe ? `<details class="situacao"><summary>Ponto de situação das fases</summary><p class="suave pequeno">${esc(p.fase_detalhe)}</p></details>` : ''}
+    ${htmlSituacao(p)}
   </div>
   ${p.app ? `<div class="cta-app"><div><h3>${esc(p.nome)} está online</h3><p>Lê primeiro em que ponto está e o próximo passo; depois abre a aplicação.</p></div>
     <a class="btn primario grande" href="${esc(p.app.url)}" target="_blank" rel="noopener" title="Abre noutra janela">${esc(p.app.rotulo)}${ic('abrir')}<span class="so-leitor"> (abre noutra janela)</span></a></div>` : ''}
@@ -133,49 +148,52 @@ export function paginaProjeto(p, aba = 'workflow') {
   <div class="aba-corpo">${corpo}</div>`;
 }
 
-function workflow(p, cps, r) {
+function workflow(p, r) {
+  const cps = checkpointsDe(p.id);
   const proximos = cps.filter((c) => c.estado !== 'concluido').flatMap((c) => tarefasDe(c.id).filter((t) => t.estado !== 'concluida')).slice(0, 4);
   const feitos = feitosDe(p.id);
   const decs = decisoesDe(p.id);
+  const cs = criticasDe(p.id), abertas = cs.filter((c) => c.estado !== 'resolvida');
   return `<div class="grelha-2">
     <div>
       <section aria-labelledby="t-workflow">
         <div class="seccao-cabeca">
-          <div><h2 id="t-workflow">Workflow</h2><p>Os checkpoints por ordem e as tarefas para chegar a cada um. <span class="num">${r.feitos} de ${r.total}</span> concluídos. Clica num checkpoint para ver as tarefas.</p></div>
+          <div><h2 id="t-workflow">Workflow</h2><p>Os checkpoints por ordem e as tarefas para chegar a cada um. <span class="num">${r.feitos} de ${r.total}</span> concluídos. Clica num checkpoint para ver as tarefas e numa tarefa para o ponto de situação e a conversa.</p></div>
           ${E.eu.editar ? `<div class="botoes"><button class="btn" type="button" data-acao="acrescentar" data-projeto="${p.id}" data-tipo="checkpoint">${ic('mais')}Checkpoint</button>
             <button class="btn" type="button" data-acao="acrescentar" data-projeto="${p.id}" data-tipo="tarefa"${cps.length ? '' : ' disabled title="Acrescenta primeiro um checkpoint"'}>${ic('mais')}Tarefa</button></div>` : ''}
         </div>
         ${cps.length ? `<ol class="workflow">${cps.map((c, i) => passo(c, i)).join('')}</ol>` : '<p class="vazio">Ainda sem checkpoints. Acrescenta o primeiro objetivo deste projeto.</p>'}
       </section>
+      ${p.pipeline ? pipeline(p) : ''}
     </div>
+
     <aside class="lateral">
       <section class="bloco-lateral"><h3>Próximos passos</h3>
-        ${proximos.length ? `<ul class="lista-simples">${proximos.map((t) => `<li>${ic('alvo', 'ic-sm')}<a href="#/projeto/${p.slug}/t-${t.id}" class="pequeno" style="color:inherit">${esc(t.titulo)}</a></li>`).join('')}</ul>` : '<p class="suave pequeno">Nada em aberto.</p>'}
+        ${proximos.length ? `<ul class="lista-simples">${proximos.map((t) => `<li>${ic('alvo', 'ic-sm')}<button type="button" class="ligacao-texto pequeno" data-acao="abrir-ficha" data-alvo="tarefa" data-id="${t.id}">${esc(t.titulo)}</button></li>`).join('')}</ul>` : '<p class="suave pequeno">Nada em aberto.</p>'}
       </section>
       ${pedidos(p)}
+      <section class="bloco-lateral" id="criticas" aria-labelledby="t-criticas"><h3 id="t-criticas">Críticas e comentários ${abertas.length ? `<span class="fraco num">${abertas.length}</span>` : ''}</h3>
+        <p class="fraco mini" style="margin:-6px 0 10px">Testaste e algo correu mal, não gostaste ou tens uma ideia? Diz aqui: a equipa vê e quem edita é avisado.</p>
+        <button class="btn pequeno" type="button" data-acao="nova-critica" data-projeto="${p.id}">${ic('comentario', 'ic-sm')}Deixar uma crítica ou comentário</button>
+        ${cs.length ? `<div style="margin-top:12px">${htmlCriticas(p.id)}</div>` : ''}
+      </section>
+      ${blocoMateriais(p)}
+      <section class="bloco-lateral"><h3>Objetivos</h3><ul class="lista-simples">${(p.objetivos || []).map((o) => `<li>${ic('certo', 'ic-sm')}<span class="pequeno">${esc(o)}</span></li>`).join('')}</ul></section>
+      <section class="bloco-lateral"><h3>Futuro</h3><ul class="lista-simples">${(p.futuro || []).map((o) => `<li>${ic('seta', 'ic-sm')}<span class="pequeno">${esc(o)}</span></li>`).join('')}</ul></section>
       <section class="bloco-lateral"><h3>Decisões</h3>
         ${decs.length ? `<ul class="lista-simples">${decs.map((d) => `<li><span>${pillDecisao(d)}</span><span class="pequeno">${esc(d.pergunta)}</span></li>`).join('')}</ul>` : '<p class="suave pequeno">Nenhuma decisão registada.</p>'}
       </section>
       <section class="bloco-lateral"><h3>Feito</h3>
         ${feitos.length ? `<ol class="tempo">${feitos.slice(0, 10).map((f) => `<li><time datetime="${f.dia}">${dia(f.dia)}</time><span class="pequeno">${esc(f.texto)}</span></li>`).join('')}</ol>` : '<p class="suave pequeno">Ainda nada concluído.</p>'}
       </section>
+      <section class="bloco-lateral"><h3>Ligações</h3>
+        <ul class="lista-simples">${(p.ligacoes || []).map((l) => `<li>${ic('ligacao', 'ic-sm')}<span class="pequeno"><a href="${linkProjeto(l.com)}">${esc(nomeProjeto(l.com))}</a>: ${esc(l.texto)}</span></li>`).join('')}</ul>
+        <p class="fraco mini" style="margin-top:10px">${esc(p.metodo || '')}</p>
+      </section>
+      <section class="bloco-lateral"><h3>Organização</h3>
+        <dl class="organizacao"><dt>Código</dt><dd>${esc(p.organizacao.codigo)}</dd><dt>Publicado</dt><dd>${esc(p.organizacao.publicado)}</dd><dt>Ramo</dt><dd>${esc(p.organizacao.ramo)}</dd></dl>
+      </section>
     </aside>
-  </div>`;
-}
-
-// o texto fixo do projeto (objetivos, futuro, ligações, organização) numa aba à parte
-function sobre(p) {
-  return `<div class="sobre-grelha">
-    <section class="bloco-lateral"><h3>Objetivos</h3><ul class="lista-simples">${(p.objetivos || []).map((o) => `<li>${ic('certo', 'ic-sm')}<span class="pequeno">${esc(o)}</span></li>`).join('')}</ul></section>
-    <section class="bloco-lateral"><h3>Futuro</h3><ul class="lista-simples">${(p.futuro || []).map((o) => `<li>${ic('seta', 'ic-sm')}<span class="pequeno">${esc(o)}</span></li>`).join('')}</ul></section>
-    ${blocoMateriais(p)}
-    <section class="bloco-lateral"><h3>Ligações</h3>
-      <ul class="lista-simples">${(p.ligacoes || []).map((l) => `<li>${ic('ligacao', 'ic-sm')}<span class="pequeno"><a href="${linkProjeto(l.com)}">${esc(nomeProjeto(l.com))}</a>: ${esc(l.texto)}</span></li>`).join('')}</ul>
-      <p class="fraco mini" style="margin-top:10px">${esc(p.metodo || '')}</p>
-    </section>
-    <section class="bloco-lateral"><h3>Organização</h3>
-      <dl class="organizacao"><dt>Código</dt><dd>${esc(p.organizacao.codigo)}</dd><dt>Publicado</dt><dd>${esc(p.organizacao.publicado)}</dd><dt>Ramo</dt><dd>${esc(p.organizacao.ramo)}</dd></dl>
-    </section>
   </div>`;
 }
 
@@ -198,6 +216,7 @@ function passo(c, i) {
       </button>
       <div class="passo-detalhe" id="cpd-${c.id}"${aberto ? '' : ' hidden'}>
         ${c.descricao ? `<p class="passo-descricao">${esc(c.descricao)}</p>` : ''}
+        <p class="passo-ficha"><button type="button" class="btn pequeno texto" data-acao="abrir-ficha" data-alvo="checkpoint" data-id="${c.id}">${ic('comentario', 'ic-sm')}Ponto de situação e conversa do checkpoint${c.situacao_em ? ` · ${ha(c.situacao_em)}` : ''}</button></p>
         ${galeria('checkpoint', c.id)}
         ${c.criterio_saida ? `<p class="criterio">${ic('alvo', 'ic-sm')}<span><b>Critério de saída:</b> ${esc(c.criterio_saida)}</span></p>` : ''}
         <div class="passo-tarefas">
@@ -218,29 +237,26 @@ function passo(c, i) {
 export function htmlTarefa(t) {
   const d = decisaoDaTarefa(t.id);
   const posso = E.eu.editar || t.responsavel_id === E.eu.id;
-  const nImagens = anexosDe('tarefa', t.id).length, porResolver = t.revisao ? notasDe(t.id).filter((n) => !n.resolvida).length : 0;
-  const detalhe = !!(t.descricao || nImagens || t.revisao), aberta = tarefasAbertas.has(t.id);
-  return `<div class="tarefa ${t.estado}${aberta ? ' aberta' : ''}" id="t-${t.id}">
+  const nImagens = anexosDe('tarefa', t.id).length;
+  const marcados = marcadosEm(t.id);
+  return `<div class="tarefa ${t.estado}" id="t-${t.id}">
     <input type="checkbox" class="visto" data-acao="concluir" data-id="${t.id}" aria-label="Concluída: ${esc(t.titulo)}"${t.estado === 'concluida' ? ' checked' : ''}${posso ? '' : ' disabled'}>
     <div>
-      ${detalhe ? `<button type="button" class="tarefa-topo" data-acao="alternar-tarefa" data-id="${t.id}" aria-expanded="${aberta}" aria-controls="td-${t.id}"><span class="titulo">${esc(t.titulo)} ${novo('tarefa', t.id)}</span>${ic('baixo', 'ic-sm chev')}</button>`
-        : `<p class="titulo">${esc(t.titulo)} ${novo('tarefa', t.id)}</p>`}
+      <button type="button" class="tarefa-titulo" data-acao="abrir-ficha" data-alvo="tarefa" data-id="${t.id}" title="Ponto de situação, pessoas e conversa"><span class="titulo">${esc(t.titulo)}</span></button> ${novo('tarefa', t.id)}
       <div class="meta">
         <span class="estado ${t.estado}">${ROTULO[t.estado]}${t.concluida_em ? ' a ' + diaCurto(t.concluida_em) : ''}</span>
         ${t.responsavel_id ? `<span class="chip"><span class="avatar pequeno">${esc(iniciais(t.responsavel_nome))}</span>${esc(t.responsavel_nome)}</span>` : ''}
+        ${marcados.length ? `<span class="pessoas" title="Marcados: ${esc(marcados.map((m) => (E.perfis.find((p) => p.id === m.utilizador_id) || {}).nome || 'Alguém').join(', '))}">${marcados.slice(0, 4).map((m) => `<span class="avatar pequeno">${esc(iniciais((E.perfis.find((p) => p.id === m.utilizador_id) || {}).nome))}</span>`).join('')}</span>` : ''}
+        ${t.situacao_em ? `<span class="chip">${ic('info', 'ic-sm')}Ponto de situação ${ha(t.situacao_em)}</span>` : ''}
         ${appChip(t.app_sugerida)}${custoChip(t.custo)}
-        ${!aberta && nImagens ? `<span class="fraco">${ic('imagem', 'ic-sm')} ${nImagens}</span>` : ''}
-        ${!aberta && porResolver ? `<span class="chip">${ic('comentario', 'ic-sm')}${porResolver} ${porResolver === 1 ? 'nota por resolver' : 'notas por resolver'}</span>` : ''}
       </div>
-      ${detalhe ? `<div class="tarefa-detalhe" id="td-${t.id}"${aberta ? '' : ' hidden'}>
-        ${t.descricao ? `<p class="descricao">${esc(t.descricao)}</p>` : ''}
-        ${galeria('tarefa', t.id)}
-        ${t.revisao ? notas(t) : ''}
-      </div>` : ''}
+      ${t.descricao || nImagens ? `<details class="tarefa-desc" data-desc="${t.id}"${descricoesAbertas.has(t.id) ? ' open' : ''}><summary>${ic('baixo', 'ic-sm chev')}Descrição${nImagens ? ` · ${nImagens} ${nImagens === 1 ? 'imagem' : 'imagens'}` : ''}</summary>
+        ${t.descricao ? `<p class="descricao">${esc(t.descricao)}</p>` : ''}${galeria('tarefa', t.id)}</details>` : ''}
+      ${t.revisao ? notas(t) : ''}
     </div>
     <div class="direita">
       ${pillDecisao(d)}
-      ${posso ? `<select class="seletor" data-acao="estado-tarefa" data-id="${t.id}" aria-label="Estado da tarefa">${['por_fazer', 'em_curso', 'bloqueada', 'concluida'].map((e) => `<option value="${e}"${e === t.estado ? ' selected' : ''}>${ROTULO[e]}</option>`).join('')}</select>` : ''}
+      ${posso ? `<select class="seletor" data-acao="estado-tarefa" data-id="${t.id}" aria-label="Estado da tarefa">${['por_fazer', 'em_curso', 'bloqueada', 'por_aprovar', 'concluida'].map((e) => `<option value="${e}"${e === t.estado ? ' selected' : ''}>${ROTULO[e]}</option>`).join('')}</select>` : ''}
       ${E.eu.editar ? `<button class="icone-botao" type="button" data-acao="editar-tarefa" data-id="${t.id}" aria-label="Editar tarefa" title="Editar">${ic('editar', 'ic-sm')}</button>` : ''}
     </div>
   </div>`;
@@ -455,6 +471,7 @@ export function definicoes(podeInstalar) {
     </form>
     <div class="definicao"><div><h3>Tema</h3><p>Claro, escuro ou o do sistema.</p></div>${seg('tema', tema, [['sistema', 'Sistema'], ['light', 'Claro'], ['dark', 'Escuro']])}</div>
     <div class="definicao"><div><h3>Animações</h3><p>Reduzidas: o hub muda sem movimento.</p></div>${seg('movimento', movimento, [['normal', 'Normais'], ['reduzido', 'Reduzidas']])}</div>
+    <div class="definicao"><div><h3>Avisos do Log</h3><p>Ao abrir o hub, um aviso de lado com o que mudou desde a tua última visita.</p></div>${seg('avisos-registo', E.perfil && E.perfil.avisos_registo === false ? '0' : '1', [['1', 'Ligados'], ['0', 'Desligados']])}</div>
     <div class="definicao"><div><h3>Acesso</h3><p>Decidido no Hub (permissão "Design").</p></div><span class="fase">${E.eu.editar ? 'Editar' : 'Ver'}</span></div>
     ${podeInstalar ? `<div class="definicao"><div><h3>Instalar como app</h3><p>Abre o Design como uma aplicação neste aparelho.</p></div><button class="btn" type="button" data-acao="instalar">${ic('instalar', 'ic-sm')}Instalar</button></div>` : ''}
   </div>`;

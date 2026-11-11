@@ -3,7 +3,7 @@ import { E, projeto, nomeProjeto, checkpointsDe, naoLidas, anexosDe, ehPorVer, p
 import { img } from './imagens.js';
 import { ic, esc, dia, ha, iniciais, abrirDialogo } from './util.js';
 
-const ESTADOS_T = { por_fazer: 'Por fazer', em_curso: 'Em curso', bloqueada: 'Bloqueada', concluida: 'Concluída' };
+const ESTADOS_T = { por_fazer: 'Por fazer', em_curso: 'Em curso', bloqueada: 'Bloqueada', por_aprovar: 'À espera de aprovação', concluida: 'Concluída' };
 const ESTADOS_C = { por_fazer: 'Por fazer', em_curso: 'Em curso', concluido: 'Concluído' };
 const opcoes = (mapa, atual) => Object.entries(mapa).map(([k, v]) => `<option value="${k}"${k === atual ? ' selected' : ''}>${esc(v)}</option>`).join('');
 const opcoesProjetos = (atual, vazio) => (vazio ? `<option value="">${vazio}</option>` : '') + E.projetos.map((p) => `<option value="${p.id}"${p.id === atual ? ' selected' : ''}>${esc(p.nome)}</option>`).join('');
@@ -16,14 +16,14 @@ export function htmlNotificacoes() {
   const n_ = naoLidas().length;
   return `<div class="pop-cabeca"><div><h2>Notificações</h2><p class="fraco mini" data-por-ver>${n_ ? `${n_} por ver` : 'Tudo visto'}</p></div>${n_ ? '<button class="btn pequeno texto" type="button" data-acao="ler-todas">Marcar todas como vistas</button>' : ''}</div>
     <div class="pop-corpo">${E.notificacoes.length ? E.notificacoes.map(linhaNotif).join('')
-      : '<p class="suave pequeno" style="padding:16px">Sem notificações. Aparecem aqui quando alguém atribui, muda ou conclui uma tarefa.</p>'}</div>
+      : '<p class="suave pequeno" style="padding:16px">Sem notificações. Aparecem aqui o que tem impacto (checkpoint ou tarefa concluída, decisões, críticas) e o que é para ti (foste marcado, atribuíram-te uma tarefa, pedem-te um ponto de situação ou uma aprovação). Todas as outras mudanças estão no Log, nas Sugestões.</p>'}</div>
     ${E.notificacoes.some((n) => !propria(n)) ? `<p class="pop-dica fraco mini">${matchMedia('(hover: hover)').matches ? 'Ficam vistas quando lhes passas o rato, as abres ou clicas no ponto' : 'Ficam vistas quando as abres ou tocas no ponto'} (o ponto também as volta a pôr por ver).</p>` : ''}`;
 }
 export function linhaNotif(n) {
   const por = ehPorVer(n), minha = propria(n);
   return `<div class="notif${por ? ' nao-lida' : ''}${minha ? ' propria' : ''}" data-notif="${n.id}">
     <button type="button" class="notif-abrir" data-acao="ir-notif" data-notif="${n.id}" data-projeto="${esc(n.projeto || '')}" data-ref="${esc(n.ref_tipo || '')}" data-id="${n.ref_id || ''}">
-      <p>${esc(n.texto)}</p><p class="quando">${esc(n.projeto ? nomeProjeto(n.projeto) : n.ref_tipo === 'sugestao' ? 'Sugestões' : n.ref_tipo === 'conversa' ? 'Chat' : 'Redes sociais')} · ${ha(n.criada_em)}${minha ? ' · feita por ti' : ''}${por ? '<span class="so-leitor"> · por ver</span>' : ''}</p></button>
+      <p>${esc(n.texto)}</p><p class="quando">${esc(n.projeto ? nomeProjeto(n.projeto) : n.ref_tipo === 'sugestao' ? 'Sugestões' : n.ref_tipo === 'conversa' ? 'Hub' : 'Redes sociais')} · ${ha(n.criada_em)}${minha ? ' · feita por ti' : ''}${por ? '<span class="so-leitor"> · por ver</span>' : ''}</p></button>
     ${minha || (!por && !E.lidas.has(n.id)) ? '' : `<button type="button" class="notif-marca" data-acao="alternar-lida" data-id="${n.id}" aria-label="${por ? 'Marcar como vista' : 'Marcar como por ver'}" title="${por ? 'Marcar como vista' : 'Marcar como por ver'}"><span class="ponto" aria-hidden="true"></span></button>`}
   </div>`;
 }
@@ -240,10 +240,10 @@ export function dlgNovaDecisao(tarefa, projetoId) {
 const FERRAMENTAS = { geral: 'Geral (o hub)', gerador: 'Gerador de documentos', builder: 'Builder', orcamentacao: 'Orçamentação', build_your_house: 'Build Your House', plataforma_cliente: 'Step Inside' };
 const ESTADOS_S = { nova: 'Nova', em_analise: 'Em análise', feita: 'Concluída', recusada: 'Recusada' };
 const COR_S = { nova: 'por_fazer', em_analise: 'em_curso', feita: 'concluida', recusada: 'bloqueada' };
-export function htmlGaveta(sep, sugestoes, abertas, erro) {
+export function htmlGaveta(sep, sugestoes, abertas, erro, log = '') {
   const podeApagar = (g) => E.eu.editar || (g.autor_id === E.eu.id && !g.na_checklist);
   const lista = sep === 'checklist' ? sugestoes.filter((g) => g.na_checklist).sort((a, b) => new Date(a.checklist_em) - new Date(b.checklist_em)) : sugestoes;
-  const corpo = erro ? `<p class="erro-msg">Não consegui carregar as sugestões: ${esc(erro)}</p>` : sep === 'checklist'
+  const corpo = sep === 'log' ? log : erro ? `<p class="erro-msg">Não consegui carregar as sugestões: ${esc(erro)}</p>` : sep === 'checklist'
     ? (lista.length ? `<p class="suave pequeno">As sugestões que escolhemos fazer. <span class="num">${lista.filter((g) => g.estado === 'feita').length} de ${lista.length}</span> concluídas.</p>` + lista.map((g) => `<div class="check">
         <input type="checkbox" class="visto" data-acao="sug-concluir" data-id="${g.id}" aria-label="Concluída"${g.estado === 'feita' ? ' checked' : ''}${E.eu.editar ? '' : ' disabled'}>
         <div><p class="pequeno" style="white-space:pre-wrap">${esc(g.texto)}</p><div class="meta" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;align-items:center">
@@ -269,10 +269,11 @@ export function htmlGaveta(sep, sugestoes, abertas, erro) {
             <form data-form="comentario" data-id="${g.id}" style="display:flex;gap:8px"><input class="campo" name="texto" maxlength="2000" required placeholder="Escreve um comentário…" aria-label="Comentário"><button class="btn pequeno" type="submit">Comentar</button></form></div>` : ''}
         </article>`;
       }).join('') : '<p class="vazio">Ainda não há sugestões. Sê o primeiro.</p>'}`;
-  return `<div class="gaveta-conteudo">${cabeca('Sugestões', 'Qualquer pessoa pode sugerir mudanças ao hub do Design; toda a equipa vê e comenta.')}
+  return `<div class="gaveta-conteudo">${cabeca(sep === 'log' ? 'Log' : 'Sugestões', sep === 'log' ? 'Tudo o que mudou no hub, com o pormenor; as notificações ficam só para o que tem impacto.' : 'Qualquer pessoa pode sugerir mudanças ao hub do Design; toda a equipa vê e comenta.')}
     <div class="separadores" role="tablist">
-      <button type="button" role="tab" data-acao="sug-sep" data-valor="sugestoes" aria-selected="${sep !== 'checklist'}">Sugestões</button>
+      <button type="button" role="tab" data-acao="sug-sep" data-valor="sugestoes" aria-selected="${sep !== 'checklist' && sep !== 'log'}">Sugestões</button>
       <button type="button" role="tab" data-acao="sug-sep" data-valor="checklist" aria-selected="${sep === 'checklist'}">Checklist</button>
+      <button type="button" role="tab" data-acao="sug-sep" data-valor="log" aria-selected="${sep === 'log'}">Log</button>
     </div>
     <div class="gaveta-corpo">${corpo}</div></div>`;
 }

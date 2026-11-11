@@ -20,7 +20,8 @@ uma página (`#/projeto/<slug>`), um ficheiro de dados, uma pasta de código e u
 - **Uma tarefa mexe só na pasta do seu projeto.** O que é partilhado (o motor em `BOB/ferramentas/`, `BOB/conhecimento/`,
   `public/js/design-core.js`) muda num ramo próprio e diz-se na página dos projetos afetados.
 - **O id do projeto nunca muda** (é a chave na base de dados); o nome que aparece pode mudar no JSON e na tabela `projetos`.
-- **O texto fixo de um projeto** (o que é, objetivos, fase, futuro, ligações, organização) está no seu JSON: atualiza-o
+- **O texto fixo de um projeto** (o que é, objetivos, fase, ponto de situação por tópicos em `situacao` {dia, feito,
+  agora, falta}, futuro, ligações, organização) está no seu JSON: atualiza-o
   no mesmo commit que muda o projeto. **O que muda todos os dias** (checkpoints, tarefas, decisões) vive no Supabase e
   edita-se no próprio hub.
 - **Aplicações independentes**: cada uma funciona sozinha. Só se usam juntas quando isso poupa tempo e tokens; nesse caso

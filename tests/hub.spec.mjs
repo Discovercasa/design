@@ -71,24 +71,25 @@ test('página do Build Your House: primeiro o estado, depois o botão para a app
   await expect(passo.locator('.passo-topo')).toHaveAttribute('aria-expanded', 'true');
   await expect(passo.locator('.tarefa')).toHaveCount(4);
   await expect(passo.locator('.decisao-pill')).toHaveCount(2);
-  // as tarefas também: a descrição, as imagens e as notas abrem com um clique no título
-  const t = passo.locator('.tarefa', { has: page.locator('.tarefa-topo') }).first();
+  // a descrição de cada tarefa é um acordeão fechado (utilizador, 2026-11-11)
+  const t = passo.locator('.tarefa', { has: page.locator('details.tarefa-desc') }).first();
   await expect(t.locator('.descricao')).toBeHidden();
-  await t.locator('.tarefa-topo').click();
+  await t.locator('details.tarefa-desc summary').click();
   await expect(t.locator('.descricao')).toBeVisible();
-  await expect(t.locator('.tarefa-topo')).toHaveAttribute('aria-expanded', 'true');
   await expect(page.locator('.passo').nth(5).locator('.chip.app').first()).toContainText('Sugerido: usar Orçamentação');
-  await captura(page, 'build-your-house');
-  // sugestão do Geral (2026-11-11): abas, uma secção de cada vez; o voltar do browser volta à aba anterior
-  const abas = page.getByRole('navigation', { name: 'Secções do projeto' });
-  await expect(abas.getByRole('link')).toHaveText([/Workflow\s*3\/15/, /Documentos/, 'Sobre o projeto']);
-  await abas.getByRole('link', { name: 'Sobre o projeto' }).click();
-  await expect(page).toHaveURL(/#\/projeto\/build-your-house\/sobre$/);
+  // «Sobre o projeto» voltou para dentro do Workflow (objetivos, futuro, ligações, organização na coluna ao lado)
   await expect(page.locator('.organizacao')).toContainText('build-your-house/<tarefa>');
+  await captura(page, 'build-your-house');
+  // abas: Workflow e Documentos (no Step Inside também Teste do AR); voltar a abrir uma aba fecha tudo outra vez
+  const abas = page.getByRole('navigation', { name: 'Secções do projeto' });
+  await expect(abas.getByRole('link')).toHaveText([/Workflow\s*3\/15/, /Documentos/]);
+  await abas.getByRole('link', { name: /Documentos/ }).click();
+  await expect(page).toHaveURL(/#\/projeto\/build-your-house\/documentos$/);
   await expect(page.locator('.workflow')).toHaveCount(0);
   await page.goBack();
   await expect(page.locator('.workflow')).toBeVisible();
   await expect(abas.getByRole('link', { name: /Workflow/ })).toHaveAttribute('aria-current', 'page');
+  await expect(page.locator('.passo-topo[aria-expanded="true"]')).toHaveCount(0);
 });
 
 test('Step Inside: novo nome, pipeline com custos e calculadora', async ({ page }) => {
@@ -96,8 +97,8 @@ test('Step Inside: novo nome, pipeline com custos e calculadora', async ({ page 
   await expect(page.getByRole('heading', { level: 1, name: 'Step Inside' })).toBeVisible();
   await expect(page.getByText('Antes: Plataforma do cliente (VR/AR)')).toBeVisible();
   await expect(page.locator('.passo')).toHaveCount(10);
-  await page.getByRole('navigation', { name: 'Secções do projeto' }).getByRole('link', { name: 'Pipeline e custos' }).click();
-  await expect(page).toHaveURL(/#\/projeto\/step-inside\/custos$/);
+  // a pipeline e a calculadora voltaram para baixo do Workflow (utilizador, 2026-11-11)
+  await expect(page.getByRole('navigation', { name: 'Secções do projeto' }).getByRole('link')).toHaveText([/Workflow/, /Documentos/, /Teste do AR/]);
   const etapas = page.locator('.etapa');
   await expect(etapas).toHaveCount(10);
   await expect(etapas.nth(7)).toContainText('0,79 €/h');
@@ -157,8 +158,9 @@ test('checkpoints e tarefas: acrescentar no Início e no projeto, concluir com a
   const hoje = new Date().toLocaleDateString('pt-PT', { day: 'numeric', month: 'short' });
   await expect(tarefa.locator('.estado')).toHaveText(`Concluída a ${hoje}`);
   await expect(page.locator('.aviso').first()).toContainText('Tarefa concluída');
-  const tipos = await db(page, () => window.__fake.db.notificacoes.map((x) => x.tipo));
-  expect(tipos).toEqual(['checkpoint_novo', 'tarefa_nova', 'tarefa_concluida']);
+  // tudo vai para o Log; só a tarefa concluída (impacto) é notificação (utilizador, 2026-11-11)
+  expect(await db(page, () => window.__fake.db.registo.map((x) => x.tipo))).toEqual(['checkpoint_novo', 'tarefa_nova', 'tarefa_concluida']);
+  expect(await db(page, () => window.__fake.db.notificacoes.map((x) => x.tipo))).toEqual(['tarefa_concluida']);
 });
 
 test('nova decisão numa tarefa, com opções, vantagens, desvantagens e custo', async ({ page }) => {
@@ -196,24 +198,25 @@ test('notificações: outra pessoa conclui uma tarefa → aviso, contador e list
   await captura(page, 'notificacoes');
   await pop.getByRole('button', { name: 'Marcar todas como vistas' }).click();
   await expect(page.locator('#contador')).toBeHidden();
+  // a notificação abre o ecrã da tarefa (utilizador, 2026-11-11: «quando clicadas levam para a tarefa»)
   await pop.locator('.notif-abrir').first().click();
-  await expect(page).toHaveURL(/#\/projeto\/step-inside\/t-72$/);
-  await expect(page.locator('#t-72')).toBeVisible();
+  await expect(page.locator('#ficha').getByRole('heading', { name: 'Testar primeiro em rede local' })).toBeVisible();
 });
 
 test('pop-up "Novo" na primeira vez que vejo uma tarefa acrescentada por outra pessoa', async ({ page }) => {
   await abrir(page, { rota: '/#/projeto/builder' });
   await db(page, () => window.__fake.comoOutro((x) => x.tarefas.insert({ checkpoint_id: 10, titulo: 'Pedir a listagem real por email', projeto: 'builder' })));
   await atualizar(page);
-  const aviso = page.locator('.aviso', { hasText: 'Nova tarefa' });
-  await expect(aviso).toContainText('«Pedir a listagem real por email» · por Colega Teste');
+  // o aviso de lado vem do Log (2026-11-11)
+  const aviso = page.locator('.aviso', { hasText: 'acrescentou a tarefa' });
+  await expect(aviso).toContainText('Colega Teste acrescentou a tarefa «Pedir a listagem real por email»');
   await page.locator('#cp-10 .passo-topo').click();
   await expect(page.locator('.tarefa', { hasText: 'Pedir a listagem real por email' }).locator('.chip.novo')).toBeVisible();
   const vistos = await db(page, () => window.__fake.db.vistos.length);
   expect(vistos).toBe(1);   // não volta a aparecer
   await captura(page, 'novo');
   await atualizar(page);
-  await expect(page.locator('.aviso', { hasText: 'Nova tarefa' })).toHaveCount(1);
+  await expect(page.locator('.aviso', { hasText: 'acrescentou a tarefa' })).toHaveCount(1);
 });
 
 test('sugestões: enviar, comentar, pôr na checklist', async ({ page }) => {
@@ -261,7 +264,7 @@ test('perfil: área pessoal, definições (nome, tema), novidades e sair', async
   await captura(page, 'inicio-escuro');
   await page.getByRole('button', { name: 'Perfil' }).click();
   await page.locator('#pop-perfil').getByRole('menuitem', { name: /Novidades/ }).click();
-  await expect(page.locator('.novidade').first()).toContainText('Chat da equipa e um hub mais simples');
+  await expect(page.locator('.novidade').first()).toContainText('Trabalho em equipa: o ecrã de cada tarefa, críticas e o Log');
   await expect(page.locator('.novidade').nth(1)).toContainText('Orçamentação: o preço final parcela a parcela');
   await page.getByRole('button', { name: 'Perfil' }).click();
   await page.locator('#pop-perfil').getByRole('menuitem', { name: 'Sair' }).click();
@@ -305,11 +308,11 @@ test('logótipo: volta ao Início e atualiza o hub', async ({ page }) => {
   await page.getByRole('link', { name: /Discovercasa Design/ }).click();
   await expect(page).toHaveURL(/#\/$/);
   await expect(page.locator('.projeto-linha').nth(2)).toContainText('0 de 4 checkpoints');   // dado novo, sem recarregar a página
-  await expect(page.locator('.aviso', { hasText: 'Novo checkpoint' })).toContainText('Escolher o software de faturação');
+  await expect(page.locator('.aviso', { hasText: 'acrescentou o checkpoint' })).toContainText('Escolher o software de faturação');
   // já no Início: clicar outra vez também atualiza
   await db(page, () => window.__fake.comoOutro((x) => x.tarefas.update({ estado: 'concluida' }).eq('id', 36)));
   await page.getByRole('link', { name: /Discovercasa Design/ }).click();
-  await expect(page.locator('#contador')).toHaveText('2');   // o checkpoint novo e a tarefa concluída
+  await expect(page.locator('#contador')).toHaveText('1');   // a tarefa concluída (o checkpoint novo só vai para o Log)
   await expect(page.locator('.tempo li').first()).toContainText('Rever o documento Cobertura');
 });
 
@@ -423,7 +426,7 @@ test('em direto: o que outra pessoa muda aparece sem recarregar, em todos os sí
   // outra pessoa acrescenta uma tarefa ao Build Your House que sugere usar o Builder
   await db(page, () => window.__fake.comoOutro((x) => x.tarefas.insert({ checkpoint_id: 4, titulo: 'Rever o divisor de módulos', app_sugerida: 'builder' })));
   await expect(page.locator('.bloco-lateral', { hasText: 'Pedidos de outros projetos' })).toContainText('Rever o divisor de módulos');   // sem visibilitychange
-  await expect(page.locator('.aviso', { hasText: 'Nova tarefa' })).toBeVisible();
+  await expect(page.locator('.aviso', { hasText: 'acrescentou a tarefa' })).toBeVisible();
   // e no Início também
   await page.getByRole('link', { name: 'Início', exact: true }).click();
   await db(page, () => window.__fake.comoOutro((x) => x.checkpoints.update({ estado: 'concluido' }).eq('id', 4)));
@@ -461,13 +464,14 @@ test('versão nova publicada: um aviso deixa recarregar a página', async ({ pag
 test('projeto: o ponto de situação das fases fica fechado num acordeão', async ({ page }) => {
   // pedido de 2026-11-09: «este texto que ocupa demasiado espaço marca-o como aquilo que ele representa num acordion»
   await abrir(page, { rota: '/#/projeto/step-inside' });
+  // 2026-11-11: «o objetivo de um ponto de situação é ser por tópicos e preciso e claro»
   const sit = page.locator('.projeto-cabeca details.situacao');
-  await expect(sit.locator('summary')).toHaveText('Ponto de situação das fases');
+  await expect(sit.locator('summary')).toContainText('Ponto de situação');
   await expect(sit).not.toHaveAttribute('open', '');
-  await expect(sit.locator('p')).toBeHidden();
+  await expect(sit.locator('.sit')).toBeHidden();
   await sit.locator('summary').click();
-  await expect(sit.locator('p')).toBeVisible();
-  await expect(sit.locator('p')).toContainText('Fase 7');
+  await expect(sit.locator('.sit-grupo h4')).toHaveText(['Feito', 'Agora', 'Falta ou à espera']);
+  await expect(sit.locator('.sit-grupo.feito li').last()).toContainText('Fase 7');
 });
 
 // Materiais vindos do Hub (migração 0016, 2026-11-10): só de consulta, o Hub envia-os nos dias úteis às 6h

@@ -211,6 +211,8 @@ main { max-width: 1280px; margin: 0 auto; padding: 40px 24px 96px; }
 .estado.em_curso::before { border-color: var(--aviso); background: var(--aviso); }
 .estado.concluida::before, .estado.concluido::before { border-color: var(--ok); background: var(--ok); }
 .estado.bloqueada::before { border-color: var(--erro); background: var(--erro); }
+.estado.por_aprovar { color: var(--acao); }
+.estado.por_aprovar::before { border-color: var(--acao); background: var(--acao); }
 .chip {
   display: inline-flex; align-items: center; gap: 6px; padding: 3px 9px; border-radius: 99px; font-size: 0.8125rem;
   border: 1px solid var(--linha); color: var(--tinta-2); background: var(--superficie); white-space: nowrap; text-decoration: none;

@@ -159,8 +159,8 @@ test('comentários de aprovação: os do Excel, um novo sobre uma foto, resolver
   await expect(page.locator('.pe-foto').nth(1).locator('.pe-coment')).toBeVisible();
   await c.locator('li:not(.resolvido)').getByRole('button', { name: 'Resolvido' }).click();
   await expect(c.locator('li.resolvido')).toHaveCount(3);
-  const n = await db(page, () => window.__fake.db.notificacoes.filter((x) => x.tipo === 'post_comentario').length);
-  expect(n).toBe(1);
+  const n = await db(page, () => window.__fake.db.registo.filter((x) => x.tipo === 'post_comentario').length);
+  expect(n).toBe(1);   // vai para o Log (só o que tem impacto notifica)
 });
 
 test('obras: fases que não se apagam, visita para fotos, fase nova na posição e obra nova', async ({ page }) => {
@@ -244,15 +244,15 @@ test('quem só vê: sem planear nem editar, mas pode comentar', async ({ page })
   await expect(page.locator('button.semana-vazia')).toHaveCount(0);
 });
 
-test('em direto: um post planeado por outra pessoa aparece logo, com o pop-up "Novo"', async ({ page }) => {
+test('em direto: um post planeado por outra pessoa aparece logo, com o aviso do Log', async ({ page }) => {
   await abrir(page);
   await db(page, () => window.__fake.comoOutro((x) => x.posts.insert({ mes: '2026-12-01', semana: 4, titulo: 'Boas festas', obra_id: null })));
   await expect(page.locator('.post-cartao', { hasText: 'Boas festas' })).toBeVisible();
-  await expect(page.locator('.aviso', { hasText: 'Novo post' })).toBeVisible();
+  const aviso = page.locator('.aviso', { hasText: 'planeou o post' });
+  await expect(aviso).toBeVisible();
   await expect(page.locator('.post-cartao', { hasText: 'Boas festas' }).locator('.chip.novo')).toBeVisible();
-  // e a notificação leva ao post
-  await page.getByRole('button', { name: /Notificações/ }).click();
-  await page.locator('#pop-notificacoes .notif', { hasText: 'planeou o post' }).click();
+  // e o aviso leva ao post
+  await aviso.getByRole('button', { name: 'Ver' }).click();
   await expect(editor(page)).toContainText('Boas festas');
 });
 

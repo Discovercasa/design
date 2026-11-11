@@ -30,10 +30,10 @@ async function abrir(page, { utilizador, rota = '/' } = {}) {
 const db = (page, expr, arg) => page.evaluate(expr, arg);
 // sugestão do Geral (2026-11-11): checkpoints e tarefas começam fechados
 const abrirPasso = async (passo) => { const b = passo.locator('.passo-topo'); if ((await b.getAttribute('aria-expanded')) !== 'true') await b.click(); };
-const abrirTarefa = async (page, tarefa) => {
+const abrirTarefa = async (page, tarefa) => {   // o checkpoint e a descrição (acordeão) da tarefa
   await abrirPasso(page.locator('.passo', { has: tarefa }));
-  const b = tarefa.locator('.tarefa-topo');
-  if ((await b.count()) && (await b.getAttribute('aria-expanded')) !== 'true') await b.click();
+  const d = tarefa.locator('details.tarefa-desc');
+  if ((await d.count()) && !(await d.evaluate((e) => e.open))) await d.locator('summary').click();
 };
 const VER = { id: 'u-ver', nome: 'So Ver', nivel: 'ver' };
 
@@ -49,7 +49,7 @@ test('imagens: juntar a uma tarefa, ver em grande com setas, tirar; critério de
   await expect(dlg.locator('.anexos-lista img').first()).toHaveAttribute('src', /.+/);
   await dlg.getByRole('button', { name: 'Cancelar' }).click();
   // no workflow: a tarefa fechada diz quantas imagens tem; aberta, as miniaturas; clicar abre o visor
-  await expect(tarefa.locator('.meta')).toContainText('2');
+  await expect(tarefa.locator('details.tarefa-desc summary')).toContainText('2 imagens');
   await abrirTarefa(page, tarefa);
   await expect(tarefa.locator('.galeria-img')).toHaveCount(2);
   await tarefa.locator('.galeria-img').first().click();
@@ -88,7 +88,6 @@ test('imagens: juntar a uma tarefa, ver em grande com setas, tirar; critério de
 test('notas de teste: a lista do teste do configurador, nota nova com imagem, resolver e passar a tarefa', async ({ page }) => {
   const erros = await abrir(page, { rota: '/#/projeto/build-your-house' });
   const tarefa = page.locator('.tarefa', { hasText: 'Teste completo do configurador pela equipa, com comentários' });
-  await expect(tarefa.locator('.meta')).toContainText('2 notas por resolver');   // fechada: o resumo na linha
   await abrirTarefa(page, tarefa);
   await expect(tarefa.locator('.descricao')).toHaveText('Cada problema encontrado no teste fica na lista de notas: bug, a mudar ou a fazer.');
   const resumo = tarefa.locator('.notas-resumo');
@@ -155,7 +154,7 @@ test('decisão: acrescentar uma opção que não estava na lista e escolhê-la',
   await expect(dlg.locator('label.opcao')).toHaveCount(4);
   await expect(dlg.locator('label.opcao').nth(3)).toContainText('Vast.ai RTX 4090');
   await expect(dlg.locator('label.opcao').nth(3).locator('input')).toBeChecked();
-  expect(await db(page, () => window.__fake.db.notificacoes.filter((n) => n.tipo === 'decisao_opcao').length)).toBe(1);
+  expect(await db(page, () => window.__fake.db.registo.filter((n) => n.tipo === 'decisao_opcao').length)).toBe(1);   // vai para o Log
   await dlg.getByRole('button', { name: 'Registar decisão' }).click();
   await expect(dlg.locator('.registo')).toContainText('Escolhemos «Vast.ai RTX 4090» em vez de');
   expect(erros).toEqual([]);
@@ -169,7 +168,7 @@ test('obras: clicar no círculo marca a fase atual, desfaz e recua; uma só noti
   await expect(fase('Estrutura')).toHaveClass(/em_curso/);
   await expect(mat()).toContainText('Agora: Estrutura');
   await expect(page.locator('.visita', { hasText: 'Matosinhos' })).toContainText('Estrutura');
-  const notifs = () => db(page, () => window.__fake.db.notificacoes.filter((n) => n.tipo === 'fase_estado').map((n) => n.texto));
+  const notifs = () => db(page, () => window.__fake.db.registo.filter((n) => n.tipo === 'fase_estado').map((n) => n.texto));   // no Log
   expect(await notifs()).toEqual(['Teste Hub passou a obra Matosinhos para a fase «Estrutura»']);
   // desfazer
   await page.locator('.aviso', { hasText: 'Matosinhos está agora em' }).getByRole('button', { name: 'Desfazer' }).click();

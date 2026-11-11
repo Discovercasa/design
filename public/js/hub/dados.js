@@ -14,6 +14,7 @@ export const E = {
   checkpoints: [], tarefas: [], decisoes: [], perfis: [], notificacoes: [], documentos: [],
   obras: [], fases: [], posts: [], media: [], comentarios: [], socialErro: null,   // redes sociais
   notas: [], anexos: [],  // notas de teste/revisão e imagens anexadas (migração 0011)
+  marcacoes: [], criticas: [], registo: [],   // trabalho em equipa (migração 0022): pessoas marcadas, críticas, o Log
   lidas: new Set(),        // notificações que já vi (migração 0014)
   vistos: new Set(),       // "tarefa:12"
   novos: new Set(),        // o que é novo para mim nesta visita (mostra a etiqueta "Novo")
@@ -56,10 +57,12 @@ export async function carregarTudo() {
     sb().from('perfis').select('id, nome'),
     sb().from('vistos').select('tipo, ref_id'),
   ]);
-  const [docs, notas, anexos] = await Promise.all([
+  const [docs, notas, anexos, marcacoes, criticas] = await Promise.all([
     sb().from('documentos').select('*').order('criado_em'),   // à parte: sem esta tabela o resto continua
     sb().from('tarefas_notas').select('*').order('criado_em'), // idem (migração 0011)
     sb().from('anexos').select('*').order('ordem'),
+    sb().from('marcacoes').select('*').order('criada_em'),     // idem (migração 0022)
+    sb().from('criticas').select('*').order('criada_em', { ascending: false }),
     carregarSocial(),                                          // idem (migração 0009)
   ]);
   const falha = r.find((x) => x.error);
@@ -70,6 +73,8 @@ export async function carregarTudo() {
   E.documentos = docs.error ? [] : docs.data;
   E.notas = notas.error ? [] : notas.data;
   E.anexos = anexos.error ? [] : anexos.data;
+  E.marcacoes = marcacoes.error ? [] : marcacoes.data;
+  E.criticas = criticas.error ? [] : criticas.data;
   E.erro = null;
 }
 
@@ -228,7 +233,8 @@ export async function apagarDocumento(doc) {
 // ---------------------------------------------------------------- em direto: qualquer mudança chega a quem tem o hub aberto
 export function ouvirMudancas(aoMudar) {
   const canal = sb().channel('hub-mudancas');
-  for (const t of ['checkpoints', 'tarefas', 'decisoes', 'decisoes_opcoes', 'documentos', 'notificacoes', 'obras', 'obras_fases', 'posts', 'posts_media', 'posts_comentarios', 'tarefas_notas', 'anexos', 'notificacoes_lidas'])
+  for (const t of ['checkpoints', 'tarefas', 'decisoes', 'decisoes_opcoes', 'documentos', 'notificacoes', 'obras', 'obras_fases', 'posts', 'posts_media', 'posts_comentarios', 'tarefas_notas', 'anexos', 'notificacoes_lidas',
+    'marcacoes', 'criticas', 'atividade', 'registo'])
     canal.on('postgres_changes', { event: '*', schema: 'public', table: t }, () => aoMudar(t));
   canal.subscribe();
   return canal;
@@ -303,3 +309,87 @@ function apagarFicheiros(caminhos) {
   if (c.length) sb().storage.from('anexos').remove(c).catch(() => {});
 }
 
+
+// ---------------------------------------------------------------- trabalho em equipa (migração 0022, 2026-11-11)
+// pessoas marcadas numa tarefa; as minhas marcações ainda por ver (o pop-up ao abrir o hub)
+export const marcadosEm = (tarefaId) => E.marcacoes.filter((m) => m.tarefa_id === tarefaId);
+export const marcacoesPorVer = () => E.marcacoes.filter((m) => m.utilizador_id === E.eu.id && !m.vista_em && E.tarefas.some((t) => t.id === m.tarefa_id));
+export async function marcar(tarefaId, utilizadorId) {
+  const { error } = await sb().from('marcacoes').insert({ tarefa_id: tarefaId, utilizador_id: utilizadorId, marcado_por: E.eu.id });
+  if (error) throw error;
+  await carregarTudo();
+}
+export async function desmarcar(tarefaId, utilizadorId) {
+  const { error } = await sb().from('marcacoes').delete().eq('tarefa_id', tarefaId).eq('utilizador_id', utilizadorId);
+  if (error) throw error;
+  await carregarTudo();
+}
+export async function marcacoesVistas(ids) {
+  const agora = new Date().toISOString();
+  for (const id of ids) {
+    const m = E.marcacoes.find((x) => x.tarefa_id === id && x.utilizador_id === E.eu.id);
+    if (!m || m.vista_em) continue;
+    m.vista_em = agora;
+    await sb().from('marcacoes').update({ vista_em: agora }).eq('tarefa_id', id).eq('utilizador_id', E.eu.id);
+  }
+}
+// a conversa de uma tarefa ou checkpoint
+export async function carregarAtividade(alvo, id) {
+  const { data, error } = await sb().from('atividade').select('*').eq('alvo', alvo).eq('ref_id', id).order('criada_em').limit(500);
+  if (error) throw error;
+  return data;
+}
+export async function escrever(alvo, id, tipo, texto, anexos) {
+  const { data, error } = await sb().from('atividade').insert({ alvo, ref_id: id, tipo, texto, anexos, autor_id: E.eu.id }).select().single();
+  if (error) throw error;
+  return data;
+}
+export async function apagarMensagem(id) { const { error } = await sb().from('atividade').delete().eq('id', id); if (error) throw error; }
+// ponto de situação, pedidos e aprovação (funções da base de dados: avisam as pessoas certas)
+async function rpc(fn, args) { const { error } = await sb().rpc(fn, args); if (error) throw error; await carregarTudo(); }
+export const darSituacao = (alvo, id, texto) => rpc('dar_situacao', { p_alvo: alvo, p_ref: id, p_texto: texto });
+export const pedirSituacao = (alvo, id, texto) => rpc('pedir_situacao', { p_alvo: alvo, p_ref: id, p_texto: texto || '' });
+export const pedirAprovacao = (id, texto) => rpc('pedir_aprovacao', { p_tarefa: id, p_texto: texto || '' });
+export const decidirAprovacao = (id, aprovar, texto) => rpc('decidir_aprovacao', { p_tarefa: id, p_aprovar: aprovar, p_texto: texto || '' });
+// críticas e comentários sobre um projeto
+export const criticasDe = (pid) => E.criticas.filter((c) => c.projeto === pid);
+export const TIPOS_CRITICA = { erro: 'Algo correu mal', nao_gostei: 'Não gostei', sugestao: 'Sugestão', comentario: 'Comentário' };
+export async function criarCritica(c) {
+  const { error } = await sb().from('criticas').insert({ ...c, autor_id: E.eu.id });
+  if (error) throw error;
+  await carregarTudo();
+}
+export const mudarCritica = (id, campos) => feito(sb().from('criticas').update(campos).eq('id', id));
+export async function apagarCritica(c) { await feito(sb().from('criticas').delete().eq('id', c.id)); }
+// uma crítica passa a tarefa: no checkpoint em curso do projeto, com o texto da crítica
+export async function criticaATarefa(c) {
+  const cp = checkpointsDe(c.projeto).find((x) => x.estado === 'em_curso') || checkpointsDe(c.projeto).find((x) => x.estado !== 'concluido') || checkpointsDe(c.projeto)[0];
+  if (!cp) throw new Error('Este projeto ainda não tem checkpoints.');
+  const titulo = (c.texto.split('\n')[0] || c.texto).slice(0, 140).trim() + (c.texto.length > 140 ? '…' : '');
+  const { data, error } = await sb().from('tarefas').insert({ checkpoint_id: cp.id, projeto: c.projeto, titulo: titulo.length >= 2 ? titulo : 'Crítica',
+    descricao: `${TIPOS_CRITICA[c.tipo]} (${c.autor_nome || 'Equipa'}${c.onde ? ', ' + c.onde : ''}):\n${c.texto}`, ordem: tarefasDe(cp.id).length + 1 }).select().single();
+  if (error) throw error;
+  await feito(sb().from('criticas').update({ tarefa_id: data.id, estado: c.estado === 'nova' ? 'vista' : c.estado }).eq('id', c.id));
+  return data;
+}
+// o Log: todas as mudanças (e o pormenor do que o Claude faz); avisa ao abrir o hub do que veio desde a última visita
+export async function carregarRegisto(limite = 300) {
+  const { data, error } = await sb().from('registo').select('*').order('criada_em', { ascending: false }).limit(limite);
+  if (error) throw error;
+  E.registo = data;
+  return data;
+}
+export const registoNovo = () => {
+  const desde = E.perfil && E.perfil.registo_visto_em ? new Date(E.perfil.registo_visto_em) : new Date();
+  return E.registo.filter((r) => r.ator_id !== E.eu.id && new Date(r.criada_em) > desde);
+};
+export async function registoVisto() {
+  const agora = new Date().toISOString();
+  if (E.perfil) E.perfil.registo_visto_em = agora;
+  await sb().from('perfis').update({ registo_visto_em: agora }).eq('id', E.eu.id);
+}
+export async function mudarAvisosRegisto(ligados) {
+  const { error } = await sb().from('perfis').update({ avisos_registo: ligados }).eq('id', E.eu.id);
+  if (error) throw error;
+  if (E.perfil) E.perfil.avisos_registo = ligados;
+}

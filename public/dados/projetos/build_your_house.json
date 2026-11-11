@@ -5,7 +5,22 @@
   "resumo": "O cliente desenha a sua casa online, parede a parede, e vê o preço em direto.",
   "descricao": "Configurador online ao estilo do IKEA Kreativ. O cliente escolhe a forma, os m² e o pé direito, monta a casa com paredes de 3 m, acrescenta portas, janelas, paredes interiores, acabamentos, cobertura e pérgolas, e vê o preço a mudar. Por trás, o motor divide as paredes em módulos com as regras de construção da Discovercasa (o cliente nunca vê a palavra módulo).",
   "fase": "Protótipo publicado",
-  "fase_detalhe": "Online no Design desde 2026-10-30, só para a equipa. Faltam respostas da Discovercasa e os preços reais.",
+  "situacao": {
+    "dia": "2026-11-11",
+    "feito": [
+      "Configurador online para a equipa desde 30/10 (ainda não para clientes).",
+      "Paredes por cliques, divisões com pavimento, pérgolas, garagens e anexos; cobertura em painel sandwich."
+    ],
+    "agora": [
+      "Respostas pendentes: «Várias águas» nas casas em L/T/U, estribo na junção das alas, pérgola ripada ou coberta.",
+      "Teste completo do configurador pela equipa, com notas."
+    ],
+    "falta": [
+      "Preços reais (vêm da Orçamentação, que espera os valores das parcelas).",
+      "Aprovação da Discovercasa antes de abrir a clientes.",
+      "Smart Land, Interiores e Conformidade: a auditoria (Fase 0) ainda não começou."
+    ]
+  },
   "objetivos": [
     "O cliente monta a casa sozinho, sem ajuda, num telemóvel ou computador.",
     "Cada casa configurada sai pronta para o Builder: estrutura, camadas e quantidades.",

@@ -30,9 +30,11 @@ Projeto Design da Discovercasa (`design.discovercasa.pt`). Responder em portugu�
 - **Organização por projeto** (pasta, ramo `<projeto>/<tarefa>`, ficheiro de dados, id): `PROJETOS.md`. O hub
   (`public/index.html` + `public/js/hub/`) lê o texto fixo de cada projeto em `public/dados/projetos/<id>.json` e os
   checkpoints, tarefas e decisões do Supabase (migrações 0004/0005). Ao fazer uma entrega num projeto, atualizar o seu
-  JSON (fase, futuro) e marcar a tarefa no hub. Testes: `tests/` (Playwright, base simulada).
+  JSON (fase, situacao, futuro) e marcar a tarefa no hub. Testes: `tests/` (Playwright, base simulada).
 - **Marcar no hub o que se conclui** (pedido de 2026-11-06): sempre que uma tarefa ou uma nota de teste do hub fica feita,
-  marcá-la concluída / resolvida no hub (Supabase "Design") no mesmo trabalho, com uma notificação para a equipa.
+  marcá-la concluída / resolvida no hub (Supabase "Design") no mesmo trabalho, com o pormenor no Log (`registo`); uma
+  notificação só se tiver impacto (tarefa ou checkpoint concluído) — pedido de 2026-11-11: «apenas deves fornecer
+  notificações para coisas que têm impacto».
 - **Redes sociais** (aba do hub, `#/social`): planeamento dos posts, aprovação, obras e fases (migrações 0009/0010,
   `public/js/hub/social*.js`). As fotos ficam no armazenamento privado `social`, nunca no Git.
 - **Materiais do Hub** (aba do hub, `#/materiais`; migração 0016, 2026-11-10): materiais, preços por fornecedor e
@@ -44,13 +46,18 @@ Projeto Design da Discovercasa (`design.discovercasa.pt`). Responder em portugu�
   (`BOB/ferramentas/documentos/codigos.py`); `BOB/orcamentacao/ligacoes.json` liga cada código a um material do Hub (só o
   id: nunca nomes nem preços do Hub no repositório público); o cálculo comum é `public/js/orcamento.js`. As parcelas do
   preço final (mão de obra, fundação, margem, IVA…) ficam só na tabela `orcamento_parcelas` (migração 0017), nunca no código.
-- **Chat da equipa** (ícone à esquerda das Sugestões; migração 0018, 2026-11-11; `public/js/hub/chat.js`): conversas
-  diretas e de grupo com texto, ficheiros, imagens/vídeos e áudios; cada conversa só a veem os seus membros (nem quem
-  edita); ficheiros no armazenamento privado `chat`, pasta por conversa. As conversas criam-se pela função
-  `abrir_conversa`. **O Claude escreve pela base de dados** (sem sessão: `autor_id` null, `autor_nome` 'Claude', numa
-  conversa `claude = true` com a pessoa como único membro) e lê as respostas na tabela `mensagens`. Comentários do
-  Claude nas sugestões: `sugestoes_comentarios` com `autor_id` null (migração 0019).
-- **Página de um projeto** (2026-11-11, sugestões do Geral): abas `#/projeto/<slug>/<aba>` (workflow, documentos,
-  teste-ar, custos, sobre); checkpoints e tarefas começam fechados.
+- **Trabalho em equipa** (2026-11-11; migrações 0022/0023; `public/js/hub/ficha.js`, `equipa.js`, `conversa.js`):
+  o Início abre um pop-up por projeto (o que está em curso e precisa de atenção); cada tarefa ou checkpoint tem o seu
+  ecrã (ponto de situação por tópicos, pedir ponto de situação, sugerir, pedir aprovação → estado `por_aprovar`, quem
+  edita aprova ou devolve, pessoas marcadas em `marcacoes`, conversa em `atividade` com anexos no armazenamento
+  privado `chat`); críticas por projeto (`criticas`). **Notificações só para o que tem impacto** (checkpoint ou tarefa
+  concluída, decisão aberta/tomada, crítica, pedido de aprovação de um post) **e as pessoais**; tudo o resto vai para
+  o **Log** (`registo`, separador ao lado da Checklist, avisos de lado ao abrir o hub). **O Claude escreve pela base
+  de dados** (sem sessão: autor 'Claude'): no Log com o pormenor (`registo.detalhe`), na conversa da tarefa
+  (`atividade`) e marca pessoas (`marcacoes`); lê as respostas na `atividade`. O chat geral (0018–0020) saiu.
+  Comentários do Claude nas sugestões: `sugestoes_comentarios` com `autor_id` null (migração 0019).
+- **Página de um projeto** (2026-11-11): abas Workflow, Documentos e (Step Inside) Teste do AR; pipeline e «sobre»
+  dentro do Workflow; tudo fechado sempre que se abre; descrição das tarefas em acordeão; o ponto de situação do
+  projeto é por tópicos no JSON (`situacao`: dia, feito, agora, falta) — atualizá-lo a cada entrega.
 - **Repositório público**: nunca dados pessoais nem desenhos de clientes (`*.dwfx`, `*.pdf` estão no `.gitignore`;
   ficam só no PC).

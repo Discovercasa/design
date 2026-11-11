@@ -5,15 +5,15 @@
   const fx = window.__FIXTURE || {};
   const fs = window.__FIXTURE_SOCIAL || {};   // redes sociais (migração 0010)
   const fm = window.__FIXTURE_MATERIAIS || {};   // materiais vindos do Hub (migração 0016, só de consulta)
-  const fc = window.__FIXTURE_CHAT || {};        // chat da equipa (migração 0018)
+  const fe = window.__FIXTURE_EQUIPA || {};      // trabalho em equipa (migração 0022): marcações, conversa, críticas, Log
   const U = window.__UTILIZADOR || { id: 'u-eu', nome: 'Teste Hub', nivel: 'editar' };
   const OUTRO = { id: 'u-outro', nome: 'Colega Teste' };
   const agora = () => new Date().toISOString();
   const hoje = () => new Date().toISOString().slice(0, 10);
   const db = {
     projetos: [['build_your_house', 'Build Your House'], ['builder', 'Builder'], ['gerador', 'Gerador de documentos'], ['orcamentacao', 'Orçamentação'], ['plataforma_cliente', 'Step Inside']].map(([id, nome], i) => ({ id, nome, ordem: i + 1 })),
-    perfis: [{ id: OUTRO.id, nome: OUTRO.nome, criado_em: '2026-11-01T00:00:00Z', notificacoes_vistas_em: '2026-11-01T00:00:00Z' }, ...(fc.perfis || [])],
-    conversas: fc.conversas || [], conversas_membros: fc.conversas_membros || [], mensagens: fc.mensagens || [],
+    perfis: [{ id: OUTRO.id, nome: OUTRO.nome, criado_em: '2026-11-01T00:00:00Z', notificacoes_vistas_em: '2026-11-01T00:00:00Z' }, ...(fe.perfis || [])],
+    marcacoes: fe.marcacoes || [], atividade: fe.atividade || [], criticas: fe.criticas || [], registo: fe.registo || [],
     checkpoints: fx.checkpoints || [], tarefas: fx.tarefas || [], decisoes: fx.decisoes || [], decisoes_opcoes: fx.decisoes_opcoes || [],
     documentos: fx.documentos || [], notificacoes: [], vistos: [],
     tarefas_notas: fx.tarefas_notas || [], anexos: [], notificacoes_lidas: [],
@@ -34,8 +34,17 @@
   const ROT = { por_fazer: 'Por fazer', em_curso: 'Em curso', bloqueada: 'Bloqueada', concluida: 'Concluída', concluido: 'Concluído' };
   const pnome = (id) => (db.perfis.find((p) => p.id === id) || {}).nome;
   const nomeAtual = () => pnome(ator.id) || ator.nome || 'Alguém';
-  function notificar(projeto, tipo, texto, ref_tipo, ref_id) {
-    db.notificacoes.push({ id: ++seq.notificacoes, projeto, tipo, texto, ator_id: ator.id, ator_nome: nomeAtual(), destinatario_id: null, ref_tipo, ref_id, criada_em: agora() });
+  const IMPACTO = ['checkpoint_concluido', 'decisao_nova', 'decisao_tomada', 'tarefa_concluida', 'critica_nova'];
+  function registar(projeto, tipo, texto, ref_tipo, ref_id, detalhe = '') {
+    db.registo.push({ id: ++seq.registo, projeto, tipo, texto, detalhe, ator_id: ator.id, ator_nome: nomeAtual(), ref_tipo, ref_id, criada_em: agora() });
+    if (typeof avisar === 'function') avisar('registo');
+  }
+  function notificar(projeto, tipo, texto, ref_tipo, ref_id, dest = null) {
+    if (!dest) {
+      registar(projeto, tipo, texto, ref_tipo, ref_id);
+      if (!IMPACTO.includes(tipo) && !(tipo === 'post_estado' && texto.includes('pediu aprovação'))) return;
+    } else if (dest === ator.id) return;
+    db.notificacoes.push({ id: ++seq.notificacoes, projeto, tipo, texto, ator_id: ator.id, ator_nome: nomeAtual(), destinatario_id: dest, ref_tipo, ref_id, criada_em: agora() });
     if (typeof avisar === 'function') avisar('notificacoes');
   }
   const antes = {
@@ -73,7 +82,10 @@
     tarefas(n, o) {
       const t = `«${n.titulo}»`;
       if (!o) notificar(n.projeto, 'tarefa_nova', `${nomeAtual()} acrescentou a tarefa ${t}`, 'tarefa', n.id);
-      if (n.responsavel_id && (!o || n.responsavel_id !== o.responsavel_id)) notificar(n.projeto, 'tarefa_atribuida', `${nomeAtual()} atribuiu a tarefa ${t} a ${n.responsavel_nome}`, 'tarefa', n.id);
+      if (n.responsavel_id && (!o || n.responsavel_id !== o.responsavel_id)) {
+        registar(n.projeto, 'tarefa_atribuida', `${nomeAtual()} atribuiu a tarefa ${t} a ${n.responsavel_nome}`, 'tarefa', n.id);
+        notificar(n.projeto, 'tarefa_atribuida', `${nomeAtual()} atribuiu-te a tarefa ${t}`, 'tarefa', n.id, n.responsavel_id);
+      }
       if (o && n.estado !== o.estado) notificar(n.projeto, n.estado === 'concluida' ? 'tarefa_concluida' : 'tarefa_estado', n.estado === 'concluida' ? `${nomeAtual()} concluiu a tarefa ${t}` : `${nomeAtual()} mudou a tarefa ${t} para ${ROT[n.estado]}`, 'tarefa', n.id);
     },
     decisoes(n, o) {
@@ -160,22 +172,57 @@
     if (!ref) throw new Error(`O ${n.alvo} ${n.ref_id} não existe.`);
     n.projeto = ref.projeto; n.ordem ??= 0;
   };
-  // chat (migração 0018): só os membros veem a conversa; cada um escreve em seu nome; o Claude escreve sem sessão
-  const membro = (cid, quem = ator) => db.conversas_membros.some((m) => m.conversa_id === cid && m.utilizador_id === quem.id);
-  antes.mensagens = (n, o) => {
-    if (o) return;
-    if (!membro(n.conversa_id)) throw new Error('new row violates row-level security policy for table "mensagens"');
-    Object.assign(n, { autor_id: ator.id, autor_nome: nomeAtual(), criada_em: agora(), texto: n.texto ?? '', anexos: n.anexos ?? [] });
-    if (!n.texto.trim() && !n.anexos.length) throw new Error('new row for relation "mensagens" violates check constraint');
-    if (n.anexos.some((a) => !String(a.caminho).startsWith(n.conversa_id + '/'))) throw new Error('Anexo inválido.');
+  // trabalho em equipa (migração 0022): marcar pessoas, a conversa de cada tarefa, críticas; só os outros recebem
+  const pessoasDaTarefa = (id) => [...new Set([(db.tarefas.find((t) => t.id === id) || {}).responsavel_id, ...db.marcacoes.filter((m) => m.tarefa_id === id).map((m) => m.utilizador_id)].filter(Boolean))];
+  const editores = () => [U.nivel !== 'ver' ? U.id : null, OUTRO.id, ...(fe.editores || [])].filter(Boolean);
+  const refDe = (alvo, id) => (alvo === 'tarefa' ? db.tarefas : db.checkpoints).find((x) => x.id === id);
+  antes.marcacoes = (n, o) => {
+    if (o) { Object.assign(n, { tarefa_id: o.tarefa_id, utilizador_id: o.utilizador_id, marcado_por: o.marcado_por, marcado_por_nome: o.marcado_por_nome, criada_em: o.criada_em }); return; }
+    if (!db.perfis.some((q) => q.id === n.utilizador_id)) throw new Error('Só se podem marcar pessoas do hub.');
+    if (db.marcacoes.some((m) => m.tarefa_id === n.tarefa_id && m.utilizador_id === n.utilizador_id)) throw new Error('duplicate key value violates unique constraint "marcacoes_pkey"');
+    Object.assign(n, { marcado_por: ator.id, marcado_por_nome: nomeAtual(), criada_em: agora(), vista_em: null });
   };
-  depois.mensagens = (n, o) => {
+  depois.marcacoes = (n, o) => {
     if (o) return;
-    const c = db.conversas.find((x) => x.id === n.conversa_id); if (c) c.ultima_em = n.criada_em;
-    const l = db.conversas_membros.find((m) => m.conversa_id === n.conversa_id && m.utilizador_id === n.autor_id); if (l) l.lida_em = n.criada_em;
-    avisar('conversas');
+    const t = db.tarefas.find((x) => x.id === n.tarefa_id);
+    registar(t.projeto, 'marcado', `${nomeAtual()} marcou ${pnome(n.utilizador_id) || 'Alguém'} na tarefa «${t.titulo}»`, 'tarefa', t.id);
+    notificar(t.projeto, 'marcado', `${nomeAtual()} marcou-te na tarefa «${t.titulo}»`, 'tarefa', t.id, n.utilizador_id);
   };
-  antes.conversas_membros = (n, o) => { if (o && (o.utilizador_id !== ator.id)) throw new Error('permission denied'); if (o) Object.assign(n, { conversa_id: o.conversa_id, utilizador_id: o.utilizador_id }); };
+  antes.atividade = (n, o) => {
+    if (o) return;
+    const ref = refDe(n.alvo, n.ref_id);
+    if (!ref) throw new Error(`A ${n.alvo} ${n.ref_id} não existe.`);
+    n.tipo ??= 'mensagem';
+    if (!['mensagem', 'sugestao'].includes(n.tipo)) throw new Error('new row violates row-level security policy for table "atividade"');
+    Object.assign(n, { autor_id: ator.id, autor_nome: nomeAtual(), criada_em: agora(), projeto: ref.projeto, texto: n.texto ?? '', anexos: n.anexos ?? [] });
+    if (!n.texto.trim() && !n.anexos.length) throw new Error('new row for relation "atividade" violates check constraint');
+    if (n.anexos.some((a) => !String(a.caminho).startsWith(`${n.alvo}-${n.ref_id}/`))) throw new Error('Anexo inválido.');
+  };
+  depois.atividade = (n, o) => {
+    if (o) return;
+    const ref = refDe(n.alvo, n.ref_id);
+    const texto = `${n.autor_nome} ${n.tipo === 'sugestao' ? 'sugeriu em' : 'escreveu em'} «${ref.titulo}»${n.texto ? ': ' + n.texto.slice(0, 120) : ' (anexo)'}`;
+    registar(n.projeto, n.tipo, texto, n.alvo, n.ref_id);
+    if (n.alvo === 'tarefa') pessoasDaTarefa(n.ref_id).forEach((d) => notificar(n.projeto, 'mensagem', texto, 'tarefa', n.ref_id, d));
+  };
+  // as funções da base de dados escrevem na conversa os pedidos, o ponto de situação e a aprovação
+  const evento = (alvo, ref_id, tipo, texto) => { const r = refDe(alvo, ref_id); db.atividade.push({ id: ++seq.atividade, alvo, ref_id, projeto: r.projeto, tipo, texto, anexos: [], autor_id: ator.id, autor_nome: nomeAtual(), criada_em: agora() }); avisar('atividade'); };
+  const ROTC = { erro: 'Algo correu mal', nao_gostei: 'Não gostei', sugestao: 'Sugestão', comentario: 'Comentário' };
+  antes.criticas = (n, o) => {
+    if (!o) {
+      Object.assign(n, { autor_id: ator.id, autor_nome: nomeAtual(), criada_em: agora(), estado: 'nova', resolvida_por_nome: '', resolvida_em: null, onde: n.onde ?? '', anexos: n.anexos ?? [], tarefa_id: n.tarefa_id ?? null });
+      if (n.anexos.some((a) => !String(a.caminho).startsWith('critica/'))) throw new Error('Anexo inválido.');
+      return;
+    }
+    Object.assign(n, { autor_id: o.autor_id, autor_nome: o.autor_nome, criada_em: o.criada_em, projeto: o.projeto });
+    if (n.estado === 'resolvida' && o.estado !== 'resolvida') Object.assign(n, { resolvida_por_nome: nomeAtual(), resolvida_em: agora() });
+    else if (n.estado !== 'resolvida') Object.assign(n, { resolvida_por_nome: '', resolvida_em: null });
+  };
+  depois.criticas = (n, o) => {
+    const nome = (db.projetos.find((x) => x.id === n.projeto) || {}).nome;
+    if (!o) notificar(n.projeto, 'critica_nova', `${nomeAtual()} deixou uma crítica no ${nome} (${ROTC[n.tipo]}): ${n.texto.slice(0, 160)}`, 'critica', n.id);
+    else if (n.estado === 'resolvida' && o.estado !== 'resolvida') registar(n.projeto, 'critica_resolvida', `${nomeAtual()} resolveu a crítica sobre o ${nome}: ${n.texto.slice(0, 160)}`, 'critica', n.id);
+  };
   // em direto: cada escrita avisa os canais abertos (como o Supabase Realtime)
   const ouvintes = [];
   const avisar = (t) => setTimeout(() => ouvintes.filter((o) => o.tabela === t).forEach((o) => o.cb({ table: t })), 30);
@@ -212,7 +259,7 @@
           linhas = this.v.map((v) => {
             const n = copia(v);
             if (this.op === 'upsert' && n.id && tab.find((r) => r.id === n.id)) { const r = tab.find((x) => x.id === n.id); Object.assign(r, n); return r; }
-            if (this.t === 'perfis') { n.criado_em = agora(); n.notificacoes_vistas_em = agora(); }
+            if (this.t === 'perfis') { n.criado_em = agora(); n.notificacoes_vistas_em = agora(); n.registo_visto_em = agora(); n.avisos_registo = true; }
             else if (this.t === 'vistos') { n.utilizador_id = ator.id; if (tab.some((r) => r.utilizador_id === n.utilizador_id && r.tipo === n.tipo && r.ref_id === n.ref_id)) throw new Error('duplicate key'); }
             else if (this.t === 'notificacoes_lidas') { Object.assign(n, { utilizador_id: ator.id, lida_em: agora() }); if (tab.some((r) => r.utilizador_id === n.utilizador_id && r.notificacao_id === n.notificacao_id)) throw new Error('duplicate key'); }
             else n.id = ++seq[this.t];
@@ -246,7 +293,7 @@
           if (this.t === 'posts') { db.posts_media = db.posts_media.filter((m) => !fora.some((p) => p.id === m.post_id)); db.posts_comentarios = db.posts_comentarios.filter((c) => !fora.some((p) => p.id === c.post_id)); }
           if (this.t === 'posts_media') { fora.forEach((m) => desaprovarFotos(m.post_id)); db.posts_comentarios.forEach((c) => { if (fora.some((m) => m.id === c.media_id)) c.media_id = null; }); }
           if (this.t === 'obras_fases' || this.t === 'obras') throw new Error('permission denied: as fases e as obras não se apagam');
-          if (this.t === 'mensagens' && fora.some((m) => m.autor_id !== ator.id)) { db[this.t] = tab; return { data: null, error: null }; }   // RLS: só as minhas
+          if (this.t === 'atividade' && U.nivel === 'ver' && fora.some((m) => m.autor_id !== ator.id)) { db[this.t] = tab; return { data: null, error: null }; }   // RLS: só as minhas
           linhas = fora;
         } else {
           // como o PostgREST: decisoes ↔ decisoes_opcoes têm duas chaves estrangeiras, o embed sem "!<fk>" falha
@@ -254,8 +301,7 @@
             return { data: null, error: { message: "Could not embed because more than one relationship was found for 'decisoes' and 'decisoes_opcoes'" } };
           linhas = tab.filter((r) => this.f.every((f) => f(r)));
           if (this.t === 'vistos' || this.t === 'notificacoes_lidas') linhas = linhas.filter((r) => r.utilizador_id === ator.id);
-          if (this.t === 'conversas') linhas = linhas.filter((r) => membro(r.id));
-          if (this.t === 'conversas_membros' || this.t === 'mensagens') linhas = linhas.filter((r) => membro(r.conversa_id));
+          if (this.t === 'notificacoes') linhas = linhas.filter((r) => !r.destinatario_id || r.destinatario_id === ator.id);
           if (this.ord) { const [c, asc] = this.ord; linhas = [...linhas].sort((a, b) => (a[c] < b[c] ? -1 : a[c] > b[c] ? 1 : 0) * (asc ? 1 : -1)); }
           if (this.lim) linhas = linhas.slice(0, this.lim);
           if (this.rng) linhas = linhas.slice(this.rng[0], this.rng[1] + 1);
@@ -321,19 +367,51 @@
           avisar('obras_fases');
           return { data: null, error: null };
         }
-        if (fn === 'abrir_conversa') {   // migração 0018: a conversa direta que já existe, ou uma nova com estas pessoas
-          const todos = [...new Set([...(a.p_membros || []), ator.id])].sort();
-          if (todos.length < 2) return { data: null, error: { message: 'Escolhe pelo menos uma pessoa.' } };
-          if (todos.some((id) => id !== ator.id && !db.perfis.some((p) => p.id === id))) return { data: null, error: { message: 'Só se podem juntar pessoas do hub.' } };
-          if (todos.length === 2) {
-            const c = db.conversas.find((k) => !k.grupo && !k.claude && db.conversas_membros.filter((m) => m.conversa_id === k.id).map((m) => m.utilizador_id).sort().join() === todos.join());
-            if (c) return { data: c.id, error: null };
+        // migração 0022: ponto de situação, pedidos e aprovação
+        if (fn === 'dar_situacao') {
+          const x = refDe(a.p_alvo, a.p_ref);
+          if (!x) return { data: null, error: { message: 'Não existe.' } };
+          const desde = x.situacao_em;
+          Object.assign(x, { situacao: (a.p_texto || '').trim(), situacao_em: agora(), situacao_por_nome: nomeAtual() });
+          avisar(a.p_alvo === 'tarefa' ? 'tarefas' : 'checkpoints');
+          if (x.situacao) evento(a.p_alvo, x.id, 'situacao', x.situacao);
+          registar(x.projeto, 'situacao', `${nomeAtual()} atualizou o ponto de situação de «${x.titulo}»`, a.p_alvo, x.id, x.situacao);
+          [...new Set(db.atividade.filter((m) => m.alvo === a.p_alvo && m.ref_id === x.id && m.tipo === 'pedido_situacao' && m.autor_id && (!desde || m.criada_em > desde)).map((m) => m.autor_id))]
+            .forEach((d) => notificar(x.projeto, 'situacao', `${nomeAtual()} respondeu ao teu pedido: ponto de situação de «${x.titulo}»`, a.p_alvo, x.id, d));
+          return { data: null, error: null };
+        }
+        if (fn === 'pedir_situacao') {
+          const x = refDe(a.p_alvo, a.p_ref);
+          if (!x) return { data: null, error: { message: 'Não existe.' } };
+          evento(a.p_alvo, x.id, 'pedido_situacao', (a.p_texto || '').trim() || 'Podes atualizar o ponto de situação?');
+          registar(x.projeto, 'pedido_situacao', `${nomeAtual()} pediu o ponto de situação de «${x.titulo}»`, a.p_alvo, x.id);
+          const quem = a.p_alvo === 'tarefa' ? pessoasDaTarefa(x.id) : [];
+          (quem.length ? quem : editores()).forEach((d) => notificar(x.projeto, 'pedido_situacao', `${nomeAtual()} pede-te o ponto de situação de «${x.titulo}»`, a.p_alvo, x.id, d));
+          return { data: null, error: null };
+        }
+        if (fn === 'pedir_aprovacao') {
+          const t = db.tarefas.find((x) => x.id === a.p_tarefa);
+          if (!t) return { data: null, error: { message: 'A tarefa não existe.' } };
+          if (t.estado === 'concluida') return { data: null, error: { message: 'A tarefa já está concluída.' } };
+          await new Q('tarefas').update({ estado: 'por_aprovar' }).eq('id', t.id);
+          evento('tarefa', t.id, 'pedido_aprovacao', (a.p_texto || '').trim() || 'Está pronta: falta a tua aprovação.');
+          editores().forEach((d) => notificar(t.projeto, 'pedido_aprovacao', `${nomeAtual()} pede a tua aprovação: «${t.titulo}»`, 'tarefa', t.id, d));
+          return { data: null, error: null };
+        }
+        if (fn === 'decidir_aprovacao') {
+          if (U.nivel === 'ver') return { data: null, error: { message: 'Só quem edita o Design aprova.' } };
+          const t = db.tarefas.find((x) => x.id === a.p_tarefa);
+          if (!t) return { data: null, error: { message: 'A tarefa não existe.' } };
+          const txt = (a.p_texto || '').trim();
+          if (a.p_aprovar) { await new Q('tarefas').update({ estado: 'concluida' }).eq('id', t.id); evento('tarefa', t.id, 'aprovada', txt || 'Aprovada.'); }
+          else {
+            if (!txt) return { data: null, error: { message: 'Diz o que falta para a aprovar.' } };
+            await new Q('tarefas').update({ estado: 'em_curso' }).eq('id', t.id);
+            evento('tarefa', t.id, 'devolvida', txt);
+            [...new Set([...pessoasDaTarefa(t.id), ...db.atividade.filter((m) => m.alvo === 'tarefa' && m.ref_id === t.id && m.tipo === 'pedido_aprovacao' && m.autor_id).map((m) => m.autor_id)])]
+              .forEach((d) => notificar(t.projeto, 'devolvida', `${nomeAtual()} devolveu «${t.titulo}»: ${txt.slice(0, 200)}`, 'tarefa', t.id, d));
           }
-          const c = { id: ++seq.conversas, titulo: (a.p_titulo || '').trim(), grupo: todos.length > 2, claude: false, criada_por: ator.id, criada_em: agora(), ultima_em: agora() };
-          db.conversas.push(c);
-          todos.forEach((u) => db.conversas_membros.push({ conversa_id: c.id, utilizador_id: u, lida_em: agora(), entrou_em: agora() }));
-          avisar('conversas');
-          return { data: c.id, error: null };
+          return { data: null, error: null };
         }
         return { data: null, error: { message: `function ${fn} does not exist` } };
       },
@@ -361,8 +439,6 @@
   // nos testes: agir como outra pessoa (acrescentar, concluir…) e ver a base
   window.__fake = {
     db, OUTRO, ficheiros, social, avisar,
-    // o Claude (sem sessão) escreve numa conversa
-    async comoClaude(conversa_id, texto) { const n = { id: ++seq.mensagens, conversa_id, autor_id: null, autor_nome: 'Claude', texto, anexos: [], criada_em: agora() }; db.mensagens.push(n); depois.mensagens(n, null); avisar('mensagens'); return n; },
     comoEu: (fn) => fn(new Proxy({}, { get: (_, t) => new Q(t) })),
     async comoOutro(fn) { ator = OUTRO; try { return await fn(new Proxy({}, { get: (_, t) => new Q(t) })); } finally { ator = U; } },
   };

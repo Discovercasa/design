@@ -1,13 +1,15 @@
 [
   {
     "dia": "2026-11-11",
-    "titulo": "Chat da equipa e um hub mais simples",
+    "titulo": "Trabalho em equipa: o ecrã de cada tarefa, críticas e o Log",
     "itens": [
-      "Chat: o ícone novo ao lado das Sugestões abre as conversas. Escreve a qualquer pessoa do hub (ou a um grupo) e junta ficheiros, fotos, vídeos e áudios gravados ali mesmo. Cada conversa só a veem as pessoas que estão nela.",
-      "O número no ícone do chat diz quantas mensagens tens por ler; uma mensagem nova com o chat fechado aparece num aviso.",
-      "O Claude também escreve no chat (por exemplo, as perguntas que tem para fazer): responde-lhe lá e ele lê as respostas.",
-      "Sugestão do Geral: ao abrir um projeto, os checkpoints e as tarefas aparecem todos fechados. Um clique no checkpoint mostra as tarefas; um clique no título da tarefa mostra a descrição, as imagens e as notas.",
-      "Sugestão do Geral: a página de cada projeto tem abas (Workflow, Documentos, Teste do AR, Pipeline e custos, Sobre o projeto), uma secção de cada vez em vez de tudo empilhado. No Início, «Objetivos» e «Como os projetos se ligam» ficam dobrados."
+      "Início: cada projeto abre um pop-up com as tarefas em curso e o que precisa de atenção (à espera de aprovação, bloqueadas, as tuas, testes com notas, críticas). «Abrir o projeto» leva à página.",
+      "O ecrã de cada tarefa (toca no título): ponto de situação por tópicos, pedir um ponto de situação, fazer uma sugestão, pedir aprovação (quem edita aprova ou devolve com o que falta), marcar pessoas e a conversa da tarefa com ficheiros, fotos, vídeos e áudios.",
+      "Quem é marcado numa tarefa vê um pop-up ao abrir o hub, que leva direto ao ecrã da tarefa.",
+      "Críticas e comentários em cada projeto: algo correu mal, não gostei, sugestão ou comentário, com imagens. Quem edita é avisado e pode passá-las a tarefa.",
+      "Notificações só para o que tem impacto (checkpoint ou tarefa concluída, decisões, críticas) e para o que é para ti. Todas as mudanças vão para o Log, ao lado da Checklist, com um aviso de lado ao abrir o hub (desliga-se nas Definições).",
+      "Projetos: abas Workflow e Documentos (no Step Inside também Teste do AR); a pipeline e o que era «Sobre o projeto» voltaram para dentro do Workflow. Sempre que se abre um projeto está tudo fechado; a descrição de cada tarefa é um acordeão; o ponto de situação do projeto é por tópicos.",
+      "O chat geral da manhã saiu: a conversa passou para dentro de cada tarefa."
     ]
   },
   {

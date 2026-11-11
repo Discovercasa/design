@@ -1,5 +1,6 @@
 // Hub do Design: entrada (conta do Hub), barra de navegação, rotas (#/, #/projeto/<slug>, #/pessoal, #/definicoes,
-// #/novidades, #/social), notificações, sugestões, decisões e o pop-up "Novo". O chat da equipa está em chat.js.
+// #/novidades, #/social), notificações, sugestões, decisões. Trabalho em equipa (2026-11-11): o ecrã de cada tarefa
+// (ficha.js), o pop-up de cada projeto, as marcações, as críticas e o Log (equipa.js).
 import * as D from './dados.js';
 import { E } from './dados.js';
 import * as V from './vistas.js';
@@ -7,14 +8,29 @@ import * as P from './paineis.js';
 import * as SO from './social.js';
 import * as MV from './materiais-vista.js';
 import * as AA from './ar-android.js';
-import * as CH from './chat.js';
+import * as FI from './ficha.js';
+import * as EQ from './equipa.js';
 import { abrirVisor, hidratar, saoImagens } from './imagens.js';
 import { $, $$, ic, esc, iniciais, aviso, abrirDialogo, fecharDialogo, entrar, encherBarras, mov, luz } from './util.js';
 
 const { sb, nivel } = window.Design;
-const dlg = $('#dlg'), gaveta = $('#gaveta'), chat = $('#chat');
+const dlg = $('#dlg'), gaveta = $('#gaveta'), ficha = $('#ficha'), projetoPop = $('#projeto-pop');
 let novidades = [], pedidoInstalar = null, rotaAnterior = '', relogio = null;
-const sug = { sep: 'sugestoes', lista: [], abertas: new Set(), erro: '' };
+const sug = { sep: 'sugestoes', lista: [], abertas: new Set(), erro: '', logErro: '' };
+// a gaveta das sugestões: Sugestões, Checklist e o Log (ao lado da checklist, pedido de 2026-11-11)
+const htmlGaveta = () => P.htmlGaveta(sug.sep, sug.lista, sug.abertas, sug.erro, sug.sep === 'log' ? EQ.htmlLog(sug.logErro) : '');
+function redesenharGaveta() {
+  if (!gaveta.open) return;
+  const corpo = $('.gaveta-corpo', gaveta), y = corpo ? corpo.scrollTop : 0;
+  gaveta.innerHTML = htmlGaveta();
+  const novo = $('.gaveta-corpo', gaveta); if (novo) novo.scrollTop = y;
+}
+async function abrirLog() {
+  sug.sep = 'log';
+  if (!gaveta.open) abrirDialogo(gaveta, htmlGaveta());
+  try { await D.carregarRegisto(); sug.logErro = ''; } catch (e) { sug.logErro = e.message || String(e); }
+  redesenharGaveta();
+}
 
 // ---------------------------------------------------------------- entrada
 function mostrarEntrada(msg, erro) {
@@ -59,8 +75,7 @@ async function arrancar(sessao) {
   $('#avatar').textContent = iniciais(E.eu.nome);
   atualizarContador();
   desenhar(true);
-  if (!E.erro) mostrarNovos();
-  CH.iniciar();
+  if (!E.erro) { mostrarNovos(); avisosDoLog(); mostrarMarcacoes(); }
   clearInterval(relogio);
   relogio = setInterval(atualizar, 60000);   // reserva, se a ligação em direto cair
   if (!E.erro) D.ouvirMudancas(emDireto);
@@ -193,7 +208,6 @@ function irPara(alvo) {
   const m = /^(t|cp|doc)-(\d+)$/.exec(alvo || '');
   if (!m) return;
   const id = Number(m[2]);
-  if (m[1] === 't' && !V.tarefasAbertas.has(id)) { V.tarefasAbertas.add(id); desenhar(false); }
   if (m[1] === 'doc') { const g = document.getElementById(alvo); const det = g && g.closest('details'); if (det) det.open = true; }
   const cpId = m[1] === 't' ? (E.tarefas.find((t) => t.id === id) || {}).checkpoint_id : m[1] === 'cp' ? id : null;
   if (m[1] === 't' && (E.tarefas.find((t) => t.id === id) || {}).revisao && !V.notasAbertas.has(id)) { V.notasAbertas.add(id); desenhar(false); }
@@ -212,6 +226,7 @@ window.addEventListener('hashchange', () => {
   desenharNav();
   if (chaveRota === rotaAnterior && r.alvo) return irPara(r.alvo);
   const outraAba = r.nome === 'projeto' && r.p && rotaAnterior.startsWith('projeto' + r.p.id + ':');
+  if (r.nome === 'projeto' && chaveRota !== rotaAnterior) V.fecharTudo();   // «sempre que abrimos um separador do projeto … tudo collapsed»
   rotaAnterior = chaveRota;
   if (outraAba) {   // the same project, another tab: the tab bar stays where it was
     const barra = $('#sub-abas'), topo = barra ? barra.getBoundingClientRect().top + window.scrollY - 72 : 0;
@@ -278,7 +293,7 @@ async function atualizar() {
   try {
     const novas = await D.carregarNotificacoes();
     await D.carregarTudo();
-    CH.atualizar();   // reserva do chat, se a ligação em direto cair
+    FI.aoMudar();
     novas.slice(0, 3).forEach((n) => aviso(esc(n.texto), { icone: 'sino', acoes: [{ rotulo: 'Ver', fazer: () => irNotif(n.projeto, n.ref_tipo, n.ref_id) }] }));
     atualizarContador();
     if (!dlg.open && !gaveta.open && !document.activeElement.matches('input, textarea, select')) desenhar(false);
@@ -286,15 +301,19 @@ async function atualizar() {
   } catch (_) { /* sem rede: tenta no próximo minuto */ }
 }
 // em direto: uma mudança feita por qualquer pessoa (ou noutra janela) atualiza já todos os sítios onde aparece
-let emDiretoEspera = null, mudouNotificacoes = false;
+let emDiretoEspera = null, mudouNotificacoes = false, mudouRegisto = false;
 function emDireto(tabela) {
   if (tabela === 'notificacoes' || tabela === 'notificacoes_lidas') mudouNotificacoes = true;
+  if (tabela === 'registo') mudouRegisto = true;
   clearTimeout(emDiretoEspera);
   emDiretoEspera = setTimeout(async () => {
     try {
       const novas = mudouNotificacoes ? await D.carregarNotificacoes() : [];
       mudouNotificacoes = false;
       await D.carregarTudo();
+      FI.aoMudar();
+      EQ.redesenharProjeto();
+      if (mudouRegisto) { mudouRegisto = false; avisosDoLog(true); }
       novas.slice(0, 3).forEach((n) => aviso(esc(n.texto), { icone: 'sino', acoes: [{ rotulo: 'Ver', fazer: () => { marcarNotif(n.id, true); irNotif(n.projeto, n.ref_tipo, n.ref_id); } }] }));
       atualizarContador();
       const pop = $('#pop-notificacoes');
@@ -342,26 +361,36 @@ document.addEventListener('pointerover', (e) => {
   linha.addEventListener('pointerleave', () => { clearTimeout(t); delete linha.dataset.espera; }, { once: true });
 });
 
-// pop-up na primeira vez que vejo um checkpoint, tarefa ou decisão acrescentados por outra pessoa
+// o que outra pessoa acrescentou e eu ainda não vi: fica com a etiqueta «Novo» nesta visita (os avisos de lado vêm do Log)
 function mostrarNovos() {
   const itens = D.porVer();
   if (!itens.length) return;
   itens.forEach((i) => E.novos.add(D.chave(i.tipo, i.x.id)));
-  const nomeTipo = { checkpoint: 'Novo checkpoint', tarefa: 'Nova tarefa', decisao: 'Nova decisão', documento: 'Novo documento', post: 'Novo post', obra: 'Nova obra' };
-  const onde = (i) => (i.x.projeto ? D.nomeProjeto(i.x.projeto) : 'Redes sociais'), nome = (i) => i.x.titulo || i.x.pergunta || i.x.nome;
-  const ir = (i) => irNotif(i.x.projeto, i.tipo, i.x.id);
-  if (itens.length > 3) {
-    aviso(`<b>${itens.length} novidades nos projetos</b><br>${itens.slice(0, 4).map((i) => `${nomeTipo[i.tipo]} em ${esc(onde(i))}: «${esc(nome(i))}»`).join('<br>')}${itens.length > 4 ? '<br>…' : ''}`,
-      { icone: 'novo', duracao: 10, acoes: [{ rotulo: 'Ver a primeira', fazer: () => ir(itens[0]) }] });
-  } else itens.forEach((i) => aviso(`<b>${nomeTipo[i.tipo]}</b> em ${esc(onde(i))}<br>«${esc(nome(i))}» · por ${esc(i.x.criado_por_nome || 'alguém')}`,
-    { icone: 'novo', duracao: 10, acoes: [{ rotulo: 'Ver', fazer: () => ir(i) }] }));
   D.marcarVistos(itens).catch(() => {});
   desenhar(false);
 }
+// o Log: ao abrir o hub, um aviso de lado com o que mudou desde a última visita (utilizador, 2026-11-11: «eu recebo
+// notificações das alterações do log … em pop-up de lado sempre que abro o hub»); ao vivo, o que não vem já como notificação
+async function avisosDoLog(aoVivo = false) {
+  try { await D.carregarRegisto(aoVivo ? 60 : 300); } catch (_) { return; }
+  const novos = D.registoNovo();
+  if (!novos.length) return;
+  if (!E.perfil || E.perfil.avisos_registo !== false) EQ.avisosLog(novos, { aviso, aoVivo, ir: irNotif, verLog: abrirLog });
+  D.registoVisto().catch(() => {});
+  if (gaveta.open && sug.sep === 'log') redesenharGaveta();
+}
+// as tarefas em que fui marcado e ainda não vi: um pop-up que leva ao ecrã de cada uma
+function mostrarMarcacoes() {
+  const html = EQ.htmlMarcacoes();
+  if (!html || (dlg.open && !dlg.querySelector('[data-marcacoes]'))) return;
+  abrirDialogo(dlg, html, { estreito: true });
+}
 function irNotif(projetoId, tipo, id) {
   // sugestões (migração 0021): a checklist das sugestões; chat: a conversa (ou a lista)
-  if (tipo === 'sugestao') { sug.sep = 'checklist'; abrirDialogo(gaveta, P.htmlGaveta(sug.sep, sug.lista, sug.abertas, sug.erro)); carregarSugestoes(); return; }
-  if (tipo === 'conversa') { CH.abrir(Number(id) || undefined); return; }
+  if (tipo === 'sugestao') { sug.sep = 'checklist'; abrirDialogo(gaveta, htmlGaveta()); carregarSugestoes(); return; }
+  if (tipo === 'tarefa' || tipo === 'checkpoint') { FI.abrir(tipo, Number(id)); return; }
+  if (tipo === 'critica') { EQ.abrirProjeto(projetoId, { criticas: true }); return; }
+  if (tipo === 'conversa') return;   // o chat geral de 11/11 já não existe
   if (tipo === 'post') { location.hash = `#/social/post-${id}`; return; }
   if (tipo === 'obra') { location.hash = `#/social/obras/obra-${id}`; return; }
   const p = D.projeto(projetoId);
@@ -405,10 +434,10 @@ $('#b-notificacoes').addEventListener('click', (e) => {
   $('#pop-notificacoes').dataset.chave = chavePop();
 });
 $('#b-perfil').addEventListener('click', (e) => { e.stopPropagation(); abrirPop(e.currentTarget, $('#pop-perfil'), P.htmlPerfil(novidadeNova())); });
-$('#b-sugestoes').addEventListener('click', () => { abrirDialogo(gaveta, P.htmlGaveta(sug.sep, sug.lista, sug.abertas, sug.erro)); carregarSugestoes(); });
+$('#b-sugestoes').addEventListener('click', () => { if (sug.sep === 'log') sug.sep = 'sugestoes'; abrirDialogo(gaveta, htmlGaveta()); carregarSugestoes(); });
 document.addEventListener('click', (e) => { if (!e.target.closest('.pop')) fecharPops(); });
 document.addEventListener('keydown', (e) => { if (e.key === 'Escape') fecharPops(); });
-[dlg, gaveta, chat].forEach((d) => {
+[dlg, gaveta, ficha, projetoPop].forEach((d) => {
   // clique fora: only when the press also started outside (team note 2026-11-10: turning the 3D model and letting go
   // past the dialog's edge counted as a click outside, closed the dialog and the drag went to the page behind)
   let baixo = null;
@@ -424,16 +453,52 @@ async function carregarSugestoes() {
     .order('criada_em', { ascending: false }).limit(200);
   sug.erro = error ? error.message : '';
   if (!error) { data.forEach((g) => (g.sugestoes_comentarios || []).sort((a, b) => new Date(a.criado_em) - new Date(b.criado_em))); sug.lista = data; }
-  if (gaveta.open) {
-    const corpo = $('.gaveta-corpo', gaveta), y = corpo ? corpo.scrollTop : 0;
-    gaveta.innerHTML = P.htmlGaveta(sug.sep, sug.lista, sug.abertas, sug.erro);
-    const novo = $('.gaveta-corpo', gaveta); if (novo) novo.scrollTop = y;
-  }
+  redesenharGaveta();
 }
 async function mudarSugestao(id, campos) {
   const { error } = await sb.from('sugestoes').update(campos).eq('id', id);
   if (error) aviso('Não foi possível mudar a sugestão: ' + esc(error.message), { icone: 'atencao' });
   carregarSugestoes();
+}
+
+// ---------------------------------------------------------------- trabalho em equipa
+// Início: cada projeto abre o seu pop-up (tarefas em curso e o que precisa de atenção); Ctrl/⌘ + clique abre a página
+document.addEventListener('click', (e) => {
+  const linha = e.target.closest('a.projeto-linha[data-projeto]');
+  if (!linha || e.button !== 0 || e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return;
+  e.preventDefault();
+  EQ.abrirProjeto(linha.dataset.projeto);
+});
+// as descrições das tarefas (acordeão) ficam abertas enquanto se está no projeto
+document.addEventListener('toggle', (e) => {
+  const d = e.target;
+  if (!d.matches || !d.matches('details[data-desc]')) return;
+  const id = Number(d.dataset.desc);
+  if (d.open) { V.descricoesAbertas.add(id); hidratar(d); } else V.descricoesAbertas.delete(id);
+}, true);
+FI.ligar({
+  depois: async () => { await depois(); EQ.redesenharProjeto(); },
+  aoFechar: () => {   // voltar ao pop-up das marcações (sem as já vistas) e ao pop-up do projeto
+    if (dlg.open && dlg.querySelector('[data-marcacoes]')) { const h = EQ.htmlMarcacoes(); if (h) dlg.innerHTML = h; else fecharDialogo(dlg); }
+    EQ.redesenharProjeto();
+  },
+});
+async function acaoCritica(el) {
+  const c = E.criticas.find((x) => x.id === Number(el.dataset.id));
+  if (!c) return;
+  if (el.dataset.acao === 'critica-estado') { if (await tentar(() => D.mudarCritica(c.id, { estado: el.dataset.valor }))) { depois(); EQ.redesenharProjeto(); } return; }
+  if (el.dataset.acao === 'critica-apagar') {
+    if (!confirm('Apagar esta crítica?')) return;
+    if (await tentar(() => D.apagarCritica(c))) { import('./conversa.js').then((m) => m.apagarFicheiros(c.anexos)); depois(); EQ.redesenharProjeto(); }
+    return;
+  }
+  if (el.dataset.acao === 'critica-tarefa') {
+    let t = null;
+    if (await tentar(async () => { t = await D.criticaATarefa(c); })) {
+      aviso(`Tarefa criada: «${esc(t.titulo)}».`, { icone: 'certo', duracao: 5, acoes: [{ rotulo: 'Ver', fazer: () => FI.abrir('tarefa', t.id) }] });
+      depois(); EQ.redesenharProjeto();
+    }
+  }
 }
 
 // ---------------------------------------------------------------- ações (cliques)
@@ -550,17 +615,27 @@ document.addEventListener('click', async (e) => {
       if (abrir && mov()) gsap.from(det, { autoAlpha: 0, y: -4, duration: 0.25, ease: 'expo.out', clearProps: 'all' });
       return;
     }
-    case 'alternar-tarefa': {   // the task's description, images and notes
-      const det = document.getElementById('td-' + id), linha = el.closest('.tarefa');
-      const abrir = det.hidden;
-      if (abrir) V.tarefasAbertas.add(id); else V.tarefasAbertas.delete(id);
-      linha.outerHTML = V.htmlTarefa(E.tarefas.find((t) => t.id === id));
-      const nova = document.getElementById('t-' + id);
-      hidratar(nova);
-      const b = nova.querySelector('[data-acao="alternar-tarefa"]');
-      if (b) b.focus({ preventScroll: true });
-      if (abrir && mov()) gsap.from(nova.querySelector('.tarefa-detalhe'), { autoAlpha: 0, y: -4, duration: 0.2, ease: 'expo.out', clearProps: 'all' });
+    case 'abrir-ficha': return FI.abrir(el.dataset.alvo, id);
+    case 'pp-ir': fecharDialogo(projetoPop); return;   // o link segue para a página do projeto
+    case 'nova-critica': return abrirDialogo(dlg, EQ.dlgCritica(el.dataset.projeto));
+    case 'tipo-critica': {
+      const f = el.closest('form'); f.elements.tipo.value = el.dataset.valor;
+      $$('[data-acao="tipo-critica"]', f).forEach((b) => b.setAttribute('aria-pressed', b === el));
       return;
+    }
+    case 'critica-tirar': return EQ.tirarCritica(Number(el.dataset.i), el.closest('form'));
+    case 'critica-estado': case 'critica-apagar': case 'critica-tarefa': return acaoCritica(el);
+    case 'criticas-todas': return EQ.abrirProjeto(el.dataset.projeto, { criticas: true });
+    case 'conv-imagem': case 'conv-ficheiro':   // anexos das críticas (os da conversa trata o ecrã da tarefa)
+      if (el.closest('#ficha')) return;
+      try { await import('./conversa.js').then((m) => m.cliqueAnexo(el, EQ.anexosCritica)); } catch (err) { aviso('Não foi possível abrir: ' + esc(err.message || err), { icone: 'atencao' }); }
+      return;
+    case 'marcacoes-vistas': await D.marcacoesVistas(D.marcacoesPorVer().map((m) => m.tarefa_id)); fecharDialogo(dlg); return;
+    case 'log-ver': { const ir = () => irNotif(el.dataset.projeto, el.dataset.ref, el.dataset.id); if (['tarefa', 'checkpoint', 'critica', 'decisao'].includes(el.dataset.ref)) return ir(); fecharDialogo(gaveta); return ir(); }
+    case 'avisos-registo': {
+      const ligados = el.dataset.valor === '1';
+      if (await tentar(() => D.mudarAvisosRegisto(ligados))) aviso(ligados ? 'Vais receber os avisos do Log ao abrir o hub.' : 'Avisos do Log desligados.', { icone: 'certo', duracao: 3 });
+      return desenhar(false);
     }
     case 'acrescentar': return abrirDialogo(dlg, P.dlgAcrescentar(el.dataset.projeto || (rota().p || {}).id, null, el.dataset.tipo));
     case 'acrescentar-doc': return abrirDialogo(dlg, P.dlgDocumento(el.dataset.projeto, el.dataset.tipoDoc), { estreito: true });
@@ -702,8 +777,8 @@ document.addEventListener('click', async (e) => {
       pedidoInstalar.prompt(); try { await pedidoInstalar.userChoice; } catch (_) {}
       pedidoInstalar = null; return desenhar(false);
     // sugestões
-    case 'sug-sep': sug.sep = el.dataset.valor; gaveta.innerHTML = P.htmlGaveta(sug.sep, sug.lista, sug.abertas, sug.erro); return;
-    case 'sug-comentarios': if (sug.abertas.has(id)) sug.abertas.delete(id); else sug.abertas.add(id); gaveta.innerHTML = P.htmlGaveta(sug.sep, sug.lista, sug.abertas, sug.erro); return;
+    case 'sug-sep': if (el.dataset.valor === 'log') return abrirLog(); sug.sep = el.dataset.valor; gaveta.innerHTML = htmlGaveta(); return;
+    case 'sug-comentarios': if (sug.abertas.has(id)) sug.abertas.delete(id); else sug.abertas.add(id); gaveta.innerHTML = htmlGaveta(); return;
     case 'sug-checklist': {
       const g = sug.lista.find((x) => x.id === id);
       return mudarSugestao(id, { na_checklist: true, checklist_em: new Date().toISOString(), ...(g && g.estado === 'nova' ? { estado: 'em_analise' } : {}) });
@@ -751,6 +826,8 @@ document.addEventListener('change', async (e) => {
       }
       if (el.name === 'anexos-ficheiros') { await enviarAnexos(el.dataset.alvo, Number(el.dataset.ref), el.files); el.value = ''; }
       if (el.name === 'imagens-nota') { juntarImagensNota(Number(el.dataset.tarefa), el.files); el.value = ''; }
+      if (el.name === 'critica-ficheiros') { EQ.juntarCritica(el.files, el.closest('form')); el.value = ''; }
+      if (el.dataset.log) { EQ.filtroLog[el.dataset.log] = el.type === 'checkbox' ? el.checked : el.value; redesenharGaveta(); }
       return;
     case 'sug-estado': return mudarSugestao(id, { estado: el.value });
     case 'sug-concluir': return mudarSugestao(id, { estado: el.checked ? 'feita' : 'em_analise' });
@@ -857,6 +934,14 @@ document.addEventListener('submit', async (e) => {
         f.reset(); aviso('Obrigado! Sugestão enviada.', { icone: 'certo', duracao: 3 });
         return carregarSugestoes();
       }
+      case 'critica': {
+        const msg = $('.erro-msg', f);
+        if (botao) botao.textContent = 'A enviar…';
+        try { await EQ.enviarCritica(f, D.criarCritica); ok = true; } catch (err) { if (msg) msg.textContent = 'Não foi enviada: ' + (err.message || err); }
+        if (botao) botao.textContent = 'Enviar';
+        if (ok) { fecharDialogo(dlg); aviso('Obrigado! A equipa vê a crítica e quem edita foi avisado.', { icone: 'certo', duracao: 4 }); depois(); EQ.redesenharProjeto(); }
+        return;
+      }
       case 'comentario': {
         const { error } = await sb.from('sugestoes_comentarios').insert({ sugestao_id: Number(f.dataset.id), texto: v('texto'), autor_nome: E.eu.nome });
         if (error) { aviso('O comentário não foi enviado: ' + esc(error.message), { icone: 'atencao' }); return; }
@@ -904,6 +989,8 @@ document.addEventListener('paste', (e) => {
   if (!ficheiros.length) return;
   const nota = e.target.closest && e.target.closest('form[data-form="nota"]');
   if (nota) { e.preventDefault(); return juntarImagensNota(Number(nota.dataset.tarefa), ficheiros); }
+  const critica = e.target.closest && e.target.closest('form[data-form="critica"]');
+  if (critica) { e.preventDefault(); return EQ.juntarCritica(ficheiros, critica); }
   const caixa = dlg.open && $('.anexos-edicao', dlg);
   if (caixa && E.eu.editar) { e.preventDefault(); enviarAnexos(caixa.dataset.alvo, Number(caixa.dataset.ref), ficheiros); }
 });

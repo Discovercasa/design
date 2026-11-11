@@ -24,8 +24,9 @@ test('notificações por ver: ponto, abrir, rato; as minhas não contam; o estad
   const erros = await abrir(page);
   // duas de outra pessoa e uma minha
   await db(page, () => window.__fake.comoOutro((x) => x.tarefas.update({ estado: 'concluida' }).eq('id', 72)));
-  await db(page, () => window.__fake.comoOutro((x) => x.tarefas.update({ estado: 'em_curso' }).eq('id', 36)));
-  await db(page, () => window.__fake.comoEu((x) => x.tarefas.update({ estado: 'em_curso' }).eq('id', 37)));
+  // (só o que tem impacto notifica desde 2026-11-11: tarefas concluídas)
+  await db(page, () => window.__fake.comoOutro((x) => x.tarefas.update({ estado: 'concluida' }).eq('id', 36)));
+  await db(page, () => window.__fake.comoEu((x) => x.tarefas.update({ estado: 'concluida' }).eq('id', 37)));
   await expect(page.locator('#contador')).toHaveText('2');
   await page.getByRole('button', { name: /Notificações/ }).click();
   const pop = page.locator('#pop-notificacoes');
@@ -64,11 +65,11 @@ test('notificações por ver: ponto, abrir, rato; as minhas não contam; o estad
     await segunda.getByRole('button', { name: 'Marcar como vista' }).click();
     await expect(page.locator('#contador')).toHaveText('1');
   }
-  // abrir uma: fica vista e vai para a tarefa
+  // abrir uma: fica vista e abre o ecrã da tarefa
   await page.getByRole('button', { name: /Notificações/ }).click().catch(() => {});
   if (await pop.isHidden()) await page.getByRole('button', { name: /Notificações/ }).click();
   await pop.locator('.notif', { hasText: 'Testar primeiro em rede local' }).locator('.notif-abrir').click();
-  await expect(page).toHaveURL(/#\/projeto\/step-inside\/t-72$/);
+  await expect(page.locator('#ficha').getByRole('heading', { name: 'Testar primeiro em rede local' })).toBeVisible();
   await expect(page.locator('#contador')).toBeHidden();
   // recarregar: continua tudo visto
   await page.reload();
@@ -84,7 +85,7 @@ test('notificações: ver uma com o rato lá em baixo não faz a lista voltar ao
   test.skip(ehTelemovel(), 'no telemóvel não há rato');
   const erros = await abrir(page);
   for (const id of [46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59])
-    await db(page, (i) => window.__fake.comoOutro((x) => x.tarefas.update({ estado: 'em_curso' }).eq('id', i)), id);
+    await db(page, (i) => window.__fake.comoOutro((x) => x.tarefas.update({ estado: 'concluida' }).eq('id', i)), id);
   await page.getByRole('button', { name: /Notificações/ }).click();
   const pop = page.locator('#pop-notificacoes');
   const corpo = pop.locator('.pop-corpo');
