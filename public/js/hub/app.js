@@ -359,6 +359,9 @@ function mostrarNovos() {
   desenhar(false);
 }
 function irNotif(projetoId, tipo, id) {
+  // sugestões (migração 0021): a checklist das sugestões; chat: a conversa (ou a lista)
+  if (tipo === 'sugestao') { sug.sep = 'checklist'; abrirDialogo(gaveta, P.htmlGaveta(sug.sep, sug.lista, sug.abertas, sug.erro)); carregarSugestoes(); return; }
+  if (tipo === 'conversa') { CH.abrir(Number(id) || undefined); return; }
   if (tipo === 'post') { location.hash = `#/social/post-${id}`; return; }
   if (tipo === 'obra') { location.hash = `#/social/obras/obra-${id}`; return; }
   const p = D.projeto(projetoId);

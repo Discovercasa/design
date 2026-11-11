@@ -143,6 +143,25 @@ test('Chat: a conversa com o Claude, um grupo e as conversas dos outros não apa
   await expect(chat.locator('.chat-linha').first()).toContainText('Obra Torres Vedras');
   await expect(chat.locator('.chat-linha').first()).toContainText('Tu: Bom dia a todos');
   await captura(page, 'chat-lista');
+  // notifications (migration 0021): «conversa» opens the chat, «sugestao» the suggestions' checklist
+  await page.keyboard.press('Escape');
+  await expect(chat).toBeHidden();
+  await page.evaluate(() => {
+    const n = (id, tipo, texto, ref_tipo, ref_id) => ({ id, projeto: null, tipo, texto, ator_id: null, ator_nome: 'Claude', destinatario_id: null, ref_tipo, ref_id, criada_em: new Date().toISOString() });
+    window.__fake.db.notificacoes.push(n(900, 'chat', 'O Claude enviou-te 11 perguntas no chat', 'conversa', 3), n(901, 'sugestao_estado', 'O Claude concluiu a sugestão «Pôr um modo escuro no hub.»', 'sugestao', 1));
+    window.__fake.avisar('notificacoes');
+  });
+  await page.getByRole('button', { name: /Notificações/ }).click();
+  const pop = page.locator('#pop-notificacoes');
+  await expect(pop.locator('.notif', { hasText: 'O Claude enviou-te' })).toContainText('Chat');
+  await expect(pop.locator('.notif', { hasText: 'O Claude concluiu' })).toContainText('Sugestões');
+  await pop.locator('.notif', { hasText: 'O Claude enviou-te' }).locator('.notif-abrir').click();
+  await expect(chat.getByRole('heading', { name: 'Claude' })).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(chat).toBeHidden();
+  await page.getByRole('button', { name: /Notificações/ }).click();
+  await pop.locator('.notif', { hasText: 'O Claude concluiu' }).locator('.notif-abrir').click();
+  await expect(page.locator('#gaveta').getByRole('tab', { name: 'Checklist' })).toHaveAttribute('aria-selected', 'true');
   expect(erros).toEqual([]);
 });
 

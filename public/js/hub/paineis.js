@@ -23,7 +23,7 @@ export function linhaNotif(n) {
   const por = ehPorVer(n), minha = propria(n);
   return `<div class="notif${por ? ' nao-lida' : ''}${minha ? ' propria' : ''}" data-notif="${n.id}">
     <button type="button" class="notif-abrir" data-acao="ir-notif" data-notif="${n.id}" data-projeto="${esc(n.projeto || '')}" data-ref="${esc(n.ref_tipo || '')}" data-id="${n.ref_id || ''}">
-      <p>${esc(n.texto)}</p><p class="quando">${esc(n.projeto ? nomeProjeto(n.projeto) : 'Redes sociais')} · ${ha(n.criada_em)}${minha ? ' · feita por ti' : ''}${por ? '<span class="so-leitor"> · por ver</span>' : ''}</p></button>
+      <p>${esc(n.texto)}</p><p class="quando">${esc(n.projeto ? nomeProjeto(n.projeto) : n.ref_tipo === 'sugestao' ? 'Sugestões' : n.ref_tipo === 'conversa' ? 'Chat' : 'Redes sociais')} · ${ha(n.criada_em)}${minha ? ' · feita por ti' : ''}${por ? '<span class="so-leitor"> · por ver</span>' : ''}</p></button>
     ${minha || (!por && !E.lidas.has(n.id)) ? '' : `<button type="button" class="notif-marca" data-acao="alternar-lida" data-id="${n.id}" aria-label="${por ? 'Marcar como vista' : 'Marcar como por ver'}" title="${por ? 'Marcar como vista' : 'Marcar como por ver'}"><span class="ponto" aria-hidden="true"></span></button>`}
   </div>`;
 }
