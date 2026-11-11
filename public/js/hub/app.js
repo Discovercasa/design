@@ -1,5 +1,5 @@
 // Hub do Design: entrada (conta do Hub), barra de navegação, rotas (#/, #/projeto/<slug>, #/pessoal, #/definicoes,
-// #/novidades, #/social), notificações, sugestões, decisões e o pop-up "Novo".
+// #/novidades, #/social), notificações, sugestões, decisões e o pop-up "Novo". O chat da equipa está em chat.js.
 import * as D from './dados.js';
 import { E } from './dados.js';
 import * as V from './vistas.js';
@@ -7,11 +7,12 @@ import * as P from './paineis.js';
 import * as SO from './social.js';
 import * as MV from './materiais-vista.js';
 import * as AA from './ar-android.js';
+import * as CH from './chat.js';
 import { abrirVisor, hidratar, saoImagens } from './imagens.js';
 import { $, $$, ic, esc, iniciais, aviso, abrirDialogo, fecharDialogo, entrar, encherBarras, mov, luz } from './util.js';
 
 const { sb, nivel } = window.Design;
-const dlg = $('#dlg'), gaveta = $('#gaveta');
+const dlg = $('#dlg'), gaveta = $('#gaveta'), chat = $('#chat');
 let novidades = [], pedidoInstalar = null, rotaAnterior = '', relogio = null;
 const sug = { sep: 'sugestoes', lista: [], abertas: new Set(), erro: '' };
 
@@ -59,6 +60,7 @@ async function arrancar(sessao) {
   atualizarContador();
   desenhar(true);
   if (!E.erro) mostrarNovos();
+  CH.iniciar();
   clearInterval(relogio);
   relogio = setInterval(atualizar, 60000);   // reserva, se a ligação em direto cair
   if (!E.erro) D.ouvirMudancas(emDireto);
@@ -156,7 +158,7 @@ function desenhar(mudouRota) {
   const r = rota(), v = $('#vista');
   const aviso_ = E.erro ? `<div class="nota" style="margin-bottom:32px;border-color:var(--erro)">${ic('atencao')}<p><b>Os checkpoints, tarefas e decisões ainda não estão disponíveis.</b> A base de dados do hub precisa das migrações 0004 e 0005. <span class="fraco">(${esc(E.erro)})</span></p></div>` : '';
   let html;
-  if (r.nome === 'projeto' && r.p) { html = V.paginaProjeto(r.p); document.title = `${r.p.nome} · Discovercasa Design`; }
+  if (r.nome === 'projeto' && r.p) { html = V.paginaProjeto(r.p, V.abaDe(r.p, r.alvo)); document.title = `${r.p.nome} · Discovercasa Design`; }
   else if (r.nome === 'pessoal') { html = V.pessoal(); document.title = 'Área pessoal · Discovercasa Design'; }
   else if (r.nome === 'definicoes') { html = V.definicoes(!!pedidoInstalar); document.title = 'Definições · Discovercasa Design'; }
   else if (r.nome === 'social') { html = SO.pagina(r.sub); document.title = 'Redes sociais · Discovercasa Design'; }
@@ -191,6 +193,7 @@ function irPara(alvo) {
   const m = /^(t|cp|doc)-(\d+)$/.exec(alvo || '');
   if (!m) return;
   const id = Number(m[2]);
+  if (m[1] === 't' && !V.tarefasAbertas.has(id)) { V.tarefasAbertas.add(id); desenhar(false); }
   if (m[1] === 'doc') { const g = document.getElementById(alvo); const det = g && g.closest('details'); if (det) det.open = true; }
   const cpId = m[1] === 't' ? (E.tarefas.find((t) => t.id === id) || {}).checkpoint_id : m[1] === 'cp' ? id : null;
   if (m[1] === 't' && (E.tarefas.find((t) => t.id === id) || {}).revisao && !V.notasAbertas.has(id)) { V.notasAbertas.add(id); desenhar(false); }
@@ -200,15 +203,22 @@ function irPara(alvo) {
   el.scrollIntoView({ block: 'center', behavior: mov() ? 'smooth' : 'auto' });
   el.classList.remove('alvo'); void el.offsetWidth; el.classList.add('alvo');
 }
+const chaveDe = (r) => r.nome + (r.p ? r.p.id + ':' + V.abaDe(r.p, r.alvo) : '') + (r.sub || '');
 window.addEventListener('hashchange', () => {
   if (!E.eu.id) return;
   const r = rota();
-  const chaveRota = r.nome + (r.p ? r.p.id : '') + (r.sub || '');
+  const chaveRota = chaveDe(r);
   fecharPops();
   desenharNav();
   if (chaveRota === rotaAnterior && r.alvo) return irPara(r.alvo);
+  const outraAba = r.nome === 'projeto' && r.p && rotaAnterior.startsWith('projeto' + r.p.id + ':');
   rotaAnterior = chaveRota;
-  desenhar(true);
+  if (outraAba) {   // the same project, another tab: the tab bar stays where it was
+    const barra = $('#sub-abas'), topo = barra ? barra.getBoundingClientRect().top + window.scrollY - 72 : 0;
+    desenhar(false);
+    if (window.scrollY > topo) window.scrollTo(0, topo);
+    if (r.alvo) irPara(r.alvo);
+  } else desenhar(true);
   refrescarAoMudar();
 });
 // os dados de novo a cada mudança de página; só redesenha se algo mudou (sem interromper a entrada da página)
@@ -221,7 +231,7 @@ async function refrescarAoMudar() {
   atualizarContador();
   if (assinatura() !== antes && !dlg.open && !document.activeElement.matches('input, textarea, select')) desenhar(false);
 }
-rotaAnterior = (() => { const r = rota(); return r.nome + (r.p ? r.p.id : '') + (r.sub || ''); })();
+rotaAnterior = chaveDe(rota());
 luz($('#vista'));
 SO.ligar({ dlg, desenhar, depois, tentar });
 
@@ -268,6 +278,7 @@ async function atualizar() {
   try {
     const novas = await D.carregarNotificacoes();
     await D.carregarTudo();
+    CH.atualizar();   // reserva do chat, se a ligação em direto cair
     novas.slice(0, 3).forEach((n) => aviso(esc(n.texto), { icone: 'sino', acoes: [{ rotulo: 'Ver', fazer: () => irNotif(n.projeto, n.ref_tipo, n.ref_id) }] }));
     atualizarContador();
     if (!dlg.open && !gaveta.open && !document.activeElement.matches('input, textarea, select')) desenhar(false);
@@ -394,7 +405,7 @@ $('#b-perfil').addEventListener('click', (e) => { e.stopPropagation(); abrirPop(
 $('#b-sugestoes').addEventListener('click', () => { abrirDialogo(gaveta, P.htmlGaveta(sug.sep, sug.lista, sug.abertas, sug.erro)); carregarSugestoes(); });
 document.addEventListener('click', (e) => { if (!e.target.closest('.pop')) fecharPops(); });
 document.addEventListener('keydown', (e) => { if (e.key === 'Escape') fecharPops(); });
-[dlg, gaveta].forEach((d) => {
+[dlg, gaveta, chat].forEach((d) => {
   // clique fora: only when the press also started outside (team note 2026-11-10: turning the 3D model and letting go
   // past the dialog's edge counted as a click outside, closed the dialog and the drag went to the page behind)
   let baixo = null;
@@ -534,6 +545,18 @@ document.addEventListener('click', async (e) => {
       if (abrir) V.abertos.add(id); else V.abertos.delete(id);
       det.hidden = !abrir; li.classList.toggle('aberto', abrir); el.setAttribute('aria-expanded', abrir);
       if (abrir && mov()) gsap.from(det, { autoAlpha: 0, y: -4, duration: 0.25, ease: 'expo.out', clearProps: 'all' });
+      return;
+    }
+    case 'alternar-tarefa': {   // the task's description, images and notes
+      const det = document.getElementById('td-' + id), linha = el.closest('.tarefa');
+      const abrir = det.hidden;
+      if (abrir) V.tarefasAbertas.add(id); else V.tarefasAbertas.delete(id);
+      linha.outerHTML = V.htmlTarefa(E.tarefas.find((t) => t.id === id));
+      const nova = document.getElementById('t-' + id);
+      hidratar(nova);
+      const b = nova.querySelector('[data-acao="alternar-tarefa"]');
+      if (b) b.focus({ preventScroll: true });
+      if (abrir && mov()) gsap.from(nova.querySelector('.tarefa-detalhe'), { autoAlpha: 0, y: -4, duration: 0.2, ease: 'expo.out', clearProps: 'all' });
       return;
     }
     case 'acrescentar': return abrirDialogo(dlg, P.dlgAcrescentar(el.dataset.projeto || (rota().p || {}).id, null, el.dataset.tipo));

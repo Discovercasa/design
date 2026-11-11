@@ -44,5 +44,13 @@ Projeto Design da Discovercasa (`design.discovercasa.pt`). Responder em portugu�
   (`BOB/ferramentas/documentos/codigos.py`); `BOB/orcamentacao/ligacoes.json` liga cada código a um material do Hub (só o
   id: nunca nomes nem preços do Hub no repositório público); o cálculo comum é `public/js/orcamento.js`. As parcelas do
   preço final (mão de obra, fundação, margem, IVA…) ficam só na tabela `orcamento_parcelas` (migração 0017), nunca no código.
+- **Chat da equipa** (ícone à esquerda das Sugestões; migração 0018, 2026-11-11; `public/js/hub/chat.js`): conversas
+  diretas e de grupo com texto, ficheiros, imagens/vídeos e áudios; cada conversa só a veem os seus membros (nem quem
+  edita); ficheiros no armazenamento privado `chat`, pasta por conversa. As conversas criam-se pela função
+  `abrir_conversa`. **O Claude escreve pela base de dados** (sem sessão: `autor_id` null, `autor_nome` 'Claude', numa
+  conversa `claude = true` com a pessoa como único membro) e lê as respostas na tabela `mensagens`. Comentários do
+  Claude nas sugestões: `sugestoes_comentarios` com `autor_id` null (migração 0019).
+- **Página de um projeto** (2026-11-11, sugestões do Geral): abas `#/projeto/<slug>/<aba>` (workflow, documentos,
+  teste-ar, custos, sobre); checkpoints e tarefas começam fechados.
 - **Repositório público**: nunca dados pessoais nem desenhos de clientes (`*.dwfx`, `*.pdf` estão no `.gitignore`;
   ficam só no PC).

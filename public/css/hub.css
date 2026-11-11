@@ -116,6 +116,10 @@ p { margin: 0; text-wrap: pretty; }
 @media (max-width: 1400px) {   /* 8 tabs since the Materiais tab (2026-11-10): tighter so «Redes sociais» still fits */
   .nav a { padding: 8px 8px; }
   .nav a[aria-current="page"]::after { left: 8px; right: 8px; }
+  /* + the chat icon (2026-11-11): the brand keeps only «Discovercasa», the icons are a bit narrower */
+  .marca span { display: none; }
+  .topo-linha { gap: 12px; }
+  .topo-acoes .icone-botao { width: 36px; }
 }
 .nav a[aria-current="page"] { color: var(--tinta); }
 .nav a[aria-current="page"]::after {
@@ -639,3 +643,42 @@ dialog.visor .icone-botao:hover { background: oklch(1 0 0 / 0.14); color: #fff; 
 .notif.nao-lida .notif-marca .ponto { background: var(--acao); border-color: var(--acao); }
 .notif-marca:hover .ponto, .notif-marca:focus-visible .ponto { box-shadow: 0 0 0 4px var(--acao-suave); }
 .pop-dica { margin: 0; padding: 10px 16px; border-top: 1px solid var(--linha); }
+
+/* ---------- página de um projeto: abas e tudo fechado ao abrir (sugestões do Geral, 2026-11-11) ---------- */
+.sub-abas {
+  position: sticky; top: 60px; z-index: 20; display: flex; gap: 2px; overflow-x: auto; scrollbar-width: none;
+  margin: 0 0 32px; padding-top: 6px; background: var(--canvas); border-bottom: 1px solid var(--linha);
+}
+.sub-abas::-webkit-scrollbar { display: none; }
+.sub-abas a {
+  position: relative; padding: 10px 14px 12px; border-radius: var(--r1) var(--r1) 0 0; color: var(--tinta-2); text-decoration: none;
+  font-size: 0.9375rem; font-weight: 500; white-space: nowrap; transition: color .15s, background-color .15s;
+}
+.sub-abas a:hover { color: var(--tinta); background: var(--linha); }
+.sub-abas a .num { margin-left: 4px; font-size: 0.8125rem; color: var(--tinta-3); }
+.sub-abas a[aria-current="page"] { color: var(--tinta); }
+.sub-abas a[aria-current="page"]::after { content: ""; position: absolute; left: 14px; right: 14px; bottom: -1px; height: 2px; background: var(--acao); border-radius: 2px; }
+.aba-corpo > .seccao:first-child { margin-top: 0; }
+.sobre-grelha { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 32px 40px; align-items: start; }
+.tarefa-topo {
+  display: flex; align-items: flex-start; gap: 6px; width: 100%; padding: 0; border: 0; background: none; font: inherit; color: inherit;
+  text-align: left; cursor: pointer;
+}
+.tarefa-topo:hover .titulo { text-decoration: underline; text-decoration-color: var(--linha-forte); text-underline-offset: 3px; }
+.tarefa-topo .chev { margin-top: 3px; color: var(--tinta-3); transition: transform .2s var(--ease); }
+.tarefa.aberta .tarefa-topo .chev { transform: rotate(180deg); }
+.tarefa-detalhe { display: grid; gap: 8px; margin-top: 10px; }
+.tarefa-detalhe .descricao { margin-top: 0; }
+.tarefa .meta .ic { vertical-align: -3px; }
+details.dobrar > summary { display: flex; align-items: center; gap: 10px; cursor: pointer; list-style: none; margin-bottom: 0; }
+details.dobrar > summary::-webkit-details-marker { display: none; }
+details.dobrar > summary .chev { color: var(--tinta-3); transition: transform .2s var(--ease); }
+details.dobrar[open] > summary { margin-bottom: 16px; }
+details.dobrar[open] > summary .chev { transform: rotate(180deg); }
+details.dobrar > summary:hover h2 { color: var(--tinta-2); }
+@media (max-width: 720px) { .sub-abas { position: static; margin-bottom: 24px; } }
+/* Início: decisões em aberto e feito recentemente lado a lado; o resto dobrado por baixo */
+.grelha-inicio { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 32px 48px; align-items: start; }
+details.dobrar + details.dobrar { margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--linha); }
+/* as gavetas (sugestões, chat) ocupam o ecrã todo no telemóvel (o browser limita os diálogos a 100% - 2em) */
+dialog.gaveta { max-width: 100vw; }

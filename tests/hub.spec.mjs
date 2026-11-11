@@ -63,20 +63,41 @@ test('página do Build Your House: primeiro o estado, depois o botão para a app
   const botao = page.getByRole('link', { name: /Abrir o Build Your House/ });
   await expect(botao).toHaveAttribute('href', '/build-your-house/');
   await expect(botao).toHaveAttribute('target', '_blank');   // abre noutra janela/separador
-  // o checkpoint em curso abre sozinho e mostra as tarefas, com a decisão e a app sugerida
+  // sugestão do Geral (2026-11-11): tudo fechado ao abrir; o checkpoint em curso abre com um clique
   const passo = page.locator('.passo.em_curso');
+  await expect(page.locator('.passo-topo[aria-expanded="true"]')).toHaveCount(0);
+  await expect(passo.locator('.tarefa').first()).toBeHidden();
+  await passo.locator('.passo-topo').click();
   await expect(passo.locator('.passo-topo')).toHaveAttribute('aria-expanded', 'true');
   await expect(passo.locator('.tarefa')).toHaveCount(4);
   await expect(passo.locator('.decisao-pill')).toHaveCount(2);
+  // as tarefas também: a descrição, as imagens e as notas abrem com um clique no título
+  const t = passo.locator('.tarefa', { has: page.locator('.tarefa-topo') }).first();
+  await expect(t.locator('.descricao')).toBeHidden();
+  await t.locator('.tarefa-topo').click();
+  await expect(t.locator('.descricao')).toBeVisible();
+  await expect(t.locator('.tarefa-topo')).toHaveAttribute('aria-expanded', 'true');
   await expect(page.locator('.passo').nth(5).locator('.chip.app').first()).toContainText('Sugerido: usar Orçamentação');
-  await expect(page.locator('.organizacao')).toContainText('build-your-house/<tarefa>');
   await captura(page, 'build-your-house');
+  // sugestão do Geral (2026-11-11): abas, uma secção de cada vez; o voltar do browser volta à aba anterior
+  const abas = page.getByRole('navigation', { name: 'Secções do projeto' });
+  await expect(abas.getByRole('link')).toHaveText([/Workflow\s*3\/15/, /Documentos/, 'Sobre o projeto']);
+  await abas.getByRole('link', { name: 'Sobre o projeto' }).click();
+  await expect(page).toHaveURL(/#\/projeto\/build-your-house\/sobre$/);
+  await expect(page.locator('.organizacao')).toContainText('build-your-house/<tarefa>');
+  await expect(page.locator('.workflow')).toHaveCount(0);
+  await page.goBack();
+  await expect(page.locator('.workflow')).toBeVisible();
+  await expect(abas.getByRole('link', { name: /Workflow/ })).toHaveAttribute('aria-current', 'page');
 });
 
 test('Step Inside: novo nome, pipeline com custos e calculadora', async ({ page }) => {
   const erros = await abrir(page, { rota: '/#/projeto/step-inside' });
   await expect(page.getByRole('heading', { level: 1, name: 'Step Inside' })).toBeVisible();
   await expect(page.getByText('Antes: Plataforma do cliente (VR/AR)')).toBeVisible();
+  await expect(page.locator('.passo')).toHaveCount(10);
+  await page.getByRole('navigation', { name: 'Secções do projeto' }).getByRole('link', { name: 'Pipeline e custos' }).click();
+  await expect(page).toHaveURL(/#\/projeto\/step-inside\/custos$/);
   const etapas = page.locator('.etapa');
   await expect(etapas).toHaveCount(10);
   await expect(etapas.nth(7)).toContainText('0,79 €/h');
@@ -90,7 +111,6 @@ test('Step Inside: novo nome, pipeline com custos e calculadora', async ({ page 
   await expect(r).toContainText('79,33');           // cenário Moderado
   await page.locator('select[name=tarifa]').selectOption('0.34');
   await expect(r).toContainText('30,30');
-  await expect(page.locator('.passo')).toHaveCount(10);
   await captura(page, 'step-inside');
   expect(erros).toEqual([]);
 });
@@ -144,6 +164,7 @@ test('checkpoints e tarefas: acrescentar no Início e no projeto, concluir com a
 test('nova decisão numa tarefa, com opções, vantagens, desvantagens e custo', async ({ page }) => {
   await abrir(page, { rota: '/#/projeto/gerador' });
   const passo = page.locator('.passo.em_curso');
+  await passo.locator('.passo-topo').click();
   await passo.locator('.tarefa').first().getByRole('button', { name: 'Editar tarefa' }).click();
   await page.locator('#dlg').getByRole('button', { name: 'Acrescentar decisão' }).click();
   const dlg = page.locator('#dlg');
@@ -186,6 +207,7 @@ test('pop-up "Novo" na primeira vez que vejo uma tarefa acrescentada por outra p
   await atualizar(page);
   const aviso = page.locator('.aviso', { hasText: 'Nova tarefa' });
   await expect(aviso).toContainText('«Pedir a listagem real por email» · por Colega Teste');
+  await page.locator('#cp-10 .passo-topo').click();
   await expect(page.locator('.tarefa', { hasText: 'Pedir a listagem real por email' }).locator('.chip.novo')).toBeVisible();
   const vistos = await db(page, () => window.__fake.db.vistos.length);
   expect(vistos).toBe(1);   // não volta a aparecer
@@ -218,6 +240,7 @@ test('sugestões: enviar, comentar, pôr na checklist', async ({ page }) => {
 test('perfil: área pessoal, definições (nome, tema), novidades e sair', async ({ page }) => {
   await abrir(page, { rota: '/#/projeto/gerador' });
   // atribuir-me uma tarefa
+  await page.locator('.passo.em_curso .passo-topo').click();
   await page.locator('.passo.em_curso .tarefa').first().getByRole('button', { name: 'Editar tarefa' }).click();
   await page.locator('#dlg').getByLabel('Responsável').selectOption({ label: 'Teste Hub' });
   await page.locator('#dlg').getByRole('button', { name: 'Guardar' }).click();
@@ -238,8 +261,8 @@ test('perfil: área pessoal, definições (nome, tema), novidades e sair', async
   await captura(page, 'inicio-escuro');
   await page.getByRole('button', { name: 'Perfil' }).click();
   await page.locator('#pop-perfil').getByRole('menuitem', { name: /Novidades/ }).click();
-  await expect(page.locator('.novidade').first()).toContainText('Orçamentação: o preço final parcela a parcela');
-  await expect(page.locator('.novidade').nth(1)).toContainText('Orçamentação: o custo dos materiais com os preços do Hub');
+  await expect(page.locator('.novidade').first()).toContainText('Chat da equipa e um hub mais simples');
+  await expect(page.locator('.novidade').nth(1)).toContainText('Orçamentação: o preço final parcela a parcela');
   await page.getByRole('button', { name: 'Perfil' }).click();
   await page.locator('#pop-perfil').getByRole('menuitem', { name: 'Sair' }).click();
   await expect(page.getByRole('button', { name: 'Entrar com a conta do Hub' })).toBeVisible();
@@ -351,11 +374,12 @@ test('Build Your House: as fases do Smart Land e Interiores na ordem certa, com 
     'Implantação · Fase 4 · Implantação geométrica', 'Conformidade · Fase 5 · Piloto municipal', 'Smart Interiors · Fase 6 · Base',
     'Smart Interiors · Fase 7 · Posicionamento e decoração automática', 'Conformidade · Fase 8 · Expansão municipal e técnica']);
   await expect(page.locator('.bloco-lateral .decisao-pill')).toHaveCount(5);
+  await page.goto('/#/projeto/build-your-house/documentos');
   await expect(page.locator('#documentos')).toContainText('Especificação Smart Land, Smart Interiors e Conformidade');
 });
 
 test('documentos: informativos e adicionais, abrir noutra janela, carregar e apagar', async ({ page, context }) => {
-  await abrir(page, { rota: '/#/projeto/step-inside' });
+  await abrir(page, { rota: '/#/projeto/step-inside/documentos' });
   const sec = page.locator('#documentos');
   await expect(sec.getByRole('heading', { name: /Documentos informativos/ })).toContainText('2');
   await expect(sec.locator('.doc', { hasText: 'Plano técnico, revisão v2 (PDF)' })).toBeVisible();
@@ -382,15 +406,16 @@ test('documentos: informativos e adicionais, abrir noutra janela, carregar e apa
 });
 
 test('Builder: desenhos de Torres Vedras e Sobral agrupados nos adicionais', async ({ page }) => {
-  await abrir(page, { rota: '/#/projeto/builder' });
+  await abrir(page, { rota: '/#/projeto/builder/documentos' });
   const sec = page.locator('#documentos');
   await expect(sec.getByRole('heading', { name: /Documentos adicionais/ })).toContainText('35');
   await expect(sec.locator('details.doc-grupo summary')).toHaveText([/Torres Vedras\s*15/, /Sobral\s*4/, /Método\s*16/]);
   await sec.locator('summary', { hasText: 'Torres Vedras' }).click();
   await expect(sec.locator('.doc', { hasText: 'projeto de arquitetura geral' }).first()).toBeVisible();
-  // pedidos de outros projetos que sugerem usar o Builder
-  await expect(page.locator('.bloco-lateral', { hasText: 'Pedidos de outros projetos' })).toContainText('Documentar a pipeline PDF/DWFx');
   await captura(page, 'builder-documentos');
+  // pedidos de outros projetos que sugerem usar o Builder (na aba Workflow)
+  await page.getByRole('navigation', { name: 'Secções do projeto' }).getByRole('link', { name: /Workflow/ }).click();
+  await expect(page.locator('.bloco-lateral', { hasText: 'Pedidos de outros projetos' })).toContainText('Documentar a pipeline PDF/DWFx');
 });
 
 test('em direto: o que outra pessoa muda aparece sem recarregar, em todos os sítios', async ({ page }) => {
@@ -508,12 +533,13 @@ test('Materiais: aba só de consulta — preço por fornecedor, histórico, filt
   await page.goto(`/#/materiais/m-${A2}`);
   await expect(page.locator(`#m-${A2} details`)).toHaveAttribute('open', '');
   // the projects that use the list say what for and link to it
-  await page.goto('/#/projeto/orcamentacao');
+  await page.goto('/#/projeto/orcamentacao/sobre');
   const bloco = page.locator('.bloco-materiais');
   await expect(bloco).toContainText('Materiais do Hub');
   await expect(bloco).toContainText('3 materiais · 2 fornecedores');
   await expect(bloco.getByRole('link', { name: 'Materiais e preços' })).toHaveAttribute('href', '#/materiais');
-  await page.goto('/#/projeto/builder');
+  await page.goto('/#/projeto/builder/sobre');
+  await expect(page.locator('.organizacao')).toBeVisible();
   await expect(page.locator('.bloco-materiais')).toHaveCount(0);
   expect(erros).toEqual([]);
 });
@@ -537,7 +563,7 @@ test('Step Inside: o Scene Viewer não abriu no Android — o hub diz porquê e 
 });
 
 test('Step Inside: teste do AR — carregar modelos e abrir no Quick Look / Scene Viewer', async ({ page }) => {
-  await abrir(page, { rota: '/#/projeto/step-inside' });
+  await abrir(page, { rota: '/#/projeto/step-inside/teste-ar' });
   const sec = page.locator('#teste-ar');
   await expect(sec.getByRole('heading', { name: 'Teste do AR no telemóvel' })).toBeVisible();
   await expect(sec).toContainText('Ainda sem modelos AR');
@@ -612,8 +638,10 @@ test('Step Inside: teste do AR — carregar modelos e abrir no Quick Look / Scen
   // Android (team note 10, 2026-11-10): the panel opens the AR test page (outside the hub) with our signed GLB in the hash
   const teste = sec.locator('#diag-ar').getByRole('link', { name: 'Abrir a página de teste do AR' });
   await expect(teste).toHaveAttribute('href', /^\/ar-teste\.html#u=http.+__ficheiro.+\.glb&t=Torres\+Vedras.+&doc=\d+&real=1$/);
-  // the documents section does not list the AR models
-  await expect(page.locator('#documentos')).not.toContainText('torres-vedras_ar_casa');
   await captura(page, 'step-inside-teste-ar');
   await sec.screenshot({ path: `capturas/step-inside-teste-ar-seccao-${test.info().project.name}.png` });
+  // the documents tab does not list the AR models
+  await page.getByRole('navigation', { name: 'Secções do projeto' }).getByRole('link', { name: /Documentos/ }).click();
+  await expect(page.locator('#documentos')).toBeVisible();
+  await expect(page.locator('#documentos')).not.toContainText('torres-vedras_ar_casa');
 });

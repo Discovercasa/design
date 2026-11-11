@@ -1,6 +1,17 @@
 [
   {
     "dia": "2026-11-11",
+    "titulo": "Chat da equipa e um hub mais simples",
+    "itens": [
+      "Chat: o ícone novo ao lado das Sugestões abre as conversas. Escreve a qualquer pessoa do hub (ou a um grupo) e junta ficheiros, fotos, vídeos e áudios gravados ali mesmo. Cada conversa só a veem as pessoas que estão nela.",
+      "O número no ícone do chat diz quantas mensagens tens por ler; uma mensagem nova com o chat fechado aparece num aviso.",
+      "O Claude também escreve no chat (por exemplo, as perguntas que tem para fazer): responde-lhe lá e ele lê as respostas.",
+      "Sugestão do Geral: ao abrir um projeto, os checkpoints e as tarefas aparecem todos fechados. Um clique no checkpoint mostra as tarefas; um clique no título da tarefa mostra a descrição, as imagens e as notas.",
+      "Sugestão do Geral: a página de cada projeto tem abas (Workflow, Documentos, Teste do AR, Pipeline e custos, Sobre o projeto), uma secção de cada vez em vez de tudo empilhado. No Início, «Objetivos» e «Como os projetos se ligam» ficam dobrados."
+    ]
+  },
+  {
+    "dia": "2026-11-11",
     "titulo": "Orçamentação: o preço final parcela a parcela",
     "itens": [
       "Na página Orçamentação, depois dos materiais, a secção «Preço final» mostra cada parcela com a sua conta: materiais, caixilharia, fundação, mão de obra, especialidades, instalações e pré-instalações, licenciamento, margem e IVA.",

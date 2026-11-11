@@ -28,19 +28,29 @@ async function abrir(page, { utilizador, rota = '/' } = {}) {
   return erros;
 }
 const db = (page, expr, arg) => page.evaluate(expr, arg);
+// sugestão do Geral (2026-11-11): checkpoints e tarefas começam fechados
+const abrirPasso = async (passo) => { const b = passo.locator('.passo-topo'); if ((await b.getAttribute('aria-expanded')) !== 'true') await b.click(); };
+const abrirTarefa = async (page, tarefa) => {
+  await abrirPasso(page.locator('.passo', { has: tarefa }));
+  const b = tarefa.locator('.tarefa-topo');
+  if ((await b.count()) && (await b.getAttribute('aria-expanded')) !== 'true') await b.click();
+};
 const VER = { id: 'u-ver', nome: 'So Ver', nivel: 'ver' };
 
 test('imagens: juntar a uma tarefa, ver em grande com setas, tirar; critério de saída e imagens no checkpoint', async ({ page }) => {
   const erros = await abrir(page, { rota: '/#/projeto/builder' });
   const dlg = page.locator('#dlg');
   const tarefa = page.locator('.tarefa', { hasText: 'Comparar as quantidades do modelo com as reais' });
+  await abrirPasso(page.locator('.passo', { has: tarefa }));
   await tarefa.getByRole('button', { name: 'Editar tarefa' }).click();
   await dlg.locator('input[name="anexos-ficheiros"]').setInputFiles([imagem('quantidades-1.png'), imagem('quantidades-2.png')]);
   await expect(dlg.locator('.anexos-lista li')).toHaveCount(2);
   await expect(page.locator('.aviso', { hasText: '2 imagens guardadas' })).toBeVisible();
   await expect(dlg.locator('.anexos-lista img').first()).toHaveAttribute('src', /.+/);
   await dlg.getByRole('button', { name: 'Cancelar' }).click();
-  // no workflow: as miniaturas por baixo da descrição; clicar abre o visor
+  // no workflow: a tarefa fechada diz quantas imagens tem; aberta, as miniaturas; clicar abre o visor
+  await expect(tarefa.locator('.meta')).toContainText('2');
+  await abrirTarefa(page, tarefa);
   await expect(tarefa.locator('.galeria-img')).toHaveCount(2);
   await tarefa.locator('.galeria-img').first().click();
   const visor = page.locator('dialog.visor');
@@ -59,6 +69,7 @@ test('imagens: juntar a uma tarefa, ver em grande com setas, tirar; critério de
   await dlg.getByRole('button', { name: 'Cancelar' }).click();
   // checkpoint: critério de saída (vem da migração) e uma imagem nova
   const cp = page.locator('.passo', { hasText: 'Validação com os materiais reais' });
+  await abrirPasso(cp);
   await expect(cp.locator('.criterio')).toContainText('Tolerância de erro definida por família de material');
   await cp.getByRole('button', { name: 'Editar checkpoint' }).click();
   await expect(dlg.locator('textarea[name="criterio_saida"]')).toHaveValue(/Tolerância de erro/);
@@ -77,6 +88,8 @@ test('imagens: juntar a uma tarefa, ver em grande com setas, tirar; critério de
 test('notas de teste: a lista do teste do configurador, nota nova com imagem, resolver e passar a tarefa', async ({ page }) => {
   const erros = await abrir(page, { rota: '/#/projeto/build-your-house' });
   const tarefa = page.locator('.tarefa', { hasText: 'Teste completo do configurador pela equipa, com comentários' });
+  await expect(tarefa.locator('.meta')).toContainText('2 notas por resolver');   // fechada: o resumo na linha
+  await abrirTarefa(page, tarefa);
   await expect(tarefa.locator('.descricao')).toHaveText('Cada problema encontrado no teste fica na lista de notas: bug, a mudar ou a fazer.');
   const resumo = tarefa.locator('.notas-resumo');
   await expect(resumo).toContainText('2 por resolver · 2 bugs · 2 no total');
@@ -120,9 +133,12 @@ test('tarefa de teste ou revisão: ligar a marca no editar faz aparecer a lista'
   await tarefa.getByRole('button', { name: 'Editar tarefa' }).click();
   await page.locator('#dlg label.aprovar', { hasText: 'Tarefa de teste ou revisão' }).locator('input').check();
   await page.locator('#dlg').getByRole('button', { name: 'Guardar' }).click();
+  await abrirTarefa(page, tarefa);
   await expect(tarefa.locator('.notas-resumo')).toContainText('Ainda sem notas');
   // as tarefas de revisão do Gerador já vêm marcadas
-  await expect(page.locator('.tarefa', { hasText: 'Rever o documento Cobertura' }).locator('.notas-resumo')).toBeVisible();
+  const cobertura = page.locator('.tarefa', { hasText: 'Rever o documento Cobertura' });
+  await abrirTarefa(page, cobertura);
+  await expect(cobertura.locator('.notas-resumo')).toBeVisible();
 });
 
 test('decisão: acrescentar uma opção que não estava na lista e escolhê-la', async ({ page }) => {
@@ -178,6 +194,7 @@ test('obras: clicar no círculo marca a fase atual, desfaz e recua; uma só noti
 test('quem só vê: escreve notas, mas não junta imagens às tarefas nem muda a fase das obras', async ({ page }) => {
   await abrir(page, { utilizador: VER, rota: '/#/projeto/build-your-house' });
   const tarefa = page.locator('.tarefa', { hasText: 'Teste completo do configurador' });
+  await abrirTarefa(page, tarefa);
   await tarefa.locator('.notas-resumo').click();
   await expect(tarefa.getByRole('button', { name: 'Passar a tarefa' })).toHaveCount(0);
   await expect(tarefa.getByRole('button', { name: 'Editar tarefa' })).toHaveCount(0);

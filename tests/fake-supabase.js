@@ -5,13 +5,15 @@
   const fx = window.__FIXTURE || {};
   const fs = window.__FIXTURE_SOCIAL || {};   // redes sociais (migração 0010)
   const fm = window.__FIXTURE_MATERIAIS || {};   // materiais vindos do Hub (migração 0016, só de consulta)
+  const fc = window.__FIXTURE_CHAT || {};        // chat da equipa (migração 0018)
   const U = window.__UTILIZADOR || { id: 'u-eu', nome: 'Teste Hub', nivel: 'editar' };
   const OUTRO = { id: 'u-outro', nome: 'Colega Teste' };
   const agora = () => new Date().toISOString();
   const hoje = () => new Date().toISOString().slice(0, 10);
   const db = {
     projetos: [['build_your_house', 'Build Your House'], ['builder', 'Builder'], ['gerador', 'Gerador de documentos'], ['orcamentacao', 'Orçamentação'], ['plataforma_cliente', 'Step Inside']].map(([id, nome], i) => ({ id, nome, ordem: i + 1 })),
-    perfis: [{ id: OUTRO.id, nome: OUTRO.nome, criado_em: '2026-11-01T00:00:00Z', notificacoes_vistas_em: '2026-11-01T00:00:00Z' }],
+    perfis: [{ id: OUTRO.id, nome: OUTRO.nome, criado_em: '2026-11-01T00:00:00Z', notificacoes_vistas_em: '2026-11-01T00:00:00Z' }, ...(fc.perfis || [])],
+    conversas: fc.conversas || [], conversas_membros: fc.conversas_membros || [], mensagens: fc.mensagens || [],
     checkpoints: fx.checkpoints || [], tarefas: fx.tarefas || [], decisoes: fx.decisoes || [], decisoes_opcoes: fx.decisoes_opcoes || [],
     documentos: fx.documentos || [], notificacoes: [], vistos: [],
     tarefas_notas: fx.tarefas_notas || [], anexos: [], notificacoes_lidas: [],
@@ -158,6 +160,22 @@
     if (!ref) throw new Error(`O ${n.alvo} ${n.ref_id} não existe.`);
     n.projeto = ref.projeto; n.ordem ??= 0;
   };
+  // chat (migração 0018): só os membros veem a conversa; cada um escreve em seu nome; o Claude escreve sem sessão
+  const membro = (cid, quem = ator) => db.conversas_membros.some((m) => m.conversa_id === cid && m.utilizador_id === quem.id);
+  antes.mensagens = (n, o) => {
+    if (o) return;
+    if (!membro(n.conversa_id)) throw new Error('new row violates row-level security policy for table "mensagens"');
+    Object.assign(n, { autor_id: ator.id, autor_nome: nomeAtual(), criada_em: agora(), texto: n.texto ?? '', anexos: n.anexos ?? [] });
+    if (!n.texto.trim() && !n.anexos.length) throw new Error('new row for relation "mensagens" violates check constraint');
+    if (n.anexos.some((a) => !String(a.caminho).startsWith(n.conversa_id + '/'))) throw new Error('Anexo inválido.');
+  };
+  depois.mensagens = (n, o) => {
+    if (o) return;
+    const c = db.conversas.find((x) => x.id === n.conversa_id); if (c) c.ultima_em = n.criada_em;
+    const l = db.conversas_membros.find((m) => m.conversa_id === n.conversa_id && m.utilizador_id === n.autor_id); if (l) l.lida_em = n.criada_em;
+    avisar('conversas');
+  };
+  antes.conversas_membros = (n, o) => { if (o && (o.utilizador_id !== ator.id)) throw new Error('permission denied'); if (o) Object.assign(n, { conversa_id: o.conversa_id, utilizador_id: o.utilizador_id }); };
   // em direto: cada escrita avisa os canais abertos (como o Supabase Realtime)
   const ouvintes = [];
   const avisar = (t) => setTimeout(() => ouvintes.filter((o) => o.tabela === t).forEach((o) => o.cb({ table: t })), 30);
@@ -228,6 +246,7 @@
           if (this.t === 'posts') { db.posts_media = db.posts_media.filter((m) => !fora.some((p) => p.id === m.post_id)); db.posts_comentarios = db.posts_comentarios.filter((c) => !fora.some((p) => p.id === c.post_id)); }
           if (this.t === 'posts_media') { fora.forEach((m) => desaprovarFotos(m.post_id)); db.posts_comentarios.forEach((c) => { if (fora.some((m) => m.id === c.media_id)) c.media_id = null; }); }
           if (this.t === 'obras_fases' || this.t === 'obras') throw new Error('permission denied: as fases e as obras não se apagam');
+          if (this.t === 'mensagens' && fora.some((m) => m.autor_id !== ator.id)) { db[this.t] = tab; return { data: null, error: null }; }   // RLS: só as minhas
           linhas = fora;
         } else {
           // como o PostgREST: decisoes ↔ decisoes_opcoes têm duas chaves estrangeiras, o embed sem "!<fk>" falha
@@ -235,6 +254,8 @@
             return { data: null, error: { message: "Could not embed because more than one relationship was found for 'decisoes' and 'decisoes_opcoes'" } };
           linhas = tab.filter((r) => this.f.every((f) => f(r)));
           if (this.t === 'vistos' || this.t === 'notificacoes_lidas') linhas = linhas.filter((r) => r.utilizador_id === ator.id);
+          if (this.t === 'conversas') linhas = linhas.filter((r) => membro(r.id));
+          if (this.t === 'conversas_membros' || this.t === 'mensagens') linhas = linhas.filter((r) => membro(r.conversa_id));
           if (this.ord) { const [c, asc] = this.ord; linhas = [...linhas].sort((a, b) => (a[c] < b[c] ? -1 : a[c] > b[c] ? 1 : 0) * (asc ? 1 : -1)); }
           if (this.lim) linhas = linhas.slice(0, this.lim);
           if (this.rng) linhas = linhas.slice(this.rng[0], this.rng[1] + 1);
@@ -300,9 +321,23 @@
           avisar('obras_fases');
           return { data: null, error: null };
         }
+        if (fn === 'abrir_conversa') {   // migração 0018: a conversa direta que já existe, ou uma nova com estas pessoas
+          const todos = [...new Set([...(a.p_membros || []), ator.id])].sort();
+          if (todos.length < 2) return { data: null, error: { message: 'Escolhe pelo menos uma pessoa.' } };
+          if (todos.some((id) => id !== ator.id && !db.perfis.some((p) => p.id === id))) return { data: null, error: { message: 'Só se podem juntar pessoas do hub.' } };
+          if (todos.length === 2) {
+            const c = db.conversas.find((k) => !k.grupo && !k.claude && db.conversas_membros.filter((m) => m.conversa_id === k.id).map((m) => m.utilizador_id).sort().join() === todos.join());
+            if (c) return { data: c.id, error: null };
+          }
+          const c = { id: ++seq.conversas, titulo: (a.p_titulo || '').trim(), grupo: todos.length > 2, claude: false, criada_por: ator.id, criada_em: agora(), ultima_em: agora() };
+          db.conversas.push(c);
+          todos.forEach((u) => db.conversas_membros.push({ conversa_id: c.id, utilizador_id: u, lida_em: agora(), entrou_em: agora() }));
+          avisar('conversas');
+          return { data: c.id, error: null };
+        }
         return { data: null, error: { message: `function ${fn} does not exist` } };
       },
-      storage: { from: (balde) => (balde === 'social' || balde === 'anexos' ? {
+      storage: { from: (balde) => (balde === 'social' || balde === 'anexos' || balde === 'chat' ? {
         upload: async (c, f) => { if (social.has(c)) return { data: null, error: { message: 'The resource already exists' } }; social.set(c, URL.createObjectURL(f)); return { data: { path: c }, error: null }; },
         createSignedUrls: async (cs) => ({ data: cs.map((c) => ({ path: c, signedUrl: social.has(c) ? urlSocial(c) : null, error: social.has(c) ? null : 'Object not found' })), error: null }),
         createSignedUrl: async (c) => (social.has(c) ? { data: { signedUrl: urlSocial(c) }, error: null } : { data: null, error: { message: 'Object not found' } }),
@@ -325,7 +360,9 @@
   };
   // nos testes: agir como outra pessoa (acrescentar, concluir…) e ver a base
   window.__fake = {
-    db, OUTRO, ficheiros, social,
+    db, OUTRO, ficheiros, social, avisar,
+    // o Claude (sem sessão) escreve numa conversa
+    async comoClaude(conversa_id, texto) { const n = { id: ++seq.mensagens, conversa_id, autor_id: null, autor_nome: 'Claude', texto, anexos: [], criada_em: agora() }; db.mensagens.push(n); depois.mensagens(n, null); avisar('mensagens'); return n; },
     comoEu: (fn) => fn(new Proxy({}, { get: (_, t) => new Q(t) })),
     async comoOutro(fn) { ator = OUTRO; try { return await fn(new Proxy({}, { get: (_, t) => new Q(t) })); } finally { ator = U; } },
   };
