@@ -145,13 +145,23 @@ Why Claude learns the method; "vamos passo a passo" — an overall idea, then an
   0004/0005 applied to the Design Supabase after the user's "Sim, aplica"; Playwright 28/28 (simulated database). The user asked for design inspiration from
   GSAP skills, React Bits, taste-skill and impeccable, and a final Playwright check with feedback.
 - **Pending with the user**: confirm the name Step Inside (migrations applied and hub published 2026-11-05).
-- **Team chat (user 2026-11-11)**: icon left of Sugestões; direct and group conversations with text, files, images/videos
-  and audio, visible only to each conversation's members (migrations 0018–0021, private bucket `chat`). Claude has no
-  account: it writes through the database in a conversation marked claude = true («Claude») and reads the replies in
-  table `mensagens` — check it for replies at the start of each hub session. Also done 2026-11-11 (Geral suggestions #4, #5):
-  checkpoints/tasks start collapsed; project pages have tabs (Workflow, Documentos, Teste do AR, Pipeline e custos, Sobre).
-  Tabs are Claude's reading of #5: ask the user whether it is what they wanted.
-- **Awaiting Dinis (asked 2026-11-11 in the chat)**: answers to items 1–11 of hub task 169 (price parcels, missing Hub
+- **Team chat (superseded 2026-11-11, see registo)**: the general chat built the same morning (migrations 0018–0021) was
+  removed; conversation now lives inside each task/checkpoint screen (table `atividade`, private bucket `chat`; migrations 0022/0023).
+- **Team work in the hub (user 2026-11-11)**: the user acts as manager; collaborators help and may leave a task nearly done,
+  only awaiting the user's approval (state «À espera de aprovação»; editors approve or send back). Início: each project opens a
+  pop-up of tasks needing attention; each task/checkpoint has its own screen (status in topics, ask for a status, suggest,
+  ask for approval, tag people, conversation with files/images/video/audio, button to the project). Tagged people get a
+  notification and a pop-up on opening the hub. Critiques/comments per project (erro, não gostei, sugestão, comentário, with
+  images) when someone tests an app. Project tabs: Workflow (with pipeline/custos and «sobre» as sub-sections) + Documentos
+  (+ Teste do AR on Step Inside); everything collapsed on opening; task descriptions in an accordion; the project «ponto de
+  situação» must be topics, precise and clear (Feito / Agora / Falta), not a description.
+- **Notification rule (user 2026-11-11, supersedes 2026-11-06 "with a notification to the team")**: notify only what has impact
+  (checkpoint concluded, task concluded, decision opened/taken, critique/error in a project, social-post approval request) plus
+  personal ones (tagged, task assigned, status request, approval request). Everything else goes to the Log (hub tab next to the
+  Checklist, visible to all; table `registo`, column `detalhe`), shown as side notices on opening the hub (each person can turn
+  them off in Definições). Claude writes the detail in the Log.
+- **Claude's questions to a person** go into the conversation of the relevant hub task, tagging the person (not a general chat).
+- **Awaiting Dinis (task 169 conversation, tagged)**: answers to items 1–11 of hub task 169 (price parcels, missing Hub
   materials, tiles/capoto conversions): file them into `orcamento_parcelas` (database only) and `orcamentacao/README.md`.
 
 ## App hierarchy (user 2026-11-06)
@@ -187,7 +197,7 @@ Agreed from the user-supplied "HIERARQUIA_E_ROADMAP_INTEGRADO_DISCOVERCASA" docu
   daily plan) exist, not imported.
 - Hub tab "Redes sociais" (#/social) built and published 2026-11-06 (design.discovercasa.pt; migrations 0009/0010 applied).
 - Practice (user 2026-11-06): when a planned weekly post is not done, the team moves a later post (the next one, or two ahead) into that week; the hub allows it ("Não feito", "Adiantar um post").
-- Standing rule (user 2026-11-06): whenever we finish a hub task or a hub test/review note, mark it concluded/resolved in the Design hub in the same piece of work, with a notification to the team (rule also in the Design repo `CLAUDE.md`).
+- Standing rule (user 2026-11-06): whenever we finish a hub task or a hub test/review note, mark it concluded/resolved in the Design hub in the same piece of work, with a notification to the team (rule also in the Design repo `CLAUDE.md`). (Notification part narrowed 2026-11-11: only for impact, detail in the hub Log; see "Notification rule" above.)
 - Hub notifications (user 2026-11-06): per-person seen state (hover 0.6 s, open, or tap the dot marks seen; own actions never unread; phones: tap, no hover). Details: Design repo `supabase/migrations/0014_notificacoes_lidas.sql`, `public/dados/novidades.json`. The Início page must show current data (e.g. a post published in Redes sociais shows "Publicado").
 - Import assumptions (past weeks with caption = Publicado; Nov with caption+photos = Por aprovar; no caption = Ideia, or "Não feito" for past weeks) not objected to by the user 2026-11-06.
 
