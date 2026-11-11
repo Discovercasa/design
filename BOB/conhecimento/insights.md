@@ -168,6 +168,13 @@ he answers (`metodo-construtivo.md`). Condensed 2026-10-28 (history in git).
   said AR supported (only a «maybe»), yet the session failed with NotSupportedError, and Scene Viewer flashed a Google
   app window and opened nothing. The hub now falls back to the in-page 3D view automatically if the page is not hidden
   within 3 s after «Ver em AR · Android», with a «Ver na Play Store» button — **applied 2026-11-10**.
+  **Superseded in part 2026-11-11:** «no ARCore» explains only the Xiaomi; the Scene Viewer failure on the other phone
+  (Pixel 6, ARCore works, Chrome's AR opens) is a Google app bug, see the next insight.
+- **2026-11-11** — Do not depend on Google Scene Viewer for Android AR on the web: a Google app update can break it for
+  everyone (regression in Google app 17.66–17.72 since about 2026-10-23: Scene Viewer closes ~90 ms after launch, also
+  with Google's own sample; github.com/google-ar/arcore-android-sdk issues 1795 and 1797, open on 2026-11-11). Chrome's
+  own AR (WebXR via model-viewer, ar-modes "webxr quick-look") is the primary Android path; Scene Viewer only as an
+  extra. Phones without ARCore stay in 3D — **applied 2026-11-11** (version 7.5), `step-inside/docs/fase7/README.md`.
 
 ## Recorded, not yet told (raise when it fits)
 - **2026-10-16** — lameladas cut from stock waste a lot (8,50 from 13,5 m: ≈ 1,1 m³ at TV) → order to length or a 17 m

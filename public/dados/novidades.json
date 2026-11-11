@@ -1,5 +1,14 @@
 [
   {
+    "dia": "2026-11-11",
+    "titulo": "AR no Android pelo próprio Chrome",
+    "itens": [
+      "A causa: a app Google tem um erro desde outubro que fecha o Scene Viewer logo ao abrir, em muitos telemóveis (também com o exemplo da própria Google).",
+      "«Ver em AR · Android» abre agora o modelo e entra no AR do próprio Chrome. Num Pixel 6 abriu o nosso modelo em AR.",
+      "Telemóveis sem o ARCore da Google (fora da lista da Google, como o Redmi Note 14 Pro 5G testado): o modelo fica em 3D no hub, com o link da Play Store."
+    ]
+  },
+  {
     "dia": "2026-11-10",
     "titulo": "AR no Android: página de teste",
     "itens": [
