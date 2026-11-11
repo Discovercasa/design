@@ -465,3 +465,10 @@ The team's notes on hub task 84 (written in the hub by [membro da equipa] on 202
 - Done (by Claude): `torres-vedras_ar_casa_interiores.usdz` / `.glb` (47 159 triangles, 4,5 / 4,6 MB) uploaded to the private `documentos` storage by the temporary Edge Function `carregar-ar` (one-time key, only its hash in the function; switched back to the 410 stub with `verify_jwt` right after, refusal 401 confirmed, key deleted); documents 58 (USDZ) and 59 (GLB) «Torres Vedras · casa 1:1 mobilada (teste)». The AR without furniture (documents 42–45) is unchanged.
 - Filed in: `step-inside/docs/fase3/README.md` → «Teste em Torres Vedras»; `step-inside/docs/fase7/README.md` → hub uploads.
 - Pending: the user's test on the phone and the decision on furniture.
+
+### 2026-11-11 — Phone test of the furnished AR as a Phase 3 task; next focus: the Builder [Step Inside Phase 3 · Builder]
+> ok tenho de testar agora, podes adicionar essa tarefa à fase 3 para depois quando tiver ok podermos finalizar as tarefas dessa fase todas.
+> Para já quero trabalhar um pouco o builder e para começar quero que me expliques e faças uma lista(aqui no chat) do que falta para podermos dropar ficheiros pdf e dwg ou dwfx para depois construíres uma página deste gênero para podermos partilhar com o cliente.
+- Context: the user attached an example of a client-share 3D page (a self-contained HTML, three.js inline, ≈ 650 KB: a two-storey house at Programa Base stage, walls read from a raster PDF at 200 dpi, Piso 0 in two variants, maquete / realista looks, furnished toggle, camera presets, floor toggles, a floor table and «Como foi feito» notes). It names the architect (with professional number) and the client: such pages carry personal data → never in this public repo; shared privately.
+- Done (by Claude): hub task 170 «Testar no telemóvel a casa mobilada de Torres Vedras e decidir o mobiliário» in Step Inside Phase 3 (checkpoint 23); with it OK, the Phase 3 tasks (156, 163, 167, 170) can be closed.
+- Builder: the explanation and the list of what is missing were given in the chat (2026-11-11); decisions asked there.
