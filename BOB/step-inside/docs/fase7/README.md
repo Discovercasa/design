@@ -673,6 +673,43 @@ para o site e o tamanho da janela.
   app.
 - A página de teste não envia o mesmo resultado duas vezes.
 
+## A causa do Android: um erro da app Google; o botão passa ao AR do Chrome (2026-11-11)
+
+O utilizador: «fizeram o teste agora no outro telemovel».
+
+**Ronda 2 no segundo telemóvel** (notas 17–19; repetidas por toques no «Enviar» antes da proteção):
+- Telemóvel: Pixel 6, Android 17, Chrome 157, o hub aberto como app instalada.
+- Câmara: sim.
+- **AR do Chrome direto: abriu.**
+- **AR do Chrome pelo visualizador: abriu, com o exemplo da Google e com o nosso modelo.**
+- Scene Viewer (3D e AR, o exemplo da Google e o nosso): a janela da app Google pisca 0,1 s e fecha, como no
+  Xiaomi.
+
+**Causa do Scene Viewer:** um erro da própria app Google. A app fecha o Scene Viewer cerca de 90 ms depois de o abrir,
+nas versões 17.66–17.72 (desde cerca de 23/10), em Pixel, Samsung e outros, e com o exemplo oficial da Google. Está
+reportado e aberto, sem resposta da Google a 2026-11-11:
+- https://github.com/google-ar/arcore-android-sdk/issues/1795
+- https://github.com/google-ar/arcore-android-sdk/issues/1797
+
+Não é o nosso ficheiro, nem o link, nem o hub. O Xiaomi, além disso, não tem ARCore (secção anterior).
+
+**Correção:** «Ver em AR · Android» passa a ser um botão. Abre o visualizador do hub com o AR do Chrome (`<model-viewer
+ar-modes="webxr quick-look">`) e entra logo em AR enquanto o toque ainda conta para o Chrome (cerca de 5 s). Se o modelo
+demorar mais, aparece «Ver no teu espaço (AR)» para um segundo toque.
+- Sem ARCore (o Xiaomi), o AR falha e o modelo fica em 3D, com o aviso e o link da Play Store.
+- O Scene Viewer saiu do botão e do visualizador. A página de teste continua a testá-lo, para se ver quando a Google o
+  corrigir.
+- Testes: `tests/hub.spec.mjs` (o botão abre o visualizador só com WebXR e Quick Look, entra em AR sozinho, e fica em
+  3D com o aviso quando o telemóvel não tem AR).
+
+**O que cada telemóvel vê agora:**
+
+| Telemóvel | Resultado |
+|---|---|
+| iPhone | AR (Quick Look) |
+| Android com ARCore (Pixel 6) | AR no Chrome |
+| Android sem ARCore (o Xiaomi) | 3D no hub |
+
 ## Em falta
 
 - **Telemóveis reais** (tarefa 84):

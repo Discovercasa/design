@@ -302,7 +302,7 @@ function linhaAR(d) {
   const botao = ios
     ? `<a rel="ar" href="#" class="ar-ios" data-ar="${d.id}" data-ar-tipo="ios" aria-disabled="true"><img src="${IMG_AR_IPHONE}" alt="Ver em AR no iPhone: ${esc(titulo)}" width="196" height="40"></a>`
     : `<button class="btn pequeno" type="button" data-acao="ver-3d" data-id="${d.id}">${ic('cubo', 'ic-sm')}Ver em 3D</button>
-       <a href="#" class="btn primario pequeno" data-ar="${d.id}" data-ar-tipo="android" aria-disabled="true">${ic('app', 'ic-sm')}Ver em AR · Android</a>`;
+       <button class="btn primario pequeno" type="button" data-acao="ar-android" data-id="${d.id}">${ic('app', 'ic-sm')}Ver em AR · Android</button>`;
   return `<li class="doc" id="doc-${d.id}">
     <span class="doc-tipo" aria-hidden="true">${esc(extensao(d.nome_ficheiro))}</span>
     <div class="doc-corpo"><p class="doc-titulo">${esc(titulo)} ${novo('documento', d.id)}</p>
@@ -325,8 +325,8 @@ function testeAR(p) {
       ${E.eu.editar ? `<button class="btn" type="button" data-acao="acrescentar-doc" data-projeto="${p.id}" data-tipo-doc="ar">${ic('mais')}Modelo AR</button>` : ''}</div>
     <div class="docs-grelha">
       <div class="docs-tipo"><div class="docs-tipo-cabeca"><h3>Modelos <span class="fraco num">${docs.length}</span></h3><p class="fraco mini">«casa»: à escala 1:1, pousa no chão e anda-se à volta. «maquete»: com o terreno, para ver em ponto pequeno. Nas casas com mais de um piso: «piso N (1:1)» é só esse piso, sem terreno, pousado no chão para andar lá dentro.</p></div>${lista}${htmlDiagnostico(docs.find((d) => /\.glb$/i.test(d.nome_ficheiro)), p.slug)}</div>
-      <div class="docs-tipo"><div class="docs-tipo-cabeca"><h3>Como testar</h3><p class="fraco mini">iPhone ou iPad: abre no Safari e toca em «Ver em AR · iPhone». Android: abre no Chrome e toca em «Ver em AR · Android» (precisa da app Google e de um telemóvel com ARCore). Sem AR (no computador, ou num telemóvel sem AR): «Ver em 3D» abre o modelo aqui, para rodar e aproximar.</p>
-        <p class="fraco mini" style="margin-top:6px">Android, se o AR abrir e fechar logo: usa «Ver em 3D» › «Ver no teu espaço (AR)», que abre o AR no próprio Chrome, sem a app Google, e faz a «página de teste do AR» (botão ao lado): diz-nos onde está o problema.</p>
+      <div class="docs-tipo"><div class="docs-tipo-cabeca"><h3>Como testar</h3><p class="fraco mini">iPhone ou iPad: abre no Safari e toca em «Ver em AR · iPhone». Android: abre no Chrome e toca em «Ver em AR · Android»: o modelo abre e passa ao AR no próprio Chrome (precisa de um telemóvel com o ARCore da Google). Sem AR (no computador, ou num telemóvel sem ARCore): «Ver em 3D» abre o modelo aqui, para rodar e aproximar.</p>
+        <p class="fraco mini" style="margin-top:6px">O Scene Viewer da app Google está com um erro da Google desde outubro (fecha logo ao abrir, em muitos telemóveis): por isso o Android usa o AR do Chrome. A «página de teste do AR» (botão ao lado) continua a testá-lo.</p>
         <p class="aviso-ar pequeno" id="ar-este-telemovel" hidden></p></div>
         <ul class="lista-simples">
           ${['A casa fica do tamanho certo? (mede uma porta: ≈ 2,1 m)', 'Assenta no chão, sem flutuar nem afundar?', 'Está virada como esperavas (fachadas, entrada)?', 'Quanto tempo demora a abrir?', 'Os materiais parecem reais ou «de plástico»?'].map((x) => `<li>${ic('certo', 'ic-sm')}<span class="pequeno">${x}</span></li>`).join('')}

@@ -238,8 +238,8 @@ test('perfil: área pessoal, definições (nome, tema), novidades e sair', async
   await captura(page, 'inicio-escuro');
   await page.getByRole('button', { name: 'Perfil' }).click();
   await page.locator('#pop-perfil').getByRole('menuitem', { name: /Novidades/ }).click();
-  await expect(page.locator('.novidade').first()).toContainText('AR no Android: página de teste');
-  await expect(page.locator('.novidade').nth(1)).toContainText('AR no Android: encontrada a causa');
+  await expect(page.locator('.novidade').first()).toContainText('AR no Android pelo próprio Chrome');
+  await expect(page.locator('.novidade').nth(1)).toContainText('AR no Android: página de teste');
   await page.getByRole('button', { name: 'Perfil' }).click();
   await page.locator('#pop-perfil').getByRole('menuitem', { name: 'Sair' }).click();
   await expect(page.getByRole('button', { name: 'Entrar com a conta do Hub' })).toBeVisible();
@@ -560,11 +560,9 @@ test('Step Inside: teste do AR — carregar modelos e abrir no Quick Look / Scen
   // a 1:1 model keeps its real size (team note 2026-11-10): no pinch-to-scale in Quick Look
   await expect(ios).toHaveAttribute('href', /\/__ficheiro\?c=plataforma_cliente%2Far%2F.+\.usdz#allowsContentScaling=0$/);
   expect(await ios.evaluate((a) => a.children.length === 1 && a.firstElementChild.tagName === 'IMG')).toBe(true);
-  // Android: Scene Viewer intent with the signed GLB, AR first, not resizable at 1:1, coming back to this page with a
-  // marker when the phone cannot open it
-  const android = sec.getByRole('link', { name: /Ver em AR · Android/ });
-  // since 2026-11-10 built exactly as Google's <model-viewer> 4.0.0 builds it (scene-viewer 1.2, disable_occlusion, file last)
-  await expect(android).toHaveAttribute('href', /^intent:\/\/arvr\.google\.com\/scene-viewer\/1\.2\?c=plataforma_cliente.+&mode=ar_preferred&disable_occlusion=true&resizable=false&title=.+&file=http.+__ficheiro.+\.glb#Intent;.*package=com\.google\.android\.googlequicksearchbox.+browser_fallback_url=.+%3Far-android%3D\d+%23%2Fprojeto%2Fstep-inside;end;$/);
+  // Android (2026-11-11): a button that opens the viewer and goes into Chrome's AR (Scene Viewer is broken in the Google
+  // app since October 2026: it closes ~90 ms after launch, the team's Pixel 6 and Xiaomi too)
+  const android = sec.getByRole('button', { name: /Ver em AR · Android/ });
   // on an Android, the page says whether this phone has AR (ARCore); the test browser has none
   if (ehTelemovel()) await expect(sec.locator('#ar-este-telemovel')).toContainText('não tem AR (ARCore)');
   else await expect(sec.locator('#ar-este-telemovel')).toBeHidden();
@@ -593,10 +591,19 @@ test('Step Inside: teste do AR — carregar modelos e abrir no Quick Look / Scen
   await expect(page.locator('#dlg model-viewer')).toBeVisible();
   await page.locator('#dlg').getByRole('button', { name: 'Fechar' }).click();
   await expect(page.locator('#dlg')).toBeHidden();
-  // the AR did not take over within 3 s (a Redmi Note 14 Pro 5G, not on Google's ARCore list, 2026-11-10): the model
-  // opens in 3D here by itself, with the ARCore link (user: «se o cliente tiver um dispositivo qualquer tem de conseguir ver»)
-  await android.evaluate((a) => a.addEventListener('click', (e) => e.preventDefault()));
+  // «Ver em AR · Android»: the viewer opens with Chrome's AR only (WebXR; iPhone's Quick Look stays) …
   await android.click();
+  const mvAR = page.locator('#dlg model-viewer');
+  await expect(mvAR).toHaveAttribute('ar-modes', 'webxr quick-look');
+  await expect(mvAR).toHaveAttribute('ar-scale', 'fixed');
+  // … and goes straight into AR while the tap still counts
+  await mvAR.evaluate((m) => { m.canActivateAR = true; m.activateAR = () => { window.__arAtivado = true; return Promise.resolve(); }; m.dispatchEvent(new Event('load')); });
+  await expect.poll(() => page.evaluate(() => window.__arAtivado === true)).toBe(true);
+  await page.locator('#dlg').getByRole('button', { name: 'Fechar' }).click();
+  // a phone without ARCore (a Redmi Note 14 Pro 5G, not on Google's list, 2026-11-10): the model stays in 3D, with the
+  // notice and the Play Store link (user: «se o cliente tiver um dispositivo qualquer tem de conseguir ver»)
+  await android.click();
+  await page.locator('#dlg model-viewer').evaluate((m) => { m.canActivateAR = false; m.dispatchEvent(new Event('load')); });
   const semAR = page.locator('.aviso').filter({ hasText: 'O AR não abriu neste telemóvel' });
   await expect(semAR).toBeVisible({ timeout: 5000 });
   await expect(semAR.getByRole('button', { name: 'Ver na Play Store' })).toBeVisible();

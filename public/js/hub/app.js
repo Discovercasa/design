@@ -75,9 +75,9 @@ async function arrancar(sessao) {
 // Scene Viewer and Chrome's AR both need ARCore («Serviços Google Play para RA»), which Google only offers for the phones
 // on its list: the notice links to it in the Play Store (it says whether this phone can install it).
 const PLAY_ARCORE = 'https://play.google.com/store/apps/details?id=com.google.ar.core';
-function arAndroidNaoAbriu(id) {
+function arAndroidNaoAbriu(id, { jaAberto = false } = {}) {
   const d = E.documentos.find((x) => x.id === id);
-  if (d) verEm3D(id);
+  if (d && !jaAberto) verEm3D(id);
   aviso('O AR não abriu neste telemóvel: o AR da Google precisa da app «Serviços Google Play para RA» (ARCore), que só existe '
     + 'para os telemóveis da lista da Google. Abrimos o modelo em 3D aqui. Na Play Store vês se este telemóvel a pode instalar.',
     { icone: 'atencao', duracao: 0, acoes: [
@@ -92,19 +92,6 @@ function arAndroidFalhou() {
   history.replaceState(null, '', location.pathname + (q.toString() ? '?' + q : '') + location.hash);
   arAndroidNaoAbriu(id);
 }
-// the tap on «Ver em AR · Android»: if the page has not gone hidden 3 s later, Scene Viewer did not take over
-document.addEventListener('click', (e) => {
-  const a = e.target.closest('a[data-ar-tipo="android"]:not([aria-disabled])');
-  if (!a) return;
-  const id = Number(a.dataset.ar);
-  let escondida = false;
-  const ver = () => { if (document.visibilityState === 'hidden') escondida = true; };
-  document.addEventListener('visibilitychange', ver);
-  setTimeout(() => {
-    document.removeEventListener('visibilitychange', ver);
-    if (!escondida && document.visibilityState === 'visible') arAndroidNaoAbriu(id);
-  }, 3000);
-});
 
 // ---------------------------------------------------------------- versão nova do hub publicada
 // Uma janela aberta mostra a versão em que foi aberta: o hub não se recarrega sozinho. Ao abrir guarda-se a
@@ -486,14 +473,38 @@ function carregarModelViewer() {
     document.head.append(s);
   }));
 }
-async function verEm3D(id) {
+// «Ver em AR · Android» (2026-11-11): the Google app closes Scene Viewer ~90 ms after launch since its October update
+// (https://github.com/google-ar/arcore-android-sdk/issues/1795, the team's Pixel 6 and Xiaomi too), while Chrome's own AR
+// (WebXR) opened our model on the Pixel 6. So the button opens the viewer and goes straight into Chrome's AR: on its own
+// while the tap still counts (Chrome allows about 5 s), otherwise with a tap on «Ver no teu espaço». Without ARCore
+// (a phone not on Google's list) the AR fails and the model stays in 3D with the notice.
+function entrarEmAR(mv, id, toque) {
+  if (!mv) return;
+  let auto = false;
+  mv.addEventListener('ar-status', (e) => {
+    if (e.detail.status !== 'failed') return;
+    if (auto) { auto = false; aviso('Toca em «Ver no teu espaço (AR)» para abrir o AR.', { icone: 'info', duracao: 5 }); }
+    else arAndroidNaoAbriu(id, { jaAberto: true });
+  });
+  mv.addEventListener('load', async () => {
+    for (let i = 0; i < 15 && !mv.canActivateAR; i++) await new Promise((r) => setTimeout(r, 100));   // decided asynchronously
+    if (!mv.canActivateAR) return arAndroidNaoAbriu(id, { jaAberto: true });
+    if (Date.now() - toque < 4500) { auto = true; try { await mv.activateAR(); } catch (_) {} }
+    else aviso('Modelo pronto: toca em «Ver no teu espaço (AR)».', { icone: 'info', duracao: 5 });
+  }, { once: true });
+}
+
+async function verEm3D(id, { ar = false, toque = 0 } = {}) {
   const d = E.documentos.find((x) => x.id === id);
   if (!d) return;
   const ios = E.documentos.find((x) => x.tipo === 'ar' && x.projeto === d.projeto && x.titulo === d.titulo && /\.usdz$/i.test(x.nome_ficheiro));
   abrirDialogo(dlg, P.htmlVisor3D(d));
   try {
     const [url, urlIos] = await Promise.all([D.urlAR(d), ios ? D.urlAR(ios) : null, carregarModelViewer()]);
-    if (dlg.open && dlg.querySelector('[data-a-carregar]')) dlg.innerHTML = P.htmlVisor3D(d, url, urlIos);
+    if (dlg.open && dlg.querySelector('[data-a-carregar]')) {
+      dlg.innerHTML = P.htmlVisor3D(d, url, urlIos);
+      if (ar) entrarEmAR(dlg.querySelector('model-viewer'), id, toque);
+    }
   } catch (err) {
     if (dlg.open) dlg.innerHTML = P.htmlVisor3D(d, null, null, err.message || String(err));
   }
@@ -533,6 +544,7 @@ document.addEventListener('click', async (e) => {
       return;
     }
     case 'ver-3d': return verEm3D(id);
+    case 'ar-android': return verEm3D(id, { ar: true, toque: Date.now() });
     case 'mat-csv': return MV.descarregarCSV();
     case 'mat-mais': MV.filtro.limite += 200; $('#mat-lista').innerHTML = MV.lista(); return;
     case 'abrir-doc': {
