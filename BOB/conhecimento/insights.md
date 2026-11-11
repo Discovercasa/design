@@ -188,6 +188,15 @@ he answers (`metodo-construtivo.md`). Condensed 2026-10-28 (history in git).
   «XPS PAREDE - 60MM» categorised «Cobertura»; the Tremolo supplier (Spain) has VAT 0 (reverse charge: Portuguese VAT paid
   separately, so «with VAT» totals understate it); older prices of one supplier kept as separate rows. Suggest an
   automatic sanity check on import (dimension plausibility, VAT by supplier country) — **open**, to tell the user.
+- **2026-11-11** — Price composition: the user's own list of price parts (2026-10-20) has no margin; the «margem» parcel in
+  `orcamento_parcelas` (migration 0017) is Claude's addition. Without it the final price would equal cost + VAT: ask
+  whether a margin exists, its %, and on what base (or whether it is already inside the other parcels, e.g. mão de obra)
+  — **open**, hub task 169 note 7.
+- **2026-11-11** — VAT: 23 % is the normal rate, but a 6 % rate may apply to construction contracts (empreitadas) of
+  housing for own permanent residence or for rent (DL 97/2026, verba 2.42 of list I of the CIVA; works started
+  23/09/2025–31/12/2029; value cap 648 000 € or 660 982 €, sources disagree: check the decree). It changes the final
+  price by about 15 %. Decide with the accountant; the configurator may need to ask the client if the house is their
+  permanent home — **open**, hub task 43 / 169 note 8. Researched on the web, not yet checked against the decree text.
 
 ## Recorded, not yet told (raise when it fits)
 - **2026-10-16** — lameladas cut from stock waste a lot (8,50 from 13,5 m: ≈ 1,1 m³ at TV) → order to length or a 17 m
