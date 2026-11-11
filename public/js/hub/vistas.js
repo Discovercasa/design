@@ -339,11 +339,17 @@ function documentos(p) {
 // USDZ -> iPhone / iPad (AR Quick Look: an <a rel="ar"> whose only child is an image, opened in Safari);
 // GLB -> Android (Google Scene Viewer through an intent: link). The links are signed and temporary; app.js fills them.
 const IMG_AR_IPHONE = "data:image/svg+xml," + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="196" height="40" viewBox="0 0 196 40"><rect width="196" height="40" rx="9" fill="#1f2937"/><text x="98" y="25" font-family="system-ui,-apple-system,Segoe UI,sans-serif" font-size="14" font-weight="600" fill="#fff" text-anchor="middle">Ver em AR · iPhone</text></svg>');
+// o utilizador (2026-11-11): «no projeto step inside no dispositivos IOS também seja possível ver em 3D tal como nos
+// androids» — a linha do iPhone também tem «Ver em 3D»: abre o mesmo visualizador com o GLB gémeo (mesmo título) e o USDZ
+// para o AR do iPhone (o <model-viewer> só desenha glTF/GLB; «Ver no teu espaço» passa ao Quick Look)
+const gemeoGLB = (d) => E.documentos.find((x) => x.tipo === 'ar' && x.projeto === d.projeto && x.titulo === d.titulo && /\.glb$/i.test(x.nome_ficheiro));
 function linhaAR(d) {
   const ios = /\.usdz$/i.test(d.nome_ficheiro);
   const titulo = d.titulo.includes(' · ') ? d.titulo.split(' · ').slice(1).join(' · ') : d.titulo;
+  const glb = ios ? gemeoGLB(d) : null;
   const botao = ios
-    ? `<a rel="ar" href="#" class="ar-ios" data-ar="${d.id}" data-ar-tipo="ios" aria-disabled="true"><img src="${IMG_AR_IPHONE}" alt="Ver em AR no iPhone: ${esc(titulo)}" width="196" height="40"></a>`
+    ? `${glb ? `<button class="btn pequeno" type="button" data-acao="ver-3d" data-id="${glb.id}" aria-label="Ver em 3D: ${esc(titulo)}">${ic('cubo', 'ic-sm')}Ver em 3D</button>` : ''}
+       <a rel="ar" href="#" class="ar-ios" data-ar="${d.id}" data-ar-tipo="ios" aria-disabled="true"><img src="${IMG_AR_IPHONE}" alt="Ver em AR no iPhone: ${esc(titulo)}" width="196" height="40"></a>`
     : `<button class="btn pequeno" type="button" data-acao="ver-3d" data-id="${d.id}">${ic('cubo', 'ic-sm')}Ver em 3D</button>
        <button class="btn primario pequeno" type="button" data-acao="ar-android" data-id="${d.id}">${ic('app', 'ic-sm')}Ver em AR · Android</button>`;
   return `<li class="doc" id="doc-${d.id}">
@@ -368,7 +374,7 @@ function testeAR(p) {
       ${E.eu.editar ? `<button class="btn" type="button" data-acao="acrescentar-doc" data-projeto="${p.id}" data-tipo-doc="ar">${ic('mais')}Modelo AR</button>` : ''}</div>
     <div class="docs-grelha">
       <div class="docs-tipo"><div class="docs-tipo-cabeca"><h3>Modelos <span class="fraco num">${docs.length}</span></h3><p class="fraco mini">«casa»: à escala 1:1, pousa no chão e anda-se à volta. «maquete»: com o terreno, para ver em ponto pequeno. Nas casas com mais de um piso: «piso N (1:1)» é só esse piso, sem terreno, pousado no chão para andar lá dentro.</p></div>${lista}${htmlDiagnostico(docs.find((d) => /\.glb$/i.test(d.nome_ficheiro)), p.slug)}</div>
-      <div class="docs-tipo"><div class="docs-tipo-cabeca"><h3>Como testar</h3><p class="fraco mini">iPhone ou iPad: abre no Safari e toca em «Ver em AR · iPhone». Android: abre no Chrome e toca em «Ver em AR · Android»: o modelo abre e passa ao AR no próprio Chrome (precisa de um telemóvel com o ARCore da Google). Sem AR (no computador, ou num telemóvel sem ARCore): «Ver em 3D» abre o modelo aqui, para rodar e aproximar.</p>
+      <div class="docs-tipo"><div class="docs-tipo-cabeca"><h3>Como testar</h3><p class="fraco mini">iPhone ou iPad: abre no Safari e toca em «Ver em AR · iPhone» (ou «Ver em 3D» para rodar o modelo aqui e, dentro dele, «Ver no teu espaço» para o AR). Android: abre no Chrome e toca em «Ver em AR · Android»: o modelo abre e passa ao AR no próprio Chrome (precisa de um telemóvel com o ARCore da Google). Sem AR (no computador, ou num telemóvel sem ARCore): «Ver em 3D» abre o modelo aqui, para rodar e aproximar.</p>
         <p class="fraco mini" style="margin-top:6px">O Scene Viewer da app Google está com um erro da Google desde outubro (fecha logo ao abrir, em muitos telemóveis): por isso o Android usa o AR do Chrome. A «página de teste do AR» (botão ao lado) continua a testá-lo.</p>
         <p class="aviso-ar pequeno" id="ar-este-telemovel" hidden></p></div>
         <ul class="lista-simples">

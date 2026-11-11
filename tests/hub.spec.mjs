@@ -599,7 +599,7 @@ test('Step Inside: teste do AR — carregar modelos e abrir no Quick Look / Scen
   // without AR (tarefa 85, 2026-11-09): «Ver em 3D» opens the GLB in Google's <model-viewer>, with the USDZ for iPhone
   await page.route('**/@google/model-viewer@*/**', (r) => r.fulfill({ contentType: 'text/javascript',
     body: "customElements.define('model-viewer', class extends HTMLElement {});" }));
-  await sec.getByRole('button', { name: 'Ver em 3D' }).click();
+  await sec.getByRole('button', { name: 'Ver em 3D', exact: true }).click();
   const mv = page.locator('#dlg model-viewer');
   await expect(mv).toHaveAttribute('src', /\/__ficheiro\?c=plataforma_cliente%2Far%2F.+\.glb$/);
   await expect(mv).toHaveAttribute('ios-src', /\.usdz$/);
@@ -617,8 +617,17 @@ test('Step Inside: teste do AR — carregar modelos e abrir no Quick Look / Scen
   await expect(page.locator('#dlg')).toBeVisible();
   await page.mouse.click(4, 4);   // a real click outside still closes it
   await expect(page.locator('#dlg')).toBeHidden();
-  await sec.getByRole('button', { name: 'Ver em 3D' }).click();
+  await sec.getByRole('button', { name: 'Ver em 3D', exact: true }).click();
   await expect(page.locator('#dlg model-viewer')).toBeVisible();
+  await page.locator('#dlg').getByRole('button', { name: 'Fechar' }).click();
+  await expect(page.locator('#dlg')).toBeHidden();
+  // iPhone / iPad (2026-11-11: «no dispositivos IOS também seja possível ver em 3D tal como nos androids»): the USDZ row
+  // has «Ver em 3D» too — the same viewer with the twin GLB, and the USDZ for the AR button (Quick Look)
+  const linhaIos = sec.locator('.doc', { hasText: 'torres-vedras_ar_casa.usdz' });
+  await linhaIos.getByRole('button', { name: /Ver em 3D/ }).click();
+  await expect(page.locator('#dlg model-viewer')).toHaveAttribute('src', /\.glb$/);
+  await expect(page.locator('#dlg model-viewer')).toHaveAttribute('ios-src', /\.usdz$/);
+  await expect(page.locator('#dlg model-viewer')).toHaveAttribute('ar-modes', /quick-look/);
   await page.locator('#dlg').getByRole('button', { name: 'Fechar' }).click();
   await expect(page.locator('#dlg')).toBeHidden();
   // «Ver em AR · Android»: the viewer opens with Chrome's AR only (WebXR; iPhone's Quick Look stays) …
