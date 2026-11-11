@@ -12,7 +12,7 @@
       "Verificação das madeiras sem Blender (choques, peças fora do sítio)."
     ],
     "agora": [
-      "Do desenho à página do cliente (11/11): ler qualquer planta sem depender das cores, vários pisos, DWG, e um ficheiro HTML para o cliente; aplicação própria no hub.",
+      "Do desenho à página do cliente: o leitor por forma (qualquer cor e estilo de parede) já funciona no Sobral e está no Gerador (11/11); a seguir os ficheiros do utilizador, vários pisos, DWG e o ficheiro HTML para o cliente.",
       "Corrigir defeitos geométricos conhecidos: anel de amarração, prumos em pares, módulos interiores.",
       "Validar com os materiais realmente gastos em Torres Vedras."
     ],

@@ -13,7 +13,7 @@
     ],
     "agora": [
       "Revisão da Discovercasa dos documentos Cobertura e Listagem de material.",
-      "Erro ao largar desenhos que não têm as paredes a vermelho: a leitura passa a não depender das cores (tarefa 171 do Builder)."
+      "Lê plantas sem paredes a vermelho (leitor por forma, 11/11); por melhorar: ficheiros grandes lentos, casa e terreno na mesma vista."
     ],
     "falta": [
       "Política de libertação: marcar documentos com erros bloqueantes e rascunhos não aprovados.",
