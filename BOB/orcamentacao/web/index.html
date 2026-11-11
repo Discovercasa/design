@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Orçamentação · Discovercasa Design</title>
+<link rel="icon" href="/img/favicon.png">
+<meta name="theme-color" content="#2a2a29">
+<!-- o tema escolhido nas Definições do hub vale aqui também -->
+<script>
+  try {
+    const t = localStorage.getItem('hub-tema'); if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    if (localStorage.getItem('hub-movimento') === 'reduzido') document.documentElement.dataset.movimento = 'reduzido';
+  } catch (_) {}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="/css/hub.css">
+<link rel="stylesheet" href="./orcamentacao.css">
+</head>
+<body>
+<header class="topo">
+  <div class="topo-linha">
+    <a class="marca" href="/" aria-label="Discovercasa Design, voltar ao hub" title="Voltar ao hub"><img src="/img/icone-192.png" alt="" width="26" height="26">Discovercasa <span>Design</span></a>
+    <span class="o-app" aria-hidden="true">Orçamentação</span>
+    <span class="o-espaco"></span>
+    <a class="btn pequeno texto o-so-largo" href="/#/materiais">Materiais e preços</a>
+    <a class="btn pequeno texto" href="/#/projeto/orcamentacao">Estado do projeto</a>
+  </div>
+</header>
+
+<main class="o-main">
+  <div class="o-cabeca">
+    <h1>Orçamentação</h1>
+    <p class="suave">O custo dos materiais de uma obra: a Listagem de material do Gerador, linha a linha, com os preços da lista do Hub.</p>
+  </div>
+
+  <section class="o-cartao" aria-labelledby="t1">
+    <div class="o-cartao-cabeca"><h2 id="t1">Listagem de material</h2>
+      <p class="suave">O CSV que o Gerador entrega em Documentos («Listagem_Material.csv»).</p></div>
+    <div id="largar" tabindex="0" role="button" aria-describedby="t1">
+      <svg class="o-largar-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m17 8-5-5-5 5"/><path d="M12 3v12"/></svg>
+      <strong>Larga aqui o CSV ou clica para escolher</strong>
+      <span class="fraco pequeno">Listagem de material do Gerador (.csv)</span>
+    </div>
+    <input type="file" id="ficheiro" accept=".csv,text/csv" hidden>
+    <div class="o-acoes">
+      <button id="exemplo" class="btn" type="button">Usar a de Torres Vedras (D2503)</button>
+      <span id="estado" class="ajuda ocupado" role="status">A ler a lista de materiais do Hub…</span>
+    </div>
+  </section>
+
+  <section class="o-cartao" id="resultado" aria-labelledby="t2" hidden>
+    <div class="o-cartao-cabeca"><h2 id="t2">Custo dos materiais</h2>
+      <p class="suave" id="res-obra"></p></div>
+    <div class="resultado" id="res-numeros"></div>
+    <div class="o-acoes">
+      <label class="o-so"><input type="checkbox" id="so-falta"> Só as linhas sem preço</label>
+      <span class="o-espaco"></span>
+      <button id="baixar" class="btn" type="button">Descarregar CSV com preços</button>
+    </div>
+    <div id="capitulos"></div>
+    <p class="fraco pequeno">Só os materiais da Listagem, ao preço mais baixo com desconto de cada material, sem IVA. Ainda não entram a mão de obra,
+      a fundação, as instalações, as licenças nem a margem, nem o IVA da obra: dependem das tarefas «Definir como se calcula cada parcela do preço»
+      e «Confirmar a taxa de IVA a aplicar».</p>
+  </section>
+
+  <section class="o-cartao" aria-labelledby="t3">
+    <div class="o-cartao-cabeca"><h2 id="t3">Ligações dos produtos ao Hub</h2>
+      <p class="suave">Cada código da Listagem e o material do Hub que lhe dá o preço. As propostas do Claude ficam «a confirmar» até a equipa as aprovar.</p></div>
+    <div id="ligacoes"><p class="vazio">A carregar…</p></div>
+  </section>
+</main>
+<script type="module" src="./orcamentacao.js"></script>
+</body>
+</html>

@@ -5,7 +5,7 @@
   "resumo": "Larga a planta de arquitetura e recebe os documentos de produção da obra.",
   "descricao": "Recebe a planta de arquitetura (DWFx ou PDF vetorial), encontra sozinho as plantas, monta a casa com o motor do Builder e devolve três documentos: Módulos, Cobertura e Listagem de material, com uma vista 3D. Corre tudo no browser.",
   "fase": "Protótipo publicado",
-  "fase_detalhe": "Online desde 2026-10-30. O documento Módulos está aprovado; Cobertura e Listagem de material à espera de revisão.",
+  "fase_detalhe": "Online desde 2026-10-30. O documento Módulos está aprovado; Cobertura e Listagem de material à espera de revisão. Desde 2026-11-11 cada linha do CSV da Listagem traz um código de produto estável (a Orçamentação dá-lhe o preço) e a Listagem de uma casa configurada já só traz a fachada escolhida (trazia as três opções).",
   "objetivos": [
     "Documentos de produção para cada obra nova, sem trabalho manual.",
     "Ler os formatos que os projetistas nos mandam."
@@ -14,7 +14,7 @@
     "Revisão da Cobertura e da Listagem de material.",
     "Ler DXF e IFC (os mesmos leitores servem o Step Inside)."
   ],
-  "materiais": "Para pôr o fornecedor e o preço em cada linha da Listagem de material.",
+  "materiais": "O código de produto de cada linha da Listagem de material liga-a ao material do Hub; o preço faz-se na Orçamentação.",
   "metodo": "Usa o motor e as regras do Builder.",
   "app": { "url": "/gerador/", "rotulo": "Abrir o Gerador" },
   "organizacao": { "codigo": "BOB/gerador/web/ e BOB/ferramentas/documentos/", "publicado": "public/gerador/", "ramo": "gerador/<tarefa>" },

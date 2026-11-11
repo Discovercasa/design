@@ -29,6 +29,7 @@ from ferramentas.documentos.folha import (A4, AZUL, CASTANHO, CINZA, CINZA_CLARO
                                           PRETO, VERDE, VERMELHO, Tabela, Vista, cota_h, cota_v, escala_para, fmt,
                                           folha, logo, seccao)
 from ferramentas.documentos.pdf import PDF, hexcor, largura  # noqa: E402
+from ferramentas.documentos.codigos import codigo  # noqa: E402
 
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
@@ -1215,15 +1216,17 @@ def linhas_material(casa):
 def doc_listagem(casa, info, caminho_pdf, caminho_csv):
     linhas = linhas_material(casa)
     itens = (casa.S.get("caixilharia") or {}).get("itens", [])
-    # CSV (for budgeting)
+    # CSV (for budgeting): the stable product code of each line is what the Orçamentação prices (codigos.py)
     with open(caminho_csv, "w", newline="", encoding="utf-8-sig") as fh:
         w = csv.writer(fh, delimiter=";")
-        w.writerow(["capitulo", "descricao", "produto", "pecas", "comprimento_m", "area_m2", "volume_m3", "quantidade_compra", "unidade_compra"])
+        w.writerow(["capitulo", "codigo", "descricao", "produto", "pecas", "comprimento_m", "area_m2", "volume_m3", "quantidade_compra",
+                    "unidade_compra"])
         for cap, d, p, n, L, A, Vv, q, u in linhas:
-            w.writerow([CAPITULOS.get(cap[0], cap) + (" (madeira)" if cap == "8m" else ""), d, p, n, round(L, 2) or "", round(A, 2) or "",
-                        round(Vv, 3) or "", q, u])
+            w.writerow([CAPITULOS.get(cap[0], cap) + (" (madeira)" if cap == "8m" else ""), codigo(cap, d, p), d, p, n, round(L, 2) or "",
+                        round(A, 2) or "", round(Vv, 3) or "", q, u])
         for it in itens:
-            w.writerow([CAPITULOS["7"] + " (itens)", f"{it.get('modulo') or it.get('parede', '')} {it.get('divisao', '')} - {it.get('descricao_curta', '')}", it.get("descricao", ""),
+            w.writerow([CAPITULOS["7"] + " (itens)", codigo("7i", it.get("descricao_curta", "")),
+                        f"{it.get('modulo') or it.get('parede', '')} {it.get('divisao', '')} - {it.get('descricao_curta', '')}", it.get("descricao", ""),
                         1, "", round(it["largura"] * it["altura"], 3), "", 1, f"{fmt(it['largura'])}x{fmt(it['altura'])}"
                         + (" + estore" if it.get("estore") else "")])
     # PDF (A4 portrait)

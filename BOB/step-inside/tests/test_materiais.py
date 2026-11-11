@@ -18,6 +18,15 @@ class TestCatalogo(unittest.TestCase):
     def test_catalogo_e_mapeamento_validos(self):
         self.assertEqual(materiais.validar(self.cat, self.mp), [])
 
+    def test_produtos_com_codigo_da_listagem(self):
+        """2026-11-11: the products of the Listagem carry their product codes, which reach the Hub's official list."""
+        com = [n for n, e in self.mp["materiais"].items() if e.get("codigos")]
+        self.assertGreaterEqual(len(com), 40)
+        self.assertEqual(self.mp["materiais"]["Douglas marron"]["codigos"], ["FORRO-TREMOLO"])
+        mp = copy.deepcopy(self.mp)
+        mp["materiais"]["OSB 9"]["codigos"] = ["NAO-EXISTE"]
+        self.assertTrue(any("NAO-EXISTE" in e for e in materiais.validar(self.cat, mp)))
+
     def test_ids_estaveis_e_independentes_do_construtor(self):
         for m in self.cat["materiais"]:
             self.assertRegex(m["id"], r"^MAT_[A-Z0-9_]+$")

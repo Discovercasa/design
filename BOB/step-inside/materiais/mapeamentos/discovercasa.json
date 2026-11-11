@@ -1,5 +1,5 @@
 {
- "_doc": "DiscoverCasa products -> common catalogue IDs (catalogo.json). Keys are the material names the house generator uses (ferramentas/modelo/sistema_construtivo.json and the layers). PROVISIONAL: built from sistema_construtivo.json (name, colour, roughness) until the official DiscoverCasa materials list arrives (user 2026-11-09: 'durante esta próxima semana eu vou associar a nossa listagem de materiais oficiais'); then each entry becomes CONFIRMED with the official product as its source. Another builder gets its own file next to this one, mapping its products to the same IDs.",
+ "_doc": "DiscoverCasa products -> common catalogue IDs (catalogo.json). Keys are the material names the house generator uses (ferramentas/modelo/sistema_construtivo.json and the layers). PROVISIONAL: built from sistema_construtivo.json (name, colour, roughness) until the official DiscoverCasa materials list arrives (user 2026-11-09: 'durante esta próxima semana eu vou associar a nossa listagem de materiais oficiais'); then each entry becomes CONFIRMED with the official product as its source. Another builder gets its own file next to this one, mapping its products to the same IDs. 2026-11-11: each product lists its Listagem product codes ('codigos', ferramentas/documentos/codigos.py); through orcamentacao/ligacoes.json a code reaches the material of the Hub's official list (user 2026-11-10: the Hub list is the official one). Products not on the Listagem (Microcimento, Betão, Madeira 160x80) have none. The entries stay INFERRED until the team confirms the links.",
  "construtor": "discovercasa",
  "estado_padrao": "INFERRED",
  "fonte_padrao": {
@@ -11,144 +11,279 @@
  "materiais": {
   "Reboco branco": {
    "mat": "MAT_WALL_RENDER__WHITE",
-   "nota": "opção B: ETICS / capoto branco"
+   "nota": "opção B: ETICS / capoto branco",
+   "codigos": [
+    "ETICS-REBOCO"
+   ]
   },
   "Ripa casquinha": {
-   "mat": "MAT_WOOD_CLADDING__PINE_NATURAL"
+   "mat": "MAT_WOOD_CLADDING__PINE_NATURAL",
+   "codigos": [
+    "RIPA-37x35",
+    "RIPA-30x20"
+   ]
   },
   "Douglas marron": {
-   "mat": "MAT_WOOD_CLADDING__DOUGLAS_BROWN"
+   "mat": "MAT_WOOD_CLADDING__DOUGLAS_BROWN",
+   "codigos": [
+    "FORRO-TREMOLO"
+   ]
   },
   "Cortiça": {
-   "mat": "MAT_CORK_CLADDING"
+   "mat": "MAT_CORK_CLADDING",
+   "codigos": [
+    "CORTICA-60"
+   ]
   },
   "Painel sandwich Munditelha": {
    "mat": "MAT_ROOF_SANDWICH_TILE__RAL8004",
-   "nota": "Mundiperfil Munditelha, cor telha RAL 8004"
+   "nota": "Mundiperfil Munditelha, cor telha RAL 8004",
+   "codigos": [
+    "PAINEL-TELHA-40"
+   ]
   },
   "Painel sandwich RAL 7016": {
    "mat": "MAT_ROOF_SANDWICH_TILE__RAL7016",
-   "nota": "Sobral Tipo 1: painel imitação telha, cinzento escuro"
+   "nota": "Sobral Tipo 1: painel imitação telha, cinzento escuro",
+   "codigos": [
+    "PAINEL-TELHA-40"
+   ]
   },
   "Painel sandwich 5 ondas": {
    "mat": "MAT_ROOF_SANDWICH_TRAPEZOIDAL__RAL8004",
-   "nota": "cobertura oculta"
+   "nota": "cobertura oculta",
+   "codigos": [
+    "PAINEL-5ONDAS-80"
+   ]
   },
   "Telha": {
    "mat": "MAT_ROOF_TILE_CERAMIC__TERRACOTTA",
-   "nota": "telha da pérgola: cerâmica ou painel imitação telha (a confirmar no sistema construtivo)"
+   "nota": "telha da pérgola: cerâmica ou painel imitação telha (a confirmar no sistema construtivo)",
+   "codigos": [
+    "TELHA-CER"
+   ]
   },
   "Remate RAL 7016": {
-   "mat": "MAT_METAL_FLASHING__RAL7016"
+   "mat": "MAT_METAL_FLASHING__RAL7016",
+   "codigos": [
+    "CHAPEU-PLATIBANDA",
+    "REMATE-VAO-EXT"
+   ]
   },
   "Remate cor da cobertura": {
-   "mat": "MAT_METAL_FLASHING__RAL8004"
+   "mat": "MAT_METAL_FLASHING__RAL8004",
+   "codigos": [
+    "REMATE-COB",
+    "CUMEEIRA",
+    "REMATE-TOPO"
+   ]
   },
   "Chapa cor telha": {
    "mat": "MAT_METAL_FLASHING__RAL8004",
-   "nota": "forro da caleira oculta"
+   "nota": "forro da caleira oculta",
+   "codigos": [
+    "CALEIRA-OCULTA"
+   ]
   },
   "Caleira": {
-   "mat": "MAT_METAL_GUTTER__DARK_GREY"
+   "mat": "MAT_METAL_GUTTER__DARK_GREY",
+   "codigos": [
+    "CALEIRA",
+    "CALEIRA-LARO"
+   ]
   },
   "Saída de caleira": {
-   "mat": "MAT_METAL_GUTTER__BLACK"
+   "mat": "MAT_METAL_GUTTER__BLACK",
+   "codigos": [
+    "CALEIRA-BOCAL"
+   ]
   },
   "Membrana de topo": {
-   "mat": "MAT_MEMBRANE_BREATHER__DARK"
+   "mat": "MAT_MEMBRANE_BREATHER__DARK",
+   "codigos": [
+    "REMATE-TOPO"
+   ]
   },
   "Alumínio": {
-   "mat": "MAT_FRAME_ALUMINIUM__NATURAL"
+   "mat": "MAT_FRAME_ALUMINIUM__NATURAL",
+   "codigos": [
+    "CAIXILHARIA"
+   ]
   },
   "Alumínio RAL 7016": {
-   "mat": "MAT_FRAME_ALUMINIUM__RAL7016"
+   "mat": "MAT_FRAME_ALUMINIUM__RAL7016",
+   "codigos": [
+    "CAIXILHARIA"
+   ]
   },
   "Vidro": {
-   "mat": "MAT_GLASS_CLEAR"
+   "mat": "MAT_GLASS_CLEAR",
+   "codigos": [
+    "CAIXILHARIA"
+   ]
   },
   "Vidro fosco": {
-   "mat": "MAT_GLASS_FROSTED"
+   "mat": "MAT_GLASS_FROSTED",
+   "codigos": [
+    "CAIXILHARIA"
+   ]
   },
   "Portão seccionado RAL 7016": {
-   "mat": "MAT_DOOR_GARAGE_SECTIONAL__RAL7016"
+   "mat": "MAT_DOOR_GARAGE_SECTIONAL__RAL7016",
+   "codigos": [
+    "CAIXILHARIA"
+   ]
   },
   "Vinílico": {
-   "mat": "MAT_FLOOR_VINYL_WOOD"
+   "mat": "MAT_FLOOR_VINYL_WOOD",
+   "codigos": [
+    "VINILICO"
+   ]
   },
   "Cerâmico": {
-   "mat": "MAT_FLOOR_CERAMIC"
+   "mat": "MAT_FLOOR_CERAMIC",
+   "codigos": [
+    "CERAMICO-PAV"
+   ]
   },
   "Microcimento": {
    "mat": "MAT_FLOOR_MICROCEMENT"
   },
   "Madeira interior": {
-   "mat": "MAT_INT_WOOD"
+   "mat": "MAT_INT_WOOD",
+   "codigos": [
+    "FORRO-MAD-INT"
+   ]
   },
   "Azulejo": {
-   "mat": "MAT_INT_WALL_TILE"
+   "mat": "MAT_INT_WALL_TILE",
+   "codigos": [
+    "AZULEJO"
+   ]
   },
   "Pladur N": {
-   "mat": "MAT_INT_PLASTER_PAINTED__WHITE"
+   "mat": "MAT_INT_PLASTER_PAINTED__WHITE",
+   "codigos": [
+    "PLADUR-13"
+   ]
   },
   "Pladur H1 (hidrófugo)": {
    "mat": "MAT_INT_PLASTER_PAINTED__WHITE",
-   "nota": "pintado fica igual ao normal; a cor verde do modelo de produção só distingue o tipo de placa"
+   "nota": "pintado fica igual ao normal; a cor verde do modelo de produção só distingue o tipo de placa",
+   "codigos": [
+    "PLADUR-13"
+   ]
   },
   "Pladur F (ignífugo)": {
    "mat": "MAT_INT_PLASTER_PAINTED__WHITE",
-   "nota": "pintado fica igual ao normal; a cor rosa do modelo de produção só distingue o tipo de placa"
+   "nota": "pintado fica igual ao normal; a cor rosa do modelo de produção só distingue o tipo de placa",
+   "codigos": [
+    "PLADUR-13"
+   ]
   },
   "Betonilha": {
-   "mat": "MAT_SCREED"
+   "mat": "MAT_SCREED",
+   "codigos": [
+    "BETONILHA"
+   ]
   },
   "XPS": {
-   "mat": "MAT_INSULATION_XPS"
+   "mat": "MAT_INSULATION_XPS",
+   "codigos": [
+    "XPS-60"
+   ]
   },
   "Lã mineral": {
-   "mat": "MAT_INSULATION_MINERAL_WOOL"
+   "mat": "MAT_INSULATION_MINERAL_WOOL",
+   "codigos": [
+    "LA-80",
+    "LA-100"
+   ]
   },
   "OSB": {
-   "mat": "MAT_BOARD_OSB"
+   "mat": "MAT_BOARD_OSB",
+   "codigos": [
+    "OSB-09",
+    "OSB-15",
+    "OSB-22"
+   ]
   },
   "OSB 9": {
-   "mat": "MAT_BOARD_OSB"
+   "mat": "MAT_BOARD_OSB",
+   "codigos": [
+    "OSB-09"
+   ]
   },
   "OSB 15": {
-   "mat": "MAT_BOARD_OSB"
+   "mat": "MAT_BOARD_OSB",
+   "codigos": [
+    "OSB-15"
+   ]
   },
   "Traspir 95": {
-   "mat": "MAT_MEMBRANE_BREATHER"
+   "mat": "MAT_MEMBRANE_BREATHER",
+   "codigos": [
+    "MEMB-T95"
+   ]
   },
   "Aço galvanizado": {
-   "mat": "MAT_METAL_GALVANIZED"
+   "mat": "MAT_METAL_GALVANIZED",
+   "codigos": [
+    "TETO-REGUA",
+    "TETO-PERFIL",
+    "TETO-CANTONEIRA",
+    "FERR-BASE-PILAR"
+   ]
   },
   "Betão": {
    "mat": "MAT_CONCRETE_SLAB"
   },
   "Madeira pérgola": {
    "mat": "MAT_TIMBER_STRUCTURE__GLULAM",
-   "nota": "lamelada com tratamento autoclave, à vista"
+   "nota": "lamelada com tratamento autoclave, à vista",
+   "codigos": [
+    "MAD-LAM-AUT",
+    "MAD-AUT"
+   ]
   },
   "Madeira apoio cobertura": {
-   "mat": "MAT_TIMBER_STRUCTURE"
+   "mat": "MAT_TIMBER_STRUCTURE",
+   "codigos": [
+    "VIGA-APOIO-COB"
+   ]
   },
   "Madeira 110x35": {
-   "mat": "MAT_TIMBER_STRUCTURE"
+   "mat": "MAT_TIMBER_STRUCTURE",
+   "codigos": [
+    "MAD-CASQ"
+   ]
   },
   "Madeira 75x35": {
-   "mat": "MAT_TIMBER_STRUCTURE"
+   "mat": "MAT_TIMBER_STRUCTURE",
+   "codigos": [
+    "MAD-CASQ"
+   ]
   },
   "Madeira 110x75": {
-   "mat": "MAT_TIMBER_STRUCTURE"
+   "mat": "MAT_TIMBER_STRUCTURE",
+   "codigos": [
+    "MAD-CASQ"
+   ]
   },
   "Madeira 220x75": {
-   "mat": "MAT_TIMBER_STRUCTURE"
+   "mat": "MAT_TIMBER_STRUCTURE",
+   "codigos": [
+    "MAD-CASQ-22"
+   ]
   },
   "Madeira 160x80": {
    "mat": "MAT_TIMBER_STRUCTURE"
   },
   "Madeira 200x100": {
-   "mat": "MAT_TIMBER_STRUCTURE"
+   "mat": "MAT_TIMBER_STRUCTURE",
+   "codigos": [
+    "MAD-LAM"
+   ]
   }
  },
  "estrutura_a_vista": [

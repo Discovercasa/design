@@ -7,7 +7,7 @@ uma página (`#/projeto/<slug>`), um ficheiro de dados, uma pasta de código e u
 |---|---|---|---|---|---|---|
 | Gerador de documentos | `gerador` | `#/projeto/gerador` | `public/dados/projetos/gerador.json` | `BOB/gerador/web/`, `BOB/ferramentas/documentos/` | `public/gerador/` | `gerador/<tarefa>` |
 | Builder | `builder` | `#/projeto/builder` | `public/dados/projetos/builder.json` | `BOB/ferramentas/modelo/`, `BOB/conhecimento/` | (ainda sem página) | `builder/<tarefa>` |
-| Orçamentação | `orcamentacao` | `#/projeto/orcamentacao` | `public/dados/projetos/orcamentacao.json` | `BOB/orcamentacao/` (a criar) | (ainda sem página) | `orcamentacao/<tarefa>` |
+| Orçamentação | `orcamentacao` | `#/projeto/orcamentacao` | `public/dados/projetos/orcamentacao.json` | `BOB/orcamentacao/` (página `web/`, `ligacoes.json`), `public/js/orcamento.js` (cálculo comum) | `public/orcamentacao/` | `orcamentacao/<tarefa>` |
 | Build Your House | `build_your_house` | `#/projeto/build-your-house` | `public/dados/projetos/build_your_house.json` | `BOB/configurador/` | `public/build-your-house/` | `build-your-house/<tarefa>` |
 | Step Inside (VR/AR) | `plataforma_cliente` | `#/projeto/step-inside` | `public/dados/projetos/plataforma_cliente.json` | `BOB/step-inside/` | (ainda sem página) | `step-inside/<fase>-<tarefa>` |
 | Hub do Design | — | `#/` | `public/dados/novidades.json` | `public/index.html`, `public/js/hub/`, `public/css/hub.css` | `public/` | `hub/<tarefa>` |

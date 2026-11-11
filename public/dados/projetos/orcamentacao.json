@@ -4,20 +4,21 @@
   "nome": "Orçamentação",
   "resumo": "O preço de cada material e fornecedor, com as contas à vista até ao preço final da casa.",
   "descricao": "A partir da Listagem de material de cada casa e da lista de preços de materiais e fornecedores, calcula o preço final: materiais, mão de obra, fundação, caixilharia, especialidades, instalações e pré-instalações, licenciamento e IVA, mostrando como se chega a cada valor.",
-  "fase": "Planeado",
-  "fase_detalhe": "A lista de materiais, fornecedores e preços chega do Hub nos dias úteis às 6h (Lisboa), desde 2026-11-10: aba Materiais do hub, só de consulta, com o histórico dos preços. Falta ligar os preços às quantidades da Listagem de material.",
+  "fase": "Protótipo publicado",
+  "fase_detalhe": "Desde 2026-11-11 a página Orçamentação calcula o custo dos materiais de uma obra: larga-se a Listagem de material do Gerador e cada linha (pelo seu código de produto) recebe o preço mais baixo da lista do Hub, com os motivos do que ainda falta. As ligações produto → material do Hub são propostas do Claude, a confirmar. Faltam a mão de obra, a fundação, a margem e o IVA da obra.",
   "objetivos": [
     "Preço final de qualquer casa em minutos.",
     "Contas transparentes, parcela a parcela."
   ],
   "futuro": [
-    "Ligar os preços do Hub às quantidades da Listagem de material: o preço de cada parcela, com as contas à vista.",
+    "Confirmar as ligações dos produtos aos materiais do Hub e completar o que não está na lista (caixilharia, caleiras, remates RAL 7016, cortiça, betonilha).",
+    "As outras parcelas do preço final (mão de obra, fundação, especialidades, instalações, licenciamento, margem) e o IVA, com as contas à vista.",
     "Ligar ao Build Your House para o preço em direto."
   ],
   "materiais": "A lista de preços que a Orçamentação esperava: o preço de cada material por fornecedor, com desconto, IVA e histórico, para multiplicar pelas quantidades da Listagem de material.",
   "metodo": "Usa as quantidades do método Discovercasa.",
-  "app": null,
-  "organizacao": { "codigo": "ainda por criar (BOB/orcamentacao/)", "publicado": "ainda sem página própria", "ramo": "orcamentacao/<tarefa>" },
+  "app": { "url": "/orcamentacao/", "rotulo": "Abrir a Orçamentação" },
+  "organizacao": { "codigo": "BOB/orcamentacao/ (página e ligações) e public/js/orcamento.js (cálculo comum)", "publicado": "public/orcamentacao/", "ramo": "orcamentacao/<tarefa>" },
   "ligacoes": [
     { "com": "build_your_house", "texto": "Dá os preços reais ao configurador." }
   ]
