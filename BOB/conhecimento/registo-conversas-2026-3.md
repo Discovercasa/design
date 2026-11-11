@@ -503,3 +503,13 @@ The team's notes on hub task 84 (written in the hub by [membro da equipa] on 202
 - Context: Claude offered two ways to read the contents of the files in the hub's private storage and recommended the first: a temporary download function with a one-time key, switched off right after (no stored credential), or a permanent read-only function with a key kept on the company PC.
 - Decision: one-time key, each time Claude needs to read files ("lê a pasta X da secção Y"); reconsider only if reading becomes several times a day / automatic.
 - Filed in: Design `CLAUDE.md` (Documentos: secções e pastas).
+
+### 2026-11-11 — Ribamar: first client page from the drawings [Builder]
+> Ok acabei de dar upload de todos os documentos necessários para avançares com o processo que tínhamos falado. O nome da secção é [cliente] Ribamar e está nos documentos adicionais do Builder. Podes começar com o processo da página
+- (The client's name in the section title is left out here: public repo.)
+- Read: 33 files downloaded from the hub section with a one-time-key function (switched off right after: 401 confirmed; key deleted). Drawings kept only on the PC (`Construção Ribamar/desenhos/`, ignored).
+- Route: the PDFs alone gave wrong scales and regions, so the DWG (converted to DXF on the PC with the ODA File Converter) was used: new pure-Python DXF reader `ferramentas/dxf/leitor_dxf.py`; page model `ferramentas/pagina/modelo_dxf.py` (walls by the shape analyser on the wall layers, outline of each storey, facade spans classified wall / frame / open, slabs, furniture, the survey's terrain); the page `ferramentas/pagina/gerar_pagina.py` + `modelo_pagina.html` (ONE HTML file, three.js inside gzipped, opens offline and on phones; no «como foi feito» notes, as asked).
+- The per-house config (which layers, where each storey's plan sits in the DXF, levels, room areas) stays in `_trabalho/ribamar/` (it holds site coordinates).
+- Result: `Casa_Ribamar_3D.html` (0.6 MB) sent to the user — cave, piso 0, piso 1, roof and terrain on/off; Maquete/Realista; furniture; 8 views; levels diagram; table of storeys with the rooms' areas from the drawings (183,01 m² interior, 43,97 m² deck and balconies).
+- Assumed (not read from the drawings yet): window sills 0,90 m and heads 2,20 m; flat roof slab 0,35 m; the deck and balconies are not modelled; the cave's ramp walls are full height.
+- Filed in: hub task 177 (and 171/175/179 situação), Log.

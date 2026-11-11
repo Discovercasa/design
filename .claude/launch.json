@@ -12,6 +12,12 @@
       "runtimeExecutable": "node",
       "runtimeArgs": ["tests/servidor.mjs"],
       "port": 4321
+    },
+    {
+      "name": "trabalho-local",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "8765", "--bind", "127.0.0.1", "--directory", "BOB/_trabalho"],
+      "port": 8765
     }
   ]
 }
