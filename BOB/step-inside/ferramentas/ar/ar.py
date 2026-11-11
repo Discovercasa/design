@@ -91,13 +91,17 @@ def main():
     ap.add_argument("--textura-max", type=int, default=1024)
     ap.add_argument("--raio-terreno", type=float, default=20.0)
     ap.add_argument("--sem-oclusao", action="store_true", help="skip the ambient occlusion bake (quicker)")
+    ap.add_argument("--interiores", action="store_true",
+                    help="the furnished house (interiores.py, hub task 167): only the 1:1 model(s), *_interiores files")
     a = ap.parse_args()
     vp = Path(a.visita).resolve()
     decl = comum.ler_json(vp)
     obra = decl["obra"]
-    blend = BOB / "_trabalho" / "step-inside" / obra / "visita" / "visita.blend"
+    blend = BOB / "_trabalho" / "step-inside" / obra / "visita" / ("visita_interiores_ar.blend" if a.interiores else "visita.blend")
     if not blend.exists():
-        raise SystemExit("primeiro o modelo de visita: python step-inside/ferramentas/visita/visita.py " + a.visita)
+        raise SystemExit("primeiro o modelo " + ("mobilado: python step-inside/ferramentas/interiores/interiores.py "
+                                                 if a.interiores else "de visita: python step-inside/ferramentas/visita/visita.py ") + a.visita)
+    sufixo = "_interiores" if a.interiores else ""
     pasta = BOB / "_trabalho" / "step-inside" / obra / "ar"
     pasta.mkdir(parents=True, exist_ok=True)
     oc = ocultos(decl.get("construtor", "discovercasa"))
@@ -106,10 +110,10 @@ def main():
     variantes, falhas, avisos = [], [], []
     # casa and maquete; then, for a house of two or more storeys, each storey (1:1 and table model): the storeys come
     # from the first run (resumo "niveis")
-    fila = [("casa", None), ("maquete", None)]
+    fila = [("casa", None)] if a.interiores else [("casa", None), ("maquete", None)]   # furniture is seen from inside only
     while fila:
         var, piso = fila.pop(0)
-        nome = var + (f"_piso{piso}" if piso is not None else "")
+        nome = var + (f"_piso{piso}" if piso is not None else "") + sufixo
         glb, usdz, res = pasta / f"{obra}_ar_{nome}.glb", pasta / f"{obra}_ar_{nome}.usdz", pasta / f"_{nome}.json"
         with tempfile.NamedTemporaryFile("w", suffix=".json", delete=False, encoding="utf-8") as fh:
             json.dump({"variante": var, "piso": piso, "ocultos": oc, "raio_terreno_m": a.raio_terreno,
@@ -149,8 +153,8 @@ def main():
               "raio_terreno_m": a.raio_terreno, "materiais_ocultos": oc, "variantes": variantes,
               "orcamento": {"triangulos_ideal": TRI_IDEAL, "triangulos_max": TRI_MAX, "textura_max_px": 2048,
                             "mb_alvo": MB_ALVO, "mb_max": MB_MAX}}
-    comum.escrever_json(vp.parent / "ar_resumo.json", resumo)
-    (vp.parent / "ar_relatorio.md").write_text(relatorio(resumo, decl), encoding="utf-8")
+    comum.escrever_json(vp.parent / f"ar{sufixo}_resumo.json", resumo)
+    (vp.parent / f"ar{sufixo}_relatorio.md").write_text(relatorio(resumo, decl), encoding="utf-8")
     print(f"{estado}: " + "; ".join((falhas + avisos)[:6]))
     print(f"ficheiros AR: {pasta}")
     sys.exit(1 if estado == "FAIL" else 0)

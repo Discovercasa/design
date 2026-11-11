@@ -1,0 +1,308 @@
+{
+ "obra": "torres-vedras",
+ "resultado": "WARNING",
+ "motivos": [
+  "casa_interiores glb (Scene Viewer): 27 materiais, 4 com transparência (recomendado pelo Scene Viewer: até 10, 2 com transparência)"
+ ],
+ "textura_max": 1024,
+ "raio_terreno_m": 20.0,
+ "materiais_ocultos": [
+  "MAT_BOARD_OSB",
+  "MAT_INSULATION_MINERAL_WOOL",
+  "MAT_INSULATION_XPS",
+  "MAT_METAL_GALVANIZED",
+  "MAT_SCREED",
+  "MAT_TIMBER_STRUCTURE"
+ ],
+ "variantes": [
+  {
+   "variante": "casa",
+   "base": "casa",
+   "piso": null,
+   "niveis": [
+    0.0
+   ],
+   "objetos": 27,
+   "materiais": [
+    "AR_OCLUSAO",
+    "INT_AR_0",
+    "INT_AR_1",
+    "INT_AR_2",
+    "INT_AR_3",
+    "INT_AR_4",
+    "INT_AR_5",
+    "INT_AR_6",
+    "INT_AR_7",
+    "INT_CFE0E8_05_A22",
+    "MAT_CONCRETE_SLAB",
+    "MAT_DOOR_GARAGE_SECTIONAL__RAL7016",
+    "MAT_FLOOR_VINYL_WOOD",
+    "MAT_FRAME_ALUMINIUM__RAL7016",
+    "MAT_GLASS_CLEAR",
+    "MAT_GLASS_FROSTED",
+    "MAT_INT_PLASTER_PAINTED__WHITE",
+    "MAT_MEMBRANE_BREATHER",
+    "MAT_METAL_FLASHING__RAL7016",
+    "MAT_METAL_FLASHING__RAL8004",
+    "MAT_METAL_GUTTER__BLACK",
+    "MAT_METAL_GUTTER__DARK_GREY",
+    "MAT_ROOF_SANDWICH_TRAPEZOIDAL__RAL8004",
+    "MAT_ROOF_TILE_CERAMIC__TERRACOTTA",
+    "MAT_TIMBER_STRUCTURE__GLULAM",
+    "MAT_WOOD_CLADDING__DOUGLAS_BROWN",
+    "MAT_WOOD_CLADDING__PINE_NATURAL"
+   ],
+   "triangulos": 47159,
+   "triangulos_antes_de_simplificar": 47318,
+   "imagens": {
+    "AR_OCLUSAO": [
+     1024,
+     1024
+    ],
+    "Chipboard004_2K-JPG_Color.jpg": [
+     1024,
+     1024
+    ],
+    "Chipboard004_2K-JPG_Roughness.jpg": [
+     512,
+     512
+    ],
+    "Chipboard004_2K-JPG_NormalGL.jpg": [
+     512,
+     512
+    ],
+    "Concrete046_2K-JPG_Color.jpg": [
+     1024,
+     1024
+    ],
+    "Concrete046_2K-JPG_Roughness.jpg": [
+     512,
+     512
+    ],
+    "Concrete046_2K-JPG_NormalGL.jpg": [
+     512,
+     512
+    ],
+    "Metal027_2K-JPG_Roughness.jpg": [
+     512,
+     512
+    ],
+    "Metal027_2K-JPG_NormalGL.jpg": [
+     512,
+     512
+    ],
+    "MAT_FLOOR_VINYL_WOOD_A9855D_Color.jpg": [
+     1024,
+     512
+    ],
+    "WoodFloor043_2K-JPG_Roughness.jpg": [
+     512,
+     256
+    ],
+    "WoodFloor043_2K-JPG_NormalGL.jpg": [
+     512,
+     256
+    ],
+    "Grass005_2K-JPG_Color.jpg": [
+     1024,
+     1024
+    ],
+    "Grass005_2K-JPG_Roughness.jpg": [
+     512,
+     512
+    ],
+    "Grass005_2K-JPG_NormalGL.jpg": [
+     512,
+     512
+    ],
+    "CorrugatedSteel005_2K-JPG_Roughness.jpg": [
+     512,
+     512
+    ],
+    "CorrugatedSteel005_2K-JPG_NormalGL.jpg": [
+     512,
+     512
+    ],
+    "MAT_ROOF_TILE_CERAMIC__TERRACOTTA_B5562F_Color.jpg": [
+     1024,
+     1024
+    ],
+    "RoofingTiles013A_2K-JPG_Roughness.jpg": [
+     512,
+     512
+    ],
+    "RoofingTiles013A_2K-JPG_NormalGL.jpg": [
+     512,
+     512
+    ],
+    "MAT_TIMBER_STRUCTURE_E2BE86_Color.jpg": [
+     1024,
+     1024
+    ],
+    "Wood096_2K-JPG_Roughness.jpg": [
+     512,
+     512
+    ],
+    "Wood096_2K-JPG_NormalGL.jpg": [
+     512,
+     512
+    ],
+    "MAT_TIMBER_STRUCTURE__GLULAM_A8743F_Color.jpg": [
+     1024,
+     1024
+    ],
+    "MAT_WOOD_CLADDING__DOUGLAS_BROWN_A0653C_Color.jpg": [
+     1024,
+     512
+    ],
+    "WoodSiding009_2K-JPG_Roughness.jpg": [
+     512,
+     256
+    ],
+    "WoodSiding009_2K-JPG_NormalGL.jpg": [
+     512,
+     256
+    ],
+    "MAT_WOOD_CLADDING__PINE_NATURAL_EBD5A6_Color.jpg": [
+     1024,
+     512
+    ]
+   },
+   "oclusao": {
+    "faces_tapadas": 5236,
+    "faces_candidatas": 21013,
+    "faces": 1895,
+    "triangulos": 3066,
+    "px": 1024,
+    "distancia_m": 1.0,
+    "forca": 0.7,
+    "afastamento_m": 0.005
+   },
+   "maquete_base": {},
+   "terreno_cozido": {},
+   "textura_maior": 1024,
+   "dimensoes": [
+    17.665,
+    13.325,
+    3.702
+   ],
+   "origem": "2 m à frente da casa, ao centro da fachada da entrada, no pavimento acabado do rés do chão",
+   "frente": {
+    "regra": "porta de entrada (M5 Sala / Entrada)",
+    "rotacao_graus": 0.0,
+    "nota": "a fachada da frente fica virada para quem vê (+Z no glTF e no USD)"
+   },
+   "z_min": -0.2,
+   "scene_viewer": {
+    "extensoes_tiradas": [
+     "KHR_materials_specular"
+    ],
+    "erros": [],
+    "avisos": [
+     "27 materiais, 4 com transparência (recomendado pelo Scene Viewer: até 10, 2 com transparência)"
+    ]
+   },
+   "ficheiros": {
+    "glb": {
+     "ficheiro": "torres-vedras_ar_casa_interiores.glb",
+     "bytes": 4571032,
+     "sha256": "882d6bef06bdd485463a1996c41f91d316a369e476445a79c733137ca6e0cd90"
+    },
+    "usdz": {
+     "ficheiro": "torres-vedras_ar_casa_interiores.usdz",
+     "bytes": 4468175,
+     "sha256": "0d5167ec83cdca1e5da0f22fb7c694b31000961c3bc061f0e8e15182d91b517e"
+    }
+   },
+   "reimportacao": {
+    "glb": {
+     "triangulos": 47159,
+     "dimensoes": [
+      17.665,
+      13.325,
+      3.702
+     ],
+     "materiais": [
+      "AR_OCLUSAO",
+      "INT_AR_0",
+      "INT_AR_1",
+      "INT_AR_2",
+      "INT_AR_3",
+      "INT_AR_4",
+      "INT_AR_5",
+      "INT_AR_6",
+      "INT_AR_7",
+      "INT_CFE0E8_05_A22",
+      "MAT_CONCRETE_SLAB",
+      "MAT_DOOR_GARAGE_SECTIONAL__RAL7016",
+      "MAT_FLOOR_VINYL_WOOD",
+      "MAT_FRAME_ALUMINIUM__RAL7016",
+      "MAT_GLASS_CLEAR",
+      "MAT_GLASS_FROSTED",
+      "MAT_INT_PLASTER_PAINTED__WHITE",
+      "MAT_MEMBRANE_BREATHER",
+      "MAT_METAL_FLASHING__RAL7016",
+      "MAT_METAL_FLASHING__RAL8004",
+      "MAT_METAL_GUTTER__BLACK",
+      "MAT_METAL_GUTTER__DARK_GREY",
+      "MAT_ROOF_SANDWICH_TRAPEZOIDAL__RAL8004",
+      "MAT_ROOF_TILE_CERAMIC__TERRACOTTA",
+      "MAT_TIMBER_STRUCTURE__GLULAM",
+      "MAT_WOOD_CLADDING__DOUGLAS_BROWN",
+      "MAT_WOOD_CLADDING__PINE_NATURAL"
+     ],
+     "imagens": 21,
+     "imagens_em_falta": [],
+     "erro": null
+    },
+    "usdz": {
+     "triangulos": 47159,
+     "dimensoes": [
+      17.665,
+      13.325,
+      3.702
+     ],
+     "materiais": [
+      "AR_OCLUSAO",
+      "INT_AR_0",
+      "INT_AR_1",
+      "INT_AR_2",
+      "INT_AR_3",
+      "INT_AR_4",
+      "INT_AR_5",
+      "INT_AR_6",
+      "INT_AR_7",
+      "INT_CFE0E8_05_A22",
+      "MAT_CONCRETE_SLAB",
+      "MAT_DOOR_GARAGE_SECTIONAL__RAL7016",
+      "MAT_FLOOR_VINYL_WOOD",
+      "MAT_FRAME_ALUMINIUM__RAL7016",
+      "MAT_GLASS_CLEAR",
+      "MAT_GLASS_FROSTED",
+      "MAT_INT_PLASTER_PAINTED__WHITE",
+      "MAT_MEMBRANE_BREATHER",
+      "MAT_METAL_FLASHING__RAL7016",
+      "MAT_METAL_FLASHING__RAL8004",
+      "MAT_METAL_GUTTER__BLACK",
+      "MAT_METAL_GUTTER__DARK_GREY",
+      "MAT_ROOF_SANDWICH_TRAPEZOIDAL__RAL8004",
+      "MAT_ROOF_TILE_CERAMIC__TERRACOTTA",
+      "MAT_TIMBER_STRUCTURE__GLULAM",
+      "MAT_WOOD_CLADDING__DOUGLAS_BROWN",
+      "MAT_WOOD_CLADDING__PINE_NATURAL"
+     ],
+     "imagens": 21,
+     "imagens_em_falta": [],
+     "erro": null
+    }
+   }
+  }
+ ],
+ "orcamento": {
+  "triangulos_ideal": 50000,
+  "triangulos_max": 100000,
+  "textura_max_px": 2048,
+  "mb_alvo": 10.0,
+  "mb_max": 25.0
+ }
+}

@@ -33,7 +33,9 @@ Um produto sem correspondência aparece no relatório do modelo de visita e pede
   (`ferramentas/documentos/codigos.py`); pelo ficheiro `orcamentacao/ligacoes.json`, cada código chega ao material da
   lista oficial do Hub (27 de 43 produtos estão na lista; os outros dizem porquê). As entradas ficam INFERRED até a
   equipa confirmar as ligações na página da Orçamentação (`/orcamentacao/`). A lista do Hub não traz cores: a cor de
-  cada produto continua a vir do sistema construtivo.
+  cada produto continua a vir do sistema construtivo. (Mais tarde no mesmo dia, com `oficial.py`: o mapeamento tem 44
+  produtos, 25 com todos os códigos na lista oficial; 21 passam a CONFIRMED e 4 são exceções — ver «Lista oficial e
+  texturas dos produtos reais» abaixo.)
 
 ## Lista oficial e texturas dos produtos reais (2026-11-11)
 
@@ -179,10 +181,42 @@ Nos dois casos as silhuetas são iguais e o resultado é WARNING: o FBX e o USDZ
      124 e 128 do hub), com os materiais deste catálogo comum. Não se faz um segundo.
    - Cada casa usa-os no modelo de visita: versão leve no AR (orçamento de 50 mil triângulos, Fase 7) e completa no
      Unreal (Fase 4). Quando o cliente decorar a casa no Build Your House, a visita mostra o que ele escolheu.
-   - A decidir:
-     - só o que a DiscoverCasa entrega (portas interiores com folha, rodapés, cozinha, louças, base de duche,
-       interruptores, luzes) ou também mobiliário de decoração;
-     - de onde vêm os modelos (gratuitos CC0 ou dos fornecedores). Descarregá-los precisa de autorização.
+   - **Decidido a 2026-11-11** (respostas do utilizador às perguntas da tarefa 167):
+     - mobiliário de decoração: «Quero testar com imboliário e depois decido» (testa-se com mobiliário; decisão final
+       depois; fica em aberto se entra só o que a DiscoverCasa entrega);
+     - origem dos modelos: «Gratuitos CC0 (Recomendado)».
+     - «Sim, descarrega»: autorizado o descarregamento de 16 modelos CC0 do Poly Haven (≈ 30 MB, glTF 1K), só no PC
+       (`_trabalho/interiores/`, nunca no Git). Feito: `interiores/descarregar.py`; catálogo comum
+       `interiores/catalogo.json` (partilhado com o Smart Interiors do Build Your House, tarefas 123/124/128);
+       disposição de teste `step-inside/projetos-teste/torres-vedras/interiores.json` (proposta nossa, não a do cliente).
+   - **Teste em Torres Vedras (2026-11-11)** — `python step-inside/ferramentas/interiores/interiores.py
+     step-inside/projetos-teste/torres-vedras/visita.json`:
+     - 45 peças em 11 divisões (nomes e áreas do desenho, `Construção Torres Vedras/docs/desenhos.md`): sala (móvel
+       de TV, televisor, sofá, mesa de centro, cadeirão, quadro, planta), jantar (mesa e 4 cadeiras), cozinha linear
+       3,60 m com coluna do frigorífico e ilha 2,00 × 0,90 (lava-loiça debaixo do vidro fixo, armários altos só fora
+       da janela), closet (2 roupeiros), quartos 01 e 03 (cama de casal, mesinhas), quarto 02 (cama de solteiro,
+       roupeiro), as duas casas de banho (base de duche com resguardo, sanita suspensa, móvel de lavatório com
+       espelho), estante na garagem, candeeiros de teto.
+     - 16 modelos CC0 do Poly Haven (importados uma vez, partilhados pelas cópias) e 11 peças paramétricas
+       (`ferramentas/interiores/pecas.py`: caixas com as medidas e as cores do catálogo, poucas faces).
+     - Cada peça assenta no pavimento acabado (raio para baixo) ou pendura-se do teto; verifica-se contra paredes,
+       vãos e remates (malha), dentro da sua divisão e entre peças. Resultado: nenhuma peça nas paredes; só as
+       cadeiras de jantar metidas 9 cm debaixo da mesa (de propósito). `tests/test_interiores.py` faz a mesma
+       verificação sem o Blender.
+     - Saídas só no PC: `visita/visita_interiores.blend` (o modelo de visita fica igual), renders em
+       `_trabalho/step-inside/torres-vedras/interiores/` (planta vista de cima + sala, cozinha, quarto 01, quarto 03,
+       WC). Resumo no Git: `projetos-teste/torres-vedras/interiores_resumo.json`.
+     - Completo: 481 mil triângulos, 47 materiais (as plantas são as peças mais pesadas: 176 mil e 70 mil).
+     - **Versão leve para o telemóvel** (`visita_interiores_ar.blend` → `ar.py --interiores`, só a casa 1:1, ficheiros
+       `*_ar_casa_interiores.*`): cada peça reduzida ao `ar_tris` do catálogo e as cores numa paleta de 8 materiais
+       lisos (média da textura de cada material, k-means) + o vidro, um objeto por material (o `blender_ar.py` coze
+       cada objeto só com o seu material ativo: na primeira tentativa a cozinha saiu toda branca e o vidro opaco).
+       Móveis 22 214 triângulos; a casa mobilada **47 159 triângulos** (abaixo do ideal de 50 mil), GLB 4,6 MB, USDZ
+       4,5 MB, todos os materiais presentes nos dois ao reabrir; aviso: 27 materiais (o Scene Viewer recomenda até 10;
+       a casa sozinha já tem 18). Resumo: `projetos-teste/torres-vedras/ar_interiores_resumo.json`. O AR atual (sem
+       móveis) não muda.
+     - ⚠ (nosso) As casas de banho mostram o pavimento vinílico (o padrão, PO Q20) e as paredes pintadas também no
+       duche; na prática a zona do duche leva cerâmico sobre Pladur H1 — a visita deveria mostrá-lo.
 3. Na Fase 4 (Unreal), validar a importação do FBX (eixos e materiais mestre por ID).
 
 A redução do GLB e do USDZ para o telemóvel, que estava aqui, foi feita na Fase 7 (de ≈ 100 MB para 1–3 MB).

@@ -1,0 +1,117 @@
+{
+ "_doc": "Origem e licença dos modelos descarregados por interiores/descarregar.py (os ficheiros ficam só no PC, em _trabalho/interiores/).",
+ "modelos": {
+  "sofa_02": {
+   "fonte": "https://polyhaven.com/a/sofa_02",
+   "licenca": "CC0",
+   "resolucao": "1k",
+   "gltf": "sofa_02_1k.gltf",
+   "bytes": 427171
+  },
+  "modern_arm_chair_01": {
+   "fonte": "https://polyhaven.com/a/modern_arm_chair_01",
+   "licenca": "CC0",
+   "resolucao": "1k",
+   "gltf": "modern_arm_chair_01_1k.gltf",
+   "bytes": 2698032
+  },
+  "mid_century_lounge_chair": {
+   "fonte": "https://polyhaven.com/a/mid_century_lounge_chair",
+   "licenca": "CC0",
+   "resolucao": "1k",
+   "gltf": "mid_century_lounge_chair_1k.gltf",
+   "bytes": 2087019
+  },
+  "Ottoman_01": {
+   "fonte": "https://polyhaven.com/a/Ottoman_01",
+   "licenca": "CC0",
+   "resolucao": "1k",
+   "gltf": "Ottoman_01_1k.gltf",
+   "bytes": 652112
+  },
+  "modern_coffee_table_01": {
+   "fonte": "https://polyhaven.com/a/modern_coffee_table_01",
+   "licenca": "CC0",
+   "resolucao": "1k",
+   "gltf": "modern_coffee_table_01_1k.gltf",
+   "bytes": 1331297
+  },
+  "coffee_table_round_01": {
+   "fonte": "https://polyhaven.com/a/coffee_table_round_01",
+   "licenca": "CC0",
+   "resolucao": "1k",
+   "gltf": "coffee_table_round_01_1k.gltf",
+   "bytes": 1563153
+  },
+  "side_table_01": {
+   "fonte": "https://polyhaven.com/a/side_table_01",
+   "licenca": "CC0",
+   "resolucao": "1k",
+   "gltf": "side_table_01_1k.gltf",
+   "bytes": 505268
+  },
+  "dining_chair_02": {
+   "fonte": "https://polyhaven.com/a/dining_chair_02",
+   "licenca": "CC0",
+   "resolucao": "1k",
+   "gltf": "dining_chair_02_1k.gltf",
+   "bytes": 921075
+  },
+  "modern_wooden_cabinet": {
+   "fonte": "https://polyhaven.com/a/modern_wooden_cabinet",
+   "licenca": "CC0",
+   "resolucao": "1k",
+   "gltf": "modern_wooden_cabinet_1k.gltf",
+   "bytes": 2855522
+  },
+  "drawer_cabinet": {
+   "fonte": "https://polyhaven.com/a/drawer_cabinet",
+   "licenca": "CC0",
+   "resolucao": "1k",
+   "gltf": "drawer_cabinet_1k.gltf",
+   "bytes": 1143429
+  },
+  "steel_frame_shelves_03": {
+   "fonte": "https://polyhaven.com/a/steel_frame_shelves_03",
+   "licenca": "CC0",
+   "resolucao": "1k",
+   "gltf": "steel_frame_shelves_03_1k.gltf",
+   "bytes": 3563231
+  },
+  "potted_plant_01": {
+   "fonte": "https://polyhaven.com/a/potted_plant_01",
+   "licenca": "CC0",
+   "resolucao": "1k",
+   "gltf": "potted_plant_01_1k.gltf",
+   "bytes": 6325139
+  },
+  "potted_plant_02": {
+   "fonte": "https://polyhaven.com/a/potted_plant_02",
+   "licenca": "CC0",
+   "resolucao": "1k",
+   "gltf": "potted_plant_02_1k.gltf",
+   "bytes": 2634698
+  },
+  "potted_plant_04": {
+   "fonte": "https://polyhaven.com/a/potted_plant_04",
+   "licenca": "CC0",
+   "resolucao": "1k",
+   "gltf": "potted_plant_04_1k.gltf",
+   "bytes": 2122625
+  },
+  "modern_ceiling_lamp_01": {
+   "fonte": "https://polyhaven.com/a/modern_ceiling_lamp_01",
+   "licenca": "CC0",
+   "resolucao": "1k",
+   "gltf": "modern_ceiling_lamp_01_1k.gltf",
+   "bytes": 436065
+  },
+  "hanging_picture_frame_01": {
+   "fonte": "https://polyhaven.com/a/hanging_picture_frame_01",
+   "licenca": "CC0",
+   "resolucao": "1k",
+   "gltf": "hanging_picture_frame_01_1k.gltf",
+   "bytes": 397466
+  }
+ }
+}

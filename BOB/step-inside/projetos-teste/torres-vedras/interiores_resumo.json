@@ -1,0 +1,483 @@
+{
+ "obra": "torres-vedras",
+ "estado": "TESTE",
+ "pecas": 45,
+ "triangulos": 481109,
+ "materiais": 47,
+ "avisos": [
+  "jantar_mesa e jantar_cadeira_1 sobrepõem-se 0.43 × 0.09 m",
+  "jantar_mesa e jantar_cadeira_2 sobrepõem-se 0.43 × 0.09 m",
+  "jantar_mesa e jantar_cadeira_3 sobrepõem-se 0.43 × 0.09 m",
+  "jantar_mesa e jantar_cadeira_4 sobrepõem-se 0.43 × 0.09 m"
+ ],
+ "modelos": {
+  "modern_wooden_cabinet": {
+   "medidas_m": [
+    2.44,
+    0.52,
+    0.68
+   ],
+   "triangulos": 24976,
+   "materiais": 1
+  },
+  "sofa_02": {
+   "medidas_m": [
+    1.807,
+    0.818,
+    0.709
+   ],
+   "triangulos": 2728,
+   "materiais": 1
+  },
+  "modern_coffee_table_01": {
+   "medidas_m": [
+    0.6,
+    1.202,
+    0.39
+   ],
+   "triangulos": 4504,
+   "materiais": 1
+  },
+  "potted_plant_04": {
+   "medidas_m": [
+    0.168,
+    0.185,
+    0.267
+   ],
+   "triangulos": 8929,
+   "materiais": 1
+  },
+  "modern_arm_chair_01": {
+   "medidas_m": [
+    0.82,
+    0.987,
+    1.023
+   ],
+   "triangulos": 8916,
+   "materiais": 2
+  },
+  "hanging_picture_frame_01": {
+   "medidas_m": [
+    0.594,
+    0.016,
+    0.841
+   ],
+   "triangulos": 2586,
+   "materiais": 3
+  },
+  "potted_plant_01": {
+   "medidas_m": [
+    0.587,
+    0.634,
+    1.35
+   ],
+   "triangulos": 176226,
+   "materiais": 2
+  },
+  "modern_ceiling_lamp_01": {
+   "medidas_m": [
+    0.432,
+    0.432,
+    0.952
+   ],
+   "triangulos": 5602,
+   "materiais": 3
+  },
+  "dining_chair_02": {
+   "medidas_m": [
+    0.434,
+    0.576,
+    0.973
+   ],
+   "triangulos": 22013,
+   "materiais": 1
+  },
+  "steel_frame_shelves_03": {
+   "medidas_m": [
+    2.351,
+    0.721,
+    2.312
+   ],
+   "triangulos": 8396,
+   "materiais": 2
+  },
+  "side_table_01": {
+   "medidas_m": [
+    0.55,
+    0.45,
+    0.551
+   ],
+   "triangulos": 2756,
+   "materiais": 1
+  },
+  "mid_century_lounge_chair": {
+   "medidas_m": [
+    1.009,
+    1.19,
+    1.169
+   ],
+   "triangulos": 6148,
+   "materiais": 1
+  },
+  "Ottoman_01": {
+   "medidas_m": [
+    0.885,
+    0.621,
+    0.624
+   ],
+   "triangulos": 4240,
+   "materiais": 1
+  },
+  "potted_plant_02": {
+   "medidas_m": [
+    0.701,
+    0.657,
+    0.841
+   ],
+   "triangulos": 69806,
+   "materiais": 2
+  },
+  "drawer_cabinet": {
+   "medidas_m": [
+    1.141,
+    0.488,
+    1.881
+   ],
+   "triangulos": 26406,
+   "materiais": 1
+  }
+ },
+ "detalhe": [
+  {
+   "id": "sala_tv_movel",
+   "obj": "OBJ_TV_UNIT",
+   "piso": 0.005,
+   "z": 0.0,
+   "triangulos": 24976
+  },
+  {
+   "id": "sala_tv",
+   "obj": "OBJ_TV",
+   "piso": 0.005,
+   "z": 0.68,
+   "triangulos": 48
+  },
+  {
+   "id": "sala_sofa",
+   "obj": "OBJ_SOFA_3",
+   "piso": 0.005,
+   "z": 0.0,
+   "triangulos": 2728
+  },
+  {
+   "id": "sala_mesa_centro",
+   "obj": "OBJ_COFFEE_TABLE",
+   "piso": 0.005,
+   "z": 0.0,
+   "triangulos": 4504
+  },
+  {
+   "id": "sala_planta_mesa",
+   "obj": "OBJ_PLANT_SMALL",
+   "piso": 0.005,
+   "z": 0.39,
+   "triangulos": 8929
+  },
+  {
+   "id": "sala_cadeirao",
+   "obj": "OBJ_ARMCHAIR",
+   "piso": 0.005,
+   "z": 0.0,
+   "triangulos": 8916
+  },
+  {
+   "id": "sala_quadro",
+   "obj": "OBJ_PICTURE",
+   "piso": 0.005,
+   "z": 1.35,
+   "triangulos": 2586
+  },
+  {
+   "id": "sala_planta",
+   "obj": "OBJ_PLANT_TALL",
+   "piso": 0.005,
+   "z": 0.0,
+   "triangulos": 176226
+  },
+  {
+   "id": "sala_candeeiro",
+   "obj": "OBJ_CEILING_LAMP",
+   "piso": 0.005,
+   "z": 1.548,
+   "triangulos": 5602
+  },
+  {
+   "id": "jantar_mesa",
+   "obj": "OBJ_DINING_TABLE",
+   "piso": 0.005,
+   "z": 0.0,
+   "triangulos": 60
+  },
+  {
+   "id": "jantar_cadeira_1",
+   "obj": "OBJ_DINING_CHAIR",
+   "piso": 0.005,
+   "z": 0.0,
+   "triangulos": 22013
+  },
+  {
+   "id": "jantar_cadeira_2",
+   "obj": "OBJ_DINING_CHAIR",
+   "piso": 0.005,
+   "z": 0.0,
+   "triangulos": 22013
+  },
+  {
+   "id": "jantar_cadeira_3",
+   "obj": "OBJ_DINING_CHAIR",
+   "piso": 0.005,
+   "z": 0.0,
+   "triangulos": 22013
+  },
+  {
+   "id": "jantar_cadeira_4",
+   "obj": "OBJ_DINING_CHAIR",
+   "piso": 0.005,
+   "z": 0.0,
+   "triangulos": 22013
+  },
+  {
+   "id": "jantar_candeeiro",
+   "obj": "OBJ_CEILING_LAMP",
+   "piso": 0.005,
+   "z": 1.548,
+   "triangulos": 5602
+  },
+  {
+   "id": "cozinha_frigorifico",
+   "obj": "OBJ_FRIDGE_COLUMN",
+   "piso": 0.005,
+   "z": 0.0,
+   "triangulos": 60
+  },
+  {
+   "id": "cozinha_linear",
+   "obj": "OBJ_KITCHEN_LINEAR",
+   "piso": 0.005,
+   "z": 0.0,
+   "triangulos": 324
+  },
+  {
+   "id": "cozinha_ilha",
+   "obj": "OBJ_KITCHEN_ISLAND",
+   "piso": 0.005,
+   "z": 0.0,
+   "triangulos": 108
+  },
+  {
+   "id": "cozinha_candeeiro",
+   "obj": "OBJ_CEILING_LAMP",
+   "piso": 0.005,
+   "z": 1.548,
+   "triangulos": 5602
+  },
+  {
+   "id": "garagem_estante",
+   "obj": "OBJ_SHELVES",
+   "piso": 0.005,
+   "z": 0.0,
+   "triangulos": 8396
+  },
+  {
+   "id": "closet_roupeiro_1",
+   "obj": "OBJ_WARDROBE",
+   "piso": 0.005,
+   "z": 0.0,
+   "triangulos": 84
+  },
+  {
+   "id": "closet_roupeiro_2",
+   "obj": "OBJ_WARDROBE",
+   "piso": 0.005,
+   "z": 0.0,
+   "triangulos": 84
+  },
+  {
+   "id": "q01_cama",
+   "obj": "OBJ_BED_DOUBLE",
+   "piso": 0.005,
+   "z": 0.0,
+   "triangulos": 72
+  },
+  {
+   "id": "q01_mesinha_1",
+   "obj": "OBJ_SIDE_TABLE",
+   "piso": 0.005,
+   "z": 0.0,
+   "triangulos": 2756
+  },
+  {
+   "id": "q01_mesinha_2",
+   "obj": "OBJ_SIDE_TABLE",
+   "piso": 0.005,
+   "z": 0.0,
+   "triangulos": 2756
+  },
+  {
+   "id": "q01_cadeirao",
+   "obj": "OBJ_LOUNGE_CHAIR",
+   "piso": 0.005,
+   "z": 0.0,
+   "triangulos": 6148
+  },
+  {
+   "id": "q01_pufe",
+   "obj": "OBJ_OTTOMAN",
+   "piso": 0.005,
+   "z": 0.0,
+   "triangulos": 4240
+  },
+  {
+   "id": "q01_candeeiro",
+   "obj": "OBJ_CEILING_LAMP",
+   "piso": 0.005,
+   "z": 1.548,
+   "triangulos": 5602
+  },
+  {
+   "id": "q02_cama",
+   "obj": "OBJ_BED_SINGLE",
+   "piso": 0.005,
+   "z": 0.0,
+   "triangulos": 60
+  },
+  {
+   "id": "q02_mesinha",
+   "obj": "OBJ_SIDE_TABLE",
+   "piso": 0.005,
+   "z": 0.0,
+   "triangulos": 2756
+  },
+  {
+   "id": "q02_roupeiro",
+   "obj": "OBJ_WARDROBE",
+   "piso": 0.005,
+   "z": 0.0,
+   "triangulos": 84
+  },
+  {
+   "id": "q02_planta",
+   "obj": "OBJ_PLANT_MEDIUM",
+   "piso": 0.005,
+   "z": 0.0,
+   "triangulos": 69806
+  },
+  {
+   "id": "q02_candeeiro",
+   "obj": "OBJ_CEILING_LAMP",
+   "piso": 0.005,
+   "z": 1.548,
+   "triangulos": 5602
+  },
+  {
+   "id": "q03_cama",
+   "obj": "OBJ_BED_DOUBLE",
+   "piso": 0.005,
+   "z": 0.0,
+   "triangulos": 72
+  },
+  {
+   "id": "q03_mesinha_1",
+   "obj": "OBJ_SIDE_TABLE",
+   "piso": 0.005,
+   "z": 0.0,
+   "triangulos": 2756
+  },
+  {
+   "id": "q03_mesinha_2",
+   "obj": "OBJ_SIDE_TABLE",
+   "piso": 0.005,
+   "z": 0.0,
+   "triangulos": 2756
+  },
+  {
+   "id": "q03_roupeiro",
+   "obj": "OBJ_WARDROBE",
+   "piso": 0.005,
+   "z": 0.0,
+   "triangulos": 84
+  },
+  {
+   "id": "q03_comoda",
+   "obj": "OBJ_CHEST",
+   "piso": 0.005,
+   "z": 0.0,
+   "triangulos": 26406
+  },
+  {
+   "id": "q03_candeeiro",
+   "obj": "OBJ_CEILING_LAMP",
+   "piso": 0.005,
+   "z": 1.548,
+   "triangulos": 5602
+  },
+  {
+   "id": "wc_duche",
+   "obj": "OBJ_SHOWER",
+   "piso": 0.005,
+   "z": 0.0,
+   "triangulos": 72
+  },
+  {
+   "id": "wc_sanita",
+   "obj": "OBJ_TOILET",
+   "piso": 0.005,
+   "z": 0.0,
+   "triangulos": 176
+  },
+  {
+   "id": "wc_lavatorio",
+   "obj": "OBJ_VANITY",
+   "piso": 0.005,
+   "z": 0.0,
+   "triangulos": 84
+  },
+  {
+   "id": "wcs_duche",
+   "obj": "OBJ_SHOWER",
+   "piso": 0.005,
+   "z": 0.0,
+   "triangulos": 72
+  },
+  {
+   "id": "wcs_sanita",
+   "obj": "OBJ_TOILET",
+   "piso": 0.005,
+   "z": 0.0,
+   "triangulos": 176
+  },
+  {
+   "id": "wcs_lavatorio",
+   "obj": "OBJ_VANITY",
+   "piso": 0.005,
+   "z": 0.0,
+   "triangulos": 84
+  }
+ ],
+ "renders": [],
+ "ar": {
+  "triangulos": 22214,
+  "materiais": [
+   "INT_AR_0",
+   "INT_AR_1",
+   "INT_AR_2",
+   "INT_AR_3",
+   "INT_AR_4",
+   "INT_AR_5",
+   "INT_AR_6",
+   "INT_AR_7",
+   "INT_CFE0E8_05_A22"
+  ],
+  "nota": "cópia leve para o telemóvel (visita_interiores_ar.blend): cada peça reduzida ao ar_tris do catálogo, cores numa paleta de poucos materiais, sem as texturas dos móveis; python step-inside/ferramentas/ar/ar.py <visita.json> --interiores"
+ }
+}

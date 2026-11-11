@@ -430,3 +430,31 @@ The team's notes on hub task 84 (written in the hub by [membro da equipa] on 202
 - Filed in: `conhecimento/discovercasa.md` → Design hub, team-work block (critique button in apps, built); `conhecimento/sessao-implementacao.md` → team-work pointer (button + `comentar.js`); nothing else new.
 - Closes: pending item (3) of the entry «Hub teamwork redesign» above («critique button inside the apps, not built»). Still open: Build Your House not adapted to phones (hub task «Testar em telemóvel e tablet»).
 - Check: no conflict; design `CLAUDE.md` already describes the button and `comentar.js`.
+
+### 2026-11-11 — Build Your House on phones deferred; «Ver em 3D» on iPhone too [Step Inside Phase 7 + Build Your House]
+> para já não. uma coisa eu quero que no projeto step inside no dispositivos IOS também seja possível ver em 3D tal como nos androids. Depois disso vamos progredir nas tarefas do step inside
+- Context: «para já não» answers Claude's question whether to adapt Build Your House to phones now (deferred; the hub task «Testar em telemóvel e tablet» stays open).
+- Done (by Claude, 2026-11-11, commit 65a3cfb): iPhone rows of the Step Inside AR test now have «Ver em 3D» (twin GLB in the viewer; USDZ stays for Quick Look).
+- Filed in: `step-inside/docs/fase7/README.md` → «Ver em 3D também no iPhone»; `conhecimento/discovercasa.md` → Step Inside Phase 3 paragraph (2026-11-11 line).
+- Check: complements the 2026-11-09 viewer section (fase7 line ~316) and the table «iPhone: AR (Quick Look)»; no conflict.
+
+### 2026-11-11 — Phase 3: real textures, official materials list, then interiors [Step Inside Phase 3]
+> Fase 3 avança com as texturas reais dos materias Discovercasa e com a Lista oficial de materiais que já tens acesso... e depois para os interiores.
+- Context: instruction on how to continue Step Inside Phase 3 (hub tasks 163, 156, 167).
+- Done (by Claude, commit d72b3af): official list (Hub, via `orcamentacao/ligacoes.json` ids only) confirms 21 of 44 mapped products (`step-inside/ferramentas/materiais/oficial.py`); exceptions: painel sandwich RAL 7016, Pladur H1, Pladur F, saída de caleira (list: white gloss; model: black; colour to confirm). Photo→texture tool `foto.py`/`blender_foto.py`. Manufacturers publish no textures; real product photos still needed (task 156).
+- Filed in: `step-inside/docs/fase3/README.md` → «Lista oficial e texturas dos produtos reais» (by the caller); `conhecimento/discovercasa.md` → Step Inside Phase 3 (2026-11-11 line).
+- Check: the earlier doc line «27 de 43 produtos estão na lista» (fase3 README ~34, ligações) differs from «21 de 44 confirmados»: different measures (in the list vs. CONFIRMED because the official product is what the model shows), not a conflict, but the totals 43 vs 44 should be reconciled.
+
+### 2026-11-11 — Interiors: furniture and model source (answers to hub task 167) [Step Inside Phase 3]
+> Quero testar com imboliário e depois decido
+> Gratuitos CC0 (Recomendado)
+- Context: answers to Claude's two questions on task 167: (1) only what DiscoverCasa delivers or also decoration furniture; (2) where the interior models come from.
+- Filed in: `step-inside/docs/fase3/README.md` → «A seguir», item 2 (decided 2026-11-11); `conhecimento/discovercasa.md`.
+- Pending: the user's final decision on furniture after testing.
+
+### 2026-11-11 — Authorisation to download the CC0 interior models [Step Inside Phase 3]
+> Sim, descarrega
+- Context: answers Claude's request to download 16 Poly Haven CC0 models (≈ 30 MB, glTF 1K; local only in `_trabalho/interiores/`, never in Git).
+- Done (by Claude): `interiores/descarregar.py`; common catalogue `interiores/catalogo.json` (shared with Build Your House Smart Interiors, hub tasks 123/124/128); test layout `step-inside/projetos-teste/torres-vedras/interiores.json` (our proposed layout, not the client's).
+- Filed in: `step-inside/docs/fase3/README.md` → «A seguir», item 2.
+- Check: same wording as the 2026-11-09 texture authorisation («Sim, descarrega»), separate authorisation; no conflict.

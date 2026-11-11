@@ -710,6 +710,14 @@ demorar mais, aparece «Ver no teu espaço (AR)» para um segundo toque.
 | Android com ARCore (Pixel 6) | AR no Chrome |
 | Android sem ARCore (o Xiaomi) | 3D no hub |
 
+## «Ver em 3D» também no iPhone (2026-11-11)
+
+O utilizador: «uma coisa eu quero que no projeto step inside no dispositivos IOS também seja possível ver em 3D tal como
+nos androids. Depois disso vamos progredir nas tarefas do step inside.»
+- Feito (commit 65a3cfb): as linhas do iPhone no Teste do AR têm «Ver em 3D» (o GLB gémeo no visualizador; o USDZ
+  continua para o Quick Look).
+- Substitui, para o iPhone, a tabela acima («iPhone: AR (Quick Look)») só no sentido de acrescentar o 3D; o AR não muda.
+
 ## Em falta
 
 - **Telemóveis reais** (tarefa 84):

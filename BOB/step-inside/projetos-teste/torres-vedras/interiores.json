@@ -1,0 +1,81 @@
+{
+ "_doc": "Interiors test of Torres Vedras (Step Inside hub task 167; user 2026-11-11: «Quero testar com imobiliário e depois decido»). A proposed furniture layout, not the client's: the house was built without a furniture plan in the drawings. Coordinates: the house model's own axes (modelos/casa/planta_paredes.json: x east 0–17,50, y north 0–11), in metres; xy = centre of the object's footprint; frente = where its front faces (S, E, N, W or degrees, 0 = S, counter-clockwise); z = height of its underside above the finished floor (default 0; 'teto' hangs it from the ceiling). Objects from interiores/catalogo.json; 'medidas' overrides a parametric object's size, 'param' its options. Rooms: the drawing's names and areas (docs/desenhos.md), boxes read from the walls.",
+ "obra": "torres-vedras",
+ "estado": "TESTE",
+ "divisoes": {
+  "garagem": {"nome": "Garagem", "caixa": [0.25, 2.75, 3.48, 7.82]},
+  "arrumo": {"nome": "Arrumo / Lavandaria", "caixa": [0.25, 7.95, 3.48, 10.75]},
+  "sala": {"nome": "Sala", "caixa": [3.63, 2.75, 10.78, 8.25]},
+  "cozinha": {"nome": "Cozinha", "caixa": [3.63, 8.25, 10.78, 10.75]},
+  "hall": {"nome": "Hall", "caixa": [10.92, 6.03, 13.55, 8.35]},
+  "wc_acess": {"nome": "WC acess.", "caixa": [10.92, 8.48, 13.55, 10.75]},
+  "closet": {"nome": "Closet", "caixa": [10.92, 2.5, 13.55, 5.9]},
+  "wc_suite": {"nome": "WC (suite)", "caixa": [11.0, 0.25, 13.27, 2.36]},
+  "quarto_01": {"nome": "Quarto 01 (suite)", "caixa": [13.4, 0.25, 17.25, 3.9]},
+  "quarto_02": {"nome": "Quarto 02", "caixa": [13.69, 4.03, 17.25, 7.12]},
+  "quarto_03": {"nome": "Quarto 03", "caixa": [13.69, 7.26, 17.25, 10.75]}
+ },
+ "vistas": [
+  {"id": "sala", "nome": "Sala vista da entrada", "de": [10.25, 3.1, 1.6], "para": [5.0, 7.4, 0.9], "lente": 16},
+  {"id": "cozinha", "nome": "Cozinha e jantar", "de": [10.45, 7.95, 1.6], "para": [5.6, 10.1, 0.9], "lente": 16},
+  {"id": "quarto_01", "nome": "Quarto 01 (suite)", "de": [16.9, 0.6, 1.6], "para": [14.8, 3.5, 0.6], "lente": 16},
+  {"id": "quarto_03", "nome": "Quarto 03", "de": [16.95, 8.15, 1.6], "para": [14.3, 9.7, 0.6], "lente": 16},
+  {"id": "wc", "nome": "WC acess.", "de": [11.25, 8.62, 1.6], "para": [13.2, 10.6, 0.8], "lente": 14}
+ ],
+ "pecas": [
+  {"id": "sala_tv_movel", "obj": "OBJ_TV_UNIT", "divisao": "sala", "xy": [3.92, 5.3], "frente": "E"},
+  {"id": "sala_tv", "obj": "OBJ_TV", "divisao": "sala", "xy": [3.86, 5.3], "frente": "E", "z": 0.68},
+  {"id": "sala_sofa", "obj": "OBJ_SOFA_3", "divisao": "sala", "xy": [6.55, 5.3], "frente": "W"},
+  {"id": "sala_mesa_centro", "obj": "OBJ_COFFEE_TABLE", "divisao": "sala", "xy": [5.2, 5.3], "frente": "S"},
+  {"id": "sala_planta_mesa", "obj": "OBJ_PLANT_SMALL", "divisao": "sala", "xy": [5.2, 5.6], "frente": "E", "z": 0.39},
+  {"id": "sala_cadeirao", "obj": "OBJ_ARMCHAIR", "divisao": "sala", "xy": [4.35, 7.25], "frente": "S"},
+  {"id": "sala_quadro", "obj": "OBJ_PICTURE", "divisao": "sala", "xy": [4.4, 8.18], "frente": "S", "z": 1.35},
+  {"id": "sala_planta", "obj": "OBJ_PLANT_TALL", "divisao": "sala", "xy": [4.0, 3.15], "frente": "N"},
+  {"id": "sala_candeeiro", "obj": "OBJ_CEILING_LAMP", "divisao": "sala", "xy": [5.4, 5.3], "frente": "S", "teto": true},
+  {"id": "jantar_mesa", "obj": "OBJ_DINING_TABLE", "divisao": "sala", "xy": [8.9, 6.55], "frente": "S"},
+  {"id": "jantar_cadeira_1", "obj": "OBJ_DINING_CHAIR", "divisao": "sala", "xy": [8.45, 7.2], "frente": "S"},
+  {"id": "jantar_cadeira_2", "obj": "OBJ_DINING_CHAIR", "divisao": "sala", "xy": [9.35, 7.2], "frente": "S"},
+  {"id": "jantar_cadeira_3", "obj": "OBJ_DINING_CHAIR", "divisao": "sala", "xy": [8.45, 5.9], "frente": "N"},
+  {"id": "jantar_cadeira_4", "obj": "OBJ_DINING_CHAIR", "divisao": "sala", "xy": [9.35, 5.9], "frente": "N"},
+  {"id": "jantar_candeeiro", "obj": "OBJ_CEILING_LAMP", "divisao": "sala", "xy": [8.9, 6.55], "frente": "S", "teto": true},
+
+  {"id": "cozinha_frigorifico", "obj": "OBJ_FRIDGE_COLUMN", "divisao": "cozinha", "xy": [4.65, 10.44], "frente": "S"},
+  {"id": "cozinha_linear", "obj": "OBJ_KITCHEN_LINEAR", "divisao": "cozinha", "xy": [6.75, 10.44], "frente": "S",
+   "param": {"placa": 0.6, "pia": 2.4, "altos": [[0.0, 1.8]], "nota": "lava-loiça debaixo da janela (vidro fixo x 7,03–8,53, peitoril ≈ 1,03), armários altos só fora da janela"}},
+  {"id": "cozinha_ilha", "obj": "OBJ_KITCHEN_ISLAND", "divisao": "cozinha", "xy": [6.6, 8.75], "frente": "N"},
+  {"id": "cozinha_candeeiro", "obj": "OBJ_CEILING_LAMP", "divisao": "cozinha", "xy": [6.6, 8.75], "frente": "S", "teto": true},
+
+  {"id": "garagem_estante", "obj": "OBJ_SHELVES", "divisao": "garagem", "xy": [1.75, 7.44], "frente": "S"},
+
+  {"id": "closet_roupeiro_1", "obj": "OBJ_WARDROBE", "divisao": "closet", "xy": [11.23, 3.9], "frente": "E"},
+  {"id": "closet_roupeiro_2", "obj": "OBJ_WARDROBE", "divisao": "closet", "xy": [13.24, 4.95], "frente": "W"},
+
+  {"id": "q01_cama", "obj": "OBJ_BED_DOUBLE", "divisao": "quarto_01", "xy": [15.4, 2.84], "frente": "S"},
+  {"id": "q01_mesinha_1", "obj": "OBJ_SIDE_TABLE", "divisao": "quarto_01", "xy": [14.2, 3.62], "frente": "S"},
+  {"id": "q01_mesinha_2", "obj": "OBJ_SIDE_TABLE", "divisao": "quarto_01", "xy": [16.6, 3.62], "frente": "S"},
+  {"id": "q01_cadeirao", "obj": "OBJ_LOUNGE_CHAIR", "divisao": "quarto_01", "xy": [14.2, 1.1], "frente": 135},
+  {"id": "q01_pufe", "obj": "OBJ_OTTOMAN", "divisao": "quarto_01", "xy": [15.6, 1.35], "frente": "S"},
+  {"id": "q01_candeeiro", "obj": "OBJ_CEILING_LAMP", "divisao": "quarto_01", "xy": [15.4, 1.9], "frente": "S", "teto": true},
+
+  {"id": "q02_cama", "obj": "OBJ_BED_SINGLE", "divisao": "quarto_02", "xy": [14.75, 4.6], "frente": "E"},
+  {"id": "q02_mesinha", "obj": "OBJ_SIDE_TABLE", "divisao": "quarto_02", "xy": [13.97, 5.4], "frente": "E"},
+  {"id": "q02_roupeiro", "obj": "OBJ_WARDROBE", "divisao": "quarto_02", "xy": [15.5, 6.81], "frente": "S"},
+  {"id": "q02_planta", "obj": "OBJ_PLANT_MEDIUM", "divisao": "quarto_02", "xy": [16.85, 4.42], "frente": "W"},
+  {"id": "q02_candeeiro", "obj": "OBJ_CEILING_LAMP", "divisao": "quarto_02", "xy": [15.5, 5.4], "frente": "S", "teto": true},
+
+  {"id": "q03_cama", "obj": "OBJ_BED_DOUBLE", "divisao": "quarto_03", "xy": [15.4, 9.69], "frente": "S"},
+  {"id": "q03_mesinha_1", "obj": "OBJ_SIDE_TABLE", "divisao": "quarto_03", "xy": [14.2, 10.48], "frente": "S"},
+  {"id": "q03_mesinha_2", "obj": "OBJ_SIDE_TABLE", "divisao": "quarto_03", "xy": [16.6, 10.48], "frente": "S"},
+  {"id": "q03_roupeiro", "obj": "OBJ_WARDROBE", "divisao": "quarto_03", "xy": [15.6, 7.57], "frente": "N"},
+  {"id": "q03_comoda", "obj": "OBJ_CHEST", "divisao": "quarto_03", "xy": [13.95, 8.95], "frente": "E"},
+  {"id": "q03_candeeiro", "obj": "OBJ_CEILING_LAMP", "divisao": "quarto_03", "xy": [15.4, 8.9], "frente": "S", "teto": true},
+
+  {"id": "wc_duche", "obj": "OBJ_SHOWER", "divisao": "wc_acess", "xy": [12.94, 10.34], "frente": "S"},
+  {"id": "wc_sanita", "obj": "OBJ_TOILET", "divisao": "wc_acess", "xy": [11.2, 9.9], "frente": "E"},
+  {"id": "wc_lavatorio", "obj": "OBJ_VANITY", "divisao": "wc_acess", "xy": [13.31, 9.15], "frente": "W"},
+
+  {"id": "wcs_duche", "obj": "OBJ_SHOWER", "divisao": "wc_suite", "xy": [12.65, 0.66], "frente": "N"},
+  {"id": "wcs_sanita", "obj": "OBJ_TOILET", "divisao": "wc_suite", "xy": [11.31, 1.0], "frente": "E"},
+  {"id": "wcs_lavatorio", "obj": "OBJ_VANITY", "divisao": "wc_suite", "xy": [13.02, 1.75], "frente": "W"}
+ ]
+}
