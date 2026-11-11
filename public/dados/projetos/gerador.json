@@ -12,7 +12,8 @@
       "Listagem de material com um código de produto em cada linha e só a fachada escolhida (11/11)."
     ],
     "agora": [
-      "Revisão da Discovercasa dos documentos Cobertura e Listagem de material."
+      "Revisão da Discovercasa dos documentos Cobertura e Listagem de material.",
+      "Erro ao largar desenhos que não têm as paredes a vermelho: a leitura passa a não depender das cores (tarefa 171 do Builder)."
     ],
     "falta": [
       "Política de libertação: marcar documentos com erros bloqueantes e rascunhos não aprovados.",

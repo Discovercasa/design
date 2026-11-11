@@ -26,6 +26,13 @@ Why Claude learns the method; "vamos passo a passo" — an overall idea, then an
    foi um projeto usado para tu aprenderes sobre nós e nós irmos também avaliando as tuas sugestões" → TV is where
    Claude learns the company **and** where the company evaluates our suggestions — a suggestion is judged against what
    TV did and they say "já foi verificado" where they have already covered it).
+   **Drawing readers and client page (user 2026-11-11):** colours are not a convention to rely on: "isso não é um facto,
+   cada projeto pode ter cores diferentes ou então simplesmente não usar o vermelho, tens de conseguir ler qualquer
+   documento e construir qualquer casa" → requirement: colour-independent readers (Gerador and Builder share them; today
+   `planta_arquitetura.py` needs red walls, blue glazing, magenta swings, axis-parallel walls — a known limit). The user will
+   supply the files of the house for this later (pending). The client 3D page has NO «como foi feito» notes; share as an
+   HTML file for now (not a link). Proposed by the user: the Builder as its own app page in the hub, like the Gerador
+   («Abrir aplicação», drop the documents, the result appears after some time) — decision pending.
    Settings panel wished ("Futuramente"): "um painel onde podemos definir este tipo de coisas, comprimentos dos módulos
    e a sua composição" — today in `sistema_construtivo.json` (`estrutura.divisor`) and each `config.json`.
    **Production documents for every new project** (2026-10-16 night): "quero que sejas capaz de desenvolver um

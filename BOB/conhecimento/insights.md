@@ -199,6 +199,10 @@ he answers (`metodo-construtivo.md`). Condensed 2026-10-28 (history in git).
   permanent home — **open**, hub task 43 / 169 note 8. Researched on the web, not yet checked against the decree text.
 
 ## Recorded, not yet told (raise when it fits)
+- **2026-11-11** — the plan readers depend on drawing colours (red walls, blue glazing, magenta swings) and on
+  axis-parallel walls: any other drawing fails (the user's correction: "tens de conseguir ler qualquer documento").
+  Colour-independent reading (line weight/pairs, hatch, layers/names, text, rasters via vision) needs the user's sample
+  files of the next house; until then reading is only reliable for drawings like Torres Vedras'.
 - **2026-10-16** — lameladas cut from stock waste a lot (8,50 from 13,5 m: ≈ 1,1 m³ at TV) → order to length or a 17 m
   stock in two (2 × 8,28 = 16,56); the material list to give cut and purchase lengths — TV #12.
 - **2026-10-16** — the cladding past the foundation edge needs the cavity bottom meshed and the Tremolo foot clear of the

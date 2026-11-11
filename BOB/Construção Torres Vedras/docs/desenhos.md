@@ -19,7 +19,7 @@ It is a preliminary study: what was built may differ (to confirm with the user).
   slope running on over the wing — D2503, `docs/cobertura-D2503.md`) + elevations
   Sudeste (≈ 62 3 100 26), Noroeste (≈ 355 5 95 22), Nordeste (≈ 160 78 66 22), Sudoeste (≈ 322 78 74 22).
   Sheet 3 (02.1 "Pormenores Construtivos"): P1, P2. Sheet 4 (03.1 "Plano de acessibilidades").
-- Colours (licensing convention): **red stroke `#FF0000` = wall faces to build**, grey fill `#767676` =
+- Colours (licensing convention **of these drawings only, not a general rule; user 2026-11-11, see registo**): **red stroke `#FF0000` = wall faces to build**, grey fill `#767676` =
   wall poche (triangulated, not usable as rectangles), blue `#003FFF` = glazing / door leaves, magenta
   `#FF00FF` = door swings and opening sashes, orange = dimensions and level marks (vector outlines).
   Room names, areas and dimensions are vector outlines, not text → `zoom`.

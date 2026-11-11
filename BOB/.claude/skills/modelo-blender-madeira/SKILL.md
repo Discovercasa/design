@@ -24,7 +24,8 @@ by hand (company defaults: `ferramentas/modelo/sistema_construtivo.json`).
 No module drawings: the walls come from the plan, everything else from the DiscoverCasa standard.
 1. `python ferramentas/modelo/planta_arquitetura.py "<plan>.dwfx" --folha N --regiao X0 Y0 X1 Y1 --escala 200
    --saida "<model>/planta_paredes.json" [--svg check.svg]`: wall faces = red strokes (licensing
-   convention) paired 0,08–0,40 m apart, walked in 1 cm steps (both faces = wall, one face = T-junction or
+   convention **of the Torres Vedras drawings only; limited 2026-11-11, see registo: colours are not a fact, each
+   project may use other colours or no red; the readers must become colour-independent and read any document**) paired 0,08–0,40 m apart, walked in 1 cm steps (both faces = wall, one face = T-junction or
    a window frame drawn on the face, none + jambs crossing the wall = opening ≤ 3,6 m); door = magenta
    swing beside it; exterior side by ray casting (works for L shapes). Check the SVG against the plan.
    **A house built in the configurator** (no drawings): `python ferramentas/configurador/para_construtor.py

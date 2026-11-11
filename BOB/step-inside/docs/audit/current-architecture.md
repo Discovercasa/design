@@ -166,7 +166,8 @@ O plano Pro custa a partir de 25 USD por mês: 8 GB de disco, 100 GB de ficheiro
 
 **Como a planta é lida:**
 - A leitura depende das convenções do desenho: traço vermelho para as paredes, azul para os vidros e magenta para as
-  aberturas das portas.
+  aberturas das portas. **(Limited 2026-11-11, see registo: isto é só o que o leitor atual assume, não um facto; cada
+  projeto pode usar outras cores ou nenhum vermelho; o leitor tem de ler qualquer documento.)**
 - A escala é deduzida (1:50, 1:100 ou 1:200).
 - **Só funciona com paredes ortogonais.**
 - A partir de uma planta só se faz 1 piso. Dois pisos só a partir dos desenhos do engenheiro.
