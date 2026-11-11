@@ -214,7 +214,8 @@ Nos dois casos as silhuetas são iguais e o resultado é WARNING: o FBX e o USDZ
        Móveis 22 214 triângulos; a casa mobilada **47 159 triângulos** (abaixo do ideal de 50 mil), GLB 4,6 MB, USDZ
        4,5 MB, todos os materiais presentes nos dois ao reabrir; aviso: 27 materiais (o Scene Viewer recomenda até 10;
        a casa sozinha já tem 18). Resumo: `projetos-teste/torres-vedras/ar_interiores_resumo.json`. O AR atual (sem
-       móveis) não muda.
+       móveis) não muda. No hub desde 2026-11-11 («Sim, carrega»): Teste do AR, documentos 58 (USDZ) e 59 (GLB),
+       «Torres Vedras · casa 1:1 mobilada (teste)».
      - ⚠ (nosso) As casas de banho mostram o pavimento vinílico (o padrão, PO Q20) e as paredes pintadas também no
        duche; na prática a zona do duche leva cerâmico sobre Pladur H1 — a visita deveria mostrá-lo.
 3. Na Fase 4 (Unreal), validar a importação do FBX (eixos e materiais mestre por ID).

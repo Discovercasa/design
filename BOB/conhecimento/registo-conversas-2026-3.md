@@ -458,3 +458,10 @@ The team's notes on hub task 84 (written in the hub by [membro da equipa] on 202
 - Done (by Claude): `interiores/descarregar.py`; common catalogue `interiores/catalogo.json` (shared with Build Your House Smart Interiors, hub tasks 123/124/128); test layout `step-inside/projetos-teste/torres-vedras/interiores.json` (our proposed layout, not the client's).
 - Filed in: `step-inside/docs/fase3/README.md` → «A seguir», item 2.
 - Check: same wording as the 2026-11-09 texture authorisation («Sim, descarrega»), separate authorisation; no conflict.
+
+### 2026-11-11 — Authorisation to upload the furnished AR model to the hub [Step Inside Phase 3 / 7]
+> Sim, carrega
+- Context: answers Claude's question whether to upload the furnished Torres Vedras AR (interiors test, hub task 167) to the hub's «Teste do AR» so the user can test it on the phone.
+- Done (by Claude): `torres-vedras_ar_casa_interiores.usdz` / `.glb` (47 159 triangles, 4,5 / 4,6 MB) uploaded to the private `documentos` storage by the temporary Edge Function `carregar-ar` (one-time key, only its hash in the function; switched back to the 410 stub with `verify_jwt` right after, refusal 401 confirmed, key deleted); documents 58 (USDZ) and 59 (GLB) «Torres Vedras · casa 1:1 mobilada (teste)». The AR without furniture (documents 42–45) is unchanged.
+- Filed in: `step-inside/docs/fase3/README.md` → «Teste em Torres Vedras»; `step-inside/docs/fase7/README.md` → hub uploads.
+- Pending: the user's test on the phone and the decision on furniture.

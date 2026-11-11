@@ -718,6 +718,19 @@ nos androids. Depois disso vamos progredir nas tarefas do step inside.»
   continua para o Quick Look).
 - Substitui, para o iPhone, a tabela acima («iPhone: AR (Quick Look)») só no sentido de acrescentar o 3D; o AR não muda.
 
+## Casa mobilada no Teste do AR (2026-11-11)
+
+O utilizador: «Sim, carrega» (o AR do teste dos interiores, tarefa 167; ver `docs/fase3/README.md`, «Teste em Torres
+Vedras»).
+- `ar.py --interiores` (só a casa 1:1, a partir de `visita_interiores_ar.blend`): 47 159 triângulos, GLB 4,6 MB, USDZ
+  4,5 MB; aviso de 27 materiais (a casa sozinha tem 18). Resumo: `projetos-teste/torres-vedras/ar_interiores_resumo.json`.
+- Carregado pela função temporária `carregar-ar` (chave de uso único; só o hash ficou no código da função; só grava no
+  armazenamento privado `documentos`, sob `plataforma_cliente/ar/`). As linhas foram inseridas na base de dados.
+  A função voltou ao *stub* 410 com `verify_jwt` (recusa 401 confirmada) e a chave foi apagada.
+- Documentos 58 (USDZ) e 59 (GLB), «Torres Vedras · casa 1:1 mobilada (teste)», no grupo Torres Vedras. O mesmo título
+  emparelha-os: o iPhone tem «Ver em 3D». Os documentos 42–45 (sem móveis) ficaram como estavam, na versão 7.1/7.3.
+  O AR sem móveis refeito hoje com os materiais da lista oficial está só no PC.
+
 ## Em falta
 
 - **Telemóveis reais** (tarefa 84):
@@ -729,4 +742,5 @@ nos androids. Depois disso vamos progredir nas tarefas do step inside.»
   (confirmado a 2026-11-09).
 - **Tabela de vãos do Sobral:** o tipo de cada vão, para trocar a caixilharia padrão (INFERRED) pela real.
 - **Fotos e materiais reais** (tarefas 156 e 163): texturas e lista oficial de materiais.
-- **Interiores** (tarefa 167, Fase 3): entram no AR na versão leve.
+- **Interiores** (tarefa 167, Fase 3): a casa mobilada de Torres Vedras está no Teste do AR (documentos 58–59) para o
+  teste no telemóvel; a decisão sobre o mobiliário é do utilizador depois do teste.
