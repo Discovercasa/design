@@ -160,6 +160,11 @@ Agreed from the user-supplied "HIERARQUIA_E_ROADMAP_INTEGRADO_DISCOVERCASA" docu
 - Only the contracts needed now (architecture BYH → Builder; quantities Listagem → Orçamentação with stable product
   codes), not a full multi-organisation platform / 9-module contract; checkpoints stay as they are (Smart Land phases
   not merged); BYH and Step Inside phase 0 audits done jointly.
+- **Orçamentação status (2026-11-11)**: the contract «quantities Listagem → Orçamentação with stable product codes» is delivered
+  (44 codes, `ferramentas/documentos/codigos.py`; links to the Hub price list in `orcamentacao/ligacoes.json`, 27 of 43
+  products, all inferred; page `/orcamentacao/`). Torres Vedras materials with a Hub price: 23 828,43 € without VAT
+  (30 of 54 lines; labour, foundation, installations, licensing, margin and house VAT not included). Open for the user:
+  how each price component is calculated (hub task 42) and the VAT rate (task 43); the team confirms the links (task 168).
 - Open business decision: sell BYH / Step Inside to third parties? (Step Inside: the user's 2026-11-09 wording "se formos vender a terceiros" shows the sale is being kept open, not decided; Phase 3 materials are builder-agnostic for that reason.) (Design accounts come from the Hub.)
 
 ## Social media (user 2026-11-06)

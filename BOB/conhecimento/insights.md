@@ -175,6 +175,19 @@ he answers (`metodo-construtivo.md`). Condensed 2026-10-28 (history in git).
   with Google's own sample; github.com/google-ar/arcore-android-sdk issues 1795 and 1797, open on 2026-11-11). Chrome's
   own AR (WebXR via model-viewer, ar-modes "webxr quick-look") is the primary Android path; Scene Viewer only as an
   extra. Phones without ARCore stay in 3D — **applied 2026-11-11** (version 7.5), `step-inside/docs/fase7/README.md`.
+  Added 2026-11-11 (user asked «é possível instalar o ARCore?»): ARCore installs from the Play Store only on phones on
+  Google's list; on the others the Store refuses it; sideloaded APKs are not an option (no calibration, security,
+  cannot be asked of a client). Client rule: iPhone AR; Android on the list Chrome AR; Android off the list 3D.
+- **2026-11-11** — Cost of materials: for each linked product take, among the Hub prices in the link's unit, each
+  supplier's latest price (the Hub keeps older prices of the same supplier as separate rows), then the cheapest with
+  discount; without this, April prices would compete with November ones. Torres Vedras: 30 of 54 lines priced, 23 828,43 €
+  without VAT (materials only). All links are inferred until the team confirms them (hub task 168) — **applied
+  2026-11-11** (`public/js/orcamento.js`, `orcamentacao/ligacoes.json`).
+- **2026-11-11** — Data quality of the Hub price list (to raise with the Hub side): «Pladur Verde» is an electrical box;
+  some Mundimat rows have length/width/thickness swapped; «Tela Traspir House HT 95» width 0.05 instead of 50 m;
+  «XPS PAREDE - 60MM» categorised «Cobertura»; the Tremolo supplier (Spain) has VAT 0 (reverse charge: Portuguese VAT paid
+  separately, so «with VAT» totals understate it); older prices of one supplier kept as separate rows. Suggest an
+  automatic sanity check on import (dimension plausibility, VAT by supplier country) — **open**, to tell the user.
 
 ## Recorded, not yet told (raise when it fits)
 - **2026-10-16** — lameladas cut from stock waste a lot (8,50 from 13,5 m: ≈ 1,1 m³ at TV) → order to length or a 17 m
