@@ -61,7 +61,9 @@ Projeto Design da Discovercasa (`design.discovercasa.pt`). Responder em portugu�
   edita, existem vazias); cada documento tem `seccao_id` e `pasta` (o caminho da pasta de onde veio, só para mostrar; o
   ficheiro fica em `<projeto>/<tipo>/<nome>`); uma pasta carregada de uma vez tem um `lote` e uma só linha no Log
   (`documentos_lote_feito`). O Claude lê a estrutura pela base de dados; o conteúdo dos ficheiros está no armazenamento
-  privado e só se lê descarregando-o.
+  privado e só se lê descarregando-o: **por uma função temporária com chave de uso único** (decisão do utilizador,
+  2026-11-11: «ok chave de uso único então»), desligada logo a seguir (410, `verify_jwt`) e a chave apagada, como no
+  carregamento dos modelos AR. Nenhuma chave permanente guardada.
 - **Página de um projeto** (2026-11-11): abas Workflow, Documentos e (Step Inside) Teste do AR; pipeline e «sobre»
   dentro do Workflow; tudo fechado sempre que se abre; descrição das tarefas em acordeão; o ponto de situação do
   projeto é por tópicos no JSON (`situacao`: dia, feito, agora, falta) — atualizá-lo a cada entrega.

@@ -496,3 +496,10 @@ The team's notes on hub task 84 (written in the hub by [membro da equipa] on 202
 - Done (by Claude): migration `supabase/migrations/0024_documentos_seccoes_pastas.sql` (table `documentos_seccoes`; `documentos.seccao_id`, `pasta`, `lote`; one Log line per folder via `documentos_lote_feito`); the groups that lived in the titles became real sections (Builder: Torres Vedras 15, Sobral 4, Método 16; Gerador: Torres Vedras 2). Hub: «Nova secção», per section «Ficheiros» / «Pasta» (with subfolders) and drag-and-drop, the «Documento» dialog chooses the section and a folder, move a document between sections, rename / delete an empty section. Tests `tests/documentos.spec.mjs`.
 - Answer to the question: Claude sees the structure (sections, folders, names, sizes, who uploaded) through the database; the files' contents sit in the private storage and are read by downloading them (temporary one-time-key function, as for the AR uploads, or a permanent read path — the user's decision).
 - Filed in: Design `CLAUDE.md` (Documentos: secções e pastas); hub news.
+
+### 2026-11-11 — How Claude reads the hub's documents [Design hub]
+> que forma sugeres ?
+> ok chave de uso único então
+- Context: Claude offered two ways to read the contents of the files in the hub's private storage and recommended the first: a temporary download function with a one-time key, switched off right after (no stored credential), or a permanent read-only function with a key kept on the company PC.
+- Decision: one-time key, each time Claude needs to read files ("lê a pasta X da secção Y"); reconsider only if reading becomes several times a day / automatic.
+- Filed in: Design `CLAUDE.md` (Documentos: secções e pastas).
