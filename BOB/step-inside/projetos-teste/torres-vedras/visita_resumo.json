@@ -49,7 +49,8 @@
     "MAT_LANDSCAPE_GRASS": 1
    },
    "estados": {
-    "INFERRED": 1111
+    "CONFIRMED": 1006,
+    "INFERRED": 105
    },
    "texturas_em_falta": [],
    "com_textura": [
@@ -352,7 +353,7 @@
  "dif_dimensoes_estrutura_m": 0.001,
  "resultado": "WARNING",
  "motivos": [
-  "materiais provisórios: mapeados a partir do sistema construtivo até chegar a lista oficial",
+  "materiais provisórios: 105 por confirmar (ainda não estão na lista oficial de materiais, ou não são o mesmo produto); 1006 confirmados pela lista oficial",
   "36 choques entre peças de madeira > 8 mm no modelo de produção (verificar.py)",
   "implantação: cota_pavimento INFERRED",
   "implantação: plataforma INFERRED",

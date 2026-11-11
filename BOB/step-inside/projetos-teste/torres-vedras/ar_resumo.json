@@ -83,17 +83,17 @@
      512,
      512
     ],
-    "WoodFloor051_2K-JPG_Color.jpg": [
+    "MAT_FLOOR_VINYL_WOOD_A9855D_Color.jpg": [
      1024,
-     1024
-    ],
-    "WoodFloor051_2K-JPG_Roughness.jpg": [
-     512,
      512
     ],
-    "WoodFloor051_2K-JPG_NormalGL.jpg": [
+    "WoodFloor043_2K-JPG_Roughness.jpg": [
      512,
-     512
+     256
+    ],
+    "WoodFloor043_2K-JPG_NormalGL.jpg": [
+     512,
+     256
     ],
     "Grass005_2K-JPG_Color.jpg": [
      1024,
@@ -197,13 +197,13 @@
    "ficheiros": {
     "glb": {
      "ficheiro": "torres-vedras_ar_casa.glb",
-     "bytes": 2939252,
-     "sha256": "ac10808def84189cc3bd6e4d5c25b8ab9ef0c889f8d39a1dc2efd4400c742ae0"
+     "bytes": 2851320,
+     "sha256": "f2247d76110b9c10e4e8d1b32ff1635b7a85b7dca985163e1243d7d7efc46693"
     },
     "usdz": {
      "ficheiro": "torres-vedras_ar_casa.usdz",
-     "bytes": 2678895,
-     "sha256": "9a30d0055dc6c8fbf47f0ffa70792214e40dfac4f3c873a98210999620a5ad1c"
+     "bytes": 2660500,
+     "sha256": "8ca60fdc33d37ddc25164d947088a22738a9b4fa4c98b2817dc28d9fa426acec"
     }
    },
    "reimportacao": {
@@ -340,17 +340,17 @@
      512,
      512
     ],
-    "WoodFloor051_2K-JPG_Color.jpg": [
+    "MAT_FLOOR_VINYL_WOOD_A9855D_Color.jpg": [
      1024,
-     1024
-    ],
-    "WoodFloor051_2K-JPG_Roughness.jpg": [
-     512,
      512
     ],
-    "WoodFloor051_2K-JPG_NormalGL.jpg": [
+    "WoodFloor043_2K-JPG_Roughness.jpg": [
      512,
-     512
+     256
+    ],
+    "WoodFloor043_2K-JPG_NormalGL.jpg": [
+     512,
+     256
     ],
     "AR_TERRENO": [
      1664,
@@ -485,13 +485,13 @@
    "ficheiros": {
     "glb": {
      "ficheiro": "torres-vedras_ar_maquete.glb",
-     "bytes": 4002548,
-     "sha256": "dff74a6dd44d3213fea08195692ebbc0ae5627a31e53a9d714d1dca6e501cc24"
+     "bytes": 3914616,
+     "sha256": "fa6e0cdc5a68b5f6cf6b38f753810f9db68e8d2da76ff650cb5db2e40f301850"
     },
     "usdz": {
      "ficheiro": "torres-vedras_ar_maquete.usdz",
-     "bytes": 3083665,
-     "sha256": "fa6853f8cfd2c2be76de22a89a9b25d906780ebc48dc67d637b0480048bccfbe"
+     "bytes": 3064912,
+     "sha256": "8346376553d4c3a592e9de9e4677ced05c6ebd72d69b8f4863f6befc72e5687d"
     }
    },
    "reimportacao": {

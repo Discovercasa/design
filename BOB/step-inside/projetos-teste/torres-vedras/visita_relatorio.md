@@ -2,7 +2,7 @@
 
 **Resultado: WARNING**
 
-- materiais provisórios: mapeados a partir do sistema construtivo até chegar a lista oficial
+- materiais provisórios: 105 por confirmar (ainda não estão na lista oficial de materiais, ou não são o mesmo produto); 1006 confirmados pela lista oficial
 - 36 choques entre peças de madeira > 8 mm no modelo de produção (verificar.py)
 - implantação: cota_pavimento INFERRED
 - implantação: plataforma INFERRED
@@ -58,7 +58,7 @@ Cada objeto tem `si_id` = `<coleção>/<nome do objeto>` (os nomes vêm dos dese
 
 ## Materiais (catálogo comum `MAT_*`)
 
-Os materiais de produção foram trocados pelos do catálogo comum (`step-inside/materiais/catalogo.json`, mapeamento `mapeamentos/discovercasa.json`). Estados dos mapeamentos usados: INFERRED 1111.
+Os materiais de produção foram trocados pelos do catálogo comum (`step-inside/materiais/catalogo.json`, mapeamento `mapeamentos/discovercasa.json`). Estados dos mapeamentos usados: CONFIRMED 1006, INFERRED 105.
 
 | ID | Objetos | Textura |
 |---|---|---|

@@ -116,7 +116,7 @@
    },
    "textura": {
     "tile_m": [
-     1.0,
+     0.5,
      0.5
     ],
     "mapas": [
@@ -124,7 +124,17 @@
      "normal",
      "roughness"
     ],
-    "fonte": null
+    "uso": "tingir",
+    "fonte": {
+     "biblioteca": "ambientCG",
+     "asset": "Cork003",
+     "resolucao": "2K-JPG",
+     "url": "https://ambientcg.com/view?id=Cork003",
+     "licenca": "CC0 1.0 Universal",
+     "descarregado": "2026-11-11",
+     "pasta_local": "_trabalho/step-inside/texturas/ambientcg/Cork003/"
+    },
+    "nota": "aglomerado de grão grosso (Cork003) tingido à cor da cortiça expandida à vista; textura gratuita provisória até haver foto do produto real (tarefa 156)"
    }
   },
   {
@@ -795,31 +805,31 @@
     "en": "Wood-look vinyl"
    },
    "pbr": {
-    "base_color": "#B8966C",
+    "base_color": "#A9855D",
     "roughness": 0.6,
     "metallic": 0.0
    },
    "textura": {
     "tile_m": [
-     2.0,
-     2.0
+     3.648,
+     1.824
     ],
     "mapas": [
      "base_color",
      "normal",
      "roughness"
     ],
-    "uso": "cor",
+    "uso": "tingir",
     "fonte": {
      "biblioteca": "ambientCG",
-     "asset": "WoodFloor051",
+     "asset": "WoodFloor043",
      "resolucao": "2K-JPG",
-     "url": "https://ambientcg.com/view?id=WoodFloor051",
+     "url": "https://ambientcg.com/view?id=WoodFloor043",
      "licenca": "CC0 1.0 Universal",
-     "descarregado": "2026-11-09",
-     "pasta_local": "_trabalho/step-inside/texturas/ambientcg/WoodFloor051/"
+     "descarregado": "2026-11-11",
+     "pasta_local": "_trabalho/step-inside/texturas/ambientcg/WoodFloor043/"
     },
-    "nota": "textura gratuita provisória; trocar por fotos do produto real quando houver (tarefa 156)"
+    "nota": "carvalho com nós em tábuas compridas (WoodFloor043), tingido à cor do vinílico. A imagem (2:1) tem 8 tábuas na altura: 8 × 0,228 m = 1,824 m dá as tábuas de 228 mm do vinílico da lista oficial (1524 × 228 mm, 2026-11-11). Textura gratuita até haver foto do produto real (tarefa 156)"
    }
   },
   {

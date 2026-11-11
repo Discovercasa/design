@@ -35,6 +35,43 @@ Um produto sem correspondência aparece no relatório do modelo de visita e pede
   equipa confirmar as ligações na página da Orçamentação (`/orcamentacao/`). A lista do Hub não traz cores: a cor de
   cada produto continua a vir do sistema construtivo.
 
+## Lista oficial e texturas dos produtos reais (2026-11-11)
+
+O utilizador: «Fase 3 avança com as texturas reais dos materiais Discovercasa e com a Lista oficial de materiais que já
+tens acesso... e depois para os interiores.»
+
+- **Lista oficial → mapeamento** (tarefa 163): `python step-inside/ferramentas/materiais/oficial.py`.
+  - Um produto passa a **CONFIRMED** quando todos os seus códigos da Listagem chegam a um material da lista oficial do
+    Hub (`orcamentacao/ligacoes.json`) e o produto oficial é o que o modelo mostra. A fonte guarda só os ids do Hub
+    (nunca nomes nem preços: o repositório é público).
+  - Resultado: **21 de 44 confirmados** (forro Tremolo Douglas, ripado, painéis imitação telha e 5 ondas RAL 8004,
+    telha da pérgola, vinílico, Pladur standard, OSB, membrana, lãs, XPS, madeiras).
+  - Ficam INFERRED, com o motivo no campo `oficial`:
+    - o painel do Sobral em RAL 7016 (a lista só tem RAL 8004);
+    - o Pladur hidrófugo e o ignífugo (a lista só tem o standard);
+    - o bocal de saída da caleira interior: a lista tem-no **branco brilhante**, o modelo mostra-o preto — a confirmar.
+  - Também INFERRED: o que ainda não está na lista oficial (reboco/ETICS, cortiça, caixilharia, remates RAL 7016,
+    caleiras, cerâmico, azulejo, betonilha, microcimento, betão, a base do pilar da pérgola).
+- **Medidas e cores da lista oficial nas texturas gratuitas:**
+  - vinílico: tábuas de 1524 × 228 mm → WoodFloor043 (carvalho com nós, 8 tábuas na altura da imagem) com
+    `tile_m` 3,648 × 1,824 m;
+  - cortiça (até aqui só cor lisa): Cork003, aglomerado de grão grosso, tingido à cor da cortiça expandida;
+  - forro Tremolo (Piveteau, Douglas maciço com autoclave castanho): já tinha tábuas de 135 mm e a cor medida na
+    foto da casa construída de Torres Vedras.
+  - Não há texturas dos fabricantes para reutilizar (Tremolo, Munditelha, vinílico, telha): as fotos dos produtos
+    reais continuam a ser o passo para o aspeto exato.
+- **Foto de um produto real → textura** (tarefa 156): `python step-inside/ferramentas/materiais/foto.py <foto>
+  --produto "<nome no mapeamento>" --largura-m <largura real> [--altura-m …] [--recorte x0 y0 x1 y1]`.
+  - O Blender recorta à proporção real, uniformiza a luz (divide pela foto muito desfocada), faz a imagem repetir sem
+    emendas e tira o relevo (normal OpenGL) e a rugosidade da luminância.
+  - As imagens ficam só no PC (`_trabalho/step-inside/texturas/fotos/<produto>/`); no mapeamento do construtor fica a
+    referência (medidas, data, licença «fotografia própria»). O catálogo comum não muda: os outros construtores
+    continuam com as texturas gratuitas.
+  - **Como fotografar:** de frente, o telemóvel paralelo à superfície; dia encoberto ou sombra total (sem manchas de
+    sol); uma área de 1 a 1,5 m sem nada à frente; resolução máxima, sem filtros; dizer a largura real fotografada
+    (ou contar as tábuas).
+  - Experimentado num recorte da foto da casa de Torres Vedras: funciona, mas a foto é pequena demais (145 px).
+
 ## Estado (2026-11-09)
 
 - **Catálogo:** 45 materiais mestre em 8 categorias:

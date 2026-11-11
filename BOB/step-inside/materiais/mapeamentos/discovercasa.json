@@ -21,13 +21,30 @@
    "codigos": [
     "RIPA-37x35",
     "RIPA-30x20"
-   ]
+   ],
+   "estado": "CONFIRMED",
+   "fonte": {
+    "documento": "lista oficial de materiais (Hub), por orcamentacao/ligacoes.json",
+    "hub": [
+     "d14ee040-9b5e-45e6-9f2c-1e4dbda91bc9",
+     "e0fffccd-bfeb-4eac-9a4e-e2c1b69ebe73"
+    ],
+    "data": "2026-11-11"
+   }
   },
   "Douglas marron": {
    "mat": "MAT_WOOD_CLADDING__DOUGLAS_BROWN",
    "codigos": [
     "FORRO-TREMOLO"
-   ]
+   ],
+   "estado": "CONFIRMED",
+   "fonte": {
+    "documento": "lista oficial de materiais (Hub), por orcamentacao/ligacoes.json",
+    "hub": [
+     "bffbf542-950c-4065-bc08-e99fb6a65a47"
+    ],
+    "data": "2026-11-11"
+   }
   },
   "Cortiça": {
    "mat": "MAT_CORK_CLADDING",
@@ -40,28 +57,53 @@
    "nota": "Mundiperfil Munditelha, cor telha RAL 8004",
    "codigos": [
     "PAINEL-TELHA-40"
-   ]
+   ],
+   "estado": "CONFIRMED",
+   "fonte": {
+    "documento": "lista oficial de materiais (Hub), por orcamentacao/ligacoes.json",
+    "hub": [
+     "da42b76d-6f33-478d-8d87-ab77fe74a083"
+    ],
+    "data": "2026-11-11"
+   }
   },
   "Painel sandwich RAL 7016": {
    "mat": "MAT_ROOF_SANDWICH_TILE__RAL7016",
    "nota": "Sobral Tipo 1: painel imitação telha, cinzento escuro",
    "codigos": [
     "PAINEL-TELHA-40"
-   ]
+   ],
+   "oficial": "a lista oficial só tem o painel imitação telha em RAL 8004; o Sobral Tipo 1 usa-o em RAL 7016"
   },
   "Painel sandwich 5 ondas": {
    "mat": "MAT_ROOF_SANDWICH_TRAPEZOIDAL__RAL8004",
    "nota": "cobertura oculta",
    "codigos": [
     "PAINEL-5ONDAS-80"
-   ]
+   ],
+   "estado": "CONFIRMED",
+   "fonte": {
+    "documento": "lista oficial de materiais (Hub), por orcamentacao/ligacoes.json",
+    "hub": [
+     "a0a0be49-3e2e-4b69-9c07-528b0275b2b1"
+    ],
+    "data": "2026-11-11"
+   }
   },
   "Telha": {
    "mat": "MAT_ROOF_TILE_CERAMIC__TERRACOTTA",
    "nota": "telha da pérgola: cerâmica ou painel imitação telha (a confirmar no sistema construtivo)",
    "codigos": [
     "TELHA-CER"
-   ]
+   ],
+   "estado": "CONFIRMED",
+   "fonte": {
+    "documento": "lista oficial de materiais (Hub), por orcamentacao/ligacoes.json",
+    "hub": [
+     "4e6bc8b1-2a2f-4aea-91cd-e70e35a3a3db"
+    ],
+    "data": "2026-11-11"
+   }
   },
   "Remate RAL 7016": {
    "mat": "MAT_METAL_FLASHING__RAL7016",
@@ -96,13 +138,22 @@
    "mat": "MAT_METAL_GUTTER__BLACK",
    "codigos": [
     "CALEIRA-BOCAL"
-   ]
+   ],
+   "oficial": "a lista oficial tem o bocal de saída da caleira interior em branco brilhante; o modelo mostra-o preto (confirmar a cor à vista)"
   },
   "Membrana de topo": {
    "mat": "MAT_MEMBRANE_BREATHER__DARK",
    "codigos": [
     "REMATE-TOPO"
-   ]
+   ],
+   "estado": "CONFIRMED",
+   "fonte": {
+    "documento": "lista oficial de materiais (Hub), por orcamentacao/ligacoes.json",
+    "hub": [
+     "e723337b-ae6f-471b-a514-7c1d8ecd01d9"
+    ],
+    "data": "2026-11-11"
+   }
   },
   "Alumínio": {
    "mat": "MAT_FRAME_ALUMINIUM__NATURAL",
@@ -138,7 +189,15 @@
    "mat": "MAT_FLOOR_VINYL_WOOD",
    "codigos": [
     "VINILICO"
-   ]
+   ],
+   "estado": "CONFIRMED",
+   "fonte": {
+    "documento": "lista oficial de materiais (Hub), por orcamentacao/ligacoes.json",
+    "hub": [
+     "243c46a2-49c0-4584-b44b-2efcea577c60"
+    ],
+    "data": "2026-11-11"
+   }
   },
   "Cerâmico": {
    "mat": "MAT_FLOOR_CERAMIC",
@@ -165,21 +224,31 @@
    "mat": "MAT_INT_PLASTER_PAINTED__WHITE",
    "codigos": [
     "PLADUR-13"
-   ]
+   ],
+   "estado": "CONFIRMED",
+   "fonte": {
+    "documento": "lista oficial de materiais (Hub), por orcamentacao/ligacoes.json",
+    "hub": [
+     "fe776e7a-0425-4828-b2c2-6a69008d1bd5"
+    ],
+    "data": "2026-11-11"
+   }
   },
   "Pladur H1 (hidrófugo)": {
    "mat": "MAT_INT_PLASTER_PAINTED__WHITE",
    "nota": "pintado fica igual ao normal; a cor verde do modelo de produção só distingue o tipo de placa",
    "codigos": [
     "PLADUR-13"
-   ]
+   ],
+   "oficial": "a lista oficial só tem a placa standard; a hidrófuga ainda não está lá"
   },
   "Pladur F (ignífugo)": {
    "mat": "MAT_INT_PLASTER_PAINTED__WHITE",
    "nota": "pintado fica igual ao normal; a cor rosa do modelo de produção só distingue o tipo de placa",
    "codigos": [
     "PLADUR-13"
-   ]
+   ],
+   "oficial": "a lista oficial só tem a placa standard; a ignífuga ainda não está lá"
   },
   "Betonilha": {
    "mat": "MAT_SCREED",
@@ -191,14 +260,31 @@
    "mat": "MAT_INSULATION_XPS",
    "codigos": [
     "XPS-60"
-   ]
+   ],
+   "estado": "CONFIRMED",
+   "fonte": {
+    "documento": "lista oficial de materiais (Hub), por orcamentacao/ligacoes.json",
+    "hub": [
+     "5b80aa41-67e3-407f-b7fb-d8a601f6ae9b"
+    ],
+    "data": "2026-11-11"
+   }
   },
   "Lã mineral": {
    "mat": "MAT_INSULATION_MINERAL_WOOL",
    "codigos": [
     "LA-80",
     "LA-100"
-   ]
+   ],
+   "estado": "CONFIRMED",
+   "fonte": {
+    "documento": "lista oficial de materiais (Hub), por orcamentacao/ligacoes.json",
+    "hub": [
+     "21ba8f09-da0c-44b5-891b-4f313b1629bc",
+     "e81d0839-b2b5-43e7-8bdb-e20268fbf80b"
+    ],
+    "data": "2026-11-11"
+   }
   },
   "OSB": {
    "mat": "MAT_BOARD_OSB",
@@ -206,25 +292,59 @@
     "OSB-09",
     "OSB-15",
     "OSB-22"
-   ]
+   ],
+   "estado": "CONFIRMED",
+   "fonte": {
+    "documento": "lista oficial de materiais (Hub), por orcamentacao/ligacoes.json",
+    "hub": [
+     "1937e740-80db-4e2d-a840-166b6ed6d193",
+     "48d1f919-aa91-4464-b5d0-9c0a1a235d82",
+     "c2024ce4-c42d-4468-814e-d70012327b95"
+    ],
+    "data": "2026-11-11"
+   }
   },
   "OSB 9": {
    "mat": "MAT_BOARD_OSB",
    "codigos": [
     "OSB-09"
-   ]
+   ],
+   "estado": "CONFIRMED",
+   "fonte": {
+    "documento": "lista oficial de materiais (Hub), por orcamentacao/ligacoes.json",
+    "hub": [
+     "c2024ce4-c42d-4468-814e-d70012327b95"
+    ],
+    "data": "2026-11-11"
+   }
   },
   "OSB 15": {
    "mat": "MAT_BOARD_OSB",
    "codigos": [
     "OSB-15"
-   ]
+   ],
+   "estado": "CONFIRMED",
+   "fonte": {
+    "documento": "lista oficial de materiais (Hub), por orcamentacao/ligacoes.json",
+    "hub": [
+     "48d1f919-aa91-4464-b5d0-9c0a1a235d82"
+    ],
+    "data": "2026-11-11"
+   }
   },
   "Traspir 95": {
    "mat": "MAT_MEMBRANE_BREATHER",
    "codigos": [
     "MEMB-T95"
-   ]
+   ],
+   "estado": "CONFIRMED",
+   "fonte": {
+    "documento": "lista oficial de materiais (Hub), por orcamentacao/ligacoes.json",
+    "hub": [
+     "31d14fee-292a-435c-b5a3-5991ea5f550f"
+    ],
+    "data": "2026-11-11"
+   }
   },
   "Aço galvanizado": {
    "mat": "MAT_METAL_GALVANIZED",
@@ -244,37 +364,86 @@
    "codigos": [
     "MAD-LAM-AUT",
     "MAD-AUT"
-   ]
+   ],
+   "estado": "CONFIRMED",
+   "fonte": {
+    "documento": "lista oficial de materiais (Hub), por orcamentacao/ligacoes.json",
+    "hub": [
+     "2f8c76c9-a431-4d53-ab8d-30289cf0d1af",
+     "d3cdbcd6-92e5-49cc-ae21-69bedaa45794"
+    ],
+    "data": "2026-11-11"
+   }
   },
   "Madeira apoio cobertura": {
    "mat": "MAT_TIMBER_STRUCTURE",
    "codigos": [
     "VIGA-APOIO-COB"
-   ]
+   ],
+   "estado": "CONFIRMED",
+   "fonte": {
+    "documento": "lista oficial de materiais (Hub), por orcamentacao/ligacoes.json",
+    "hub": [
+     "d14ee040-9b5e-45e6-9f2c-1e4dbda91bc9"
+    ],
+    "data": "2026-11-11"
+   }
   },
   "Madeira 110x35": {
    "mat": "MAT_TIMBER_STRUCTURE",
    "codigos": [
     "MAD-CASQ"
-   ]
+   ],
+   "estado": "CONFIRMED",
+   "fonte": {
+    "documento": "lista oficial de materiais (Hub), por orcamentacao/ligacoes.json",
+    "hub": [
+     "d14ee040-9b5e-45e6-9f2c-1e4dbda91bc9"
+    ],
+    "data": "2026-11-11"
+   }
   },
   "Madeira 75x35": {
    "mat": "MAT_TIMBER_STRUCTURE",
    "codigos": [
     "MAD-CASQ"
-   ]
+   ],
+   "estado": "CONFIRMED",
+   "fonte": {
+    "documento": "lista oficial de materiais (Hub), por orcamentacao/ligacoes.json",
+    "hub": [
+     "d14ee040-9b5e-45e6-9f2c-1e4dbda91bc9"
+    ],
+    "data": "2026-11-11"
+   }
   },
   "Madeira 110x75": {
    "mat": "MAT_TIMBER_STRUCTURE",
    "codigos": [
     "MAD-CASQ"
-   ]
+   ],
+   "estado": "CONFIRMED",
+   "fonte": {
+    "documento": "lista oficial de materiais (Hub), por orcamentacao/ligacoes.json",
+    "hub": [
+     "d14ee040-9b5e-45e6-9f2c-1e4dbda91bc9"
+    ],
+    "data": "2026-11-11"
+   }
   },
   "Madeira 220x75": {
    "mat": "MAT_TIMBER_STRUCTURE",
    "codigos": [
     "MAD-CASQ-22"
-   ]
+   ],
+   "estado": "CONFIRMED",
+   "fonte": {
+    "documento": "lista oficial de materiais (Hub), por orcamentacao/ligacoes.json",
+    "hub": [
+     "fdf5e24b-ea08-40bc-9862-3daba42aee41"
+    ],
+    "data": "2026-11-11"
+   }
   },
   "Madeira 160x80": {
    "mat": "MAT_TIMBER_STRUCTURE"
@@ -283,7 +452,15 @@
    "mat": "MAT_TIMBER_STRUCTURE",
    "codigos": [
     "MAD-LAM"
-   ]
+   ],
+   "estado": "CONFIRMED",
+   "fonte": {
+    "documento": "lista oficial de materiais (Hub), por orcamentacao/ligacoes.json",
+    "hub": [
+     "42e57870-bb17-4d9a-972c-77f41de8a6ff"
+    ],
+    "data": "2026-11-11"
+   }
   }
  },
  "estrutura_a_vista": [

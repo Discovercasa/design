@@ -341,7 +341,8 @@ def avaliar(r, campos, terreno_gate):
             avisos.append("texturas do catálogo em falta neste PC: " + ", ".join(mt["texturas_em_falta"]) +
                           " (descarregar para _trabalho/step-inside/texturas/)")
         if mt["estados"].get("INFERRED"):
-            avisos.append("materiais provisórios: mapeados a partir do sistema construtivo até chegar a lista oficial")
+            avisos.append(f"materiais provisórios: {mt['estados']['INFERRED']} peças com um material por confirmar (ainda não está na "
+                          f"lista oficial de materiais, ou não é o mesmo produto); {mt['estados'].get('CONFIRMED', 0)} peças confirmadas")
     ab = r["modelo"].get("aberturas", {})
     if ab.get("controlo_abertas_por_engano"):
         rever.append(f"o teste das aberturas falhou o controlo: paredes cheias vistas como abertas "

@@ -69,17 +69,29 @@
      512,
      512
     ],
-    "WoodFloor051_2K-JPG_Color.jpg": [
+    "MAT_CORK_CLADDING_4A392E_Color.jpg": [
      1024,
      1024
     ],
-    "WoodFloor051_2K-JPG_Roughness.jpg": [
+    "Cork003_2K-JPG_Roughness.jpg": [
      512,
      512
     ],
-    "WoodFloor051_2K-JPG_NormalGL.jpg": [
+    "Cork003_2K-JPG_NormalGL.jpg": [
      512,
      512
+    ],
+    "MAT_FLOOR_VINYL_WOOD_A9855D_Color.jpg": [
+     1024,
+     512
+    ],
+    "WoodFloor043_2K-JPG_Roughness.jpg": [
+     512,
+     256
+    ],
+    "WoodFloor043_2K-JPG_NormalGL.jpg": [
+     512,
+     256
     ],
     "Metal027_2K-JPG_Roughness.jpg": [
      512,
@@ -187,13 +199,13 @@
    "ficheiros": {
     "glb": {
      "ficheiro": "sobral-tipo1_ar_casa.glb",
-     "bytes": 2149596,
-     "sha256": "031170750c3f229b1425cac09a2725abda3c6fd8915615a7eaf09fafcc20b173"
+     "bytes": 2061648,
+     "sha256": "1bf869b12841ceefd9a841d22a5c9826d82eed70a5dee8520738fdbdb34311b5"
     },
     "usdz": {
      "ficheiro": "sobral-tipo1_ar_casa.usdz",
-     "bytes": 1907424,
-     "sha256": "b99fdfde0285c802da9ec813438d4286d995d980ad237df17c0101de18e31bb1"
+     "bytes": 1888954,
+     "sha256": "55fa082c9ef67ea6315ff8b524a384cab15a0472f0971dac7a2ffe3a6fc01725"
     }
    },
    "reimportacao": {
@@ -302,17 +314,29 @@
      512,
      512
     ],
-    "WoodFloor051_2K-JPG_Color.jpg": [
+    "MAT_CORK_CLADDING_4A392E_Color.jpg": [
      1024,
      1024
     ],
-    "WoodFloor051_2K-JPG_Roughness.jpg": [
+    "Cork003_2K-JPG_Roughness.jpg": [
      512,
      512
     ],
-    "WoodFloor051_2K-JPG_NormalGL.jpg": [
+    "Cork003_2K-JPG_NormalGL.jpg": [
      512,
      512
+    ],
+    "MAT_FLOOR_VINYL_WOOD_A9855D_Color.jpg": [
+     1024,
+     512
+    ],
+    "WoodFloor043_2K-JPG_Roughness.jpg": [
+     512,
+     256
+    ],
+    "WoodFloor043_2K-JPG_NormalGL.jpg": [
+     512,
+     256
     ],
     "Metal027_2K-JPG_Roughness.jpg": [
      512,
@@ -451,13 +475,13 @@
    "ficheiros": {
     "glb": {
      "ficheiro": "sobral-tipo1_ar_maquete.glb",
-     "bytes": 3585212,
-     "sha256": "c51bd10116c28b992c53375d0ce00527bbafdfdb2a6afc9e1059fe76a8c890cd"
+     "bytes": 3497280,
+     "sha256": "6a9d6747e10e847869e83a54c73c2e84f54279d305e609c0def9c6a91e6be25b"
     },
     "usdz": {
      "ficheiro": "sobral-tipo1_ar_maquete.usdz",
-     "bytes": 2296976,
-     "sha256": "bdd149c15b78c52da8ef47dd1d31df3416f83696743a931eff0f68ab9d7a5401"
+     "bytes": 2278395,
+     "sha256": "335bcf18024d3abb1b87700036c37855edec426a60c37984341538bb7b7ab615"
     }
    },
    "reimportacao": {
@@ -566,17 +590,29 @@
      512,
      512
     ],
-    "WoodFloor051_2K-JPG_Color.jpg": [
+    "MAT_CORK_CLADDING_4A392E_Color.jpg": [
      1024,
      1024
     ],
-    "WoodFloor051_2K-JPG_Roughness.jpg": [
+    "Cork003_2K-JPG_Roughness.jpg": [
      512,
      512
     ],
-    "WoodFloor051_2K-JPG_NormalGL.jpg": [
+    "Cork003_2K-JPG_NormalGL.jpg": [
      512,
      512
+    ],
+    "MAT_FLOOR_VINYL_WOOD_A9855D_Color.jpg": [
+     1024,
+     512
+    ],
+    "WoodFloor043_2K-JPG_Roughness.jpg": [
+     512,
+     256
+    ],
+    "WoodFloor043_2K-JPG_NormalGL.jpg": [
+     512,
+     256
     ],
     "Metal027_2K-JPG_Roughness.jpg": [
      512,
@@ -682,13 +718,13 @@
    "ficheiros": {
     "glb": {
      "ficheiro": "sobral-tipo1_ar_casa_piso0.glb",
-     "bytes": 1576396,
-     "sha256": "cbd1ed5e8ded1f12ae47de489c25ff2f915c1a8eb4048a6c3819b4565f45030c"
+     "bytes": 1488464,
+     "sha256": "edc764435ec4dd1272334e09ec4bd37cf5dd581f4276dd7df198f384b849a1e1"
     },
     "usdz": {
      "ficheiro": "sobral-tipo1_ar_casa_piso0.usdz",
-     "bytes": 1445818,
-     "sha256": "8e128ddf6f41560408171284965c2a899db6eaa7a074a7c1f9d2189fbf965472"
+     "bytes": 1427345,
+     "sha256": "260cbaf6ce13855695c623d3a5336c750df8ecfd769ff1925fccf2cb63a1c771"
     }
    },
    "reimportacao": {
@@ -787,17 +823,29 @@
      512,
      512
     ],
-    "WoodFloor051_2K-JPG_Color.jpg": [
+    "MAT_CORK_CLADDING_4A392E_Color.jpg": [
      1024,
      1024
     ],
-    "WoodFloor051_2K-JPG_Roughness.jpg": [
+    "Cork003_2K-JPG_Roughness.jpg": [
      512,
      512
     ],
-    "WoodFloor051_2K-JPG_NormalGL.jpg": [
+    "Cork003_2K-JPG_NormalGL.jpg": [
      512,
      512
+    ],
+    "MAT_FLOOR_VINYL_WOOD_A9855D_Color.jpg": [
+     1024,
+     512
+    ],
+    "WoodFloor043_2K-JPG_Roughness.jpg": [
+     512,
+     256
+    ],
+    "WoodFloor043_2K-JPG_NormalGL.jpg": [
+     512,
+     256
     ],
     "Metal027_2K-JPG_Roughness.jpg": [
      512,
@@ -903,13 +951,13 @@
    "ficheiros": {
     "glb": {
      "ficheiro": "sobral-tipo1_ar_casa_piso1.glb",
-     "bytes": 1338292,
-     "sha256": "b00a5977ef54cf81862574659264b42ff98cf63fa95ccbad401e77318f0aa5f4"
+     "bytes": 1250356,
+     "sha256": "fb4303283e5f8cbc13790349f790a3044c4d80f8c8c856176b626c181073ae48"
     },
     "usdz": {
      "ficheiro": "sobral-tipo1_ar_casa_piso1.usdz",
-     "bytes": 1278047,
-     "sha256": "28d9cb9a4d049a37b3099aa9fe0b87346e158c105f3442102276a2de697a0a51"
+     "bytes": 1259536,
+     "sha256": "4f4148b20f641a63f24209fba39f2327a93f1494c60a68ef94c8bcf84844fa38"
     }
    },
    "reimportacao": {

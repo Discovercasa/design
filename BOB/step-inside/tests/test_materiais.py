@@ -40,9 +40,17 @@ class TestCatalogo(unittest.TestCase):
         self.assertEqual(e["pbr"]["metallic"], 0.5)  # from the variant
         self.assertEqual(t["MAT_GLASS_CLEAR"]["id"], "MAT_GLASS_CLEAR")  # catalogue ids map to themselves
 
-    def test_provisorio_ate_lista_oficial(self):
+    def test_lista_oficial_confirma_produtos(self):
+        # 2026-11-11: the official list (Hub) confirms the products whose codes all reach one of its materials
         t = materiais.resolver(self.cat, self.mp)
-        self.assertEqual({t[k]["estado"] for k in self.mp["materiais"]}, {"INFERRED"})
+        conf = {k for k in self.mp["materiais"] if t[k]["estado"] == "CONFIRMED"}
+        self.assertGreaterEqual(len(conf), 20)
+        for k in ("Douglas marron", "Painel sandwich Munditelha", "Vinílico", "Telha", "OSB 9"):
+            self.assertIn(k, conf)
+            self.assertTrue(all(len(i) == 36 for i in t[k]["fonte"]["hub"]))   # Hub ids only, never names or prices
+        for k in ("Cortiça", "Painel sandwich RAL 7016", "Saída de caleira", "Alumínio RAL 7016"):
+            self.assertEqual(t[k]["estado"], "INFERRED")   # not on the list, or not the same thing
+        self.assertIn("RAL 8004", self.mp["materiais"]["Painel sandwich RAL 7016"]["oficial"])
 
     def test_erros_detetados(self):
         cat = copy.deepcopy(self.cat)

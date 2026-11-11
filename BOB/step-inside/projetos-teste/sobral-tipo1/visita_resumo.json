@@ -44,12 +44,14 @@
     "MAT_LANDSCAPE_SOIL": 1
    },
    "estados": {
-    "INFERRED": 882
+    "CONFIRMED": 825,
+    "INFERRED": 57
    },
    "texturas_em_falta": [],
    "com_textura": [
     "MAT_BOARD_OSB",
     "MAT_CONCRETE_SLAB",
+    "MAT_CORK_CLADDING",
     "MAT_FLOOR_VINYL_WOOD",
     "MAT_FRAME_ALUMINIUM__RAL7016",
     "MAT_LANDSCAPE_SOIL",
@@ -521,7 +523,7 @@
  "dif_contorno_implantacao_m": 0.009,
  "resultado": "WARNING",
  "motivos": [
-  "materiais provisórios: mapeados a partir do sistema construtivo até chegar a lista oficial",
+  "materiais provisórios: 57 por confirmar (ainda não estão na lista oficial de materiais, ou não são o mesmo produto); 825 confirmados pela lista oficial",
   "implantação: cota_pavimento INFERRED",
   "implantação: rotacao_graus INFERRED",
   "implantação: plataforma INFERRED",
