@@ -42,7 +42,8 @@ pushing to `main` if unsure. Read the repo root `CLAUDE.md` (Design rules: Supab
 - Team work in the hub (2026-11-11, supersedes the general chat 0018–0021): conversation lives in each task/checkpoint
   (table `atividade`, migrations 0022/0023). Claude writes through the database (no account): detail in the Log
   (`registo.detalhe`), questions to a person in the task's conversation tagging them (`marcacoes`); notify the team only for
-  impact (task/checkpoint concluded, decision, critique). Read replies in `atividade` at the start of a session. Awaiting
+  impact (task/checkpoint concluded, decision, critique). Critique button «Comentar» (2026-11-11): `public/js/comentar.js`,
+  loaded by `porta.js` (all apps) and `ar-teste.html`, plus the hub top bar; saves to `criticas`. Read replies in `atividade` at the start of a session. Awaiting
   Dinis's answers (hub task 169 conversation, items 1–11) → file into `orcamento_parcelas` and the Orçamentação docs.
 - Prices: since 2026-11-10 the price list comes from the Hub (the company's other system) into the Design Supabase,
   tables `hub_fornecedores`, `hub_materiais`, `hub_material_precos` (price per supplier: unit, discount, VAT, lead time,

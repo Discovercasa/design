@@ -152,7 +152,10 @@ Why Claude learns the method; "vamos passo a passo" — an overall idea, then an
   pop-up of tasks needing attention; each task/checkpoint has its own screen (status in topics, ask for a status, suggest,
   ask for approval, tag people, conversation with files/images/video/audio, button to the project). Tagged people get a
   notification and a pop-up on opening the hub. Critiques/comments per project (erro, não gostei, sugestão, comentário, with
-  images) when someone tests an app. Project tabs: Workflow (with pipeline/custos and «sobre» as sub-sections) + Documentos
+  images) when someone tests an app. «Comentar» button (user 2026-11-11, «põe em todas as abas»): inside every app (Build Your
+  House, Gerador, Orçamentação, Step Inside AR test page) and in the hub top bar (every hub tab); preset to the project on a
+  project page, otherwise asks which; «onde» pre-filled (app, step, browser, screen size); saved in `criticas`
+  (`public/js/comentar.js`). Project tabs: Workflow (with pipeline/custos and «sobre» as sub-sections) + Documentos
   (+ Teste do AR on Step Inside); everything collapsed on opening; task descriptions in an accordion; the project «ponto de
   situação» must be topics, precise and clear (Feito / Agora / Falta), not a description.
 - **Notification rule (user 2026-11-11, supersedes 2026-11-06 "with a notification to the team")**: notify only what has impact
