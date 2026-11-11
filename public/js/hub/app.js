@@ -56,11 +56,12 @@ async function arrancar(sessao) {
   if (!sessao || nivel(sessao) === 'sem') return mostrarEntrada('A tua conta não tem acesso ao Design.', true);
   // veio de uma página interna (porta.js): depois de entrar, volta para lá
   const voltar = new URLSearchParams(location.search).get('voltar');
-  if (voltar && /^\/(build-your-house|gerador)\//.test(voltar)) return location.replace(voltar);
+  if (voltar && /^\/(build-your-house|gerador|orcamentacao)\//.test(voltar)) return location.replace(voltar);
   E.eu = { id: sessao.user.id, nome: (sessao.user.user_metadata && sessao.user.user_metadata.nome) || '', editar: nivel(sessao) === 'editar' };
   $('#ecra-entrar').hidden = true; $('#topo').hidden = false; $('#vista').hidden = false;
   $('#vista').innerHTML = V.esqueleto();
   $('#b-sugestoes').innerHTML = ic('sugestao');
+  $('#b-critica').innerHTML = ic('comentario');
   $('#b-notificacoes').innerHTML = ic('sino') + '<span class="contador" id="contador" hidden></span>';
   await D.carregarProjetos();
   novidades = await fetch('/dados/novidades.json').then((r) => r.json()).catch(() => []);
@@ -434,6 +435,8 @@ $('#b-notificacoes').addEventListener('click', (e) => {
   $('#pop-notificacoes').dataset.chave = chavePop();
 });
 $('#b-perfil').addEventListener('click', (e) => { e.stopPropagation(); abrirPop(e.currentTarget, $('#pop-perfil'), P.htmlPerfil(novidadeNova())); });
+// críticas e comentários: em todas as abas (utilizador, 2026-11-11: «sim põe em todas as abas»), já com o projeto da aba
+$('#b-critica').addEventListener('click', () => { fecharPops(); abrirDialogo(dlg, EQ.dlgCritica((rota().p || {}).id || null)); });
 $('#b-sugestoes').addEventListener('click', () => { if (sug.sep === 'log') sug.sep = 'sugestoes'; abrirDialogo(gaveta, htmlGaveta()); carregarSugestoes(); });
 document.addEventListener('click', (e) => { if (!e.target.closest('.pop')) fecharPops(); });
 document.addEventListener('keydown', (e) => { if (e.key === 'Escape') fecharPops(); });

@@ -53,13 +53,14 @@ export function htmlCriticas(pid, { todas = false } = {}) {
 const C = { pendentes: [] };
 export function dlgCritica(pid) {
   C.pendentes = [];
-  const p = projeto(pid);
-  return `<form data-form="critica" data-projeto="${esc(pid)}">
-    <div class="dlg-cabeca"><div><h2>Crítica ou comentário</h2><p class="suave pequeno" style="margin-top:4px">${esc(p.nome)} · toda a equipa vê; quem edita é avisado.</p></div>
+  const p = pid ? projeto(pid) : null;
+  return `<form data-form="critica" data-projeto="${esc(pid || '')}">
+    <div class="dlg-cabeca"><div><h2>Crítica ou comentário</h2><p class="suave pequeno" style="margin-top:4px">${p ? esc(p.nome) + ' · ' : ''}toda a equipa vê; quem edita é avisado.</p></div>
       <button class="icone-botao" type="button" data-acao="fechar-dlg" aria-label="Fechar">${ic('fechar')}</button></div>
     <div class="dlg-corpo">
       <div class="segmentado" role="group" aria-label="O que é">${Object.entries(TIPOS_CRITICA).map(([k, v], i) => `<button type="button" data-acao="tipo-critica" data-valor="${k}" aria-pressed="${i === 0}">${v}</button>`).join('')}</div>
       <input type="hidden" name="tipo" value="erro">
+      ${p ? '' : `<label class="campo-grupo"><span>Sobre que projeto?</span><select class="campo" name="projeto" required><option value="">Escolhe o projeto</option>${E.projetos.map((x) => `<option value="${x.id}">${esc(x.nome)}</option>`).join('')}</select></label>`}
       <label class="campo-grupo"><span>O que aconteceu?</span><textarea class="campo" name="texto" required minlength="2" maxlength="4000"
         placeholder="O que fizeste, o que esperavas e o que aconteceu. Podes colar capturas de ecrã (Ctrl+V)."></textarea></label>
       <label class="campo-grupo"><span>Onde? <small>(opcional: a página, o passo, o documento)</small></span><input class="campo" name="onde" maxlength="300" autocomplete="off"></label>
@@ -78,10 +79,12 @@ export function juntarCritica(lista, form) {
 export function tirarCritica(i, form) { C.pendentes.splice(i, 1); juntarCritica([], form); }
 export async function enviarCritica(form, criar) {
   const v = (n) => form.elements[n].value.trim();
+  const pid = form.elements.projeto ? form.elements.projeto.value : form.dataset.projeto;
+  if (!pid) throw new Error('escolhe o projeto.');
   const feitos = [];
   try {
     for (const f of C.pendentes) feitos.push(await CV.carregarAnexo('critica', f));
-    await criar({ projeto: form.dataset.projeto, tipo: v('tipo'), texto: v('texto'), onde: v('onde'), anexos: feitos });
+    await criar({ projeto: pid, tipo: v('tipo'), texto: v('texto'), onde: v('onde'), anexos: feitos });
     C.pendentes = [];
     return true;
   } catch (e) { CV.apagarFicheiros(feitos); throw e; }

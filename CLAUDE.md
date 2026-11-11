@@ -50,7 +50,8 @@ Projeto Design da Discovercasa (`design.discovercasa.pt`). Responder em portugu�
   o Início abre um pop-up por projeto (o que está em curso e precisa de atenção); cada tarefa ou checkpoint tem o seu
   ecrã (ponto de situação por tópicos, pedir ponto de situação, sugerir, pedir aprovação → estado `por_aprovar`, quem
   edita aprova ou devolve, pessoas marcadas em `marcacoes`, conversa em `atividade` com anexos no armazenamento
-  privado `chat`); críticas por projeto (`criticas`). **Notificações só para o que tem impacto** (checkpoint ou tarefa
+  privado `chat`); críticas por projeto (`criticas`), com o botão «Comentar» na barra do hub e dentro das apps
+  (`public/js/comentar.js`, carregado pela `porta.js` e pela `ar-teste.html`; o projeto vem do caminho da página). **Notificações só para o que tem impacto** (checkpoint ou tarefa
   concluída, decisão aberta/tomada, crítica, pedido de aprovação de um post) **e as pessoais**; tudo o resto vai para
   o **Log** (`registo`, separador ao lado da Checklist, avisos de lado ao abrir o hub). **O Claude escreve pela base
   de dados** (sem sessão: autor 'Claude'): no Log com o pormenor (`registo.detalhe`), na conversa da tarefa

@@ -262,3 +262,65 @@ test('projeto: cada vez que se abre, os checkpoints e as descrições estão fec
   if (ehTelemovel()) await captura(page, 'equipa-projeto-telemovel');
   expect(erros).toEqual([]);
 });
+
+test('Comentar em todas as abas do hub: o botão da barra de cima, já com o projeto da aba', async ({ page }) => {
+  const erros = await abrir(page);
+  // Início: chooses the project
+  await page.getByRole('button', { name: 'Crítica ou comentário sobre um projeto' }).click();
+  const d = page.locator('#dlg');
+  await d.getByRole('button', { name: 'Não gostei' }).click();
+  await d.getByLabel('O que aconteceu?').fill('As cores do preço final confundem.');
+  await d.getByRole('button', { name: 'Enviar' }).click();
+  await expect(d).toBeVisible();   // without a project the form does not go
+  await d.getByLabel('Sobre que projeto?').selectOption('orcamentacao');
+  await d.getByRole('button', { name: 'Enviar' }).click();
+  await expect(d).toBeHidden();
+  expect(await db(page, () => window.__fake.db.criticas.map((c) => [c.projeto, c.tipo]))).toEqual([['orcamentacao', 'nao_gostei']]);
+  // on a project tab the project is already chosen
+  await page.goto('/#/projeto/builder');
+  await page.getByRole('button', { name: 'Crítica ou comentário sobre um projeto' }).click();
+  await expect(d.getByLabel('Sobre que projeto?')).toHaveCount(0);
+  await expect(d).toContainText('Builder · toda a equipa vê');
+  expect(erros).toEqual([]);
+});
+
+for (const [rota, nome, projeto] of [['/gerador/', 'Gerador de documentos', 'gerador'], ['/orcamentacao/', 'Orçamentação', 'orcamentacao']]) {
+  test(`Comentar dentro da app: ${nome}`, async ({ page }) => {
+    const erros = [];
+    page.on('pageerror', (e) => erros.push(e.message));
+    await page.route('**/@supabase/supabase-js@*/**', (r) => r.fulfill({ contentType: 'text/javascript', body: FAKE }));
+    await page.goto(rota);
+    const botao = page.getByRole('button', { name: `Crítica ou comentário sobre o ${nome}` });
+    await expect(botao).toBeVisible();
+    await botao.click();
+    const d = page.locator('dialog.dc-com-dlg');
+    await expect(d.getByRole('heading', { name: 'Crítica ou comentário' })).toBeVisible();
+    await expect(d.getByLabel(/Onde\?/)).toHaveValue(new RegExp(`^${nome}`));
+    await d.getByRole('button', { name: 'Sugestão' }).click();
+    await d.getByLabel('O que aconteceu?').fill('Podia dizer quanto tempo falta.');
+    await d.locator('input[name="ficheiros"]').setInputFiles({ name: 'ecra.png', mimeType: 'image/png', buffer: PNG });
+    await expect(d.locator('[data-com-lista] li')).toHaveCount(1);
+    await d.getByRole('button', { name: 'Enviar' }).click();
+    await expect(d.getByRole('heading', { name: 'Obrigado!' })).toBeVisible();
+    const c = await db(page, () => window.__fake.db.criticas.map((x) => ({ projeto: x.projeto, tipo: x.tipo, texto: x.texto, anexos: x.anexos.map((a) => a.caminho) })));
+    expect(c).toHaveLength(1);
+    expect(c[0]).toMatchObject({ projeto, tipo: 'sugestao', texto: 'Podia dizer quanto tempo falta.' });
+    expect(c[0].anexos[0]).toMatch(/^critica\/.+__ecra\.png$/);
+    expect(await db(page, () => window.__fake.db.notificacoes.filter((n) => n.tipo === 'critica_nova').length)).toBe(1);
+    if (projeto === 'gerador') await captura(page, 'comentar-app');
+    expect(erros).toEqual([]);
+  });
+}
+
+test('Comentar no Build Your House: o botão fica acima da barra de vistas', async ({ page }) => {
+  await page.route('**/@supabase/supabase-js@*/**', (r) => r.fulfill({ contentType: 'text/javascript', body: FAKE }));
+  await page.goto('/build-your-house/');
+  const botao = page.locator('.dc-com-botao');
+  await expect(botao).toBeVisible();
+  // in the visible part of the screen, above the views bar (the app is wider than a phone: the page corner is off screen)
+  const pos = await botao.evaluate((b) => { const r = b.getBoundingClientRect(), v = window.visualViewport;
+    return { abaixo: v.offsetTop + v.height - r.bottom, direita: v.offsetLeft + v.width - r.right, esquerda: r.left - v.offsetLeft }; });
+  expect(pos.abaixo).toBeGreaterThanOrEqual(64 + 16 - 1);
+  expect(pos.direita).toBeGreaterThanOrEqual(15);
+  expect(pos.esquerda).toBeGreaterThanOrEqual(0);
+});

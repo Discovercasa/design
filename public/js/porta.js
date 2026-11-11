@@ -4,7 +4,13 @@
   const raiz = document.documentElement;
   raiz.style.visibility = 'hidden';
   Design.sb.auth.getSession().then(({ data: { session } }) => {
-    if (session && Design.nivel(session) !== 'sem') { raiz.style.visibility = ''; return; }
+    if (session && Design.nivel(session) !== 'sem') { raiz.style.visibility = ''; comentar(); return; }
     location.replace('/?voltar=' + encodeURIComponent(location.pathname));
   }, () => location.replace('/'));
+  // o botão «Comentar» (críticas e comentários sobre a app, 2026-11-11): só depois de confirmar a sessão
+  function comentar() {
+    const s = document.createElement('script');
+    s.src = '/js/comentar.js';
+    document.head.appendChild(s);
+  }
 })();
