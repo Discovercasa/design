@@ -1,5 +1,5 @@
 // As páginas do hub, desenhadas a partir do estado E (dados.js). Os botões levam data-acao; o app.js trata dos cliques.
-import { E, projeto, nomeProjeto, checkpointsDe, tarefasDe, decisaoDaTarefa, decisoesDe, resumo, feitosDe, chave, documentosDe, anexosDe, notasDe, TIPOS_NOTA, podeMexerNota,
+import { E, projeto, nomeProjeto, checkpointsDe, tarefasDe, decisaoDaTarefa, decisoesDe, resumo, feitosDe, chave, documentosDe, seccoesDe, anexosDe, notasDe, TIPOS_NOTA, podeMexerNota,
   marcadosEm, criticasDe } from './dados.js';
 import { img } from './imagens.js';
 import { ic, esc, dia, diaCurto, iniciais, euros, ha } from './util.js';
@@ -16,7 +16,7 @@ const ROTULO = { por_fazer: 'Por fazer', em_curso: 'Em curso', bloqueada: 'Bloqu
 export const abertos = new Set();   // checkpoints abertos (ficam abertos ao redesenhar)
 export const descricoesAbertas = new Set();   // tarefas com a descrição (acordeão) aberta
 export const notasAbertas = new Set();   // tarefas com a lista de notas aberta
-export function fecharTudo() { abertos.clear(); descricoesAbertas.clear(); notasAbertas.clear(); }
+export function fecharTudo() { abertos.clear(); descricoesAbertas.clear(); notasAbertas.clear(); seccoesAbertas.clear(); }
 
 const saudacao = () => { const h = new Date().getHours(); return h < 6 ? 'Boa noite' : h < 13 ? 'Bom dia' : h < 20 ? 'Boa tarde' : 'Boa noite'; };
 const novo = (tipo, id) => (E.novos.has(chave(tipo, id)) ? '<span class="chip novo">Novo</span>' : '');
@@ -305,25 +305,65 @@ function linhaNota(n) {
 const tamanho = (b) => (b >= 1e6 ? `${(b / 1e6).toLocaleString('pt-PT', { maximumFractionDigits: 1 })} MB` : `${Math.max(1, Math.round(b / 1e3))} kB`);
 const extensao = (nome) => (String(nome).split('.').pop() || '').toUpperCase().slice(0, 4);
 function linhaDoc(d) {
-  const titulo = d.titulo.includes(' · ') ? d.titulo.split(' · ').slice(1).join(' · ') : d.titulo;
+  const titulo = d.titulo.includes(' · ') && !d.seccao_id ? d.titulo.split(' · ').slice(1).join(' · ') : d.titulo;
   return `<li class="doc" id="doc-${d.id}">
     <span class="doc-tipo" aria-hidden="true">${esc(extensao(d.nome_ficheiro))}</span>
     <div class="doc-corpo"><p class="doc-titulo">${esc(titulo)} ${novo('documento', d.id)}</p>
       <p class="doc-meta">${esc(d.nome_ficheiro)} · ${tamanho(d.tamanho)} · ${dia(d.criado_em)} · ${esc(d.criado_por_nome || 'Equipa')}</p>
       ${d.descricao ? `<p class="doc-desc">${esc(d.descricao)}</p>` : ''}</div>
     <div class="doc-acoes"><button class="btn pequeno" type="button" data-acao="abrir-doc" data-id="${d.id}">${ic('abrir', 'ic-sm')}Abrir</button>
-      ${E.eu.editar ? `<button class="icone-botao" type="button" data-acao="apagar-doc" data-id="${d.id}" aria-label="Apagar ${esc(titulo)}" title="Apagar">${ic('apagar', 'ic-sm')}</button>` : ''}</div>
+      ${E.eu.editar ? `<button class="icone-botao" type="button" data-acao="mover-doc" data-id="${d.id}" aria-label="Mudar de secção: ${esc(titulo)}" title="Mudar de secção">${ic('pasta', 'ic-sm')}</button>
+      <button class="icone-botao" type="button" data-acao="apagar-doc" data-id="${d.id}" aria-label="Apagar ${esc(titulo)}" title="Apagar">${ic('apagar', 'ic-sm')}</button>` : ''}</div>
   </li>`;
+}
+// secções e pastas (migração 0024; o utilizador, 2026-11-11: criar uma secção, pôr lá os ficheiros que quiser, e
+// também pastas inteiras). Tudo fechado ao abrir a aba; o que se abriu fica aberto enquanto se trabalha nela.
+export const seccoesAbertas = new Set();   // "sec:<id>" e "sec:<id>/<pasta>/<subpasta>"
+function arvorePastas(docs) {
+  const raiz = { ficheiros: [], pastas: new Map() };
+  for (const d of docs) {
+    let no = raiz;
+    for (const parte of String(d.pasta || '').split('/').filter(Boolean)) {
+      if (!no.pastas.has(parte)) no.pastas.set(parte, { ficheiros: [], pastas: new Map() });
+      no = no.pastas.get(parte);
+    }
+    no.ficheiros.push(d);
+  }
+  return raiz;
+}
+const contarArvore = (no) => no.ficheiros.length + [...no.pastas.values()].reduce((s, x) => s + contarArvore(x), 0);
+function htmlArvore(no, base) {
+  const pastas = [...no.pastas].sort((a, b) => a[0].localeCompare(b[0], 'pt')).map(([nome, sub]) => {
+    const k = `${base}/${nome}`;
+    return `<details class="doc-pasta" data-aberto="${esc(k)}"${seccoesAbertas.has(k) ? ' open' : ''}>
+      <summary>${ic('pasta', 'ic-sm')}<span>${esc(nome)}</span> <span class="fraco num">${contarArvore(sub)}</span></summary>${htmlArvore(sub, k)}</details>`;
+  }).join('');
+  return pastas + (no.ficheiros.length ? `<ul class="docs-lista">${no.ficheiros.map(linhaDoc).join('')}</ul>` : '');
+}
+function htmlSeccao(s, docs) {
+  const k = `sec:${s.id}`;
+  const acoes = E.eu.editar ? `<div class="sec-acoes">
+      <button class="btn pequeno" type="button" data-acao="sec-ficheiros" data-seccao="${s.id}">${ic('mais', 'ic-sm')}Ficheiros</button>
+      <button class="btn pequeno" type="button" data-acao="sec-pasta" data-seccao="${s.id}">${ic('pasta', 'ic-sm')}Pasta</button>
+      <button class="icone-botao" type="button" data-acao="sec-renomear" data-seccao="${s.id}" aria-label="Mudar o nome da secção ${esc(s.nome)}" title="Mudar o nome">${ic('editar', 'ic-sm')}</button>
+      <button class="icone-botao" type="button" data-acao="sec-apagar" data-seccao="${s.id}" aria-label="Apagar a secção ${esc(s.nome)}" title="Apagar a secção">${ic('apagar', 'ic-sm')}</button>
+      <span class="fraco mini">ou arrasta ficheiros e pastas para aqui</span></div>` : '';
+  return `<details class="doc-grupo" data-seccao="${s.id}" data-aberto="${k}"${seccoesAbertas.has(k) ? ' open' : ''}>
+    <summary>${esc(s.nome)} <span class="fraco num">${docs.length}</span></summary>
+    ${acoes}
+    ${docs.length ? htmlArvore(arvorePastas(docs), k) : '<p class="vazio pequeno">Secção vazia.</p>'}
+  </details>`;
 }
 function grupoDocs(tipo, titulo, explica, p) {
   const docs = documentosDe(p.id, tipo);
-  const grupos = new Map();   // "Torres Vedras · …" agrupa por obra / origem
-  for (const d of docs) { const g = d.titulo.includes(' · ') ? d.titulo.split(' · ')[0] : ''; if (!grupos.has(g)) grupos.set(g, []); grupos.get(g).push(d); }
-  const corpo = !docs.length ? `<p class="vazio pequeno">Ainda sem documentos ${tipo === 'informativo' ? 'informativos' : 'adicionais'}.</p>`
-    : [...grupos].map(([g, lista]) => g
-      ? `<details class="doc-grupo"${lista.length <= 4 ? ' open' : ''}><summary>${esc(g)} <span class="fraco num">${lista.length}</span></summary><ul class="docs-lista">${lista.map(linhaDoc).join('')}</ul></details>`
-      : `<ul class="docs-lista">${lista.map(linhaDoc).join('')}</ul>`).join('');
-  return `<div class="docs-tipo"><div class="docs-tipo-cabeca"><h3>${titulo} <span class="fraco num">${docs.length}</span></h3><p class="fraco mini">${explica}</p></div>${corpo}</div>`;
+  const secs = seccoesDe(p.id, tipo);
+  const ids = new Set(secs.map((s) => s.id));
+  const soltos = docs.filter((d) => !ids.has(d.seccao_id));
+  const corpo = !docs.length && !secs.length ? `<p class="vazio pequeno">Ainda sem documentos ${tipo === 'informativo' ? 'informativos' : 'adicionais'}.</p>`
+    : secs.map((s) => htmlSeccao(s, docs.filter((d) => d.seccao_id === s.id))).join('')
+      + (soltos.length ? htmlArvore(arvorePastas(soltos), `solto:${p.id}:${tipo}`) : '');
+  const novaSec = E.eu.editar ? `<button class="btn pequeno texto" type="button" data-acao="nova-seccao" data-projeto="${p.id}" data-tipo-doc="${tipo}">${ic('mais', 'ic-sm')}Nova secção</button>` : '';
+  return `<div class="docs-tipo" data-tipo-docs="${tipo}" data-projeto="${p.id}"><div class="docs-tipo-cabeca"><div class="linha-cabeca"><h3>${titulo} <span class="fraco num">${docs.length}</span></h3>${novaSec}</div><p class="fraco mini">${explica}</p></div>${corpo}</div>`;
 }
 function documentos(p) {
   return `<section class="seccao" id="documentos" aria-labelledby="t-docs">
@@ -333,6 +373,7 @@ function documentos(p) {
       ${grupoDocs('informativo', 'Documentos informativos', 'O que o projeto é: especificações, planos, decisões escritas.', p)}
       ${grupoDocs('adicional', 'Documentos adicionais', 'Conhecimento extra para o projeto: desenhos de obras, fichas, fotografias.', p)}
     </div>
+    ${E.eu.editar ? '<input type="file" multiple hidden data-entrada="ficheiros" aria-hidden="true" tabindex="-1"><input type="file" multiple webkitdirectory hidden data-entrada="pasta" aria-hidden="true" tabindex="-1">' : ''}
   </section>`;
 }
 // ---------------------------------------------------------------- Step Inside: teste do AR no telemóvel

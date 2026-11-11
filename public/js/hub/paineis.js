@@ -1,5 +1,5 @@
 // Painéis e diálogos: notificações, menu do perfil, sugestões (gaveta), decisões, acrescentar/editar checkpoints e tarefas.
-import { E, projeto, nomeProjeto, checkpointsDe, naoLidas, anexosDe, ehPorVer, propria } from './dados.js';
+import { E, projeto, nomeProjeto, checkpointsDe, naoLidas, anexosDe, ehPorVer, propria, seccoesDe } from './dados.js';
 import { img } from './imagens.js';
 import { ic, esc, dia, ha, iniciais, abrirDialogo } from './util.js';
 
@@ -299,13 +299,47 @@ export function dlgDocumento(projetoId, tipo) {
       </div>
       <input type="hidden" name="tipo" value="informativo">
       <p class="fraco mini" data-explica>Informativo: o que o projeto é (especificações, planos). Adicional: conhecimento extra (desenhos de obras, fichas, fotografias).</p>
-      <label class="campo-grupo"><span>Ficheiros</span><input class="campo" type="file" name="ficheiros" multiple required></label>
+      ${opcoesSeccao(projetoId)}
+      <label class="campo-grupo"><span>Ficheiros</span><input class="campo" type="file" name="ficheiros" multiple></label>
+      <label class="campo-grupo"><span>Ou uma pasta inteira <small>(com as subpastas)</small></span><input class="campo" type="file" name="pasta" multiple webkitdirectory></label>
       <ul class="ficheiros-escolhidos" data-escolhidos></ul>
       <label class="campo-grupo"><span>Título <small>(se for um só ficheiro; vazio = o nome do ficheiro)</small></span><input class="campo" name="titulo" maxlength="200"></label>
       <label class="campo-grupo"><span>Descrição <small>(opcional)</small></span><textarea class="campo" name="descricao" maxlength="2000" style="min-height:64px"></textarea></label>
       <p class="erro-msg pequeno" role="alert"></p>
     </div>
     <div class="dlg-rodape"><button class="btn texto" type="button" data-acao="fechar-dlg">Cancelar</button><button class="btn primario" type="submit">Carregar</button></div>
+  </form>`;
+}
+// secção do documento: as secções dos dois tipos (escolher uma secção escolhe também o tipo), ou só as de um tipo
+function opcoesSeccao(projetoId, atual = null, soTipo = null) {
+  const grupo = (tipo, rotulo) => {
+    const ss = soTipo && soTipo !== tipo ? [] : seccoesDe(projetoId, tipo);
+    return ss.length ? `<optgroup label="${rotulo}">${ss.map((s) => `<option value="${s.id}" data-tipo="${tipo}"${s.id === atual ? ' selected' : ''}>${esc(s.nome)}</option>`).join('')}</optgroup>` : '';
+  };
+  return `<label class="campo-grupo"><span>Secção</span><select class="campo" name="seccao">
+    <option value="">Sem secção</option>${grupo('informativo', 'Informativos')}${grupo('adicional', 'Adicionais')}</select></label>`;
+}
+// criar uma secção, ou mudar-lhe o nome
+export function dlgSeccao(projetoId, tipo, s = null) {
+  return `<form data-form="seccao" data-projeto="${projetoId}" data-tipo-doc="${tipo}"${s ? ` data-seccao="${s.id}"` : ''}>${cabeca(s ? 'Mudar o nome da secção' : 'Nova secção',
+    esc(nomeProjeto(projetoId)) + ' · documentos ' + (tipo === 'informativo' ? 'informativos' : 'adicionais'))}
+    <div class="dlg-corpo">
+      <label class="campo-grupo"><span>Nome</span><input class="campo" name="nome" maxlength="120" required value="${s ? esc(s.nome) : ''}" placeholder="ex.: Torres Vedras, Desenhos de execução"></label>
+      ${s ? '' : '<p class="fraco mini">Depois de criada, acrescenta-lhe ficheiros ou uma pasta inteira (ou arrasta-os para a secção).</p>'}
+      <p class="erro-msg pequeno" role="alert"></p>
+    </div>
+    <div class="dlg-rodape"><button class="btn texto" type="button" data-acao="fechar-dlg">Cancelar</button><button class="btn primario" type="submit">${s ? 'Guardar' : 'Criar secção'}</button></div>
+  </form>`;
+}
+// mudar um documento de secção
+export function dlgMover(d) {
+  return `<form data-form="mover-doc" data-id="${d.id}">${cabeca('Mudar de secção', esc(d.titulo))}
+    <div class="dlg-corpo">
+      ${opcoesSeccao(d.projeto, d.seccao_id, d.tipo)}
+      <p class="fraco mini">As secções dos documentos ${d.tipo === 'informativo' ? 'informativos' : 'adicionais'}.</p>
+      <p class="erro-msg pequeno" role="alert"></p>
+    </div>
+    <div class="dlg-rodape"><button class="btn texto" type="button" data-acao="fechar-dlg">Cancelar</button><button class="btn primario" type="submit">Mudar</button></div>
   </form>`;
 }
 export { abrirDialogo, projeto };

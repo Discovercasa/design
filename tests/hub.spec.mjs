@@ -471,7 +471,7 @@ test('projeto: o ponto de situação das fases fica fechado num acordeão', asyn
   await expect(sit.locator('.sit')).toBeHidden();
   await sit.locator('summary').click();
   await expect(sit.locator('.sit-grupo h4')).toHaveText(['Feito', 'Agora', 'Falta ou à espera']);
-  await expect(sit.locator('.sit-grupo.feito li').last()).toContainText('Fase 7');
+  await expect(sit.locator('.sit-grupo.feito li', { hasText: 'Fase 7' })).toHaveCount(1);
 });
 
 // Materiais vindos do Hub (migração 0016, 2026-11-10): só de consulta, o Hub envia-os nos dias úteis às 6h

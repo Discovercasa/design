@@ -15,7 +15,7 @@
     perfis: [{ id: OUTRO.id, nome: OUTRO.nome, criado_em: '2026-11-01T00:00:00Z', notificacoes_vistas_em: '2026-11-01T00:00:00Z' }, ...(fe.perfis || [])],
     marcacoes: fe.marcacoes || [], atividade: fe.atividade || [], criticas: fe.criticas || [], registo: fe.registo || [],
     checkpoints: fx.checkpoints || [], tarefas: fx.tarefas || [], decisoes: fx.decisoes || [], decisoes_opcoes: fx.decisoes_opcoes || [],
-    documentos: fx.documentos || [], notificacoes: [], vistos: [],
+    documentos: fx.documentos || [], documentos_seccoes: fx.documentos_seccoes || [], notificacoes: [], vistos: [],
     tarefas_notas: fx.tarefas_notas || [], anexos: [], notificacoes_lidas: [],
     obras: fs.obras || [], obras_fases: fs.obras_fases || [], posts: fs.posts || [], posts_media: fs.posts_media || [], posts_comentarios: fs.posts_comentarios || [],
     sugestoes: [{ id: 1, texto: 'Pôr um modo escuro no hub.', ferramenta: 'geral', estado: 'nova', autor_id: OUTRO.id, autor_nome: OUTRO.nome, criada_em: '2026-11-04T09:00:00Z', na_checklist: false, checklist_em: null }],
@@ -97,8 +97,22 @@
       }
     },
   };
-  depois.documentos = (n, o) => { if (!o) notificar(n.projeto, 'documento_novo', `${nomeAtual()} acrescentou o documento «${n.titulo}» (${n.tipo})`, 'documento', n.id); };
-  antes.documentos = (n, o) => { if (!o) Object.assign(n, { criado_por: ator.id, criado_por_nome: nomeAtual(), criado_em: agora(), descricao: n.descricao ?? '' }); };
+  depois.documentos = (n, o) => { if (!o && !n.lote) notificar(n.projeto, 'documento_novo', `${nomeAtual()} acrescentou o documento «${n.titulo}» (${n.tipo})`, 'documento', n.id); };
+  antes.documentos = (n, o) => {
+    if (n.seccao_id != null && !db.documentos_seccoes.some((s) => s.id === n.seccao_id && s.projeto === n.projeto && s.tipo === n.tipo)) throw new Error('A secção não é deste projeto e tipo de documento.');
+    if (n.pasta && (/^\/|\/$|\.\./.test(n.pasta) || n.pasta.length > 500)) throw new Error('new row for relation "documentos" violates check constraint "documentos_pasta_check"');
+    if (!o) Object.assign(n, { criado_por: ator.id, criado_por_nome: nomeAtual(), criado_em: agora(), descricao: n.descricao ?? '', pasta: n.pasta ?? '', lote: n.lote ?? null, seccao_id: n.seccao_id ?? null });
+  };
+  // secções dos documentos (migração 0024): nome único por projeto e tipo; apagar deixa os documentos sem secção
+  antes.documentos_seccoes = (n, o) => {
+    if (ator.nivel && ator.nivel !== 'editar') throw new Error('new row violates row-level security policy for table "documentos_seccoes"');
+    n.nome = String(n.nome || '').trim();
+    if (!n.nome) throw new Error('new row for relation "documentos_seccoes" violates check constraint');
+    if (db.documentos_seccoes.some((s) => s !== o && s.id !== (o && o.id) && s.projeto === (o ? o.projeto : n.projeto) && s.tipo === (o ? o.tipo : n.tipo) && s.nome === n.nome))
+      throw new Error('duplicate key value violates unique constraint "documentos_seccoes_projeto_tipo_nome_key"');
+    if (!o) Object.assign(n, { criado_por: ator.id, criado_por_nome: nomeAtual(), criado_em: agora(), ordem: n.ordem ?? 0 });
+    else Object.assign(n, { projeto: o.projeto, tipo: o.tipo, criado_por: o.criado_por, criado_por_nome: o.criado_por_nome, criado_em: o.criado_em });
+  };
   // redes sociais (migração 0009): carimbos, aprovação e notificações
   const carimbo = (n) => Object.assign(n, { criado_por: ator.id, criado_por_nome: nomeAtual(), criado_em: agora() });
   antes.obras = (n, o) => { if (!o) { carimbo(n); n.descricao ??= ''; n.ativa ??= true; n.ordem ??= 0; } };
@@ -289,6 +303,7 @@
             semAnexos('tarefa', fora.map((t) => t.id)); semAnexos('nota', ns);
           }
           if (this.t === 'tarefas_notas') semAnexos('nota', fora.map((x) => x.id));
+          if (this.t === 'documentos_seccoes') db.documentos.forEach((d) => { if (fora.some((s) => s.id === d.seccao_id)) d.seccao_id = null; });
           if (this.t === 'decisoes') db.decisoes_opcoes = db.decisoes_opcoes.filter((o) => !fora.some((d) => d.id === o.decisao_id));
           if (this.t === 'posts') { db.posts_media = db.posts_media.filter((m) => !fora.some((p) => p.id === m.post_id)); db.posts_comentarios = db.posts_comentarios.filter((c) => !fora.some((p) => p.id === c.post_id)); }
           if (this.t === 'posts_media') { fora.forEach((m) => desaprovarFotos(m.post_id)); db.posts_comentarios.forEach((c) => { if (fora.some((m) => m.id === c.media_id)) c.media_id = null; }); }
@@ -368,6 +383,13 @@
           return { data: null, error: null };
         }
         // migração 0022: ponto de situação, pedidos e aprovação
+        if (fn === 'documentos_lote_feito') {
+          const ds = db.documentos.filter((x) => x.lote === a.p_lote).sort((x, y) => x.id - y.id);
+          if (!ds.length) return { data: null, error: null };
+          const d = ds[0], s = db.documentos_seccoes.find((x) => x.id === d.seccao_id);
+          notificar(d.projeto, 'documento_novo', `${nomeAtual()} acrescentou ${ds.length} ${ds.length === 1 ? 'documento' : 'documentos'}${s ? ` à secção «${s.nome}»` : ''}${d.pasta ? ` (pasta «${d.pasta.split('/')[0]}»)` : ''}`, 'documento', d.id);
+          return { data: null, error: null };
+        }
         if (fn === 'dar_situacao') {
           const x = refDe(a.p_alvo, a.p_ref);
           if (!x) return { data: null, error: { message: 'Não existe.' } };

@@ -57,6 +57,11 @@ Projeto Design da Discovercasa (`design.discovercasa.pt`). Responder em portugu�
   de dados** (sem sessão: autor 'Claude'): no Log com o pormenor (`registo.detalhe`), na conversa da tarefa
   (`atividade`) e marca pessoas (`marcacoes`); lê as respostas na `atividade`. O chat geral (0018–0020) saiu.
   Comentários do Claude nas sugestões: `sugestoes_comentarios` com `autor_id` null (migração 0019).
+- **Documentos: secções e pastas** (2026-11-11, migração 0024): `documentos_seccoes` (por projeto e tipo, criadas por quem
+  edita, existem vazias); cada documento tem `seccao_id` e `pasta` (o caminho da pasta de onde veio, só para mostrar; o
+  ficheiro fica em `<projeto>/<tipo>/<nome>`); uma pasta carregada de uma vez tem um `lote` e uma só linha no Log
+  (`documentos_lote_feito`). O Claude lê a estrutura pela base de dados; o conteúdo dos ficheiros está no armazenamento
+  privado e só se lê descarregando-o.
 - **Página de um projeto** (2026-11-11): abas Workflow, Documentos e (Step Inside) Teste do AR; pipeline e «sobre»
   dentro do Workflow; tudo fechado sempre que se abre; descrição das tarefas em acordeão; o ponto de situação do
   projeto é por tópicos no JSON (`situacao`: dia, feito, agora, falta) — atualizá-lo a cada entrega.

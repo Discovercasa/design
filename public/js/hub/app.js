@@ -658,6 +658,32 @@ document.addEventListener('click', async (e) => {
       catch (err) { if (janela) janela.close(); aviso('Não foi possível abrir o documento: ' + esc(err.message || err), { icone: 'atencao' }); }
       return;
     }
+    case 'nova-seccao': return abrirDialogo(dlg, P.dlgSeccao(el.dataset.projeto, el.dataset.tipoDoc), { estreito: true });
+    case 'sec-renomear': {
+      const s = E.seccoes.find((x) => x.id === Number(el.dataset.seccao));
+      return s && abrirDialogo(dlg, P.dlgSeccao(s.projeto, s.tipo, s), { estreito: true });
+    }
+    case 'sec-apagar': {
+      const s = E.seccoes.find((x) => x.id === Number(el.dataset.seccao));
+      if (!s) return;
+      const n = E.documentos.filter((d) => d.seccao_id === s.id).length;
+      if (n) return aviso(`Para apagar a secção «${esc(s.nome)}», muda de secção ou apaga primeiro os seus ${n} ${n === 1 ? 'documento' : 'documentos'}.`, { icone: 'atencao' });
+      if (!confirm(`Apagar a secção «${s.nome}»?`)) return;
+      if (await tentar(() => D.apagarSeccao(s.id))) depois();
+      return;
+    }
+    case 'sec-ficheiros': case 'sec-pasta': {
+      const s = E.seccoes.find((x) => x.id === Number(el.dataset.seccao));
+      if (!s) return;
+      alvoCarga = { projeto: s.projeto, tipo: s.tipo, seccao: s.id };
+      const entrada = $(`#documentos input[data-entrada="${el.dataset.acao === 'sec-pasta' ? 'pasta' : 'ficheiros'}"]`);
+      if (entrada) entrada.click();
+      return;
+    }
+    case 'mover-doc': {
+      const d = E.documentos.find((x) => x.id === id);
+      return d && abrirDialogo(dlg, P.dlgMover(d), { estreito: true });
+    }
     case 'apagar-doc': {
       const d = E.documentos.find((x) => x.id === id);
       if (!confirm(`Apagar o documento «${d.titulo}»? O ficheiro deixa de estar disponível para a equipa.`)) return;
@@ -823,9 +849,19 @@ document.addEventListener('change', async (e) => {
     case 'estado-cp': if (await tentar(() => D.mudarCheckpoint(id, { estado: el.value }))) depois(); return;
     case 'projeto-novo': { const f = el.closest('form'); f.elements.checkpoint.innerHTML = P.opcoesCheckpoints(el.value); f.elements.posicao.innerHTML = P.opcoesPosicao(el.value); return; }
     case undefined:
-      if (el.name === 'ficheiros') {
-        const lista = el.closest('form').querySelector('[data-escolhidos]');
-        lista.innerHTML = [...el.files].map((x) => `<li>${esc(x.name)} · ${(x.size / 1e6).toLocaleString('pt-PT', { maximumFractionDigits: 1 })} MB</li>`).join('');
+      if ((el.name === 'ficheiros' || el.name === 'pasta') && el.closest('form')) {
+        const f = el.closest('form'), lista = f.querySelector('[data-escolhidos]');
+        const fs = [...(f.elements.ficheiros ? f.elements.ficheiros.files : [])];
+        const ps = [...(f.elements.pasta ? f.elements.pasta.files : [])].filter((x) => !IGNORAR.test(x.name));
+        const raiz = ps.length ? (ps[0].webkitRelativePath || '').split('/')[0] : '';
+        lista.innerHTML = fs.map((x) => `<li>${esc(x.name)} · ${(x.size / 1e6).toLocaleString('pt-PT', { maximumFractionDigits: 1 })} MB</li>`).join('')
+          + (ps.length ? `<li>${ic('pasta', 'ic-sm')}Pasta «${esc(raiz)}»: ${ps.length} ${ps.length === 1 ? 'ficheiro' : 'ficheiros'}</li>` : '');
+      }
+      if (el.dataset.entrada) {   // the hidden inputs of a section's «Ficheiros» / «Pasta» buttons
+        const itens = [...el.files].map((x) => ({ ficheiro: x, pasta: el.dataset.entrada === 'pasta' ? pastaDe(x.webkitRelativePath) : '' }));
+        el.value = '';
+        if (alvoCarga && itens.length) await carregarVarios(alvoCarga.projeto, alvoCarga.tipo, alvoCarga.seccao, itens);
+        return;
       }
       if (el.name === 'anexos-ficheiros') { await enviarAnexos(el.dataset.alvo, Number(el.dataset.ref), el.files); el.value = ''; }
       if (el.name === 'imagens-nota') { juntarImagensNota(Number(el.dataset.tarefa), el.files); el.value = ''; }
@@ -912,7 +948,35 @@ document.addEventListener('submit', async (e) => {
         if (ok) { fecharDialogo(dlg); depois(); }
         return;
       }
+      case 'seccao': {
+        const s = f.dataset.seccao ? Number(f.dataset.seccao) : null;
+        let nova = null;
+        ok = await tentar(async () => { if (s) await D.renomearSeccao(s, v('nome')); else nova = await D.criarSeccao(f.dataset.projeto, f.dataset.tipoDoc, v('nome')); }, f);
+        if (ok) {
+          fecharDialogo(dlg);
+          if (nova) { V.seccoesAbertas.add(`sec:${nova.id}`); aviso(`Secção «${esc(nova.nome)}» criada. Acrescenta-lhe ficheiros ou uma pasta.`, { icone: 'certo', duracao: 4 }); }
+          depois();
+        }
+        return;
+      }
+      case 'mover-doc': {
+        const sel = f.elements.seccao.value ? Number(f.elements.seccao.value) : null;
+        ok = await tentar(() => D.moverDocumento(Number(f.dataset.id), sel), f);
+        if (ok) { fecharDialogo(dlg); if (sel) V.seccoesAbertas.add(`sec:${sel}`); depois(); }
+        return;
+      }
       case 'documento': {
+        if (f.elements.pasta || f.elements.seccao) {   // informative / additional documents: files and folders, into a section
+          const fs = [...f.elements.ficheiros.files].map((x) => ({ ficheiro: x, pasta: '' }));
+          const ps = [...(f.elements.pasta ? f.elements.pasta.files : [])].map((x) => ({ ficheiro: x, pasta: pastaDe(x.webkitRelativePath) }));
+          if (!fs.length && !ps.length) { $('.erro-msg', f).textContent = 'Escolhe ficheiros ou uma pasta.'; return; }
+          const opt = f.elements.seccao && f.elements.seccao.selectedOptions[0];
+          const seccao = opt && opt.value ? Number(opt.value) : null;
+          const tipo = (opt && opt.dataset.tipo) || v('tipo');
+          fecharDialogo(dlg);
+          await carregarVarios(f.dataset.projeto, tipo, seccao, [...fs, ...ps], { titulo: v('titulo'), descricao: v('descricao') });
+          return;
+        }
         const ficheiros = [...f.elements.ficheiros.files];
         if (!ficheiros.length) return;
         const grandes = ficheiros.filter((x) => x.size > 50 * 1024 * 1024);
@@ -1010,6 +1074,106 @@ document.addEventListener('drop', (e) => {
   if (zona.matches('form')) juntarImagensNota(Number(zona.dataset.tarefa), e.dataTransfer.files);
   else enviarAnexos(zona.dataset.alvo, Number(zona.dataset.ref), e.dataTransfer.files);
 });
+
+// ---------------------------------------------------------------- documentos: secções, ficheiros e pastas (migração 0024)
+// O utilizador (2026-11-11): criar uma secção nos documentos informativos ou adicionais, pôr lá os ficheiros que quiser
+// e também pastas inteiras (com as subpastas). Quem edita: botões da secção, o diálogo «Documento», ou arrastar.
+const IGNORAR = /^(\.|~\$)|^(thumbs\.db|desktop\.ini)$/i;   // hidden and system files of a folder
+let alvoCarga = null;   // the section a «Ficheiros» / «Pasta» button is loading into
+function pastaDe(relativo) {   // "Obra/Desenhos/planta.pdf" -> "Obra/Desenhos"
+  return String(relativo || '').split('/').slice(0, -1).filter((x) => x && x !== '.' && x !== '..').join('/').slice(0, 500);
+}
+function novoLote() {
+  return (crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 10)).toLowerCase();
+}
+// many files (a folder) into a section: three at a time, progress in a notice, one Log line for the batch
+async function carregarVarios(projeto, tipo, seccao, itens, { titulo = '', descricao = '' } = {}) {
+  itens = itens.filter((x) => !IGNORAR.test(x.ficheiro.name));
+  const grandes = itens.filter((x) => x.ficheiro.size > 50 * 1024 * 1024);
+  const bons = itens.filter((x) => x.ficheiro.size <= 50 * 1024 * 1024);
+  if (!bons.length) {
+    if (grandes.length) aviso(`Demasiado grande (máximo 50 MB): ${grandes.map((x) => esc(x.ficheiro.name)).join(', ')}`, { icone: 'atencao' });
+    return;
+  }
+  const lote = bons.length > 1 ? novoLote() : null;
+  const so = bons.length === 1;
+  const prog = aviso(`<span data-prog>A carregar 0 de ${bons.length}…</span>`, { icone: 'info', duracao: 0 });
+  const falhas = [];
+  let i = 0, feitos = 0;
+  const um = async () => {
+    while (i < bons.length) {
+      const x = bons[i++];
+      try { await D.carregarDocumento(projeto, tipo, x.ficheiro, so ? titulo : '', so ? descricao : '', { seccao_id: seccao, pasta: x.pasta, lote }); }
+      catch (e) { falhas.push(`${x.ficheiro.name}: ${e.message || e}`); }
+      feitos++;
+      const s = prog.querySelector('[data-prog]');
+      if (s) s.textContent = `A carregar ${feitos} de ${bons.length}…`;
+    }
+  };
+  await Promise.all([um(), um(), um()]);
+  prog.remove();
+  if (lote && feitos > falhas.length) { try { await D.loteFeito(lote); } catch (_) { /* the Log line is not essential */ } }
+  try { await D.carregarTudo(); } catch (_) { /* the redraw shows what is there */ }
+  if (seccao) {
+    V.seccoesAbertas.add(`sec:${seccao}`);
+    for (const x of bons) {   // the folders just loaded open too
+      let k = `sec:${seccao}`;
+      for (const parte of x.pasta.split('/').filter(Boolean)) { k += `/${parte}`; V.seccoesAbertas.add(k); }
+    }
+  }
+  depois();
+  const n = bons.length - falhas.length;
+  if (n) aviso(`${n === 1 ? 'Documento carregado' : `${n} documentos carregados`}${seccao ? ` na secção «${esc((E.seccoes.find((s) => s.id === seccao) || {}).nome || '')}»` : ''}.`, { icone: 'certo', duracao: 4 });
+  if (falhas.length || grandes.length) {
+    aviso(`<b>Não foram carregados:</b><br>${[...grandes.map((x) => `${esc(x.ficheiro.name)}: maior do que 50 MB`), ...falhas.map(esc)].slice(0, 8).join('<br>')}`, { icone: 'atencao', duracao: 15 });
+  }
+}
+// files and whole folders dragged onto a section (or onto the documents of a type: no section)
+async function itensArrastados(dt) {
+  const entradas = [...(dt.items || [])].map((it) => (it.kind === 'file' && it.webkitGetAsEntry ? it.webkitGetAsEntry() : null)).filter(Boolean);
+  if (!entradas.length) return [...dt.files].map((f) => ({ ficheiro: f, pasta: '' }));
+  const out = [];
+  const ler = (dir) => new Promise((res) => {
+    const r = dir.createReader(), todas = [];
+    const mais = () => r.readEntries((es) => { if (!es.length) return res(todas); todas.push(...es); mais(); }, () => res(todas));
+    mais();
+  });
+  async function andar(e, caminho) {
+    if (e.isFile) {
+      try { out.push({ ficheiro: await new Promise((res, rej) => e.file(res, rej)), pasta: caminho }); } catch (_) { /* unreadable: skipped */ }
+    } else if (e.isDirectory) {
+      const dentro = caminho ? `${caminho}/${e.name}` : e.name;
+      for (const c of await ler(e)) await andar(c, dentro);
+    }
+  }
+  for (const e of entradas) await andar(e, '');
+  return out;
+}
+const zonaDocs = (e) => E.eu.editar && e.target.closest && e.target.closest('#documentos details[data-seccao], #documentos .docs-tipo[data-tipo-docs]');
+document.addEventListener('dragover', (e) => {
+  const z = zonaDocs(e);
+  if (!z || ![...(e.dataTransfer.types || [])].includes('Files')) return;
+  e.preventDefault();
+  $$('#documentos .sobre').forEach((x) => x !== z && x.classList.remove('sobre'));
+  z.classList.add('sobre');
+});
+document.addEventListener('dragleave', (e) => { const z = zonaDocs(e); if (z && !z.contains(e.relatedTarget)) z.classList.remove('sobre'); });
+document.addEventListener('drop', async (e) => {
+  const z = zonaDocs(e);
+  if (!z || !e.dataTransfer.files.length) return;
+  e.preventDefault();
+  z.classList.remove('sobre');
+  const itens = await itensArrastados(e.dataTransfer);
+  const caixa = z.closest('.docs-tipo');
+  const s = z.matches('details[data-seccao]') ? E.seccoes.find((x) => x.id === Number(z.dataset.seccao)) : null;
+  await carregarVarios(caixa.dataset.projeto, s ? s.tipo : caixa.dataset.tipoDocs, s ? s.id : null, itens);
+});
+// sections and folders stay open while one works in the tab
+document.addEventListener('toggle', (e) => {
+  const d = e.target;
+  if (!d.matches || !d.matches('#documentos details[data-aberto]')) return;
+  if (d.open) V.seccoesAbertas.add(d.dataset.aberto); else V.seccoesAbertas.delete(d.dataset.aberto);
+}, true);
 
 // ---------------------------------------------------------------- instalar como app
 if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js').catch(() => {});

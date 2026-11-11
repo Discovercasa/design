@@ -554,6 +554,18 @@ dialog.gaveta::backdrop { background: oklch(0.2 0.01 85 / 0.25); }
 .doc-grupo { display: grid; gap: 8px; }
 .doc-grupo summary { cursor: pointer; font-size: 0.9375rem; font-weight: 500; padding: 4px 0; }
 .doc-grupo[open] summary { margin-bottom: 8px; }
+/* secções e pastas (migração 0024) */
+.docs-tipo-cabeca .linha-cabeca { display: flex; align-items: center; gap: 8px; width: 100%; justify-content: space-between; }
+.doc-grupo[data-seccao] { border: 1px solid var(--linha); border-radius: var(--r2); padding: 8px 12px; background: var(--canvas); transition: border-color 0.15s, background 0.15s; }
+.doc-grupo[data-seccao][open] { padding-bottom: 12px; }
+.doc-grupo[data-seccao].sobre, .docs-tipo.sobre { border-color: var(--acao); background: var(--acao-suave); outline: 2px dashed var(--acao); outline-offset: 2px; }
+.sec-acoes { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-bottom: 4px; }
+.sec-acoes .mini { margin-left: 4px; }
+.doc-pasta { display: grid; gap: 6px; margin-left: 4px; padding-left: 12px; border-left: 2px solid var(--linha); }
+.doc-pasta > summary { cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 0.875rem; font-weight: 500; padding: 4px 0; }
+.doc-pasta > summary .ic-sm { color: var(--tinta-3); }
+.doc-pasta[open] > summary { margin-bottom: 2px; }
+.docs-tipo > .doc-pasta, .docs-tipo > .docs-lista { margin-top: 4px; }
 .ficheiros-escolhidos { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; font-size: 0.875rem; color: var(--tinta-2); }
 @media (max-width: 560px) {
   .doc { grid-template-columns: 36px minmax(0, 1fr); }

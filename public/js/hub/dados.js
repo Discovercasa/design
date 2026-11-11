@@ -11,7 +11,7 @@ export const E = {
   eu: { id: null, nome: '', editar: false },
   perfil: null,            // a minha linha em perfis
   projetos: [],            // JSON de cada projeto
-  checkpoints: [], tarefas: [], decisoes: [], perfis: [], notificacoes: [], documentos: [],
+  checkpoints: [], tarefas: [], decisoes: [], perfis: [], notificacoes: [], documentos: [], seccoes: [],   // secções dos documentos (migração 0024)
   obras: [], fases: [], posts: [], media: [], comentarios: [], socialErro: null,   // redes sociais
   notas: [], anexos: [],  // notas de teste/revisão e imagens anexadas (migração 0011)
   marcacoes: [], criticas: [], registo: [],   // trabalho em equipa (migração 0022): pessoas marcadas, críticas, o Log
@@ -57,12 +57,13 @@ export async function carregarTudo() {
     sb().from('perfis').select('id, nome'),
     sb().from('vistos').select('tipo, ref_id'),
   ]);
-  const [docs, notas, anexos, marcacoes, criticas] = await Promise.all([
+  const [docs, notas, anexos, marcacoes, criticas, seccoes] = await Promise.all([
     sb().from('documentos').select('*').order('criado_em'),   // à parte: sem esta tabela o resto continua
     sb().from('tarefas_notas').select('*').order('criado_em'), // idem (migração 0011)
     sb().from('anexos').select('*').order('ordem'),
     sb().from('marcacoes').select('*').order('criada_em'),     // idem (migração 0022)
     sb().from('criticas').select('*').order('criada_em', { ascending: false }),
+    sb().from('documentos_seccoes').select('*').order('ordem'),   // idem (migração 0024)
     carregarSocial(),                                          // idem (migração 0009)
   ]);
   const falha = r.find((x) => x.error);
@@ -75,6 +76,7 @@ export async function carregarTudo() {
   E.anexos = anexos.error ? [] : anexos.data;
   E.marcacoes = marcacoes.error ? [] : marcacoes.data;
   E.criticas = criticas.error ? [] : criticas.data;
+  E.seccoes = seccoes.error ? [] : seccoes.data;
   E.erro = null;
 }
 
@@ -201,15 +203,46 @@ export const documentosDe = (id, tipo) => E.documentos.filter((d) => d.projeto =
 const chaveFicheiro = (nome) => nome.normalize('NFKD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9._-]+/g, '-').replace(/-{2,}/g, '-').replace(/^[-.]+|[-.]+$/g, '') || 'ficheiro';
 const MIMES = { pdf: 'application/pdf', md: 'text/plain; charset=utf-8', txt: 'text/plain; charset=utf-8', csv: 'text/csv', png: 'image/png', jpg: 'image/jpeg', jpeg: 'image/jpeg', webp: 'image/webp',
   usdz: 'model/vnd.usdz+zip', glb: 'model/gltf-binary' };   // AR: the phone's viewer needs the right type
-export async function carregarDocumento(projetoId, tipo, ficheiro, titulo, descricao) {
+export async function carregarDocumento(projetoId, tipo, ficheiro, titulo, descricao, { seccao_id = null, pasta = '', lote = null } = {}) {
   const ext = (ficheiro.name.split('.').pop() || '').toLowerCase();
   const mime = MIMES[ext] || ficheiro.type || 'application/octet-stream';
   const caminho = `${projetoId}/${tipo}/${Date.now().toString(36)}__${chaveFicheiro(ficheiro.name)}`;
   const up = await sb().storage.from('documentos').upload(caminho, ficheiro, { contentType: mime, upsert: false });
   if (up.error) throw up.error;
   const { error } = await sb().from('documentos').insert({ projeto: projetoId, tipo, titulo: titulo || ficheiro.name, descricao: descricao || '',
-    caminho, nome_ficheiro: ficheiro.name, tamanho: ficheiro.size, mime });
+    caminho, nome_ficheiro: ficheiro.name, tamanho: ficheiro.size, mime, seccao_id, pasta, lote });
   if (error) { await sb().storage.from('documentos').remove([caminho]); throw error; }
+}
+// secções (migração 0024): criadas por quem edita, existem vazias; um documento tem uma secção (ou nenhuma) e a pasta
+// de onde veio quando se carregou uma pasta inteira
+export const seccoesDe = (id, tipo) => E.seccoes.filter((s) => s.projeto === id && s.tipo === tipo)
+  .sort((a, b) => a.ordem - b.ordem || a.id - b.id);
+export async function criarSeccao(projetoId, tipo, nome) {
+  const ordem = Math.max(0, ...seccoesDe(projetoId, tipo).map((s) => s.ordem)) + 1;
+  const { data, error } = await sb().from('documentos_seccoes').insert({ projeto: projetoId, tipo, nome: nome.trim(), ordem }).select().single();
+  if (error) throw (/duplicate|unique/i.test(error.message || '') ? new Error(`Já existe uma secção «${nome.trim()}».`) : error);
+  await carregarTudo();
+  return data;
+}
+export async function renomearSeccao(id, nome) {
+  const { error } = await sb().from('documentos_seccoes').update({ nome: nome.trim() }).eq('id', id);
+  if (error) throw (/duplicate|unique/i.test(error.message || '') ? new Error(`Já existe uma secção «${nome.trim()}».`) : error);
+  await carregarTudo();
+}
+export async function apagarSeccao(id) {
+  const { error } = await sb().from('documentos_seccoes').delete().eq('id', id);
+  if (error) throw error;
+  await carregarTudo();
+}
+export async function moverDocumento(id, seccaoId) {
+  const { error } = await sb().from('documentos').update({ seccao_id: seccaoId || null, pasta: '' }).eq('id', id);
+  if (error) throw error;
+  await carregarTudo();
+}
+// um só registo no Log para os ficheiros carregados de uma vez (uma pasta)
+export async function loteFeito(lote) {
+  const { error } = await sb().rpc('documentos_lote_feito', { p_lote: lote });
+  if (error) throw error;
 }
 export async function urlDocumento(doc) {
   const descarregar = !/^(application\/pdf|text\/|image\/|model\/)/.test(doc.mime || '');
@@ -234,7 +267,7 @@ export async function apagarDocumento(doc) {
 export function ouvirMudancas(aoMudar) {
   const canal = sb().channel('hub-mudancas');
   for (const t of ['checkpoints', 'tarefas', 'decisoes', 'decisoes_opcoes', 'documentos', 'notificacoes', 'obras', 'obras_fases', 'posts', 'posts_media', 'posts_comentarios', 'tarefas_notas', 'anexos', 'notificacoes_lidas',
-    'marcacoes', 'criticas', 'atividade', 'registo'])
+    'marcacoes', 'criticas', 'atividade', 'registo', 'documentos_seccoes'])
     canal.on('postgres_changes', { event: '*', schema: 'public', table: t }, () => aoMudar(t));
   canal.subscribe();
   return canal;

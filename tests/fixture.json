@@ -3854,7 +3854,10 @@
    "mime": "text/plain; charset=utf-8",
    "criado_por": null,
    "criado_por_nome": "Equipa",
-   "criado_em": "2026-11-05T12:00:00Z"
+   "criado_em": "2026-11-05T12:00:00Z",
+   "pasta": "",
+   "lote": null,
+   "seccao_id": null
   },
   {
    "id": 2,
@@ -3868,7 +3871,10 @@
    "mime": "application/pdf",
    "criado_por": null,
    "criado_por_nome": "Equipa",
-   "criado_em": "2026-11-05T12:00:00Z"
+   "criado_em": "2026-11-05T12:00:00Z",
+   "pasta": "",
+   "lote": null,
+   "seccao_id": null
   },
   {
    "id": 3,
@@ -3882,7 +3888,10 @@
    "mime": "text/plain; charset=utf-8",
    "criado_por": null,
    "criado_por_nome": "Equipa",
-   "criado_em": "2026-11-05T12:00:00Z"
+   "criado_em": "2026-11-05T12:00:00Z",
+   "pasta": "",
+   "lote": null,
+   "seccao_id": null
   },
   {
    "id": 4,
@@ -3896,13 +3905,16 @@
    "mime": "application/pdf",
    "criado_por": null,
    "criado_por_nome": "Equipa",
-   "criado_em": "2026-11-05T12:00:00Z"
+   "criado_em": "2026-11-05T12:00:00Z",
+   "pasta": "",
+   "lote": null,
+   "seccao_id": null
   },
   {
    "id": 5,
    "projeto": "builder",
    "tipo": "adicional",
-   "titulo": "Torres Vedras · 20241024.PL LA muros-F05.1 MUROS (DWFX)",
+   "titulo": "20241024.PL LA muros-F05.1 MUROS (DWFX)",
    "descricao": "Casa já construída: onde se aprende o método e se compara com os materiais realmente gastos.",
    "caminho": "builder/adicional/torres-vedras__20241024.pl_la_muros-f05.1_muros.dwfx",
    "nome_ficheiro": "20241024.PL_LA_muros-F05.1_MUROS.dwfx",
@@ -3910,13 +3922,16 @@
    "mime": "model/vnd.dwfx+xps",
    "criado_por": null,
    "criado_por_nome": "Equipa",
-   "criado_em": "2026-11-05T12:00:00Z"
+   "criado_em": "2026-11-05T12:00:00Z",
+   "pasta": "",
+   "lote": null,
+   "seccao_id": 1
   },
   {
    "id": 6,
    "projeto": "builder",
    "tipo": "adicional",
-   "titulo": "Torres Vedras · 20241024.PL LA muros-F05.1 MUROS (DWG)",
+   "titulo": "20241024.PL LA muros-F05.1 MUROS (DWG)",
    "descricao": "Casa já construída: onde se aprende o método e se compara com os materiais realmente gastos.",
    "caminho": "builder/adicional/torres-vedras__20241024.pl_la_muros-f05.1_muros.dwg",
    "nome_ficheiro": "20241024.PL_LA_muros-F05.1_MUROS.dwg",
@@ -3924,13 +3939,16 @@
    "mime": "image/vnd.dwg",
    "criado_por": null,
    "criado_por_nome": "Equipa",
-   "criado_em": "2026-11-05T12:00:00Z"
+   "criado_em": "2026-11-05T12:00:00Z",
+   "pasta": "",
+   "lote": null,
+   "seccao_id": 1
   },
   {
    "id": 7,
    "projeto": "builder",
    "tipo": "adicional",
-   "titulo": "Torres Vedras · 20241024.PL LA muros-F05.1 MUROS (PDF)",
+   "titulo": "20241024.PL LA muros-F05.1 MUROS (PDF)",
    "descricao": "Casa já construída: onde se aprende o método e se compara com os materiais realmente gastos.",
    "caminho": "builder/adicional/torres-vedras__20241024.pl_la_muros-f05.1_muros.pdf",
    "nome_ficheiro": "20241024.PL_LA_muros-F05.1_MUROS.pdf",
@@ -3938,13 +3956,16 @@
    "mime": "application/pdf",
    "criado_por": null,
    "criado_por_nome": "Equipa",
-   "criado_em": "2026-11-05T12:00:00Z"
+   "criado_em": "2026-11-05T12:00:00Z",
+   "pasta": "",
+   "lote": null,
+   "seccao_id": 1
   },
   {
    "id": 8,
    "projeto": "builder",
    "tipo": "adicional",
-   "titulo": "Torres Vedras · 250828 D2503 Cobertura (DWFX)",
+   "titulo": "250828 D2503 Cobertura (DWFX)",
    "descricao": "Casa já construída: onde se aprende o método e se compara com os materiais realmente gastos.",
    "caminho": "builder/adicional/torres-vedras__250828_d2503_cobertura.dwfx",
    "nome_ficheiro": "250828_D2503_Cobertura.dwfx",
@@ -3952,13 +3973,16 @@
    "mime": "model/vnd.dwfx+xps",
    "criado_por": null,
    "criado_por_nome": "Equipa",
-   "criado_em": "2026-11-05T12:00:00Z"
+   "criado_em": "2026-11-05T12:00:00Z",
+   "pasta": "",
+   "lote": null,
+   "seccao_id": 1
   },
   {
    "id": 9,
    "projeto": "builder",
    "tipo": "adicional",
-   "titulo": "Torres Vedras · 250828 D2503 Modulos (DWFX)",
+   "titulo": "250828 D2503 Modulos (DWFX)",
    "descricao": "Casa já construída: onde se aprende o método e se compara com os materiais realmente gastos.",
    "caminho": "builder/adicional/torres-vedras__250828_d2503_modulos.dwfx",
    "nome_ficheiro": "250828_D2503_Modulos.dwfx",
@@ -3966,13 +3990,16 @@
    "mime": "model/vnd.dwfx+xps",
    "criado_por": null,
    "criado_por_nome": "Equipa",
-   "criado_em": "2026-11-05T12:00:00Z"
+   "criado_em": "2026-11-05T12:00:00Z",
+   "pasta": "",
+   "lote": null,
+   "seccao_id": 1
   },
   {
    "id": 10,
    "projeto": "builder",
    "tipo": "adicional",
-   "titulo": "Torres Vedras · Levantamento topográfico F00.0 (DWFX)",
+   "titulo": "Levantamento topográfico F00.0 (DWFX)",
    "descricao": "Casa já construída: onde se aprende o método e se compara com os materiais realmente gastos.",
    "caminho": "builder/adicional/torres-vedras__levantamento-topografico-f00.0.dwfx",
    "nome_ficheiro": "Levantamento topográfico F00.0.dwfx",
@@ -3980,13 +4007,16 @@
    "mime": "model/vnd.dwfx+xps",
    "criado_por": null,
    "criado_por_nome": "Equipa",
-   "criado_em": "2026-11-05T12:00:00Z"
+   "criado_em": "2026-11-05T12:00:00Z",
+   "pasta": "",
+   "lote": null,
+   "seccao_id": 1
   },
   {
    "id": 11,
    "projeto": "builder",
    "tipo": "adicional",
-   "titulo": "Torres Vedras · Levantamento topográfico F00.0 (DWG)",
+   "titulo": "Levantamento topográfico F00.0 (DWG)",
    "descricao": "Casa já construída: onde se aprende o método e se compara com os materiais realmente gastos.",
    "caminho": "builder/adicional/torres-vedras__levantamento-topografico-f00.0.dwg",
    "nome_ficheiro": "Levantamento topográfico F00.0.dwg",
@@ -3994,13 +4024,16 @@
    "mime": "image/vnd.dwg",
    "criado_por": null,
    "criado_por_nome": "Equipa",
-   "criado_em": "2026-11-05T12:00:00Z"
+   "criado_em": "2026-11-05T12:00:00Z",
+   "pasta": "",
+   "lote": null,
+   "seccao_id": 1
   },
   {
    "id": 12,
    "projeto": "builder",
    "tipo": "adicional",
-   "titulo": "Torres Vedras · Levantamento topográfico F00.0 (PDF)",
+   "titulo": "Levantamento topográfico F00.0 (PDF)",
    "descricao": "Casa já construída: onde se aprende o método e se compara com os materiais realmente gastos.",
    "caminho": "builder/adicional/torres-vedras__levantamento-topografico-f00.0.pdf",
    "nome_ficheiro": "Levantamento topográfico F00.0.pdf",
@@ -4008,13 +4041,16 @@
    "mime": "application/pdf",
    "criado_por": null,
    "criado_por_nome": "Equipa",
-   "criado_em": "2026-11-05T12:00:00Z"
+   "criado_em": "2026-11-05T12:00:00Z",
+   "pasta": "",
+   "lote": null,
+   "seccao_id": 1
   },
   {
    "id": 13,
    "projeto": "builder",
    "tipo": "adicional",
-   "titulo": "Torres Vedras · Planta de implantação F01,1 (DWFX)",
+   "titulo": "Planta de implantação F01,1 (DWFX)",
    "descricao": "Casa já construída: onde se aprende o método e se compara com os materiais realmente gastos.",
    "caminho": "builder/adicional/torres-vedras__planta-de-implantacao-f01-1.dwfx",
    "nome_ficheiro": "Planta de implantação F01,1.dwfx",
@@ -4022,13 +4058,16 @@
    "mime": "model/vnd.dwfx+xps",
    "criado_por": null,
    "criado_por_nome": "Equipa",
-   "criado_em": "2026-11-05T12:00:00Z"
+   "criado_em": "2026-11-05T12:00:00Z",
+   "pasta": "",
+   "lote": null,
+   "seccao_id": 1
   },
   {
    "id": 14,
    "projeto": "builder",
    "tipo": "adicional",
-   "titulo": "Torres Vedras · Planta de implantação F01,1 (DWG)",
+   "titulo": "Planta de implantação F01,1 (DWG)",
    "descricao": "Casa já construída: onde se aprende o método e se compara com os materiais realmente gastos.",
    "caminho": "builder/adicional/torres-vedras__planta-de-implantacao-f01-1.dwg",
    "nome_ficheiro": "Planta de implantação F01,1.dwg",
@@ -4036,13 +4075,16 @@
    "mime": "image/vnd.dwg",
    "criado_por": null,
    "criado_por_nome": "Equipa",
-   "criado_em": "2026-11-05T12:00:00Z"
+   "criado_em": "2026-11-05T12:00:00Z",
+   "pasta": "",
+   "lote": null,
+   "seccao_id": 1
   },
   {
    "id": 15,
    "projeto": "builder",
    "tipo": "adicional",
-   "titulo": "Torres Vedras · Planta de implantação F01,1 (PDF)",
+   "titulo": "Planta de implantação F01,1 (PDF)",
    "descricao": "Casa já construída: onde se aprende o método e se compara com os materiais realmente gastos.",
    "caminho": "builder/adicional/torres-vedras__planta-de-implantacao-f01-1.pdf",
    "nome_ficheiro": "Planta de implantação F01,1.pdf",
@@ -4050,13 +4092,16 @@
    "mime": "application/pdf",
    "criado_por": null,
    "criado_por_nome": "Equipa",
-   "criado_em": "2026-11-05T12:00:00Z"
+   "criado_em": "2026-11-05T12:00:00Z",
+   "pasta": "",
+   "lote": null,
+   "seccao_id": 1
   },
   {
    "id": 16,
    "projeto": "builder",
    "tipo": "adicional",
-   "titulo": "Torres Vedras · planta localização (PDF)",
+   "titulo": "planta localização (PDF)",
    "descricao": "Casa já construída: onde se aprende o método e se compara com os materiais realmente gastos.",
    "caminho": "builder/adicional/torres-vedras__planta-localizacao.pdf",
    "nome_ficheiro": "planta localização.pdf",
@@ -4064,13 +4109,16 @@
    "mime": "application/pdf",
    "criado_por": null,
    "criado_por_nome": "Equipa",
-   "criado_em": "2026-11-05T12:00:00Z"
+   "criado_em": "2026-11-05T12:00:00Z",
+   "pasta": "",
+   "lote": null,
+   "seccao_id": 1
   },
   {
    "id": 17,
    "projeto": "builder",
    "tipo": "adicional",
-   "titulo": "Torres Vedras · projeto de arquitetura geral F01.2 F01.3 F02.1 F03.1 (DWFX)",
+   "titulo": "projeto de arquitetura geral F01.2 F01.3 F02.1 F03.1 (DWFX)",
    "descricao": "Casa já construída: onde se aprende o método e se compara com os materiais realmente gastos.",
    "caminho": "builder/adicional/torres-vedras__projeto-de-arquitetura_geral-f01.2_f01.3_f02.1_f03.1.dwfx",
    "nome_ficheiro": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
@@ -4078,13 +4126,16 @@
    "mime": "model/vnd.dwfx+xps",
    "criado_por": null,
    "criado_por_nome": "Equipa",
-   "criado_em": "2026-11-05T12:00:00Z"
+   "criado_em": "2026-11-05T12:00:00Z",
+   "pasta": "",
+   "lote": null,
+   "seccao_id": 1
   },
   {
    "id": 18,
    "projeto": "builder",
    "tipo": "adicional",
-   "titulo": "Torres Vedras · projeto de arquitetura geral F01.2 F01.3 F02.1 F03.1 (DWG)",
+   "titulo": "projeto de arquitetura geral F01.2 F01.3 F02.1 F03.1 (DWG)",
    "descricao": "Casa já construída: onde se aprende o método e se compara com os materiais realmente gastos.",
    "caminho": "builder/adicional/torres-vedras__projeto-de-arquitetura_geral-f01.2_f01.3_f02.1_f03.1.dwg",
    "nome_ficheiro": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwg",
@@ -4092,13 +4143,16 @@
    "mime": "image/vnd.dwg",
    "criado_por": null,
    "criado_por_nome": "Equipa",
-   "criado_em": "2026-11-05T12:00:00Z"
+   "criado_em": "2026-11-05T12:00:00Z",
+   "pasta": "",
+   "lote": null,
+   "seccao_id": 1
   },
   {
    "id": 19,
    "projeto": "builder",
    "tipo": "adicional",
-   "titulo": "Torres Vedras · projeto de arquitetura geral F01.2 F01.3 F02.1 F03.1 (PDF)",
+   "titulo": "projeto de arquitetura geral F01.2 F01.3 F02.1 F03.1 (PDF)",
    "descricao": "Casa já construída: onde se aprende o método e se compara com os materiais realmente gastos.",
    "caminho": "builder/adicional/torres-vedras__projeto-de-arquitetura_geral-f01.2_f01.3_f02.1_f03.1.pdf",
    "nome_ficheiro": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.pdf",
@@ -4106,13 +4160,16 @@
    "mime": "application/pdf",
    "criado_por": null,
    "criado_por_nome": "Equipa",
-   "criado_em": "2026-11-05T12:00:00Z"
+   "criado_em": "2026-11-05T12:00:00Z",
+   "pasta": "",
+   "lote": null,
+   "seccao_id": 1
   },
   {
    "id": 20,
    "projeto": "builder",
    "tipo": "adicional",
-   "titulo": "Sobral · PD Estabilidade Armazém (DWFX)",
+   "titulo": "PD Estabilidade Armazém (DWFX)",
    "descricao": "Loteamento Sobral (16 casas e armazém): desenhos de projeto.",
    "caminho": "builder/adicional/sobral__pd_estabilidade-armazem.dwfx",
    "nome_ficheiro": "PD_Estabilidade Armazém.dwfx",
@@ -4120,13 +4177,16 @@
    "mime": "model/vnd.dwfx+xps",
    "criado_por": null,
    "criado_por_nome": "Equipa",
-   "criado_em": "2026-11-05T12:00:00Z"
+   "criado_em": "2026-11-05T12:00:00Z",
+   "pasta": "",
+   "lote": null,
+   "seccao_id": 2
   },
   {
    "id": 21,
    "projeto": "builder",
    "tipo": "adicional",
-   "titulo": "Sobral · PD Habitacoes A B C D E K L M N O P (1) (DWFX)",
+   "titulo": "PD Habitacoes A B C D E K L M N O P (1) (DWFX)",
    "descricao": "Loteamento Sobral (16 casas e armazém): desenhos de projeto.",
    "caminho": "builder/adicional/sobral__pd_habitacoes-a-b-c-d-e-k-l-m-n-o-p-1-.dwfx",
    "nome_ficheiro": "PD_Habitacoes A B C D E K L M N O P (1).dwfx",
@@ -4134,13 +4194,16 @@
    "mime": "model/vnd.dwfx+xps",
    "criado_por": null,
    "criado_por_nome": "Equipa",
-   "criado_em": "2026-11-05T12:00:00Z"
+   "criado_em": "2026-11-05T12:00:00Z",
+   "pasta": "",
+   "lote": null,
+   "seccao_id": 2
   },
   {
    "id": 22,
    "projeto": "builder",
    "tipo": "adicional",
-   "titulo": "Sobral · PD Habitacoes F G H I J (DWFX)",
+   "titulo": "PD Habitacoes F G H I J (DWFX)",
    "descricao": "Loteamento Sobral (16 casas e armazém): desenhos de projeto.",
    "caminho": "builder/adicional/sobral__pd_habitacoes-f-g-h-i-j.dwfx",
    "nome_ficheiro": "PD_Habitacoes F G H I J.dwfx",
@@ -4148,13 +4211,16 @@
    "mime": "model/vnd.dwfx+xps",
    "criado_por": null,
    "criado_por_nome": "Equipa",
-   "criado_em": "2026-11-05T12:00:00Z"
+   "criado_em": "2026-11-05T12:00:00Z",
+   "pasta": "",
+   "lote": null,
+   "seccao_id": 2
   },
   {
    "id": 23,
    "projeto": "builder",
    "tipo": "adicional",
-   "titulo": "Sobral · SMA 012 arquitectura pecas desenhadas (DWFX)",
+   "titulo": "SMA 012 arquitectura pecas desenhadas (DWFX)",
    "descricao": "Loteamento Sobral (16 casas e armazém): desenhos de projeto.",
    "caminho": "builder/adicional/sobral__sma_012_arquitectura_pecas_desenhadas.dwfx",
    "nome_ficheiro": "SMA_012_arquitectura_pecas_desenhadas.dwfx",
@@ -4162,13 +4228,16 @@
    "mime": "model/vnd.dwfx+xps",
    "criado_por": null,
    "criado_por_nome": "Equipa",
-   "criado_em": "2026-11-05T12:00:00Z"
+   "criado_em": "2026-11-05T12:00:00Z",
+   "pasta": "",
+   "lote": null,
+   "seccao_id": 2
   },
   {
    "id": 24,
    "projeto": "builder",
    "tipo": "adicional",
-   "titulo": "Método · estrutura-exemplo-casa-cl modulos piso1 exteriores",
+   "titulo": "estrutura-exemplo-casa-cl modulos piso1 exteriores",
    "descricao": "Fonte do sistema construtivo Discovercasa (rascunhos da empresa, fichas de produtos, fotografias de obra).",
    "caminho": "builder/adicional/metodo__modulos_piso1_exteriores.pdf",
    "nome_ficheiro": "modulos_piso1_exteriores.pdf",
@@ -4176,13 +4245,16 @@
    "mime": "application/pdf",
    "criado_por": null,
    "criado_por_nome": "Equipa",
-   "criado_em": "2026-11-05T12:00:00Z"
+   "criado_em": "2026-11-05T12:00:00Z",
+   "pasta": "",
+   "lote": null,
+   "seccao_id": 3
   },
   {
    "id": 25,
    "projeto": "builder",
    "tipo": "adicional",
-   "titulo": "Método · estrutura-exemplo-casa-cl modulos piso1 interiores v2",
+   "titulo": "estrutura-exemplo-casa-cl modulos piso1 interiores v2",
    "descricao": "Fonte do sistema construtivo Discovercasa (rascunhos da empresa, fichas de produtos, fotografias de obra).",
    "caminho": "builder/adicional/metodo__modulos_piso1_interiores_v2.pdf",
    "nome_ficheiro": "modulos_piso1_interiores_v2.pdf",
@@ -4190,13 +4262,16 @@
    "mime": "application/pdf",
    "criado_por": null,
    "criado_por_nome": "Equipa",
-   "criado_em": "2026-11-05T12:00:00Z"
+   "criado_em": "2026-11-05T12:00:00Z",
+   "pasta": "",
+   "lote": null,
+   "seccao_id": 3
   },
   {
    "id": 26,
    "projeto": "builder",
    "tipo": "adicional",
-   "titulo": "Método · estrutura-exemplo-casa-cl modulos piso2 exteriores",
+   "titulo": "estrutura-exemplo-casa-cl modulos piso2 exteriores",
    "descricao": "Fonte do sistema construtivo Discovercasa (rascunhos da empresa, fichas de produtos, fotografias de obra).",
    "caminho": "builder/adicional/metodo__modulos_piso2_exteriores.pdf",
    "nome_ficheiro": "modulos_piso2_exteriores.pdf",
@@ -4204,13 +4279,16 @@
    "mime": "application/pdf",
    "criado_por": null,
    "criado_por_nome": "Equipa",
-   "criado_em": "2026-11-05T12:00:00Z"
+   "criado_em": "2026-11-05T12:00:00Z",
+   "pasta": "",
+   "lote": null,
+   "seccao_id": 3
   },
   {
    "id": 27,
    "projeto": "builder",
    "tipo": "adicional",
-   "titulo": "Método · estrutura-exemplo-casa-cl modulos piso2 interiores",
+   "titulo": "estrutura-exemplo-casa-cl modulos piso2 interiores",
    "descricao": "Fonte do sistema construtivo Discovercasa (rascunhos da empresa, fichas de produtos, fotografias de obra).",
    "caminho": "builder/adicional/metodo__modulos_piso2_interiores.pdf",
    "nome_ficheiro": "modulos_piso2_interiores.pdf",
@@ -4218,13 +4296,16 @@
    "mime": "application/pdf",
    "criado_por": null,
    "criado_por_nome": "Equipa",
-   "criado_em": "2026-11-05T12:00:00Z"
+   "criado_em": "2026-11-05T12:00:00Z",
+   "pasta": "",
+   "lote": null,
+   "seccao_id": 3
   },
   {
    "id": 28,
    "projeto": "builder",
    "tipo": "adicional",
-   "titulo": "Método · execucao-tecnica-obra 2026-09-24",
+   "titulo": "execucao-tecnica-obra 2026-09-24",
    "descricao": "Fonte do sistema construtivo Discovercasa (rascunhos da empresa, fichas de produtos, fotografias de obra).",
    "caminho": "builder/adicional/metodo__execucao-tecnica-obra_2026-09-24.md",
    "nome_ficheiro": "execucao-tecnica-obra_2026-09-24.md",
@@ -4232,13 +4313,16 @@
    "mime": "text/plain; charset=utf-8",
    "criado_por": null,
    "criado_por_nome": "Equipa",
-   "criado_em": "2026-11-05T12:00:00Z"
+   "criado_em": "2026-11-05T12:00:00Z",
+   "pasta": "",
+   "lote": null,
+   "seccao_id": 3
   },
   {
    "id": 29,
    "projeto": "builder",
    "tipo": "adicional",
-   "titulo": "Método · execucao-tecnica-obra 2026-09-24 fundacao",
+   "titulo": "execucao-tecnica-obra 2026-09-24 fundacao",
    "descricao": "Fonte do sistema construtivo Discovercasa (rascunhos da empresa, fichas de produtos, fotografias de obra).",
    "caminho": "builder/adicional/metodo__execucao-tecnica-obra_2026-09-24_fundacao.png",
    "nome_ficheiro": "execucao-tecnica-obra_2026-09-24_fundacao.png",
@@ -4246,13 +4330,16 @@
    "mime": "image/png",
    "criado_por": null,
    "criado_por_nome": "Equipa",
-   "criado_em": "2026-11-05T12:00:00Z"
+   "criado_em": "2026-11-05T12:00:00Z",
+   "pasta": "",
+   "lote": null,
+   "seccao_id": 3
   },
   {
    "id": 30,
    "projeto": "builder",
    "tipo": "adicional",
-   "titulo": "Método · ficha MC 1000-5 PUR PIR",
+   "titulo": "ficha MC 1000-5 PUR PIR",
    "descricao": "Fonte do sistema construtivo Discovercasa (rascunhos da empresa, fichas de produtos, fotografias de obra).",
    "caminho": "builder/adicional/metodo__ficha_mc_1000-5_pur_pir.pdf",
    "nome_ficheiro": "ficha_MC_1000-5_PUR_PIR.pdf",
@@ -4260,13 +4347,16 @@
    "mime": "application/pdf",
    "criado_por": null,
    "criado_por_nome": "Equipa",
-   "criado_em": "2026-11-05T12:00:00Z"
+   "criado_em": "2026-11-05T12:00:00Z",
+   "pasta": "",
+   "lote": null,
+   "seccao_id": 3
   },
   {
    "id": 31,
    "projeto": "builder",
    "tipo": "adicional",
-   "titulo": "Método · fotos-teto-cobertura 1 viga amarracao topo paredes",
+   "titulo": "fotos-teto-cobertura 1 viga amarracao topo paredes",
    "descricao": "Fonte do sistema construtivo Discovercasa (rascunhos da empresa, fichas de produtos, fotografias de obra).",
    "caminho": "builder/adicional/metodo__1_viga_amarracao_topo_paredes.webp",
    "nome_ficheiro": "1_viga_amarracao_topo_paredes.webp",
@@ -4274,13 +4364,16 @@
    "mime": "image/webp",
    "criado_por": null,
    "criado_por_nome": "Equipa",
-   "criado_em": "2026-11-05T12:00:00Z"
+   "criado_em": "2026-11-05T12:00:00Z",
+   "pasta": "",
+   "lote": null,
+   "seccao_id": 3
   },
   {
    "id": 32,
    "projeto": "builder",
    "tipo": "adicional",
-   "titulo": "Método · fotos-teto-cobertura 1b pecas 7,5x3,5 nos vaos azul",
+   "titulo": "fotos-teto-cobertura 1b pecas 7,5x3,5 nos vaos azul",
    "descricao": "Fonte do sistema construtivo Discovercasa (rascunhos da empresa, fichas de produtos, fotografias de obra).",
    "caminho": "builder/adicional/metodo__1b_pecas_7-5x3-5_nos_vaos_azul.webp",
    "nome_ficheiro": "1b_pecas_7,5x3,5_nos_vaos_azul.webp",
@@ -4288,13 +4381,16 @@
    "mime": "image/webp",
    "criado_por": null,
    "criado_por_nome": "Equipa",
-   "criado_em": "2026-11-05T12:00:00Z"
+   "criado_em": "2026-11-05T12:00:00Z",
+   "pasta": "",
+   "lote": null,
+   "seccao_id": 3
   },
   {
    "id": 33,
    "projeto": "builder",
    "tipo": "adicional",
-   "titulo": "Método · fotos-teto-cobertura 2 teto falso calhas perfis cantoneira",
+   "titulo": "fotos-teto-cobertura 2 teto falso calhas perfis cantoneira",
    "descricao": "Fonte do sistema construtivo Discovercasa (rascunhos da empresa, fichas de produtos, fotografias de obra).",
    "caminho": "builder/adicional/metodo__2_teto_falso_calhas_perfis_cantoneira.webp",
    "nome_ficheiro": "2_teto_falso_calhas_perfis_cantoneira.webp",
@@ -4302,13 +4398,16 @@
    "mime": "image/webp",
    "criado_por": null,
    "criado_por_nome": "Equipa",
-   "criado_em": "2026-11-05T12:00:00Z"
+   "criado_em": "2026-11-05T12:00:00Z",
+   "pasta": "",
+   "lote": null,
+   "seccao_id": 3
   },
   {
    "id": 34,
    "projeto": "builder",
    "tipo": "adicional",
-   "titulo": "Método · fotos-teto-cobertura 3 vigas teto prumos vigas cobertura",
+   "titulo": "fotos-teto-cobertura 3 vigas teto prumos vigas cobertura",
    "descricao": "Fonte do sistema construtivo Discovercasa (rascunhos da empresa, fichas de produtos, fotografias de obra).",
    "caminho": "builder/adicional/metodo__3_vigas_teto_prumos_vigas_cobertura.webp",
    "nome_ficheiro": "3_vigas_teto_prumos_vigas_cobertura.webp",
@@ -4316,13 +4415,16 @@
    "mime": "image/webp",
    "criado_por": null,
    "criado_por_nome": "Equipa",
-   "criado_em": "2026-11-05T12:00:00Z"
+   "criado_em": "2026-11-05T12:00:00Z",
+   "pasta": "",
+   "lote": null,
+   "seccao_id": 3
   },
   {
    "id": 35,
    "projeto": "builder",
    "tipo": "adicional",
-   "titulo": "Método · fotos-teto-cobertura 4 vigas teto prumos vigas cobertura b",
+   "titulo": "fotos-teto-cobertura 4 vigas teto prumos vigas cobertura b",
    "descricao": "Fonte do sistema construtivo Discovercasa (rascunhos da empresa, fichas de produtos, fotografias de obra).",
    "caminho": "builder/adicional/metodo__4_vigas_teto_prumos_vigas_cobertura_b.webp",
    "nome_ficheiro": "4_vigas_teto_prumos_vigas_cobertura_b.webp",
@@ -4330,13 +4432,16 @@
    "mime": "image/webp",
    "criado_por": null,
    "criado_por_nome": "Equipa",
-   "criado_em": "2026-11-05T12:00:00Z"
+   "criado_em": "2026-11-05T12:00:00Z",
+   "pasta": "",
+   "lote": null,
+   "seccao_id": 3
   },
   {
    "id": 36,
    "projeto": "builder",
    "tipo": "adicional",
-   "titulo": "Método · produtos-teto 1 cantoneira perfurada cantos",
+   "titulo": "produtos-teto 1 cantoneira perfurada cantos",
    "descricao": "Fonte do sistema construtivo Discovercasa (rascunhos da empresa, fichas de produtos, fotografias de obra).",
    "caminho": "builder/adicional/metodo__1_cantoneira_perfurada_cantos.png",
    "nome_ficheiro": "1_cantoneira_perfurada_cantos.png",
@@ -4344,13 +4449,16 @@
    "mime": "image/png",
    "criado_por": null,
    "criado_por_nome": "Equipa",
-   "criado_em": "2026-11-05T12:00:00Z"
+   "criado_em": "2026-11-05T12:00:00Z",
+   "pasta": "",
+   "lote": null,
+   "seccao_id": 3
   },
   {
    "id": 37,
    "projeto": "builder",
    "tipo": "adicional",
-   "titulo": "Método · produtos-teto 2 regua suspensao teto falso",
+   "titulo": "produtos-teto 2 regua suspensao teto falso",
    "descricao": "Fonte do sistema construtivo Discovercasa (rascunhos da empresa, fichas de produtos, fotografias de obra).",
    "caminho": "builder/adicional/metodo__2_regua_suspensao_teto_falso.png",
    "nome_ficheiro": "2_regua_suspensao_teto_falso.png",
@@ -4358,13 +4466,16 @@
    "mime": "image/png",
    "criado_por": null,
    "criado_por_nome": "Equipa",
-   "criado_em": "2026-11-05T12:00:00Z"
+   "criado_em": "2026-11-05T12:00:00Z",
+   "pasta": "",
+   "lote": null,
+   "seccao_id": 3
   },
   {
    "id": 38,
    "projeto": "builder",
    "tipo": "adicional",
-   "titulo": "Método · produtos-teto 3 cantoneira 30x30 perimetro leroy merlin",
+   "titulo": "produtos-teto 3 cantoneira 30x30 perimetro leroy merlin",
    "descricao": "Fonte do sistema construtivo Discovercasa (rascunhos da empresa, fichas de produtos, fotografias de obra).",
    "caminho": "builder/adicional/metodo__3_cantoneira_30x30_perimetro_leroy_merlin.png",
    "nome_ficheiro": "3_cantoneira_30x30_perimetro_leroy_merlin.png",
@@ -4372,13 +4483,16 @@
    "mime": "image/png",
    "criado_por": null,
    "criado_por_nome": "Equipa",
-   "criado_em": "2026-11-05T12:00:00Z"
+   "criado_em": "2026-11-05T12:00:00Z",
+   "pasta": "",
+   "lote": null,
+   "seccao_id": 3
   },
   {
    "id": 39,
    "projeto": "builder",
    "tipo": "adicional",
-   "titulo": "Método · vigamento-base 3 Vigamento",
+   "titulo": "vigamento-base 3 Vigamento",
    "descricao": "Fonte do sistema construtivo Discovercasa (rascunhos da empresa, fichas de produtos, fotografias de obra).",
    "caminho": "builder/adicional/metodo__3_vigamento.pdf",
    "nome_ficheiro": "3_Vigamento.pdf",
@@ -4386,13 +4500,16 @@
    "mime": "application/pdf",
    "criado_por": null,
    "criado_por_nome": "Equipa",
-   "criado_em": "2026-11-05T12:00:00Z"
+   "criado_em": "2026-11-05T12:00:00Z",
+   "pasta": "",
+   "lote": null,
+   "seccao_id": 3
   },
   {
    "id": 40,
    "projeto": "gerador",
    "tipo": "adicional",
-   "titulo": "Torres Vedras · planta de arquitetura (DWFX)",
+   "titulo": "planta de arquitetura (DWFX)",
    "descricao": "A planta com que o Gerador foi desenvolvido e testado.",
    "caminho": "gerador/adicional/torres-vedras__projeto-de-arquitetura_geral-f01.2_f01.3_f02.1_f03.1.dwfx",
    "nome_ficheiro": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.dwfx",
@@ -4400,13 +4517,16 @@
    "mime": "model/vnd.dwfx+xps",
    "criado_por": null,
    "criado_por_nome": "Equipa",
-   "criado_em": "2026-11-05T12:00:00Z"
+   "criado_em": "2026-11-05T12:00:00Z",
+   "pasta": "",
+   "lote": null,
+   "seccao_id": 4
   },
   {
    "id": 41,
    "projeto": "gerador",
    "tipo": "adicional",
-   "titulo": "Torres Vedras · planta de arquitetura (PDF)",
+   "titulo": "planta de arquitetura (PDF)",
    "descricao": "A planta com que o Gerador foi desenvolvido e testado.",
    "caminho": "gerador/adicional/torres-vedras__projeto-de-arquitetura_geral-f01.2_f01.3_f02.1_f03.1.pdf",
    "nome_ficheiro": "projeto de arquitetura_geral F01.2_F01.3_F02.1_F03.1.pdf",
@@ -4414,7 +4534,10 @@
    "mime": "application/pdf",
    "criado_por": null,
    "criado_por_nome": "Equipa",
-   "criado_em": "2026-11-05T12:00:00Z"
+   "criado_em": "2026-11-05T12:00:00Z",
+   "pasta": "",
+   "lote": null,
+   "seccao_id": 4
   }
  ],
  "tarefas_notas": [
@@ -4445,6 +4568,48 @@
    "autor_id": null,
    "autor_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z"
+  }
+ ],
+ "documentos_seccoes": [
+  {
+   "id": 1,
+   "projeto": "builder",
+   "tipo": "adicional",
+   "nome": "Torres Vedras",
+   "ordem": 1,
+   "criado_por": null,
+   "criado_por_nome": "Claude",
+   "criado_em": "2026-11-05T12:00:00Z"
+  },
+  {
+   "id": 2,
+   "projeto": "builder",
+   "tipo": "adicional",
+   "nome": "Sobral",
+   "ordem": 2,
+   "criado_por": null,
+   "criado_por_nome": "Claude",
+   "criado_em": "2026-11-05T12:00:00Z"
+  },
+  {
+   "id": 3,
+   "projeto": "builder",
+   "tipo": "adicional",
+   "nome": "Método",
+   "ordem": 3,
+   "criado_por": null,
+   "criado_por_nome": "Claude",
+   "criado_em": "2026-11-05T12:00:00Z"
+  },
+  {
+   "id": 4,
+   "projeto": "gerador",
+   "tipo": "adicional",
+   "nome": "Torres Vedras",
+   "ordem": 1,
+   "criado_por": null,
+   "criado_por_nome": "Claude",
+   "criado_em": "2026-11-05T12:00:00Z"
   }
  ]
 }

@@ -1,6 +1,17 @@
 [
   {
     "dia": "2026-11-11",
+    "titulo": "Documentos: secções e pastas",
+    "itens": [
+      "Nos documentos informativos e adicionais de cada projeto: «Nova secção» cria uma secção (por exemplo uma obra), que existe mesmo vazia.",
+      "Em cada secção: «Ficheiros» para vários ficheiros de uma vez e «Pasta» para uma pasta inteira, com as subpastas (ficam como pastas dentro da secção). Também se podem arrastar ficheiros e pastas para a secção.",
+      "O botão «Documento» também deixa escolher a secção e uma pasta.",
+      "Cada documento pode mudar de secção (ícone da pasta); a secção muda de nome e apaga-se quando está vazia.",
+      "Uma pasta carregada fica numa só linha no Log, não numa por ficheiro."
+    ]
+  },
+  {
+    "dia": "2026-11-11",
     "titulo": "Trabalho em equipa: o ecrã de cada tarefa, críticas e o Log",
     "itens": [
       "Início: cada projeto abre um pop-up com as tarefas em curso e o que precisa de atenção (à espera de aprovação, bloqueadas, as tuas, testes com notas, críticas). «Abrir o projeto» leva à página.",

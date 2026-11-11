@@ -154,6 +154,20 @@ for t in db["tarefas"]: t["revisao"] = False
 db["tarefas_notas"] = []
 correr(corpo_do((MIG / "0012_conteudo_hierarquia_revisoes.sql").read_text(encoding="utf-8")))
 for c in db["checkpoints"]: c.setdefault("criterio_saida", "")
+# 0024: the sections that lived in the titles («Torres Vedras · …») become sections; documents get seccao_id and pasta
+db["documentos_seccoes"] = []
+for d in db["documentos"]:
+    d.setdefault("pasta", ""); d.setdefault("lote", None); d.setdefault("seccao_id", None)
+    if d["tipo"] in ("informativo", "adicional") and " · " in d["titulo"]:
+        nome = d["titulo"].split(" · ")[0]
+        s = next((s for s in db["documentos_seccoes"] if (s["projeto"], s["tipo"], s["nome"]) == (d["projeto"], d["tipo"], nome)), None)
+        if s is None:
+            s = {"id": len(db["documentos_seccoes"]) + 1, "projeto": d["projeto"], "tipo": d["tipo"], "nome": nome,
+                 "ordem": sum(1 for x in db["documentos_seccoes"] if (x["projeto"], x["tipo"]) == (d["projeto"], d["tipo"])) + 1,
+                 "criado_por": None, "criado_por_nome": "Claude", "criado_em": d["criado_em"]}
+            db["documentos_seccoes"].append(s)
+        d["seccao_id"] = s["id"]
+        d["titulo"] = d["titulo"][len(nome) + 3:]
 for t in db["tarefas"]: t.setdefault("revisao", False)
 (RAIZ / "tests" / "fixture.json").write_text(json.dumps(db, ensure_ascii=False, indent=1), encoding="utf-8")
 print({k: len(v) for k, v in db.items()})
