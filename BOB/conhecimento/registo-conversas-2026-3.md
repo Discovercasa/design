@@ -580,3 +580,20 @@ The team's notes on hub task 84 (written in the hub by [membro da equipa] on 202
 > no ponto 11 não vamos conseguir ter fotos das casas... vais ter de arranjar outra solução
 - Done: item 11 of hub task «Validar a lista de documentos para fazer uma página» rewritten — the surroundings are built in 3D from open data only: DGT LiDAR (terrain, houses and trees up to ~500 m with real heights), orthophotos (ground colours), OpenStreetMap (roads, land use), a terrain model for the skyline up to ~20 km; neighbours as simple volumes (geometry right, look illustrative). Needed: only the survey in official coordinates (item 3) and what will change by handover; helpful: location plan, street elevations, licensing photos. Item 9 no longer mentions photos. Message to Dinis; Log entry.
 - Filed: `conhecimento/insights.md` (method rewritten), `conhecimento/discovercasa.md`.
+
+### 2026-11-12 — «Sim, experimenta»: the surroundings of Ribamar from open data [Builder]
+> Sim, experimenta
+- The DGT LiDAR needs a free account (Claude cannot create accounts or sign in). Asked; the user chose «Só dados sem conta» (OpenStreetMap + Copernicus GLO-30, no LiDAR) and authorised the downloads («Sim, descarrega»). Downloaded to `_trabalho/ribamar/envolvente/` (local only): Copernicus_DSM_COG_10_N39_00_W010_00_DEM.tif (9,9 MB) and the OSM extract (25 MB — more than the 2–5 MB estimated beforehand).
+- Found: the DEM matches the survey within ~0.3 m around the house after a 2,6 m shift (confirms the drawing is in PT-TM06); the sea is ~250 m west of the house, under a ~50 m cliff 125–225 m away — the view matters.
+
+### 2026-11-12 — Real exterior as an option for Dinis; items 10 and 11 out of the documents list [Builder]
+> quero que adiciones a lista da tarefa "Pormenores da página do cliente: o que queres incluir" casa com exterior real (vistas das janelas para a rua, vistas das paisagens e ambiente que a casa realmente vai ter)
+> Remove o ponto 10 e 11 da lista da tarefa "Validar a lista de documentos para fazer uma página"
+- Done: hub task «Pormenores da página do cliente» — new option under item 6: casa com exterior real (window views to the street, landscape and surroundings the house will really have, from public data, in the 3D, images and 360° tour). Hub task «Validar a lista de documentos» — items 10 (360° tour) and 11 (visible exterior) removed, following items renumbered 10–13, intro no longer mentions the 360° tour. Messages to Dinis in both conversations; Log entry.
+
+### 2026-11-12 — «150 casas vizinhas?»: only the near ones and the far roofs that show [Builder]
+> isso nao é uma área demasiado grande ? 150 casas vizinhas? Eu já estive na zona da casa e não tem 150 casas vizinhas !!
+> pois assim não necessitas de fazer todas essas casas apenas as mais perto ou por exemplo se se vir um telhado de uma ou outra ao longe simular isso mas não mais que isso
+- Explained: the 148 were every OSM building within 1,5 km (the whole village); by distance: 2 within 100 m, 15 at 100–200 m, 9 at 200–300 m. Asked whether that matches what the user saw on site (OSM may be outdated).
+- Rule (user): build only the nearest buildings and, farther away, only a roof that can be seen — nothing more. Done: every building within 300 m (26) + the farther ones whose roof shows over the ground from a glazed opening of the house (18) = 44.
+- Result of the test (local, `_trabalho/ribamar/Ribamar_vista_real_teste.html`, sent to the user): 360° of the sala and quarto 01, the view from the sala and the varanda, a wide aerial; the sea shows as a blue band on the horizon above the fence. Interior not furnished yet. Filed: `conhecimento/insights.md`.

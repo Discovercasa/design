@@ -451,3 +451,12 @@ he answers (`metodo-construtivo.md`). Condensed 2026-10-28 (history in git).
   is illustrative, not photographic. Needs only the survey in official coordinates (PT-TM06) and what will change by
   handover; helpful: the licensing project's location plan, street elevations and site photos. Google Street View /
   Earth / 3D Tiles only as reference, never in the page (terms of use). Built BEFORE the 360° renders.
+  **Tested on Ribamar 2026-11-12 (status: works, internal test):** `ferramentas/pagina/envolvente.py` (PT-TM06 <-> lat/lon,
+  a stdlib GeoTIFF reader, OSM buildings/roads/land use/vegetation) + `casa_blender.py` (`envolvente` in the house
+  description: terrain to 18 km with the earth's curve, the sea, buildings with hipped roofs and windows, roads, trees
+  as instances, haze in the sky's own colour; `panorama` views for 360°). Lessons: GLO-30 matched the survey within
+  ~0.3 m after a 2,6 m shift (also proves the drawing is in PT-TM06); a physical flat sea mirrors the pale horizon
+  and reads as sky — cap the reflection (~55 % x Fresnel) and tint it blue; strong wave bump spreads the sun's glitter
+  over the whole sea (silver); only build the buildings the house sees (user: all within 300 m + farther ones whose
+  roof shows over the ground from a window — 44 of 148 in 1,5 km); clear balustrade glass for views from inside.
+  Still crude: OSM road ribbons near the lot, blob trees up close, neighbours as plain volumes (as asked).

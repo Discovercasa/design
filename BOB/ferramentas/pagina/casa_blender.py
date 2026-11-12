@@ -23,7 +23,14 @@ casa.json (local metres, x/y on the plan, z up from the reference floor; see ger
             Renders: hair grass on "relva"/"relva_fora" (straight up, no children, the ground casts no shadow: each
             of those three avoided a patchwork of ground triangles).
   arvores   [{x, y, z, altura, copa}]   trunk + low-poly crown (web, maquette); leaves in clumps for the renders
-  vistas    [{nome, camara [x,y,z], alvo [x,y,z], lente}]
+  vistas    [{nome, camara [x,y,z], alvo [x,y,z], lente, panorama (equirect 360°, centre = alvo), res "WxH",
+             exposicao (this view's exposure, e.g. brighter inside)}]
+  terreno.cor  optional [ny-1][nx-1] RGB (sRGB 0-1) per cell for the material "solo" (the surroundings' ground)
+  envolvente   (renders only; ferramentas/pagina/envolvente.py + the project's generator) {casas [{pontos [[x,y]],
+            z0, zc, altura, telhado aguas|plano, estufa, tom}], estradas [{pontos [[x,y,z]], largura, mat}],
+            arvores [[x, y, z, variante 0-8, altura, rotacao]], mar {z, raio, curvatura}, neblina {distancia}}:
+            hipped tile roofs, rendered walls with windows, trees as instances, the sea following the earth's curve,
+            far things fade into the sky's own colour (aerial perspective)
   rodar_graus   rotation of the whole model about z (plan frame -> north up)
   sol       {azimute (deg from north, clockwise), elevacao}
 Output: casa.glb (web, textures 1024 px JPEG, groups in extras), casa.blend, render_<vista>.jpg (Cycles), texturas/.
@@ -286,6 +293,51 @@ def criar_materiais():
     MATS["vidro"] = mat_vidro("vidro")
     MATS["vidro_guarda"] = mat_vidro("vidro_guarda", 0.12, (0.95, 0.97, 0.97))
     MATS["forro"] = MATS["ripado"]
+    if (E.get("terreno") or {}).get("cor"):
+        MATS["solo"] = mat_solo()
+
+
+def mat_solo():
+    """The surroundings' ground: the cell colour (attribute cor_solo) with large and small mottling, a little bump."""
+    m = bpy.data.materials.new("solo")
+    try:
+        m.use_nodes = True
+    except Exception:
+        pass
+    nt = m.node_tree
+    b = principled(m)
+    at = no(nt, "ShaderNodeAttribute", -900, 300)
+    at.attribute_name = "cor_solo"
+    tc = no(nt, "ShaderNodeTexCoord", -1300, 0)
+    r1 = no(nt, "ShaderNodeTexNoise", -1000, 0)
+    r1.inputs["Scale"].default_value = 0.06
+    r1.inputs["Detail"].default_value = 6.0
+    nt.links.new(tc.outputs["Object"], r1.inputs["Vector"])
+    r2 = no(nt, "ShaderNodeTexNoise", -1000, -250)
+    r2.inputs["Scale"].default_value = 1.2
+    nt.links.new(tc.outputs["Object"], r2.inputs["Vector"])
+    v1 = no(nt, "ShaderNodeMapRange", -750, 0)
+    v1.inputs["To Min"].default_value, v1.inputs["To Max"].default_value = 0.72, 1.25
+    nt.links.new(r1.outputs["Fac"], v1.inputs["Value"])
+    v2 = no(nt, "ShaderNodeMapRange", -750, -250)
+    v2.inputs["To Min"].default_value, v2.inputs["To Max"].default_value = 0.85, 1.12
+    nt.links.new(r2.outputs["Fac"], v2.inputs["Value"])
+    k = no(nt, "ShaderNodeMath", -550, -100)
+    k.operation = "MULTIPLY"
+    nt.links.new(v1.outputs["Result"], k.inputs[0])
+    nt.links.new(v2.outputs["Result"], k.inputs[1])
+    mul = no(nt, "ShaderNodeVectorMath", -350, 200)
+    mul.operation = "SCALE"
+    nt.links.new(at.outputs["Color"], mul.inputs[0])
+    nt.links.new(k.outputs["Value"], mul.inputs["Scale"])
+    nt.links.new(mul.outputs["Vector"], b.inputs["Base Color"])
+    b.inputs["Roughness"].default_value = 0.95
+    bp = no(nt, "ShaderNodeBump", -350, -250)
+    bp.inputs["Strength"].default_value = 0.25
+    nt.links.new(r2.outputs["Fac"], bp.inputs["Height"])
+    nt.links.new(bp.outputs["Normal"], b.inputs["Normal"])
+    m.diffuse_color = (0.25, 0.3, 0.12, 1)
+    return m
 
 
 # ---------------------------------------------------------------------------------------------- geometry helpers
@@ -674,7 +726,8 @@ def construir_terreno():
     nx, ny = len(xs), len(ys)
     me = bpy.data.meshes.new("terreno")
     verts = [(xs[i], ys[j], Z[j][i]) for j in range(ny) for i in range(nx)]
-    faces, mi = [], []
+    faces, mi, cores = [], [], []
+    CT = T.get("cor")
     for j in range(ny - 1):
         for i in range(nx - 1):
             c = M[j][i]
@@ -683,7 +736,13 @@ def construir_terreno():
             a = j * nx + i
             faces.append((a, a + 1, a + nx + 1, a + nx))
             mi.append(c)
+            if CT:
+                q = CT[j][i] or (0.3, 0.4, 0.2)
+                cores += [q[0] ** 2.2, q[1] ** 2.2, q[2] ** 2.2, 1.0]
     me.from_pydata(verts, [], faces)
+    if CT:
+        at = me.attributes.new("cor_solo", "FLOAT_COLOR", "FACE")
+        at.data.foreach_set("color", cores)
     for n in nomes:
         me.materials.append(MATS[n])
     me.polygons.foreach_set("material_index", mi)
@@ -774,6 +833,9 @@ def relva_cycles(terreno, nome="relva", densidade=900, raio=None):
 
 
 # ---------------------------------------------------------------------------------------------- light, sky, cameras
+CEU = {}
+
+
 def luz_e_ceu():
     sol = E.get("sol", {"azimute": 235, "elevacao": 32})
     w = bpy.data.worlds.new("mundo")
@@ -803,6 +865,7 @@ def luz_e_ceu():
                 pass
     nt.links.new(ceu.outputs["Color"], bg.inputs["Color"])
     bg.inputs["Strength"].default_value = float(sol.get("ceu", 0.35))
+    CEU["no"], CEU["forca"] = ceu, float(sol.get("ceu", 0.35))
     luz = bpy.data.lights.new("sol", "SUN")
     luz.energy = float(sol.get("forca", 3.2))
     luz.angle = math.radians(0.6)
@@ -825,7 +888,15 @@ def camaras():
         cam.lens = v.get("lente", 26)
         cam.sensor_width = 36
         cam.clip_start = 0.1
-        cam.clip_end = 2000
+        cam.clip_end = 100000 if E.get("envolvente") else 2000
+        if v.get("panorama"):
+            cam.type = "PANO"
+            for alvo_ in (cam, getattr(cam, "cycles", None)):
+                try:
+                    alvo_.panorama_type = "EQUIRECTANGULAR"
+                    break
+                except Exception:
+                    continue
         ob = bpy.data.objects.new("cam_" + v["nome"], cam)
         cena.collection.objects.link(ob)
         ob.parent = RAIZ
@@ -1089,6 +1160,571 @@ def ceu_panorama():
     bpy.data.objects.remove(ob)
     print("CEU ok")
 
+# ---------------------------------------------------------------------------------------------- the surroundings (renders)
+NEB = {"maximo": 0.85}
+
+
+def neblina(m, distancia, maximo=None):
+    """Aerial perspective: far surfaces fade into the sky's own colour seen in the same direction (the sky texture
+    evaluated along the view ray, kept just above the horizon), maximo (1 - exp(-d / distancia)): the far hills
+    stay visible, the sea horizon stays a line."""
+    nt = m.node_tree
+    out = next(n for n in nt.nodes if n.type == "OUTPUT_MATERIAL")
+    if not out.inputs["Surface"].links or not CEU:
+        return
+    origem = out.inputs["Surface"].links[0].from_socket
+    cd = no(nt, "ShaderNodeCameraData", 300, -400)
+    k = no(nt, "ShaderNodeMath", 500, -400)
+    k.operation = "MULTIPLY"
+    k.inputs[1].default_value = -1.0 / distancia
+    nt.links.new(cd.outputs["View Distance"], k.inputs[0])
+    ex = no(nt, "ShaderNodeMath", 650, -400)
+    ex.operation = "EXPONENT"
+    nt.links.new(k.outputs["Value"], ex.inputs[0])
+    f = no(nt, "ShaderNodeMath", 800, -400)
+    f.operation = "SUBTRACT"
+    f.inputs[0].default_value = 1.0
+    nt.links.new(ex.outputs["Value"], f.inputs[1])
+    fm = no(nt, "ShaderNodeMath", 950, -400)
+    fm.operation = "MULTIPLY"
+    fm.inputs[1].default_value = NEB["maximo"] if maximo is None else maximo
+    nt.links.new(f.outputs["Value"], fm.inputs[0])
+    g = no(nt, "ShaderNodeNewGeometry", 300, -650)
+    inv = no(nt, "ShaderNodeVectorMath", 500, -650)
+    inv.operation = "SCALE"
+    inv.inputs["Scale"].default_value = -1.0
+    nt.links.new(g.outputs["Incoming"], inv.inputs[0])
+    sp = no(nt, "ShaderNodeSeparateXYZ", 650, -650)
+    nt.links.new(inv.outputs["Vector"], sp.inputs[0])
+    mz = no(nt, "ShaderNodeMath", 800, -700)
+    mz.operation = "MAXIMUM"
+    mz.inputs[1].default_value = 0.03
+    nt.links.new(sp.outputs["Z"], mz.inputs[0])
+    cb = no(nt, "ShaderNodeCombineXYZ", 950, -650)
+    nt.links.new(sp.outputs["X"], cb.inputs["X"])
+    nt.links.new(sp.outputs["Y"], cb.inputs["Y"])
+    nt.links.new(mz.outputs["Value"], cb.inputs["Z"])
+    nr = no(nt, "ShaderNodeVectorMath", 1100, -650)
+    nr.operation = "NORMALIZE"
+    nt.links.new(cb.outputs["Vector"], nr.inputs[0])
+    ceu_w = CEU["no"]
+    sk = no(nt, "ShaderNodeTexSky", 1250, -650)
+    for attr in ("sky_type", "sun_elevation", "sun_rotation", "sun_disc", "altitude", "air_density",
+                 "aerosol_density", "dust_density", "ozone_density"):
+        if hasattr(ceu_w, attr):
+            try:
+                setattr(sk, attr, getattr(ceu_w, attr))
+            except Exception:
+                pass
+    nt.links.new(nr.outputs["Vector"], sk.inputs["Vector"])
+    em = no(nt, "ShaderNodeEmission", 1450, -650)
+    em.inputs["Strength"].default_value = CEU["forca"]
+    nt.links.new(sk.outputs["Color"], em.inputs["Color"])
+    mx = no(nt, "ShaderNodeMixShader", 1650, -300)
+    nt.links.new(fm.outputs["Value"], mx.inputs["Fac"])
+    nt.links.new(origem, mx.inputs[1])
+    nt.links.new(em.outputs["Emission"], mx.inputs[2])
+    nt.links.new(mx.outputs["Shader"], out.inputs["Surface"])
+
+
+def _ramp(nt, entrada, cores, x, y, constante=True):
+    r = no(nt, "ShaderNodeValToRGB", x, y)
+    cr = r.color_ramp
+    if constante:
+        cr.interpolation = "CONSTANT"
+    n = len(cores)
+    while len(cr.elements) < n:
+        cr.elements.new(0.5)
+    for k, h in enumerate(cores):
+        cr.elements[k].position = k / n if constante else k / max(1, n - 1)
+        cr.elements[k].color = (*[c ** 2.2 for c in hex_rgb(h)], 1)
+    nt.links.new(entrada, r.inputs["Fac"])
+    return r
+
+
+def mat_parede_env(dist):
+    """Rendered walls (white, cream, pale yellow, light grey by 'tom') with windows from the wall UVs (u along the
+    wall, v up from the ground): 1.2 m windows every 3.3 m, one row per 2.9 m storey, up to 'hjan'."""
+    m = bpy.data.materials.new("parede_env")
+    try:
+        m.use_nodes = True
+    except Exception:
+        pass
+    nt = m.node_tree
+    b = principled(m)
+    out = next(n for n in nt.nodes if n.type == "OUTPUT_MATERIAL")
+    tom = no(nt, "ShaderNodeAttribute", -1500, 400)
+    tom.attribute_name = "tom"
+    rp = _ramp(nt, tom.outputs["Fac"], ["#e4e0d6", "#ded3bb", "#e2d8b6", "#d4d0c8", "#e9e7e1", "#d9c9a8"], -1250, 400)
+    b.inputs["Roughness"].default_value = 0.9
+    tc = no(nt, "ShaderNodeTexCoord", -1700, 0)
+    sp = no(nt, "ShaderNodeSeparateXYZ", -1500, 0)
+    nt.links.new(tc.outputs["UV"], sp.inputs[0])
+    sujo = no(nt, "ShaderNodeTexNoise", -1250, 650)
+    sujo.inputs["Scale"].default_value = 0.6
+    sujo.inputs["Detail"].default_value = 5.0
+    nt.links.new(tc.outputs["Object"], sujo.inputs["Vector"])
+    mr = no(nt, "ShaderNodeMapRange", -1050, 650)
+    mr.inputs["To Min"].default_value, mr.inputs["To Max"].default_value = 0.86, 1.04
+    nt.links.new(sujo.outputs["Fac"], mr.inputs["Value"])
+    esc = no(nt, "ShaderNodeVectorMath", -850, 500)
+    esc.operation = "SCALE"
+    nt.links.new(rp.outputs["Color"], esc.inputs[0])
+    nt.links.new(mr.outputs["Result"], esc.inputs["Scale"])
+    soco_ = no(nt, "ShaderNodeMath", -1050, 350)
+    soco_.operation = "LESS_THAN"
+    soco_.inputs[1].default_value = 0.45
+    nt.links.new(sp.outputs["Y"], soco_.inputs[0])
+    mc = no(nt, "ShaderNodeMix", -650, 450)
+    mc.data_type = "RGBA"
+    nt.links.new(soco_.outputs["Value"], mc.inputs["Factor"])
+    nt.links.new(esc.outputs["Vector"], mc.inputs["A"])
+    mc.inputs["B"].default_value = (0.32, 0.30, 0.27, 1)
+    nt.links.new(mc.outputs["Result"], b.inputs["Base Color"])
+    hj = no(nt, "ShaderNodeAttribute", -1500, -300)
+    hj.attribute_name = "hjan"
+
+    def op(tipo, a, b_=None, x=0, y=0):
+        n = no(nt, "ShaderNodeMath", x, y)
+        n.operation = tipo
+        for k_, val in ((0, a), (1, b_)):
+            if val is None:
+                continue
+            if isinstance(val, (int, float)):
+                n.inputs[k_].default_value = val
+            else:
+                nt.links.new(val, n.inputs[k_])
+        return n.outputs["Value"]
+
+    u = op("ADD", sp.outputs["X"], op("MULTIPLY", tom.outputs["Fac"], 7.0, x=-1300, y=150), x=-1150, y=100)
+    cu = op("FRACT", op("DIVIDE", u, 3.3, x=-1000, y=100), x=-850, y=100)
+    m1 = op("MULTIPLY", op("GREATER_THAN", cu, 0.33, x=-700, y=150), op("LESS_THAN", cu, 0.67, x=-700, y=50),
+            x=-550, y=100)
+    fv = op("FRACT", op("DIVIDE", op("SUBTRACT", sp.outputs["Y"], 0.95, x=-1150, y=-100), 2.9, x=-1000, y=-100),
+            x=-850, y=-100)
+    m2 = op("LESS_THAN", fv, 0.47, x=-700, y=-100)
+    # the glass inside a 6 cm frame (frame = window mask minus the inner one)
+    g1 = op("MULTIPLY", op("GREATER_THAN", cu, 0.345, x=-700, y=250), op("LESS_THAN", cu, 0.655, x=-700, y=200),
+            x=-550, y=230)
+    g2 = op("MULTIPLY", op("GREATER_THAN", fv, 0.02, x=-700, y=-150), op("LESS_THAN", fv, 0.45, x=-700, y=-180),
+            x=-550, y=-160)
+    m3 = op("GREATER_THAN", sp.outputs["Y"], 0.9, x=-700, y=-200)
+    m4 = op("LESS_THAN", sp.outputs["Y"], hj.outputs["Fac"], x=-700, y=-300)
+    mk = op("MULTIPLY", op("MULTIPLY", m1, m2, x=-550, y=-50), op("MULTIPLY", m3, m4, x=-550, y=-250), x=-400, y=-100)
+    vid = no(nt, "ShaderNodeBsdfPrincipled", -300, -500)
+    vid.inputs["Base Color"].default_value = (0.03, 0.035, 0.04, 1)
+    vid.inputs["Roughness"].default_value = 0.03
+    for k_ in ("Specular IOR Level", "Specular"):
+        if k_ in vid.inputs:
+            vid.inputs[k_].default_value = 1.0
+            break
+    caix = no(nt, "ShaderNodeBsdfPrincipled", -300, -800)
+    caix.inputs["Base Color"].default_value = (0.55, 0.55, 0.53, 1)
+    caix.inputs["Roughness"].default_value = 0.5
+    mv = no(nt, "ShaderNodeMixShader", -50, -600)
+    nt.links.new(op("MULTIPLY", g1, g2, x=-400, y=-650), mv.inputs["Fac"])
+    nt.links.new(caix.outputs["BSDF"], mv.inputs[1])
+    nt.links.new(vid.outputs["BSDF"], mv.inputs[2])
+    mx = no(nt, "ShaderNodeMixShader", 100, 0)
+    nt.links.new(mk, mx.inputs["Fac"])
+    nt.links.new(b.outputs["BSDF"], mx.inputs[1])
+    nt.links.new(mv.outputs["Shader"], mx.inputs[2])
+    nt.links.new(mx.outputs["Shader"], out.inputs["Surface"])
+    neblina(m, dist)
+    return m
+
+
+def mat_env(nome, cor, rug, dist, ramp_cores=None, ruido=0.0):
+    m = bpy.data.materials.new(nome)
+    try:
+        m.use_nodes = True
+    except Exception:
+        pass
+    nt = m.node_tree
+    b = principled(m)
+    b.inputs["Roughness"].default_value = rug
+    fonte = None
+    if ramp_cores:
+        tom = no(nt, "ShaderNodeAttribute", -900, 300)
+        tom.attribute_name = "tom"
+        fonte = _ramp(nt, tom.outputs["Fac"], ramp_cores, -650, 300).outputs["Color"]
+    else:
+        b.inputs["Base Color"].default_value = (*[c ** 2.2 for c in hex_rgb(cor)], 1)
+    if ruido and fonte is not None:
+        tc = no(nt, "ShaderNodeTexCoord", -1100, 0)
+        rn = no(nt, "ShaderNodeTexNoise", -900, 0)
+        rn.inputs["Scale"].default_value = 3.0
+        nt.links.new(tc.outputs["Object"], rn.inputs["Vector"])
+        mr = no(nt, "ShaderNodeMapRange", -650, 0)
+        mr.inputs["To Min"].default_value, mr.inputs["To Max"].default_value = 1 - ruido, 1 + ruido
+        nt.links.new(rn.outputs["Fac"], mr.inputs["Value"])
+        sc = no(nt, "ShaderNodeVectorMath", -400, 200)
+        sc.operation = "SCALE"
+        nt.links.new(fonte, sc.inputs[0])
+        nt.links.new(mr.outputs["Result"], sc.inputs["Scale"])
+        fonte = sc.outputs["Vector"]
+    if fonte is not None:
+        nt.links.new(fonte, b.inputs["Base Color"])
+    neblina(m, dist)
+    return m
+
+
+def _retangulo_minimo(pts):
+    """Smallest rectangle around a footprint (rotating the convex hull's edges): area, centre, long axis u, v, half
+    sizes a >= b."""
+    P = np.array(pts, dtype=float)
+    P = P[np.lexsort((P[:, 1], P[:, 0]))]
+
+    def cruz(o, a, b):
+        return (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0])
+    inf, sup = [], []
+    for p in P:
+        while len(inf) >= 2 and cruz(inf[-2], inf[-1], p) <= 0:
+            inf.pop()
+        inf.append(p)
+    for p in P[::-1]:
+        while len(sup) >= 2 and cruz(sup[-2], sup[-1], p) <= 0:
+            sup.pop()
+        sup.append(p)
+    H = np.array(inf[:-1] + sup[:-1])
+    melhor = None
+    for i in range(len(H)):
+        e = H[(i + 1) % len(H)] - H[i]
+        L = float(np.hypot(*e))
+        if L < 1e-6:
+            continue
+        u = e / L
+        v = np.array([-u[1], u[0]])
+        pu, pv = H @ u, H @ v
+        area = (pu.max() - pu.min()) * (pv.max() - pv.min())
+        if melhor is None or area < melhor[0]:
+            c = u * (pu.max() + pu.min()) / 2 + v * (pv.max() + pv.min()) / 2
+            a, b = (pu.max() - pu.min()) / 2, (pv.max() - pv.min()) / 2
+            melhor = (area, c, u, v, a, b) if a >= b else (area, c, v, -u, b, a)
+    return melhor
+
+
+def construir_envolvente():
+    EV = E["envolvente"]
+    # seen from inside, the balustrade glass must be clear (0.12 made a frosted band across the view)
+    if "vidro_guarda" in MATS:
+        principled(MATS["vidro_guarda"]).inputs["Roughness"].default_value = 0.02
+    D = float(EV.get("neblina", {}).get("distancia", 25000.0))
+    NEB["maximo"] = float(EV.get("neblina", {}).get("maximo", 0.85))
+    if "solo" in MATS:
+        neblina(MATS["solo"], D)
+    col = bpy.data.collections.new("envolvente")
+    cena.collection.children.link(col)
+
+    def objeto(nome, me):
+        ob = bpy.data.objects.new(nome, me)
+        col.objects.link(ob)
+        ob.parent = RAIZ
+        return ob
+
+    # ---- the sea: rings out to the horizon, falling with the earth's curve like the ground
+    mar = EV.get("mar")
+    if mar:
+        R, curv, z0 = float(mar.get("raio", 60000)), float(mar.get("curvatura", 7.43e6)), float(mar["z"])
+        raios = [0.0]
+        r = 15.0
+        while r < R:
+            raios.append(r)
+            r *= 1.05
+        raios.append(R)
+        na = 360
+        V = [(0.0, 0.0, z0)]
+        for r in raios[1:]:
+            for k in range(na):
+                a = 2 * math.pi * k / na
+                V.append((r * math.cos(a), r * math.sin(a), z0 - r * r / (2 * curv)))
+        F = [(0, 1 + k, 1 + (k + 1) % na) for k in range(na)]
+        for i in range(len(raios) - 2):
+            b0, b1 = 1 + i * na, 1 + (i + 1) * na
+            F += [(b0 + k, b0 + (k + 1) % na, b1 + (k + 1) % na, b1 + k) for k in range(na)]
+        me = bpy.data.meshes.new("mar")
+        me.from_pydata(V, [], F)
+        for p in me.polygons:
+            p.use_smooth = True
+        m = bpy.data.materials.new("mar")
+        try:
+            m.use_nodes = True
+        except Exception:
+            pass
+        nt = m.node_tree
+        for n_ in list(nt.nodes):
+            if n_.type == "BSDF_PRINCIPLED":
+                nt.nodes.remove(n_)
+        out = next(n_ for n_ in nt.nodes if n_.type == "OUTPUT_MATERIAL")
+        # deep blue water under a reflection held to at most ~45 % even at grazing angles (a physical flat sea mirrors
+        # the pale sky near the horizon and read as sky in the views from the house)
+        tc = no(nt, "ShaderNodeTexCoord", -1300, -200)
+        w1 = no(nt, "ShaderNodeTexNoise", -1050, -100)
+        w1.inputs["Scale"].default_value = 0.08
+        w1.inputs["Detail"].default_value = 6.0
+        nt.links.new(tc.outputs["Object"], w1.inputs["Vector"])
+        w2 = no(nt, "ShaderNodeTexNoise", -1050, -350)
+        w2.inputs["Scale"].default_value = 0.9
+        w2.inputs["Detail"].default_value = 8.0
+        nt.links.new(tc.outputs["Object"], w2.inputs["Vector"])
+        sm = no(nt, "ShaderNodeMath", -800, -200)
+        sm.operation = "ADD"
+        nt.links.new(w1.outputs["Fac"], sm.inputs[0])
+        nt.links.new(w2.outputs["Fac"], sm.inputs[1])
+        bp = no(nt, "ShaderNodeBump", -600, -200)
+        bp.inputs["Strength"].default_value = 0.3
+        bp.inputs["Distance"].default_value = 0.6
+        nt.links.new(sm.outputs["Value"], bp.inputs["Height"])
+        agua = no(nt, "ShaderNodeBsdfDiffuse", -300, 200)
+        agua.inputs["Color"].default_value = (0.004, 0.022, 0.055, 1)
+        brilho = no(nt, "ShaderNodeBsdfGlossy", -300, -50)
+        brilho.inputs["Roughness"].default_value = 0.03
+        # the waves face the viewer and mirror the higher, bluer sky, not the white horizon: tint the reflection
+        brilho.inputs["Color"].default_value = (0.30, 0.50, 0.82, 1)
+        nt.links.new(bp.outputs["Normal"], brilho.inputs["Normal"])
+        lw = no(nt, "ShaderNodeLayerWeight", -600, 250)
+        lw.inputs["Blend"].default_value = 0.25
+        nt.links.new(bp.outputs["Normal"], lw.inputs["Normal"])
+        k = no(nt, "ShaderNodeMath", -350, 400)
+        k.operation = "MULTIPLY"
+        k.inputs[1].default_value = 0.55
+        nt.links.new(lw.outputs["Fresnel"], k.inputs[0])
+        mx = no(nt, "ShaderNodeMixShader", 0, 150)
+        nt.links.new(k.outputs["Value"], mx.inputs["Fac"])
+        nt.links.new(agua.outputs["BSDF"], mx.inputs[1])
+        nt.links.new(brilho.outputs["BSDF"], mx.inputs[2])
+        nt.links.new(mx.outputs["Shader"], out.inputs["Surface"])
+        neblina(m, D)
+        me.materials.append(m)
+        objeto("mar", me)
+
+    # ---- buildings: walls along the footprint, hipped tile roof over its rectangle (or flat), windows in the walls
+    casas = EV.get("casas", [])
+    if casas:
+        V, F, FM, TOM, HJ, UV = [], [], [], [], [], []
+        for q in casas:
+            pts = [tuple(p) for p in q["pontos"]]
+            if sum(pts[i - 1][0] * pts[i][1] - pts[i][0] * pts[i - 1][1] for i in range(len(pts))) < 0:
+                pts = pts[::-1]
+            z0, zc, h = q["z0"], q["zc"], q["altura"]
+            zt = zc + h
+            tom = q.get("tom", 0.5)
+            mw = 3 if q.get("estufa") else 0
+            u = 0.0
+            for i in range(len(pts)):
+                (x1, y1), (x2, y2) = pts[i], pts[(i + 1) % len(pts)]
+                L = math.hypot(x2 - x1, y2 - y1)
+                b0 = len(V)
+                V += [(x1, y1, z0), (x2, y2, z0), (x2, y2, zt + 0.1), (x1, y1, zt + 0.1)]
+                F.append((b0, b0 + 1, b0 + 2, b0 + 3))
+                FM.append(mw)
+                TOM.append(tom)
+                HJ.append(h - 0.5)
+                UV.append([(u, z0 - zc), (u + L, z0 - zc), (u + L, zt + 0.1 - zc), (u, zt + 0.1 - zc)])
+                u += L
+            rect = _retangulo_minimo(pts)
+            area = abs(sum(pts[i - 1][0] * pts[i][1] - pts[i][0] * pts[i - 1][1] for i in range(len(pts)))) / 2
+            if q.get("telhado") == "aguas" and rect and area / max(rect[0], 1e-6) > 0.72 and not q.get("estufa"):
+                _, c, ua, va, a, bb = rect
+                a, bb = a + 0.35, bb + 0.35
+                ze = zt - 0.10
+                sobe = bb * math.tan(math.radians(24))
+                P1 = (*(c - ua * a - va * bb), ze)
+                P2 = (*(c + ua * a - va * bb), ze)
+                P3 = (*(c + ua * a + va * bb), ze)
+                P4 = (*(c - ua * a + va * bb), ze)
+                R1 = (*(c - ua * (a - bb)), ze + sobe)
+                R2 = (*(c + ua * (a - bb)), ze + sobe)
+                b0 = len(V)
+                V += [tuple(float(t) for t in p) for p in (P1, P2, P3, P4, R1, R2)]
+                for fc in ((0, 1, 5, 4), (1, 2, 5), (2, 3, 4, 5), (3, 0, 4)):
+                    F.append(tuple(b0 + k for k in fc))
+                    FM.append(1)
+                    TOM.append(tom)
+                    HJ.append(0.0)
+                    UV.append([(0.0, 0.0)] * len(fc))
+            else:
+                b0 = len(V)
+                V += [(x, y, zt) for x, y in pts]
+                F.append(tuple(range(b0, b0 + len(pts))))
+                FM.append(3 if q.get("estufa") else 2)
+                TOM.append(tom)
+                HJ.append(0.0)
+                UV.append([(0.0, 0.0)] * len(pts))
+        me = bpy.data.meshes.new("casas_env")
+        me.from_pydata(V, [], F)
+        me.polygons.foreach_set("material_index", FM)
+        at = me.attributes.new("tom", "FLOAT", "FACE")
+        at.data.foreach_set("value", TOM)
+        at = me.attributes.new("hjan", "FLOAT", "FACE")
+        at.data.foreach_set("value", HJ)
+        uvl = me.uv_layers.new(name="UVMap")
+        for p, uvs in zip(me.polygons, UV):
+            for li, (uu, vv) in zip(p.loop_indices, uvs):
+                uvl.data[li].uv = (uu, vv)
+        for mt in (mat_parede_env(D),
+                   mat_env("telha_env", None, 0.7, D, ["#9b4f35", "#a35a3c", "#8d4a33", "#b0654a", "#94503a"], 0.12),
+                   mat_env("terraco_env", "#b8b4ab", 0.85, D),
+                   mat_env("estufa_env", "#d9dcd8", 0.4, D)):
+            me.materials.append(mt)
+        objeto("casas_env", me)
+
+    # ---- roads: ribbons on the ground
+    estr = EV.get("estradas", [])
+    if estr:
+        V, F, FM = [], [], []
+        for k, e in enumerate(estr):
+            P = e["pontos"]
+            w = e["largura"] / 2
+            b0 = len(V)
+            for i, (x, y, z) in enumerate(P):
+                xa, ya = P[max(0, i - 1)][:2]
+                xb, yb = P[min(len(P) - 1, i + 1)][:2]
+                dx, dy = xb - xa, yb - ya
+                L = math.hypot(dx, dy) or 1.0
+                nx_, ny_ = -dy / L * w, dx / L * w
+                zz = z + 0.003 * (k % 7)
+                V += [(x + nx_, y + ny_, zz), (x - nx_, y - ny_, zz)]
+            for i in range(len(P) - 1):
+                a = b0 + 2 * i
+                F.append((a, a + 2, a + 3, a + 1))
+                FM.append(0 if e["mat"] == "asfalto" else 1)
+        me = bpy.data.meshes.new("estradas_env")
+        me.from_pydata(V, [], F)
+        me.polygons.foreach_set("material_index", FM)
+        me.materials.append(mat_env("asfalto_env", "#4d4d50", 0.85, D))
+        me.materials.append(mat_env("terra_env", "#8b7a5f", 0.95, D))
+        objeto("estradas_env", me)
+
+    # ---- trees: nine models (pine x2, eucalyptus x2, broadleaf x2, bush x2, fruit tree), placed as instances
+    arv = EV.get("arvores", [])
+    if arv:
+        modelos = bpy.data.collections.new("modelos_arvores")
+        casca = mat_env("casca_env", "#4a3f35", 0.9, D)
+        FOL = {"pinheiro": ["#26331a", "#2d3b1c", "#33421f"], "eucalipto": ["#4f5d3c", "#5a6845", "#46553a"],
+               "folhosa": ["#3d4f22", "#4a5c27", "#56662d"], "arbusto": ["#3f4a24", "#4a5228", "#56592e"],
+               "fruteira": ["#4f6227", "#5b6d2c"]}
+        mats_f = {}
+        for t_, cs in FOL.items():
+            m = bpy.data.materials.new("folhagem_" + t_)
+            try:
+                m.use_nodes = True
+            except Exception:
+                pass
+            nt = m.node_tree
+            b = principled(m)
+            oi = no(nt, "ShaderNodeObjectInfo", -900, 300)
+            rp = _ramp(nt, oi.outputs["Random"], cs, -650, 300, constante=False)
+            nt.links.new(rp.outputs["Color"], b.inputs["Base Color"])
+            b.inputs["Roughness"].default_value = 0.65
+            tc = no(nt, "ShaderNodeTexCoord", -900, -200)
+            rn = no(nt, "ShaderNodeTexNoise", -650, -200)
+            rn.inputs["Scale"].default_value = 9.0
+            rn.inputs["Detail"].default_value = 4.0
+            nt.links.new(tc.outputs["Object"], rn.inputs["Vector"])
+            bp = no(nt, "ShaderNodeBump", -400, -200)
+            bp.inputs["Strength"].default_value = 0.6
+            nt.links.new(rn.outputs["Fac"], bp.inputs["Height"])
+            nt.links.new(bp.outputs["Normal"], b.inputs["Normal"])
+            out = next(n for n in nt.nodes if n.type == "OUTPUT_MATERIAL")
+            tr = no(nt, "ShaderNodeBsdfTranslucent", -200, -400)
+            nt.links.new(rp.outputs["Color"], tr.inputs["Color"])
+            mx = no(nt, "ShaderNodeMixShader", 150, 100)
+            mx.inputs["Fac"].default_value = 0.22
+            nt.links.new(b.outputs["BSDF"], mx.inputs[1])
+            nt.links.new(tr.outputs["BSDF"], mx.inputs[2])
+            nt.links.new(mx.outputs["Shader"], out.inputs["Surface"])
+            neblina(m, D)
+            mats_f[t_] = m
+
+        def modelo(k, tipo, semente):
+            """A tree 1 m tall (instances scale it to their height): trunk + irregular crown of blobs."""
+            rng = np.random.default_rng(semente)
+            bm = bmesh.new()
+            t0, hc, raio, nb, achatar = {"pinheiro": (0.58, 0.40, 0.42, 6, 0.55), "eucalipto": (0.38, 0.62, 0.17, 7, 0.45),
+                                         "folhosa": (0.32, 0.68, 0.36, 6, 0.0), "arbusto": (0.0, 1.0, 0.62, 3, 0.0),
+                                         "fruteira": (0.34, 0.66, 0.46, 5, 0.0)}[tipo]
+            if t0 > 0:
+                res = bmesh.ops.create_cone(bm, cap_ends=True, segments=7,
+                                            radius1=0.018 if tipo != "eucalipto" else 0.012, radius2=0.006,
+                                            depth=t0 + hc * 0.5)
+                bmesh.ops.translate(bm, verts=res["verts"], vec=(0, 0, (t0 + hc * 0.5) / 2))
+            n_tronco = len(bm.faces)
+            for j in range(nb):
+                if j == 0:
+                    c = (0.0, 0.0, t0 + hc * 0.55)
+                    r = raio * 0.8
+                else:
+                    a = rng.random() * 2 * math.pi
+                    c = (math.cos(a) * raio * rng.uniform(0.3, 0.65), math.sin(a) * raio * rng.uniform(0.3, 0.65),
+                         t0 + hc * rng.uniform(0.25, 0.85))
+                    r = raio * rng.uniform(0.45, 0.7)
+                res = bmesh.ops.create_icosphere(bm, subdivisions=2, radius=1.0)
+                for v_ in res["verts"]:
+                    jit = 1 + rng.uniform(-0.18, 0.18)
+                    v_.co.x = v_.co.x * r * jit + c[0]
+                    v_.co.y = v_.co.y * r * jit + c[1]
+                    v_.co.z = v_.co.z * min(r, hc / 2) * jit * (1 - achatar * 0.5) + c[2]
+            bm.faces.ensure_lookup_table()
+            for i_, f_ in enumerate(bm.faces):
+                f_.material_index = 0 if i_ < n_tronco else 1
+                f_.smooth = i_ >= n_tronco
+            me = bpy.data.meshes.new(f"arv_{k}")
+            bm.to_mesh(me)
+            bm.free()
+            me.materials.append(casca)
+            me.materials.append(mats_f[tipo])
+            ob = bpy.data.objects.new(f"arv_{k}", me)
+            modelos.objects.link(ob)
+            return ob
+
+        for k, (tipo, sem) in enumerate((("pinheiro", 1), ("pinheiro", 2), ("eucalipto", 3), ("eucalipto", 4),
+                                         ("folhosa", 5), ("folhosa", 6), ("arbusto", 7), ("arbusto", 8),
+                                         ("fruteira", 9))):
+            modelo(k, tipo, sem)
+        A = np.array(arv, dtype=float)
+        me = bpy.data.meshes.new("arvores_env")
+        me.from_pydata(A[:, :3].tolist(), [], [])
+        for nome_, tipo_, col_ in (("variante", "INT", 3), ("escala", "FLOAT", 4), ("rot", "FLOAT", 5)):
+            at = me.attributes.new(nome_, tipo_, "POINT")
+            at.data.foreach_set("value", A[:, col_].astype(np.int32 if tipo_ == "INT" else np.float32))
+        ob = objeto("arvores_env", me)
+        ng = bpy.data.node_groups.new("arvores_instancias", "GeometryNodeTree")
+        ng.interface.new_socket("Geometry", in_out="INPUT", socket_type="NodeSocketGeometry")
+        ng.interface.new_socket("Geometry", in_out="OUTPUT", socket_type="NodeSocketGeometry")
+        gi = ng.nodes.new("NodeGroupInput")
+        go = ng.nodes.new("NodeGroupOutput")
+        ip = ng.nodes.new("GeometryNodeInstanceOnPoints")
+        ci = ng.nodes.new("GeometryNodeCollectionInfo")
+        ci.inputs["Collection"].default_value = modelos
+        ci.inputs["Separate Children"].default_value = True
+        ci.inputs["Reset Children"].default_value = True
+        ip.inputs["Pick Instance"].default_value = True
+
+        def atributo(nome_, tipo_):
+            n = ng.nodes.new("GeometryNodeInputNamedAttribute")
+            n.data_type = tipo_
+            n.inputs["Name"].default_value = nome_
+            return n.outputs["Attribute"]
+        ng.links.new(gi.outputs[0], ip.inputs["Points"])
+        ng.links.new(ci.outputs[0], ip.inputs["Instance"])
+        ng.links.new(atributo("variante", "INT"), ip.inputs["Instance Index"])
+        cx = ng.nodes.new("ShaderNodeCombineXYZ")
+        ng.links.new(atributo("rot", "FLOAT"), cx.inputs["Z"])
+        try:
+            er = ng.nodes.new("FunctionNodeEulerToRotation")
+            ng.links.new(cx.outputs[0], er.inputs[0])
+            ng.links.new(er.outputs[0], ip.inputs["Rotation"])
+        except Exception:
+            ng.links.new(cx.outputs[0], ip.inputs["Rotation"])
+        ng.links.new(atributo("escala", "FLOAT"), ip.inputs["Scale"])
+        ng.links.new(ip.outputs["Instances"], go.inputs[0])
+        mod = ob.modifiers.new("arvores", "NODES")
+        mod.node_group = ng
+        print("envolvente: árvores", len(arv))
+    print("envolvente ok:", len(casas), "casas,", len(estr), "estradas")
+
+
 # ---------------------------------------------------------------------------------------------- main
 criar_materiais()
 construir_solidos()
@@ -1136,6 +1772,8 @@ if OPC["render"]:
     folhas_cycles()
     for ob in CARTAS:
         ob.hide_render = True
+    if E.get("envolvente"):
+        construir_envolvente()
     cena.render.engine = "CYCLES"
     pref = bpy.context.preferences.addons["cycles"].preferences
     try:
@@ -1172,8 +1810,12 @@ if OPC["render"]:
     cena.render.image_settings.file_format = "JPEG"
     cena.render.image_settings.quality = 88
     nomes = list(cams) if OPC["render"] == "todas" else OPC["render"].split(",")
+    VV = {v["nome"]: v for v in E.get("vistas", [])}
     for n in nomes:
         cena.camera = cams[n]
+        wv, hv = [int(q) for q in VV[n].get("res", OPC["res"]).split("x")]
+        cena.render.resolution_x, cena.render.resolution_y = wv, hv
+        cena.view_settings.exposure = float(VV[n].get("exposicao", E.get("sol", {}).get("exposicao", 0.0)))
         cena.render.filepath = os.path.join(SAIDA, f"render_{n}.jpg")
         t0 = __import__("time").time()
         bpy.ops.render.render(write_still=True)
