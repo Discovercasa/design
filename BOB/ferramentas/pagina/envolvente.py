@@ -367,7 +367,7 @@ class Envolvente:
                         h = 6.2
                 hs = _hash(el["id"])
                 plano = tipo in ("industrial", "warehouse", "retail", "commercial", "apartments") or area > 600
-                out.append({"pontos": [[round(a, 2), round(b, 2)] for a, b in p], "altura": round(h, 2),
+                out.append({"osm": el["id"], "pontos": [[round(a, 2), round(b, 2)] for a, b in p], "altura": round(h, 2),
                             "telhado": "plano" if plano or tipo == "greenhouse" else "aguas",
                             "estufa": tipo == "greenhouse", "tom": round(hs, 3)})
         return out

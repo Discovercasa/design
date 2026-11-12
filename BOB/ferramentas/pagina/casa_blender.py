@@ -27,7 +27,8 @@ casa.json (local metres, x/y on the plan, z up from the reference floor; see ger
              exposicao (this view's exposure, e.g. brighter inside)}]
   terreno.cor  optional [ny-1][nx-1] RGB (sRGB 0-1) per cell for the material "solo" (the surroundings' ground)
   envolvente   (renders only; ferramentas/pagina/envolvente.py + the project's generator) {casas [{pontos [[x,y]],
-            z0, zc, altura, telhado aguas|plano, estufa, tom}], estradas [{pontos [[x,y,z]], largura, mat}],
+            z0, zc, altura, telhado aguas|plano, estufa, tom, cor_cob (roof colour), moderna (large windows, parapet)}],
+            estradas [{pontos [[x,y,z]], largura, mat}],
             arvores [[x, y, z, variante 0-8, altura, rotacao]], mar {z, raio, curvatura}, neblina {distancia}}:
             hipped tile roofs, rendered walls with windows, trees as instances, the sea following the earth's curve,
             far things fade into the sky's own colour (aerial perspective)
@@ -1283,6 +1284,12 @@ def mat_parede_env(dist):
     nt.links.new(mc.outputs["Result"], b.inputs["Base Color"])
     hj = no(nt, "ShaderNodeAttribute", -1500, -300)
     hj.attribute_name = "hjan"
+    a_ja = no(nt, "ShaderNodeAttribute", -1700, -450)
+    a_ja.attribute_name = "ja"
+    a_jt = no(nt, "ShaderNodeAttribute", -1700, -600)
+    a_jt.attribute_name = "jt"
+    a_j0 = no(nt, "ShaderNodeAttribute", -1700, -750)
+    a_j0.attribute_name = "j0"
 
     def op(tipo, a, b_=None, x=0, y=0):
         n = no(nt, "ShaderNodeMath", x, y)
@@ -1298,19 +1305,34 @@ def mat_parede_env(dist):
 
     u = op("ADD", sp.outputs["X"], op("MULTIPLY", tom.outputs["Fac"], 7.0, x=-1300, y=150), x=-1150, y=100)
     cu = op("FRACT", op("DIVIDE", u, 3.3, x=-1000, y=100), x=-850, y=100)
-    m1 = op("MULTIPLY", op("GREATER_THAN", cu, 0.33, x=-700, y=150), op("LESS_THAN", cu, 0.67, x=-700, y=50),
+    ja, jt = a_ja.outputs["Fac"], a_jt.outputs["Fac"]
+    um_ja = op("SUBTRACT", 1.0, ja, x=-1300, y=-450)
+    m1 = op("MULTIPLY", op("GREATER_THAN", cu, ja, x=-700, y=150), op("LESS_THAN", cu, um_ja, x=-700, y=50),
             x=-550, y=100)
-    fv = op("FRACT", op("DIVIDE", op("SUBTRACT", sp.outputs["Y"], 0.95, x=-1150, y=-100), 2.9, x=-1000, y=-100),
-            x=-850, y=-100)
-    m2 = op("LESS_THAN", fv, 0.47, x=-700, y=-100)
-    # the glass inside a 6 cm frame (frame = window mask minus the inner one)
-    g1 = op("MULTIPLY", op("GREATER_THAN", cu, 0.345, x=-700, y=250), op("LESS_THAN", cu, 0.655, x=-700, y=200),
-            x=-550, y=230)
-    g2 = op("MULTIPLY", op("GREATER_THAN", fv, 0.02, x=-700, y=-150), op("LESS_THAN", fv, 0.45, x=-700, y=-180),
-            x=-550, y=-160)
-    m3 = op("GREATER_THAN", sp.outputs["Y"], 0.9, x=-700, y=-200)
+    fv = op("FRACT", op("DIVIDE", op("SUBTRACT", sp.outputs["Y"], a_j0.outputs["Fac"], x=-1150, y=-100), 2.9,
+                        x=-1000, y=-100), x=-850, y=-100)
+    m2 = op("LESS_THAN", fv, jt, x=-700, y=-100)
+    # the glass inside a 5 cm frame (frame = window mask minus the inner one)
+    g1 = op("MULTIPLY", op("GREATER_THAN", cu, op("ADD", ja, 0.015, x=-900, y=250), x=-700, y=250),
+            op("LESS_THAN", cu, op("SUBTRACT", um_ja, 0.015, x=-900, y=200), x=-700, y=200), x=-550, y=230)
+    g2 = op("MULTIPLY", op("GREATER_THAN", fv, 0.02, x=-700, y=-150),
+            op("LESS_THAN", fv, op("SUBTRACT", jt, 0.02, x=-900, y=-180), x=-700, y=-180), x=-550, y=-160)
+    m3 = op("GREATER_THAN", sp.outputs["Y"], op("SUBTRACT", a_j0.outputs["Fac"], 0.05, x=-900, y=-220), x=-700, y=-200)
     m4 = op("LESS_THAN", sp.outputs["Y"], hj.outputs["Fac"], x=-700, y=-300)
-    mk = op("MULTIPLY", op("MULTIPLY", m1, m2, x=-550, y=-50), op("MULTIPLY", m3, m4, x=-550, y=-250), x=-400, y=-100)
+    # not every bay has a window: a random choice per bay and storey (a regular grid read as an office block)
+    baia = op("FLOOR", op("DIVIDE", u, 3.3, x=-1000, y=400), x=-850, y=400)
+    andar = op("FLOOR", op("DIVIDE", op("SUBTRACT", sp.outputs["Y"], a_j0.outputs["Fac"], x=-1150, y=500), 2.9,
+                           x=-1000, y=500), x=-850, y=500)
+    cb = no(nt, "ShaderNodeCombineXYZ", -700, 450)
+    nt.links.new(baia, cb.inputs["X"])
+    nt.links.new(andar, cb.inputs["Y"])
+    nt.links.new(tom.outputs["Fac"], cb.inputs["Z"])
+    wn = no(nt, "ShaderNodeTexWhiteNoise", -550, 450)
+    wn.noise_dimensions = "3D"
+    nt.links.new(cb.outputs["Vector"], wn.inputs["Vector"])
+    tem = op("GREATER_THAN", wn.outputs["Value"], 0.38, x=-400, y=450)
+    mk = op("MULTIPLY", op("MULTIPLY", op("MULTIPLY", m1, m2, x=-550, y=-50), op("MULTIPLY", m3, m4, x=-550, y=-250),
+                           x=-400, y=-100), tem, x=-300, y=0)
     vid = no(nt, "ShaderNodeBsdfPrincipled", -300, -500)
     vid.inputs["Base Color"].default_value = (0.03, 0.035, 0.04, 1)
     vid.inputs["Roughness"].default_value = 0.03
@@ -1330,6 +1352,34 @@ def mat_parede_env(dist):
     nt.links.new(b.outputs["BSDF"], mx.inputs[1])
     nt.links.new(mv.outputs["Shader"], mx.inputs[2])
     nt.links.new(mx.outputs["Shader"], out.inputs["Surface"])
+    neblina(m, dist)
+    return m
+
+
+def mat_cobertura_env(dist):
+    """Roofs: each building's own colour (attribute cor_cob, from the satellite view), mottled."""
+    m = bpy.data.materials.new("cobertura_env")
+    try:
+        m.use_nodes = True
+    except Exception:
+        pass
+    nt = m.node_tree
+    b = principled(m)
+    b.inputs["Roughness"].default_value = 0.75
+    at = no(nt, "ShaderNodeAttribute", -900, 300)
+    at.attribute_name = "cor_cob"
+    tc = no(nt, "ShaderNodeTexCoord", -1100, 0)
+    rn = no(nt, "ShaderNodeTexNoise", -900, 0)
+    rn.inputs["Scale"].default_value = 1.5
+    nt.links.new(tc.outputs["Object"], rn.inputs["Vector"])
+    mr = no(nt, "ShaderNodeMapRange", -650, 0)
+    mr.inputs["To Min"].default_value, mr.inputs["To Max"].default_value = 0.85, 1.12
+    nt.links.new(rn.outputs["Fac"], mr.inputs["Value"])
+    sc = no(nt, "ShaderNodeVectorMath", -400, 200)
+    sc.operation = "SCALE"
+    nt.links.new(at.outputs["Color"], sc.inputs[0])
+    nt.links.new(mr.outputs["Result"], sc.inputs["Scale"])
+    nt.links.new(sc.outputs["Vector"], b.inputs["Base Color"])
     neblina(m, dist)
     return m
 
@@ -1501,8 +1551,13 @@ def construir_envolvente():
     # ---- buildings: walls along the footprint, hipped tile roof over its rectangle (or flat), windows in the walls
     casas = EV.get("casas", [])
     if casas:
-        V, F, FM, TOM, HJ, UV = [], [], [], [], [], []
+        V, F, FM, TOM, HJ, UV, COB, JA, JT, J0 = [], [], [], [], [], [], [], [], [], []
         for q in casas:
+            cob = [c ** 2.2 for c in hex_rgb(q.get("cor_cob", "#b4603e"))] + [1.0]
+            moderna = bool(q.get("moderna"))
+            janela = (0.22, 0.76, 0.15) if moderna else (0.33, 0.47, 0.95)
+            plano = q.get("telhado") != "aguas"
+            n0 = len(F)
             pts = [tuple(p) for p in q["pontos"]]
             if sum(pts[i - 1][0] * pts[i][1] - pts[i][0] * pts[i - 1][1] for i in range(len(pts))) < 0:
                 pts = pts[::-1]
@@ -1515,12 +1570,13 @@ def construir_envolvente():
                 (x1, y1), (x2, y2) = pts[i], pts[(i + 1) % len(pts)]
                 L = math.hypot(x2 - x1, y2 - y1)
                 b0 = len(V)
-                V += [(x1, y1, z0), (x2, y2, z0), (x2, y2, zt + 0.1), (x1, y1, zt + 0.1)]
+                ztopo = zt + (0.45 if moderna else 0.3) if plano else zt + 0.1     # parapet round a flat roof
+                V += [(x1, y1, z0), (x2, y2, z0), (x2, y2, ztopo), (x1, y1, ztopo)]
                 F.append((b0, b0 + 1, b0 + 2, b0 + 3))
                 FM.append(mw)
                 TOM.append(tom)
                 HJ.append(h - 0.5)
-                UV.append([(u, z0 - zc), (u + L, z0 - zc), (u + L, zt + 0.1 - zc), (u, zt + 0.1 - zc)])
+                UV.append([(u, z0 - zc), (u + L, z0 - zc), (u + L, ztopo - zc), (u, ztopo - zc)])
                 u += L
             rect = _retangulo_minimo(pts)
             area = abs(sum(pts[i - 1][0] * pts[i][1] - pts[i][0] * pts[i - 1][1] for i in range(len(pts)))) / 2
@@ -1551,6 +1607,11 @@ def construir_envolvente():
                 TOM.append(tom)
                 HJ.append(0.0)
                 UV.append([(0.0, 0.0)] * len(pts))
+            for _ in range(len(F) - n0):
+                COB += cob
+                JA.append(janela[0])
+                JT.append(janela[1])
+                J0.append(janela[2])
         me = bpy.data.meshes.new("casas_env")
         me.from_pydata(V, [], F)
         me.polygons.foreach_set("material_index", FM)
@@ -1558,14 +1619,17 @@ def construir_envolvente():
         at.data.foreach_set("value", TOM)
         at = me.attributes.new("hjan", "FLOAT", "FACE")
         at.data.foreach_set("value", HJ)
+        at = me.attributes.new("cor_cob", "FLOAT_COLOR", "FACE")
+        at.data.foreach_set("color", COB)
+        for nome_, vals in (("ja", JA), ("jt", JT), ("j0", J0)):
+            at = me.attributes.new(nome_, "FLOAT", "FACE")
+            at.data.foreach_set("value", vals)
         uvl = me.uv_layers.new(name="UVMap")
         for p, uvs in zip(me.polygons, UV):
             for li, (uu, vv) in zip(p.loop_indices, uvs):
                 uvl.data[li].uv = (uu, vv)
-        for mt in (mat_parede_env(D),
-                   mat_env("telha_env", None, 0.7, D, ["#9b4f35", "#a35a3c", "#8d4a33", "#b0654a", "#94503a"], 0.12),
-                   mat_env("terraco_env", "#b8b4ab", 0.85, D),
-                   mat_env("estufa_env", "#d9dcd8", 0.4, D)):
+        cobertura = mat_cobertura_env(D)
+        for mt in (mat_parede_env(D), cobertura, cobertura, mat_env("estufa_env", "#d9dcd8", 0.4, D)):
             me.materials.append(mt)
         objeto("casas_env", me)
 

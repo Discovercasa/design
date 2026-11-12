@@ -460,3 +460,10 @@ he answers (`metodo-construtivo.md`). Condensed 2026-10-28 (history in git).
   over the whole sea (silver); only build the buildings the house sees (user: all within 300 m + farther ones whose
   roof shows over the ground from a window — 44 of 148 in 1,5 km); clear balustrade glass for views from inside.
   Still crude: OSM road ribbons near the lot, blob trees up close, neighbours as plain volumes (as asked).
+  **What the neighbours look like:** OSM had only "house"/"yes" (no storeys, roof or colour) and missed 6 buildings
+  within 300 m (recent ones). Method used: the satellite view as reference only (never in the page) — each OSM
+  footprint's centroid is projected to the screenshot (Web Mercator, known centre and zoom) to read its roof (hipped
+  orange tile vs flat white/grey, colour, pool/solar panels), and missing buildings are picked by their corners on the
+  screenshot and converted back to the house frame. Ribamar: a mix — traditional tile-roofed houses to the west and
+  south, modern flat-roofed villas next to the lot. Storeys are guessed (2, or 1 for small ones); Street View or the
+  DGT LiDAR would confirm them.
