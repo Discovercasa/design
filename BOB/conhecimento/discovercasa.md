@@ -55,6 +55,16 @@ Why Claude learns the method; "vamos passo a passo" — an overall idea, then an
    `ferramentas/pagina/gerar_pagina.py` (one HTML: images, 3D Realista/Maquete, storeys, areas, finishes). DWG → DXF with
    the ODA File Converter; `ferramentas/dxf/leitor_dxf.py` reads it. Ribamar's description is measured by hand on the DXF
    for now (`_trabalho/ribamar/`, local); the automatic reading should later produce `casa.json`.
+   **Documents per client page (2026-11-12):** each page is a different project and client, so each needs its own
+   files. Claude's proposed list waits for Dinis's validation (hub task «Validar a lista de documentos para fazer uma
+   página», Builder › Páginas › Estrutura da página): essential — floor plans of every storey, elevations and sections,
+   site plan + topographic survey, finishes; very useful (Claude proposes if missing) — window/door schedule,
+   electrical/lighting plan, furniture plan, kitchen/bathroom design, landscaping, site photos, area table; optional —
+   architect's 3D model, client's choices and references, page texts. Formats: DWG/DXF → DWFx → vector PDF → scanned.
+   **Lighting:** "nós costumamos ter o esquemas elétricos das casas mas na falta deses esquemas adaptas e fazes a melhor
+   iluminação possível para aquele projeto" — use the electrical plan's light points when there is one; otherwise
+   design the best lighting for that house. Dropping the files in the hub comes later, "quando tivermos tudo definido e
+   já criares páginas como queremos com a qualidade desejada" — not now.
    Settings panel wished ("Futuramente"): "um painel onde podemos definir este tipo de coisas, comprimentos dos módulos
    e a sua composição" — today in `sistema_construtivo.json` (`estrutura.divisor`) and each `config.json`.
    **Production documents for every new project** (2026-10-16 night): "quero que sejas capaz de desenvolver um
