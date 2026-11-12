@@ -441,12 +441,13 @@ he answers (`metodo-construtivo.md`). Condensed 2026-10-28 (history in git).
   transform and draw it outside the tone mapping; clamp indirect light in the bake (light through glass made specks) and
   blur dark areas harder (rooms seen through the glass). Baked light is only right for the whole house: cut-away views
   go back to dynamic light. `ferramentas/pagina/casa_blender.py --luz`, `modelo_pagina.html`.
-- **2026-11-12** — **status: proposed to the user (not built).** The view from inside the house in the 360° tour, in
-  three depths: near (lot, terrain, walls, garden, road) in 3D from the topographic survey, as for Ribamar; middle
-  (neighbouring houses, trees) as simple volumes from the DGT LiDAR open data (MDT/MDS 50 cm, CC-BY 4.0; MDS − MDT gives
-  building and tree heights) or OpenStreetMap footprints; far (landscape, sea, hills, sky) = a real 360° photo taken on
-  the site at each storey's eye height (floor level + 1,6 m), used as the background through the windows. Easiest
-  capture: a 360° camera on a tall pole (≈5–7 m reaches Piso 1) in HDR mode, at points marked on the site plan, with the
-  date and time kept (the render's sun is set to the photo's). A drone also works but needs AAN authorisation for aerial
-  images. Without photos: LiDAR + orthophotos only (correct geometry, less real). Google Street View / Earth only as
-  reference, never in the page.
+- **2026-11-12** — **status: proposed to the user (not built); site photos ruled out by the user.** The view from
+  inside the house in the 360° tour, built only from open data (the user: "no ponto 11 não vamos conseguir ter fotos das
+  casas"): near field (lot, terrain, walls, garden, road) in 3D from the topographic survey, as for Ribamar; middle field
+  (neighbouring houses and trees up to ~500 m) from the DGT LiDAR (MDT/MDS 50 cm, CC-BY 4.0: MDS − MDT gives real building
+  and tree heights) with OpenStreetMap footprints, roads and land use (scrub, fields, sea), ground colours from the
+  orthophotos; far field (hills, sea, skyline up to ~20 km) from a coarser terrain model (DGT MDT 2 m or Copernicus DEM).
+  Neighbours as simple volumes with typical finishes: distances, heights and what each window sees are right, the look
+  is illustrative, not photographic. Needs only the survey in official coordinates (PT-TM06) and what will change by
+  handover; helpful: the licensing project's location plan, street elevations and site photos. Google Street View /
+  Earth / 3D Tiles only as reference, never in the page (terms of use). Built BEFORE the 360° renders.

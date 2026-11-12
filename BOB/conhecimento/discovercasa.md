@@ -66,8 +66,8 @@ Why Claude learns the method; "vamos passo a passo" — an overall idea, then an
    design the best lighting for that house. Dropping the files in the hub comes later, "quando tivermos tudo definido e
    já criares páginas como queremos com a qualidade desejada" — not now.
    **View from inside (2026-11-12):** "nós vamos querer replicar pelo menos o exterior visível da casa do cliente" — so
-   the 360° tour shows the view the client will have from inside. Proposed method in `insights.md` (site 360° photos at
-   each storey's eye height + LiDAR/OSM neighbours + 3D near field).
+   the 360° tour shows the view the client will have from inside. Method in `insights.md`: no site photos ("não vamos conseguir ter
+   fotos das casas") — the surroundings are built from open data (DGT LiDAR + orthophotos, OSM, terrain model).
    Order: the visible exterior is done BEFORE the 360° renders — "quando for para fazer os renders 360 vamos precisar já
    do exterior feito para eles ficarem minimamente fidedignos"; they are two separate items of the documents list.
    Settings panel wished ("Futuramente"): "um painel onde podemos definir este tipo de coisas, comprimentos dos módulos
