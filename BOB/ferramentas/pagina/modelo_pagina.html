@@ -158,13 +158,6 @@ footer .largura{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8p
 </section>
 <div class="ficha"><div class="largura"><dl>__FICHA__</dl></div></div>
 
-<section class="bloco" aria-labelledby="h-imagens">
-  <div class="largura">
-    <div class="cab"><h2 id="h-imagens">Imagens</h2><p>Toque numa imagem para a ver em ecrã inteiro.</p></div>
-    <div class="imagens">__GALERIA__</div>
-  </div>
-</section>
-
 <section class="bloco mesa" aria-labelledby="h-3d">
   <div class="largura">
     <div class="cab"><h2 id="h-3d">Explorar em 3D</h2><p>Arraste para rodar e use a roda do rato ou dois dedos para aproximar. Tire a cobertura e os pisos de cima para ver por dentro.</p></div>
@@ -183,6 +176,13 @@ footer .largura{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8p
         <div id="pisos"></div>
       </aside>
     </div>
+  </div>
+</section>
+
+<section class="bloco" aria-labelledby="h-imagens">
+  <div class="largura">
+    <div class="cab"><h2 id="h-imagens">Imagens</h2><p>Toque numa imagem para a ver em ecrã inteiro.</p></div>
+    <div class="imagens">__GALERIA__</div>
   </div>
 </section>
 
@@ -208,6 +208,7 @@ footer .largura{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8p
 <script id="dados" type="application/json">__DADOS__</script>
 <script id="modulos" type="application/json">__MODULOS__</script>
 <script id="glb" type="text/plain">__GLB__</script>
+<script id="texturas" type="application/json">__TEXTURAS__</script>
 <script>
 // images, storeys and finishes: plain script, so they show even where the 3D cannot start
 (function () {
@@ -282,12 +283,12 @@ async function modulos() {
     return (urls[p] = URL.createObjectURL(new Blob([src], { type: 'text/javascript' })));
   }
   const imp = (p) => import(url(p));
-  const [THREE, OC, GL, EC, RP, GT, OP, SK, RE] = await Promise.all([
+  const [THREE, OC, GL, EC, RP, GT, OP, RE] = await Promise.all([
     imp('build/three.module.js'), imp('examples/jsm/controls/OrbitControls.js'), imp('examples/jsm/loaders/GLTFLoader.js'),
     imp('examples/jsm/postprocessing/EffectComposer.js'), imp('examples/jsm/postprocessing/RenderPass.js'),
     imp('examples/jsm/postprocessing/GTAOPass.js'), imp('examples/jsm/postprocessing/OutputPass.js'),
-    imp('examples/jsm/objects/Sky.js'), imp('examples/jsm/environments/RoomEnvironment.js')]);
-  return { THREE, ...OC, ...GL, ...EC, ...RP, ...GT, ...OP, ...SK, ...RE };
+    imp('examples/jsm/environments/RoomEnvironment.js')]);
+  return { THREE, ...OC, ...GL, ...EC, ...RP, ...GT, ...OP, ...RE };
 }
 try {
   const L = await modulos();
@@ -304,7 +305,7 @@ async function iniciar(L, D) {
   const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
   renderer.setPixelRatio(Math.min(devicePixelRatio, movel ? 1.5 : 2));
   renderer.shadowMap.enabled = true;
-  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  renderer.shadowMap.type = THREE.PCFShadowMap;
   renderer.toneMapping = THREE.AgXToneMapping;
   renderer.toneMappingExposure = 1.0;
   vista.prepend(renderer.domElement);
@@ -320,40 +321,64 @@ async function iniciar(L, D) {
   const gltf = await new Promise((ok, erro) => new L.GLTFLoader().parse(b64bytes(document.getElementById('glb').textContent).buffer, '', ok, erro));
   const modelo = gltf.scene;
   cena.add(modelo);
-  const grupoDe = (o) => { while (o) { if (o.userData && o.userData.grupo) return o.userData.grupo; o = o.parent; } return 'casa'; };
+  // the light of the photographs, baked in Blender (Cycles): one map per part, its scale K in D.luz
+  const TX = JSON.parse(document.getElementById('texturas').textContent);
+  const tl = new THREE.TextureLoader();
+  const carregarTex = (src) => new Promise((ok, erro) => tl.load(src, ok, undefined, erro));
+  const LUZ = {};
+  for (const k of Object.keys(D.luz || {})) {
+    if (!TX['lm_' + k]) continue;
+    const t = await carregarTex(TX['lm_' + k]);
+    t.flipY = false; t.channel = 1; t.colorSpace = THREE.SRGBColorSpace;
+    LUZ[k] = { t, I: Math.PI * D.luz[k].K };
+  }
+  let ceuTex = null, folhaTex = null, folhaBranca = null;
+  if (TX.ceu) { ceuTex = await carregarTex(TX.ceu); ceuTex.mapping = THREE.EquirectangularReflectionMapping; ceuTex.colorSpace = THREE.SRGBColorSpace; }
+  if (TX.folha) {
+    folhaTex = await carregarTex(TX.folha); folhaTex.flipY = false; folhaTex.colorSpace = THREE.SRGBColorSpace;
+    const cv = document.createElement('canvas'); cv.width = folhaTex.image.width; cv.height = folhaTex.image.height;
+    const g2 = cv.getContext('2d'); g2.drawImage(folhaTex.image, 0, 0);
+    g2.globalCompositeOperation = 'source-atop'; g2.fillStyle = '#ecebe6'; g2.fillRect(0, 0, cv.width, cv.height);
+    folhaBranca = new THREE.CanvasTexture(cv); folhaBranca.flipY = false; folhaBranca.colorSpace = THREE.SRGBColorSpace;
+  }
+  const subir = (o, chave) => { while (o) { if (o.userData && o.userData[chave]) return o.userData[chave]; o = o.parent; } return null; };
+  const CASA = new Set(['cave', 'piso0', 'piso1', 'cobertura']);
+  const corMaq = (nm) => /relva|brita|berma/.test(nm) ? 0xdcdcd4 : /asfalto/.test(nm) ? 0xc8c8c4 : /metal|painel/.test(nm) ? 0xbdbab3 : 0xf4f2ee;
+  const VID = new THREE.MeshStandardMaterial({ color: 0xbfd0d6, roughness: 0.1, transparent: true, opacity: 0.35, depthWrite: false });
+  const RELVA = (D.ajuste && D.ajuste.relva) || [0.62, 0.84, 0.84];
   const malhas = [];
   modelo.traverse((o) => {
     if (!o.isMesh) return;
-    const g = grupoDe(o), nm = (o.material.name || '').toLowerCase();
-    o.userData.g = g;
-    o.userData.real = o.material;
+    const real = o.material, nm = (real.name || '').toLowerCase();
+    const M = {};
+    o.userData.g = subir(o, 'grupo') || 'casa';
     o.userData.vidro = nm.startsWith('vidro');
-    o.castShadow = !o.userData.vidro && g !== 'terreno';
-    o.receiveShadow = true;
+    if (real.map) real.map.anisotropy = renderer.capabilities.getMaxAnisotropy();
     if (o.userData.vidro) {
-      o.material = new THREE.MeshPhysicalMaterial({ color: nm.includes('guarda') ? 0xe8eeee : 0xcfdfe4, metalness: 0, roughness: nm.includes('guarda') ? 0.35 : 0.04,
-        transparent: true, opacity: nm.includes('guarda') ? 0.45 : 0.28, envMapIntensity: 1.6, depthWrite: false });
-      o.userData.real = o.material;
+      const guarda = nm.includes('guarda');
+      M.real = new THREE.MeshPhysicalMaterial({ color: guarda ? 0xe8eeee : 0xcfdfe4, metalness: 0, roughness: guarda ? 0.35 : 0.04,
+        transparent: true, opacity: guarda ? 0.45 : 0.25, envMapIntensity: 1.4, depthWrite: false });
+      M.maq = VID;
+    } else if (nm.startsWith('folhas_cartas') && folhaTex) {
+      M.real = new THREE.MeshStandardMaterial({ map: folhaTex, alphaTest: 0.45, side: THREE.DoubleSide, roughness: 0.75 });
+      M.maq = new THREE.MeshStandardMaterial({ map: folhaBranca, alphaTest: 0.45, side: THREE.DoubleSide, roughness: 0.95 });
+    } else {
+      M.real = real;
+      M.maq = new THREE.MeshStandardMaterial({ color: /tronco/.test(nm) ? 0xe9e9e4 : corMaq(nm), roughness: 0.92 });
+      const lm = LUZ[subir(o, 'lm')];
+      if (lm && o.geometry.attributes.uv1) {        // baked light: colour x light, exactly as in Cycles
+        M.realLuz = new THREE.MeshBasicMaterial({ map: real.map || null, color: real.color ? real.color.clone() : 0xffffff, lightMap: lm.t, lightMapIntensity: lm.I });
+        if (/relva|berma/.test(nm)) M.realLuz.color.multiply(new THREE.Color(...RELVA));   // the grass of the images is longer and greener than its texture
+        M.maqLuz = new THREE.MeshBasicMaterial({ color: corMaq(nm), lightMap: lm.t, lightMapIntensity: lm.I });
+      }
     }
-    const m = o.userData.real;
-    if (m.map) { m.map.anisotropy = renderer.capabilities.getMaxAnisotropy(); }
+    o.userData.M = M;
+    o.castShadow = !o.userData.vidro && o.userData.g !== 'terreno';
     malhas.push(o);
   });
-  // the maquette: white volumes, pale ground, white trees, light glass
-  const BR = new THREE.MeshStandardMaterial({ color: 0xf4f2ee, roughness: 0.92 });
-  const CHAO = new THREE.MeshStandardMaterial({ color: 0xdcdcd4, roughness: 1 });
-  const RUA = new THREE.MeshStandardMaterial({ color: 0xc8c8c4, roughness: 1 });
-  const ARV = new THREE.MeshStandardMaterial({ color: 0xe9e9e4, roughness: 0.95 });
-  const VID = new THREE.MeshStandardMaterial({ color: 0xbfd0d6, roughness: 0.1, transparent: true, opacity: 0.35, depthWrite: false });
-  const ESC = new THREE.MeshStandardMaterial({ color: 0xbdbab3, roughness: 0.9 });
-  for (const o of malhas) {
-    const nm = (o.userData.real.name || '').toLowerCase();
-    o.userData.maq = o.userData.vidro ? VID : /relva|brita/.test(nm) ? CHAO : /asfalto/.test(nm) ? RUA : /copa|tronco/.test(nm) ? ARV
-      : /metal|painel/.test(nm) ? ESC : BR;
-  }
 
-  // light, sky
-  const sol = new THREE.DirectionalLight(0xfff1e0, 3.2);
+  // light for what is not baked (fences, trees, glass) and for the cut-away storeys: the sun and sky of the images
+  const sol = new THREE.DirectionalLight(0xfff3e6, 4.0);
   sol.castShadow = true;
   sol.shadow.mapSize.set(movel ? 2048 : 4096, movel ? 2048 : 4096);
   const S = 26;
@@ -366,46 +391,60 @@ async function iniciar(L, D) {
   sol.position.copy(centro).addScaledVector(dirSol, 70);
   sol.target.position.copy(centro);
   cena.add(sol, sol.target);
-  const hemi = new THREE.HemisphereLight(0xdfe8f2, 0x8a8470, 0.35);
+  const hemi = new THREE.HemisphereLight(0xdfe8f2, 0x8a8470, 0.0);
   cena.add(hemi);
-  const ceu = new L.Sky();
-  ceu.scale.setScalar(2500);
-  const u = ceu.material.uniforms;
-  u.turbidity.value = 3.5; u.rayleigh.value = 1.3; u.mieCoefficient.value = 0.004; u.mieDirectionalG.value = 0.8;
-  u.sunPosition.value.copy(dirSol);
   const pmrem = new THREE.PMREMGenerator(renderer);
-  const cenaCeu = new THREE.Scene();
-  const ceuEnv = ceu.clone(); cenaCeu.add(ceuEnv);
-  const envReal = pmrem.fromScene(cenaCeu, 0.02).texture;
+  const envCeu = ceuTex ? pmrem.fromEquirectangular(ceuTex).texture : pmrem.fromScene(new L.RoomEnvironment(), 0.04).texture;
   const envMaq = pmrem.fromScene(new L.RoomEnvironment(), 0.04).texture;
-  cena.add(ceu);
+  // the sky of the images, shown as it came out of Blender (outside the tone mapping, which greyed it)
+  let domo = null;
+  if (ceuTex) {
+    domo = new THREE.Mesh(new THREE.SphereGeometry(1800, 48, 24), new THREE.ShaderMaterial({
+      uniforms: { t: { value: ceuTex } }, side: THREE.BackSide, depthWrite: false, toneMapped: false,
+      vertexShader: 'varying vec3 vD; void main(){ vD = position; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }',
+      fragmentShader: 'uniform sampler2D t; varying vec3 vD; void main(){ vec3 d = normalize(vD); vec2 uv = vec2(atan(d.z, d.x) * 0.15915494 + 0.5, asin(clamp(d.y, -1.0, 1.0)) * 0.31830988 + 0.5); gl_FragColor = vec4(texture2D(t, uv).rgb * 0.94, 1.0);' + String.fromCharCode(10) + '#include <colorspace_fragment>' + String.fromCharCode(10) + '}',
+    }));
+    domo.frustumCulled = false; domo.renderOrder = -1;
+    cena.add(domo);
+  }
 
-  // ambient occlusion (desktop)
-  let composer = null, gtao = null;
+  // ambient occlusion only for the cut-away (dynamic) view on a computer: the baked light already has it
+  let composer = null, gtao = null, usarAO = false;
   if (!movel) {
     composer = new L.EffectComposer(renderer);
     composer.addPass(new L.RenderPass(cena, camara));
     gtao = new L.GTAOPass(cena, camara, 800, 500);
     gtao.updateGtaoMaterial({ radius: 0.6, distanceExponent: 1.5, thickness: 1.0, scale: 1.0, samples: 16 });
     gtao.updatePdMaterial({ lumaPhi: 10, depthPhi: 2, normalPhi: 3, radius: 6, rings: 2, samples: 16 });
-    gtao.blendIntensity = 1.0;
     composer.addPass(gtao);
     composer.addPass(new L.OutputPass());
   }
 
-  function aplicarAspeto(a) {
-    for (const o of malhas) o.material = a === 'maquete' ? o.userData.maq : o.userData.real;
-    if (a === 'maquete') {
-      ceu.visible = false; cena.background = new THREE.Color(0xe7e8e3); cena.environment = envMaq; cena.environmentIntensity = 0.55;
-      sol.intensity = 2.6; sol.color.set(0xffffff); hemi.intensity = 0.5; renderer.toneMappingExposure = movel ? 0.92 : 1.05;
-      if (gtao) gtao.blendIntensity = 1.0;
-    } else {
-      ceu.visible = true; cena.background = null; cena.environment = envReal; cena.environmentIntensity = 0.9;
-      sol.intensity = 3.4; sol.color.set(0xfff1e0); hemi.intensity = 0.2; renderer.toneMappingExposure = movel ? 0.82 : 1.0;
-      if (gtao) gtao.blendIntensity = 0.75;
+  let aspeto = 'realista';
+  const AJ = Object.assign({ exposicao: 0.87, contraste: 1.1, saturacao: 1.04, ceu: 1.0, sol: 4.0, fundo: 0.55, relva: [0.62, 0.84, 0.84] }, D.ajuste || {});
+  function aplicar() {
+    const corte = ['cobertura', 'piso1', 'piso0'].some((id) => cx(id) && !cx(id).checked);
+    for (const o of malhas) {
+      const M = o.userData.M;
+      const luz = M.realLuz && !(corte && CASA.has(o.userData.g));
+      o.material = aspeto === 'maquete' ? (luz ? M.maqLuz : M.maq) : (luz ? M.realLuz : M.real);
+      o.receiveShadow = !luz;
     }
-    document.querySelectorAll('#segAspeto button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.v === a));
+    if (aspeto === 'maquete') {
+      cena.background = new THREE.Color(0xe7e8e3); cena.environment = envMaq; cena.environmentIntensity = 0.6; if (domo) domo.visible = false;
+      sol.intensity = AJ.sol * 0.8; sol.color.set(0xffffff); hemi.intensity = 0.35;
+      renderer.toneMappingExposure = AJ.exposicao; renderer.domElement.style.filter = '';
+    } else {
+      cena.background = domo ? null : new THREE.Color(0xcfdbe3); if (domo) domo.visible = true;
+      cena.environment = envCeu; cena.environmentIntensity = AJ.ceu;
+      sol.intensity = AJ.sol; sol.color.set(0xfff3e6); hemi.intensity = 0.0;
+      renderer.toneMappingExposure = AJ.exposicao;
+      renderer.domElement.style.filter = `contrast(${AJ.contraste}) saturate(${AJ.saturacao})`;   // the "Medium High Contrast" look of the images
+    }
+    usarAO = !!composer && corte;
+    document.querySelectorAll('#segAspeto button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.v === aspeto));
   }
+  function aplicarAspeto(a) { aspeto = a; aplicar(); }
   document.getElementById('segAspeto').addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) aplicarAspeto(b.dataset.v); });
 
   // what is shown: storeys cut from the top down
@@ -423,6 +462,7 @@ async function iniciar(L, D) {
   });
   function sincronizar() {
     for (const o of malhas) { const c = cx(o.userData.g); o.visible = c ? c.checked : true; }
+    aplicar();
   }
 
   // views
@@ -458,11 +498,17 @@ async function iniciar(L, D) {
   }
   new ResizeObserver(tamanho).observe(vista);
   tamanho();
-  aplicarAspeto('realista');
   sincronizar();
   const v0 = VIS[0];
   camara.position.copy(v0.a).addScaledVector(v0.c.clone().sub(v0.a), Math.max(1, Math.pow(1.5 / camara.aspect, 0.7)));
   controlos.target.copy(v0.a);
+  if (location.hash === '#comparar') {      // the first image's camera and lens, full window: to set the light against the photograph
+    vista.style.cssText = 'position:fixed;inset:0;height:auto;z-index:100';
+    tamanho();
+    camara.fov = 2 * Math.atan(18 / (v0.lente || 26) / camara.aspect) * 180 / Math.PI;
+    camara.updateProjectionMatrix();
+    camara.position.copy(v0.c); controlos.target.copy(v0.a);
+  }
   document.getElementById('carregar').remove();
   const seta = document.getElementById('seta');
   const tmp = new THREE.Vector3();
@@ -475,9 +521,10 @@ async function iniciar(L, D) {
       if (camara.position.distanceTo(alvoCam.c) < 0.05) alvoCam = null;
     }
     controlos.update();
+    if (domo) domo.position.copy(camara.position);
     camara.getWorldDirection(tmp);
     seta.style.transform = `rotate(${-Math.atan2(tmp.x, -tmp.z)}rad)`;   // where north is on the screen
-    if (composer) composer.render(); else renderer.render(cena, camara);
+    if (usarAO) composer.render(); else renderer.render(cena, camara);
   });
   window.__modelo = { cena, camara, controlos, irPara, aplicarAspeto, malhas };
   window.__pronto = true;

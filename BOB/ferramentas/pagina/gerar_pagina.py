@@ -27,7 +27,7 @@ THREE = AQUI.parent.parent / "configurador" / "web" / "node_modules" / "three"
 ENTRADAS = ["build/three.module.js", "examples/jsm/controls/OrbitControls.js", "examples/jsm/loaders/GLTFLoader.js",
             "examples/jsm/postprocessing/EffectComposer.js", "examples/jsm/postprocessing/RenderPass.js",
             "examples/jsm/postprocessing/GTAOPass.js", "examples/jsm/postprocessing/OutputPass.js",
-            "examples/jsm/objects/Sky.js", "examples/jsm/environments/RoomEnvironment.js"]
+            "examples/jsm/environments/RoomEnvironment.js"]
 IMPORTA = re.compile(r"""(?:\bfrom\s*|\bimport\s*\(\s*|\bimport\s+)(['"])([^'"\n]+)\1""")
 MESES = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho", "agosto", "setembro", "outubro",
          "novembro", "dezembro"]
@@ -68,7 +68,7 @@ def gerar(pagina, saida):
         return [round(xr, 3), round(z, 3), round(-yr, 3)]
     titulos = {i["vista"]: i["titulo"] for i in P.get("imagens", [])}
     vistas = [{"nome": v["nome"], "titulo": titulos.get(v["nome"], v["nome"].capitalize()),
-               "camara": tres(v["camara"]), "alvo": tres(v["alvo"])} for v in C.get("vistas", [])]
+               "camara": tres(v["camara"]), "alvo": tres(v["alvo"]), "lente": v.get("lente", 26)} for v in C.get("vistas", [])]
     cx, cy = C.get("centro", [0, 0])
     pisos = [{**p, "cota_txt": _num(p["cota"])} for p in P["pisos"]]
     dados = {"pisos": pisos, "cota_topo": _num(P["cota_topo"]), "cota_topo_num": P["cota_topo"], "vistas": vistas, "sol": C.get("sol", {}),
@@ -76,6 +76,18 @@ def gerar(pagina, saida):
     sol = dict(dados["sol"])
     sol["azimute"] = sol.get("azimute", 235)
     dados["sol"] = sol
+    # the baked light (casa_blender.py --luz): lightmaps, the sky of the images, the leaf cards
+    texturas = {}
+    luz = modelo / "luz.json"
+    if luz.exists():
+        dados["luz"] = json.loads(luz.read_text(encoding="utf-8"))
+        for k in dados["luz"]:
+            texturas["lm_" + k] = "data:image/jpeg;base64," + base64.b64encode((modelo / f"lm_{k}.jpg").read_bytes()).decode("ascii")
+    for chave, nome, tipo in (("ceu", "ceu.jpg", "jpeg"), ("folha", "folha.png", "png")):
+        if (modelo / nome).exists():
+            texturas[chave] = f"data:image/{tipo};base64," + base64.b64encode((modelo / nome).read_bytes()).decode("ascii")
+    if P.get("ajuste"):
+        dados["ajuste"] = P["ajuste"]
     fotos = []
     for i in P.get("imagens", []):
         f = modelo / f"render_{i['vista']}.jpg"
@@ -101,9 +113,10 @@ def gerar(pagina, saida):
         "DADOS": json.dumps(dados, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/"),
         "MODULOS": json.dumps(_modulos(), separators=(",", ":")),
         "GLB": base64.b64encode((modelo / "casa.glb").read_bytes()).decode("ascii"),
+        "TEXTURAS": json.dumps(texturas, separators=(",", ":")),
     }
     tpl = (AQUI / "modelo_pagina.html").read_text(encoding="utf-8")
-    pagina_html = re.sub(r"__(TITULO|SUBTITULO|FICHA|DATA|HERO|GALERIA|DADOS|MODULOS|GLB)__", lambda m: valores[m.group(1)], tpl)
+    pagina_html = re.sub(r"__(TITULO|SUBTITULO|FICHA|DATA|HERO|GALERIA|DADOS|MODULOS|GLB|TEXTURAS)__", lambda m: valores[m.group(1)], tpl)
     Path(saida).write_text(pagina_html, encoding="utf-8")
     return len(pagina_html.encode("utf-8")), len(fotos)
 

@@ -435,3 +435,9 @@ he answers (`metodo-construtivo.md`). Condensed 2026-10-28 (history in git).
   per opening, finishes from the drawings' notes, the ground reshaped: ramp trench with retaining walls, platform at the
   house, gravel drive, boundary fence) → one Blender scene gives the interactive GLB (Realista/Maquete) and the Cycles images.
   The Builder's automatic reading should aim to produce that description (casa.json), not the page directly.
+- **2026-11-12** — **status: applied (Ribamar page), told to the user.** To make an interactive 3D look like its Cycles
+  images: bake the light (diffuse direct + indirect, no colour) into lightmaps on a second UV and show colour x light
+  unlit in three.js (MeshBasicMaterial lightMap, intensity π·K); render the sky panorama with the images' own view
+  transform and draw it outside the tone mapping; clamp indirect light in the bake (light through glass made specks) and
+  blur dark areas harder (rooms seen through the glass). Baked light is only right for the whole house: cut-away views
+  go back to dynamic light. `ferramentas/pagina/casa_blender.py --luz`, `modelo_pagina.html`.

@@ -3,6 +3,9 @@
     blender -b --factory-startup -P ferramentas/pagina/casa_blender.py -- <casa.json> <saida/> [--render v1,v2|todas]
                                   [--amostras 160] [--res 1600x1000] [--sem-glb] [--previa] [--sem-relva]
   (--previa: half size; ~50 s per view on a GTX 1050 Ti at 32 samples. The first Cycles run compiles the GPU kernels.)
+  --luz [--amostras_luz 200]: for the web model, bake the Cycles light (direct + bounced, diffuse) into lightmaps
+  lm_casa/lm_exterior/lm_terreno.jpg (second UV 'lm' = TEXCOORD_1, K per map in luz.json), the sky as an equirect
+  ceu.jpg (AgX like the images, centre = east) and leaf cards for the crowns (folha.png). ~10 min at 200 samples.
 
 casa.json (local metres, x/y on the plan, z up from the reference floor; see gerar_casa in the project's _trabalho):
   materiais_cor   optional colour overrides {"ripado": "#6a4a35", ...}
@@ -41,7 +44,7 @@ OPC = {"render": "", "amostras": "160", "res": "1600x1000"}
 i = 2
 while i < len(argv):
     a = argv[i]
-    if a in ("--sem-glb", "--previa", "--sem-relva"):
+    if a in ("--sem-glb", "--previa", "--sem-relva", "--luz"):
         OPC[a[2:]] = True
         i += 1
     else:
@@ -789,7 +792,7 @@ def luz_e_ceu():
         except Exception:
             continue
     el, az = math.radians(sol["elevacao"]), math.radians(sol["azimute"])
-    for attr, val in (("sun_elevation", el), ("sun_rotation", math.pi / 2 - az + math.pi), ("sun_disc", False),
+    for attr, val in (("sun_elevation", el), ("sun_rotation", az), ("sun_disc", False),
                       ("altitude", 100.0), ("air_density", 1.0), ("aerosol_density", float(sol.get("aerossol", 0.6))),
                       ("dust_density", float(sol.get("aerossol", 0.6))),
                       ("ozone_density", 1.0)):
@@ -835,6 +838,257 @@ def camaras():
     return out
 
 
+
+# ---------------------------------------------------------------------------------------------- web: baked light, sky, leaf cards
+CARTAS = []
+
+
+def cartas_folhas():
+    """Crowns for the web: cards carrying a cluster of leaves (alpha). They also cast dappled shadows in the bake."""
+    if not ARVORES:
+        return None
+    n = 512
+    rng = np.random.default_rng(77)
+    rgba = np.zeros((n, n, 4))
+    yy, xx = np.mgrid[0:n, 0:n] / n
+    for _ in range(420):
+        cx, cy = rng.random(2) * 0.84 + 0.08
+        if (cx - 0.5) ** 2 + (cy - 0.5) ** 2 > 0.19:
+            continue
+        a, b = rng.uniform(0.018, 0.032), rng.uniform(0.008, 0.014)
+        ang = rng.random() * math.pi
+        dx, dy = xx - cx, yy - cy
+        u = (dx * math.cos(ang) + dy * math.sin(ang)) / a
+        v = (-dx * math.sin(ang) + dy * math.cos(ang)) / b
+        m = u * u + v * v <= 1.0
+        tom = rng.uniform(0.55, 1.15)
+        cor = np.array([0.16, 0.26, 0.07]) * tom + rng.normal(0, 0.012, 3)
+        sombra = 0.8 + 0.2 * (1 - np.clip(np.abs(v), 0, 1))
+        for c_ in range(3):
+            rgba[..., c_] = np.where(m, np.clip(cor[c_] * sombra, 0, 1), rgba[..., c_])
+        rgba[..., 3] = np.where(m, 1.0, rgba[..., 3])
+    img = bpy.data.images.new("folha_cartas", n, n, alpha=True)
+    img.pixels.foreach_set(rgba[::-1].astype(np.float32).ravel())
+    img.filepath_raw = os.path.join(SAIDA, "folha.png")
+    img.file_format = "PNG"
+    img.save()
+    m = bpy.data.materials.new("folhas_cartas")
+    try:
+        m.use_nodes = True
+    except Exception:
+        pass
+    nt = m.node_tree
+    b = principled(m)
+    it = no(nt, "ShaderNodeTexImage", -500, 200)
+    it.image = img
+    nt.links.new(it.outputs["Color"], b.inputs["Base Color"])
+    nt.links.new(it.outputs["Alpha"], b.inputs["Alpha"])
+    b.inputs["Roughness"].default_value = 0.6
+    MATS["folhas_cartas"] = m
+    for k, (copa, x, y, zc, c) in enumerate(ARVORES):
+        rng = np.random.default_rng(500 + k)
+        bm = bmesh.new()
+        uvl = bm.loops.layers.uv.new("UVMap")
+        for _ in range(int(64 * (c / 2.2) ** 2)):
+            d = rng.normal(size=3)
+            d /= np.linalg.norm(d)
+            p = np.array([x, y, zc]) + d * c * rng.uniform(0.25, 0.85) * np.array([1, 1, 0.85])
+            nrm = rng.normal(size=3)
+            nrm /= np.linalg.norm(nrm)
+            t1 = np.cross(nrm, [0, 0, 1] if abs(nrm[2]) < 0.9 else [1, 0, 0])
+            t1 /= np.linalg.norm(t1)
+            t2 = np.cross(nrm, t1)
+            s = c * rng.uniform(0.55, 0.85)
+            vs = [bm.verts.new(tuple(p + (t1 * a_ + t2 * b_) * s)) for a_, b_ in ((-1, -1), (1, -1), (1, 1), (-1, 1))]
+            f = bm.faces.new(vs)
+            for lp, uv in zip(f.loops, ((0, 0), (1, 0), (1, 1), (0, 1))):
+                lp[uvl].uv = uv
+        me = bpy.data.meshes.new(f"copa_cartas{k}")
+        bm.to_mesh(me)
+        bm.free()
+        me.materials.append(m)
+        ob = ligar(bpy.data.objects.new(f"copa_cartas{k}", me), "envolvente")
+        CARTAS.append(ob)
+        copa.hide_render = True          # the low-poly crown stays out of the bake and the web model
+        copa.hide_set(True)
+        copa.hide_viewport = True
+    return img
+
+
+def configurar_cycles():
+    cena.render.engine = "CYCLES"
+    pref = bpy.context.preferences.addons["cycles"].preferences
+    try:
+        pref.compute_device_type = "CUDA"
+        pref.refresh_devices()
+        for d in pref.devices:
+            d.use = d.type == "CUDA"
+        cena.cycles.device = "GPU"
+    except Exception as e:
+        print("GPU indisponível:", e)
+
+
+def _srgb(x):
+    x = np.clip(x, 0, 1)
+    return np.where(x <= 0.0031308, 12.92 * x, 1.055 * np.power(x, 1 / 2.4) - 0.055)
+
+
+def _desfocar(a, vezes=2):
+    for _ in range(vezes):
+        a = (a + np.roll(a, 1, 0) + np.roll(a, -1, 0) + np.roll(a, 1, 1) + np.roll(a, -1, 1)) / 5
+    return a
+
+
+def _limpar(px):
+    """Bake noise: a light blur everywhere, a strong one where it is dark (rooms seen through the glass)."""
+    leve = _desfocar(px, 2)
+    forte = _desfocar(px, 8)
+    lum = leve.mean(-1)
+    ref = float(np.percentile(lum, 95)) or 1.0
+    w = np.clip((0.25 * ref - lum) / (0.25 * ref), 0, 1)[..., None]
+    return leve * (1 - w) + forte * w
+
+
+def uv_luz(obs, plano=None):
+    """Second UV map 'lm' for the bake: a plan projection (the ground) or islands packed into one square (the rest)."""
+    for ob in obs:
+        me = ob.data
+        lm = me.uv_layers.get("lm") or me.uv_layers.new(name="lm")
+        if plano:
+            x0, y0, x1, y1 = plano
+            for lp in me.loops:
+                co = me.vertices[lp.vertex_index].co
+                lm.data[lp.index].uv = (min(1, max(0, (co.x - x0) / (x1 - x0))), min(1, max(0, (co.y - y0) / (y1 - y0))))
+        me.uv_layers.active = lm
+    if plano:
+        return
+    bpy.ops.object.select_all(action="DESELECT")
+    for ob in obs:
+        ob.hide_set(False)
+        ob.select_set(True)
+    bpy.context.view_layer.objects.active = obs[0]
+    bpy.ops.object.mode_set(mode="EDIT")
+    bpy.ops.mesh.select_all(action="SELECT")
+    bpy.ops.uv.smart_project(angle_limit=math.radians(60), island_margin=0.004, area_weight=1.0, correct_aspect=True,
+                             scale_to_bounds=False)
+    bpy.ops.uv.pack_islands(margin=0.004, rotate=True)
+    bpy.ops.object.mode_set(mode="OBJECT")
+
+
+def gravar_luz(amostras=128):
+    """Bake the light of the scene (direct + bounced, diffuse, no colour) into lightmaps, for the web model:
+    'casa' (every storey, frames, copings, deck), 'exterior' (walls, ramp, road), 'terreno' (the ground near the house).
+    Saved as sRGB JPEG divided by K (luz.json says K per map); the page multiplies the texture colour by it."""
+    vidro = lambda ob: any(m and m.name.startswith("vidro") for m in ob.data.materials)
+    meshes = [o for o in cena.objects if o.type == "MESH" and not o.hide_get() and o.data.polygons]
+    grupos = {
+        "casa": [o for o in meshes if o.get("grupo") in ("cave", "piso0", "piso1", "cobertura") and not vidro(o)],
+        "exterior": [o for o in meshes if o.name.startswith(("muro", "piso_livre", "faixa"))],
+        "terreno": [o for o in meshes if o.name == "terreno"],
+    }
+    tamanho = {"casa": 2048, "exterior": 1024, "terreno": 2048}
+    # triangulate the baked meshes (simpler islands; the web model is triangles anyway)
+    for nome in ("casa", "exterior"):
+        for ob in grupos[nome]:
+            bm = bmesh.new()
+            bm.from_mesh(ob.data)
+            bmesh.ops.triangulate(bm, faces=bm.faces)
+            bm.to_mesh(ob.data)
+            bm.free()
+    uv_luz(grupos["casa"])
+    uv_luz(grupos["exterior"])
+    uv_luz(grupos["terreno"], plano=E.get("luz_plano", (-45, -15, 45, 55)))
+    configurar_cycles()
+    cena.cycles.samples = amostras
+    cena.cycles.use_denoising = False
+    cena.cycles.sample_clamp_indirect = 1.0     # light through the glass made bright specks inside
+    cena.cycles.max_bounces = 6
+    info = {}
+    for nome, obs in grupos.items():
+        if not obs:
+            continue
+        n = tamanho[nome]
+        img = bpy.data.images.new("lm_" + nome, n, n, alpha=False, float_buffer=True)
+        mats = {m for ob in obs for m in ob.data.materials if m}
+        for m in mats:
+            nt = m.node_tree
+            nd = nt.nodes.get("LM") or nt.nodes.new("ShaderNodeTexImage")
+            nd.name = "LM"
+            nd.image = img
+            nt.nodes.active = nd
+        bpy.ops.object.select_all(action="DESELECT")
+        for ob in obs:
+            ob.select_set(True)
+            ob.data.uv_layers.active = ob.data.uv_layers["lm"]
+            ob["lm"] = nome
+        bpy.context.view_layer.objects.active = obs[0]
+        t0 = __import__("time").time()
+        bpy.ops.object.bake(type="DIFFUSE", pass_filter={"DIRECT", "INDIRECT"}, uv_layer="lm", margin=8,
+                            use_clear=True, target="IMAGE_TEXTURES")
+        px = np.array(img.pixels[:], dtype=np.float32).reshape(n, n, 4)[..., :3]
+        px = _limpar(px)
+        K = float(np.percentile(px, 99.7)) or 1.0
+        enc = _srgb(px / K)
+        out = bpy.data.images.new("lm_" + nome + "_8", n, n, alpha=False)
+        rgba = np.ones((n, n, 4), dtype=np.float32)
+        rgba[..., :3] = enc
+        out.pixels.foreach_set(rgba.ravel())
+        out.filepath_raw = os.path.join(SAIDA, f"lm_{nome}.jpg")
+        out.file_format = "JPEG"
+        cena.render.image_settings.quality = 88
+        out.save()
+        info[nome] = {"K": round(K, 4), "tam": n}
+        print("LUZ", nome, n, "K", round(K, 3), round(__import__("time").time() - t0), "s")
+        for ob in obs:
+            ob.data.uv_layers.active = ob.data.uv_layers[0]
+    for ob in meshes:          # texture UVs first again (TEXCOORD_0), 'lm' second (TEXCOORD_1)
+        if ob.data.uv_layers:
+            ob.data.uv_layers[0].active = True
+            ob.data.uv_layers[0].active_render = True
+    json.dump(info, open(os.path.join(SAIDA, "luz.json"), "w"))
+
+
+def ceu_panorama():
+    """The sky of the images as an equirectangular picture (centre = east, as three.js expects) for the web page."""
+    from mathutils import Euler
+    ocultos = []
+    for ob in cena.objects:
+        if ob.type in ("MESH", "CURVES") and not ob.hide_render:
+            ob.hide_render = True
+            ocultos.append(ob)
+    cam = bpy.data.cameras.new("pano")
+    cam.type = "PANO"
+    for alvo in (cam, getattr(cam, "cycles", None)):
+        if alvo is not None and hasattr(alvo, "panorama_type"):
+            try:
+                alvo.panorama_type = "EQUIRECTANGULAR"
+            except Exception:
+                pass
+    ob = bpy.data.objects.new("cam_pano", cam)
+    cena.collection.objects.link(ob)
+    ob.location = (0, 0, 2)
+    ob.rotation_euler = Euler((math.pi / 2, 0, -math.pi / 2))     # looking east
+    configurar_cycles()
+    cena.camera = ob
+    cena.cycles.samples = 16
+    cena.render.resolution_x, cena.render.resolution_y, cena.render.resolution_percentage = 2048, 1024, 100
+    vt, lk, ex = cena.view_settings.view_transform, cena.view_settings.look, cena.view_settings.exposure
+    try:      # the same colour transform as the images: the page shows this sky as it is (no tone mapping)
+        cena.view_settings.view_transform = "AgX"
+        cena.view_settings.look = "AgX - Medium High Contrast"
+    except Exception:
+        pass
+    cena.view_settings.exposure = float(E.get("sol", {}).get("exposicao", 0.0))
+    cena.render.image_settings.file_format = "JPEG"
+    cena.render.image_settings.quality = 85
+    cena.render.filepath = os.path.join(SAIDA, "ceu.jpg")
+    bpy.ops.render.render(write_still=True)
+    cena.view_settings.view_transform, cena.view_settings.look, cena.view_settings.exposure = vt, lk, ex
+    for o in ocultos:
+        o.hide_render = False
+    bpy.data.objects.remove(ob)
+    print("CEU ok")
+
 # ---------------------------------------------------------------------------------------------- main
 criar_materiais()
 construir_solidos()
@@ -853,11 +1107,16 @@ for ob in cena.objects:
 luz_e_ceu()
 cams = camaras()
 bpy.context.view_layer.update()
+if OPC.get("luz"):
+    cartas_folhas()
+    bpy.context.view_layer.update()
+    gravar_luz(int(OPC.get("amostras_luz", 128)))
+    ceu_panorama()
 
 if not OPC.get("sem-glb"):
     # web copy: textures at 512 px, JPEG inside the GLB
     for img in bpy.data.images:
-        if img.size[0] > 512:
+        if img.size[0] > 512 and not img.name.startswith(("lm_", "folha")):
             img.scale(512, 512)
     bpy.ops.object.select_all(action="DESELECT")
     bpy.ops.export_scene.gltf(filepath=os.path.join(SAIDA, "casa.glb"), export_format="GLB", export_extras=True,
@@ -875,6 +1134,8 @@ if OPC["render"]:
         relva_cycles(terreno, "relva", 1200)
         relva_cycles(terreno, "relva_fora", 320, raio=34)
     folhas_cycles()
+    for ob in CARTAS:
+        ob.hide_render = True
     cena.render.engine = "CYCLES"
     pref = bpy.context.preferences.addons["cycles"].preferences
     try:
