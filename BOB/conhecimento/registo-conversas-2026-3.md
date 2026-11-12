@@ -513,3 +513,18 @@ The team's notes on hub task 84 (written in the hub by [membro da equipa] on 202
 - Result: `Casa_Ribamar_3D.html` (0.6 MB) sent to the user — cave, piso 0, piso 1, roof and terrain on/off; Maquete/Realista; furniture; 8 views; levels diagram; table of storeys with the rooms' areas from the drawings (183,01 m² interior, 43,97 m² deck and balconies).
 - Assumed (not read from the drawings yet): window sills 0,90 m and heads 2,20 m; flat roof slab 0,35 m; the deck and balconies are not modelled; the cave's ramp walls are full height.
 - Filed in: hub task 177 (and 171/175/179 situação), Log.
+
+### 2026-11-11 — Ribamar: the first page was not good enough [Builder]
+> eu quero que me entregues a página pronta para enviar ao cliente com uma vista da maquete e ultra-realista, o que mandaste estava péssimo e a casa parecia ter pilares ao lado das paredes, uma confusão... a rampa que leva para a garagem estava coberta com o terreno... Eu quero ter algo realista e digno de apresentar a um cliente. Não está sequer perto do resultado desejado...
+- Requirement: the client page must be client-grade — a maquette view AND an ultra-realistic view; no visual artefacts (the "pillars" were the analyser's walls doubled by the outline's wall stubs); the site must be shaped (ramp trench cut into the ground, not buried).
+- Lesson (Builder): the automatic plan reading is good enough to find walls, not to present a house. A client page needs a clean house description: volumes per storey, rooms carved out, openings measured on the elevations, real finishes from the drawings' notes, the ground reshaped around the house (ramp, platform, deck), the boundary fence. From now on the page is built from that description (casa.json) in Blender: one model for the interactive 3D (GLB) and for the photorealistic images (Cycles).
+- Done (2026-11-12, second version, sent to the user): `Casa_Ribamar.html` (5,7 MB, offline) — 5 photorealistic Cycles
+  images (from the street with the ramp, the covered terrace, north-west, south-east entrance, aerial), the 3D in
+  "Realista" (real finishes, sky, sun, ambient occlusion on desktop) or "Maquete" (white model), storeys cut from the top
+  down, exterior and terrain on/off (the cave shows with the terrain off), 7 views, north arrow, table of storeys with the
+  rooms' areas, list of finishes from the drawings' notes. Model measured on the DXF plans, elevations and sections:
+  timber-clad box (Douglas boards), west covered terrace and two loggias with glass guards, south entrance porch, the
+  lower north volume, flat roofs behind parapets, garage ramp in a trench with retaining walls and log fences, deck
+  bridging the ramp's end, boundary fence (logs on the street, posts and sheep net elsewhere), gravel drive, road.
+- Assumed: trees (one is on the plans, the others are illustrative), interiors without furniture, window heights read on
+  the elevations (±10 cm), the road and the ground beyond the survey.

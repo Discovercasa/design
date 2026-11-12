@@ -47,6 +47,14 @@ Why Claude learns the method; "vamos passo a passo" — an overall idea, then an
    (Torres Vedras wing south wall), site plans with house + terrain in one view, big multi-sheet sets are slow (≈ 4 min
    on the PC for Sobral's 22 sheets), windows in hatched walls ±0,2 m, oblique walls not yet built by the chain,
    scanned PDFs, DWG.
+   **Client page (2026-11-11, Ribamar, the first real house):** the page built straight from the automatic reading was
+   rejected ("péssimo", walls looked like pillars, the garage ramp buried by the terrain) — the user wants a page "digno de
+   apresentar a um cliente" with a maquette view AND an ultra-realistic view. Now: a clean house description (`casa.json`:
+   storey volumes, rooms/loggias/openings carved, finishes from the drawings' notes, ground reshaped around the house) →
+   `ferramentas/pagina/casa_blender.py` (Blender: GLB for the interactive 3D + Cycles images) →
+   `ferramentas/pagina/gerar_pagina.py` (one HTML: images, 3D Realista/Maquete, storeys, areas, finishes). DWG → DXF with
+   the ODA File Converter; `ferramentas/dxf/leitor_dxf.py` reads it. Ribamar's description is measured by hand on the DXF
+   for now (`_trabalho/ribamar/`, local); the automatic reading should later produce `casa.json`.
    Settings panel wished ("Futuramente"): "um painel onde podemos definir este tipo de coisas, comprimentos dos módulos
    e a sua composição" — today in `sistema_construtivo.json` (`estrutura.divisor`) and each `config.json`.
    **Production documents for every new project** (2026-10-16 night): "quero que sejas capaz de desenvolver um

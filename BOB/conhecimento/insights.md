@@ -428,3 +428,10 @@ he answers (`metodo-construtivo.md`). Condensed 2026-10-28 (history in git).
   was real. Also: a terrain survey that predates the works leaves built elements (pergola posts) hanging above the old
   ground → the flat platform must include them (INFERRED; real graded ground = photos) — `step-inside/docs/fase7/README.md`
   «Versão 7».
+- **2026-11-11** — **status: applied (Ribamar client page, second version); told to the user.** A client page cannot be built
+  straight from the automatic plan reading: doubled walls (analyser walls + outline stubs) read as pillars and the survey
+  terrain buries anything below grade (the garage ramp). The page is now made from a clean house description
+  (`ferramentas/pagina/casa_blender.py`: storey volumes with rooms, loggias and openings carved by booleans, frames and glass
+  per opening, finishes from the drawings' notes, the ground reshaped: ramp trench with retaining walls, platform at the
+  house, gravel drive, boundary fence) → one Blender scene gives the interactive GLB (Realista/Maquete) and the Cycles images.
+  The Builder's automatic reading should aim to produce that description (casa.json), not the page directly.

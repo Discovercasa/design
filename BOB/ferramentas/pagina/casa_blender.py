@@ -1,0 +1,921 @@
+"""Blender: the client's house from a clean description (casa.json), with real materials, for the client page.
+
+    blender -b --factory-startup -P ferramentas/pagina/casa_blender.py -- <casa.json> <saida/> [--render v1,v2|todas]
+                                  [--amostras 160] [--res 1600x1000] [--sem-glb] [--previa] [--sem-relva]
+  (--previa: half size; ~50 s per view on a GTX 1050 Ti at 32 samples. The first Cycles run compiles the GPU kernels.)
+
+casa.json (local metres, x/y on the plan, z up from the reference floor; see gerar_casa in the project's _trabalho):
+  materiais_cor   optional colour overrides {"ripado": "#6a4a35", ...}
+  solidos   [{nome, caixa [x0,y0,z0,x1,y1,z1], mat, grupo, mats {base, topo, lados}}]   volumes that get carved
+  vazios    [{caixa, em [solid names], mats {lados, chao, teto}}]   rooms, loggias, openings, roof wells
+  caixas    [{caixa, mat, grupo}]                                     plain boxes (deck, copings, fins, slabs)
+  vaos      [{caixa, eixo x|y, plano, paineis, tipo correr|janela|fixo|porta|garagem, grupo}] frames, glass, leaves
+  guardas   [{de [x,y], ate [x,y], z0, altura, grupo}]               glass balustrades
+  muros     [{pontos [[x,y,zbase,ztopo],...], esp, mat, grupo}]       walls along a line, top following the ground
+  pisos_livres [{pontos [[x,y,z],...], mat, grupo}]                  a polygon surface (ramp floor)
+  toros     [{pontos [[x,y,z],...], passo, altura, diam, grupo}]      timber log fence along a line (base at z);
+            passo >= 1.5 m: posts with a three-wire sheep net
+  faixas    [{a [[x,y,z],...], b [...] (same count), mat}]          a strip between two lines (a road between kerbs)
+  terreno   {xs [...], ys [...], z [ny][nx], mat [ny-1][nx-1] (codes, -1 = hole), mats [names]}
+            Renders: hair grass on "relva"/"relva_fora" (straight up, no children, the ground casts no shadow: each
+            of those three avoided a patchwork of ground triangles).
+  arvores   [{x, y, z, altura, copa}]   trunk + low-poly crown (web, maquette); leaves in clumps for the renders
+  vistas    [{nome, camara [x,y,z], alvo [x,y,z], lente}]
+  rodar_graus   rotation of the whole model about z (plan frame -> north up)
+  sol       {azimute (deg from north, clockwise), elevacao}
+Output: casa.glb (web, textures 1024 px JPEG, groups in extras), casa.blend, render_<vista>.jpg (Cycles), texturas/.
+"""
+import json
+import math
+import os
+import sys
+
+import bmesh
+import bpy
+import numpy as np
+
+# ---------------------------------------------------------------------------------------------- arguments
+argv = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else []
+ESPEC, SAIDA = os.path.abspath(argv[0]), os.path.abspath(argv[1])
+OPC = {"render": "", "amostras": "160", "res": "1600x1000"}
+i = 2
+while i < len(argv):
+    a = argv[i]
+    if a in ("--sem-glb", "--previa", "--sem-relva"):
+        OPC[a[2:]] = True
+        i += 1
+    else:
+        OPC[a[2:]] = argv[i + 1]
+        i += 2
+os.makedirs(os.path.join(SAIDA, "texturas"), exist_ok=True)
+E = json.load(open(ESPEC, encoding="utf-8"))
+bpy.ops.wm.read_factory_settings(use_empty=True)
+cena = bpy.context.scene
+RAIZ = bpy.data.objects.new("casa", None)
+cena.collection.objects.link(RAIZ)
+CORTADORES = bpy.data.collections.new("cortadores")
+cena.collection.children.link(CORTADORES)
+RNG = np.random.default_rng(7)
+
+
+# ---------------------------------------------------------------------------------------------- textures (numpy)
+def ruido(n, celulas, oitavas=4, semente=0):
+    """Tileable value noise in [0,1], n x n."""
+    rng = np.random.default_rng(semente)
+    out = np.zeros((n, n))
+    amp, tot = 1.0, 0.0
+    for o in range(oitavas):
+        c = celulas * 2 ** o
+        g = rng.random((c, c))
+        t = np.arange(n) * c / n
+        i0 = np.floor(t).astype(int) % c
+        i1 = (i0 + 1) % c
+        f = t - np.floor(t)
+        f = f * f * (3 - 2 * f)
+        a = g[i0][:, i0] * (1 - f)[None, :] + g[i0][:, i1] * f[None, :]
+        b = g[i1][:, i0] * (1 - f)[None, :] + g[i1][:, i1] * f[None, :]
+        out += amp * (a * (1 - f)[:, None] + b * f[:, None])
+        tot += amp
+        amp *= 0.5
+    return out / tot
+
+
+def ruido_esticado(n, cu, cv, semente):
+    """Noise stretched along v (wood grain): few cells across, many along."""
+    rng = np.random.default_rng(semente)
+    g = rng.random((cv, cu))
+    tu, tv = np.arange(n) * cu / n, np.arange(n) * cv / n
+    iu0, iv0 = np.floor(tu).astype(int) % cu, np.floor(tv).astype(int) % cv
+    iu1, iv1 = (iu0 + 1) % cu, (iv0 + 1) % cv
+    fu, fv = tu - np.floor(tu), tv - np.floor(tv)
+    a = g[iv0][:, iu0] * (1 - fu) + g[iv0][:, iu1] * fu
+    b = g[iv1][:, iu0] * (1 - fu) + g[iv1][:, iu1] * fu
+    return a * (1 - fv)[:, None] + b * fv[:, None]
+
+
+def hex_rgb(h):
+    h = h.lstrip("#")
+    return np.array([int(h[k:k + 2], 16) / 255 for k in (0, 2, 4)])
+
+
+def tabuas(n, nt, cor, var=0.12, junta=0.07, escuro=0.35, comprimentos=None, semente=1):
+    """Boards running along v (columns along u). Returns colour (n,n,3) and height (n,n)."""
+    u = (np.arange(n) + 0.5) / n
+    k = np.floor(u * nt).astype(int)
+    fr = u * nt - k
+    rng = np.random.default_rng(semente)
+    tom = 1 + (rng.random(nt) - 0.5) * 2 * var
+    mat = 1 + (rng.random(nt) - 0.5) * 0.10
+    grao = ruido_esticado(n, nt * 6, 3, semente + 1)
+    fio = ruido_esticado(n, nt * 40, 8, semente + 2)
+    v = np.linspace(0, 1, n, endpoint=False)
+    col = np.ones((n, n, 3)) * cor[None, None, :]
+    f = (tom[k])[None, :] * (0.86 + 0.18 * grao + 0.10 * (fio - 0.5))
+    col = col * f[:, :, None]
+    col[:, :, 0] *= mat[k][None, :]
+    h = np.ones((n, n))
+    borda = np.minimum(fr, 1 - fr)
+    g = borda < junta / 2
+    col[:, g] *= escuro
+    h[:, g] = 0.0
+    h = h - 0.15 * np.clip((junta * 1.5 - borda) / (junta * 1.5), 0, 1)[None, :]
+    if comprimentos:       # board ends: a joint across each board at a random v
+        for b in range(nt):
+            for _ in range(comprimentos):
+                vv = rng.random()
+                linha = np.abs(((v - vv + 0.5) % 1) - 0.5) < 0.004
+                cols = k == b
+                col[np.ix_(linha, cols)] *= escuro + 0.2
+                h[np.ix_(linha, cols)] = 0.2
+    h += 0.04 * (fio - 0.5)
+    return np.clip(col, 0, 1), h
+
+
+def normal_de(h, forca):
+    dx = (np.roll(h, -1, 1) - np.roll(h, 1, 1)) * forca
+    dy = (np.roll(h, -1, 0) - np.roll(h, 1, 0)) * forca
+    nrm = np.dstack([-dx, -dy, np.ones_like(h)])
+    nrm /= np.linalg.norm(nrm, axis=2, keepdims=True)
+    return nrm * 0.5 + 0.5
+
+
+def imagem(nome, arr, nao_cor=False):
+    n = arr.shape[0]
+    rgba = np.ones((n, n, 4), dtype=np.float32)
+    rgba[:, :, :3] = arr[::-1]          # Blender rows go bottom-up
+    img = bpy.data.images.new(nome, n, n, alpha=False, is_data=nao_cor)
+    if nao_cor:
+        img.colorspace_settings.name = "Non-Color"
+    img.pixels.foreach_set(rgba.ravel())
+    img.update()
+    caminho = os.path.join(SAIDA, "texturas", nome + ".png")
+    img.filepath_raw = caminho
+    img.file_format = "PNG"
+    img.save()
+    return img
+
+
+COR = {"ripado": "#5c3f2c", "deck": "#8f6c4c", "soalho": "#c09e78", "interior": "#eeebe4", "betao": "#a6a39c",
+       "painel": "#45322e", "metal": "#383e42", "pedra": "#c8b68f", "relva": "#6f7d3a", "relva_fora": "#66733a",
+       "asfalto": "#3a3a3a", "berma": "#56703a", "brita": "#a49d90", "porta_garagem": "#5c3f2c", "tecido": "#9c968c", "toros": "#9a7a55"}
+COR.update(E.get("materiais_cor", {}))
+TILE = {"berma": 3.0, "ripado": 1.2, "deck": 1.4, "soalho": 1.8, "betao": 2.4, "painel": 1.0, "relva": 3.0, "relva_fora": 3.0,
+        "asfalto": 3.0, "brita": 1.5, "pedra": 1.2, "porta_garagem": 1.2, "interior": 2.0, "metal": 1.0,
+        "tecido": 1.0, "toros": 1.0}
+N = 1024
+
+
+def gerar_texturas():
+    T = {}
+    c, h = tabuas(N, 10, hex_rgb(COR["ripado"]), var=0.16, junta=0.08, escuro=0.25, semente=3)
+    T["ripado"] = (c, normal_de(h, 6.0), 0.78)
+    c, h = tabuas(N, 10, hex_rgb(COR["deck"]), var=0.14, junta=0.06, escuro=0.3, comprimentos=1, semente=5)
+    T["deck"] = (c, normal_de(h, 5.0), 0.7)
+    c, h = tabuas(N, 10, hex_rgb(COR["soalho"]), var=0.08, junta=0.015, escuro=0.7, comprimentos=1, semente=9)
+    T["soalho"] = (c, normal_de(h, 2.0), 0.45)
+    c, h = tabuas(N, 10, hex_rgb(COR["porta_garagem"]), var=0.12, junta=0.06, escuro=0.3, semente=11)
+    T["porta_garagem"] = (np.transpose(c, (1, 0, 2)).copy(), normal_de(h.T.copy(), 5.0), 0.75)
+    c, h = tabuas(N, 4, hex_rgb(COR["toros"]), var=0.18, junta=0.0, escuro=1.0, semente=13)
+    T["toros"] = (c, normal_de(h, 1.5), 0.8)
+    r = ruido(N, 8, 5, 21)
+    r2 = ruido(N, 64, 2, 22)
+    base = hex_rgb(COR["betao"])
+    col = base[None, None, :] * (0.88 + 0.16 * r + 0.06 * (r2 - 0.5))[:, :, None]
+    junta = (np.abs(((np.arange(N) / N * 2) % 1) - 0.0) < 0.002)
+    col[junta, :] *= 0.8
+    col[:, junta] *= 0.8
+    T["betao"] = (np.clip(col, 0, 1), normal_de(0.3 * r + 0.2 * r2, 2.0), 0.85)
+    u = np.arange(N) / N * 5
+    fr = u - np.floor(u)
+    perfil = np.clip(1 - np.abs(fr - 0.12) / 0.07, 0, 1)        # one rib every 0.2 m
+    hp = np.tile(perfil, (N, 1))
+    col = hex_rgb(COR["painel"])[None, None, :] * (0.92 + 0.08 * ruido(N, 4, 2, 31))[:, :, None]
+    T["painel"] = (col, normal_de(hp, 8.0), 0.45)
+    for nome, sem, mix in (("relva", 41, 1.0), ("relva_fora", 43, 0.85), ("berma", 45, 0.85)):
+        a, b = ruido(N, 6, 5, sem), ruido(N, 48, 3, sem + 1)
+        verde, palha, escuro_ = hex_rgb(COR[nome]), np.array([0.55, 0.52, 0.30]), np.array([0.25, 0.32, 0.14])
+        t = np.clip((a - 0.45) * 2.5, 0, 1)[:, :, None]
+        col = verde * (1 - t) + palha * t
+        col = col * (0.75 + 0.5 * b[:, :, None])
+        col = col * (1 - 0.35 * np.clip((0.5 - b) * 3, 0, 1)[:, :, None]) + escuro_ * 0.0
+        T[nome] = (np.clip(col * mix + (1 - mix) * verde, 0, 1), normal_de(b * 0.6 + a * 0.2, 3.0), 0.95)
+    for nome, sem, k in (("asfalto", 51, 0.18), ("brita", 53, 0.35), ("pedra", 55, 0.12)):
+        a, b = ruido(N, 128, 2, sem), ruido(N, 10, 4, sem + 1)
+        col = hex_rgb(COR[nome])[None, None, :] * (1 - k / 2 + k * a + 0.06 * (b - 0.5))[:, :, None]
+        T[nome] = (np.clip(col, 0, 1), normal_de(a, 4.0 if nome == "brita" else 1.0), 0.9 if nome != "pedra" else 0.6)
+    return T
+
+
+# ---------------------------------------------------------------------------------------------- materials
+MATS = {}
+
+
+def no(nt, tipo, x, y):
+    n = nt.nodes.new(tipo)
+    n.location = (x, y)
+    return n
+
+
+def principled(m):
+    return next(n for n in m.node_tree.nodes if n.type == "BSDF_PRINCIPLED")
+
+
+def mat_textura(nome, cor, normal, rug, metal=0.0):
+    m = bpy.data.materials.new(nome)
+    try:
+        m.use_nodes = True
+    except Exception:
+        pass
+    nt = m.node_tree
+    bsdf = principled(m)
+    bsdf.inputs["Roughness"].default_value = rug
+    bsdf.inputs["Metallic"].default_value = metal
+    ic = no(nt, "ShaderNodeTexImage", -500, 200)
+    ic.image = imagem(nome + "_cor", cor)
+    nt.links.new(ic.outputs["Color"], bsdf.inputs["Base Color"])
+    inn = no(nt, "ShaderNodeTexImage", -500, -200)
+    inn.image = imagem(nome + "_normal", normal, nao_cor=True)
+    nm = no(nt, "ShaderNodeNormalMap", -200, -200)
+    nt.links.new(inn.outputs["Color"], nm.inputs["Color"])
+    nt.links.new(nm.outputs["Normal"], bsdf.inputs["Normal"])
+    return m
+
+
+def mat_simples(nome, cor, rug=0.8, metal=0.0):
+    m = bpy.data.materials.new(nome)
+    try:
+        m.use_nodes = True
+    except Exception:
+        pass
+    b = principled(m)
+    b.inputs["Base Color"].default_value = (*[c ** 2.2 for c in hex_rgb(cor)], 1)
+    b.inputs["Roughness"].default_value = rug
+    b.inputs["Metallic"].default_value = metal
+    m.diffuse_color = (*[c ** 2.2 for c in hex_rgb(cor)], 1)
+    return m
+
+
+def mat_vidro(nome, rug=0.0, cor=(0.92, 0.96, 0.95)):
+    m = bpy.data.materials.new(nome)
+    try:
+        m.use_nodes = True
+    except Exception:
+        pass
+    b = principled(m)
+    b.inputs["Base Color"].default_value = (*cor, 1)
+    b.inputs["Roughness"].default_value = rug
+    for k in ("Transmission Weight", "Transmission"):
+        if k in b.inputs:
+            b.inputs[k].default_value = 1.0
+            break
+    b.inputs["IOR"].default_value = 1.5
+    m.diffuse_color = (*cor, 0.3)
+    return m
+
+
+def criar_materiais():
+    T = gerar_texturas()
+    for nome, (c, nrm, rug) in T.items():
+        MATS[nome] = mat_textura(nome, c, nrm, rug, metal=0.25 if nome == "painel" else 0.0)
+    MATS["interior"] = mat_simples("interior", COR["interior"], 0.85)
+    MATS["metal"] = mat_simples("metal", COR["metal"], 0.38, 0.6)
+    MATS["tecido"] = mat_simples("tecido", COR["tecido"], 0.95)
+    MATS["vidro"] = mat_vidro("vidro")
+    MATS["vidro_guarda"] = mat_vidro("vidro_guarda", 0.12, (0.95, 0.97, 0.97))
+    MATS["forro"] = MATS["ripado"]
+
+
+# ---------------------------------------------------------------------------------------------- geometry helpers
+def ligar(ob, grupo):
+    cena.collection.objects.link(ob)
+    ob.parent = RAIZ
+    ob["grupo"] = grupo or "casa"
+    return ob
+
+
+def malha_caixa(nome, cx, mats_faces):
+    """Box mesh with per-face materials. mats_faces: dict side -> material name (x0,x1,y0,y1,z0,z1)."""
+    x0, y0, z0, x1, y1, z1 = cx
+    v = [(x0, y0, z0), (x1, y0, z0), (x1, y1, z0), (x0, y1, z0), (x0, y0, z1), (x1, y0, z1), (x1, y1, z1), (x0, y1, z1)]
+    f = {"z0": (0, 3, 2, 1), "z1": (4, 5, 6, 7), "y0": (0, 1, 5, 4), "y1": (2, 3, 7, 6), "x0": (3, 0, 4, 7), "x1": (1, 2, 6, 5)}
+    me = bpy.data.meshes.new(nome)
+    ordem = list(f)
+    me.from_pydata(v, [], [f[k] for k in ordem])
+    nomes = []
+    for k in ordem:
+        mn = mats_faces.get(k)
+        if mn not in nomes:
+            nomes.append(mn)
+    for mn in nomes:
+        me.materials.append(MATS[mn])
+    me.polygons.foreach_set("material_index", [nomes.index(mats_faces.get(k)) for k in ordem])
+    me.update()
+    return me
+
+
+def faces_mats(base, topo=None, fundo=None, lados=None):
+    lados = lados or base
+    return {"x0": lados, "x1": lados, "y0": lados, "y1": lados, "z0": fundo or base, "z1": topo or base}
+
+
+def caixa(nome, cx, mat, grupo, mats=None):
+    me = malha_caixa(nome, cx, mats or faces_mats(mat))
+    return ligar(bpy.data.objects.new(nome, me), grupo)
+
+
+def poligono_extrudido(nome, pts, z0, z1, mat, grupo):
+    bm = bmesh.new()
+    base = [bm.verts.new((x, y, z0)) for x, y in pts]
+    face = bm.faces.new(base)
+    bmesh.ops.recalc_face_normals(bm, faces=[face])
+    if face.normal.z > 0:
+        face.normal_flip()
+    ext = bmesh.ops.extrude_face_region(bm, geom=[face])
+    vs = [g for g in ext["geom"] if isinstance(g, bmesh.types.BMVert)]
+    bmesh.ops.translate(bm, verts=vs, vec=(0, 0, z1 - z0))
+    me = bpy.data.meshes.new(nome)
+    bm.to_mesh(me)
+    bm.free()
+    me.materials.append(MATS[mat])
+    return ligar(bpy.data.objects.new(nome, me), grupo)
+
+
+# ---------------------------------------------------------------------------------------------- UVs by world position
+def uvs_mundo(ob):
+    me = ob.data
+    if not me.uv_layers:
+        me.uv_layers.new(name="UVMap")
+    uv = me.uv_layers.active.data
+    mw = ob.matrix_basis
+    nomes = [m.name if m else "" for m in me.materials]
+    for p in me.polygons:
+        n = p.normal
+        t = TILE.get(nomes[p.material_index].split(".")[0], 1.2) if nomes else 1.2
+        for li in p.loop_indices:
+            co = mw @ me.vertices[me.loops[li].vertex_index].co
+            if abs(n.z) > 0.7:
+                uv[li].uv = (co.x / t, co.y / t)
+            elif abs(n.x) >= abs(n.y):
+                uv[li].uv = (co.y / t, co.z / t)
+            else:
+                uv[li].uv = (co.x / t, co.z / t)
+
+
+# ---------------------------------------------------------------------------------------------- the house
+def construir_solidos():
+    sol = {}
+    for s in E.get("solidos", []):
+        mm = s.get("mats", {})
+        ob = caixa(s["nome"], s["caixa"], None, s.get("grupo"),
+                   faces_mats(mm.get("base", s["mat"]), mm.get("topo", "interior"), mm.get("fundo", "interior"),
+                              mm.get("lados", s["mat"])))
+        ob["cortes"] = []
+        sol[s["nome"]] = ob
+    for k, v in enumerate(E.get("vazios", [])):
+        mm = v.get("mats", {})
+        x0, y0, z0, x1, y1, z1 = v["caixa"]
+        alvos = v.get("em") or [n for n, ob in sol.items() if _sobrepoe(E_solido(n)["caixa"], v["caixa"])]
+        me = malha_caixa(f"vazio{k}", v["caixa"], faces_mats(mm.get("lados", "interior"), mm.get("teto", "interior"),
+                                                              mm.get("chao", "soalho"), mm.get("lados", "interior")))
+        # the cutter's faces point inward into the solid after the difference: flip so the result keeps them right
+        cut = bpy.data.objects.new(f"vazio{k}", me)
+        CORTADORES.objects.link(cut)
+        cut.hide_render = True
+        cut.display_type = "WIRE"
+        for n in alvos:
+            if n in sol:
+                sol[n]["cortes"] = list(sol[n]["cortes"]) + [cut.name]
+    dg = None
+    for n, ob in sol.items():
+        cortes = list(ob["cortes"])
+        if not cortes:
+            continue
+        col = bpy.data.collections.new("c_" + n)
+        for cn in cortes:
+            col.objects.link(bpy.data.objects[cn])
+        mod = ob.modifiers.new("vazios", "BOOLEAN")
+        mod.operation = "DIFFERENCE"
+        mod.operand_type = "COLLECTION"
+        mod.collection = col
+        mod.solver = "EXACT"
+        try:
+            mod.material_mode = "TRANSFER"
+        except Exception:
+            pass
+        dg = bpy.context.evaluated_depsgraph_get()
+        me2 = bpy.data.meshes.new_from_object(ob.evaluated_get(dg))
+        ob.modifiers.clear()
+        velho = ob.data
+        ob.data = me2
+        bpy.data.meshes.remove(velho)
+    for ob in list(CORTADORES.objects):
+        bpy.data.objects.remove(ob)
+    return sol
+
+
+def E_solido(nome):
+    return next(s for s in E["solidos"] if s["nome"] == nome)
+
+
+def _sobrepoe(a, b):
+    return a[0] < b[3] and b[0] < a[3] and a[1] < b[4] and b[1] < a[4] and a[2] < b[5] and b[2] < a[5]
+
+
+def construir_vaos():
+    for k, v in enumerate(E.get("vaos", [])):
+        x0, y0, z0, x1, y1, z1 = v["caixa"]
+        g = v.get("grupo")
+        eixo, pl = v["eixo"], v["plano"]
+        tipo = v.get("tipo", "correr")
+        n = max(1, int(v.get("paineis", 1)))
+        p = 0.06       # frame profile
+        d = 0.07       # frame depth
+
+        def peca(nome, a0, a1, b0, b1, prof, mat):     # a along the wall, b = z, prof = depth around the plane
+            if eixo == "x":     # wall normal along x: runs along y
+                return caixa(nome, [pl - prof / 2, a0, b0, pl + prof / 2, a1, b1], mat, g)
+            return caixa(nome, [a0, pl - prof / 2, b0, a1, pl + prof / 2, b1], mat, g)
+        a0, a1 = (y0, y1) if eixo == "x" else (x0, x1)
+        peca(f"vao{k}_aro_b", a0, a1, z0, z0 + p * 0.6, d, "metal")
+        peca(f"vao{k}_aro_t", a0, a1, z1 - p, z1, d, "metal")
+        peca(f"vao{k}_aro_e", a0, a0 + p, z0, z1, d, "metal")
+        peca(f"vao{k}_aro_d", a1 - p, a1, z0, z1, d, "metal")
+        if tipo in ("porta", "garagem"):
+            peca(f"vao{k}_folha", a0 + p, a1 - p, z0 + 0.01, z1 - p, 0.05, "porta_garagem" if tipo == "garagem" else "ripado")
+            continue
+        larg = (a1 - a0 - 2 * p) / n
+        for j in range(1, n):
+            c = a0 + p + j * larg
+            peca(f"vao{k}_mont{j}", c - p / 2, c + p / 2, z0, z1, d, "metal")
+        peca(f"vao{k}_vidro", a0 + p, a1 - p, z0 + p * 0.6, z1 - p, 0.024, "vidro")
+
+
+def construir_extras():
+    for k, c in enumerate(E.get("caixas", [])):
+        caixa(c.get("nome", f"caixa{k}"), c["caixa"], c["mat"], c.get("grupo"),
+              faces_mats(c["mat"], c.get("topo"), c.get("fundo"), c.get("lados")))
+    for k, gd in enumerate(E.get("guardas", [])):
+        (xa, ya), (xb, yb) = gd["de"], gd["ate"]
+        z0, h = gd["z0"], gd.get("altura", 1.1)
+        if abs(xb - xa) < abs(yb - ya):
+            caixa(f"guarda{k}", [xa - 0.01, min(ya, yb), z0, xa + 0.01, max(ya, yb), z0 + h], "vidro_guarda", gd.get("grupo"))
+            caixa(f"guarda{k}_base", [xa - 0.03, min(ya, yb), z0, xa + 0.03, max(ya, yb), z0 + 0.06], "metal", gd.get("grupo"))
+        else:
+            caixa(f"guarda{k}", [min(xa, xb), ya - 0.01, z0, max(xa, xb), ya + 0.01, z0 + h], "vidro_guarda", gd.get("grupo"))
+            caixa(f"guarda{k}_base", [min(xa, xb), ya - 0.03, z0, max(xa, xb), ya + 0.03, z0 + 0.06], "metal", gd.get("grupo"))
+    for k, mu in enumerate(E.get("muros", [])):
+        pts, esp = mu["pontos"], mu.get("esp", 0.3)
+        bm = bmesh.new()
+        lados = []
+        for j, (x, y, zb, zt) in enumerate(pts):
+            a = pts[max(j - 1, 0)]
+            b = pts[min(j + 1, len(pts) - 1)]
+            dx, dy = b[0] - a[0], b[1] - a[1]
+            L = math.hypot(dx, dy) or 1
+            nx, ny = -dy / L * esp / 2, dx / L * esp / 2
+            lados.append([bm.verts.new((x + nx, y + ny, zb)), bm.verts.new((x - nx, y - ny, zb)),
+                          bm.verts.new((x - nx, y - ny, zt)), bm.verts.new((x + nx, y + ny, zt))])
+        for a, b in zip(lados, lados[1:]):
+            for q in range(4):
+                bm.faces.new((a[q], a[(q + 1) % 4], b[(q + 1) % 4], b[q]))
+        bm.faces.new(list(reversed(lados[0])))
+        bm.faces.new(lados[-1])
+        bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
+        me = bpy.data.meshes.new(f"muro{k}")
+        bm.to_mesh(me)
+        bm.free()
+        me.materials.append(MATS[mu.get("mat", "betao")])
+        ligar(bpy.data.objects.new(f"muro{k}", me), mu.get("grupo", "envolvente"))
+    for k, pl in enumerate(E.get("pisos_livres", [])):
+        bm = bmesh.new()
+        vs = [bm.verts.new(tuple(p)) for p in pl["pontos"]]
+        f = bm.faces.new(vs)
+        if f.normal.z < 0:
+            f.normal_flip()
+        me = bpy.data.meshes.new(f"piso_livre{k}")
+        bm.to_mesh(me)
+        bm.free()
+        me.materials.append(MATS[pl.get("mat", "betao")])
+        ligar(bpy.data.objects.new(f"piso_livre{k}", me), pl.get("grupo", "envolvente"))
+    for k, fx in enumerate(E.get("faixas", [])):
+        A_, B_ = fx["a"], fx["b"]
+        n = len(A_)
+        verts = [tuple(p) for p in A_] + [tuple(p) for p in B_]
+        faces = [(i, i + 1, n + i + 1, n + i) for i in range(n - 1)]
+        me = bpy.data.meshes.new(f"faixa{k}")
+        me.from_pydata(verts, [], faces)
+        me.update()
+        for p in me.polygons:
+            if p.normal.z < 0:
+                p.flip()
+        me.update()
+        me.materials.append(MATS[fx.get("mat", "asfalto")])
+        ligar(bpy.data.objects.new(f"faixa{k}", me), fx.get("grupo", "terreno"))
+    # timber logs: one mesh per fence (all logs joined), cylinders of 9 sides
+    for k, t in enumerate(E.get("toros", [])):
+        bm = bmesh.new()
+        r, h, passo = t.get("diam", 0.1) / 2, t.get("altura", 0.9), t.get("passo", 0.2)
+        pts = t["pontos"]
+        for (xa, ya, za), (xb, yb, zb) in zip(pts, pts[1:]):
+            L = math.hypot(xb - xa, yb - ya)
+            m = max(1, int(L / passo))
+            for j in range(m):
+                f = (j + 0.5) / m
+                x, y, z = xa + (xb - xa) * f, ya + (yb - ya) * f, za + (zb - za) * f
+                hh = h * (1 + (RNG.random() - 0.5) * 0.06)
+                res = bmesh.ops.create_cone(bm, cap_ends=True, segments=9, radius1=r, radius2=r, depth=hh + 0.3)
+                bmesh.ops.translate(bm, verts=res["verts"], vec=(x, y, z + (hh - 0.3) / 2))
+        me = bpy.data.meshes.new(f"toros{k}")
+        bm.to_mesh(me)
+        bm.free()
+        me.materials.append(MATS["toros"])
+        ligar(bpy.data.objects.new(f"toros{k}", me), t.get("grupo", "envolvente"))
+        if passo >= 1.5:          # posts with a sheep net: three wires
+            from mathutils import Vector
+            bm = bmesh.new()
+            for (xa, ya, za), (xb, yb, zb) in zip(pts, pts[1:]):
+                a, b = Vector((xa, ya, za)), Vector((xb, yb, zb))
+                d = b - a
+                if d.length < 0.05:
+                    continue
+                rot = Vector((0, 0, 1)).rotation_difference(d.normalized()).to_matrix()
+                for hw in (0.2, 0.5, 0.8):
+                    res = bmesh.ops.create_cone(bm, cap_ends=False, segments=4, radius1=0.004, radius2=0.004, depth=d.length)
+                    bmesh.ops.rotate(bm, verts=res["verts"], cent=(0, 0, 0), matrix=rot)
+                    bmesh.ops.translate(bm, verts=res["verts"], vec=(a + b) / 2 + Vector((0, 0, hw * h)))
+            me = bpy.data.meshes.new(f"rede{k}")
+            bm.to_mesh(me)
+            bm.free()
+            me.materials.append(MATS["metal"])
+            ligar(bpy.data.objects.new(f"rede{k}", me), t.get("grupo", "envolvente"))
+
+
+ARVORES = []
+
+
+def construir_arvores():
+    if not E.get("arvores"):
+        return
+    MATS["tronco"] = mat_simples("tronco", "#4b4036", 0.9)
+    MATS["copa"] = mat_simples("copa", "#566f34", 0.9)
+    for k, t in enumerate(E["arvores"]):
+        x, y, z, h, c = t["x"], t["y"], t["z"], t.get("altura", 7.0), t.get("copa", 2.2)
+        bm = bmesh.new()
+        res = bmesh.ops.create_cone(bm, cap_ends=True, segments=10, radius1=0.04 * h / 2.5, radius2=0.05, depth=h * 0.62)
+        bmesh.ops.translate(bm, verts=res["verts"], vec=(x, y, z + h * 0.31 - 0.05))
+        me = bpy.data.meshes.new(f"tronco{k}")
+        bm.to_mesh(me)
+        bm.free()
+        me.materials.append(MATS["tronco"])
+        ligar(bpy.data.objects.new(f"tronco{k}", me), "envolvente")
+        bm = bmesh.new()
+        rng = np.random.default_rng(100 + k)
+        for j in range(4):
+            r = c * (0.75 if j == 0 else 0.5 + 0.15 * rng.random())
+            ang = rng.random() * 2 * math.pi
+            off = 0 if j == 0 else c * 0.45
+            res = bmesh.ops.create_icosphere(bm, subdivisions=2, radius=r)
+            bmesh.ops.translate(bm, verts=res["verts"], vec=(x + off * math.cos(ang), y + off * math.sin(ang),
+                                                             z + h - c * 0.95 + (0 if j == 0 else (rng.random() - 0.3) * c * 0.5)))
+        me = bpy.data.meshes.new(f"copa{k}")
+        bm.to_mesh(me)
+        bm.free()
+        me.materials.append(MATS["copa"])
+        for p in me.polygons:
+            p.use_smooth = True
+        ob = ligar(bpy.data.objects.new(f"copa{k}", me), "envolvente")
+        ARVORES.append((ob, x, y, z + h - c * 0.95, c))
+
+
+def folhas_cycles():
+    """For the renders, the low-poly crowns give way to leaves: small cards in clumps, denser near each clump's
+    surface, random orientation and tone (one mesh for all trees)."""
+    if not ARVORES:
+        return
+    V, F, T = [], [], []
+    base = 0
+    for k, (copa, x, y, zc, c) in enumerate(ARVORES):
+        copa.hide_render = True
+        rng = np.random.default_rng(300 + k)
+        nc = 7
+        cent = np.zeros((nc, 3))
+        raio = np.zeros(nc)
+        cent[0] = (x, y, zc)
+        raio[0] = c * 0.62
+        for j in range(1, nc):
+            d = rng.normal(size=3)
+            d /= np.linalg.norm(d)
+            d[2] = abs(d[2]) * 0.6 - 0.15
+            cent[j] = (x, y, zc) + d * c * rng.uniform(0.35, 0.6) * np.array([1, 1, 0.8])
+            raio[j] = c * rng.uniform(0.38, 0.55)
+        n = int(26000 * (c / 2.2) ** 2)
+        peso = raio ** 3 / (raio ** 3).sum()
+        qual = rng.choice(nc, size=n, p=peso)
+        d = rng.normal(size=(n, 3))
+        d /= np.linalg.norm(d, axis=1, keepdims=True)
+        r = raio[qual] * rng.random(n) ** 0.3
+        p = cent[qual] + d * r[:, None] * np.array([1, 1, 0.85])
+        a = rng.normal(size=(n, 3))
+        a /= np.linalg.norm(a, axis=1, keepdims=True)
+        b = np.cross(a, rng.normal(size=(n, 3)))
+        b /= np.linalg.norm(b, axis=1, keepdims=True)
+        esc = rng.uniform(0.7, 1.35, n)[:, None]
+        L, W = 0.085 * esc, 0.05 * esc
+        quad = np.stack([p - a * L, p - b * W, p + a * L, p + b * W], axis=1)
+        V.append(quad.reshape(-1, 3))
+        F.append(base + np.arange(n * 4).reshape(n, 4))
+        T.append(rng.random(n))
+        base += n * 4
+    V, F, T = np.concatenate(V), np.concatenate(F), np.concatenate(T)
+    me = bpy.data.meshes.new("folhas")
+    me.from_pydata(V.tolist(), [], F.tolist())
+    at = me.attributes.new("variacao", "FLOAT", "FACE")
+    at.data.foreach_set("value", T.astype(np.float32))
+    m = bpy.data.materials.new("folha")
+    try:
+        m.use_nodes = True
+    except Exception:
+        pass
+    nt = m.node_tree
+    b = principled(m)
+    out = next(nd for nd in nt.nodes if nd.type == "OUTPUT_MATERIAL")
+    attr = no(nt, "ShaderNodeAttribute", -800, 200)
+    attr.attribute_name = "variacao"
+    rampa = no(nt, "ShaderNodeValToRGB", -550, 200)
+    rampa.color_ramp.elements[0].color = (0.035, 0.075, 0.015, 1)
+    rampa.color_ramp.elements[1].color = (0.20, 0.25, 0.05, 1)
+    el = rampa.color_ramp.elements.new(0.6)
+    el.color = (0.08, 0.15, 0.03, 1)
+    nt.links.new(attr.outputs["Fac"], rampa.inputs["Fac"])
+    nt.links.new(rampa.outputs["Color"], b.inputs["Base Color"])
+    b.inputs["Roughness"].default_value = 0.5
+    tr = no(nt, "ShaderNodeBsdfTranslucent", -200, -200)
+    nt.links.new(rampa.outputs["Color"], tr.inputs["Color"])
+    mix = no(nt, "ShaderNodeMixShader", 200, 100)
+    mix.inputs["Fac"].default_value = 0.3
+    nt.links.new(b.outputs["BSDF"], mix.inputs[1])
+    nt.links.new(tr.outputs["BSDF"], mix.inputs[2])
+    nt.links.new(mix.outputs["Shader"], out.inputs["Surface"])
+    me.materials.append(m)
+    ob = bpy.data.objects.new("folhas", me)
+    cena.collection.objects.link(ob)
+    ob.parent = RAIZ
+
+
+def construir_terreno():
+    T = E.get("terreno")
+    if not T:
+        return None
+    xs, ys, Z, M = T["xs"], T["ys"], T["z"], T["mat"]
+    nomes = T["mats"]
+    nx, ny = len(xs), len(ys)
+    me = bpy.data.meshes.new("terreno")
+    verts = [(xs[i], ys[j], Z[j][i]) for j in range(ny) for i in range(nx)]
+    faces, mi = [], []
+    for j in range(ny - 1):
+        for i in range(nx - 1):
+            c = M[j][i]
+            if c < 0:
+                continue
+            a = j * nx + i
+            faces.append((a, a + 1, a + nx + 1, a + nx))
+            mi.append(c)
+    me.from_pydata(verts, [], faces)
+    for n in nomes:
+        me.materials.append(MATS[n])
+    me.polygons.foreach_set("material_index", mi)
+    me.update()
+    # triangulate once: the grass grows on these very triangles (a quad split differently buried half the grass)
+    bm = bmesh.new()
+    bm.from_mesh(me)
+    bmesh.ops.triangulate(bm, faces=bm.faces, quad_method="BEAUTY")
+    bm.to_mesh(me)
+    bm.free()
+    for p in me.polygons:
+        p.use_smooth = True
+    return ligar(bpy.data.objects.new("terreno", me), "terreno")
+
+
+def relva_cycles(terreno, nome="relva", densidade=900, raio=None):
+    """Hair grass on the meadow faces (render only, never exported)."""
+    T = E["terreno"]
+    if nome not in T["mats"]:
+        return None
+    k = T["mats"].index(nome)
+    cx, cy = E.get("centro", [0, 0])
+    me = terreno.data.copy()
+    bm = bmesh.new()
+    bm.from_mesh(me)
+    fora = [f for f in bm.faces if f.material_index != k
+            or (raio and math.hypot(f.calc_center_median().x - cx, f.calc_center_median().y - cy) > raio)]
+    bmesh.ops.delete(bm, geom=fora, context="FACES")
+    bm.to_mesh(me)
+    bm.free()
+    ob = bpy.data.objects.new("relva_" + nome, me)
+    cena.collection.objects.link(ob)
+    ob.parent = RAIZ
+    ob.location.z = 0.01
+    m = bpy.data.materials.new("relva_fios")
+    try:
+        m.use_nodes = True
+    except Exception:
+        pass
+    nt = m.node_tree
+    b = principled(m)
+    info = no(nt, "ShaderNodeHairInfo", -700, 200)
+    rampa = no(nt, "ShaderNodeValToRGB", -450, 200)
+    rampa.color_ramp.elements[0].color = (0.06, 0.12, 0.02, 1)
+    rampa.color_ramp.elements[1].color = (0.30, 0.30, 0.10, 1)
+    el = rampa.color_ramp.elements.new(0.7)
+    el.color = (0.11, 0.19, 0.04, 1)
+    nt.links.new(info.outputs["Random"], rampa.inputs["Fac"])
+    nt.links.new(rampa.outputs["Color"], b.inputs["Base Color"])
+    b.inputs["Roughness"].default_value = 0.85
+    for k_ in ("Specular IOR Level", "Specular"):
+        if k_ in b.inputs:
+            b.inputs[k_].default_value = 0.15
+            break
+    me.materials.clear()
+    me.materials.append(m)
+    mod = ob.modifiers.new("relva", "PARTICLE_SYSTEM")
+    ps = mod.particle_system.settings
+    ps.type = "HAIR"
+    area = sum(p.area for p in me.polygons)
+    ps.count = int(min(1400000, area * densidade))
+    ps.hair_length = 0.15
+    ps.use_advanced_hair = True
+    ps.emit_from = "FACE"
+    ps.distribution = "RAND"
+    ps.use_even_distribution = True
+    try:      # grow straight up, not along each triangle's normal (that showed the mesh as patches)
+        ps.normal_factor = 0.0
+        ps.object_align_factor = (0.0, 0.0, 0.15 / 4.0)      # hair length = 4 x velocity
+    except Exception as e:
+        print('relva vertical:', e)
+    for attr, val in (("factor_random", 0.012), ("brownian_factor", 0.0), ("root_radius", 0.0025), ("tip_radius", 0.0),
+                      ("radius_scale", 1.0), ("display_percentage", 5), ("render_step", 3), ("display_step", 2)):
+        if hasattr(ps, attr):
+            setattr(ps, attr, val)
+    if False:     # children sat in a plane around each strand and half of them ended under the ground (patches)
+        ps.child_type = "SIMPLE"
+        ps.rendered_child_count = 2
+        for attr in ("child_nbr", "child_percent", "child_display_percent"):
+            if hasattr(ps, attr):
+                setattr(ps, attr, 1)
+        for attr, val in (("child_radius", 0.04), ("roughness_2", 0.06), ("roughness_endpoint", 0.05),
+                          ("child_length", 1.0), ("child_length_threshold", 0.5)):
+            if hasattr(ps, attr):
+                setattr(ps, attr, val)
+    ps.material = 1
+    return ob
+
+
+# ---------------------------------------------------------------------------------------------- light, sky, cameras
+def luz_e_ceu():
+    sol = E.get("sol", {"azimute": 235, "elevacao": 32})
+    w = bpy.data.worlds.new("mundo")
+    cena.world = w
+    try:
+        w.use_nodes = True
+    except Exception:
+        pass
+    nt = w.node_tree
+    bg = next(n for n in nt.nodes if n.type == "BACKGROUND")
+    ceu = no(nt, "ShaderNodeTexSky", -300, 300)
+    for t in ("MULTIPLE_SCATTERING", "SINGLE_SCATTERING", "NISHITA", "HOSEK_WILKIE"):
+        try:
+            ceu.sky_type = t
+            break
+        except Exception:
+            continue
+    el, az = math.radians(sol["elevacao"]), math.radians(sol["azimute"])
+    for attr, val in (("sun_elevation", el), ("sun_rotation", math.pi / 2 - az + math.pi), ("sun_disc", False),
+                      ("altitude", 100.0), ("air_density", 1.0), ("aerosol_density", float(sol.get("aerossol", 0.6))),
+                      ("dust_density", float(sol.get("aerossol", 0.6))),
+                      ("ozone_density", 1.0)):
+        if hasattr(ceu, attr):
+            try:
+                setattr(ceu, attr, val)
+            except Exception:
+                pass
+    nt.links.new(ceu.outputs["Color"], bg.inputs["Color"])
+    bg.inputs["Strength"].default_value = float(sol.get("ceu", 0.35))
+    luz = bpy.data.lights.new("sol", "SUN")
+    luz.energy = float(sol.get("forca", 3.2))
+    luz.angle = math.radians(0.6)
+    luz.color = (1.0, 0.95, 0.88)
+    ob = bpy.data.objects.new("sol", luz)
+    cena.collection.objects.link(ob)
+    # direction: the light points down toward -dir(sun); world frame is north-up after the root rotation
+    dx, dy = math.sin(az), math.cos(az)
+    ob.rotation_euler = (0.0, 0.0, 0.0)
+    v = (-(dx * math.cos(el)), -(dy * math.cos(el)), -math.sin(el))
+    from mathutils import Vector
+    ob.rotation_euler = Vector(v).to_track_quat("-Z", "Y").to_euler()
+
+
+def camaras():
+    from mathutils import Vector
+    out = {}
+    for v in E.get("vistas", []):
+        cam = bpy.data.cameras.new(v["nome"])
+        cam.lens = v.get("lente", 26)
+        cam.sensor_width = 36
+        cam.clip_start = 0.1
+        cam.clip_end = 2000
+        ob = bpy.data.objects.new("cam_" + v["nome"], cam)
+        cena.collection.objects.link(ob)
+        ob.parent = RAIZ
+        ob.location = v["camara"]
+        d = Vector(v["alvo"]) - Vector(v["camara"])
+        ob.rotation_euler = d.to_track_quat("-Z", "Y").to_euler()
+        if "shift_y" in v:
+            cam.shift_y = v["shift_y"]
+        out[v["nome"]] = ob
+    return out
+
+
+# ---------------------------------------------------------------------------------------------- main
+criar_materiais()
+construir_solidos()
+construir_vaos()
+construir_extras()
+terreno = construir_terreno()
+construir_arvores()
+RAIZ.rotation_euler = (0, 0, math.radians(E.get("rodar_graus", 0.0)))
+bpy.context.view_layer.update()
+for ob in cena.objects:
+    if ob.type == "MESH":
+        uvs_mundo(ob)
+        if ob.name != "terreno":
+            for p in ob.data.polygons:
+                p.use_smooth = False
+luz_e_ceu()
+cams = camaras()
+bpy.context.view_layer.update()
+
+if not OPC.get("sem-glb"):
+    # web copy: textures at 512 px, JPEG inside the GLB
+    for img in bpy.data.images:
+        if img.size[0] > 512:
+            img.scale(512, 512)
+    bpy.ops.object.select_all(action="DESELECT")
+    bpy.ops.export_scene.gltf(filepath=os.path.join(SAIDA, "casa.glb"), export_format="GLB", export_extras=True,
+                              export_apply=True, export_image_format="JPEG", export_jpeg_quality=82,
+                              export_cameras=False, export_lights=False, use_visible=True)
+    for img in bpy.data.images:          # back to full size for Cycles
+        if img.filepath_raw:
+            img.reload()
+    print("GLB", os.path.getsize(os.path.join(SAIDA, "casa.glb")))
+
+if OPC["render"]:
+    # the ground casts no shadow: grass roots sit on it and half the triangles shaded them (patches); it still receives
+    terreno.visible_shadow = False
+    if not OPC.get("sem-relva"):
+        relva_cycles(terreno, "relva", 1200)
+        relva_cycles(terreno, "relva_fora", 320, raio=34)
+    folhas_cycles()
+    cena.render.engine = "CYCLES"
+    pref = bpy.context.preferences.addons["cycles"].preferences
+    try:
+        pref.compute_device_type = "CUDA"
+        pref.refresh_devices()
+        for d in pref.devices:
+            d.use = d.type == "CUDA"
+        cena.cycles.device = "GPU"
+    except Exception as e:
+        print("GPU indisponível:", e)
+    cena.cycles.samples = int(OPC["amostras"])
+    cena.cycles.use_adaptive_sampling = True
+    cena.cycles.adaptive_threshold = 0.03
+    try:
+        cena.cycles_curves.shape = "THICK"      # ribbons took the shading of each ground triangle: patches
+    except Exception:
+        pass
+    cena.cycles.use_denoising = True
+    try:
+        cena.cycles.denoiser = "OPENIMAGEDENOISE"
+    except Exception:
+        pass
+    cena.cycles.max_bounces = 8
+    cena.cycles.transparent_max_bounces = 8
+    w, h = [int(v) for v in OPC["res"].split("x")]
+    cena.render.resolution_x, cena.render.resolution_y = w, h
+    cena.render.resolution_percentage = 50 if OPC.get("previa") else 100
+    try:
+        cena.view_settings.view_transform = "AgX"
+        cena.view_settings.look = "AgX - Medium High Contrast"
+    except Exception:
+        pass
+    cena.view_settings.exposure = float(E.get("sol", {}).get("exposicao", 0.0))
+    cena.render.image_settings.file_format = "JPEG"
+    cena.render.image_settings.quality = 88
+    nomes = list(cams) if OPC["render"] == "todas" else OPC["render"].split(",")
+    for n in nomes:
+        cena.camera = cams[n]
+        cena.render.filepath = os.path.join(SAIDA, f"render_{n}.jpg")
+        t0 = __import__("time").time()
+        bpy.ops.render.render(write_still=True)
+        print("RENDER", n, round(__import__("time").time() - t0), "s")
+bpy.ops.wm.save_as_mainfile(filepath=os.path.join(SAIDA, "casa.blend"))
+print("FEITO")

@@ -1,4 +1,6 @@
-"""The 3D volumes of a house for the client page, from its architecture DXF (a DWG converted on the PC). Pure Python.
+"""A first AUTOMATIC volume model of a house from its architecture DXF (a DWG converted on the PC). Pure Python.
+Not client-grade (2026-11-11: doubled walls, terrain over the ramp): client pages are built from a clean house
+description with casa_blender.py + gerar_pagina.py. Kept as the automatic reading step the Builder app will improve.
 
     python ferramentas/pagina/modelo_dxf.py "_trabalho/<obra>/config.json"
 
@@ -17,8 +19,9 @@ MDT). From that:
   - slabs on the outlines; roof slabs on the roof plan's outline at its levels;
   - furniture: the closed shapes of the furniture layer, low blocks;
   - terrain: the MDT faces within a radius of the house.
-Output (local metres, origin at the centre of the house, x east, y north, z up from the reference floor level): JSON for
-gerar_pagina.py. Never written to Git: it is the client's house (it stays in _trabalho/).
+Output (local metres, origin at the centre of the house, x east, y north, z up from the reference floor level): JSON
+(storeys, walls with openings, outlines, facade spans, terrain). Never written to Git: it is the client's house (it stays
+in _trabalho/).
 """
 import json
 import math

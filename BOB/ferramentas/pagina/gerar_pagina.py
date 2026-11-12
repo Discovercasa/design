@@ -1,97 +1,106 @@
-"""The client's page: ONE self-contained HTML file with the house's 3D model (three.js travels inside, gzipped,
-so it opens offline, from an e-mail attachment or a phone). Input: the page model written by modelo_dxf.py.
+"""The client's page: ONE self-contained HTML file (opens offline, from an e-mail attachment or a phone) with
+  - the photorealistic images rendered by casa_blender.py (Cycles),
+  - the house in 3D (the GLB from casa_blender.py), "Realista" (real materials, sky, sun) or "Maquete" (white model),
+    storeys cut from the top down, roof, exterior and terrain on/off, the project's views, a north arrow,
+  - the table of storeys with the rooms' areas and the list of finishes.
+It never shows how the model was made. three.js (MIT) travels inside, gzipped.
 
-    python ferramentas/pagina/gerar_pagina.py <modelo.json> <saida.html> [--subtitulo "..."]
+    python ferramentas/pagina/gerar_pagina.py <pagina.json> <saida.html>
 
-The page shows the model (storeys, roof and terrain on/off, "maquete" or "realista" look, furniture, views),
-a levels diagram and the table of storeys with their rooms' areas. It never shows how the model was made.
+pagina.json: {"titulo", "subtitulo", "modelo": "<folder with casa.glb and render_*.jpg>", "casa": "<casa.json>",
+              "pisos": [{"id", "nome", "cota", "divisoes": [[nome, m2], ...]}], "cota_topo",
+              "imagens": [{"vista", "titulo"}], "acabamentos": [{"parte", "texto", "cor"}], "ficha": [[k, v], ...]}
 """
-import argparse
 import base64
 import datetime
 import gzip
 import html
 import json
 import math
+import posixpath
 import re
 import sys
 from pathlib import Path
 
 AQUI = Path(__file__).resolve().parent
 THREE = AQUI.parent.parent / "configurador" / "web" / "node_modules" / "three"
-FICHEIROS = {"CORE": "build/three.core.js", "MOD": "build/three.module.js", "ORBIT": "examples/jsm/controls/OrbitControls.js"}
-EXTERIOR = re.compile(r"deck|varanda|terra[cç]o|alpendre|p[áa]tio|logradouro", re.I)
+ENTRADAS = ["build/three.module.js", "examples/jsm/controls/OrbitControls.js", "examples/jsm/loaders/GLTFLoader.js",
+            "examples/jsm/postprocessing/EffectComposer.js", "examples/jsm/postprocessing/RenderPass.js",
+            "examples/jsm/postprocessing/GTAOPass.js", "examples/jsm/postprocessing/OutputPass.js",
+            "examples/jsm/objects/Sky.js", "examples/jsm/environments/RoomEnvironment.js"]
+IMPORTA = re.compile(r"""(?:\bfrom\s*|\bimport\s*\(\s*|\bimport\s+)(['"])([^'"\n]+)\1""")
 MESES = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho", "agosto", "setembro", "outubro",
          "novembro", "dezembro"]
 
 
-def _embalar(rel):
-    p = THREE / rel
-    if not p.exists():
-        sys.exit(f"falta {p}: corre 'npm install' em configurador/web")
-    return base64.b64encode(gzip.compress(p.read_bytes(), 9, mtime=0)).decode("ascii")
+def _modulos():
+    """three's modules the page imports, with everything they import (relative paths and 'three')."""
+    if not THREE.exists():
+        sys.exit(f"falta {THREE}: corre 'npm install' em configurador/web")
+    feitos, fila = {}, list(ENTRADAS)
+    while fila:
+        p = fila.pop()
+        if p in feitos:
+            continue
+        src = (THREE / p).read_text(encoding="utf-8")
+        feitos[p] = base64.b64encode(gzip.compress(src.encode("utf-8"), 9, mtime=0)).decode("ascii")
+        for _, esp in IMPORTA.findall(src):
+            alvo = "build/three.module.js" if esp == "three" else posixpath.normpath(posixpath.join(posixpath.dirname(p), esp))
+            if (THREE / alvo).exists() and alvo not in feitos:
+                fila.append(alvo)
+    return feitos
 
 
 def _num(v):
     return f"{v:,.2f}".replace(",", " ").replace(".", ",")
 
 
-def ponto_interior(piso):
-    """Eye inside the reference storey looking out through its widest glazing (camera x, y, target x, y)."""
-    cont = piso["contorno"]
-    cx = sum(x for x, _ in cont) / len(cont)
-    cy = sum(y for _, y in cont) / len(cont)
-    vidros = [f for f in piso.get("fachada", []) if f["tipo"] != "parede"]
-    if not vidros:
-        return [cx, cy, cont[0][0], cont[0][1]]
-    f = max(vidros, key=lambda f: math.dist(f["p0"], f["p1"]))
-    mx, my = (f["p0"][0] + f["p1"][0]) / 2, (f["p0"][1] + f["p1"][1]) / 2
-    d = math.hypot(cx - mx, cy - my) or 1.0
-    k = min(5.0, 0.8 * d) / d
-    return [round(mx + (cx - mx) * k, 2), round(my + (cy - my) * k, 2), round(mx, 2), round(my, 2)]
+def gerar(pagina, saida):
+    P = json.loads(Path(pagina).read_text(encoding="utf-8"))
+    base = Path(pagina).resolve().parent
+    modelo = (base / P["modelo"]).resolve()
+    C = json.loads((base / P["casa"]).read_text(encoding="utf-8"))
+    th = math.radians(C.get("rodar_graus", 0.0))
 
-
-def gerar(modelo, saida, subtitulo=None):
-    M = json.loads(Path(modelo).read_text(encoding="utf-8"))
-    pisos = sorted(M["pisos"], key=lambda p: p["z"])
-    ref = next((p for p in pisos if p["id"] == M.get("referencia")), pisos[0])
-    M["interior"] = ponto_interior(ref)
-    util = sum(a for p in pisos for n, a in p.get("divisoes", []) if not EXTERIOR.search(n))
-    ext = sum(a for p in pisos for n, a in p.get("divisoes", []) if EXTERIOR.search(n))
-    topo = pisos[-1]
-    ficha = [("Pisos", str(len(pisos))),
-             ("Área útil interior", f"{_num(util)} m²" if util else "—"),
-             ("Áreas exteriores", f"{_num(ext)} m²" if ext else "—"),
-             (f"Cota {ref['nome']}", _num(ref["cota"])),
-             ("Cota da cobertura", _num(topo["cota"] + topo["z_acima"] - topo["z"])),
-             ("Altura acima do " + ref["nome"], f"{_num(topo['z_acima'] - ref['z'])} m")]
-    nomes = ", ".join(p["nome"].split("·")[-1].strip().lower() for p in pisos)
-    sub = subtitulo or (f"Moradia em {len(pisos)} pisos ({nomes}) sobre o terreno. Arraste para rodar, use a roda do "
-                        "rato ou dois dedos para aproximar e escolha o que quer ver.")
+    def tres(p):       # plan frame (x, y, z up) -> three.js (y up, north = -z)
+        x, y, z = p
+        xr, yr = x * math.cos(th) - y * math.sin(th), x * math.sin(th) + y * math.cos(th)
+        return [round(xr, 3), round(z, 3), round(-yr, 3)]
+    titulos = {i["vista"]: i["titulo"] for i in P.get("imagens", [])}
+    vistas = [{"nome": v["nome"], "titulo": titulos.get(v["nome"], v["nome"].capitalize()),
+               "camara": tres(v["camara"]), "alvo": tres(v["alvo"])} for v in C.get("vistas", [])]
+    cx, cy = C.get("centro", [0, 0])
+    pisos = [{**p, "cota_txt": _num(p["cota"])} for p in P["pisos"]]
+    dados = {"pisos": pisos, "cota_topo": _num(P["cota_topo"]), "vistas": vistas, "sol": C.get("sol", {}),
+             "centro": tres([cx, cy, 2.0]), "acabamentos": P.get("acabamentos", [])}
+    sol = dict(dados["sol"])
+    sol["azimute"] = sol.get("azimute", 235)
+    dados["sol"] = sol
+    galeria = []
+    for i in P.get("imagens", []):
+        f = modelo / f"render_{i['vista']}.jpg"
+        if f.exists():
+            b = base64.b64encode(f.read_bytes()).decode("ascii")
+            galeria.append(f'<img src="data:image/jpeg;base64,{b}" alt="{html.escape(i["titulo"])}">')
     hoje = datetime.date.today()
     valores = {
-        "TITULO": html.escape(M["nome"]),
-        "SUBTITULO": html.escape(sub),
-        "FICHA": "".join(f"<div><dt>{html.escape(k)}</dt><dd>{html.escape(v)}</dd></div>" for k, v in ficha),
+        "TITULO": html.escape(P["titulo"]),
+        "SUBTITULO": html.escape(P.get("subtitulo", "")),
+        "FICHA": "".join(f"<div><dt>{html.escape(k)}</dt><dd>{html.escape(v)}</dd></div>" for k, v in P.get("ficha", [])),
         "DATA": f"{hoje.day} de {MESES[hoje.month - 1]} de {hoje.year}",
-        "DADOS": json.dumps(M, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/"),
+        "GALERIA": "\n    ".join(galeria),
+        "DADOS": json.dumps(dados, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/"),
+        "MODULOS": json.dumps(_modulos(), separators=(",", ":")),
+        "GLB": base64.b64encode((modelo / "casa.glb").read_bytes()).decode("ascii"),
     }
-    valores.update({k: _embalar(v) for k, v in FICHEIROS.items()})
-    modelo_html = (AQUI / "modelo_pagina.html").read_text(encoding="utf-8")
-    pagina = re.sub(r"__(TITULO|SUBTITULO|FICHA|DATA|DADOS|CORE|MOD|ORBIT)__", lambda m: valores[m.group(1)], modelo_html)
-    Path(saida).write_text(pagina, encoding="utf-8")
-    return len(pagina.encode("utf-8"))
-
-
-def main():
-    ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
-    ap.add_argument("modelo")
-    ap.add_argument("saida")
-    ap.add_argument("--subtitulo")
-    a = ap.parse_args()
-    n = gerar(a.modelo, a.saida, a.subtitulo)
-    print(f"página: {a.saida} ({n / 1e6:.2f} MB)")
+    tpl = (AQUI / "modelo_pagina.html").read_text(encoding="utf-8")
+    pagina_html = re.sub(r"__(TITULO|SUBTITULO|FICHA|DATA|GALERIA|DADOS|MODULOS|GLB)__", lambda m: valores[m.group(1)], tpl)
+    Path(saida).write_text(pagina_html, encoding="utf-8")
+    return len(pagina_html.encode("utf-8")), len(galeria)
 
 
 if __name__ == "__main__":
-    main()
+    if len(sys.argv) != 3:
+        sys.exit(__doc__)
+    n, g = gerar(sys.argv[1], sys.argv[2])
+    print(f"página: {sys.argv[2]} ({n / 1e6:.2f} MB, {g} imagens)")
