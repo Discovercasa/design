@@ -66,7 +66,7 @@ export function opcoesPosicao(pid, atualId) {
   return ops.join('');
 }
 
-export function dlgAcrescentar(projetoId, cpId, tipoInicial) {
+export function dlgAcrescentar(projetoId, cpId, tipoInicial, aba = '') {
   const pid = projetoId || E.projetos[0].id;
   const tarefa = tipoInicial ? tipoInicial === 'tarefa' : !!cpId;
   return `<form data-form="acrescentar">${cabeca('Acrescentar', 'Um checkpoint é uma meta do projeto; uma tarefa é um passo pequeno dentro de um checkpoint.')}
@@ -76,10 +76,11 @@ export function dlgAcrescentar(projetoId, cpId, tipoInicial) {
         <button type="button" data-acao="tipo-novo" data-valor="checkpoint" aria-pressed="${!tarefa}">Checkpoint</button>
       </div>
       <input type="hidden" name="tipo" value="${tarefa ? 'tarefa' : 'checkpoint'}">
+      <input type="hidden" name="aba" value="${esc(aba)}">
       <div class="grelha-campos">
         <label class="campo-grupo"><span>Projeto</span><select class="campo" name="projeto" data-acao="projeto-novo">${opcoesProjetos(pid)}</select></label>
-        <label class="campo-grupo so-tarefa"${tarefa ? '' : ' hidden'}><span>Checkpoint</span><select class="campo" name="checkpoint">${opcoesCheckpoints(pid, cpId)}</select></label>
-        <label class="campo-grupo so-checkpoint"${tarefa ? ' hidden' : ''}><span>Posição no workflow</span><select class="campo" name="posicao">${opcoesPosicao(pid)}</select></label>
+        <label class="campo-grupo so-tarefa"${tarefa ? '' : ' hidden'}><span>Checkpoint</span><select class="campo" name="checkpoint">${opcoesCheckpoints(pid, cpId, aba)}</select></label>
+        <label class="campo-grupo so-checkpoint"${tarefa || aba ? ' hidden' : ''}${aba ? ' data-sem-posicao' : ''}><span>Posição no workflow</span><select class="campo" name="posicao">${opcoesPosicao(pid)}</select></label>
       </div>
       <label class="campo-grupo"><span>Título</span><input class="campo" name="titulo" maxlength="200" required autocomplete="off"></label>
       <label class="campo-grupo"><span>Descrição <small>(opcional)</small></span><textarea class="campo" name="descricao" maxlength="4000"></textarea></label>
@@ -95,8 +96,9 @@ export function dlgAcrescentar(projetoId, cpId, tipoInicial) {
     <div class="dlg-rodape"><button class="btn texto" type="button" data-acao="fechar-dlg">Cancelar</button><button class="btn primario" type="submit">Acrescentar</button></div>
   </form>`;
 }
-export function opcoesCheckpoints(pid, atual) {
-  const cps = checkpointsDe(pid);
+export function opcoesCheckpoints(pid, atual, aba) {
+  // aba: '' = the Workflow tab, 'paginas' = the Páginas tab; undefined = every checkpoint (editing a task can move it)
+  const cps = aba === undefined ? checkpointsDe(pid) : checkpointsDe(pid).filter((c) => (c.aba || '') === aba);
   if (!cps.length) return '<option value="">Este projeto ainda não tem checkpoints</option>';
   const def = atual || (cps.find((c) => c.estado === 'em_curso') || cps.find((c) => c.estado !== 'concluido') || cps[0]).id;
   return cps.map((c) => `<option value="${c.id}"${c.id === def ? ' selected' : ''}>${esc(c.titulo)}</option>`).join('');

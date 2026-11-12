@@ -1,6 +1,15 @@
 [
   {
     "dia": "2026-11-12",
+    "titulo": "Builder: a aba Páginas",
+    "itens": [
+      "No projeto Builder há uma aba nova, «Páginas», com as páginas que entregamos aos clientes (um só ficheiro com a casa em 3D, as imagens, os pisos e os materiais).",
+      "«Abrir a página» abre-a noutra janela; «Descarregar» guarda o ficheiro para enviar. Quem edita pode carregar uma página nova (o título vem da própria página).",
+      "A aba tem os seus checkpoints e tarefas, separados do Workflow; os links para uma tarefa desta aba abrem-na lá."
+    ]
+  },
+  {
+    "dia": "2026-11-12",
     "titulo": "Tarefas para ti: também as que te marcaram",
     "itens": [
       "No Início, «tarefas para ti» conta as tarefas de que és responsável e aquelas em que foste marcado (antes só contava as primeiras).",

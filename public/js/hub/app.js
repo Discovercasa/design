@@ -641,7 +641,21 @@ document.addEventListener('click', async (e) => {
       if (await tentar(() => D.mudarAvisosRegisto(ligados))) aviso(ligados ? 'Vais receber os avisos do Log ao abrir o hub.' : 'Avisos do Log desligados.', { icone: 'certo', duracao: 3 });
       return desenhar(false);
     }
-    case 'acrescentar': return abrirDialogo(dlg, P.dlgAcrescentar(el.dataset.projeto || (rota().p || {}).id, null, el.dataset.tipo));
+    case 'acrescentar': return abrirDialogo(dlg, P.dlgAcrescentar(el.dataset.projeto || (rota().p || {}).id, null, el.dataset.tipo, el.dataset.aba || ''));
+    case 'abrir-pagina': {   // a client page: fetched from the private storage and opened from memory in another window
+      const d = E.documentos.find((x) => x.id === id);
+      const janela = window.open('about:blank', '_blank');  // já, para o browser não bloquear a janela
+      if (janela) { try { janela.document.title = d.titulo; janela.document.body.innerHTML = '<p style="font:16px system-ui;padding:24px;color:#555">A abrir a página…</p>'; } catch { /* nada */ } }
+      try { const url = await D.urlPagina(d); if (janela) janela.location.href = url; else location.href = url; }
+      catch (err) { if (janela) janela.close(); aviso('Não foi possível abrir a página: ' + esc(err.message || err), { icone: 'atencao' }); }
+      return;
+    }
+    case 'descarregar-pagina': {
+      const d = E.documentos.find((x) => x.id === id);
+      try { location.href = await D.urlPagina(d, { descarregar: true }); }
+      catch (err) { aviso('Não foi possível descarregar: ' + esc(err.message || err), { icone: 'atencao' }); }
+      return;
+    }
     case 'acrescentar-doc': return abrirDialogo(dlg, P.dlgDocumento(el.dataset.projeto, el.dataset.tipoDoc), { estreito: true });
     case 'tipo-doc': {
       const f = el.closest('form'); f.elements.tipo.value = el.dataset.valor;
@@ -848,7 +862,7 @@ document.addEventListener('change', async (e) => {
       else el.checked = !el.checked;
       return;
     case 'estado-cp': if (await tentar(() => D.mudarCheckpoint(id, { estado: el.value }))) depois(); return;
-    case 'projeto-novo': { const f = el.closest('form'); f.elements.checkpoint.innerHTML = P.opcoesCheckpoints(el.value); f.elements.posicao.innerHTML = P.opcoesPosicao(el.value); return; }
+    case 'projeto-novo': { const f = el.closest('form'); f.elements.checkpoint.innerHTML = P.opcoesCheckpoints(el.value, null, f.elements.aba ? f.elements.aba.value : undefined); f.elements.posicao.innerHTML = P.opcoesPosicao(el.value); return; }
     case undefined:
       if ((el.name === 'ficheiros' || el.name === 'pasta') && el.closest('form')) {
         const f = el.closest('form'), lista = f.querySelector('[data-escolhidos]');
@@ -862,6 +876,13 @@ document.addEventListener('change', async (e) => {
         const itens = [...el.files].map((x) => ({ ficheiro: x, pasta: el.dataset.entrada === 'pasta' ? pastaDe(x.webkitRelativePath) : '' }));
         el.value = '';
         if (alvoCarga && itens.length) await carregarVarios(alvoCarga.projeto, alvoCarga.tipo, alvoCarga.seccao, itens);
+        return;
+      }
+      if (el.name === 'pagina-ficheiro' && el.files.length) {   // aba Páginas: one HTML file; the title comes from its <title>
+        const ficheiro = el.files[0]; el.value = '';
+        const titulo = ((await ficheiro.slice(0, 16384).text()).match(/<title>([^<]{1,200})<\/title>/i) || [])[1] || ficheiro.name.replace(/\.html?$/i, '');
+        aviso(`A carregar «${esc(titulo.trim())}»…`, { icone: 'info', duracao: 3 });
+        if (await tentar(() => D.carregarDocumento(el.dataset.projeto, 'pagina', ficheiro, titulo.trim(), ''))) { aviso('Página carregada.', { icone: 'certo', duracao: 3 }); depois(); }
         return;
       }
       if (el.name === 'anexos-ficheiros') { await enviarAnexos(el.dataset.alvo, Number(el.dataset.ref), el.files); el.value = ''; }
@@ -908,7 +929,9 @@ document.addEventListener('submit', async (e) => {
       case 'acrescentar': {
         const projetoId = v('projeto');
         if (v('tipo') === 'checkpoint') {
-          ok = await tentar(() => D.criarCheckpoint({ projeto: projetoId, titulo: v('titulo'), descricao: v('descricao'), criterio_saida: v('criterio_saida') }, Number(v('posicao')) || null), f);
+          const aba = f.elements.aba ? f.elements.aba.value : '';   // the Páginas tab: its checkpoints go to the end
+          ok = await tentar(() => D.criarCheckpoint({ projeto: projetoId, titulo: v('titulo'), descricao: v('descricao'), criterio_saida: v('criterio_saida'), aba: aba || null },
+            aba ? null : Number(v('posicao')) || null), f);
         } else {
           const cp = Number(v('checkpoint'));
           if (!cp) { $('.erro-msg', f).textContent = 'Este projeto ainda não tem checkpoints: acrescenta primeiro um checkpoint.'; return; }

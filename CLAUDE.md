@@ -64,6 +64,10 @@ Projeto Design da Discovercasa (`design.discovercasa.pt`). Responder em portugu�
   privado e só se lê descarregando-o: **por uma função temporária com chave de uso único** (decisão do utilizador,
   2026-11-11: «ok chave de uso único então»), desligada logo a seguir (410, `verify_jwt`) e a chave apagada, como no
   carregamento dos modelos AR. Nenhuma chave permanente guardada.
+- **Aba Páginas** (2026-11-12, migração 0025; o JSON do projeto diz `"paginas": true`, hoje só o Builder): as páginas
+  entregues aos clientes são documentos do tipo `pagina` no armazenamento privado `documentos` (nunca no Git: são casas de
+  clientes) e abrem-se noutra janela a partir da memória; a aba tem os seus checkpoints (`checkpoints.aba = 'paginas'`,
+  fora do Workflow). O Claude carrega uma página pela função temporária com chave de uso único (como os modelos AR).
 - **Página de um projeto** (2026-11-11): abas Workflow, Documentos e (Step Inside) Teste do AR; pipeline e «sobre»
   dentro do Workflow; tudo fechado sempre que se abre; descrição das tarefas em acordeão; o ponto de situação do
   projeto é por tópicos no JSON (`situacao`: dia, feito, agora, falta) — atualizá-lo a cada entrega.

@@ -26,6 +26,8 @@ export const projeto = (id) => E.projetos.find((p) => p.id === id);
 export const projetoPorSlug = (slug) => E.projetos.find((p) => p.slug === slug);
 export const nomeProjeto = (id) => (projeto(id) || {}).nome || id;
 export const checkpointsDe = (id) => E.checkpoints.filter((c) => c.projeto === id).sort((a, b) => a.ordem - b.ordem || a.id - b.id);
+// os checkpoints de uma aba do projeto (migração 0025): sem aba = o Workflow; 'paginas' = a aba Páginas
+export const checkpointsDaAba = (id, aba = null) => checkpointsDe(id).filter((c) => (c.aba || null) === (aba || null));
 export const tarefasDe = (cpId) => E.tarefas.filter((t) => t.checkpoint_id === cpId).sort((a, b) => a.ordem - b.ordem || a.id - b.id);
 export const decisaoDaTarefa = (tId) => E.decisoes.find((d) => d.tarefa_id === tId);
 export const decisoesDe = (id) => E.decisoes.filter((d) => d.projeto === id);
@@ -146,7 +148,8 @@ async function feito(p) { const { error } = await p; if (error) throw error; awa
 export async function criarCheckpoint(c, posicao) {
   const { data, error } = await sb().rpc('inserir_checkpoint', { p_projeto: c.projeto, p_titulo: c.titulo, p_descricao: c.descricao || '', p_posicao: posicao });
   if (error) throw error;
-  if (c.criterio_saida) { const r = await sb().from('checkpoints').update({ criterio_saida: c.criterio_saida }).eq('id', data); if (r.error) throw r.error; }
+  const extra = { ...(c.criterio_saida ? { criterio_saida: c.criterio_saida } : {}), ...(c.aba ? { aba: c.aba } : {}) };
+  if (Object.keys(extra).length) { const r = await sb().from('checkpoints').update(extra).eq('id', data); if (r.error) throw r.error; }
   await carregarTudo();
   return data;
 }
@@ -202,7 +205,7 @@ export function feitosDe(id) {
 export const documentosDe = (id, tipo) => E.documentos.filter((d) => d.projeto === id && (!tipo || d.tipo === tipo));
 const chaveFicheiro = (nome) => nome.normalize('NFKD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9._-]+/g, '-').replace(/-{2,}/g, '-').replace(/^[-.]+|[-.]+$/g, '') || 'ficheiro';
 const MIMES = { pdf: 'application/pdf', md: 'text/plain; charset=utf-8', txt: 'text/plain; charset=utf-8', csv: 'text/csv', png: 'image/png', jpg: 'image/jpeg', jpeg: 'image/jpeg', webp: 'image/webp',
-  usdz: 'model/vnd.usdz+zip', glb: 'model/gltf-binary' };   // AR: the phone's viewer needs the right type
+  usdz: 'model/vnd.usdz+zip', glb: 'model/gltf-binary', html: 'text/html; charset=utf-8', htm: 'text/html; charset=utf-8' };   // AR: the phone's viewer needs the right type
 export async function carregarDocumento(projetoId, tipo, ficheiro, titulo, descricao, { seccao_id = null, pasta = '', lote = null } = {}) {
   const ext = (ficheiro.name.split('.').pop() || '').toLowerCase();
   const mime = MIMES[ext] || ficheiro.type || 'application/octet-stream';
@@ -249,6 +252,18 @@ export async function urlDocumento(doc) {
   const { data, error } = await sb().storage.from('documentos').createSignedUrl(doc.caminho, 300, descarregar ? { download: doc.nome_ficheiro } : undefined);
   if (error) throw error;
   return data.signedUrl;
+}
+// a client page (aba Páginas): the HTML is fetched with a short signed link and opened from memory, so the page runs
+// whatever the storage says about HTML files; descarregar = a link that saves the file
+export async function urlPagina(doc, { descarregar = false } = {}) {
+  const { data, error } = await sb().storage.from('documentos').createSignedUrl(doc.caminho, 300, descarregar ? { download: doc.nome_ficheiro } : undefined);
+  if (error) throw error;
+  if (descarregar) return data.signedUrl;
+  const r = await fetch(data.signedUrl);
+  if (!r.ok) throw new Error(`o ficheiro não veio (${r.status})`);
+  const url = URL.createObjectURL(new Blob([await r.arrayBuffer()], { type: 'text/html;charset=utf-8' }));
+  setTimeout(() => URL.revokeObjectURL(url), 120000);
+  return url;
 }
 // AR models (Step Inside): a signed link that the phone's AR viewer opens directly (Quick Look / Scene Viewer fetch it)
 export async function urlAR(doc, segundos = 3600) {

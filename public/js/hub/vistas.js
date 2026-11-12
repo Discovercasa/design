@@ -1,6 +1,6 @@
 // As páginas do hub, desenhadas a partir do estado E (dados.js). Os botões levam data-acao; o app.js trata dos cliques.
 import { E, projeto, nomeProjeto, checkpointsDe, tarefasDe, decisaoDaTarefa, decisoesDe, resumo, feitosDe, chave, documentosDe, seccoesDe, anexosDe, notasDe, TIPOS_NOTA, podeMexerNota,
-  marcadosEm, criticasDe, paraMim, minhaMarcacao } from './dados.js';
+  marcadosEm, criticasDe, paraMim, minhaMarcacao, checkpointsDaAba } from './dados.js';
 import { img } from './imagens.js';
 import { ic, esc, dia, diaCurto, iniciais, euros, ha } from './util.js';
 import { htmlCriticas } from './equipa.js';
@@ -108,14 +108,24 @@ export function inicio() {
 // Sugestão do Geral (2026-11-10) «Simplificar» → abas (#/projeto/<slug>/<aba>). O utilizador (2026-11-11): «adiciona
 // apenas as abas pipeline e custos e sobre o projeto dentro da aba do workflow como sub-secções dela, tal como estava
 // anteriormente» — ficam Workflow, Documentos e (no Step Inside) Teste do AR.
-export const ABAS = { workflow: 'Workflow', documentos: 'Documentos', 'teste-ar': 'Teste do AR' };
-export const abasDe = (p) => Object.keys(ABAS).filter((k) => k !== 'teste-ar' || p.teste_ar);
+// 2026-11-12: «Dentro do projeto do Builder cria uma aba que vai ter as nossas páginas» → Páginas (o JSON diz "paginas": true)
+export const ABAS = { workflow: 'Workflow', paginas: 'Páginas', documentos: 'Documentos', 'teste-ar': 'Teste do AR' };
+export const abasDe = (p) => Object.keys(ABAS).filter((k) => (k !== 'teste-ar' || p.teste_ar) && (k !== 'paginas' || p.paginas));
 // a aba de uma rota: o nome da aba, ou a aba onde está o item (t-, cp- → Workflow; doc- → Documentos ou Teste do AR)
 export function abaDe(p, alvo) {
   if (!p) return 'workflow';
   if (abasDe(p).includes(alvo)) return alvo;
   const m = /^doc-(\d+)$/.exec(alvo || '');
-  if (m) { const d = E.documentos.find((x) => x.id === Number(m[1])); return d && d.tipo === 'ar' && p.teste_ar ? 'teste-ar' : 'documentos'; }
+  if (m) {
+    const d = E.documentos.find((x) => x.id === Number(m[1]));
+    return d && d.tipo === 'ar' && p.teste_ar ? 'teste-ar' : d && d.tipo === 'pagina' && p.paginas ? 'paginas' : 'documentos';
+  }
+  const c = /^(cp|t)-(\d+)$/.exec(alvo || '');   // a checkpoint or task of the Páginas tab opens there
+  if (c && p.paginas) {
+    const cpId = c[1] === 'cp' ? Number(c[2]) : (E.tarefas.find((t) => t.id === Number(c[2])) || {}).checkpoint_id;
+    const cp = E.checkpoints.find((x) => x.id === cpId);
+    if (cp && cp.aba === 'paginas') return 'paginas';
+  }
   return 'workflow';
 }
 // o ponto de situação do projeto, por tópicos (o utilizador, 2026-11-11: «o objetivo de um ponto de situação é ser por
@@ -131,9 +141,10 @@ export function paginaProjeto(p, aba = 'workflow') {
   const abas = abasDe(p);
   if (!abas.includes(aba)) aba = 'workflow';
   const r = resumo(p.id);
-  const nDocs = documentosDe(p.id).filter((d) => d.tipo !== 'ar').length, nAR = documentosDe(p.id, 'ar').length;
-  const conta = { workflow: r.total ? `${r.feitos}/${r.total}` : '', documentos: nDocs || '', 'teste-ar': nAR || '' };
-  const corpo = aba === 'documentos' ? documentos(p) : aba === 'teste-ar' ? testeAR(p) : workflow(p, r);
+  const nDocs = documentosDe(p.id).filter((d) => d.tipo !== 'ar' && d.tipo !== 'pagina').length, nAR = documentosDe(p.id, 'ar').length;
+  const wf = checkpointsDaAba(p.id), wfFeitos = wf.filter((c) => c.estado === 'concluido').length;
+  const conta = { workflow: wf.length ? `${wfFeitos}/${wf.length}` : '', paginas: documentosDe(p.id, 'pagina').length || '', documentos: nDocs || '', 'teste-ar': nAR || '' };
+  const corpo = aba === 'documentos' ? documentos(p) : aba === 'teste-ar' ? testeAR(p) : aba === 'paginas' ? paginas(p) : workflow(p, r);
 
   return `
   <div class="projeto-cabeca">
@@ -148,8 +159,9 @@ export function paginaProjeto(p, aba = 'workflow') {
   <div class="aba-corpo">${corpo}</div>`;
 }
 
-function workflow(p, r) {
-  const cps = checkpointsDe(p.id);
+function workflow(p) {
+  const cps = checkpointsDaAba(p.id);   // the Workflow tab: checkpoints without a tab of their own
+  const r = { feitos: cps.filter((c) => c.estado === 'concluido').length, total: cps.length };
   const proximos = cps.filter((c) => c.estado !== 'concluido').flatMap((c) => tarefasDe(c.id).filter((t) => t.estado !== 'concluida')).slice(0, 4);
   const feitos = feitosDe(p.id);
   const decs = decisoesDe(p.id);
@@ -195,6 +207,38 @@ function workflow(p, r) {
       </section>
     </aside>
   </div>`;
+}
+
+// ---------------------------------------------------------------- aba Páginas (as páginas para os clientes)
+// As páginas ficam no armazenamento privado (documentos do tipo 'pagina'); abrem-se noutra janela a partir da memória.
+// Por baixo, os checkpoints e as tarefas desta aba (checkpoints.aba = 'paginas'), como no Workflow.
+function paginas(p) {
+  const ps = documentosDe(p.id, 'pagina').slice().sort((a, b) => (a.criado_em < b.criado_em ? 1 : -1));
+  const cps = checkpointsDaAba(p.id, 'paginas'), feitos = cps.filter((c) => c.estado === 'concluido').length;
+  const cartao = (d) => `<li class="pagina-cartao" id="doc-${d.id}">
+      <span class="pagina-icone" aria-hidden="true">${ic('casa')}</span>
+      <div class="pagina-texto"><h3>${esc(d.titulo)} ${novo('documento', d.id)}</h3>
+        ${d.descricao ? `<p class="pequeno">${esc(d.descricao)}</p>` : ''}
+        <p class="fraco mini">${esc(d.criado_por_nome || 'Alguém')} · ${dia(d.criado_em)} · ${tamanho(d.tamanho || 0)}</p></div>
+      <div class="pagina-acoes"><button class="btn primario pequeno" type="button" data-acao="abrir-pagina" data-id="${d.id}">${ic('abrir', 'ic-sm')}Abrir a página</button>
+        <button class="btn pequeno texto" type="button" data-acao="descarregar-pagina" data-id="${d.id}">Descarregar</button>
+        ${E.eu.editar ? `<button class="icone-botao" type="button" data-acao="apagar-doc" data-id="${d.id}" aria-label="Apagar ${esc(d.titulo)}" title="Apagar">${ic('apagar', 'ic-sm')}</button>` : ''}</div>
+    </li>`;
+  return `<section aria-labelledby="t-paginas">
+      <div class="seccao-cabeca">
+        <div><h2 id="t-paginas">Páginas</h2><p>As páginas que entregamos aos clientes: um só ficheiro com a casa em 3D, as imagens, os pisos e os materiais. Ficam em privado; «Abrir a página» abre-a noutra janela e «Descarregar» guarda o ficheiro para enviar.</p></div>
+        ${E.eu.editar ? `<div class="botoes"><label class="btn">${ic('mais')}Carregar página<input type="file" name="pagina-ficheiro" data-projeto="${p.id}" accept=".html,.htm,text/html" class="so-leitor"></label></div>` : ''}
+      </div>
+      ${ps.length ? `<ul class="paginas">${ps.map(cartao).join('')}</ul>` : '<p class="vazio">Ainda sem páginas.</p>'}
+    </section>
+    <section aria-labelledby="t-paginas-wf" style="margin-top:32px">
+      <div class="seccao-cabeca">
+        <div><h2 id="t-paginas-wf">Checkpoints e tarefas das páginas</h2><p>O que falta para as páginas, por ordem. <span class="num">${feitos} de ${cps.length}</span> concluídos. Clica num checkpoint para ver as tarefas e numa tarefa para o ponto de situação e a conversa.</p></div>
+        ${E.eu.editar ? `<div class="botoes"><button class="btn" type="button" data-acao="acrescentar" data-projeto="${p.id}" data-tipo="checkpoint" data-aba="paginas">${ic('mais')}Checkpoint</button>
+          <button class="btn" type="button" data-acao="acrescentar" data-projeto="${p.id}" data-tipo="tarefa" data-aba="paginas"${cps.length ? '' : ' disabled title="Acrescenta primeiro um checkpoint"'}>${ic('mais')}Tarefa</button></div>` : ''}
+      </div>
+      ${cps.length ? `<ol class="workflow">${cps.map((c, i) => passo(c, i)).join('')}</ol>` : '<p class="vazio">Ainda sem checkpoints nesta aba.</p>'}
+    </section>`;
 }
 
 // imagens anexadas (checkpoint, tarefa ou nota): miniaturas que abrem em grande no visor

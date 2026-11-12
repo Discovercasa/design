@@ -573,6 +573,22 @@ dialog.gaveta::backdrop { background: oklch(0.2 0.01 85 / 0.25); }
   .doc-acoes { grid-column: 2; }
 }
 
+/* ---------- aba Páginas (2026-11-12): as páginas para os clientes ---------- */
+.paginas { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.pagina-cartao { display: grid; grid-template-columns: 48px minmax(0, 1fr) auto; gap: 14px; align-items: center; padding: 14px 16px;
+  border: 1px solid var(--linha); border-radius: var(--r2); background: var(--superficie); }
+.pagina-cartao.alvo { animation: alvo 2.4s var(--ease); }
+.pagina-icone { display: grid; place-items: center; height: 48px; border-radius: var(--r1); background: var(--acao-suave); color: var(--acao); }
+.pagina-texto { min-width: 0; }
+.pagina-texto h3 { font-size: 1rem; margin: 0 0 2px; overflow-wrap: anywhere; }
+.pagina-texto p { margin: 2px 0 0; color: var(--tinta-2); overflow-wrap: anywhere; }
+.pagina-acoes { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+@media (max-width: 560px) {
+  .pagina-cartao { grid-template-columns: 40px minmax(0, 1fr); }
+  .pagina-icone { height: 40px; }
+  .pagina-acoes { grid-column: 1 / -1; justify-content: flex-start; }
+}
+
 /* ---------- descrições, critério de saída e imagens anexadas ---------- */
 .passo-descricao, .tarefa .descricao { white-space: pre-line; }
 .criterio { display: flex; gap: 8px; align-items: flex-start; margin-top: 10px; padding: 8px 12px; border-radius: var(--r1); background: var(--lateral); border: 1px solid var(--linha); font-size: 0.8125rem; color: var(--tinta-2); max-width: 70ch; }

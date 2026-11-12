@@ -36,6 +36,7 @@
   ],
   "metodo": "É a autoridade do método construtivo Discovercasa: os outros projetos usam-no quando precisam desse método, mas não dependem dele para funcionar. No futuro outros métodos entram como pacotes à parte.",
   "app": null,
+  "paginas": true,
   "organizacao": { "codigo": "BOB/ferramentas/modelo/ e BOB/conhecimento/", "publicado": "ainda sem página própria", "ramo": "builder/<tarefa>" },
   "ligacoes": [
     { "com": "gerador", "texto": "O Gerador usa o motor do Builder para tirar Módulos, Cobertura e Listagem de material." },
