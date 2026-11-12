@@ -65,6 +65,9 @@ Why Claude learns the method; "vamos passo a passo" — an overall idea, then an
    iluminação possível para aquele projeto" — use the electrical plan's light points when there is one; otherwise
    design the best lighting for that house. Dropping the files in the hub comes later, "quando tivermos tudo definido e
    já criares páginas como queremos com a qualidade desejada" — not now.
+   **View from inside (2026-11-12):** "nós vamos querer replicar pelo menos o exterior visível da casa do cliente" — so
+   the 360° tour shows the view the client will have from inside. Proposed method in `insights.md` (site 360° photos at
+   each storey's eye height + LiDAR/OSM neighbours + 3D near field).
    Settings panel wished ("Futuramente"): "um painel onde podemos definir este tipo de coisas, comprimentos dos módulos
    e a sua composição" — today in `sistema_construtivo.json` (`estrutura.divisor`) and each `config.json`.
    **Production documents for every new project** (2026-10-16 night): "quero que sejas capaz de desenvolver um
