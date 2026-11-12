@@ -528,3 +528,9 @@ The team's notes on hub task 84 (written in the hub by [membro da equipa] on 202
   bridging the ramp's end, boundary fence (logs on the street, posts and sheep net elsewhere), gravel drive, road.
 - Assumed: trees (one is on the plans, the others are illustrative), interiors without furniture, window heights read on
   the elevations (±10 cm), the road and the ground beyond the survey.
+
+### 2026-11-12 — Ribamar page: design for presentation; can the 3D match the images? [Builder]
+> a lot better just one question is it impossible to make the quality of the images the same as the quality of the 3D Model ? The 3D model looks too bright. Just answer don´t start doing nothing
+> But before that run our web design skills except playright and reformulate the page to look better for presentation and send it to me.
+- Done: page redesigned (artifact-design guidance + the frontend-design skill; Playwright left out as asked): full-width photograph as the opening with the house name, key figures strip, image grid with a full-screen viewer, the 3D on a dark "model table" band, storeys with a section drawn to scale with the levels, finishes as material swatches; colours from the house (RAL 7016 anthracite, Douglas timber, light concrete), light and dark themes; Archivo + Source Sans 3 (Google Fonts, with fallbacks when offline). Sent to the user.
+- The brightness of the 3D: answered only (not changed), as asked.

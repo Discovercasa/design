@@ -71,32 +71,41 @@ def gerar(pagina, saida):
                "camara": tres(v["camara"]), "alvo": tres(v["alvo"])} for v in C.get("vistas", [])]
     cx, cy = C.get("centro", [0, 0])
     pisos = [{**p, "cota_txt": _num(p["cota"])} for p in P["pisos"]]
-    dados = {"pisos": pisos, "cota_topo": _num(P["cota_topo"]), "vistas": vistas, "sol": C.get("sol", {}),
+    dados = {"pisos": pisos, "cota_topo": _num(P["cota_topo"]), "cota_topo_num": P["cota_topo"], "vistas": vistas, "sol": C.get("sol", {}),
              "centro": tres([cx, cy, 2.0]), "acabamentos": P.get("acabamentos", [])}
     sol = dict(dados["sol"])
     sol["azimute"] = sol.get("azimute", 235)
     dados["sol"] = sol
-    galeria = []
+    fotos = []
     for i in P.get("imagens", []):
         f = modelo / f"render_{i['vista']}.jpg"
         if f.exists():
-            b = base64.b64encode(f.read_bytes()).decode("ascii")
-            galeria.append(f'<img src="data:image/jpeg;base64,{b}" alt="{html.escape(i["titulo"])}">')
+            fotos.append((base64.b64encode(f.read_bytes()).decode("ascii"), html.escape(i["titulo"])))
+    hero = galeria = ""
+    if fotos:
+        b, tit = fotos[0]
+        hero = (f'<button data-foto data-titulo="{tit}" aria-label="Ver em ecrã inteiro: {tit}" '
+                f'style="all:unset;display:block;width:100%;height:100%"><img src="data:image/jpeg;base64,{b}" alt="{tit}"></button>')
+        galeria = "\n      ".join(
+            f'<figure><button data-foto data-titulo="{tit}" aria-label="Ver em ecrã inteiro: {tit}">'
+            f'<img src="data:image/jpeg;base64,{b}" alt="{tit}" loading="lazy"></button><figcaption>{tit}</figcaption></figure>'
+            for b, tit in fotos[1:])
     hoje = datetime.date.today()
     valores = {
         "TITULO": html.escape(P["titulo"]),
         "SUBTITULO": html.escape(P.get("subtitulo", "")),
         "FICHA": "".join(f"<div><dt>{html.escape(k)}</dt><dd>{html.escape(v)}</dd></div>" for k, v in P.get("ficha", [])),
         "DATA": f"{hoje.day} de {MESES[hoje.month - 1]} de {hoje.year}",
-        "GALERIA": "\n    ".join(galeria),
+        "HERO": hero,
+        "GALERIA": galeria,
         "DADOS": json.dumps(dados, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/"),
         "MODULOS": json.dumps(_modulos(), separators=(",", ":")),
         "GLB": base64.b64encode((modelo / "casa.glb").read_bytes()).decode("ascii"),
     }
     tpl = (AQUI / "modelo_pagina.html").read_text(encoding="utf-8")
-    pagina_html = re.sub(r"__(TITULO|SUBTITULO|FICHA|DATA|GALERIA|DADOS|MODULOS|GLB)__", lambda m: valores[m.group(1)], tpl)
+    pagina_html = re.sub(r"__(TITULO|SUBTITULO|FICHA|DATA|HERO|GALERIA|DADOS|MODULOS|GLB)__", lambda m: valores[m.group(1)], tpl)
     Path(saida).write_text(pagina_html, encoding="utf-8")
-    return len(pagina_html.encode("utf-8")), len(galeria)
+    return len(pagina_html.encode("utf-8")), len(fotos)
 
 
 if __name__ == "__main__":
