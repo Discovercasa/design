@@ -68,6 +68,8 @@ Why Claude learns the method; "vamos passo a passo" — an overall idea, then an
    **View from inside (2026-11-12):** "nós vamos querer replicar pelo menos o exterior visível da casa do cliente" — so
    the 360° tour shows the view the client will have from inside. Proposed method in `insights.md` (site 360° photos at
    each storey's eye height + LiDAR/OSM neighbours + 3D near field).
+   Order: the visible exterior is done BEFORE the 360° renders — "quando for para fazer os renders 360 vamos precisar já
+   do exterior feito para eles ficarem minimamente fidedignos"; they are two separate items of the documents list.
    Settings panel wished ("Futuramente"): "um painel onde podemos definir este tipo de coisas, comprimentos dos módulos
    e a sua composição" — today in `sistema_construtivo.json` (`estrutura.divisor`) and each `config.json`.
    **Production documents for every new project** (2026-10-16 night): "quero que sejas capaz de desenvolver um
