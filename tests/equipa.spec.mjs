@@ -183,6 +183,24 @@ test('marcado numa tarefa: um pop-up ao abrir o hub leva ao ecrã da tarefa', as
   expect(erros).toEqual([]);
 });
 
+test('marcado numa tarefa, já vista: conta no Início e abre-se pela área pessoal', async ({ page }) => {
+  // 2026-11-12: o Dinis foi marcado em 4 tarefas, o Início dizia «0 tarefas tuas» e depois não as voltava a abrir
+  const erros = await abrir(page, { equipa: { marcacoes: [
+    { tarefa_id: 72, utilizador_id: 'u-eu', marcado_por: 'u-outro', marcado_por_nome: 'Colega Teste', criada_em: '2026-11-11T10:00:00Z', vista_em: '2026-11-11T11:00:00Z' },
+  ] } });
+  const t72 = 'Testar primeiro em rede local';
+  const esperado = await db(page, () => window.__fake.db.tarefas.filter((t) => t.estado !== 'concluida' && (t.responsavel_id === 'u-eu' || t.id === 72)).length);
+  const chip = page.locator('.para-ti a[href="#/pessoal"]');
+  await expect(chip).toContainText(`${esperado} tarefa`);
+  await expect(page.locator('#dlg')).toBeHidden();   // already seen: no pop-up
+  await chip.click();
+  const linha = page.locator('.cartoes-pessoal .pp-linha', { hasText: t72 });
+  await expect(linha).toContainText('marcado por Colega Teste');
+  await linha.click();
+  await expect(ficha(page).getByRole('heading', { name: t72 })).toBeVisible();
+  expect(erros).toEqual([]);
+});
+
 test('críticas: deixar uma crítica com imagem, a equipa é avisada, passar a tarefa e resolver', async ({ page }) => {
   const erros = await abrir(page, { rota: '/#/projeto/gerador' });
   await page.getByRole('button', { name: 'Deixar uma crítica ou comentário' }).click();

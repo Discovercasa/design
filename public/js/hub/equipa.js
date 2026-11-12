@@ -164,7 +164,7 @@ export function htmlMarcacoes() {
       <p class="suave pequeno" style="margin-top:4px">Toca numa para ver o ponto de situação e a conversa.</p></div>
       <button class="icone-botao" type="button" data-acao="fechar-dlg" aria-label="Fechar">${ic('fechar')}</button></div>
     <div class="dlg-corpo"><ul class="pp-lista">${ms.map((m) => linhaTarefa(E.tarefas.find((t) => t.id === m.tarefa_id), `${nomeProjeto(E.tarefas.find((t) => t.id === m.tarefa_id).projeto)} · marcado por ${m.marcado_por_nome || 'alguém'} ${ha(m.criada_em)}`)).join('')}</ul></div>
-    <div class="dlg-rodape"><button class="btn texto" type="button" data-acao="marcacoes-vistas">Marcar todas como vistas</button><button class="btn" type="button" data-acao="fechar-dlg">Mais tarde</button></div>
+    <div class="dlg-rodape"><a class="btn texto" href="#/pessoal" data-acao="ir-pessoal">Ver todas as tarefas para ti</a><button class="btn texto" type="button" data-acao="marcacoes-vistas">Marcar todas como vistas</button><button class="btn" type="button" data-acao="fechar-dlg">Mais tarde</button></div>
   </div>`;
 }
 

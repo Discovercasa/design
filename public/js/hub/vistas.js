@@ -1,6 +1,6 @@
 // As páginas do hub, desenhadas a partir do estado E (dados.js). Os botões levam data-acao; o app.js trata dos cliques.
 import { E, projeto, nomeProjeto, checkpointsDe, tarefasDe, decisaoDaTarefa, decisoesDe, resumo, feitosDe, chave, documentosDe, seccoesDe, anexosDe, notasDe, TIPOS_NOTA, podeMexerNota,
-  marcadosEm, criticasDe } from './dados.js';
+  marcadosEm, criticasDe, paraMim, minhaMarcacao } from './dados.js';
 import { img } from './imagens.js';
 import { ic, esc, dia, diaCurto, iniciais, euros, ha } from './util.js';
 import { htmlCriticas } from './equipa.js';
@@ -27,7 +27,7 @@ const pillDecisao = (d) => (d ? `<button type="button" class="decisao-pill ${d.e
 
 // ---------------------------------------------------------------- Início
 export function inicio() {
-  const minhas = E.tarefas.filter((t) => t.responsavel_id === E.eu.id && t.estado !== 'concluida');
+  const minhas = paraMim().filter((t) => t.estado !== 'concluida');   // responsável ou marcado
   const abertas = E.decisoes.filter((d) => d.estado === 'aberta');
   const feitos = feitosDe().slice(0, 8);
   const ligacoes = E.projetos.flatMap((p) => (p.ligacoes || []).map((l) => ({ de: p.id, ...l })));
@@ -38,7 +38,7 @@ export function inicio() {
       <h1>${saudacao()}${E.eu.nome ? ', ' + esc(E.eu.nome.split(' ')[0]) : ''}</h1>
       <p class="suave">Cada projeto da Discovercasa num só sítio: o que é, em que fase está, o que já foi feito e o que vem a seguir.</p>
       <div class="para-ti">
-        <a class="chip" href="#/pessoal">${ic('pessoa', 'ic-sm')}<span class="num">${minhas.length}</span> ${minhas.length === 1 ? 'tarefa tua' : 'tarefas tuas'}</a>
+        <a class="chip" href="#/pessoal">${ic('pessoa', 'ic-sm')}<span class="num">${minhas.length}</span> ${minhas.length === 1 ? 'tarefa para ti' : 'tarefas para ti'}</a>
         <a class="chip" href="#decisoes-abertas">${ic('decisao', 'ic-sm')}<span class="num">${abertas.length}</span> ${abertas.length === 1 ? 'decisão em aberto' : 'decisões em aberto'}</a>
       </div>
     </div>
@@ -486,13 +486,21 @@ export function calcular(form, cambio) {
 
 // ---------------------------------------------------------------- área pessoal
 export function pessoal() {
-  const minhas = E.tarefas.filter((t) => t.responsavel_id === E.eu.id);
+  const minhas = paraMim();   // responsável ou marcado, em todos os projetos (cada linha abre o ecrã da tarefa)
+  const linha = (t) => {
+    const m = minhaMarcacao(t.id);
+    const porque = t.responsavel_id === E.eu.id ? 'és o responsável' : `marcado por ${m.marcado_por_nome || 'alguém'} ${ha(m.criada_em)}`;
+    return `<li><button type="button" class="pp-linha" data-acao="abrir-ficha" data-alvo="tarefa" data-id="${t.id}">
+      <span class="pp-linha-texto"><b>${esc(t.titulo)}</b><span class="fraco mini">${esc(nomeProjeto(t.projeto))} · ${esc(porque)}</span></span>
+      ${m && !m.vista_em ? '<span class="chip pequeno">nova</span>' : ''}${ic('direita', 'ic-sm')}</button></li>`;
+  };
   const grupo = (titulo, lista) => `<section class="bloco-lateral"><h3>${titulo} <span class="fraco num">${lista.length}</span></h3>
-    ${lista.length ? `<ul class="lista-simples">${lista.map((t) => `<li>${ic('alvo', 'ic-sm')}<span class="pequeno"><a href="#/projeto/${projeto(t.projeto).slug}/t-${t.id}" style="color:inherit">${esc(t.titulo)}</a><br><span class="fraco mini">${esc(nomeProjeto(t.projeto))}</span></span></li>`).join('')}</ul>` : '<p class="suave pequeno">Nada aqui.</p>'}</section>`;
+    ${lista.length ? `<ul class="pp-lista">${lista.map(linha).join('')}</ul>` : '<p class="suave pequeno">Nada aqui.</p>'}</section>`;
   const decididas = E.decisoes.filter((d) => d.decidida_por === E.eu.id);
   return `
-  <div class="cabeca-pagina"><div class="texto"><h1>Área pessoal</h1><p class="suave">As tarefas atribuídas a ti, em todos os projetos, e as decisões que tomaste.</p></div></div>
+  <div class="cabeca-pagina"><div class="texto"><h1>Área pessoal</h1><p class="suave">As tarefas de que és responsável e aquelas em que foste marcado, em todos os projetos, e as decisões que tomaste.</p></div></div>
   <div class="cartoes-pessoal">
+    ${grupo('À espera de aprovação', minhas.filter((t) => t.estado === 'por_aprovar'))}
     ${grupo('Em curso', minhas.filter((t) => t.estado === 'em_curso'))}
     ${grupo('Por fazer', minhas.filter((t) => t.estado === 'por_fazer'))}
     ${grupo('Bloqueadas', minhas.filter((t) => t.estado === 'bloqueada'))}

@@ -620,6 +620,7 @@ document.addEventListener('click', async (e) => {
     }
     case 'abrir-ficha': return FI.abrir(el.dataset.alvo, id);
     case 'pp-ir': fecharDialogo(projetoPop); return;   // o link segue para a página do projeto
+    case 'ir-pessoal': fecharDialogo(dlg); return;     // o link segue para a área pessoal (todas as tarefas para mim)
     case 'nova-critica': return abrirDialogo(dlg, EQ.dlgCritica(el.dataset.projeto));
     case 'tipo-critica': {
       const f = el.closest('form'); f.elements.tipo.value = el.dataset.valor;

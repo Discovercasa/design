@@ -264,8 +264,8 @@ test('perfil: área pessoal, definições (nome, tema), novidades e sair', async
   await captura(page, 'inicio-escuro');
   await page.getByRole('button', { name: 'Perfil' }).click();
   await page.locator('#pop-perfil').getByRole('menuitem', { name: /Novidades/ }).click();
-  await expect(page.locator('.novidade').first()).toContainText('Trabalho em equipa: o ecrã de cada tarefa, críticas e o Log');
-  await expect(page.locator('.novidade').nth(1)).toContainText('Orçamentação: o preço final parcela a parcela');
+  await expect(page.locator('.novidade').first()).toContainText('Tarefas para ti: também as que te marcaram');
+  await expect(page.locator('.novidade').nth(1)).toContainText('Documentos: secções e pastas');
   await page.getByRole('button', { name: 'Perfil' }).click();
   await page.locator('#pop-perfil').getByRole('menuitem', { name: 'Sair' }).click();
   await expect(page.getByRole('button', { name: 'Entrar com a conta do Hub' })).toBeVisible();

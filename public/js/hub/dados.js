@@ -346,6 +346,10 @@ function apagarFicheiros(caminhos) {
 // ---------------------------------------------------------------- trabalho em equipa (migração 0022, 2026-11-11)
 // pessoas marcadas numa tarefa; as minhas marcações ainda por ver (o pop-up ao abrir o hub)
 export const marcadosEm = (tarefaId) => E.marcacoes.filter((m) => m.tarefa_id === tarefaId);
+// as tarefas para mim: sou o responsável OU fui marcado (2026-11-12: o Dinis foi marcado em 4 tarefas, o Início dizia
+// «0 tarefas tuas» e, depois de ver as marcações, não havia sítio onde voltar a abri-las)
+export const minhaMarcacao = (tarefaId) => E.marcacoes.find((m) => m.tarefa_id === tarefaId && m.utilizador_id === E.eu.id);
+export const paraMim = () => E.tarefas.filter((t) => t.responsavel_id === E.eu.id || !!minhaMarcacao(t.id));
 export const marcacoesPorVer = () => E.marcacoes.filter((m) => m.utilizador_id === E.eu.id && !m.vista_em && E.tarefas.some((t) => t.id === m.tarefa_id));
 export async function marcar(tarefaId, utilizadorId) {
   const { error } = await sb().from('marcacoes').insert({ tarefa_id: tarefaId, utilizador_id: utilizadorId, marcado_por: E.eu.id });

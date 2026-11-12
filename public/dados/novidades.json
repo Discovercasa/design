@@ -1,5 +1,14 @@
 [
   {
+    "dia": "2026-11-12",
+    "titulo": "Tarefas para ti: também as que te marcaram",
+    "itens": [
+      "No Início, «tarefas para ti» conta as tarefas de que és responsável e aquelas em que foste marcado (antes só contava as primeiras).",
+      "A Área pessoal mostra todas, por estado (incluindo «À espera de aprovação»), com quem te marcou; toca numa para abrir o ecrã da tarefa.",
+      "Depois de veres as marcações, continuam lá: o pop-up «Foste marcado» tem «Ver todas as tarefas para ti»."
+    ]
+  },
+  {
     "dia": "2026-11-11",
     "titulo": "Documentos: secções e pastas",
     "itens": [
