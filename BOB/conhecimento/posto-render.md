@@ -1,11 +1,19 @@
-# Render station — the user's home PC
+# Render stations (postos de render) — any PC, started from the hub
 
 **Role (user 2026-11-13):** the GPU work of the client pages (Cycles images, the light baked for the web 3D, the 360°
 tour, the open-data surroundings) and the Step Inside Unreal/VR. Later, the unattended worker of the Builder app (hub
-task 178), once the Hub side gives it a technical account (doc for Sebastião: «Posto de render e conta técnica: o que
-é preciso», 2026-11-13).
+task 178), once the Hub side gives each station a technical account (doc for Sebastião: «Postos de render e contas
+técnicas: o que é preciso», 2026-11-13).
 
-## The machine
+**Any PC (user 2026-11-13):** «quero que seja possível fazer isto em qualquer PC por exemplo se o sebastião quiser
+fazer os renders no PC dele, visto que é superior ao meu. Mas quero que antes de começar a usar a gráfica seja
+possível nos no HUB darmos a ordem de começar o uso do PC desejado.» So: every station runs the same program with
+its own technical account; the hub lists the stations (name, GPU, last signal, free/busy, an «available» switch its
+owner controls); each request gets a chosen station and the «Começar neste PC» order — **without that order no PC
+uses its GPU**. The first station is the user's home PC (below); Sebastião's PC can be another (asked in the doc).
+The setup below is the same on every station.
+
+## Station 1: the user's home PC
 Inventory 2026-11-07 (script output); GPU confirmed by the user 2026-11-13 («sim é uma RTX 2060»):
 Ryzen 9 5900X (12 cores) · 32 GB DDR4-3200 · **RTX 2060 6 GB** (Turing: Cycles uses OptiX) · SATA SSDs, one with
 ~200 GB free (2026-11-13) · no NVMe yet (2 TB planned before the Unreal phase). Already there (user): Blender
@@ -20,13 +28,13 @@ Client drawings, the open-data extracts (they locate a house) and the pages stay
 and in the hub's private storage — never in Git. BitLocker on that disk, a password on the Windows account. The user
 wants this work on that PC (2026-11-13), which implies it may hold client files — confirm once.
 
-## Setting it up
+## Setting up a station (any PC)
 **The user (once):**
 1. Install the Claude desktop app and sign in with the same account.
 2. Git for Windows and the GitHub CLI if missing; `gh auth login` with the account that pushes Discovercasa/design.
 3. Clone on the disk with space, e.g. `git clone https://github.com/Discovercasa/design.git D:\DiscoverCasa\design`.
 4. Open that folder in the Code tab and write: «Configura este PC como posto de render: segue
-   BOB/conhecimento/posto-render.md».
+   BOB/conhecimento/posto-render.md». (Another station: the same, with that PC's owner.)
 
 **The Claude session on that PC** (each download or install: name, source, size, and the user's yes first):
 1. `git config core.quotepath false`; `python BOB/ferramentas/verificar.py` (Python ≥ 3.10, Blender, git, scratch).
@@ -47,6 +55,8 @@ wants this work on that PC (2026-11-13), which implies it may hold client files 
   (OpenSSH + a VPN such as Tailscale) so an office session can start jobs there.
 - **Memory:** a session there does not see the office conversations; the shared memory is the repo (`BOB/CLAUDE.md`,
   `conhecimento/`) — keep it current.
-- **Phase 2 (hub task 178):** the worker — a small Python program that takes «novo» page requests from the hub,
-  downloads the drawings, runs the reader and Blender, uploads the page «por aprovar» and writes the Log. It signs in
-  with the technical account; its secret lives only in the Windows Credential Manager. Waits for Sebastião.
+- **Phase 2 (hub task 178):** the worker — the same small Python program on every station. Idle by default: it sends
+  a heartbeat and only takes a request whose station is itself AND whose «Começar neste PC» order was given in the
+  hub; then it downloads the drawings, runs the reader and Blender, uploads the page «por aprovar», writes the Log
+  (which station) and deletes the downloaded drawings. It signs in with its station's technical account; the secret
+  lives only in that PC's Windows Credential Manager. Waits for Sebastião (accounts, unattended sign-in).

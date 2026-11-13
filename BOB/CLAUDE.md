@@ -40,7 +40,7 @@ DiscoverCasa projects from any device.
 | `conhecimento/construcao-madeira.md` | timber-frame method, timber↔concrete rules (with numbers), PT regulations, termites, grading, connectors, PT↔EN glossary | technical questions, drawing reviews |
 | `conhecimento/registo-conversas*.md` | the user's messages verbatim, dated, with where each fact was filed (until 2026-11-09 `registo-conversas.md`; since then `-2026-3`) | to find exactly what the user said (Grep, don't read it all) |
 | `conhecimento/perguntas-por-obra.md` | questions to ask on every new project (items that vary per house, with defaults) | start of every new project |
-| `conhecimento/posto-render.md` | the user's home PC (RTX 2060) as the render station: setup, checks, phases | setting up or working on that PC; GPU-heavy jobs |
+| `conhecimento/posto-render.md` | render stations: any PC, started from the hub (first: the user's home PC, RTX 2060); setup, checks, phases | setting up or working on a station; GPU-heavy jobs |
 | `conhecimento/insights.md` | our technical insights and suggestions to the user, dated, with status (user 2026-10-21) | before advising; add each new insight |
 | `Construção Sobral/` | Loteamento Sobral project (16 houses + warehouse), has its own `CLAUDE.md` (paused 2026-10-15; two-storey houses, "estará para avançar brevemente" — 2026-10-20) | any work on that project |
 | `Construção Torres Vedras/` | house already built — model it from the architecture and compare with the real materials (current focus) | any work on that project |

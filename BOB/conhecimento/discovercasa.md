@@ -75,8 +75,9 @@ Why Claude learns the method; "vamos passo a passo" — an overall idea, then an
    reviewed before going to the client; GPU work runs on the user's home PC; pixel streaming only for the VR.
    **Real exterior always (2026-11-13):** "o exterior não deve estar só presente na tour 360 mas sim sempre em todos os
    projetos a não ser que seja mencionado que não queremos" — the surroundings are in the 3D, the images and the tour
-   of every house unless told otherwise. Render station: the home PC, RTX 2060 6 GB (user confirmed; not 2080) —
-   `conhecimento/posto-render.md`.
+   of every house unless told otherwise. Render stations: any PC (first the home PC, RTX 2060 6 GB — user confirmed,
+   not 2080; Sebastião's PC may be another), each with its own technical account; no PC uses its GPU before the
+   «Começar neste PC» order is given in the hub (user 2026-11-13) — `conhecimento/posto-render.md`.
    Settings panel wished ("Futuramente"): "um painel onde podemos definir este tipo de coisas, comprimentos dos módulos
    e a sua composição" — today in `sistema_construtivo.json` (`estrutura.divisor`) and each `config.json`.
    **Production documents for every new project** (2026-10-16 night): "quero que sejas capaz de desenvolver um
