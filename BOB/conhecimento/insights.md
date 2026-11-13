@@ -466,4 +466,14 @@ he answers (`metodo-construtivo.md`). Condensed 2026-10-28 (history in git).
   orange tile vs flat white/grey, colour, pool/solar panels), and missing buildings are picked by their corners on the
   screenshot and converted back to the house frame. Ribamar: a mix — traditional tile-roofed houses to the west and
   south, modern flat-roofed villas next to the lot. Storeys are guessed (2, or 1 for small ones); Street View or the
-  DGT LiDAR would confirm them.
+  DGT LiDAR would confirm them.- **2026-11-13** — **status: told to the user.** The quality ceiling of the client page's 3D. Ribamar's 3D (three.js, light
+  baked in Cycles: lightmaps 2048/1024, GLB textures 512 px, ~7 MB, opens offline on a phone) is a balance, not the
+  maximum. Same technology, higher: 1–2K textures (KTX2 needs the Basis transcoder — a new dependency, ask first),
+  4K lightmaps and a baked interior, the furnished interior and the real surroundings inside the 3D (with LOD), baked
+  reflection probes; costs file size (15–30 MB) and older phones. Beyond, other technologies: Cycles 360° panoramas
+  (render quality, no free walking — the tour), path tracing in the browser (three-gpu-pathtracer: converges to
+  render quality when still; heavy on phones), Gaussian splats trained from many Cycles renders (near-photo, real
+  time; hours to make, 50–200 MB, experimental), cloud streaming (Unreal pixel streaming: top quality, a GPU server
+  per viewer, monthly cost, not a file). The renders themselves are limited by the GTX 1050 Ti (4 GB, ~2–5 min per
+  image, ~10 min bake); an RTX-class card cuts that 5–10×. The Builder app (task 178) needs a worker with Blender
+  (company PC or cloud GPU) — the hub only queues the job and shows the result.
