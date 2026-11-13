@@ -73,6 +73,10 @@ Why Claude learns the method; "vamos passo a passo" — an overall idea, then an
    **Decisions 2026-11-13:** phase 1 = the checkpoint «Do desenho à página do cliente» operational, quality up
    afterwards; every client page has the 360° tour at the house's quality (hub task 183); houses and pages are always
    reviewed before going to the client; GPU work runs on the user's home PC; pixel streaming only for the VR.
+   **Real exterior always (2026-11-13):** "o exterior não deve estar só presente na tour 360 mas sim sempre em todos os
+   projetos a não ser que seja mencionado que não queremos" — the surroundings are in the 3D, the images and the tour
+   of every house unless told otherwise. Render station: the home PC, RTX 2060 6 GB (user confirmed; not 2080) —
+   `conhecimento/posto-render.md`.
    Settings panel wished ("Futuramente"): "um painel onde podemos definir este tipo de coisas, comprimentos dos módulos
    e a sua composição" — today in `sistema_construtivo.json` (`estrutura.divisor`) and each `config.json`.
    **Production documents for every new project** (2026-10-16 night): "quero que sejas capaz de desenvolver um

@@ -620,3 +620,14 @@ The team's notes on hub task 84 (written in the hub by [membro da equipa] on 202
 - Done in the hub: new task 183 «Visita virtual 360° em todas as páginas» (checkpoint «Do desenho à página do cliente», before the hub app); decisions added to tasks 177 and 178; task 181: the tour is decided, not an option (message to Dinis); Log entry.
 - Conflict flagged: the home-PC inventory of 2026-11-07 (script output) says RTX 2060 6 GB, not RTX 2080 — asked the user to confirm (upgrade since?). The open item «whether the home PC may hold client drawings» is implicitly answered (the user wants this work there) — to confirm.
 - Answered with recommendations (not decided): see `conhecimento/insights.md` 2026-11-13 (Unreal vs the web page; home PC as the render station).
+
+### 2026-11-13 — Setting up the home PC; the real exterior always; RTX 2060; the worker explained for Sebastião; disk [Builder · Step Inside]
+> Ok e qual seria a melhor forma de seres tu a dar setup a tudo no outro PC? Na minha sessão no browser dizer que estou no outro PC ? sei que alguns elementos já tem como por exemplo o blender, o unreal, etc.
+> No ponto 3 só esclarecer uma coisa o exterior não deve estar só presente na tour 360 mas sim sempre em todos os projetos a não ser que seja mencionado que não queremos.
+> E sim é uma RTX 2060, minha culpa que me enganei a escrever.
+> Diz-me os passos e o que é necessário para  " um pequeno programa nesse PC vai buscar ao hub os pedidos da aplicação, faz a página e devolve-a à aba Páginas para revisão. Precisa de uma conta técnica própria, a combinar com o Sebastião, porque não se guardam chaves no código" de forma a explicar ao sebastião o que é necessário e o porquê.
+> Agora num dos discos tenho cerca de 200 gb já dá para remediar alguma coisa? Acho que consigo libertar mais um pouco de espaço se necessário.
+- Rule (user): the real exterior is in every project (3D, images, tour) unless told otherwise. Filed: `conhecimento/discovercasa.md`; hub tasks 177, 181 (decided, message to Dinis), 183; Log.
+- GPU confirmed: RTX 2060 6 GB (the 2026-11-07 inventory was right); hub task 178 corrected.
+- Done: `conhecimento/posto-render.md` (what the user installs, what a Claude session on that PC checks and installs with approval, disk budget, privacy, phases); `casa_blender.py` uses OptiX on RTX cards and CUDA otherwise (tested here: OptiX lists the GTX 1050 Ti but its kernel fails). A Claude Doc «Posto de render e conta técnica: o que é preciso» for Sebastião (what, how — diagram —, why an account, options A/B/C with A recommended, the four answers needed from the Hub side, PC security).
+- Disk: ~200 GB free on one disk is plenty for the client pages and enough for a first Unreal test; the 2 TB NVMe stays for when Unreal projects grow.

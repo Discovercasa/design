@@ -833,6 +833,30 @@ def relva_cycles(terreno, nome="relva", densidade=900, raio=None):
     return ob
 
 
+# ---------------------------------------------------------------------------------------------- GPU
+def usar_gpu():
+    """OptiX on RTX cards (the home render PC), else CUDA (the office GTX 1050 Ti: OptiX lists it but fails), else the
+    CPU."""
+    pref = bpy.context.preferences.addons["cycles"].preferences
+    for tipo in ("OPTIX", "CUDA"):
+        try:
+            pref.compute_device_type = tipo
+            pref.refresh_devices()
+            gpus = [d for d in pref.devices if d.type == tipo]
+            if tipo == "OPTIX":       # OptiX lists the GTX 1050 Ti too but its kernel fails there: RTX cards only
+                gpus = [d for d in gpus if "RTX" in d.name.upper()]
+            if gpus:
+                for d in pref.devices:
+                    d.use = d.type == tipo
+                cena.cycles.device = "GPU"
+                print("GPU:", tipo, ", ".join(d.name for d in gpus))
+                return tipo
+        except Exception as e:  # noqa: BLE001
+            print("GPU", tipo, "indisponível:", e)
+    print("Sem GPU: Cycles no processador")
+    return None
+
+
 # ---------------------------------------------------------------------------------------------- light, sky, cameras
 CEU = {}
 
@@ -989,15 +1013,7 @@ def cartas_folhas():
 
 def configurar_cycles():
     cena.render.engine = "CYCLES"
-    pref = bpy.context.preferences.addons["cycles"].preferences
-    try:
-        pref.compute_device_type = "CUDA"
-        pref.refresh_devices()
-        for d in pref.devices:
-            d.use = d.type == "CUDA"
-        cena.cycles.device = "GPU"
-    except Exception as e:
-        print("GPU indisponível:", e)
+    usar_gpu()
 
 
 def _srgb(x):
@@ -1839,15 +1855,7 @@ if OPC["render"]:
     if E.get("envolvente"):
         construir_envolvente()
     cena.render.engine = "CYCLES"
-    pref = bpy.context.preferences.addons["cycles"].preferences
-    try:
-        pref.compute_device_type = "CUDA"
-        pref.refresh_devices()
-        for d in pref.devices:
-            d.use = d.type == "CUDA"
-        cena.cycles.device = "GPU"
-    except Exception as e:
-        print("GPU indisponível:", e)
+    usar_gpu()
     cena.cycles.samples = int(OPC["amostras"])
     cena.cycles.use_adaptive_sampling = True
     cena.cycles.adaptive_threshold = 0.03
