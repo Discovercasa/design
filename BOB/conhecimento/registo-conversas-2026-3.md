@@ -608,3 +608,15 @@ The team's notes on hub task 84 (written in the hub by [membro da equipa] on 202
 > Na tarefa Aplicação do Builder no hub: largar os desenhos e receber o resultado, a ideia é ser um HTML com a mesma qualidade no 3D do último que geramos para a Casa Ribamar e já agora essa é a qualidade máxima que conseguimos obter?
 - Decision (user): the Builder app's result is an HTML with the same 3D quality as the latest Ribamar page. Filed in hub task 178's description, with its dependencies (automatic reading at Ribamar's level, tasks 171–176; a machine running Blender — the browser cannot bake the light or render).
 - Answered: the gap is the automatic house description (Ribamar's was measured by hand); per-task list; the Ribamar 3D is not the maximum — it is the balance for one ~7 MB file that opens offline on a phone (see `conhecimento/insights.md`, 2026-11-13).
+
+### 2026-11-13 — Phases; Unreal for the 3D?; the home PC's GPU; the 360° tour in every page; always reviewed [Builder · Step Inside]
+> vamos por fases, primeiro quero que esteja operacional a parte do primeiro checkpoint e depois damos improve a qualidade.
+> Algumas coisas que queria a tua opinião/sugestão :
+> 1. Primeiro no step inside o próximo passo é começar a usar o unreal para preparar o VR e já que vamos começar a usar o unreal secalhar podiamos seguir essa rota para fazer os 3D com mais qualidade, que dizes? Sendo que só queria utilizar o serviço do pixel streaming na experiência VR visto que tem custos adicionais. Resumindo: página que geras usamos a mesma técnica ou é possível usar aquilo que vamos gerar no Unreal como o nosso 3D. qual é melhor e qual vai ter mais qualidade?
+> 2. No meu PC de casa tenho uma rtx 2080 e era lá que queria usar para fazer este tipo de trabalhos que envolve usar uma gráfica melhor, qual seria a melhor forma de fazermos isto ?
+> 3. Todas as páginas vão ter que ter esse tour com renders 360 de forma a pessoa conseguir andar dentro da casa. A forma como o fazes deve depender daquilo que decidirmos usar a nível de qualidade, deve ser equivalente à da casa.
+> 4. E sim vamos rever sempre as casas e páginas.
+- Decisions (user): phase 1 = the checkpoint «Do desenho à página do cliente» operational, quality up afterwards; every client page has the 360° tour, at the same quality as the house; houses and pages are always reviewed before going to the client; GPU work on the user's home PC; pixel streaming only for the Step Inside VR (it costs).
+- Done in the hub: new task 183 «Visita virtual 360° em todas as páginas» (checkpoint «Do desenho à página do cliente», before the hub app); decisions added to tasks 177 and 178; task 181: the tour is decided, not an option (message to Dinis); Log entry.
+- Conflict flagged: the home-PC inventory of 2026-11-07 (script output) says RTX 2060 6 GB, not RTX 2080 — asked the user to confirm (upgrade since?). The open item «whether the home PC may hold client drawings» is implicitly answered (the user wants this work there) — to confirm.
+- Answered with recommendations (not decided): see `conhecimento/insights.md` 2026-11-13 (Unreal vs the web page; home PC as the render station).

@@ -70,6 +70,9 @@ Why Claude learns the method; "vamos passo a passo" — an overall idea, then an
    fotos das casas") — the surroundings are built from open data (DGT LiDAR + orthophotos, OSM, terrain model).
    Order: the visible exterior is done BEFORE the 360° renders — "quando for para fazer os renders 360 vamos precisar já
    do exterior feito para eles ficarem minimamente fidedignos"; they are two separate items of the documents list.
+   **Decisions 2026-11-13:** phase 1 = the checkpoint «Do desenho à página do cliente» operational, quality up
+   afterwards; every client page has the 360° tour at the house's quality (hub task 183); houses and pages are always
+   reviewed before going to the client; GPU work runs on the user's home PC; pixel streaming only for the VR.
    Settings panel wished ("Futuramente"): "um painel onde podemos definir este tipo de coisas, comprimentos dos módulos
    e a sua composição" — today in `sistema_construtivo.json` (`estrutura.divisor`) and each `config.json`.
    **Production documents for every new project** (2026-10-16 night): "quero que sejas capaz de desenvolver um

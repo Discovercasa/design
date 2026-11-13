@@ -477,3 +477,17 @@ he answers (`metodo-construtivo.md`). Condensed 2026-10-28 (history in git).
   per viewer, monthly cost, not a file). The renders themselves are limited by the GTX 1050 Ti (4 GB, ~2–5 min per
   image, ~10 min bake); an RTX-class card cuts that 5–10×. The Builder app (task 178) needs a worker with Blender
   (company PC or cloud GPU) — the hub only queues the job and shows the result.
+- **2026-11-13** — **status: proposed to the user.** (1) **Unreal and the client page:** Unreal 5 has no web export
+  (HTML5 was dropped in 4.24): outside pixel streaming, an Unreal scene cannot be the 3D of a page that opens from a
+  file on a phone. Interactive quality: Unreal (Lumen/Nanite, VR) > browser; stills and 360°: Cycles and Unreal's
+  path tracer are equivalent (Cycles is easier to run headless and already automated). Proposal: one house model
+  (`casa.json` → Blender scene) feeding three outputs — the page (three.js + light baked in Cycles), the images and
+  360° tour (Cycles), and Unreal for the Step Inside VR (export by USD/glTF/FBX), so the VR and the page show the same
+  house; pixel streaming only for VR, as the user wants. Licence: Epic charges non-game companies above US$1M yearly
+  revenue per seat since 2024 — confirm before Phase 4. (2) **Home PC as the render station** (task 178's worker):
+  same Blender (5.2), Python, Git, the ODA converter and the Claude app there; phase 1 = run the heavy jobs in a Claude
+  session on that PC; later = a small worker that takes the hub's queued requests and returns the page for review (a
+  technical account for it, to settle with Sebastião: no keys in the code). Turing RTX cards use OptiX in Cycles:
+  roughly 4–6x the GTX 1050 Ti. Disk (15 GB / 83 GB free) is still the first limit — the 2 TB NVMe planned for Phase 4
+  also serves this. (3) **Tour:** points per room from the house description, 4096 x 2048 Cycles panoramas, ~8–12 per
+  house, furnished and lit, the real exterior first (open data), reviewed with the page.
