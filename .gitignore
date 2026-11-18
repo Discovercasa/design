@@ -14,3 +14,6 @@ tests/node_modules/
 tests/test-results/
 tests/relatorio/
 tests/capturas/
+
+# External programs installed locally on a station (not in Git)
+ferramentas-externas/

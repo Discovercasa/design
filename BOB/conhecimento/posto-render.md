@@ -19,6 +19,14 @@ Ryzen 9 5900X (12 cores) · 32 GB DDR4-3200 · **RTX 2060 6 GB** (Turing: Cycles
 ~200 GB free (2026-11-13) · no NVMe yet (2 TB planned before the Unreal phase). Already there (user): Blender
 (5.2.2 seen 2026-11-07), Unreal — check the versions.
 
+**Station check 2026-11-18 (Claude on that PC):** `verificar.py` ALL GOOD (Python 3.14.4, Blender 5.2.2 LTS at
+`D:\Blender\blender.exe`, git, gh 2.105). Cycles OptiX lists the RTX 2060. NVIDIA driver 610.47. Unreal **5.8** at
+`D:\Epic Games\UE_5.8` (the Step Inside target). Free space: D: 165 GB, **C: only 8 GB** (keep Unreal's derived-data
+cache and projects on D:). Repo at `D:\AI Super\projects\Discovercasa VR-AR`. ODA File Converter 27.10 (signed
+by Open Design Alliance) installed 2026-11-18 at the user's request («instala mas na pasta onde estamos a trabalhar e
+usamos o DISCO D») in `<repo>\ferramentas-externas\ODAFileConverter\` (git-ignored). Rule on this PC: tools, Unreal
+projects and caches go on D:.
+
 **Disk budget.** Client pages: tools ~2 GB; per house the drawings, the open data (OSM ~25 MB, terrain ~10 MB), the
 Blender scene and the renders/panoramas/page ~1–2 GB → 200 GB is plenty. Unreal 5: engine ~60 GB, each project
 10–50 GB plus tens of GB of derived-data cache → a first Unreal test fits; the NVMe when projects grow.
