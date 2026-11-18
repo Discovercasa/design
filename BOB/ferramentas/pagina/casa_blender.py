@@ -167,11 +167,11 @@ def imagem(nome, arr, nao_cor=False):
     return img
 
 
-COR = {"ripado": "#5c3f2c", "deck": "#8f6c4c", "soalho": "#c09e78", "interior": "#eeebe4", "betao": "#a6a39c",
+COR = {"ripado": "#93552f", "deck": "#8f6c4c", "soalho": "#c09e78", "interior": "#eeebe4", "betao": "#a6a39c",
        "painel": "#45322e", "metal": "#383e42", "pedra": "#c8b68f", "relva": "#6f7d3a", "relva_fora": "#66733a",
-       "asfalto": "#3a3a3a", "berma": "#56703a", "brita": "#a49d90", "porta_garagem": "#5c3f2c", "tecido": "#9c968c", "toros": "#9a7a55"}
+       "asfalto": "#3a3a3a", "berma": "#56703a", "brita": "#a49d90", "porta_garagem": "#93552f", "tecido": "#9c968c", "toros": "#9a7a55"}
 COR.update(E.get("materiais_cor", {}))
-TILE = {"berma": 3.0, "ripado": 1.2, "deck": 1.4, "soalho": 1.8, "betao": 2.4, "painel": 1.0, "relva": 3.0, "relva_fora": 3.0,
+TILE = {"berma": 3.0, "ripado": 1.08, "deck": 1.4, "soalho": 1.8, "betao": 2.4, "painel": 1.0, "relva": 3.0, "relva_fora": 3.0,
         "asfalto": 3.0, "brita": 1.5, "pedra": 1.2, "porta_garagem": 1.2, "interior": 2.0, "metal": 1.0,
         "tecido": 1.0, "toros": 1.0}
 N = 1024
@@ -179,8 +179,10 @@ N = 1024
 
 def gerar_texturas():
     T = {}
-    c, h = tabuas(N, 10, hex_rgb(COR["ripado"]), var=0.16, junta=0.08, escuro=0.25, semente=3)
-    T["ripado"] = (c, normal_de(h, 6.0), 0.78)
+    # the Tremolo as built (Piveteau Douglas 22 x 135, oiled; photo of the Torres Vedras house): vertical boards of
+    # 135 mm useful, even warm reddish-brown tone, a fine V joint that draws a shadow line on every board
+    c, h = tabuas(N, 8, hex_rgb(COR["ripado"]), var=0.07, junta=0.065, escuro=0.3, semente=3)
+    T["ripado"] = (c, normal_de(h, 7.0), 0.6)
     c, h = tabuas(N, 10, hex_rgb(COR["deck"]), var=0.14, junta=0.06, escuro=0.3, comprimentos=1, semente=5)
     T["deck"] = (c, normal_de(h, 5.0), 0.7)
     c, h = tabuas(N, 10, hex_rgb(COR["soalho"]), var=0.08, junta=0.015, escuro=0.7, comprimentos=1, semente=9)
@@ -741,6 +743,21 @@ def construir_terreno():
             if CT:
                 q = CT[j][i] or (0.3, 0.4, 0.2)
                 cores += [q[0] ** 2.2, q[1] ** 2.2, q[2] ** 2.2, 1.0]
+    if T.get("base") is not None:        # a cut-out site (the web model): soil sides down to "base", like a site model
+        anel = ([(i, 0) for i in range(nx)] + [(nx - 1, j) for j in range(1, ny)]
+                + [(i, ny - 1) for i in range(nx - 2, -1, -1)] + [(0, j) for j in range(ny - 2, -1, -1)])
+        k_terra = len(nomes)
+        for (i0, j0), (i1, j1) in zip(anel, anel[1:]):
+            a, b = j0 * nx + i0, j1 * nx + i1
+            verts += [(xs[i0], ys[j0], T["base"]), (xs[i1], ys[j1], T["base"])]
+            a2, b2 = len(verts) - 2, len(verts) - 1
+            faces.append((a, a2, b2, b))     # counter-clockwise ring seen from above: the side faces outward
+            mi.append(k_terra)
+            if CT:
+                cores += [0.1, 0.08, 0.06, 1.0]
+        nomes = nomes + ["terra"]
+        if "terra" not in MATS:
+            MATS["terra"] = mat_simples("terra", "#5a4634", 0.95)
     me.from_pydata(verts, [], faces)
     if CT:
         at = me.attributes.new("cor_solo", "FLOAT_COLOR", "FACE")
@@ -1077,7 +1094,7 @@ def gravar_luz(amostras=128):
         "exterior": [o for o in meshes if o.name.startswith(("muro", "piso_livre", "faixa"))],
         "terreno": [o for o in meshes if o.name == "terreno"],
     }
-    tamanho = {"casa": 2048, "mobilia": 2048, "exterior": 1024, "terreno": 2048}
+    tamanho = {"casa": 4096, "mobilia": 4096, "exterior": 1024, "terreno": 2048}   # 4096: sharper light on the walls and furniture
     # triangulate the baked meshes (simpler islands; the web model is triangles anyway)
     for nome in ("casa", "mobilia", "exterior"):
         for ob in grupos[nome]:

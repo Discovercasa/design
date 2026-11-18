@@ -303,6 +303,8 @@ revisions A "Dimensões para execução" … E "Cobertura e Módulos - Correçã
        warm reddish-brown, cedar-like tone, sampled ≈ #C0935C in sun and ≈ #895332 in shade (AR version 3 uses #A0653C):
        lighter and more orange than the dark brown first used, which settles "mais claro" vs "marron". Board width kept at
        135 mm useful (Piveteau 22×135, from records), read as "mais fino" relative to the first wide texture.
+       **Model texture (2026-11-18, after "o forro exterior não está tão parecido"):** 135 mm vertical boards, even
+       warm reddish-brown base #93552f, fine V joint shadow, oiled sheen (roughness 0.6) — `casa_blender.py` default.
        The gaps the user reported ("havia pequenos gaps no tremolo ...") were an AR-model bug (gaps between the model's
        cladding pieces), not a fact about the real façade: the Piveteau tongue and groove profile above stands.
      - **Contra-ripado**: the user's rule of 2026-09-24 — "we do a slatted against slatted with 30x20mm … so the zone

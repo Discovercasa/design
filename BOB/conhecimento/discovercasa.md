@@ -93,6 +93,11 @@ Why Claude learns the method; "vamos passo a passo" — an overall idea, then an
    modelo consegue anda de ponto em ponto" / "consegue clicar e entrar no panorama e depois anda de panorama em
    panorama" — «Visita 360°» shows the house from outside (roof and upper storeys cut), a circle per point; tap → fly in
    → panorama → walk point to point → «Ver de fora». No separate tour section.
+   **Review of 2026-11-18 (night):** the tour never cuts the roof or storeys (every point seen from outside; tabs
+   Todos / Piso 0 / Piso 1); a point at the top of the stairs links the hall to piso 1; the 3D shows only the plot and
+   a few metres round it, real ground, nothing invented (no trees unless drawn); **no «Como construímos» and no
+   closing «Próximo passo» on any page** ("não vamos querer isso de raiz"); no loungers on loggias, the ones on the
+   ground face the garden.
    **Real exterior always (2026-11-13):** "o exterior não deve estar só presente na tour 360 mas sim sempre em todos os
    projetos a não ser que seja mencionado que não queremos" — the surroundings are in the 3D, the images and the tour
    of every house unless told otherwise. Render stations: any PC (first the home PC, RTX 2060 6 GB — user confirmed,

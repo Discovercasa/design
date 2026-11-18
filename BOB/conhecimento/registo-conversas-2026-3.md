@@ -679,3 +679,22 @@ The team's notes on hub task 84 (written in the hub by [membro da equipa] on 202
 > consegue clicar e entrar no panorama e depois anda de panorama em panorama
 > para ficar mais claro o que quis dizer
 - Decided (user): the 360° tour is a MODE of the 3D viewer, not a separate section. The client picks «Visita 360°», sees the house from outside with the roof and upper storeys cut away and a circle on each tour point of that storey. Tapping a circle flies the camera in and opens the panorama. From there the client walks panorama to panorama, and «Ver de fora» flies back out. The plan circles (Plantas section), the side minimap and the point list enter the same tour. Built in `ferramentas/pagina/modelo_pagina.html` (+ `p3` per point in `gerar_pagina.py`). Filed: `conhecimento/discovercasa.md` (client page).
+
+### 2026-11-18 (night) — Review of the Ribamar page: 3D surroundings, tour, stairs, window, realism, Tremolo, sections [Builder]
+> 1. Quando só se esta a ver o 3D a parte de fora deve ser apenas o terreno e um pouco de envolvente exterior, muito pouco e deve estar em concordância de como é na realidade.
+> 2. A visita 360 está boa mas não deve remover a cobertura nem os pisos simplesmente aparecem os pontos e a pessoa pode clicar e ir, se tive no piso consegue ver os pontos do piso0 de lado tal como está e se tiver no piso 1 consegue ver os pontos do piso 1 mas qaundo se ativa a visita 360 deve conseguir ver os pontos todos de fora sem esconder nenhum piso.
+> 3. Deve ser possível também na visita 360 do ponto do hall de entrada selecionar um ponto no cima das escadas para ir para o piso 1.
+> 4. Algo está errado com esta janela no screenshot.
+> 5. Esta é a qualidade máxima do 3D ?? Sinto que pode ser muito mais realista. Ainda parece muito algo modelado e não muito realista.
+> 6. Os interiores estão bonitos mas não parecem muito reais e tira as espreguiçadeiras das varandas, na parte exterior orienta as espreguiçadeiras.
+> 7. O forro exterior não está tão parecido como devia estar ao forro que usamos. Se for necessário podes editar as texturas que estas a utilizar de forma a parecerem mais realistas.
+> 8. Remove o Como Construímos e o Próximo Passo de todas as páginas, não vamos querer isso de raiz.
+- (1) Decided: the web 3D shows only the plot plus a few metres round it, cut like a site model (soil sides), with the real ground of the survey and the street from the drawings; no invented trees (the drawings have none). The wooden fence is in the project (layer «_AP_vedação_madeira»). Ribamar: plot + 6 m. Tool: `casa.json` "terreno"."base" → soil sides (`casa_blender.py`).
+- (2) Decided: «Visita 360°» never cuts the roof or storeys; it shows every point from outside; the side tabs (Todos / Piso 0 / Piso 1) show one storey's points from the side.
+- (3) Decided: the hall's panorama has a point at the top of the stairs («Subir ao piso 1»); the landing has «Descer à entrada» on the stairs. Tool: a point's `"via": {id: {"p", "nome"}}` in `casa.json` "visita".
+- (4) Found: the shower's wall tiles (piso 1 bathroom, our proposal) were modelled over the bathroom window; the tiles now go round it.
+- (6) Decided: no sun loungers on the loggias; on the ground they face the garden (backrest to the house).
+- (7) The Tremolo texture redone from the photos of the built Torres Vedras house: 135 mm vertical boards, even warm reddish-brown (#93552f), fine V joint, oiled sheen; default for every house (`casa_blender.py`).
+- (8) Decided: no «Como construímos» and no closing «Próximo passo» on any client page (template and generator).
+- (5)/(6) Realism: textures, furniture and trees are made by code (procedural), which reads as "modelled"; lightmaps raised to 4096. Asked the user to allow CC0 (public-domain) textures and models from Poly Haven / ambientCG (pending).
+- Filed: `conhecimento/discovercasa.md` (client page), `conhecimento/sistema-construtivo.md` (Tremolo look), `conhecimento/insights.md`.

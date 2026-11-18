@@ -161,6 +161,7 @@ footer .largura{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8p
 .lado360[hidden],.lado-explorar[hidden],.grupo[hidden]{display:none}
 .lado-explorar{display:flex;flex-direction:column;gap:2px}
 .lado360 .seg{align-self:flex-start}
+.lado360 .seg button{padding:6px 12px;white-space:nowrap}
 .lado360 svg{width:100%;height:auto;background:#1d2326;border-radius:4px}
 .lado360 .lista{display:flex;flex-wrap:wrap;gap:6px}
 .lado360 .lista button{all:unset;cursor:pointer;padding:6px 11px;font-size:14px;border-radius:999px;border:1px solid var(--mesa-linha);color:var(--mesa-tinta)}
@@ -174,22 +175,6 @@ footer .largura{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8p
 .planta svg{width:100%;height:auto;max-height:78vh;display:block}
 .legenda{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:10px;font-size:14px;color:var(--suave)}
 
-/* how we build, next step */
-.passos{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:22px}
-.passos div{border-top:2px solid var(--madeira);padding-top:14px}
-.passos b{display:block;font:650 19px/1.2 var(--display);font-stretch:90%;margin-bottom:6px}
-.passos p{margin:0;color:var(--suave);font-size:16px}
-.camadas{margin-top:34px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:22px}
-.camadas ol,.camadas ul{margin:0;padding-left:20px;color:var(--suave)}
-.camadas h3{font-size:19px;margin-bottom:8px}
-.fecho{background:var(--tinta);color:var(--folha)}
-.fecho .largura{display:flex;flex-wrap:wrap;gap:20px 40px;align-items:center;justify-content:space-between}
-.fecho h2{font-size:clamp(28px,3.2vw,40px);font-stretch:82%}
-.fecho p{margin:8px 0 0;max-width:60ch;opacity:.85}
-.fecho a{display:inline-block;padding:13px 24px;border-radius:999px;background:var(--madeira);color:#fff;text-decoration:none;font-weight:600}
-@media (max-width:980px){
-  .passos{grid-template-columns:repeat(2,minmax(0,1fr))}.camadas{grid-template-columns:minmax(0,1fr)}}
-@media (max-width:760px){.passos{grid-template-columns:minmax(0,1fr)}}
 
 @media (max-width:980px){
   .ficha dl{grid-template-columns:repeat(3,minmax(0,1fr))}
@@ -223,7 +208,7 @@ footer .largura{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8p
 <div class="ficha"><div class="largura"><dl>__FICHA__</dl></div></div>
 <nav class="menu" aria-label="Secções"><div class="largura">
   <a href="#explorar" data-modo="visita">Visita 360°</a><a href="#h-imagens">Imagens</a><a href="#explorar" data-modo="explorar">3D</a><a href="#h-plantas">Plantas</a>
-  <a href="#h-pisos">Áreas e materiais</a><a href="#h-construir">Como construímos</a><a href="#fecho">Próximo passo</a></div></nav>
+  <a href="#h-pisos">Áreas e materiais</a></div></nav>
 
 <section class="bloco mesa" id="explorar" aria-labelledby="h-3d">
   <div class="largura">
@@ -288,28 +273,6 @@ footer .largura{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8p
   </div>
 </section>
 
-<section class="bloco" aria-labelledby="h-construir" style="background:var(--folha);border-top:1px solid var(--linha)">
-  <div class="largura">
-    <div class="cab"><h2 id="h-construir">Como construímos</h2><p>Estrutura em madeira sobre fundação de betão, feita por módulos em fábrica e montada em obra: menos tempo de obra, menos desperdício e a mesma precisão em todas as casas.</p></div>
-    <div class="passos">
-      <div><b>1. Fundação</b><p>Base em betão armado, executada no terreno e preparada para receber a estrutura.</p></div>
-      <div><b>2. Módulos em fábrica</b><p>As paredes, os pavimentos e a cobertura são pré-fabricados em módulos de madeira, com medidas exatas.</p></div>
-      <div><b>3. Montagem</b><p>Os módulos chegam à obra e são montados e fixados à fundação; a casa fica fechada em pouco tempo.</p></div>
-      <div><b>4. Acabamentos</b><p>Isolamentos, caixilharia, revestimentos exteriores e interiores, redes e equipamentos, até à entrega da chave.</p></div>
-    </div>
-    <div class="camadas">
-      <div><h3>Parede exterior, de fora para dentro</h3><ol>__CAMADAS_EXT__</ol></div>
-      <div><h3>Porquê madeira</h3><ul>__PORQUE__</ul></div>
-    </div>
-  </div>
-</section>
-
-<section class="bloco fecho" id="fecho" aria-labelledby="h-fecho">
-  <div class="largura">
-    <div><h2 id="h-fecho">__FECHO_TITULO__</h2><p>__FECHO_TEXTO__</p></div>
-    <a href="__CONTACTO_LINK__" target="_blank" rel="noopener">__CONTACTO_BOTAO__</a>
-  </div>
-</section>
 <footer><div class="largura"><span>DiscoverCasa, __TITULO__</span><span>__DATA__. __LEGAL__</span></div></footer>
 
 <div class="visor" id="visor" hidden role="dialog" aria-modal="true" aria-label="Imagem em ecrã inteiro">
@@ -518,13 +481,17 @@ __PANOS__
     v.liga.forEach((o) => carregar(o));       // decode the neighbours ahead
   }
 
-  // a link's direction from here: plan angle (anticlockwise from +x) -> the panorama's longitude
+  // a link's direction from here: plan angle (anticlockwise from +x) -> the panorama's longitude. A link may go "via" a
+  // point of its own (the top of the stairs): the circle sits there, with its own name ("Subir ao piso 1")
   function direcao(de, para) {
-    const dx = para.camara[0] - de.camara[0], dy = para.camara[1] - de.camara[1], dz = para.camara[2] - de.camara[2];
+    const via = de.via && de.via[para.id];
+    const alvo = via ? via.p : para.camara;
+    const dx = alvo[0] - de.camara[0], dy = alvo[1] - de.camara[1], dz = para.camara[2] - de.camara[2];
     const th = Math.atan2(dy, dx) / RAD;
     let lon = (de.olhar - th) * RAD; lon = Math.atan2(Math.sin(lon), Math.cos(lon));
     const dist = Math.max(1.2, Math.hypot(dx, dy));
-    const lat = dz ? Math.atan2(dz > 0 ? 0.6 : -0.9, Math.min(dist, 3)) : Math.atan2(-1.25, dist);
+    const lat = via ? Math.atan2(alvo[2] - de.camara[2], dist)
+      : dz ? Math.atan2(dz > 0 ? 0.6 : -0.9, Math.min(dist, 3)) : Math.atan2(-1.25, dist);
     return [lon, lat];
   }
   let pontos = [];
@@ -532,11 +499,11 @@ __PANOS__
     camada.innerHTML = ''; pontos = [];
     const de = porId[atual];
     de.liga.filter((o) => porId[o]).forEach((o) => {
-      const para = porId[o];
+      const para = porId[o], via = de.via && de.via[o], nome = via && via.nome ? via.nome : para.nome;
       const b = document.createElement('button');
       b.className = 'ponto' + (para.camara[2] - de.camara[2] > 1 ? ' sobe' : para.camara[2] - de.camara[2] < -1 ? ' desce' : '');
-      b.innerHTML = `<i></i><span>${esc(para.nome)}</span>`;
-      b.setAttribute('aria-label', 'Ir para ' + para.nome);
+      b.innerHTML = `<i></i><span>${esc(nome)}</span>`;
+      b.setAttribute('aria-label', nome === para.nome ? 'Ir para ' + para.nome : nome);
       b.addEventListener('click', (e) => { e.stopPropagation(); abrir(o); });
       b.addEventListener('pointerdown', (e) => e.stopPropagation());
       camada.appendChild(b);
@@ -567,12 +534,14 @@ __PANOS__
     cone();
   }
 
-  // the minimap: this storey, every point, and a cone where you look
+  // the minimap: a storey, its points, and a cone where you look. Outside, "filtro" picks the points shown
+  // (null = every storey: user 2026-11-18 «deve conseguir ver os pontos todos de fora sem esconder nenhum piso»)
   const svgM = document.getElementById('mapa360'), segM = document.getElementById('pisos360'), listaEl = document.getElementById('lista360');
   const CORES_ESC = { parede: '#cfd6d8', chao: '#2a3135', risco: '#59656b', vidro: '#6aa6c9', linha: '#59656b', movel: '#323a3f', texto: '#eef1f1', suave: '#a3adb2' };
-  let mapaR = null, pisoMapa = null;
+  const pisosT = [...new Set(V.map((v) => v.piso))];
+  let mapaR = null, pisoMapa = null, filtro = null;
   function mapa(piso) {
-    pisoMapa = piso || porId[atual].piso;
+    pisoMapa = piso || (atual && porId[atual].piso) || (pisosT.includes('piso0') ? 'piso0' : pisosT[0]);
     mapaR = desenharPlanta(svgM, pisoMapa, { nomes: false, moveis: true, cores: CORES_ESC, margem: 0.6 });
     if (!mapaR) return;
     const g = document.createElementNS(NS, 'g'); g.id = 'pontosMapa'; svgM.appendChild(g);
@@ -586,28 +555,33 @@ __PANOS__
       const t = document.createElementNS(NS, 'title'); t.textContent = v.nome; k.appendChild(t);
       g.appendChild(k);
     });
-    [...segM.children].forEach((b) => b.setAttribute('aria-pressed', b.dataset.p === pisoMapa));
+    const premido = ecra.hidden ? (filtro || '') : pisoMapa;
+    [...segM.children].forEach((b) => b.setAttribute('aria-pressed', b.dataset.p === premido));
     cone();
   }
   function cone() {
     const c = svgM.querySelector('#cone'); if (!c || !mapaR) return;
     const v = porId[atual];
-    if (ecra.hidden || v.piso !== pisoMapa || !mapaR.dentro(v.camara[0], v.camara[1])) { c.setAttribute('d', ''); return; }
+    if (!v || ecra.hidden || v.piso !== pisoMapa || !mapaR.dentro(v.camara[0], v.camara[1])) { c.setAttribute('d', ''); return; }
     const th = (v.olhar + yaw / RAD) * RAD, a = fov * 0.75, L = 2.6;
     const x = +mapaR.X(v.camara[0]), y = +mapaR.Y(v.camara[1]);
     const p = (ang) => `${(x + L * Math.cos(ang)).toFixed(3)} ${(y - L * Math.sin(ang)).toFixed(3)}`;
     c.setAttribute('d', `M${x} ${y} L${p(th + a / 2)} L${p(th - a / 2)} Z`);
   }
-  const pisosT = [...new Set(V.map((v) => v.piso))];
-  segM.innerHTML = pisosT.map((p) => `<button data-p="${p}">${esc(nomePiso[p] || p)}</button>`).join('');
-  segM.addEventListener('click', (e) => { const b = e.target.closest('button'); if (!b) return; if (ecra.hidden) verDeFora(b.dataset.p); else { mapa(b.dataset.p); lista(); } });
+  segM.innerHTML = (pisosT.length > 1 ? '<button data-p="">Todos</button>' : '')
+    + pisosT.map((p) => `<button data-p="${p}">${esc(nomePiso[p] || p)}</button>`).join('');
+  segM.addEventListener('click', (e) => {
+    const b = e.target.closest('button'); if (!b) return;
+    if (ecra.hidden) verDeFora(b.dataset.p || null); else { mapa(b.dataset.p || null); lista(); }
+  });
   function lista() {
-    listaEl.innerHTML = V.filter((v) => v.piso === pisoMapa).map((v) => `<button data-v="${v.id}" aria-pressed="${v.id === atual && !ecra.hidden}">${esc(v.nome)}</button>`).join('');
+    const ver = ecra.hidden ? V.filter((v) => !filtro || v.piso === filtro) : V.filter((v) => v.piso === pisoMapa);
+    listaEl.innerHTML = ver.map((v) => `<button data-v="${v.id}" aria-pressed="${v.id === atual && !ecra.hidden}">${esc(v.nome)}</button>`).join('');
   }
   listaEl.addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) irA(b.dataset.v, false); });
   function irA(id) { if (ecra.hidden) entrar(id); else abrir(id, false); }
 
-  // ---------------------------------------------------------------- the mode: the house from outside, a circle per point
+  // ---------------------------------------------------------------- the mode: the whole house from outside, every point on it
   const vista = document.getElementById('vista'), alvos = document.getElementById('alvos3d'), dica = document.getElementById('dica3d');
   const segModo = document.getElementById('segModo'), ajuda = document.getElementById('ajuda3d'), ajudaExplorar = ajuda.textContent;
   let modo = 'explorar', listaAlvos = [];
@@ -623,14 +597,14 @@ __PANOS__
     ajuda.textContent = m === 'visita' ? 'Toque num círculo para entrar nessa divisão e depois ande de divisão em divisão; arraste para olhar à volta. «Ver de fora» volta a mostrar a casa.' : ajudaExplorar;
     if (m === 'explorar') {
       sair360(); alvos.hidden = true; dica.hidden = true;
-      if (M()) { M().aCadaFrame = null; M().mostrarTudo(); }
-    } else if (voar !== false) verDeFora((atual && porId[atual].piso) || (V.find((v) => v.piso === 'piso0') || V[0]).piso);
+      if (M()) M().aCadaFrame = null;
+    } else if (voar !== false) verDeFora(null);
   }
   segModo.addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) definirModo(b.dataset.m); });
   document.querySelectorAll('a[data-modo]').forEach((a) => a.addEventListener('click', () => definirModo(a.dataset.modo)));
   function criarAlvos() {
     alvos.innerHTML = ''; listaAlvos = [];
-    V.filter((v) => v.piso === pisoMapa).forEach((v) => {
+    V.filter((v) => !filtro || v.piso === filtro).forEach((v) => {
       const b = document.createElement('button');
       b.className = 'ponto' + (v.id === atual ? ' aqui' : '');
       b.innerHTML = `<i></i><span>${esc(v.nome)}</span>`;
@@ -649,17 +623,19 @@ __PANOS__
       b.style.display = ''; b.style.left = ((q.x + 1) / 2 * W) + 'px'; b.style.top = ((1 - q.y) / 2 * H) + 'px';
     });
   }
+  // nothing is cut away: the roof and every storey stay, the circles show where each point is
   function verDeFora(piso) {
     const m = M(), de = !ecra.hidden && atual ? porId[atual] : null;
     if (de && m) { m.pausar(false); m.colocar(de.p3, frente(de, de.olhar + yaw / RAD)); }
     sair360();
-    mapa(piso); lista(); criarAlvos();
+    filtro = piso || null;
+    mapa(filtro); lista(); criarAlvos();
     alvos.hidden = dica.hidden = !m;
     if (!m) return;                     // the model is still loading: "modelo-pronto" comes back here
     m.aplicarAspeto('realista');
-    m.cortarAte(piso);
+    m.mostrarTudo();
     m.aCadaFrame = colocarAlvos;
-    m.voarPara(m.vistaDeFora(V.filter((v) => v.piso === piso).map((v) => v.p3)), de ? 1300 : 900);
+    m.voarPara(m.vistaDeFora(V.filter((v) => !filtro || v.piso === filtro).map((v) => v.p3)), de ? 1300 : 900);
   }
   async function entrar(id) {
     const v = porId[id]; if (!v) return;
@@ -668,21 +644,26 @@ __PANOS__
     alvos.hidden = true; dica.hidden = true;
     carregar(id);                        // decode while the camera flies in
     const m = M();
-    if (m) { m.aplicarAspeto('realista'); m.cortarAte(v.piso); await m.voarPara({ c: v.p3, a: frente(v, v.olhar) }, 1100); }
+    let voo = null;
+    if (m) {
+      m.aplicarAspeto('realista'); m.mostrarTudo();
+      voo = m.voarPara({ c: v.p3, a: frente(v, v.olhar) }, 1000);
+      await Promise.race([voo, new Promise((ok) => setTimeout(ok, 620))]);   // the panorama fades in as the camera arrives
+    }
     ecra.style.opacity = '0'; ecra.hidden = false; atual = null;
     await abrir(id, false);
     ecra.style.opacity = '1';
-    if (m) setTimeout(() => { if (!ecra.hidden) m.pausar(true); }, 400);   // the 3D rests behind the panorama
+    if (m) { await voo; setTimeout(() => { if (!ecra.hidden) m.pausar(true); }, 400); }   // the 3D rests behind the panorama
   }
   function sair360() {
     if (ecra.hidden) return;
     ecra.hidden = true; ecra.style.opacity = '0';
     if (M()) M().pausar(false);
   }
-  document.getElementById('b360fora').addEventListener('click', (e) => { e.stopPropagation(); verDeFora(porId[atual].piso); });
+  document.getElementById('b360fora').addEventListener('click', (e) => { e.stopPropagation(); verDeFora(filtro); });
   addEventListener('modelo-pronto', () => {
     if (modo !== 'visita') return;
-    if (ecra.hidden) verDeFora(pisoMapa); else { M().cortarAte(porId[atual].piso); M().pausar(true); }
+    if (ecra.hidden) verDeFora(filtro); else M().pausar(true);
   });
 
   // dragging, pinch and wheel
@@ -903,7 +884,7 @@ async function iniciar(L, D) {
   const ORDEM = ['cave', 'piso0', 'piso1', 'cobertura'];
   const itens = [{ id: 'cobertura', nome: 'Cobertura', sub: 'cota ' + D.cota_topo }]
     .concat([...D.pisos].reverse().map((p) => ({ id: p.id, nome: p.nome, sub: 'cota ' + p.cota_txt })))
-    .concat([{ id: 'envolvente', nome: 'Exterior', sub: 'muros, vedações, árvores' }, { id: 'terreno', nome: 'Terreno', sub: 'tire-o para ver a cave' }]);
+    .concat([{ id: 'envolvente', nome: 'Exterior', sub: 'muros e vedações' }, { id: 'terreno', nome: 'Terreno', sub: 'tire-o para ver a cave' }]);
   const painel = document.getElementById('pisos');
   painel.innerHTML = itens.map((i) => `<label class="fl"><input type="checkbox" data-g="${i.id}" checked><span><b>${i.nome}</b><small>${i.sub}</small></span></label>`).join('');
   const cx = (id) => painel.querySelector(`[data-g="${id}"]`);
@@ -962,8 +943,9 @@ async function iniciar(L, D) {
     const a = b.getCenter(new THREE.Vector3()); a.y -= 1.45;
     const sz = b.getSize(new THREE.Vector3()), span = Math.max(sz.x, sz.z, 6);
     const d = VIS[0].c.clone().sub(VIS[0].a); d.y = 0; d.normalize();
-    const L = (span * 1.25 + 6) * Math.max(1, Math.pow(1.5 / camara.aspect, 0.7));
-    return { c: a.clone().addScaledVector(d, L * 0.75).add(new THREE.Vector3(0, L * 0.85, 0)).toArray(), a: a.toArray() };
+    a.y += 1.2;
+    const L = (span * 1.2 + 9) * Math.max(1, Math.pow(1.5 / camara.aspect, 0.7));
+    return { c: a.clone().addScaledVector(d, L * 0.88).add(new THREE.Vector3(0, L * 0.48, 0)).toArray(), a: a.toArray() };
   };
   const proj = new THREE.Vector3();
   API.projetar = (p) => { proj.set(...p).project(camara); return { x: proj.x, y: proj.y, atras: proj.z > 1 }; };

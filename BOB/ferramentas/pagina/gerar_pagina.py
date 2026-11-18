@@ -11,7 +11,7 @@ pagina.json: {"titulo", "subtitulo", "modelo": "<folder with casa.glb and render
               "pisos": [{"id", "nome", "cota", "divisoes": [[nome, m2], ...]}], "cota_topo",
               "imagens": [{"vista", "titulo"}], "acabamentos": [{"parte", "texto", "cor"}], "ficha": [[k, v], ...],
               optional: "renders" (folder of the images and panoramas, default "modelo"),
-              "fecho": {"titulo", "texto", "botao", "link"}, "legal", "camadas_ext": [...], "porque": [...]}
+              "legal" (the footer's line). No «Como construímos» and no closing section (user 2026-11-18).}
 The tour (casa.json "visita": points with camara, olhar, liga) shows render_pano_<id>.jpg, as a mode of the 3D viewer
 (the house from outside, a circle per point, fly in, walk panorama to panorama); the plans are drawn from
 casa.json (storey volumes, rooms, openings, stairs, the furniture's footprints, "divisoes" for names and areas).
@@ -137,16 +137,6 @@ def _planta(C, pisos):
     return {"rodar": C.get("rodar_graus", 0.0), "pisos": out}
 
 
-CAMADAS_EXT = ["Revestimento exterior à escolha (nesta casa: __FACHADA__)",
-               "Membrana respirável: não deixa entrar a água e deixa sair o vapor", "Placa de OSB",
-               "Estrutura em madeira com isolamento em lã mineral entre os montantes", "Placa de OSB",
-               "Acabamento interior (gesso cartonado pintado)"]
-PORQUE = ["Obra mais rápida: os módulos fazem-se em fábrica enquanto se prepara o terreno.",
-          "Precisão: as peças são cortadas e montadas com medidas exatas.",
-          "Conforto: a estrutura e o isolamento trabalham juntos no inverno e no verão.",
-          "Um material renovável, que guarda carbono."]
-
-
 def gerar(pagina, saida):
     P = json.loads(Path(pagina).read_text(encoding="utf-8"))
     base = Path(pagina).resolve().parent
@@ -203,11 +193,6 @@ def gerar(pagina, saida):
             f'<img src="data:image/jpeg;base64,{b}" alt="{tit}" loading="lazy"></button><figcaption>{tit}</figcaption></figure>'
             for b, tit in fotos[1:])
     hoje = datetime.date.today()
-    fachada = next((a["texto"] for a in P.get("acabamentos", []) if a.get("parte") == "Fachada"), "à escolha do cliente")
-    fecho = {"titulo": "Gostou da sua casa?",
-             "texto": "Esta página mostra o projeto como vai ficar. Fale connosco para afinar acabamentos, cores e "
-                      "mobiliário, ou para visitar uma obra DiscoverCasa.",
-             "botao": "Falar com a DiscoverCasa", "link": "https://discovercasa.pt", **P.get("fecho", {})}
     legal = P.get("legal", "Imagens ilustrativas: o mobiliário, a decoração e a envolvente (casas vizinhas, "
                            "vegetação, céu) são indicativos. Áreas do projeto de arquitetura.")
     valores = {
@@ -222,11 +207,6 @@ def gerar(pagina, saida):
         "GLB": base64.b64encode((modelo / "casa.glb").read_bytes()).decode("ascii"),
         "TEXTURAS": json.dumps(texturas, separators=(",", ":")),
         "PANOS": panos,
-        "CAMADAS_EXT": "".join(f"<li>{html.escape(t).replace('__FACHADA__', html.escape(fachada[:1].lower() + fachada[1:]))}</li>"
-                               for t in P.get("camadas_ext", CAMADAS_EXT)),
-        "PORQUE": "".join(f"<li>{html.escape(t)}</li>" for t in P.get("porque", PORQUE)),
-        "FECHO_TITULO": html.escape(fecho["titulo"]), "FECHO_TEXTO": html.escape(fecho["texto"]),
-        "CONTACTO_BOTAO": html.escape(fecho["botao"]), "CONTACTO_LINK": html.escape(fecho["link"], quote=True),
         "LEGAL": html.escape(legal),
     }
     tpl = (AQUI / "modelo_pagina.html").read_text(encoding="utf-8")
