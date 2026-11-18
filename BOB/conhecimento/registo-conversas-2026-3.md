@@ -671,3 +671,11 @@ The team's notes on hub task 84 (written in the hub by [membro da equipa] on 202
 ### 2026-11-18 — Pages: no «baseada em padrão» mark; final renders on the home RTX 2060 [Builder, stations]
 > nao marques as páginas e podes correr os renders no PC de casa na RTX2060 quando tiver finalizado da-me o link
 - Decided (user): pages built only from a floor plan are NOT marked «baseada em padrão» in the hub. The Ribamar final renders move from the office PC to the home render station (RTX 2060, OptiX, driven over SSH from the office session); the user wants the link when the page is done. Filed: `conhecimento/discovercasa.md`, `conhecimento/posto-render.md`.
+
+### 2026-11-18 — Render quality; the 360° tour is a mode of the 3D viewer [Builder]
+> as imagens e o tour e tudo já vão ser com a qualidade máxima certo?
+- Answered: panoramas 4096x2048, images 3200x2000, 512 samples, adaptive threshold 0.01, up to 12 bounces, denoised; web model lightmaps at 512 samples with a separate furniture atlas. Not 8192 panoramas: many phones cannot load a texture that size in the 360° viewer.
+> o tour deve ser um modo que o cliente seleciona e de fora do modelo consegue anda de ponto em ponto a ver a casa...
+> consegue clicar e entrar no panorama e depois anda de panorama em panorama
+> para ficar mais claro o que quis dizer
+- Decided (user): the 360° tour is a MODE of the 3D viewer, not a separate section. The client picks «Visita 360°», sees the house from outside with the roof and upper storeys cut away and a circle on each tour point of that storey. Tapping a circle flies the camera in and opens the panorama. From there the client walks panorama to panorama, and «Ver de fora» flies back out. The plan circles (Plantas section), the side minimap and the point list enter the same tour. Built in `ferramentas/pagina/modelo_pagina.html` (+ `p3` per point in `gerar_pagina.py`). Filed: `conhecimento/discovercasa.md` (client page).

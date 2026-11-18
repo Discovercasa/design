@@ -137,8 +137,13 @@ footer .largura{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8p
 /* the 360-degree tour */
 .tour{background:#111517;color:#eef1f1}
 .tour .cab p{color:#a3adb2}
-.palco360{display:grid;grid-template-columns:minmax(0,1fr) 300px;border:1px solid #2c3438;border-radius:6px;overflow:hidden}
-.ecra360{position:relative;height:clamp(420px,70vh,760px);background:#000;touch-action:none;cursor:grab;user-select:none;-webkit-user-select:none;overflow:hidden}
+.ecra360{position:absolute;inset:0;z-index:4;background:#000;touch-action:none;cursor:grab;user-select:none;-webkit-user-select:none;overflow:hidden;transition:opacity .35s ease}
+.ecra360[hidden]{display:none}
+.alvos3d{position:absolute;inset:0;z-index:2;pointer-events:none;overflow:hidden}
+.alvos3d .ponto{pointer-events:auto}
+.ponto.aqui i{border-color:var(--madeira);background:rgba(201,148,112,.55)}
+.dica3d{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);z-index:3;background:rgba(0,0,0,.6);color:#fff;font-size:14px;padding:7px 14px;border-radius:999px;pointer-events:none;white-space:nowrap}
+.vista:fullscreen{height:100vh}
 .ecra360:active{cursor:grabbing}
 .ecra360 canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
 .ecra360 .veu{position:absolute;inset:0;background:#000;opacity:0;transition:opacity .3s ease;pointer-events:none}
@@ -152,12 +157,14 @@ footer .largura{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8p
 .ondeestou{position:absolute;left:14px;top:12px;font:650 20px/1.1 var(--display);font-stretch:90%;text-shadow:0 1px 8px rgba(0,0,0,.6);pointer-events:none}
 .botoes360{position:absolute;right:12px;top:12px;display:flex;gap:6px}
 .botoes360 button{background:rgba(0,0,0,.45);border:1px solid rgba(255,255,255,.3);color:#fff;border-radius:999px;padding:7px 13px;cursor:pointer;font-size:14px}
-.lado360{padding:16px;border-left:1px solid #2c3438;display:flex;flex-direction:column;gap:14px;background:#161b1e}
+.lado360{display:flex;flex-direction:column;gap:12px}
+.lado360[hidden],.lado-explorar[hidden],.grupo[hidden]{display:none}
+.lado-explorar{display:flex;flex-direction:column;gap:2px}
+.lado360 .seg{align-self:flex-start}
 .lado360 svg{width:100%;height:auto;background:#1d2326;border-radius:4px}
 .lado360 .lista{display:flex;flex-wrap:wrap;gap:6px}
-.lado360 .lista button{all:unset;cursor:pointer;padding:6px 11px;font-size:14px;border-radius:999px;border:1px solid #2c3438;color:#eef1f1}
+.lado360 .lista button{all:unset;cursor:pointer;padding:6px 11px;font-size:14px;border-radius:999px;border:1px solid var(--mesa-linha);color:var(--mesa-tinta)}
 .lado360 .lista button[aria-pressed=true]{border-color:var(--madeira);background:var(--madeira)}
-.ecra360:fullscreen{height:100vh}
 
 /* plans */
 .plantas .seg{background:var(--folha);border-color:var(--linha)}
@@ -180,9 +187,9 @@ footer .largura{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8p
 .fecho h2{font-size:clamp(28px,3.2vw,40px);font-stretch:82%}
 .fecho p{margin:8px 0 0;max-width:60ch;opacity:.85}
 .fecho a{display:inline-block;padding:13px 24px;border-radius:999px;background:var(--madeira);color:#fff;text-decoration:none;font-weight:600}
-@media (max-width:980px){.palco360{grid-template-columns:minmax(0,1fr)}.lado360{border-left:0;border-top:1px solid #2c3438}
+@media (max-width:980px){
   .passos{grid-template-columns:repeat(2,minmax(0,1fr))}.camadas{grid-template-columns:minmax(0,1fr)}}
-@media (max-width:760px){.ecra360{height:62vh;min-height:340px}.passos{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:760px){.passos{grid-template-columns:minmax(0,1fr)}}
 
 @media (max-width:980px){
   .ficha dl{grid-template-columns:repeat(3,minmax(0,1fr))}
@@ -215,43 +222,39 @@ footer .largura{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8p
 </section>
 <div class="ficha"><div class="largura"><dl>__FICHA__</dl></div></div>
 <nav class="menu" aria-label="Secções"><div class="largura">
-  <a href="#visita">Visita 360°</a><a href="#h-imagens">Imagens</a><a href="#h-3d">3D</a><a href="#h-plantas">Plantas</a>
+  <a href="#explorar" data-modo="visita">Visita 360°</a><a href="#h-imagens">Imagens</a><a href="#explorar" data-modo="explorar">3D</a><a href="#h-plantas">Plantas</a>
   <a href="#h-pisos">Áreas e materiais</a><a href="#h-construir">Como construímos</a><a href="#fecho">Próximo passo</a></div></nav>
 
-<section class="bloco tour" id="visita" aria-labelledby="h-visita">
+<section class="bloco mesa" id="explorar" aria-labelledby="h-3d">
   <div class="largura">
-    <div class="cab"><h2 id="h-visita">Visita virtual 360°</h2><p>Arraste para olhar à volta e toque nos círculos para passar à divisão seguinte. A vista pelas janelas é a do terreno.</p></div>
-    <div class="palco360">
-      <div class="ecra360" id="ecra360">
-        <canvas id="tela360"></canvas><div class="veu" id="veu"></div><div id="pontos"></div>
-        <div class="ondeestou" id="ondeestou"></div>
-        <div class="botoes360"><button id="b360ecra">Ecrã inteiro</button></div>
-      </div>
-      <div class="lado360">
-        <div class="seg" id="pisos360"></div>
-        <svg id="mapa360" role="img" aria-label="Planta com o ponto onde está e para onde olha"></svg>
-        <div class="lista" id="lista360"></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="bloco mesa" aria-labelledby="h-3d">
-  <div class="largura">
-    <div class="cab"><h2 id="h-3d">Explorar em 3D</h2><p>Arraste para rodar e use a roda do rato ou dois dedos para aproximar. Tire a cobertura e os pisos de cima para ver por dentro.</p></div>
+    <div class="cab"><h2 id="h-3d">Explorar em 3D e visita 360°</h2><p id="ajuda3d">Arraste para rodar e use a roda do rato ou dois dedos para aproximar. Tire a cobertura e os pisos de cima para ver por dentro.</p></div>
     <div class="comandos">
-      <div class="grupo"><span class="rot">Aspeto</span>
+      <div class="grupo" id="grupoModo"><span class="rot">Modo</span>
+        <div class="seg" id="segModo"><button data-m="explorar" aria-pressed="true">Explorar</button><button data-m="visita" aria-pressed="false">Visita 360°</button></div></div>
+      <div class="grupo so-explorar"><span class="rot">Aspeto</span>
         <div class="seg" id="segAspeto"><button data-v="realista" aria-pressed="true">Realista</button><button data-v="maquete" aria-pressed="false">Maquete</button></div></div>
-      <div class="grupo"><span class="rot">Vistas</span><div class="vistas" id="vistas"></div></div>
+      <div class="grupo so-explorar"><span class="rot">Vistas</span><div class="vistas" id="vistas"></div></div>
     </div>
     <div class="palco3d">
       <div class="vista" id="vista">
         <div class="carregar" id="carregar">A preparar o modelo…</div>
         <div class="norte" title="Norte"><svg width="24" height="24" viewBox="0 0 22 22" id="seta" aria-label="Norte"><path d="M11 2 L15 15 L11 12 L7 15 Z" fill="#2c3236"/><text x="11" y="21" text-anchor="middle" font-size="6" font-family="sans-serif" fill="#2c3236">N</text></svg></div>
+        <div class="alvos3d" id="alvos3d" hidden></div>
+        <div class="dica3d" id="dica3d" hidden>Toque num círculo para entrar nessa divisão</div>
+        <div class="ecra360" id="ecra360" hidden>
+          <canvas id="tela360"></canvas><div class="veu" id="veu"></div><div id="pontos"></div>
+          <div class="ondeestou" id="ondeestou"></div>
+          <div class="botoes360"><button id="b360fora">Ver de fora</button><button id="b360ecra">Ecrã inteiro</button></div>
+        </div>
       </div>
       <aside class="mostrar" aria-label="O que mostrar">
-        <span class="rot">Mostrar</span>
-        <div id="pisos"></div>
+        <div class="lado-explorar" id="ladoExplorar"><span class="rot">Mostrar</span><div id="pisos"></div></div>
+        <div class="lado360" id="ladoVisita" hidden>
+          <span class="rot">Pontos da visita</span>
+          <div class="seg" id="pisos360"></div>
+          <svg id="mapa360" role="img" aria-label="Planta com os pontos da visita, onde está e para onde olha"></svg>
+          <div class="lista" id="lista360"></div>
+        </div>
       </aside>
     </div>
   </div>
@@ -278,7 +281,7 @@ footer .largura{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8p
 </section>
 <section class="bloco plantas" aria-labelledby="h-plantas">
   <div class="largura">
-    <div class="cab"><h2 id="h-plantas">Plantas</h2><p>As divisões de cada piso com as áreas do projeto. Toque num ponto da visita para entrar nessa divisão.</p></div>
+    <div class="cab"><h2 id="h-plantas">Plantas</h2><p>As divisões de cada piso com as áreas do projeto. Toque num ponto para entrar nessa divisão na visita 360°.</p></div>
     <div class="seg" id="segPlanta"></div>
     <div class="planta"><svg id="planta" role="img" aria-label="Planta do piso"></svg>
       <div class="legenda"><span><b style="color:var(--madeira)">●</b> Ponto da visita 360°</span><span>Riscado: terraço, varandas e alpendre</span><span>Mobiliário indicativo</span></div></div>
@@ -443,7 +446,7 @@ __PANOS__
       const g = document.createElementNS(NS, 'g');
       g.setAttribute('role', 'button'); g.setAttribute('tabindex', '0'); g.style.cursor = 'pointer';
       g.innerHTML = `<title>Visita 360°: ${esc(v.nome)}</title><circle cx="${r.X(v.camara[0])}" cy="${r.Y(v.camara[1])}" r=".26" fill="var(--madeira)" stroke="#fff" stroke-width=".06"/>`;
-      const ir = () => { abrir(v.id); document.getElementById('visita').scrollIntoView({ behavior: 'smooth' }); };
+      const ir = () => { document.getElementById('explorar').scrollIntoView({ behavior: 'smooth' }); entrar(v.id); };
       g.addEventListener('click', ir); g.addEventListener('keydown', (e) => { if (e.key === 'Enter') ir(); });
       svgP.appendChild(g);
     });
@@ -456,7 +459,7 @@ __PANOS__
   }
 
   // ---------------------------------------------------------------- the 360 viewer
-  if (!V.length) { document.getElementById('visita').hidden = true; document.querySelector('a[href="#visita"]').hidden = true; return; }
+  if (!V.length) { document.getElementById('grupoModo').hidden = true; document.querySelector('a[data-modo="visita"]').hidden = true; return; }
   const ecra = document.getElementById('ecra360'), cv = document.getElementById('tela360'), veu = document.getElementById('veu');
   const camada = document.getElementById('pontos'), onde = document.getElementById('ondeestou');
   const gl = cv.getContext('webgl', { antialias: false, preserveDrawingBuffer: false });
@@ -509,7 +512,7 @@ __PANOS__
     yaw = manterOlhar === false ? 0 : ((olharMundo - v.olhar) * RAD);
     yaw = Math.atan2(Math.sin(yaw), Math.cos(yaw));
     onde.textContent = v.nome;
-    criarPontos(); mapa(); lista();
+    criarPontos(); mapa(); lista(); criarAlvos();
     desenhar();
     requestAnimationFrame(() => veu.classList.remove('on'));
     v.liga.forEach((o) => carregar(o));       // decode the neighbours ahead
@@ -576,9 +579,10 @@ __PANOS__
     const c = document.createElementNS(NS, 'path'); c.id = 'cone'; c.setAttribute('fill', 'rgba(201,148,112,.45)'); svgM.appendChild(c);
     V.filter((v) => v.piso === pisoMapa && mapaR.dentro(v.camara[0], v.camara[1])).forEach((v) => {
       const k = document.createElementNS(NS, 'circle');
-      k.setAttribute('cx', mapaR.X(v.camara[0])); k.setAttribute('cy', mapaR.Y(v.camara[1])); k.setAttribute('r', v.id === atual ? '.34' : '.24');
-      k.setAttribute('fill', v.id === atual ? '#c99470' : '#eef1f1'); k.setAttribute('stroke', '#111517'); k.setAttribute('stroke-width', '.06');
-      k.style.cursor = 'pointer'; k.addEventListener('click', () => abrir(v.id));
+      const aqui = v.id === atual && !ecra.hidden;
+      k.setAttribute('cx', mapaR.X(v.camara[0])); k.setAttribute('cy', mapaR.Y(v.camara[1])); k.setAttribute('r', aqui ? '.34' : '.24');
+      k.setAttribute('fill', aqui ? '#c99470' : '#eef1f1'); k.setAttribute('stroke', '#111517'); k.setAttribute('stroke-width', '.06');
+      k.style.cursor = 'pointer'; k.addEventListener('click', () => irA(v.id));
       const t = document.createElementNS(NS, 'title'); t.textContent = v.nome; k.appendChild(t);
       g.appendChild(k);
     });
@@ -588,7 +592,7 @@ __PANOS__
   function cone() {
     const c = svgM.querySelector('#cone'); if (!c || !mapaR) return;
     const v = porId[atual];
-    if (v.piso !== pisoMapa || !mapaR.dentro(v.camara[0], v.camara[1])) { c.setAttribute('d', ''); return; }
+    if (ecra.hidden || v.piso !== pisoMapa || !mapaR.dentro(v.camara[0], v.camara[1])) { c.setAttribute('d', ''); return; }
     const th = (v.olhar + yaw / RAD) * RAD, a = fov * 0.75, L = 2.6;
     const x = +mapaR.X(v.camara[0]), y = +mapaR.Y(v.camara[1]);
     const p = (ang) => `${(x + L * Math.cos(ang)).toFixed(3)} ${(y - L * Math.sin(ang)).toFixed(3)}`;
@@ -596,11 +600,90 @@ __PANOS__
   }
   const pisosT = [...new Set(V.map((v) => v.piso))];
   segM.innerHTML = pisosT.map((p) => `<button data-p="${p}">${esc(nomePiso[p] || p)}</button>`).join('');
-  segM.addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) mapa(b.dataset.p); });
+  segM.addEventListener('click', (e) => { const b = e.target.closest('button'); if (!b) return; if (ecra.hidden) verDeFora(b.dataset.p); else { mapa(b.dataset.p); lista(); } });
   function lista() {
-    listaEl.innerHTML = V.map((v) => `<button data-v="${v.id}" aria-pressed="${v.id === atual}">${esc(v.nome)}</button>`).join('');
+    listaEl.innerHTML = V.filter((v) => v.piso === pisoMapa).map((v) => `<button data-v="${v.id}" aria-pressed="${v.id === atual && !ecra.hidden}">${esc(v.nome)}</button>`).join('');
   }
-  listaEl.addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) abrir(b.dataset.v, false); });
+  listaEl.addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) irA(b.dataset.v, false); });
+  function irA(id) { if (ecra.hidden) entrar(id); else abrir(id, false); }
+
+  // ---------------------------------------------------------------- the mode: the house from outside, a circle per point
+  const vista = document.getElementById('vista'), alvos = document.getElementById('alvos3d'), dica = document.getElementById('dica3d');
+  const segModo = document.getElementById('segModo'), ajuda = document.getElementById('ajuda3d'), ajudaExplorar = ajuda.textContent;
+  let modo = 'explorar', listaAlvos = [];
+  const M = () => window.__modelo;
+  const rumo = (graus) => { const a = (graus + (PL.rodar || 0)) * RAD; return [Math.cos(a), 0, -Math.sin(a)]; };   // plan angle -> three.js
+  const frente = (v, graus) => { const d = rumo(graus); return [v.p3[0] + d[0] * 2, v.p3[1], v.p3[2] + d[2] * 2]; };
+  function definirModo(m, voar) {
+    modo = m;
+    segModo.querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.m === m));
+    document.querySelectorAll('.so-explorar').forEach((el) => (el.hidden = m !== 'explorar'));
+    document.getElementById('ladoExplorar').hidden = m !== 'explorar';
+    document.getElementById('ladoVisita').hidden = m !== 'visita';
+    ajuda.textContent = m === 'visita' ? 'Toque num círculo para entrar nessa divisão e depois ande de divisão em divisão; arraste para olhar à volta. «Ver de fora» volta a mostrar a casa.' : ajudaExplorar;
+    if (m === 'explorar') {
+      sair360(); alvos.hidden = true; dica.hidden = true;
+      if (M()) { M().aCadaFrame = null; M().mostrarTudo(); }
+    } else if (voar !== false) verDeFora((atual && porId[atual].piso) || (V.find((v) => v.piso === 'piso0') || V[0]).piso);
+  }
+  segModo.addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) definirModo(b.dataset.m); });
+  document.querySelectorAll('a[data-modo]').forEach((a) => a.addEventListener('click', () => definirModo(a.dataset.modo)));
+  function criarAlvos() {
+    alvos.innerHTML = ''; listaAlvos = [];
+    V.filter((v) => v.piso === pisoMapa).forEach((v) => {
+      const b = document.createElement('button');
+      b.className = 'ponto' + (v.id === atual ? ' aqui' : '');
+      b.innerHTML = `<i></i><span>${esc(v.nome)}</span>`;
+      b.setAttribute('aria-label', 'Entrar: ' + v.nome);
+      b.addEventListener('click', () => entrar(v.id));
+      alvos.appendChild(b);
+      listaAlvos.push([b, [v.p3[0], v.p3[1] - 1.45, v.p3[2]]]);
+    });
+  }
+  function colocarAlvos() {
+    const m = M(); if (!m) return;
+    const W = vista.clientWidth, H = vista.clientHeight;
+    listaAlvos.forEach(([b, p]) => {
+      const q = m.projetar(p);
+      if (q.atras || Math.abs(q.x) > 1.05 || Math.abs(q.y) > 1.05) { b.style.display = 'none'; return; }
+      b.style.display = ''; b.style.left = ((q.x + 1) / 2 * W) + 'px'; b.style.top = ((1 - q.y) / 2 * H) + 'px';
+    });
+  }
+  function verDeFora(piso) {
+    const m = M(), de = !ecra.hidden && atual ? porId[atual] : null;
+    if (de && m) { m.pausar(false); m.colocar(de.p3, frente(de, de.olhar + yaw / RAD)); }
+    sair360();
+    mapa(piso); lista(); criarAlvos();
+    alvos.hidden = dica.hidden = !m;
+    if (!m) return;                     // the model is still loading: "modelo-pronto" comes back here
+    m.aplicarAspeto('realista');
+    m.cortarAte(piso);
+    m.aCadaFrame = colocarAlvos;
+    m.voarPara(m.vistaDeFora(V.filter((v) => v.piso === piso).map((v) => v.p3)), de ? 1300 : 900);
+  }
+  async function entrar(id) {
+    const v = porId[id]; if (!v) return;
+    if (modo !== 'visita') definirModo('visita', false);
+    if (!ecra.hidden) return abrir(id, false);
+    alvos.hidden = true; dica.hidden = true;
+    carregar(id);                        // decode while the camera flies in
+    const m = M();
+    if (m) { m.aplicarAspeto('realista'); m.cortarAte(v.piso); await m.voarPara({ c: v.p3, a: frente(v, v.olhar) }, 1100); }
+    ecra.style.opacity = '0'; ecra.hidden = false; atual = null;
+    await abrir(id, false);
+    ecra.style.opacity = '1';
+    if (m) setTimeout(() => { if (!ecra.hidden) m.pausar(true); }, 400);   // the 3D rests behind the panorama
+  }
+  function sair360() {
+    if (ecra.hidden) return;
+    ecra.hidden = true; ecra.style.opacity = '0';
+    if (M()) M().pausar(false);
+  }
+  document.getElementById('b360fora').addEventListener('click', (e) => { e.stopPropagation(); verDeFora(porId[atual].piso); });
+  addEventListener('modelo-pronto', () => {
+    if (modo !== 'visita') return;
+    if (ecra.hidden) verDeFora(pisoMapa); else { M().cortarAte(porId[atual].piso); M().pausar(true); }
+  });
 
   // dragging, pinch and wheel
   const toques = new Map();
@@ -626,14 +709,11 @@ __PANOS__
   ecra.tabIndex = 0;
   document.getElementById('b360ecra').addEventListener('click', (e) => {
     e.stopPropagation();
-    if (document.fullscreenElement) document.exitFullscreen(); else if (ecra.requestFullscreen) ecra.requestFullscreen();
+    if (document.fullscreenElement) document.exitFullscreen(); else if (vista.requestFullscreen) vista.requestFullscreen();
   });
   document.addEventListener('fullscreenchange', () => requestAnimationFrame(desenhar));
   addEventListener('resize', desenhar);
-  // open when the tour comes into view (the panoramas are large: decode only then)
-  const io = new IntersectionObserver((es) => { if (es.some((x) => x.isIntersecting)) { io.disconnect(); abrir(V[0].id, false); } }, { rootMargin: '300px' });
-  io.observe(ecra);
-  window.__abrirVisita = abrir;
+  window.__visita = { entrar, verDeFora, definirModo };
 })();
 </script>
 <script type="module">
@@ -858,7 +938,36 @@ async function iniciar(L, D) {
     bv.querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', +b.dataset.i === i));
   }
   bv.addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) irPara(+b.dataset.i); });
-  renderer.domElement.addEventListener('pointerdown', () => (alvoCam = null));
+  renderer.domElement.addEventListener('pointerdown', () => { alvoCam = null; if (voo) { voo.ok(); voo = null; } });
+
+  // for the 360 tour: cut the storeys, fly the camera, project the points
+  let voo = null, pausado = false;
+  const API = { aCadaFrame: null };
+  const V3 = (p) => new THREE.Vector3(...p);
+  API.cortarAte = (piso) => {
+    const k = ORDEM.indexOf(piso);
+    ORDEM.forEach((o, j) => { if (cx(o)) cx(o).checked = o !== 'cobertura' && j <= k; });
+    ['envolvente', 'terreno'].forEach((o) => { if (cx(o)) cx(o).checked = true; });
+    sincronizar();
+  };
+  API.mostrarTudo = () => { painel.querySelectorAll('input').forEach((i) => (i.checked = true)); sincronizar(); };
+  API.colocar = (c, a) => { voo = null; alvoCam = null; camara.position.copy(V3(c)); controlos.target.copy(V3(a)); camara.lookAt(controlos.target); };
+  API.voarPara = (v, ms = 900) => new Promise((ok) => {
+    if (voo) voo.ok();
+    controlos.autoRotate = false; alvoCam = null;
+    voo = { c0: camara.position.clone(), a0: controlos.target.clone(), c1: V3(v.c), a1: V3(v.a), t0: performance.now(), ms, ok };
+  });
+  API.vistaDeFora = (pts) => {
+    const b = new THREE.Box3(); pts.forEach((p) => b.expandByPoint(V3(p)));
+    const a = b.getCenter(new THREE.Vector3()); a.y -= 1.45;
+    const sz = b.getSize(new THREE.Vector3()), span = Math.max(sz.x, sz.z, 6);
+    const d = VIS[0].c.clone().sub(VIS[0].a); d.y = 0; d.normalize();
+    const L = (span * 1.25 + 6) * Math.max(1, Math.pow(1.5 / camara.aspect, 0.7));
+    return { c: a.clone().addScaledVector(d, L * 0.75).add(new THREE.Vector3(0, L * 0.85, 0)).toArray(), a: a.toArray() };
+  };
+  const proj = new THREE.Vector3();
+  API.projetar = (p) => { proj.set(...p).project(camara); return { x: proj.x, y: proj.y, atras: proj.z > 1 }; };
+  API.pausar = (s) => { pausado = s; };
 
   // size and loop
   function tamanho() {
@@ -885,21 +994,30 @@ async function iniciar(L, D) {
   const seta = document.getElementById('seta');
   const tmp = new THREE.Vector3();
   renderer.setAnimationLoop(() => {
-    if (alvoCam) {
+    if (pausado) return;
+    if (voo) {                              // a flight of the tour: eased, the camera looking where it goes
+      const t = Math.min(1, (performance.now() - voo.t0) / voo.ms), k = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+      camara.position.lerpVectors(voo.c0, voo.c1, k);
+      controlos.target.lerpVectors(voo.a0, voo.a1, k);
+      camara.lookAt(controlos.target);
+      if (t >= 1) { const f = voo.ok; voo = null; f(); }
+    } else if (alvoCam) {
       alvoCam.t = Math.min(1, alvoCam.t + 0.06);
       const k = 1 - Math.pow(1 - alvoCam.t, 3);
       camara.position.lerp(alvoCam.c, k * 0.35 + 0.02);
       controlos.target.lerp(alvoCam.a, k * 0.35 + 0.02);
       if (camara.position.distanceTo(alvoCam.c) < 0.05) alvoCam = null;
     }
-    controlos.update();
+    if (!voo) controlos.update();
     if (domo) domo.position.copy(camara.position);
     camara.getWorldDirection(tmp);
     seta.style.transform = `rotate(${-Math.atan2(tmp.x, -tmp.z)}rad)`;   // where north is on the screen
     if (usarAO) composer.render(); else renderer.render(cena, camara);
+    if (API.aCadaFrame) API.aCadaFrame();
   });
-  window.__modelo = { cena, camara, controlos, irPara, aplicarAspeto, malhas };
+  window.__modelo = Object.assign(API, { cena, camara, controlos, irPara, aplicarAspeto, malhas });
   window.__pronto = true;
+  dispatchEvent(new Event('modelo-pronto'));
 }
 </script>
 </body>

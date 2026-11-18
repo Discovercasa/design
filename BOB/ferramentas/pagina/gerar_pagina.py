@@ -12,7 +12,8 @@ pagina.json: {"titulo", "subtitulo", "modelo": "<folder with casa.glb and render
               "imagens": [{"vista", "titulo"}], "acabamentos": [{"parte", "texto", "cor"}], "ficha": [[k, v], ...],
               optional: "renders" (folder of the images and panoramas, default "modelo"),
               "fecho": {"titulo", "texto", "botao", "link"}, "legal", "camadas_ext": [...], "porque": [...]}
-The tour (casa.json "visita": points with camara, olhar, liga) shows render_pano_<id>.jpg; the plans are drawn from
+The tour (casa.json "visita": points with camara, olhar, liga) shows render_pano_<id>.jpg, as a mode of the 3D viewer
+(the house from outside, a circle per point, fly in, walk panorama to panorama); the plans are drawn from
 casa.json (storey volumes, rooms, openings, stairs, the furniture's footprints, "divisoes" for names and areas).
 """
 import base64
@@ -182,7 +183,7 @@ def gerar(pagina, saida):
         dados["ajuste"] = P["ajuste"]
     visita = [v for v in C.get("visita", []) if (renders / f"render_pano_{v['id']}.jpg").exists()]
     ids = {v["id"] for v in visita}
-    dados["visita"] = [{**v, "liga": [o for o in v.get("liga", []) if o in ids]} for v in visita]
+    dados["visita"] = [{**v, "p3": tres(v["camara"]), "liga": [o for o in v.get("liga", []) if o in ids]} for v in visita]
     dados["planta"] = _planta(C, P["pisos"])
     panos = "\n".join(f'<script type="text/plain" id="pano-{v["id"]}">'
                        + base64.b64encode((renders / f"render_pano_{v['id']}.jpg").read_bytes()).decode("ascii")

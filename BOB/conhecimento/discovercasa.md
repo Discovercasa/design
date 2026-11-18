@@ -89,6 +89,10 @@ Why Claude learns the method; "vamos passo a passo" — an overall idea, then an
    (furniture, stairs, doors, skirting, downlights, lamps as Cycles lights, kitchen, fireplace, bathrooms, plants,
    pictures), 360° tour with minimap, plans per storey with furniture, «Como construímos»; Ribamar furniture follows the
    architect's DXF furniture layers, other rooms are DiscoverCasa's proposal.
+   **The tour is a mode of the 3D viewer (2026-11-18):** "o tour deve ser um modo que o cliente seleciona e de fora do
+   modelo consegue anda de ponto em ponto" / "consegue clicar e entrar no panorama e depois anda de panorama em
+   panorama" — «Visita 360°» shows the house from outside (roof and upper storeys cut), a circle per point; tap → fly in
+   → panorama → walk point to point → «Ver de fora». No separate tour section.
    **Real exterior always (2026-11-13):** "o exterior não deve estar só presente na tour 360 mas sim sempre em todos os
    projetos a não ser que seja mencionado que não queremos" — the surroundings are in the 3D, the images and the tour
    of every house unless told otherwise. Render stations: any PC (first the home PC, RTX 2060 6 GB — user confirmed,
