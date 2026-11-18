@@ -73,6 +73,9 @@ wants this work on that PC (2026-11-13), which implies it may hold client files 
   «podes correr os renders no PC de casa na RTX2060» → full pages render on this station, driven over SSH from the
   office session (tools from `git pull`, the house's casa*.json copied by scp into `D:\BOB-posto\<obra>\`, results
   copied back; the client data stays local, never in Git). The office GTX 1050 Ti is for quick previews.
+- **CC0 assets (user 2026-11-18: «Sim, podes»):** photo textures and models from Poly Haven (public domain), fetched by
+  `ferramentas/pagina/descarregar_ativos.py` (manifest with source, licence, size) into `_trabalho/assets/polyhaven`
+  (office) and copied to `D:\BOB-posto\assets` (station); renders run with `--ativos D:\BOB-posto\assets`. Never in Git.
 - **Following from elsewhere (optional, ask first):** Remote Control in the Claude app (phone, office); later SSH
   (OpenSSH + a VPN such as Tailscale) so an office session can start jobs there.
 - **Memory:** a session there does not see the office conversations; the shared memory is the repo (`BOB/CLAUDE.md`,

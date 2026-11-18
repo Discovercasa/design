@@ -202,7 +202,7 @@ he answers (`metodo-construtivo.md`). Condensed 2026-10-28 (history in git).
 - **2026-11-18** — Client pages look "modelled" mainly because every texture, piece of furniture and tree is generated
   by code; photo-scanned CC0 textures (wood, fabric, plaster, grass) and CC0 furniture/plant/tree models (Poly Haven,
   ambientCG: public domain, commercial use free) are the big step to photo-real interiors and a more real 3D — **told**,
-  waiting for the go-ahead to download. Also told: a browser 3D (real-time) never equals the Cycles images; the images
+  **accepted** («Sim, podes»), in use (`ativos.py`). Also told: a browser 3D (real-time) never equals the Cycles images; the images
   and the 360° tour carry the realism, the 3D carries the space.
 - **2026-11-18** — the office GTX 1050 Ti (CUDA) makes a full client page (11 images 2560x1600 + 11 panoramas 4096x2048) an overnight job (about 8 h); the home RTX 2060 with OptiX would be several times faster → run full pages on the home station once the user agrees; keep the office for tests. The 50 MB limit of the hub's «documentos» bucket is not a problem: a 2048 px panorama is ~160 KB as JPEG, a 4096 px one ~0.6 MB, so 11 of them add ~7 MB. Status: not yet told.
 - **2026-11-11** — the plan readers depend on drawing colours (red walls, blue glazing, magenta swings) and on

@@ -13,6 +13,8 @@ secretaria, cadeira_escritorio, estante, sanita, lavatorio, duche, espelho, plan
 espreguicadeira, mesa_exterior, cadeira_exterior, aparador.
 Every piece is built from bevelled boxes, cylinders and spheres (real geometry: the web model gets it too); lights are
 real Cycles lights (warm white), switched on in the renders. Sizes default to common furniture sizes.
+With the CC0 assets (ativos.py) the woods and fabrics get photo textures, and plants, vases, the armchair, the round
+coffee table, the sideboard and the pendant lamps are real models (Poly Haven); without them, the procedural ones.
 """
 import math
 
@@ -102,6 +104,30 @@ def materiais():
     _mat("exterior_tecido", "#d8d2c4", 0.95, sheen=0.4)
     for i, c in enumerate(("#7d5a44", "#3f5268", "#a7a08f", "#6b3a33", "#d9cfbd", "#2f3a33", "#c29b5d")):
         _mat(f"livro{i}", c, 0.7)
+    A = ctx.get("ativos")
+    if not A:
+        return
+    # CC0 photo textures in our colours: (asset, colour, normal strength, size factor, extra)
+    for nome, (aid, cor, forca, esc, extra) in {
+            "carvalho": ("oak_veneer_01", "#c09a6e", 0.4, 1.0, {"coat": 0.1}),
+            "nogueira": ("wood_table_001", "#5e4330", 0.4, 1.0, {"coat": 0.2}),
+            "bancada": ("marble_01", "#e9e6e1", 0.3, 1.0, {"rug": 0.15, "coat": 0.3}),
+            "microcimento": ("concrete_floor_02", "#9d978d", 0.4, 0.5, {}),
+            "tecido": ("rough_linen", "#b9b1a4", 0.8, 1.0, {"sheen": 0.6}),
+            "tecido_escuro": ("rough_linen", "#58534d", 0.8, 1.0, {"sheen": 0.6}),
+            "almofada": ("velour_velvet", "#d9cbb3", 0.6, 1.0, {"sheen": 0.8}),
+            "almofada2": ("velour_velvet", "#8a6f57", 0.6, 1.0, {"sheen": 0.8}),
+            "roupa": ("rough_linen", "#f3f1ec", 0.6, 1.0, {"sheen": 0.5}),
+            "manta": ("velour_velvet", "#a98f72", 0.8, 1.0, {"sheen": 0.8}),
+            "la": ("rough_linen", "#cfc4b3", 1.0, 2.5, {"sheen": 0.4}),
+            "la_escura": ("rough_linen", "#6c6359", 1.0, 2.5, {"sheen": 0.4}),
+            "exterior_tecido": ("rough_linen", "#d8d2c4", 0.8, 1.0, {"sheen": 0.4}),
+    }.items():
+        if A.tem(aid):
+            m = A.material("int_" + nome, aid, cor=cor, forca=forca, **extra)
+            if m:
+                M[nome] = m
+                ctx["TILE"]["int_" + nome] = A.tamanho_m(aid) * esc
 
 
 # ------------------------------------------------------------------------------------------------ the piece builder
@@ -216,6 +242,20 @@ class Peca:
         LUZES.append(ob)
         return ob
 
+    def modelo(self, aid, x=0.0, y=0.0, z=0.0, rot=0.0, alt=None, larg=None, esc=None, sem_sombra=False):
+        """A CC0 model (ativos.py) at (x, y, z) of the piece, its front to +y turned by rot; scaled to alt (height) or
+        esc (uniform), larg stretches the width only. None when the asset is not there (the caller builds its own)."""
+        A = ctx.get("ativos")
+        P = A.prototipo(aid) if A and A.tem(aid) else None
+        if P is None:
+            return None
+        s = esc or (alt / P["dim"].z if alt else 1.0)
+        sx = larg / P["dim"].x if larg else s
+        S = Matrix.Diagonal((sx, s, s, 1.0))
+        R = Matrix.Rotation(math.radians(rot), 4, "Z")
+        return A.colocar(aid, self.T @ Matrix.Translation((x, y, z)) @ R @ S, self.grupo, ctx["ligar"], self.nome,
+                         sem_sombra=sem_sombra)
+
     def fim(self):
         obs = []
         for mat, bm in self.bms.items():
@@ -251,6 +291,8 @@ def sofa(p, d):
 
 
 def maple(p, d):
+    if p.modelo(d.get("modelo", "modern_arm_chair_01")):
+        return
     tec = d.get("mat", "tecido_escuro")
     for sx in (-1, 1):
         for sy in (-1, 1):
@@ -265,6 +307,12 @@ def maple(p, d):
 
 def mesa_centro(p, d):
     L, P, h = d.get("larg", 1.1), d.get("prof", 0.6), d.get("alt", 0.38)
+    s = min(1.0, max(L * 0.82, P * 1.5) / 1.3)               # the round table (1.30 m) as wide as the piece allows
+    if p.modelo("coffee_table_round_01", esc=s):
+        h = 0.49 * s
+        livros(p, {"n": 3, "deitados": True}, (-0.18 * s, 0.0, h))
+        jarra(p, {"alt": 0.22}, (0.22 * s, 0.08, h))
+        return
     p.caixa("carvalho", -L / 2, -P / 2, h - 0.04, L / 2, P / 2, h, 0.008)
     p.caixa("carvalho", -L / 2 + 0.06, -P / 2 + 0.06, 0.0, L / 2 - 0.06, P / 2 - 0.06, 0.1, 0.008)
     for sx in (-1, 1):
@@ -323,6 +371,16 @@ def tapete(p, d):
 def pendente(p, d):
     h = d.get("teto", 2.94) - d.get("z", 0.0)
     zb = d.get("altura", 1.65)
+    A = ctx.get("ativos")
+    if A and A.tem("modern_ceiling_lamp_01"):           # the glass globe lamp: lit from inside, its cord to the ceiling
+        for dx in d.get("lampadas", [0.0]):
+            obs = p.modelo("modern_ceiling_lamp_01", dx, 0, zb, sem_sombra=True)
+            topo = zb + A.prototipo("modern_ceiling_lamp_01")["dim"].z
+            if obs and topo < h - 0.01:
+                p.tubo("metal_preto", (dx, 0, h), (dx, 0, topo), 0.003, 6)
+            p.luz("POINT", dx, 0, zb + 0.2, d.get("potencia", 45), 0.08)
+        p.cil("metal_preto", 0, 0, h - 0.015, h, 0.05)
+        return
     for k, dx in enumerate(d.get("lampadas", [0.0])):
         p.tubo("metal_preto", (dx, 0, h), (dx, 0, zb + 0.22), 0.003, 6)
         p.cil(d.get("mat", "latao"), dx, 0, zb, zb + 0.22, d.get("raio", 0.2), 0.04, 32, tampa=False)
@@ -513,9 +571,15 @@ def livros(p, d, o=(0, 0, 0)):
         xx += t + 0.002
 
 
+JARRAS = ["ceramic_vase_01", "ceramic_vase_04", "ceramic_vase_02"]
+
+
 def jarra(p, d, o=(0, 0, 0)):
     x, y, z = o
     h = d.get("alt", 0.25)
+    aid = JARRAS[int(ctx["RNG"].integers(0, len(JARRAS)))]
+    if p.modelo(aid, x, y, z, rot=float(ctx["RNG"].uniform(0, 360)), alt=h * 1.3):
+        return
     p.cil(d.get("mat", "vaso"), x, y, z, z + h * 0.7, 0.06 * h / 0.25, 0.09 * h / 0.25, 24)
     p.cil(d.get("mat", "vaso"), x, y, z + h * 0.7, z + h, 0.09 * h / 0.25, 0.04 * h / 0.25, 24)
 
@@ -524,6 +588,9 @@ def planta(p, d, o=(0, 0, 0)):
     """A potted plant: a pot and leaves (curved blades) fanning out of it."""
     x, y, z = o
     h = d.get("alt", 1.2)
+    aid = "potted_plant_02" if h >= 0.6 else "potted_plant_04"     # leafy plant in a clay pot / succulent
+    if p.modelo(aid, x, y, z, rot=float(ctx["RNG"].uniform(0, 360)), alt=min(h, 0.97 if h >= 0.6 else 0.45)):
+        return
     rv = 0.11 + h * 0.08
     p.cil(d.get("vaso", "vaso_escuro"), x, y, z, z + rv * 1.6, rv * 0.8, rv, 24)
     p.cil("terra", x, y, z + rv * 1.5, z + rv * 1.55, rv * 0.95, seg=24)
@@ -604,6 +671,10 @@ def espelho(p, d):
 
 def aparador(p, d):
     L, P, h = d.get("larg", 1.6), d.get("prof", 0.42), d.get("alt", 0.75)
+    if p.modelo("modern_wooden_cabinet", 0, -P + 0.26, 0, larg=L):   # slatted sideboard 0,52 deep, back on the wall (y = -P)
+        jarra(p, {"alt": 0.35}, (-L / 4, -P + 0.26, 0.68))
+        livros(p, {"n": 3, "deitados": True}, (L / 4, -P + 0.26, 0.68))
+        return
     p.caixa("nogueira", -L / 2, -P, 0.12, L / 2, 0.0, h, 0.008)
     for sx in (-1, 1):
         p.tubo("metal_preto", (sx * (L / 2 - 0.08), -P / 2, 0), (sx * (L / 2 - 0.08), -P / 2, 0.12), 0.015)

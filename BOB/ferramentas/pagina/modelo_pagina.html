@@ -803,6 +803,8 @@ async function iniciar(L, D) {
         M.realLuz = new THREE.MeshBasicMaterial({ map: real.map || null, color: real.color ? real.color.clone() : 0xffffff, lightMap: lm.t, lightMapIntensity: lm.I });
         if (/relva|berma/.test(nm)) M.realLuz.color.multiply(new THREE.Color(...RELVA));   // the grass of the images is longer and greener than its texture
         M.maqLuz = new THREE.MeshBasicMaterial({ color: corMaq(nm), lightMap: lm.t, lightMapIntensity: lm.I });
+      } else if (CASA.has(o.userData.g) && real.isMeshStandardMaterial) {
+        real.envMapIntensity = 0.5;       // the plants (not baked) inside the house: less of the open sky's light
       }
     }
     o.userData.M = M;

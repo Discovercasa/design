@@ -698,3 +698,13 @@ The team's notes on hub task 84 (written in the hub by [membro da equipa] on 202
 - (8) Decided: no «Como construímos» and no closing «Próximo passo» on any client page (template and generator).
 - (5)/(6) Realism: textures, furniture and trees are made by code (procedural), which reads as "modelled"; lightmaps raised to 4096. Asked the user to allow CC0 (public-domain) textures and models from Poly Haven / ambientCG (pending).
 - Filed: `conhecimento/discovercasa.md` (client page), `conhecimento/sistema-construtivo.md` (Tremolo look), `conhecimento/insights.md`.
+
+### 2026-11-18 (night) — CC0 textures and models allowed [Builder, stations]
+> Sim, podes
+- Answer to «Posso descarregar texturas e modelos CC0 da Poly Haven e da ambientCG?». Done: 14 photo textures (Tremolo
+  from japanese_cedar_planks at 135 mm boards in #93552f, oak floor, deck, plaster, concrete, linen, velvet, lawn, gravel,
+  asphalt, marble tiles, marble worktop, oak and walnut veneers) and 10 models (globe pendant, two armchairs, two potted
+  plants, three ceramic vases, slatted sideboard, round coffee table) from Poly Haven; no modern beds, kitchens or
+  bathroom fittings exist there, so those stay procedural with the photo textures. No invented garden trees in the
+  renders either (the drawings have none). Tools: `ferramentas/pagina/ativos.py`, `descarregar_ativos.py`
+  (`casa_blender.py --ativos`). Assets never in Git. Filed: `conhecimento/posto-render.md`, `insights.md` (status).

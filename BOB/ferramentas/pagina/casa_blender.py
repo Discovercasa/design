@@ -3,6 +3,8 @@
     blender -b --factory-startup -P ferramentas/pagina/casa_blender.py -- <casa.json> <saida/> [--render v1,v2|todas]
                                   [--amostras 160] [--res 1600x1000] [--sem-glb] [--previa] [--sem-relva]
                                   [--limiar 0.03] (adaptive sampling noise threshold: lower = cleaner, slower)
+  --ativos <pasta>: CC0 photo textures and models (Poly Haven, ativos.py; default BOB/_trabalho/assets/polyhaven when
+  it exists; without it everything stays procedural)
   (--previa: half size; ~50 s per view on a GTX 1050 Ti at 32 samples. The first Cycles run compiles the GPU kernels.)
   --luz [--amostras_luz 200]: for the web model, bake the Cycles light (direct + bounced, diffuse) into lightmaps
   lm_casa/lm_exterior/lm_terreno.jpg (second UV 'lm' = TEXCOORD_1, K per map in luz.json), the sky as an equirect
@@ -68,6 +70,11 @@ cena.collection.objects.link(RAIZ)
 CORTADORES = bpy.data.collections.new("cortadores")
 cena.collection.children.link(CORTADORES)
 RNG = np.random.default_rng(7)
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import ativos  # noqa: E402
+_pasta_ativos = OPC.get("ativos") or os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..",
+                                                                     "_trabalho", "assets", "polyhaven"))
+COM_ATIVOS = ativos.iniciar(_pasta_ativos if os.path.isdir(_pasta_ativos) else None, SAIDA)
 
 
 # ---------------------------------------------------------------------------------------------- textures (numpy)
@@ -287,13 +294,35 @@ def mat_vidro(nome, rug=0.0, cor=(0.92, 0.96, 0.95)):
     return m
 
 
+# material -> (CC0 asset, normal strength, size factor, extra) — the Tremolo: 135 mm boards from the cedar's ~80 mm
+FOTO = {"ripado": ("japanese_cedar_planks", 1.0, 1.67, {"contraste": 0.7, "rug_mult": 0.8}),
+        "soalho": ("oak_wood_planks", 0.6, 1.0, {}),
+        "deck": ("wood_floor_deck", 1.0, 1.0, {}),
+        "betao": ("concrete_floor_02", 0.6, 1.0, {}),
+        "relva": ("leafy_grass", 0.8, 1.0, {}), "relva_fora": ("leafy_grass", 0.8, 1.0, {}),
+        "berma": ("leafy_grass", 0.8, 1.0, {}),
+        "brita": ("gravel_floor_02", 1.0, 1.0, {}), "asfalto": ("asphalt_02", 0.8, 1.0, {}),
+        "pedra": ("marble_tiles", 0.5, 0.6, {})}
+
+
 def criar_materiais():
     T = gerar_texturas()
     for nome, (c, nrm, rug) in T.items():
         MATS[nome] = mat_textura(nome, c, nrm, rug, metal=0.25 if nome == "painel" else 0.0)
     MATS["interior"] = mat_simples("interior", COR["interior"], 0.85)
+    if COM_ATIVOS and ativos.tem("painted_plaster_wall"):
+        MATS["interior"] = ativos.material("interior", "painted_plaster_wall", cor=COR["interior"], forca=0.25,
+                                           rug=0.85, contraste=0.5)
+        TILE["interior"] = 2.0
     MATS["metal"] = mat_simples("metal", COR["metal"], 0.38, 0.6)
     MATS["tecido"] = mat_simples("tecido", COR["tecido"], 0.95)
+    # CC0 photo textures (ativos.py): the photo's detail in the house's colours; TILE = the photo's real size
+    for nome, (aid, forca, esc, extra) in FOTO.items():
+        if COM_ATIVOS and ativos.tem(aid):
+            m = ativos.material(nome, aid, cor=COR.get(nome), forca=forca, **extra)
+            if m:
+                MATS[nome] = m
+                TILE[nome] = ativos.tamanho_m(aid) * esc
     MATS["vidro"] = mat_vidro("vidro")
     MATS["vidro_guarda"] = mat_vidro("vidro_guarda", 0.12, (0.95, 0.97, 0.97))
     MATS["forro"] = MATS["ripado"]
@@ -1090,7 +1119,7 @@ def gravar_luz(amostras=128):
     grupos = {
         "casa": [o for o in meshes if o.get("grupo") in ("cave", "piso0", "piso1", "cobertura") and not vidro(o)
                  and not o.get("suave")],
-        "mobilia": [o for o in meshes if o.get("suave") and not vidro(o)],      # the interior (interior.py)
+        "mobilia": [o for o in meshes if o.get("suave") and not vidro(o) and not o.get("pesado")],   # interior.py
         "exterior": [o for o in meshes if o.name.startswith(("muro", "piso_livre", "faixa"))],
         "terreno": [o for o in meshes if o.name == "terreno"],
     }
@@ -1835,13 +1864,14 @@ construir_extras()
 if E.get("interior"):
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
     import interior  # noqa: E402
-    interior.construir(E, {"MATS": MATS, "ligar": ligar, "RNG": RNG, "RAIZ": RAIZ})
+    interior.construir(E, {"MATS": MATS, "ligar": ligar, "RNG": RNG, "RAIZ": RAIZ, "TILE": TILE,
+                           "ativos": ativos if COM_ATIVOS else None})
 terreno = construir_terreno()
 construir_arvores()
 RAIZ.rotation_euler = (0, 0, math.radians(E.get("rodar_graus", 0.0)))
 bpy.context.view_layer.update()
 for ob in cena.objects:
-    if ob.type == "MESH":
+    if ob.type == "MESH" and not ob.get("ativo"):
         uvs_mundo(ob)
         if ob.name != "terreno" and not ob.get("suave"):
             for p in ob.data.polygons:
@@ -1860,10 +1890,21 @@ if not OPC.get("sem-glb"):
     for img in bpy.data.images:
         if img.size[0] > 512 and not img.name.startswith(("lm_", "folha")):
             img.scale(512, 512)
+    dec = []
+    for ob in cena.objects:
+        if ob.get("pesado") and ob.data.users and ob.data not in dec:
+            dec.append(ob.data)
+    for ob in cena.objects:              # plants: ~15 % of the triangles in the web copy (the renders keep them all)
+        if ob.get("pesado"):
+            md = ob.modifiers.new("web", "DECIMATE")
+            md.ratio = 0.15
     bpy.ops.object.select_all(action="DESELECT")
     bpy.ops.export_scene.gltf(filepath=os.path.join(SAIDA, "casa.glb"), export_format="GLB", export_extras=True,
                               export_apply=True, export_image_format="JPEG", export_jpeg_quality=82,
                               export_cameras=False, export_lights=False, use_visible=True)
+    for ob in cena.objects:
+        if ob.get("pesado") and ob.modifiers.get("web"):
+            ob.modifiers.remove(ob.modifiers["web"])
     for img in bpy.data.images:          # back to full size for Cycles
         if img.filepath_raw:
             img.reload()
