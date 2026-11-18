@@ -59,6 +59,15 @@ wants this work on that PC (2026-11-13), which implies it may hold client files 
 ## Working on it
 - **Phase 1 (now):** the heavy jobs run in a Claude session on that PC (repo + tools there). Client files come from
   the hub's private storage by the one-time-key route, or the user copies them.
+- **Driven from the office session (user 2026-11-18, set up the same day):** «eu quero poder trabalhar nesta sessão e
+  fazer tudo nesta sessão mas os renders funcionarem no PC de casa» — the Claude session on the company account (office
+  PC) does all the thinking; the home PC only executes, its own Claude app is not used. Link: Tailscale on both PCs
+  (same tailnet) + Windows OpenSSH Server on the home PC, key-only (password login off), firewall open only to the
+  Tailscale range 100.64.0.0/10. The office PC reaches it as `ssh posto-casa` (alias in `~/.ssh/config` there; key
+  `id_ed25519_postocasa`). Working folder on the home PC: `D:\BOB-posto\`. Test 2026-11-18: Blender 5.2.2 over SSH
+  renders with OptiX on the RTX 2060 (960×540, 128 samples, 2.6 s). GUI jobs (Unreal editor) must run in the user's
+  logged-in desktop (a scheduled task started over SSH), not in the SSH session. To cut access: Tailscale off on the
+  home PC, or delete the `bob-escritorio` line in `C:\ProgramData\sshdministrators_authorized_keys`.
 - **Following from elsewhere (optional, ask first):** Remote Control in the Claude app (phone, office); later SSH
   (OpenSSH + a VPN such as Tailscale) so an office session can start jobs there.
 - **Memory:** a session there does not see the office conversations; the shared memory is the repo (`BOB/CLAUDE.md`,

@@ -647,3 +647,5 @@ The team's notes on hub task 84 (written in the hub by [membro da equipa] on 202
 > mas eu não quero dar logout daquela conta simplesmente enviar informação ou fazer tudo neste chat e depois comunicar de forma ao outro pc trabalhar no que for preciso
 - Rule (user): the work is driven from the office session (company account); the home PC only executes, its Claude app stays on the user's own account.
 - Proposed: SSH from the office PC to the home PC over a private VPN (Tailscale), key-only; GUI jobs (Unreal editor) launched in the user's logged-in desktop via a scheduled task; files back by scp. Waiting for the user's go-ahead (installs on both PCs).
+> eu quero poder trabalhar nesta sessão e fazer tudo nesta sessão mas os renders funcionarem no PC de casa
+- Done: Tailscale on both PCs (the office PC approved by link from the home PC; Google passkey sign-in failed without Bluetooth), OpenSSH Server key-only on the home PC; test render over SSH with OptiX on the RTX 2060 OK. Filed in `posto-render.md`.
