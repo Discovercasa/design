@@ -6,14 +6,15 @@
   "descricao": "Assim que um cliente tem o projeto de arquitetura, a casa fica pronta no Builder: lê as plantas (DWFx ou PDF), monta a estrutura de madeira em módulos sobre a fundação de betão, acrescenta as camadas (OSB, membrana, isolamento, acabamentos, cobertura) e tira as quantidades. É aqui que vive o livro de regras do método Discovercasa.",
   "fase": "Em desenvolvimento",
   "situacao": {
-    "dia": "2026-11-11",
+    "dia": "2026-11-18",
     "feito": [
       "Torres Vedras modelada a partir da arquitetura.",
       "Verificação das madeiras sem Blender (choques, peças fora do sítio).",
-      "Primeira página 3D do cliente num só ficheiro HTML: Casa Ribamar, feita a partir do DWG (convertido em DXF), com pisos, cobertura, terreno, aspeto Maquete/Realista e quadro de áreas."
+      "Primeira página 3D do cliente num só ficheiro HTML: Casa Ribamar, feita a partir do DWG (convertido em DXF), com pisos, cobertura, terreno, aspeto Maquete/Realista e quadro de áreas.",
+      "Página da Casa Ribamar completa para os testes finais (aba Páginas, 18/11): casa mobilada, visita 360° com 11 pontos como modo do 3D (a casa vista de fora, entrar num ponto e andar de divisão em divisão), 10 imagens e panoramas na qualidade máxima feitos no PC de casa (RTX 2060), plantas por piso, Como construímos."
     ],
     "agora": [
-      "Páginas dos clientes (aba Páginas, 12/11): a página de Ribamar já está lá (imagens ultra-realistas e o 3D com a luz das imagens). A seguir: a estrutura da página com os pormenores do Dinis (tarefa marcada), depois a aplicação no hub que gera a página a partir dos desenhos.",
+      "Testes finais da página de Ribamar (tarefas «Página do cliente num ficheiro HTML» e «Visita virtual 360°» à espera de aprovação). A seguir: a aplicação no hub que gera a página a partir dos desenhos e a leitura de qualquer planta.",
       "Corrigir defeitos geométricos conhecidos: anel de amarração, prumos em pares, módulos interiores.",
       "Validar com os materiais realmente gastos em Torres Vedras."
     ],
@@ -37,9 +38,19 @@
   "metodo": "É a autoridade do método construtivo Discovercasa: os outros projetos usam-no quando precisam desse método, mas não dependem dele para funcionar. No futuro outros métodos entram como pacotes à parte.",
   "app": null,
   "paginas": true,
-  "organizacao": { "codigo": "BOB/ferramentas/modelo/ e BOB/conhecimento/", "publicado": "ainda sem página própria", "ramo": "builder/<tarefa>" },
+  "organizacao": {
+    "codigo": "BOB/ferramentas/modelo/ e BOB/conhecimento/",
+    "publicado": "ainda sem página própria",
+    "ramo": "builder/<tarefa>"
+  },
   "ligacoes": [
-    { "com": "gerador", "texto": "O Gerador usa o motor do Builder para tirar Módulos, Cobertura e Listagem de material." },
-    { "com": "plataforma_cliente", "texto": "Opcional: nas obras Discovercasa o Step Inside pode partir do modelo do Builder (detalhe construtivo); não depende dele." }
+    {
+      "com": "gerador",
+      "texto": "O Gerador usa o motor do Builder para tirar Módulos, Cobertura e Listagem de material."
+    },
+    {
+      "com": "plataforma_cliente",
+      "texto": "Opcional: nas obras Discovercasa o Step Inside pode partir do modelo do Builder (detalhe construtivo); não depende dele."
+    }
   ]
 }
