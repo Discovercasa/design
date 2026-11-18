@@ -67,7 +67,7 @@ wants this work on that PC (2026-11-13), which implies it may hold client files 
   `id_ed25519_postocasa`). Working folder on the home PC: `D:\BOB-posto\`. Test 2026-11-18: Blender 5.2.2 over SSH
   renders with OptiX on the RTX 2060 (960×540, 128 samples, 2.6 s). GUI jobs (Unreal editor) must run in the user's
   logged-in desktop (a scheduled task started over SSH), not in the SSH session. To cut access: Tailscale off on the
-  home PC, or delete the `bob-escritorio` line in `C:\ProgramData\sshdministrators_authorized_keys`.
+  home PC, or delete the `bob-escritorio` line in `C:\ProgramData\ssh\administrators_authorized_keys`.
 - **Following from elsewhere (optional, ask first):** Remote Control in the Claude app (phone, office); later SSH
   (OpenSSH + a VPN such as Tailscale) so an office session can start jobs there.
 - **Memory:** a session there does not see the office conversations; the shared memory is the repo (`BOB/CLAUDE.md`,
