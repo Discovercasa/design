@@ -242,6 +242,125 @@ class Peca:
         LUZES.append(ob)
         return ob
 
+    # -------------------------------------------------------------------------------- soft shapes (upholstery, bedding)
+    def _soltar(self, mat, verts, faces, M=None):
+        """Faces from verts (piece frame, after M), duplicates merged, smooth shading."""
+        tmp = bmesh.new()
+        vs = [tmp.verts.new(M @ Vector(v) if M else v) for v in verts]
+        for f in faces:
+            q = [vs[i] for i in f]
+            if len(set(q)) == len(q):
+                try:
+                    tmp.faces.new(q)
+                except ValueError:
+                    pass
+        bmesh.ops.remove_doubles(tmp, verts=tmp.verts, dist=1e-5)
+        for f in tmp.faces:
+            f.smooth = True
+        self._juntar(self._bm(mat), tmp)
+
+    def macio(self, mat, cx, cy, cz, a, b, c, e1=0.45, e2=0.25, puff=0.0, eixo="z", inclinar=0.0, seg=(56, 28)):
+        """A soft upholstered volume: a superellipsoid of half sizes a (x), b (y), c (z); e1 rounds the profile, e2 the
+        plan (0 = box, 1 = ellipsoid). puff bulges the face toward +eixo (a cushion's filling); inclinar tilts it
+        about x (deg, + leans the top toward -y)."""
+        def sg(w, m, f):
+            v = f(w)
+            return math.copysign(abs(v) ** m, v)
+        nu, nv = seg
+        verts, faces = [], []
+        for j in range(nv + 1):
+            u = -math.pi / 2 + math.pi * j / nv
+            cu, su = sg(u, e1, math.cos), sg(u, e1, math.sin)
+            for i in range(nu):
+                v = -math.pi + 2 * math.pi * i / nu
+                x, y, z = a * cu * sg(v, e2, math.cos), b * cu * sg(v, e2, math.sin), c * su
+                if puff and eixo == "z" and z > 0:
+                    z += puff * max(0.0, 1 - (x / a) ** 2) * max(0.0, 1 - (y / b) ** 2) * (z / c)
+                elif puff and eixo == "y" and y > 0:
+                    y += puff * max(0.0, 1 - (x / a) ** 2) * max(0.0, 1 - (z / c) ** 2) * (y / b)
+                verts.append((x, y, z))
+        for j in range(nv):
+            for i in range(nu):
+                i2 = (i + 1) % nu
+                faces.append((j * nu + i, j * nu + i2, (j + 1) * nu + i2, (j + 1) * nu + i))
+        M = Matrix.Translation((cx, cy, cz)) @ Matrix.Rotation(math.radians(-inclinar), 4, "X")
+        self._soltar(mat, verts, faces, M)
+
+    def travesseiro(self, mat, cx, cy, cz, a, c, b, inclinar=0.0, n=26):
+        """A pillow standing up: 2a wide (x), 2c high (z), 2b thick in the middle (y), thin at the seam all round,
+        its sides drawn in a little; inclinar leans it back (deg, the top toward -y)."""
+        verts, faces = [], []
+        for lado in (1, -1):
+            base = len(verts)
+            for j in range(n + 1):
+                t = -1 + 2 * j / n
+                for i in range(n + 1):
+                    s_ = -1 + 2 * i / n
+                    th = b * max(0.0, (1 - abs(s_) ** 4) * (1 - abs(t) ** 4)) ** 0.55
+                    x = a * s_ * (1 - 0.07 * (1 - t * t))
+                    z = c * t * (1 - 0.07 * (1 - s_ * s_))
+                    verts.append((x, lado * th, z))
+            for j in range(n):
+                for i in range(n):
+                    q = (base + j * (n + 1) + i, base + j * (n + 1) + i + 1, base + (j + 1) * (n + 1) + i + 1,
+                         base + (j + 1) * (n + 1) + i)
+                    faces.append(q if lado < 0 else q[::-1])
+        M = Matrix.Translation((cx, cy, cz)) @ Matrix.Rotation(math.radians(-inclinar), 4, "X")
+        self._soltar(mat, verts, faces, M)
+
+    def lencol(self, mat, x0, y0, x1, y1, z, cair, r=0.06, esq=True, dir=True, frente=True, rugas=0.012,
+               passo=0.025, semente=0):
+        """A cover (duvet, throw) lying flat on x0..x1 / y0..y1 at height z, rolling over a rounded edge (radius r)
+        and hanging cair metres on the left, right and front (+y) sides, with soft folds where it hangs."""
+        rng = ctx["RNG"]
+        Ld = r * math.pi / 2 + max(0.0, cair - r)
+        ua, ub = x0 - (Ld if esq else 0.0), x1 + (Ld if dir else 0.0)
+        vb = y1 + (Ld if frente else 0.0)
+        nu, nv = max(4, int((ub - ua) / passo)), max(4, int((vb - y0) / passo))
+        fase = [rng.uniform(0, 6.3) for _ in range(6)]
+        lam = [rng.uniform(0.32, 0.46), rng.uniform(0.55, 0.8), rng.uniform(0.21, 0.27)]   # broad, uneven folds
+
+        def dobrar(d, e, sgn):            # distance d past the edge e (outward sign) -> position across, height drop
+            if d <= 0:
+                return None
+            if d < r * math.pi / 2:
+                th = d / r
+                return e + sgn * r * math.sin(th), r * (1 - math.cos(th)), d
+            return e + sgn * r, r + (d - r * math.pi / 2), d
+
+        verts, faces = [], []
+        for j in range(nv + 1):
+            v = y0 + (vb - y0) * j / nv
+            for i in range(nu + 1):
+                u = ua + (ub - ua) * i / nu
+                x, y, hz, dmax = u, v, 0.0, 0.0
+                fx = dobrar(x0 - u, x0, -1) if u < x0 else dobrar(u - x1, x1, 1) if u > x1 else None
+                fy = dobrar(v - y1, y1, 1) if v > y1 else None
+                if fx:
+                    x, hz, dmax = fx[0], fx[1], fx[2]
+                if fy:
+                    y = fy[0]
+                    hz = max(hz, fy[1]) + (0.35 * min(hz, fy[1]) if fx else 0.0)
+                    dmax = max(dmax, fy[2])
+                hz = min(hz, cair * 1.1)
+                # folds: grow with how far the cloth hangs; the top only undulates a little
+                k = min(1.0, dmax / 0.18)
+                ao_longo = v if (fx and not fy) else u          # folds run down the cloth, varying along the edge
+                w = rugas * (0.15 + 0.85 * k) * (math.sin(2 * math.pi * ao_longo / lam[0] + fase[0])
+                                                 + 0.7 * math.sin(2 * math.pi * ao_longo / lam[1] + fase[1])
+                                                 + 0.3 * math.sin(2 * math.pi * ao_longo / lam[2] + fase[2]))
+                if fx and not fy:
+                    x += math.copysign(w * k, x - (x0 + x1) / 2)
+                elif fy:
+                    y += w * k
+                zz = z - hz + (0.0 if dmax else 0.12 * w)
+                verts.append((x, y, zz))
+        for j in range(nv):
+            for i in range(nu):
+                a_ = j * (nu + 1) + i
+                faces.append((a_, a_ + 1, a_ + nu + 2, a_ + nu + 1))
+        self._soltar(mat, verts, faces)
+
     def modelo(self, aid, x=0.0, y=0.0, z=0.0, rot=0.0, alt=None, larg=None, esc=None, sem_sombra=False):
         """A CC0 model (ativos.py) at (x, y, z) of the piece, its front to +y turned by rot; scaled to alt (height) or
         esc (uniform), larg stretches the width only. None when the asset is not there (the caller builds its own)."""
@@ -272,22 +391,25 @@ class Peca:
 
 # ------------------------------------------------------------------------------------------------ the pieces
 def sofa(p, d):
+    """A deep sofa: soft base, rounded arms and back, filled seat and back cushions, two scatter cushions."""
     L, P = d.get("larg", 2.5), d.get("prof", 0.95)
     x0, x1, y0, y1 = -L / 2, L / 2, -P / 2, P / 2
     tec = d.get("mat", "tecido")
-    p.caixa("metal_preto", x0 + 0.05, y0 + 0.08, 0, x1 - 0.05, y1 - 0.08, 0.06, 0.004)              # recessed plinth
-    p.caixa(tec, x0, y0, 0.06, x1, y1, 0.24, 0.03)                                                 # base
-    p.caixa(tec, x0, y0, 0.24, x0 + 0.16, y1, 0.62, 0.05, 3)                                       # arms
-    p.caixa(tec, x1 - 0.16, y0, 0.24, x1, y1, 0.62, 0.05, 3)
-    p.caixa(tec, x0 + 0.16, y0, 0.24, x1 - 0.16, y0 + 0.2, 0.72, 0.06, 3)                          # back (y0 = back)
-    n = max(2, round((L - 0.32) / 0.8))
-    w = (L - 0.32) / n
+    p.caixa("metal_preto", x0 + 0.06, y0 + 0.08, 0, x1 - 0.06, y1 - 0.08, 0.06, 0.004)              # recessed plinth
+    p.macio(tec, 0, 0, 0.15, L / 2, P / 2, 0.095, e1=0.25, e2=0.08)                                 # base
+    for sx in (-1, 1):                                                                             # arms
+        p.macio(tec, sx * (L / 2 - 0.085), 0.0, 0.43, 0.085, P / 2, 0.2, e1=0.4, e2=0.35, puff=0.012)
+    p.macio(tec, 0, y0 + 0.1, 0.48, L / 2 - 0.15, 0.1, 0.25, e1=0.35, e2=0.3)                       # back
+    n = max(2, round((L - 0.34) / 0.8))
+    w = (L - 0.34) / n
     for i in range(n):
-        a = x0 + 0.16 + i * w
-        p.caixa(tec, a + 0.005, y0 + 0.2, 0.24, a + w - 0.005, y1, 0.44, 0.06, 3)                   # seat cushions
-        p.caixa(tec, a + 0.01, y0 + 0.17, 0.44, a + w - 0.01, y0 + 0.36, 0.82, 0.07, 3)             # back cushions
-    for i, (a, mat) in enumerate(((x0 + 0.3, "almofada"), (x0 + 0.62, "almofada2"), (x1 - 0.32, "almofada"))):
-        p.caixa(mat, a - 0.22, y0 + 0.36, 0.44, a + 0.22, y0 + 0.5, 0.86, 0.07, 3)
+        cx = x0 + 0.17 + (i + 0.5) * w
+        p.macio(tec, cx, y0 + 0.2 + (P - 0.2) / 2, 0.34, w / 2 - 0.004, (P - 0.2) / 2, 0.1,
+                e1=0.42, e2=0.18, puff=0.025)                                                      # seat cushions
+        p.macio(tec, cx, y0 + 0.28, 0.66, w / 2 - 0.01, 0.1, 0.2, e1=0.5, e2=0.3, puff=0.03, eixo="y",
+                inclinar=10)                                                                       # back cushions
+    for a_, mat, inc in ((x0 + 0.38, "almofada", 16), (x1 - 0.4, "almofada2", 12)):
+        p.travesseiro(mat, a_, y0 + 0.42, 0.66, 0.21, 0.21, 0.075, inclinar=inc)
 
 
 def maple(p, d):
@@ -485,20 +607,23 @@ def lareira(p, d):
 
 
 def cama(p, d):
-    """Bed with its head against the wall behind (y = -C/2)."""
+    """Bed with its head against the wall behind (y = -C/2): upholstered headboard and base, a rounded mattress, a duvet
+    that rolls over the sides and the foot, a throw across the foot, sleeping pillows and a cushion leaning back."""
     L, C = d.get("larg", 1.8), d.get("comp", 2.05)
     y0, y1 = -C / 2, C / 2
-    p.caixa("tecido", -L / 2 - 0.05, y0 - 0.06, 0.0, L / 2 + 0.05, y0 + 0.02, 1.15, 0.04, 3)          # headboard
-    p.caixa("tecido", -L / 2, y0 + 0.02, 0.06, L / 2, y1, 0.32, 0.03, 3)                            # base
+    p.macio("tecido", 0, y0 - 0.02, 0.6, L / 2 + 0.05, 0.045, 0.55, e1=0.2, e2=0.15, puff=0.01, eixo="y")   # headboard
+    p.macio("tecido", 0, 0.01, 0.19, L / 2, C / 2 - 0.01, 0.13, e1=0.22, e2=0.08)                   # base
     p.caixa("metal_preto", -L / 2 + 0.1, y0 + 0.12, 0, L / 2 - 0.1, y1 - 0.1, 0.06)
-    p.caixa("roupa", -L / 2 + 0.02, y0 + 0.04, 0.32, L / 2 - 0.02, y1 - 0.02, 0.52, 0.06, 3)          # mattress
-    p.caixa("roupa", -L / 2 - 0.03, y0 + 0.55, 0.3, L / 2 + 0.03, y1 + 0.03, 0.57, 0.05, 4)           # duvet
-    p.caixa("manta", -L / 2 - 0.04, y1 - 0.55, 0.32, L / 2 + 0.04, y1 - 0.15, 0.6, 0.03, 3)
+    p.macio("roupa", 0, 0.02, 0.42, L / 2 - 0.02, C / 2 - 0.04, 0.11, e1=0.3, e2=0.08, puff=0.01)    # mattress
+    p.lencol("roupa", -L / 2 + 0.01, y0 + 0.62, L / 2 - 0.01, y1 - 0.03, 0.555, 0.27, r=0.07, rugas=0.01,
+             semente=1)                                                                            # duvet
+    p.lencol("manta", -L / 2 + 0.01, y1 - 0.62, L / 2 - 0.01, y1 - 0.06, 0.585, 0.3, r=0.085, frente=False,
+             rugas=0.014, semente=2)                                                               # throw
     n = 2 if L > 1.2 else 1
     for i in range(n):
         cx = -L / 2 + (i + 0.5) * L / n
-        p.caixa("roupa", cx - 0.36, y0 + 0.06, 0.5, cx + 0.36, y0 + 0.24, 0.82, 0.08, 4)
-        p.caixa("almofada", cx - 0.25, y0 + 0.22, 0.52, cx + 0.25, y0 + 0.34, 0.76, 0.07, 4)
+        p.travesseiro("roupa", cx, y0 + 0.2, 0.72, 0.34, 0.2, 0.09, inclinar=28)
+        p.travesseiro("almofada", cx + (0.06 if i else -0.06), y0 + 0.36, 0.68, 0.22, 0.15, 0.07, inclinar=20)
     if d.get("mesinhas", True):
         for sx in (-1, 1):
             mesinha(p, {}, (sx * (L / 2 + 0.33), y0 + 0.25, 0))
@@ -632,11 +757,15 @@ def quadro(p, d):
 
 
 def sanita(p, d):
-    """Wall-hung toilet against the wall behind (y = 0 is the wall, the bowl goes toward +y)."""
-    p.caixa("lacado", -0.3, -0.12, 0.0, 0.3, 0.0, 1.1, 0.004)        # boxing of the cistern
-    p.caixa("inox", -0.1, 0.0, 0.95, 0.1, 0.006, 1.05, 0.004)
-    p.caixa("loica", -0.18, 0.0, 0.25, 0.18, 0.55, 0.4, 0.07, 4)
-    p.caixa("loica", -0.185, 0.0, 0.4, 0.185, 0.56, 0.43, 0.04, 3)
+    """Wall-hung toilet against the wall behind (y = 0 the wall, the bowl toward +y): a slim panel in the wall's own
+    finish with the flush plate, a rounded bowl (wider at the rim) and a soft-close lid."""
+    e = 0.035                       # the panel stands proud of the wall (a face on the wall itself flickered)
+    p.caixa(d.get("painel", "interior"), -0.3, 0.0, 0.0, 0.3, e, 1.12, 0.006)
+    p.caixa("inox", -0.11, e, 0.98, 0.11, e + 0.006, 1.06, 0.003)
+    p.macio("loica", 0, e + 0.27, 0.36, 0.175, 0.27, 0.075, e1=0.55, e2=0.45)                      # bowl
+    p.macio("loica", 0, e + 0.29, 0.425, 0.185, 0.28, 0.022, e1=0.35, e2=0.5)                       # rim
+    p.macio("loica", 0, e + 0.28, 0.462, 0.18, 0.275, 0.014, e1=0.3, e2=0.5)                        # lid
+    p.caixa("loica", -0.12, e, 0.3, 0.12, e + 0.08, 0.44, 0.03, 3)                                 # where it meets the wall
 
 
 def lavatorio(p, d):

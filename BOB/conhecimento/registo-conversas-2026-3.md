@@ -708,3 +708,20 @@ The team's notes on hub task 84 (written in the hub by [membro da equipa] on 202
   bathroom fittings exist there, so those stay procedural with the photo textures. No invented garden trees in the
   renders either (the drawings have none). Tools: `ferramentas/pagina/ativos.py`, `descarregar_ativos.py`
   (`casa_blender.py --ativos`). Assets never in Git. Filed: `conhecimento/posto-render.md`, `insights.md` (status).
+
+### 2026-11-18 (night) — Soft beds and sofas, the toilet, the Tremolo's purple; only 3D and tour for now [Builder]
+> 1. as camas e sofás parecem demasiado falsas, meio que modelaste o objeto e pronto está feito, nota-se demasiado o contorno dos shapes não está fluído
+> 2. a sanita tem uma sombra estranha
+> 3. no forro exterior parecer ter tons de roxo não consegui perceber muito bem se é destes render ou do que poderá ser
+>
+> Para ser mais rápido ver o resultado final mantém as fotos individuais como estão e quero só as mudanças no 3D e na visita 360 depois se gostar damos render às imagens
+- (1) Done: upholstery and bedding are soft shapes now (`interior.py`: `macio` superellipsoid cushions with filling,
+  `travesseiro` pillows thin at the seam, `lencol` duvet/throw rolling over the edges with uneven folds); sofa and bed
+  rebuilt with them.
+- (2) Found: the toilet's panel sat on the wall's own plane (two coincident faces) and the bowl was a box. Now a slim
+  panel standing proud of the wall in the wall's finish, a rounded bowl, rim and lid.
+- (3) Found: it was the render, not the drawings — the cedar photo has boards of another hue (pinkish) that turned
+  purple once moved to the red-brown. Now one hue (only the photo's grain and joints) in #925725, a little more yellow
+  like the photo of the built house in sun.
+- Decided (user): the page keeps the current images; only the 3D and the 360° tour are redone now; the images are
+  rendered again only if the user likes the result.

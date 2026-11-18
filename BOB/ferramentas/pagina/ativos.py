@@ -50,17 +50,24 @@ def _hex_lin(h):
     return np.array([int(h[k:k + 2], 16) / 255.0 for k in (0, 2, 4)]) ** 2.2
 
 
-def _ajustar(img, nome, cor=None, contraste=1.0):
-    """The photo with its mean colour moved to cor and its contrast scaled (linear light); saved as JPEG."""
+def _ajustar(img, nome, cor=None, contraste=1.0, tom_unico=False):
+    """The photo with its mean colour moved to cor and its contrast scaled (linear light); saved as JPEG.
+    tom_unico: only the photo's light and dark (grain, joints) in one hue, cor's — boards of another hue in the photo
+    (pinkish cedar) would turn purple once moved to a red-brown."""
     w, h = img.size
     px = np.empty(w * h * 4, dtype=np.float32)
     img.pixels.foreach_get(px)
     px = px.reshape(-1, 4)
     lin = np.power(np.clip(px[:, :3], 0.0, 1.0), 2.2)
     media = np.maximum(lin.mean(0), 1e-4)
-    if contraste != 1.0:
+    if tom_unico and cor:
+        lum = lin @ np.array([0.2126, 0.7152, 0.0722])
+        ml = max(float(lum.mean()), 1e-4)
+        lum = ml + (lum - ml) * contraste
+        lin = _hex_lin(cor)[None, :] * (lum / ml)[:, None]
+    elif contraste != 1.0:
         lin = media[None, :] + (lin - media[None, :]) * contraste
-    if cor:
+    if cor and not tom_unico:
         lin = lin * (_hex_lin(cor) / media)[None, :]
     px[:, :3] = np.power(np.clip(lin, 0.0, 1.0), 1 / 2.2)
     out = bpy.data.images.new(nome, w, h, alpha=False)
@@ -76,7 +83,7 @@ def _ajustar(img, nome, cor=None, contraste=1.0):
     return out, np.power(np.clip(lin.mean(0), 0, 1), 1 / 2.2)
 
 
-def material(nome, aid, cor=None, forca=1.0, rug=None, rug_mult=1.0, sheen=0.0, coat=0.0, contraste=1.0):
+def material(nome, aid, cor=None, forca=1.0, rug=None, rug_mult=1.0, sheen=0.0, coat=0.0, contraste=1.0, tom_unico=False):
     if not tem(aid) or "Diffuse" not in MAN[aid]["ficheiros"]:
         return None
     f = MAN[aid]["ficheiros"]
@@ -96,7 +103,7 @@ def material(nome, aid, cor=None, forca=1.0, rug=None, rug_mult=1.0, sheen=0.0, 
     img = bpy.data.images.load(os.path.join(base, f["Diffuse"]), check_existing=True)
     media = None
     if cor or contraste != 1.0:
-        img, media = _ajustar(img, nome + "_cor", cor, contraste)
+        img, media = _ajustar(img, nome + "_cor", cor, contraste, tom_unico)
     ic.image = img
     nt.links.new(uv.outputs["UV"], ic.inputs["Vector"])
     nt.links.new(ic.outputs["Color"], b.inputs["Base Color"])
