@@ -640,3 +640,10 @@ The team's notes on hub task 84 (written in the hub by [membro da equipa] on 202
 ### 2026-11-18 — At the home PC: how to start working with Unreal there [Step Inside]
 > estou agora no meu PC de casa como consigo que possas utilizar para começarmos a trabalhar com o unreal?
 - Answered: this session runs on the office PC and cannot reach the home PC; the steps of `conhecimento/posto-render.md` (Claude app + Git + clone + a session opened in that folder), then the Unreal phase (Step Inside Phase 4) from there.
+- Then: the clone failed on a path with spaces (fixed with quotes); the home-PC session checked the station (commit 046b876). Flagged: that commit's author is a personal identity (public repo), C: has only 8 GB (Unreal cache to D:), the ODA install step showed «Failed».
+
+### 2026-11-18 — Use the company account, not the home PC's own Claude account [Step Inside, stations]
+> eu quero trabalhar a partir desta conta, não quero usar os tokens do meu claude desktop
+> mas eu não quero dar logout daquela conta simplesmente enviar informação ou fazer tudo neste chat e depois comunicar de forma ao outro pc trabalhar no que for preciso
+- Rule (user): the work is driven from the office session (company account); the home PC only executes, its Claude app stays on the user's own account.
+- Proposed: SSH from the office PC to the home PC over a private VPN (Tailscale), key-only; GUI jobs (Unreal editor) launched in the user's logged-in desktop via a scheduled task; files back by scp. Waiting for the user's go-ahead (installs on both PCs).
