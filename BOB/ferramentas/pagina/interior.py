@@ -407,7 +407,8 @@ def foco(p, d):
     h = d.get("teto", 2.94) - d.get("z", 0.0)
     p.cil("metal_preto", 0, 0, h - 0.005, h, 0.045)
     p.cil("led", 0, 0, h - 0.008, h - 0.004, 0.03)
-    p.luz("SPOT", 0, 0, h - 0.02, d.get("potencia", 18), 0.03, direcao=(0, 0, -1), angulo=d.get("angulo", 80))
+    p.luz("SPOT", 0, 0, h - 0.02, d.get("potencia", 18), 0.03, direcao=(0, 0, -1), angulo=d.get("angulo", 80),
+          cor=tuple(d.get("cor", (1.0, 0.78, 0.55))))
 
 
 def cozinha(p, d):

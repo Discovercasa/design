@@ -174,9 +174,9 @@ def imagem(nome, arr, nao_cor=False):
     return img
 
 
-COR = {"ripado": "#93552f", "deck": "#8f6c4c", "soalho": "#c09e78", "interior": "#eeebe4", "betao": "#a6a39c",
+COR = {"ripado": "#8f4c25", "deck": "#8f6c4c", "soalho": "#c09e78", "interior": "#eeebe4", "betao": "#a6a39c",
        "painel": "#45322e", "metal": "#383e42", "pedra": "#c8b68f", "relva": "#6f7d3a", "relva_fora": "#66733a",
-       "asfalto": "#3a3a3a", "berma": "#56703a", "brita": "#a49d90", "porta_garagem": "#93552f", "tecido": "#9c968c", "toros": "#9a7a55"}
+       "asfalto": "#3a3a3a", "berma": "#56703a", "brita": "#a49d90", "porta_garagem": "#8f4c25", "tecido": "#9c968c", "toros": "#9a7a55"}
 COR.update(E.get("materiais_cor", {}))
 TILE = {"berma": 3.0, "ripado": 1.08, "deck": 1.4, "soalho": 1.8, "betao": 2.4, "painel": 1.0, "relva": 3.0, "relva_fora": 3.0,
         "asfalto": 3.0, "brita": 1.5, "pedra": 1.2, "porta_garagem": 1.2, "interior": 2.0, "metal": 1.0,
@@ -297,12 +297,12 @@ def mat_vidro(nome, rug=0.0, cor=(0.92, 0.96, 0.95)):
 # material -> (CC0 asset, normal strength, size factor, extra) — the Tremolo: 135 mm boards from the cedar's ~80 mm
 FOTO = {"ripado": ("japanese_cedar_planks", 1.0, 1.67, {"contraste": 0.7, "rug_mult": 0.8}),
         "soalho": ("oak_wood_planks", 0.6, 1.0, {}),
-        "deck": ("wood_floor_deck", 1.0, 1.0, {}),
+        "deck": ("oak_wood_planks", 0.8, 1.2, {"rug_mult": 1.2}),
         "betao": ("concrete_floor_02", 0.6, 1.0, {}),
         "relva": ("leafy_grass", 0.8, 1.0, {}), "relva_fora": ("leafy_grass", 0.8, 1.0, {}),
         "berma": ("leafy_grass", 0.8, 1.0, {}),
         "brita": ("gravel_floor_02", 1.0, 1.0, {}), "asfalto": ("asphalt_02", 0.8, 1.0, {}),
-        "pedra": ("marble_tiles", 0.5, 0.6, {})}
+        "pedra": ("marble_01", 0.3, 1.0, {"rug": 0.25, "coat": 0.2})}
 
 
 def criar_materiais():
@@ -311,8 +311,8 @@ def criar_materiais():
         MATS[nome] = mat_textura(nome, c, nrm, rug, metal=0.25 if nome == "painel" else 0.0)
     MATS["interior"] = mat_simples("interior", COR["interior"], 0.85)
     if COM_ATIVOS and ativos.tem("painted_plaster_wall"):
-        MATS["interior"] = ativos.material("interior", "painted_plaster_wall", cor=COR["interior"], forca=0.25,
-                                           rug=0.85, contraste=0.5)
+        MATS["interior"] = ativos.material("interior", "painted_plaster_wall", cor=COR["interior"], forca=0.12,
+                                           rug=0.85, contraste=0.2)
         TILE["interior"] = 2.0
     MATS["metal"] = mat_simples("metal", COR["metal"], 0.38, 0.6)
     MATS["tecido"] = mat_simples("tecido", COR["tecido"], 0.95)
