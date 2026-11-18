@@ -2,6 +2,7 @@
 
     blender -b --factory-startup -P ferramentas/pagina/casa_blender.py -- <casa.json> <saida/> [--render v1,v2|todas]
                                   [--amostras 160] [--res 1600x1000] [--sem-glb] [--previa] [--sem-relva]
+                                  [--limiar 0.03] (adaptive sampling noise threshold: lower = cleaner, slower)
   (--previa: half size; ~50 s per view on a GTX 1050 Ti at 32 samples. The first Cycles run compiles the GPU kernels.)
   --luz [--amostras_luz 200]: for the web model, bake the Cycles light (direct + bounced, diffuse) into lightmaps
   lm_casa/lm_exterior/lm_terreno.jpg (second UV 'lm' = TEXCOORD_1, K per map in luz.json), the sky as an equirect
@@ -1070,13 +1071,15 @@ def gravar_luz(amostras=128):
     vidro = lambda ob: any(m and m.name.startswith("vidro") for m in ob.data.materials)
     meshes = [o for o in cena.objects if o.type == "MESH" and not o.hide_get() and o.data.polygons]
     grupos = {
-        "casa": [o for o in meshes if o.get("grupo") in ("cave", "piso0", "piso1", "cobertura") and not vidro(o)],
+        "casa": [o for o in meshes if o.get("grupo") in ("cave", "piso0", "piso1", "cobertura") and not vidro(o)
+                 and not o.get("suave")],
+        "mobilia": [o for o in meshes if o.get("suave") and not vidro(o)],      # the interior (interior.py)
         "exterior": [o for o in meshes if o.name.startswith(("muro", "piso_livre", "faixa"))],
         "terreno": [o for o in meshes if o.name == "terreno"],
     }
-    tamanho = {"casa": 2048, "exterior": 1024, "terreno": 2048}
+    tamanho = {"casa": 2048, "mobilia": 2048, "exterior": 1024, "terreno": 2048}
     # triangulate the baked meshes (simpler islands; the web model is triangles anyway)
-    for nome in ("casa", "exterior"):
+    for nome in ("casa", "mobilia", "exterior"):
         for ob in grupos[nome]:
             bm = bmesh.new()
             bm.from_mesh(ob.data)
@@ -1084,6 +1087,8 @@ def gravar_luz(amostras=128):
             bm.to_mesh(ob.data)
             bm.free()
     uv_luz(grupos["casa"])
+    if grupos["mobilia"]:
+        uv_luz(grupos["mobilia"])
     uv_luz(grupos["exterior"])
     uv_luz(grupos["terreno"], plano=E.get("luz_plano", (-45, -15, 45, 55)))
     configurar_cycles()
@@ -1810,6 +1815,10 @@ criar_materiais()
 construir_solidos()
 construir_vaos()
 construir_extras()
+if E.get("interior"):
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    import interior  # noqa: E402
+    interior.construir(E, {"MATS": MATS, "ligar": ligar, "RNG": RNG, "RAIZ": RAIZ})
 terreno = construir_terreno()
 construir_arvores()
 RAIZ.rotation_euler = (0, 0, math.radians(E.get("rodar_graus", 0.0)))
@@ -1817,7 +1826,7 @@ bpy.context.view_layer.update()
 for ob in cena.objects:
     if ob.type == "MESH":
         uvs_mundo(ob)
-        if ob.name != "terreno":
+        if ob.name != "terreno" and not ob.get("suave"):
             for p in ob.data.polygons:
                 p.use_smooth = False
 luz_e_ceu()
@@ -1858,7 +1867,7 @@ if OPC["render"]:
     usar_gpu()
     cena.cycles.samples = int(OPC["amostras"])
     cena.cycles.use_adaptive_sampling = True
-    cena.cycles.adaptive_threshold = 0.03
+    cena.cycles.adaptive_threshold = float(OPC.get("limiar", 0.03))
     try:
         cena.cycles_curves.shape = "THICK"      # ribbons took the shading of each ground triangle: patches
     except Exception:
@@ -1868,7 +1877,10 @@ if OPC["render"]:
         cena.cycles.denoiser = "OPENIMAGEDENOISE"
     except Exception:
         pass
-    cena.cycles.max_bounces = 8
+    cena.cycles.max_bounces = 12 if E.get("interior") else 8
+    cena.cycles.diffuse_bounces = 6 if E.get("interior") else 4
+    cena.cycles.glossy_bounces = 6
+    cena.cycles.sample_clamp_indirect = 8.0
     cena.cycles.transparent_max_bounces = 8
     w, h = [int(v) for v in OPC["res"].split("x")]
     cena.render.resolution_x, cena.render.resolution_y = w, h

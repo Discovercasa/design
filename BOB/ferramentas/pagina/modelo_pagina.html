@@ -127,6 +127,63 @@ ul.mat span{color:var(--suave);font-size:15.5px}
 footer{border-top:1px solid var(--linha);padding-block:22px 30px;color:var(--suave);font-size:14px}
 footer .largura{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 24px}
 
+
+/* section menu */
+.menu{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--folha) 92%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--linha)}
+.menu .largura{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}
+.menu a{flex:none;padding:13px 12px;font-size:15px;color:var(--suave);text-decoration:none;white-space:nowrap}
+.menu a:hover{color:var(--tinta)}
+
+/* the 360-degree tour */
+.tour{background:#111517;color:#eef1f1}
+.tour .cab p{color:#a3adb2}
+.palco360{display:grid;grid-template-columns:minmax(0,1fr) 300px;border:1px solid #2c3438;border-radius:6px;overflow:hidden}
+.ecra360{position:relative;height:clamp(420px,70vh,760px);background:#000;touch-action:none;cursor:grab;user-select:none;-webkit-user-select:none;overflow:hidden}
+.ecra360:active{cursor:grabbing}
+.ecra360 canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.ecra360 .veu{position:absolute;inset:0;background:#000;opacity:0;transition:opacity .3s ease;pointer-events:none}
+.ecra360 .veu.on{opacity:1}
+.ponto{position:absolute;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:6px;background:none;border:0;cursor:pointer;color:#fff;padding:0}
+.ponto i{width:38px;height:38px;border-radius:50%;border:2px solid #fff;background:rgba(255,255,255,.22);backdrop-filter:blur(3px);box-shadow:0 2px 10px rgba(0,0,0,.35);display:grid;place-items:center;transition:transform .2s}
+.ponto i::after{content:"";width:10px;height:10px;border-radius:50%;background:#fff}
+.ponto:hover i{transform:scale(1.12)}
+.ponto span{font-size:13.5px;font-weight:600;padding:3px 9px;border-radius:999px;background:rgba(0,0,0,.55);white-space:nowrap}
+.ponto.sobe span::before{content:"↑ "}.ponto.desce span::before{content:"↓ "}
+.ondeestou{position:absolute;left:14px;top:12px;font:650 20px/1.1 var(--display);font-stretch:90%;text-shadow:0 1px 8px rgba(0,0,0,.6);pointer-events:none}
+.botoes360{position:absolute;right:12px;top:12px;display:flex;gap:6px}
+.botoes360 button{background:rgba(0,0,0,.45);border:1px solid rgba(255,255,255,.3);color:#fff;border-radius:999px;padding:7px 13px;cursor:pointer;font-size:14px}
+.lado360{padding:16px;border-left:1px solid #2c3438;display:flex;flex-direction:column;gap:14px;background:#161b1e}
+.lado360 svg{width:100%;height:auto;background:#1d2326;border-radius:4px}
+.lado360 .lista{display:flex;flex-wrap:wrap;gap:6px}
+.lado360 .lista button{all:unset;cursor:pointer;padding:6px 11px;font-size:14px;border-radius:999px;border:1px solid #2c3438;color:#eef1f1}
+.lado360 .lista button[aria-pressed=true]{border-color:var(--madeira);background:var(--madeira)}
+.ecra360:fullscreen{height:100vh}
+
+/* plans */
+.plantas .seg{background:var(--folha);border-color:var(--linha)}
+.plantas .seg button{color:var(--suave)}
+.plantas .seg button[aria-pressed=true]{background:var(--tinta);color:var(--folha)}
+.planta{margin-top:18px;background:var(--folha);border:1px solid var(--linha);border-radius:6px;padding:12px}
+.planta svg{width:100%;height:auto;max-height:78vh;display:block}
+.legenda{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:10px;font-size:14px;color:var(--suave)}
+
+/* how we build, next step */
+.passos{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:22px}
+.passos div{border-top:2px solid var(--madeira);padding-top:14px}
+.passos b{display:block;font:650 19px/1.2 var(--display);font-stretch:90%;margin-bottom:6px}
+.passos p{margin:0;color:var(--suave);font-size:16px}
+.camadas{margin-top:34px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:22px}
+.camadas ol,.camadas ul{margin:0;padding-left:20px;color:var(--suave)}
+.camadas h3{font-size:19px;margin-bottom:8px}
+.fecho{background:var(--tinta);color:var(--folha)}
+.fecho .largura{display:flex;flex-wrap:wrap;gap:20px 40px;align-items:center;justify-content:space-between}
+.fecho h2{font-size:clamp(28px,3.2vw,40px);font-stretch:82%}
+.fecho p{margin:8px 0 0;max-width:60ch;opacity:.85}
+.fecho a{display:inline-block;padding:13px 24px;border-radius:999px;background:var(--madeira);color:#fff;text-decoration:none;font-weight:600}
+@media (max-width:980px){.palco360{grid-template-columns:minmax(0,1fr)}.lado360{border-left:0;border-top:1px solid #2c3438}
+  .passos{grid-template-columns:repeat(2,minmax(0,1fr))}.camadas{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:760px){.ecra360{height:62vh;min-height:340px}.passos{grid-template-columns:minmax(0,1fr)}}
+
 @media (max-width:980px){
   .ficha dl{grid-template-columns:repeat(3,minmax(0,1fr))}
   .ficha div:nth-child(4){border-left:0;padding-left:0}
@@ -157,6 +214,27 @@ footer .largura{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8p
   <div class="titulo"><div class="largura"><h1>__TITULO__</h1><p>__SUBTITULO__</p></div></div>
 </section>
 <div class="ficha"><div class="largura"><dl>__FICHA__</dl></div></div>
+<nav class="menu" aria-label="Secções"><div class="largura">
+  <a href="#visita">Visita 360°</a><a href="#h-imagens">Imagens</a><a href="#h-3d">3D</a><a href="#h-plantas">Plantas</a>
+  <a href="#h-pisos">Áreas e materiais</a><a href="#h-construir">Como construímos</a><a href="#fecho">Próximo passo</a></div></nav>
+
+<section class="bloco tour" id="visita" aria-labelledby="h-visita">
+  <div class="largura">
+    <div class="cab"><h2 id="h-visita">Visita virtual 360°</h2><p>Arraste para olhar à volta e toque nos círculos para passar à divisão seguinte. A vista pelas janelas é a do terreno.</p></div>
+    <div class="palco360">
+      <div class="ecra360" id="ecra360">
+        <canvas id="tela360"></canvas><div class="veu" id="veu"></div><div id="pontos"></div>
+        <div class="ondeestou" id="ondeestou"></div>
+        <div class="botoes360"><button id="b360ecra">Ecrã inteiro</button></div>
+      </div>
+      <div class="lado360">
+        <div class="seg" id="pisos360"></div>
+        <svg id="mapa360" role="img" aria-label="Planta com o ponto onde está e para onde olha"></svg>
+        <div class="lista" id="lista360"></div>
+      </div>
+    </div>
+  </div>
+</section>
 
 <section class="bloco mesa" aria-labelledby="h-3d">
   <div class="largura">
@@ -198,7 +276,38 @@ footer .largura{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8p
     </div>
   </div>
 </section>
-<footer><div class="largura"><span>DiscoverCasa, __TITULO__</span><span>__DATA__. Imagens ilustrativas.</span></div></footer>
+<section class="bloco plantas" aria-labelledby="h-plantas">
+  <div class="largura">
+    <div class="cab"><h2 id="h-plantas">Plantas</h2><p>As divisões de cada piso com as áreas do projeto. Toque num ponto da visita para entrar nessa divisão.</p></div>
+    <div class="seg" id="segPlanta"></div>
+    <div class="planta"><svg id="planta" role="img" aria-label="Planta do piso"></svg>
+      <div class="legenda"><span><b style="color:var(--madeira)">●</b> Ponto da visita 360°</span><span>Riscado: terraço, varandas e alpendre</span><span>Mobiliário indicativo</span></div></div>
+  </div>
+</section>
+
+<section class="bloco" aria-labelledby="h-construir" style="background:var(--folha);border-top:1px solid var(--linha)">
+  <div class="largura">
+    <div class="cab"><h2 id="h-construir">Como construímos</h2><p>Estrutura em madeira sobre fundação de betão, feita por módulos em fábrica e montada em obra: menos tempo de obra, menos desperdício e a mesma precisão em todas as casas.</p></div>
+    <div class="passos">
+      <div><b>1. Fundação</b><p>Base em betão armado, executada no terreno e preparada para receber a estrutura.</p></div>
+      <div><b>2. Módulos em fábrica</b><p>As paredes, os pavimentos e a cobertura são pré-fabricados em módulos de madeira, com medidas exatas.</p></div>
+      <div><b>3. Montagem</b><p>Os módulos chegam à obra e são montados e fixados à fundação; a casa fica fechada em pouco tempo.</p></div>
+      <div><b>4. Acabamentos</b><p>Isolamentos, caixilharia, revestimentos exteriores e interiores, redes e equipamentos, até à entrega da chave.</p></div>
+    </div>
+    <div class="camadas">
+      <div><h3>Parede exterior, de fora para dentro</h3><ol>__CAMADAS_EXT__</ol></div>
+      <div><h3>Porquê madeira</h3><ul>__PORQUE__</ul></div>
+    </div>
+  </div>
+</section>
+
+<section class="bloco fecho" id="fecho" aria-labelledby="h-fecho">
+  <div class="largura">
+    <div><h2 id="h-fecho">__FECHO_TITULO__</h2><p>__FECHO_TEXTO__</p></div>
+    <a href="__CONTACTO_LINK__" target="_blank" rel="noopener">__CONTACTO_BOTAO__</a>
+  </div>
+</section>
+<footer><div class="largura"><span>DiscoverCasa, __TITULO__</span><span>__DATA__. __LEGAL__</span></div></footer>
 
 <div class="visor" id="visor" hidden role="dialog" aria-modal="true" aria-label="Imagem em ecrã inteiro">
   <img id="visorImg" alt="">
@@ -209,6 +318,7 @@ footer .largura{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8p
 <script id="modulos" type="application/json">__MODULOS__</script>
 <script id="glb" type="text/plain">__GLB__</script>
 <script id="texturas" type="application/json">__TEXTURAS__</script>
+__PANOS__
 <script>
 // images, storeys and finishes: plain script, so they show even where the 3D cannot start
 (function () {
@@ -262,6 +372,268 @@ footer .largura{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8p
     }).join('') + '</tbody>';
   document.getElementById('acab').innerHTML = D.acabamentos.map((a) =>
     `<li><i style="background-color:${a.cor}" class="${/reguado|deck|toros/i.test(a.texto) ? 'tabuas' : ''}"></i><div><b>${a.parte}</b><span>${a.texto}</span></div></li>`).join('');
+})();
+</script>
+<script>
+// the 360-degree tour and the plans: plain script (WebGL 1), independent of the 3D module
+(function () {
+  const D = JSON.parse(document.getElementById('dados').textContent);
+  const V = D.visita || [], PL = D.planta || { pisos: [] };
+  const NS = 'http://www.w3.org/2000/svg';
+  const porId = Object.fromEntries(V.map((v) => [v.id, v]));
+  const nomePiso = Object.fromEntries((PL.pisos || []).map((p) => [p.id, p.nome]));
+  const esc = (t) => String(t).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const fmt = (v) => v.toLocaleString('pt-PT', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+  // ---------------------------------------------------------------- a storey's plan as SVG (house frame, metres)
+  function desenharPlanta(svg, pisoId, opc) {
+    const P = PL.pisos.find((p) => p.id === pisoId);
+    if (!P) { svg.innerHTML = ''; return null; }
+    const xs = [], ys = [];
+    [...P.solidos, ...P.exteriores].forEach((b) => { xs.push(b[0], b[2]); ys.push(b[1], b[3]); });
+    const m = opc.margem ?? 1.2, X0 = Math.min(...xs) - m, X1 = Math.max(...xs) + m, Y0 = Math.min(...ys) - m, Y1 = Math.max(...ys) + m;
+    const W = X1 - X0, H = Y1 - Y0;
+    svg.setAttribute('viewBox', `0 0 ${W.toFixed(2)} ${H.toFixed(2)}`);
+    const X = (x) => (x - X0).toFixed(3), Y = (y) => (Y1 - y).toFixed(3);
+    const rect = (b, f, extra = '') => `<rect x="${X(b[0])}" y="${Y(b[3])}" width="${(b[2] - b[0]).toFixed(3)}" height="${(b[3] - b[1]).toFixed(3)}" fill="${f}" ${extra}/>`;
+    const poli = (pts, f, extra = '') => `<polygon points="${pts.map((q) => X(q[0]) + ',' + Y(q[1])).join(' ')}" fill="${f}" ${extra}/>`;
+    const c = opc.cores;
+    let s = `<defs><pattern id="ris-${svg.id}" width=".25" height=".25" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2=".25" stroke="${c.risco}" stroke-width=".035"/></pattern></defs>`;
+    P.exteriores.forEach((b) => (s += rect(b, `url(#ris-${svg.id})`, `stroke="${c.risco}" stroke-width=".02"`)));
+    P.solidos.forEach((b) => (s += rect(b, c.parede)));
+    P.vazios.forEach((b) => (s += rect(b, b[4] === 'ext' ? `url(#ris-${svg.id})` : c.chao)));
+    P.vazios.filter((b) => b[4] === 'ext').forEach((b) => (s += rect(b, c.chao, 'opacity=".55"')));
+    P.vaos.forEach((v) => {             // glazing: a thin line along the opening
+      const [x0, y0, x1, y1, e] = v;
+      s += e === 'x' ? `<line x1="${X((x0 + x1) / 2)}" y1="${Y(y0)}" x2="${X((x0 + x1) / 2)}" y2="${Y(y1)}" stroke="${c.vidro}" stroke-width=".06"/>`
+        : `<line x1="${X(x0)}" y1="${Y((y0 + y1) / 2)}" x2="${X(x1)}" y2="${Y((y0 + y1) / 2)}" stroke="${c.vidro}" stroke-width=".06"/>`;
+    });
+    P.escadas.forEach((e) => {
+      s += poli(e.contorno, 'none', `stroke="${c.linha}" stroke-width=".025"`);
+      e.degraus.forEach((l) => (s += `<line x1="${X(l[0][0])}" y1="${Y(l[0][1])}" x2="${X(l[1][0])}" y2="${Y(l[1][1])}" stroke="${c.linha}" stroke-width=".018"/>`));
+    });
+    if (opc.moveis) P.moveis.forEach((pts) => (s += poli(pts, c.movel, `stroke="${c.linha}" stroke-width=".015"`)));
+    if (opc.nomes) P.divisoes.forEach((d) => {
+      const cx = (d.caixa[0] + d.caixa[2]) / 2, cy = (d.caixa[1] + d.caixa[3]) / 2, w = d.caixa[2] - d.caixa[0];
+      const t = Math.min(0.42, Math.max(0.22, w / 9));
+      s += `<text x="${X(cx)}" y="${Y(cy)}" text-anchor="middle" font-size="${t}" font-weight="600" fill="${c.texto}" font-family="Source Sans 3,Segoe UI,sans-serif">${esc(d.nome)}</text>`
+        + `<text x="${X(cx)}" y="${(+Y(cy) + t * 1.15).toFixed(3)}" text-anchor="middle" font-size="${t * 0.85}" fill="${c.suave}" font-family="Source Sans 3,Segoe UI,sans-serif">${fmt(d.area)} m²</text>`;
+    });
+    // north arrow (the house frame is turned by "rodar" degrees from north-up)
+    const nx = W - 0.9, ny = 0.9;
+    s += `<g transform="translate(${nx} ${ny}) rotate(${PL.rodar || 0})"><path d="M0 -.55 L.22 .3 L0 .15 L-.22 .3 Z" fill="${c.texto}"/><text y=".72" text-anchor="middle" font-size=".3" fill="${c.texto}" font-family="sans-serif">N</text></g>`;
+    svg.innerHTML = s;
+    const dentro = (x, y) => x > X0 + 0.2 && x < X1 - 0.2 && y > Y0 + 0.2 && y < Y1 - 0.2;
+    return { X, Y, P, dentro };
+  }
+
+  // ---------------------------------------------------------------- plans section
+  const segP = document.getElementById('segPlanta'), svgP = document.getElementById('planta');
+  const CORES_CLARO = { parede: '#2c3236', chao: '#ffffff', risco: '#b8b2a8', vidro: '#6aa6c9', linha: '#9aa0a2', movel: '#ece7df', texto: '#2c3236', suave: '#667075' };
+  function cores() {
+    const cs = getComputedStyle(document.documentElement);
+    const v = (n) => cs.getPropertyValue(n).trim();
+    return { parede: v('--tinta'), chao: v('--folha'), risco: v('--suave'), vidro: '#6aa6c9', linha: v('--suave'), movel: v('--chao'), texto: v('--tinta'), suave: v('--suave') };
+  }
+  function planta(id) {
+    [...segP.children].forEach((b) => b.setAttribute('aria-pressed', b.dataset.p === id));
+    const r = desenharPlanta(svgP, id, { nomes: true, moveis: true, cores: cores() });
+    if (!r) return;
+    V.filter((v) => v.piso === id && r.dentro(v.camara[0], v.camara[1])).forEach((v) => {
+      const g = document.createElementNS(NS, 'g');
+      g.setAttribute('role', 'button'); g.setAttribute('tabindex', '0'); g.style.cursor = 'pointer';
+      g.innerHTML = `<title>Visita 360°: ${esc(v.nome)}</title><circle cx="${r.X(v.camara[0])}" cy="${r.Y(v.camara[1])}" r=".26" fill="var(--madeira)" stroke="#fff" stroke-width=".06"/>`;
+      const ir = () => { abrir(v.id); document.getElementById('visita').scrollIntoView({ behavior: 'smooth' }); };
+      g.addEventListener('click', ir); g.addEventListener('keydown', (e) => { if (e.key === 'Enter') ir(); });
+      svgP.appendChild(g);
+    });
+  }
+  if (segP && PL.pisos.length) {
+    segP.innerHTML = PL.pisos.map((p) => `<button data-p="${p.id}">${esc(p.nome)}</button>`).join('');
+    segP.addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) planta(b.dataset.p); });
+    planta((PL.pisos.find((p) => p.id === 'piso0') || PL.pisos[0]).id);
+    matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => planta(segP.querySelector('[aria-pressed=true]').dataset.p));
+  }
+
+  // ---------------------------------------------------------------- the 360 viewer
+  if (!V.length) { document.getElementById('visita').hidden = true; document.querySelector('a[href="#visita"]').hidden = true; return; }
+  const ecra = document.getElementById('ecra360'), cv = document.getElementById('tela360'), veu = document.getElementById('veu');
+  const camada = document.getElementById('pontos'), onde = document.getElementById('ondeestou');
+  const gl = cv.getContext('webgl', { antialias: false, preserveDrawingBuffer: false });
+  if (!gl) { onde.textContent = 'Este navegador não mostra a visita 360°.'; return; }
+  const vs = 'attribute vec2 p;varying vec2 v;void main(){v=p;gl_Position=vec4(p,0.,1.);}';
+  const fs = 'precision highp float;varying vec2 v;uniform sampler2D t;uniform float yaw,pitch,f,asp;' +
+    'void main(){vec3 d=normalize(vec3(v.x*f*asp,v.y*f,-1.));' +
+    'float cp=cos(pitch),sp=sin(pitch);d=vec3(d.x,d.y*cp-d.z*sp,d.y*sp+d.z*cp);' +
+    'float cy=cos(yaw),sy=sin(yaw);d=vec3(d.x*cy+d.z*sy,d.y,-d.x*sy+d.z*cy);' +
+    'float lon=atan(d.x,-d.z),lat=asin(clamp(d.y,-1.,1.));' +
+    'gl_FragColor=texture2D(t,vec2(0.5+lon/6.2831853,0.5-lat/3.1415927));}';
+  const sh = (tp, src) => { const o = gl.createShader(tp); gl.shaderSource(o, src); gl.compileShader(o); return o; };
+  const pr = gl.createProgram(); gl.attachShader(pr, sh(gl.VERTEX_SHADER, vs)); gl.attachShader(pr, sh(gl.FRAGMENT_SHADER, fs)); gl.linkProgram(pr); gl.useProgram(pr);
+  const buf = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, buf); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
+  const lp = gl.getAttribLocation(pr, 'p'); gl.enableVertexAttribArray(lp); gl.vertexAttribPointer(lp, 2, gl.FLOAT, false, 0, 0);
+  const U = (n) => gl.getUniformLocation(pr, n), tex = gl.createTexture();
+  const maxTex = gl.getParameter(gl.MAX_TEXTURE_SIZE);
+  let yaw = 0, pitch = -0.04, fov = 1.35, pronto = false, atual = null, pedido = 0;
+  const RAD = Math.PI / 180;
+
+  function imagemDe(id) {                     // the panorama, decoded once, resized if the GPU cannot take it
+    const el = document.getElementById('pano-' + id);
+    return new Promise((ok) => {
+      const im = new Image();
+      im.onload = () => {
+        if (im.width <= maxTex) return ok(im);
+        const c = document.createElement('canvas'); c.width = maxTex; c.height = maxTex / 2;
+        c.getContext('2d').drawImage(im, 0, 0, c.width, c.height); ok(c);
+      };
+      im.src = 'data:image/jpeg;base64,' + el.textContent.trim();
+    });
+  }
+  const cache = {};
+  function carregar(id) { return (cache[id] = cache[id] || imagemDe(id)); }
+
+  async function abrir(id, manterOlhar) {
+    const v = porId[id]; if (!v) return;
+    const n = ++pedido;
+    const olharMundo = atual ? porId[atual].olhar + yaw / RAD : v.olhar;   // keep looking the same way on the plan
+    veu.classList.add('on');
+    const im = await carregar(id);
+    if (n !== pedido) return;
+    gl.bindTexture(gl.TEXTURE_2D, tex);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, im);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    atual = id; pronto = true;
+    yaw = manterOlhar === false ? 0 : ((olharMundo - v.olhar) * RAD);
+    yaw = Math.atan2(Math.sin(yaw), Math.cos(yaw));
+    onde.textContent = v.nome;
+    criarPontos(); mapa(); lista();
+    desenhar();
+    requestAnimationFrame(() => veu.classList.remove('on'));
+    v.liga.forEach((o) => carregar(o));       // decode the neighbours ahead
+  }
+
+  // a link's direction from here: plan angle (anticlockwise from +x) -> the panorama's longitude
+  function direcao(de, para) {
+    const dx = para.camara[0] - de.camara[0], dy = para.camara[1] - de.camara[1], dz = para.camara[2] - de.camara[2];
+    const th = Math.atan2(dy, dx) / RAD;
+    let lon = (de.olhar - th) * RAD; lon = Math.atan2(Math.sin(lon), Math.cos(lon));
+    const dist = Math.max(1.2, Math.hypot(dx, dy));
+    const lat = dz ? Math.atan2(dz > 0 ? 0.6 : -0.9, Math.min(dist, 3)) : Math.atan2(-1.25, dist);
+    return [lon, lat];
+  }
+  let pontos = [];
+  function criarPontos() {
+    camada.innerHTML = ''; pontos = [];
+    const de = porId[atual];
+    de.liga.filter((o) => porId[o]).forEach((o) => {
+      const para = porId[o];
+      const b = document.createElement('button');
+      b.className = 'ponto' + (para.camara[2] - de.camara[2] > 1 ? ' sobe' : para.camara[2] - de.camara[2] < -1 ? ' desce' : '');
+      b.innerHTML = `<i></i><span>${esc(para.nome)}</span>`;
+      b.setAttribute('aria-label', 'Ir para ' + para.nome);
+      b.addEventListener('click', (e) => { e.stopPropagation(); abrir(o); });
+      b.addEventListener('pointerdown', (e) => e.stopPropagation());
+      camada.appendChild(b);
+      pontos.push([b, ...direcao(de, para)]);
+    });
+  }
+  function colocarPontos(W, H) {
+    const f = Math.tan(fov / 2), asp = W / H, cy = Math.cos(yaw), sy = Math.sin(yaw), cp = Math.cos(pitch), sp = Math.sin(pitch);
+    pontos.forEach(([b, lon, lat]) => {
+      const w = [Math.sin(lon) * Math.cos(lat), Math.sin(lat), -Math.cos(lon) * Math.cos(lat)];
+      const d1x = w[0] * cy - w[2] * sy, d1z = w[0] * sy + w[2] * cy, d1y = w[1];
+      const dy = d1y * cp + d1z * sp, dz = -d1y * sp + d1z * cp, dx = d1x;
+      if (dz >= -0.05) { b.style.display = 'none'; return; }
+      const sx = dx / -dz / (f * asp), syy = dy / -dz / f;
+      if (Math.abs(sx) > 1.1 || Math.abs(syy) > 1.1) { b.style.display = 'none'; return; }
+      b.style.display = ''; b.style.left = ((sx + 1) / 2 * W) + 'px'; b.style.top = ((1 - syy) / 2 * H) + 'px';
+    });
+  }
+  function desenhar() {
+    const r = ecra.getBoundingClientRect(), dp = Math.min(2, devicePixelRatio || 1);
+    const W = Math.max(1, Math.round(r.width * dp)), H = Math.max(1, Math.round(r.height * dp));
+    if (cv.width !== W || cv.height !== H) { cv.width = W; cv.height = H; }
+    gl.viewport(0, 0, W, H);
+    if (!pronto) return;
+    gl.uniform1f(U('yaw'), yaw); gl.uniform1f(U('pitch'), pitch); gl.uniform1f(U('f'), Math.tan(fov / 2)); gl.uniform1f(U('asp'), W / H);
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    colocarPontos(r.width, r.height);
+    cone();
+  }
+
+  // the minimap: this storey, every point, and a cone where you look
+  const svgM = document.getElementById('mapa360'), segM = document.getElementById('pisos360'), listaEl = document.getElementById('lista360');
+  const CORES_ESC = { parede: '#cfd6d8', chao: '#2a3135', risco: '#59656b', vidro: '#6aa6c9', linha: '#59656b', movel: '#323a3f', texto: '#eef1f1', suave: '#a3adb2' };
+  let mapaR = null, pisoMapa = null;
+  function mapa(piso) {
+    pisoMapa = piso || porId[atual].piso;
+    mapaR = desenharPlanta(svgM, pisoMapa, { nomes: false, moveis: true, cores: CORES_ESC, margem: 0.6 });
+    if (!mapaR) return;
+    const g = document.createElementNS(NS, 'g'); g.id = 'pontosMapa'; svgM.appendChild(g);
+    const c = document.createElementNS(NS, 'path'); c.id = 'cone'; c.setAttribute('fill', 'rgba(201,148,112,.45)'); svgM.appendChild(c);
+    V.filter((v) => v.piso === pisoMapa && mapaR.dentro(v.camara[0], v.camara[1])).forEach((v) => {
+      const k = document.createElementNS(NS, 'circle');
+      k.setAttribute('cx', mapaR.X(v.camara[0])); k.setAttribute('cy', mapaR.Y(v.camara[1])); k.setAttribute('r', v.id === atual ? '.34' : '.24');
+      k.setAttribute('fill', v.id === atual ? '#c99470' : '#eef1f1'); k.setAttribute('stroke', '#111517'); k.setAttribute('stroke-width', '.06');
+      k.style.cursor = 'pointer'; k.addEventListener('click', () => abrir(v.id));
+      const t = document.createElementNS(NS, 'title'); t.textContent = v.nome; k.appendChild(t);
+      g.appendChild(k);
+    });
+    [...segM.children].forEach((b) => b.setAttribute('aria-pressed', b.dataset.p === pisoMapa));
+    cone();
+  }
+  function cone() {
+    const c = svgM.querySelector('#cone'); if (!c || !mapaR) return;
+    const v = porId[atual];
+    if (v.piso !== pisoMapa || !mapaR.dentro(v.camara[0], v.camara[1])) { c.setAttribute('d', ''); return; }
+    const th = (v.olhar + yaw / RAD) * RAD, a = fov * 0.75, L = 2.6;
+    const x = +mapaR.X(v.camara[0]), y = +mapaR.Y(v.camara[1]);
+    const p = (ang) => `${(x + L * Math.cos(ang)).toFixed(3)} ${(y - L * Math.sin(ang)).toFixed(3)}`;
+    c.setAttribute('d', `M${x} ${y} L${p(th + a / 2)} L${p(th - a / 2)} Z`);
+  }
+  const pisosT = [...new Set(V.map((v) => v.piso))];
+  segM.innerHTML = pisosT.map((p) => `<button data-p="${p}">${esc(nomePiso[p] || p)}</button>`).join('');
+  segM.addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) mapa(b.dataset.p); });
+  function lista() {
+    listaEl.innerHTML = V.map((v) => `<button data-v="${v.id}" aria-pressed="${v.id === atual}">${esc(v.nome)}</button>`).join('');
+  }
+  listaEl.addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) abrir(b.dataset.v, false); });
+
+  // dragging, pinch and wheel
+  const toques = new Map();
+  ecra.addEventListener('pointerdown', (e) => { ecra.setPointerCapture(e.pointerId); toques.set(e.pointerId, [e.clientX, e.clientY]); });
+  ecra.addEventListener('pointermove', (e) => {
+    if (!toques.has(e.pointerId)) return;
+    const ant = toques.get(e.pointerId); toques.set(e.pointerId, [e.clientX, e.clientY]);
+    if (toques.size === 2) {
+      const [a, b] = [...toques.values()], o = [...toques.entries()].find(([k]) => k !== e.pointerId)[1];
+      const d1 = Math.hypot(a[0] - b[0], a[1] - b[1]), d0 = Math.hypot(ant[0] - o[0], ant[1] - o[1]);
+      fov = Math.min(1.9, Math.max(0.45, fov * d0 / d1)); desenhar(); return;
+    }
+    const k = fov / ecra.clientHeight;
+    yaw += (e.clientX - ant[0]) * k; pitch = Math.max(-1.45, Math.min(1.45, pitch + (e.clientY - ant[1]) * k));
+    desenhar();
+  });
+  ['pointerup', 'pointercancel'].forEach((t) => ecra.addEventListener(t, (e) => toques.delete(e.pointerId)));
+  ecra.addEventListener('wheel', (e) => { e.preventDefault(); fov = Math.min(1.9, Math.max(0.45, fov * (1 + e.deltaY * 0.001))); desenhar(); }, { passive: false });
+  ecra.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowLeft') yaw += 0.1; else if (e.key === 'ArrowRight') yaw -= 0.1; else return;
+    e.preventDefault(); desenhar();
+  });
+  ecra.tabIndex = 0;
+  document.getElementById('b360ecra').addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (document.fullscreenElement) document.exitFullscreen(); else if (ecra.requestFullscreen) ecra.requestFullscreen();
+  });
+  document.addEventListener('fullscreenchange', () => requestAnimationFrame(desenhar));
+  addEventListener('resize', desenhar);
+  // open when the tour comes into view (the panoramas are large: decode only then)
+  const io = new IntersectionObserver((es) => { if (es.some((x) => x.isIntersecting)) { io.disconnect(); abrir(V[0].id, false); } }, { rootMargin: '300px' });
+  io.observe(ecra);
+  window.__abrirVisita = abrir;
 })();
 </script>
 <script type="module">

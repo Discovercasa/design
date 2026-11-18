@@ -9,7 +9,11 @@ It never shows how the model was made. three.js (MIT) travels inside, gzipped.
 
 pagina.json: {"titulo", "subtitulo", "modelo": "<folder with casa.glb and render_*.jpg>", "casa": "<casa.json>",
               "pisos": [{"id", "nome", "cota", "divisoes": [[nome, m2], ...]}], "cota_topo",
-              "imagens": [{"vista", "titulo"}], "acabamentos": [{"parte", "texto", "cor"}], "ficha": [[k, v], ...]}
+              "imagens": [{"vista", "titulo"}], "acabamentos": [{"parte", "texto", "cor"}], "ficha": [[k, v], ...],
+              optional: "renders" (folder of the images and panoramas, default "modelo"),
+              "fecho": {"titulo", "texto", "botao", "link"}, "legal", "camadas_ext": [...], "porque": [...]}
+The tour (casa.json "visita": points with camara, olhar, liga) shows render_pano_<id>.jpg; the plans are drawn from
+casa.json (storey volumes, rooms, openings, stairs, the furniture's footprints, "divisoes" for names and areas).
 """
 import base64
 import datetime
@@ -55,10 +59,98 @@ def _num(v):
     return f"{v:,.2f}".replace(",", " ").replace(".", ",")
 
 
+PEGADAS = {   # furniture footprints on the plans: local rectangle (front = +y) from the piece's own sizes
+    "sofa": lambda d: [-d.get("larg", 2.5) / 2, -d.get("prof", 0.95) / 2, d.get("larg", 2.5) / 2, d.get("prof", 0.95) / 2],
+    "maple": lambda d: [-0.4, -0.4, 0.4, 0.4],
+    "mesa_centro": lambda d: [-d.get("larg", 1.1) / 2, -d.get("prof", 0.6) / 2, d.get("larg", 1.1) / 2, d.get("prof", 0.6) / 2],
+    "mesa_jantar": lambda d: [-d.get("larg", 1.8) / 2, -d.get("prof", 0.9) / 2, d.get("larg", 1.8) / 2, d.get("prof", 0.9) / 2],
+    "mesa_exterior": lambda d: [-d.get("larg", 1.6) / 2, -d.get("prof", 0.9) / 2, d.get("larg", 1.6) / 2, d.get("prof", 0.9) / 2],
+    "secretaria": lambda d: [-d.get("larg", 1.5) / 2, -d.get("prof", 0.65) / 2, d.get("larg", 1.5) / 2, d.get("prof", 0.65) / 2],
+    "cozinha": lambda d: [-d["larg"] / 2, -0.62, d["larg"] / 2, 0.0],
+    "lareira": lambda d: [-d.get("larg", 3.3) / 2, -d.get("prof", 0.62), d.get("larg", 3.3) / 2, 0.0],
+    "roupeiro": lambda d: [-d["larg"] / 2, -d.get("prof", 0.6), d["larg"] / 2, 0.0],
+    "estante": lambda d: [-d.get("larg", 1.6) / 2, -d.get("prof", 0.35), d.get("larg", 1.6) / 2, 0.0],
+    "aparador": lambda d: [-d.get("larg", 1.6) / 2, -d.get("prof", 0.42), d.get("larg", 1.6) / 2, 0.0],
+    "cama": lambda d: [-d.get("larg", 1.8) / 2 - 0.05, -d.get("comp", 2.05) / 2 - 0.06, d.get("larg", 1.8) / 2 + 0.05,
+                       d.get("comp", 2.05) / 2],
+    "sanita": lambda d: [-0.18, 0.0, 0.18, 0.56],
+    "lavatorio": lambda d: [-d.get("larg", 1.2) / 2, 0.0, d.get("larg", 1.2) / 2, d.get("prof", 0.48)],
+    "duche": lambda d: [-d.get("larg", 1.4) / 2, 0.0, d.get("larg", 1.4) / 2, d.get("prof", 0.85)],
+    "espreguicadeira": lambda d: [-0.33, -0.95, 0.33, 0.95],
+}
+
+
+def _poligono(d, r):
+    a = math.radians(d.get("rot", 0.0))
+    c, s = math.cos(a), math.sin(a)
+    return [[round(d["x"] + c * lx - s * ly, 3), round(d["y"] + s * lx + c * ly, 3)]
+            for lx, ly in ((r[0], r[1]), (r[2], r[1]), (r[2], r[3]), (r[0], r[3]))]
+
+
+def _planta(C, pisos):
+    """Per storey: volumes, rooms (interior / exterior), glazing, stairs, furniture footprints, the rooms' names."""
+    I = C.get("interior") or {}
+    out = []
+    for p in pisos:
+        pid = p["id"]
+        vz = [v for v in C.get("vazios", []) if pid in (v.get("em") or [])]
+        if not vz:
+            continue
+        chao = min(v["caixa"][2] for v in vz)
+        sol = [s["caixa"] for s in C.get("solidos", []) if s["nome"] == pid]
+        vaz = [[*v["caixa"][:2], *v["caixa"][3:5], "ext" if (v.get("mats") or {}).get("lados") == "ripado" else "int"]
+               for v in vz if v["caixa"][2] <= chao + 0.6 and (v.get("mats") or {}).get("chao") != "painel"]
+        ext = [[c["caixa"][0], c["caixa"][1], c["caixa"][3], c["caixa"][4]] for c in C.get("caixas", [])
+               if c.get("grupo") == pid and c.get("mat") == "deck"]
+        vaos = [[*va["caixa"][:2], *va["caixa"][3:5], va["eixo"]] for va in C.get("vaos", []) if va.get("grupo") == pid]
+        esc = []
+        for e in I.get("escadas", []):
+            a, b = e["de"], e["ate"]
+            if not (e.get("grupo") == pid or abs(b[2] - chao) < 0.4 or abs(a[2] - chao) < 0.4):
+                continue
+            dx, dy = b[0] - a[0], b[1] - a[1]
+            L = math.hypot(dx, dy) or 1
+            ux, uy, w = dx / L, dy / L, e.get("largura", 1.0) / 2
+            n = int(e.get("degraus", 16))
+            lado = (-uy * w, ux * w)
+            cont = [[a[0] + lado[0], a[1] + lado[1]], [b[0] + lado[0], b[1] + lado[1]],
+                    [b[0] - lado[0], b[1] - lado[1]], [a[0] - lado[0], a[1] - lado[1]]]
+            deg = []
+            for i in range(n):
+                t = i / max(1, n - 1)
+                cx, cy = a[0] + dx * t, a[1] + dy * t
+                deg.append([[round(cx + lado[0], 3), round(cy + lado[1], 3)], [round(cx - lado[0], 3), round(cy - lado[1], 3)]])
+            esc.append({"contorno": [[round(x, 3), round(y, 3)] for x, y in cont], "degraus": deg})
+        mov = []
+        for d in I.get("pecas", []):
+            if d.get("grupo") == pid and d["tipo"] in PEGADAS:
+                mov.append(_poligono(d, PEGADAS[d["tipo"]](d)))
+                if d["tipo"] == "cama" and d.get("mesinhas", True):
+                    L, Cc = d.get("larg", 1.8), d.get("comp", 2.05)
+                    for sx in (-1, 1):
+                        cx = sx * (L / 2 + 0.33)
+                        mov.append(_poligono(d, [cx - 0.24, -Cc / 2 + 0.05, cx + 0.24, -Cc / 2 + 0.45]))
+        div = [d for d in C.get("divisoes", []) if d.get("piso") == pid]
+        out.append({"id": pid, "nome": p["nome"], "solidos": [[b[0], b[1], b[3], b[4]] for b in sol], "vazios": vaz,
+                    "exteriores": ext, "vaos": vaos, "escadas": esc, "moveis": mov, "divisoes": div})
+    return {"rodar": C.get("rodar_graus", 0.0), "pisos": out}
+
+
+CAMADAS_EXT = ["Revestimento exterior à escolha (nesta casa: __FACHADA__)",
+               "Membrana respirável: não deixa entrar a água e deixa sair o vapor", "Placa de OSB",
+               "Estrutura em madeira com isolamento em lã mineral entre os montantes", "Placa de OSB",
+               "Acabamento interior (gesso cartonado pintado)"]
+PORQUE = ["Obra mais rápida: os módulos fazem-se em fábrica enquanto se prepara o terreno.",
+          "Precisão: as peças são cortadas e montadas com medidas exatas.",
+          "Conforto: a estrutura e o isolamento trabalham juntos no inverno e no verão.",
+          "Um material renovável, que guarda carbono."]
+
+
 def gerar(pagina, saida):
     P = json.loads(Path(pagina).read_text(encoding="utf-8"))
     base = Path(pagina).resolve().parent
     modelo = (base / P["modelo"]).resolve()
+    renders = (base / P.get("renders", P["modelo"])).resolve()
     C = json.loads((base / P["casa"]).read_text(encoding="utf-8"))
     th = math.radians(C.get("rodar_graus", 0.0))
 
@@ -88,9 +180,16 @@ def gerar(pagina, saida):
             texturas[chave] = f"data:image/{tipo};base64," + base64.b64encode((modelo / nome).read_bytes()).decode("ascii")
     if P.get("ajuste"):
         dados["ajuste"] = P["ajuste"]
+    visita = [v for v in C.get("visita", []) if (renders / f"render_pano_{v['id']}.jpg").exists()]
+    ids = {v["id"] for v in visita}
+    dados["visita"] = [{**v, "liga": [o for o in v.get("liga", []) if o in ids]} for v in visita]
+    dados["planta"] = _planta(C, P["pisos"])
+    panos = "\n".join(f'<script type="text/plain" id="pano-{v["id"]}">'
+                       + base64.b64encode((renders / f"render_pano_{v['id']}.jpg").read_bytes()).decode("ascii")
+                       + "</script>" for v in visita)
     fotos = []
     for i in P.get("imagens", []):
-        f = modelo / f"render_{i['vista']}.jpg"
+        f = renders / f"render_{i['vista']}.jpg"
         if f.exists():
             fotos.append((base64.b64encode(f.read_bytes()).decode("ascii"), html.escape(i["titulo"])))
     hero = galeria = ""
@@ -103,6 +202,13 @@ def gerar(pagina, saida):
             f'<img src="data:image/jpeg;base64,{b}" alt="{tit}" loading="lazy"></button><figcaption>{tit}</figcaption></figure>'
             for b, tit in fotos[1:])
     hoje = datetime.date.today()
+    fachada = next((a["texto"] for a in P.get("acabamentos", []) if a.get("parte") == "Fachada"), "à escolha do cliente")
+    fecho = {"titulo": "Gostou da sua casa?",
+             "texto": "Esta página mostra o projeto como vai ficar. Fale connosco para afinar acabamentos, cores e "
+                      "mobiliário, ou para visitar uma obra DiscoverCasa.",
+             "botao": "Falar com a DiscoverCasa", "link": "https://discovercasa.pt", **P.get("fecho", {})}
+    legal = P.get("legal", "Imagens ilustrativas: o mobiliário, a decoração e a envolvente (casas vizinhas, "
+                           "vegetação, céu) são indicativos. Áreas do projeto de arquitetura.")
     valores = {
         "TITULO": html.escape(P["titulo"]),
         "SUBTITULO": html.escape(P.get("subtitulo", "")),
@@ -114,9 +220,16 @@ def gerar(pagina, saida):
         "MODULOS": json.dumps(_modulos(), separators=(",", ":")),
         "GLB": base64.b64encode((modelo / "casa.glb").read_bytes()).decode("ascii"),
         "TEXTURAS": json.dumps(texturas, separators=(",", ":")),
+        "PANOS": panos,
+        "CAMADAS_EXT": "".join(f"<li>{html.escape(t).replace('__FACHADA__', html.escape(fachada[:1].lower() + fachada[1:]))}</li>"
+                               for t in P.get("camadas_ext", CAMADAS_EXT)),
+        "PORQUE": "".join(f"<li>{html.escape(t)}</li>" for t in P.get("porque", PORQUE)),
+        "FECHO_TITULO": html.escape(fecho["titulo"]), "FECHO_TEXTO": html.escape(fecho["texto"]),
+        "CONTACTO_BOTAO": html.escape(fecho["botao"]), "CONTACTO_LINK": html.escape(fecho["link"], quote=True),
+        "LEGAL": html.escape(legal),
     }
     tpl = (AQUI / "modelo_pagina.html").read_text(encoding="utf-8")
-    pagina_html = re.sub(r"__(TITULO|SUBTITULO|FICHA|DATA|HERO|GALERIA|DADOS|MODULOS|GLB|TEXTURAS)__", lambda m: valores[m.group(1)], tpl)
+    pagina_html = re.sub(r"__(" + "|".join(valores) + ")__", lambda m: valores[m.group(1)], tpl)
     Path(saida).write_text(pagina_html, encoding="utf-8")
     return len(pagina_html.encode("utf-8")), len(fotos)
 

@@ -56,8 +56,12 @@ Why Claude learns the method; "vamos passo a passo" — an overall idea, then an
    the ODA File Converter; `ferramentas/dxf/leitor_dxf.py` reads it. Ribamar's description is measured by hand on the DXF
    for now (`_trabalho/ribamar/`, local); the automatic reading should later produce `casa.json`.
    **Documents per client page (2026-11-12):** each page is a different project and client, so each needs its own
-   files. Claude's proposed list waits for Dinis's validation (hub task «Validar a lista de documentos para fazer uma
-   página», Builder › Páginas › Estrutura da página): essential — floor plans of every storey, elevations and sections,
+   files. Claude's proposed list waited for Dinis's validation (hub task 182 «Validar a lista de documentos para fazer uma
+   página», Builder › Páginas › Estrutura da página). **Validated by Dinis 2026-11-18 (changed; the text after this
+   is the original proposal, superseded 2026-11-18, see registo):** A essential = only the floor plan (if it has no
+   dimensions, two dimensions typed by hand so the program can estimate the scale); former A.2 elevations and sections,
+   A.3 site plan + topographic survey, A.4 finishes move to B (if not submitted, DiscoverCasa's predefined defaults);
+   the rest "como estava". Original proposal: essential — floor plans of every storey, elevations and sections,
    site plan + topographic survey, finishes; very useful (Claude proposes if missing) — window/door schedule,
    electrical/lighting plan, furniture plan, kitchen/bathroom design, landscaping, site photos, area table; optional —
    architect's 3D model, client's choices and references, page texts. Formats: DWG/DXF → DWFx → vector PDF → scanned.
@@ -73,6 +77,18 @@ Why Claude learns the method; "vamos passo a passo" — an overall idea, then an
    **Decisions 2026-11-13:** phase 1 = the checkpoint «Do desenho à página do cliente» operational, quality up
    afterwards; every client page has the 360° tour at the house's quality (hub task 183); houses and pages are always
    reviewed before going to the client; GPU work runs on the user's home PC; pixel streaming only for the VR.
+   **2026-11-18 (page for final tests):** the user wants the Builder pages completely ready for final tests, one page
+   finished with maximum-quality renders, first asked on the office PC, then moved the same day to the home RTX 2060
+   («podes correr os renders no PC de casa na RTX2060 quando tiver finalizado da-me o link»: the 2026-11-13 «home PC»
+   rule stands). Pages built only from a floor plan are NOT marked «baseada em padrão» in the hub (user 2026-11-18,
+   «nao marques as páginas»). Page details (task 181, 15 questions, concluded in the hub but unanswered by Dinis):
+   defaults used — page name = house name only (no client name), PT only; sections: opening photo, facts, menu, 360°
+   tour, images, 3D, plans, areas and materials, «Como construímos» (the DiscoverCasa method explained to clients),
+   closing «Gostou da sua casa?» with a button to discovercasa.pt; legal line «Imagens ilustrativas: mobiliário,
+   decoração e envolvente indicativos; áreas do projeto». **Pending:** Dinis's answers to task 181. Built: `ferramentas/pagina/interior.py`
+   (furniture, stairs, doors, skirting, downlights, lamps as Cycles lights, kitchen, fireplace, bathrooms, plants,
+   pictures), 360° tour with minimap, plans per storey with furniture, «Como construímos»; Ribamar furniture follows the
+   architect's DXF furniture layers, other rooms are DiscoverCasa's proposal.
    **Real exterior always (2026-11-13):** "o exterior não deve estar só presente na tour 360 mas sim sempre em todos os
    projetos a não ser que seja mencionado que não queremos" — the surroundings are in the 3D, the images and the tour
    of every house unless told otherwise. Render stations: any PC (first the home PC, RTX 2060 6 GB — user confirmed,

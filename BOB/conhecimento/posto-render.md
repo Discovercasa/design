@@ -68,6 +68,11 @@ wants this work on that PC (2026-11-13), which implies it may hold client files 
   renders with OptiX on the RTX 2060 (960×540, 128 samples, 2.6 s). GUI jobs (Unreal editor) must run in the user's
   logged-in desktop (a scheduled task started over SSH), not in the SSH session. To cut access: Tailscale off on the
   home PC, or delete the `bob-escritorio` line in `C:\ProgramData\ssh\administrators_authorized_keys`.
+- **Unreal phase postponed (user 2026-11-18):** asked «Começamos o Unreal do Step Inside a partir daqui?», answer «Mais tarde»; when resumed it is driven from the office session.
+- **Client-page renders (user 2026-11-18):** first «usa o PC do escritório onde esta sessão corre», then the same day
+  «podes correr os renders no PC de casa na RTX2060» → full pages render on this station, driven over SSH from the
+  office session (tools from `git pull`, the house's casa*.json copied by scp into `D:\BOB-posto\<obra>\`, results
+  copied back; the client data stays local, never in Git). The office GTX 1050 Ti is for quick previews.
 - **Following from elsewhere (optional, ask first):** Remote Control in the Claude app (phone, office); later SSH
   (OpenSSH + a VPN such as Tailscale) so an office session can start jobs there.
 - **Memory:** a session there does not see the office conversations; the shared memory is the repo (`BOB/CLAUDE.md`,

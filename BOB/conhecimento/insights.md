@@ -199,6 +199,7 @@ he answers (`metodo-construtivo.md`). Condensed 2026-10-28 (history in git).
   permanent home — **open**, hub task 43 / 169 note 8. Researched on the web, not yet checked against the decree text.
 
 ## Recorded, not yet told (raise when it fits)
+- **2026-11-18** — the office GTX 1050 Ti (CUDA) makes a full client page (11 images 2560x1600 + 11 panoramas 4096x2048) an overnight job (about 8 h); the home RTX 2060 with OptiX would be several times faster → run full pages on the home station once the user agrees; keep the office for tests. The 50 MB limit of the hub's «documentos» bucket is not a problem: a 2048 px panorama is ~160 KB as JPEG, a 4096 px one ~0.6 MB, so 11 of them add ~7 MB. Status: not yet told.
 - **2026-11-11** — the plan readers depend on drawing colours (red walls, blue glazing, magenta swings) and on
   axis-parallel walls: any other drawing fails (the user's correction: "tens de conseguir ler qualquer documento").
   Colour-independent reading (line weight/pairs, hatch, layers/names, text, rasters via vision) needs the user's sample

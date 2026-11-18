@@ -649,3 +649,25 @@ The team's notes on hub task 84 (written in the hub by [membro da equipa] on 202
 - Proposed: SSH from the office PC to the home PC over a private VPN (Tailscale), key-only; GUI jobs (Unreal editor) launched in the user's logged-in desktop via a scheduled task; files back by scp. Waiting for the user's go-ahead (installs on both PCs).
 > eu quero poder trabalhar nesta sessão e fazer tudo nesta sessão mas os renders funcionarem no PC de casa
 - Done: Tailscale on both PCs (the office PC approved by link from the home PC; Google passkey sign-in failed without Bluetooth), OpenSSH Server key-only on the home PC; test render over SSH with OptiX on the RTX 2060 OK. Filed in `posto-render.md`.
+
+### 2026-11-18 — Unreal postponed [Step Inside]
+- Context: Claude asked «Começamos o Unreal do Step Inside a partir daqui?» (after the SSH link to the home PC worked).
+> Mais tarde
+- Filed: `posto-render.md` → Working on it (Unreal phase postponed; when resumed it is driven from the office session); pending item in the report.
+
+### 2026-11-18 — Builder: pages ready for final tests, rendered on the office PC [Builder, client page]
+> quero que no builder as páginas fiquem completamente prontas para testes finais, lê apenas o que o Dinis acrescentou nos comentários e depois começa a dar setup a tudo e queria uma página já com tudo finalizado e estruturado com renders na qualidade máxima mas usa o PC do escritório onde esta sessão corre
+- Rule: renders for this page run on the OFFICE PC (GTX 1050 Ti, CUDA), not the home render station.
+- Read in the hub (2026-11-18), Dinis on task 182 «Validar a lista de documentos para fazer uma página» (2026-11-16), verbatim:
+> Acho que não ha necessidade de tantos essenciais, para mim essencial é apenas uma planta e caso nao tenha medidas no documento colocarmos à mão 2 medidas para o programa fazer estimativas
+> A.2, 3 e 4 - Não ha necessidade de ser essenciais, se submetermos algo, perfeito, se não utiliza algo já pre difinido por nos
+> apenas mudava o ponto 2,3 e 4 para o B 
+> de resto concordo totalmente
+- Filed: `discovercasa.md` → client page, documents list updated (A = floor plan only; elevations/sections, site plan + survey, finishes moved to B with DiscoverCasa defaults; two hand-typed dimensions if the plan has none).
+- Task 181 (Pormenores da página do cliente, 15 questions) is concluded in the hub but Dinis left no answers in its conversation: defaults used (page name = house name only, PT only; sections: opening photo, facts, menu, 360° tour, images, 3D, plans, areas and materials, «Como construímos», closing «Gostou da sua casa?» with a button to discovercasa.pt; legal line «Imagens ilustrativas: mobiliário, decoração e envolvente indicativos; áreas do projeto»). Pending: Dinis's answers. Filed: `discovercasa.md`.
+- Built 2026-11-18 (in progress): `ferramentas/pagina/interior.py` (furniture, stairs, interior doors, skirting, ceiling downlights, pendant/floor/table lamps as real Cycles lights, kitchen, fireplace, bathrooms, plants, books, pictures; `casa.json` "interior"); `casa_blender.py` uses it (own lightmap atlas «mobilia» for the web model, option --limiar, more indoor bounces); page template: 360° tour (11 points for Ribamar, plan minimap with view cone, links between rooms), plans per storey from `casa.json` with furniture footprints, «Como construímos», closing section; `casa.json` gains "divisoes" and "visita". Ribamar furniture positions come from the architect's furniture layers in the DXF; bedrooms, atelier and bathroom fittings beyond the drawn ones are DiscoverCasa's proposal. Render quality on the office PC: images 2560x1600 at 200 samples, panoramas 4096x2048 at 128 samples (OIDN denoise), about 8 h in total.
+- Filed: `discovercasa.md` (client page), `posto-render.md` (office PC renders this page), `insights.md` (overnight job; storage cap).
+
+### 2026-11-18 — Pages: no «baseada em padrão» mark; final renders on the home RTX 2060 [Builder, stations]
+> nao marques as páginas e podes correr os renders no PC de casa na RTX2060 quando tiver finalizado da-me o link
+- Decided (user): pages built only from a floor plan are NOT marked «baseada em padrão» in the hub. The Ribamar final renders move from the office PC to the home render station (RTX 2060, OptiX, driven over SSH from the office session); the user wants the link when the page is done. Filed: `conhecimento/discovercasa.md`, `conhecimento/posto-render.md`.
