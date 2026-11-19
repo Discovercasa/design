@@ -725,3 +725,11 @@ The team's notes on hub task 84 (written in the hub by [membro da equipa] on 202
   like the photo of the built house in sun.
 - Decided (user): the page keeps the current images; only the 3D and the 360° tour are redone now; the images are
   rendered again only if the user likes the result.
+
+### 2026-11-19 — Shut the home station down when the renders finish [stations]
+> consegues encerrar o meu PC de casa quando tiver feito?
+> ok perfeito
+- Done: after the 3D and the 11 panoramas were copied to the office and checked (MD5, 18 files), the home PC was shut
+  down over SSH (`shutdown /s /t 60` with a message; `shutdown /a` cancels). It cannot be woken remotely: for the next
+  renders the user switches it on. Page «Casa Ribamar» (19/11, documentos 97) uploaded; 96 kept as «versão de 18/11, 1.ª».
+  Filed: `conhecimento/posto-render.md`.
