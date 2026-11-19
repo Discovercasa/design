@@ -30,6 +30,7 @@ from ferramentas.documentos.folha import (A4, AZUL, CASTANHO, CINZA, CINZA_CLARO
                                           folha, logo, seccao)
 from ferramentas.documentos.pdf import PDF, hexcor, largura  # noqa: E402
 from ferramentas.documentos.codigos import areas, codigo  # noqa: E402
+from ferramentas.documentos import compra as compra_hub  # noqa: E402
 
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
@@ -1216,25 +1217,49 @@ def linhas_material(casa):
 def doc_listagem(casa, info, caminho_pdf, caminho_csv):
     linhas = linhas_material(casa)
     itens = (casa.S.get("caixilharia") or {}).get("itens", [])
+    # «Compra» of every line in the unit the company buys it in, from the Hub material it is linked to (compra.py;
+    # user 2026-11-19); without the local copy of the Hub's materials the standard's purchase units stay
+    lig, mat = compra_hub.carregar()
+    refs = []
+    if lig:
+        novas = []
+        for cap, d, p, n, L, A, Vv, q, u in linhas:
+            q2, u2, ref = compra_hub.compra(codigo(cap, d, p), d, p, n, L, A, Vv, q, u, lig, mat)
+            novas.append((cap, d, p, n, L, A, Vv, q2, u2))
+            refs.append(ref)
+        linhas = novas
+    else:
+        refs = [""] * len(linhas)
+    ref_de = {id(l): r for l, r in zip(linhas, refs)}
+    # timber totals by section (user 2026-11-19: "madeira total de 22x7,5, madeira total de 11x7,5 …")
+    tot_sec = sorted(compra_hub.totais_madeira([x for x in casa.pecas_madeira() if "érgola" not in x[0]]),
+                     key=lambda r: ordem_secoes(r[0]))
+    def casq(sec):  # the Hub timber a section is bought as (22x7,5: the long boards)
+        c = "MAD-CASQ-22" if sec.lower() in ("220x75", "75x220") else "MAD-CASQ"
+        return (mat.get((lig.get(c) or {}).get("hub", ""), {}) or {}).get("nome", "")
     # CSV (for budgeting): the stable product code of each line is what the Orçamentação prices (codigos.py)
     with open(caminho_csv, "w", newline="", encoding="utf-8-sig") as fh:
         w = csv.writer(fh, delimiter=";")
         w.writerow(["capitulo", "codigo", "descricao", "produto", "pecas", "comprimento_m", "area_m2", "volume_m3", "quantidade_compra",
-                    "unidade_compra"])
-        for cap, d, p, n, L, A, Vv, q, u in linhas:
-            w.writerow([CAPITULOS.get(cap[0], cap) + (" (madeira)" if cap == "8m" else ""), codigo(cap, d, p), d, p, n, round(L, 2) or "",
-                        round(A, 2) or "", round(Vv, 3) or "", q, u])
+                    "unidade_compra", "referencia_compra"])
+        for (cap, d, p, n, L, A, Vv, q, u), ref in zip(linhas, refs):
+            w.writerow([CAPITULOS.get(cap[0], cap) + (" (madeira)" if cap == "8m" else ""), codigo(cap, d, p), d, p, n or "", round(L, 2) or "",
+                        round(A, 2) or "", round(Vv, 3) or "", q, u, ref])
+        for sec, n, L, Vv, tb, longas in tot_sec:  # summary lines: never priced (RESUMO)
+            w.writerow([CAPITULOS["1"] + " (totais por secção)", "RESUMO", f"Total madeira {seccao(sec)}"
+                        + (f" ({longas} peças > {fmt(compra_hub.TABUA_MAX)} m)" if longas else ""), f"Madeira {seccao(sec)}", n,
+                        round(L, 2), "", round(Vv, 3), round(tb, 2) if tb else math.ceil(Vv * 100) / 100, "m3 tábua 230x78" if tb else "m3", casq(sec) if tb else ""])
         for it in itens:
             w.writerow([CAPITULOS["7"] + " (itens)", codigo("7i", it.get("descricao_curta", "")),
                         f"{it.get('modulo') or it.get('parede', '')} {it.get('divisao', '')} - {it.get('descricao_curta', '')}", it.get("descricao", ""),
                         1, "", round(it["largura"] * it["altura"], 3), "", 1, f"{fmt(it['largura'])}x{fmt(it['altura'])}"
-                        + (" + estore" if it.get("estore") else "")])
+                        + (" + estore" if it.get("estore") else ""), ""])
         for cod, desc, a in areas(casa.G):  # the house's data, for the parcels priced per m² (Orçamentação)
-            w.writerow(["Dados da obra", cod, desc, "", "", "", a, "", "", ""])
+            w.writerow(["Dados da obra", cod, desc, "", "", "", a, "", "", "", ""])
     # PDF (A4 portrait)
     pdf = PDF(titulo=f"{info['obra']} - Listagem de material")
-    cols = [("Descrição", 46, "e"), ("Produto / secção", 56, "e"), ("Peças", 12, "d"), ("Comp. m", 15, "d"),
-            ("Área m²", 15, "d"), ("Vol. m³", 14, "d"), ("Compra", 32, "d")]
+    cols = [("Descrição", 44, "e"), ("Produto / secção (material de compra)", 52, "e"), ("Peças", 11, "d"), ("Comp. m", 14, "d"),
+            ("Área m²", 14, "d"), ("Vol. m³", 14, "d"), ("Compra", 41, "d")]
     tab = []
     for cap in ("1", "2", "3", "4", "5", "6", "7", "8"):
         sel = [l for l in linhas if l[0] == cap or (cap == "8" and l[0] == "8m")]
@@ -1251,13 +1276,20 @@ def doc_listagem(casa, info, caminho_pdf, caminho_csv):
             continue
         else:
             tab.append(f"# {cap} {CAPITULOS[cap]}")
-        for _c, d, p, n, L, A, Vv, q, u in sel:
-            tab.append([d, p, str(n) if n else "", fmt(L, 1) if L else "", fmt(A, 1) if A else "", fmt(Vv, 3) if Vv else "",
-                        f"{q} {u}" if q != "" else ""])
+        for l in sel:
+            _c, d, p, n, L, A, Vv, q, u = l
+            ref = ref_de.get(id(l), "")
+            prod = p if (p or "").startswith("Madeira") or not ref or ref.startswith("não está") else ref
+            tab.append([d, prod, str(n) if n else "", fmt(L, 1) if L else "", fmt(A, 1) if A else "", fmt(Vv, 3) if Vv else "",
+                        (f"{fmt(q) if isinstance(q, float) else q} {u}") if q != "" else ""])
         if cap in ("1",):
             sel = [l for l in sel if l[2].startswith("Madeira")]  # not the hardware
             tab.append(["Total madeira", "", str(sum(l[3] for l in sel)), fmt(sum(l[4] for l in sel), 1), "",
-                        fmt(sum(l[6] for l in sel), 2), ""])
+                        fmt(sum(l[6] for l in sel), 2), (f"{fmt(sum(r[4] for r in tot_sec if r[4]))} m3 tábua 230x78"
+                                                         if any(r[4] for r in tot_sec) else "")])
+            for sec, n, L, Vv, tb, longas in tot_sec:
+                tab.append([f"Total madeira {seccao(sec)}", f"{longas} peças > {fmt(compra_hub.TABUA_MAX)} m" if longas else "",
+                            str(n), fmt(L, 1), "", fmt(Vv, 3), f"{fmt(tb)} m3 tábua 230x78" if tb else f"{fmt(math.ceil(Vv * 100) / 100)} m3"])
     corte = casa.lista_corte(False)
     tab.append("# Anexo - lista de corte da madeira (módulos, amarração, lameladas, madres, prumos, calços, pérgola)")
     for sec in sorted(corte, key=ordem_secoes):
@@ -1285,6 +1317,10 @@ def doc_listagem(casa, info, caminho_pdf, caminho_csv):
         pg.linha(10, 12, 200, 12, 0.15, CINZA)
         pg.texto(10, 8, "Quantidades do modelo (líquidas, peças como cortadas; montantes inteiros); compra = quantidade x "
                  "(1 + desperdício) / unidade. Não inclui consumíveis, fundação, portas interiores nem instalações.", 1.5, CINZA)
+        if lig:
+            pg.texto(10, 5.5, "Compra na unidade do material do Hub (Orçamentação); madeira = m³ de tábua de casquinha 230x78 de onde se "
+                     "cortam as secções (4 x 11x3,5, 6 x 7,5x3,5, 2 x 11x7,5, 1 x 22x7,5 por tábua; rendimento assumido, sem sobras "
+                     "de comprimento).", 1.5, CINZA)
         pg.texto(200, 8, f"Página {n}/{total}", 1.8, ESCURO_DC, alinh="d")
     pdf.gravar(caminho_pdf)
     if SVG:

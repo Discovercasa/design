@@ -22,6 +22,7 @@
  "ferramentas/modelo/sistema_construtivo.json",
  "ferramentas/documentos/__init__.py",
  "ferramentas/documentos/codigos.py",
+ "ferramentas/documentos/compra.py",
  "ferramentas/documentos/dados.py",
  "ferramentas/documentos/de_desenhos.py",
  "ferramentas/documentos/folha.py",

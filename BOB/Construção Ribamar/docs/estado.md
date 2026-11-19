@@ -8,7 +8,14 @@ in DiscoverCasa timber modules. The user's words: `conhecimento/registo-conversa
 - **Delivered: Listagem de material from the real module sheets** — hub › gerador › Documentos adicionais › «Ribamar» ›
   pasta «Ribamar Listagem de material» (documents 113 PDF, 114 CSV; hub Log 102). Made by
   `ferramentas/documentos/listagem_modulos.py` with `modelos/listagem/config.json` (assumptions below).
-- **Waiting for the user**: confirm that "Casa CL" = Ribamar; the open questions below (asked 2026-11-19).
+- **Listagem version 2 (2026-11-19, user's request)** — hub documents 113 / 114 replaced, hub Log 103: a total per timber
+  section and the «Compra» of every product from the Hub materials (`ferramentas/documentos/compra.py`; rule in
+  `metodo/01-principios.md` §0a). Timber: 22x7,5 5,44 m³ (45 pcs, 329,7 m, 29 > 5,70 m); 11x7,5 5,12 m³ (248 pcs,
+  621,1 m, 42 > 5,70 m); 11x3,5 1,92 m³ (204 pcs, 497,7 m); 7,5x3,5 0,80 m³ (135 pcs, 303,2 m) → **14,62 m³ of
+  casquinha 230x78 board** (our cutting yield, no waste, no length offcuts — to confirm, `metodo/10-pontos-abertos.md`
+  item 27). Pieces over 5,70 m need the "+6 m" stock (Q11).
+- **Waiting for the user**: confirm that "Casa CL" = Ribamar; the open questions below (asked 2026-11-19); "metros
+  quadrados" totals per section: m² or running metres? (Q13, asked back 2026-11-19).
 - **Not asked yet**: the per-project questions (`conhecimento/perguntas-por-obra.md`) — the Listagem used the defaults.
   Ask them in one message, skipping what the drawings already answer; also the stage of the obra (Ribamar is an obra
   followed for social content, `conhecimento/discovercasa.md` "Social media").
@@ -76,5 +83,8 @@ Not asked yet (ours, from the 2026-11-19 check):
    (config `faixa_piso` 0,39 assumes the stack).
 10. Piso 1 clear height: 2,5 (architecture) or ≈ 2,64 (interior modules 2,68 + amarração 0,11 − false ceiling 0,148,
     our arithmetic)? The Listagem uses 2,50 for the walls' Pladur.
-11. 8,89 m joists in one piece: the longest 22×7,5 stock bought is OPEN (`metodo/08-produtos-limites.md`).
+11. 8,89 m joists in one piece: the longest 22×7,5 stock bought is OPEN (`metodo/08-produtos-limites.md`); Listagem v2
+    flags 29 × 22x7,5 and 42 × 11x7,5 over 5,70 m for the Hub's "+6 m" stock.
 12. Stage of the obra (built? which phase?).
+Asked back 2026-11-19 (Listagem v2):
+13. "os metros quadrados totais … de cada viga": m² or running metres? (read as running metres meanwhile).

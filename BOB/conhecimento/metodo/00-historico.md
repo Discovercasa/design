@@ -48,3 +48,5 @@ attached blocks (§3, §7, §8, §15; supersedes the 10 cm bocal and the 13,5 m)
 and step 7): panel colour RAL 8004 (Munditelha and the hidden 5-ondas; Sobral's grey = [SB]; flashings, lining assumed the
 same), downpipes two per gutter / one on a small one (replaces "one per 37 m²"), pergola top ≤ the ground floor's top, an
 attached block's wall flush with its neighbours (§7, §8, §11, §15; L70).
+
+**v8.14 (moved here from the index in v8.17)**: **Version 8.14, 2026-11-07** — the raise applies to houses from a plan only; houses from the engineer's module drawings (`estrutura_dc.py`, Sobral) keep the drawings' module height and heads ≈ 3 cm lower — confirmed exception (user "Sim, ficam"; §3, X1(b)).

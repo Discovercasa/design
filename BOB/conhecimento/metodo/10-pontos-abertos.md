@@ -42,6 +42,8 @@
 - Our 2026-10-22 "Num L quase quadrado em 2 águas, que direção de cumeeira preferes?" (the 1 : 1,6 rule is ours, §7; = D1).
 - The **header** ("viga de bordadura"): "Porque razão? Explica-me melhor por favor" → explained 2026-10-28; his reply
   (§6, §13; the rule stays ours / the engineer's).
+- **"metros quadrados totais … de cada viga"** (2026-11-19): read as running metres, asked back — the Listagem gives pieces,
+  m and m³ per section meanwhile (§0a).
 ### To ask now (one point per question, with the images / sketch named; §0)
 **Roof questionnaire, asked 2026-10-29 night** — his words "faz todas as questões que precisares para começarmos a fazer as
 coberturas sem falhas algumas!!"; he answers by the code; in brackets what the engine does now; replaces the earlier scattered
@@ -155,6 +157,9 @@ Other items (numbers kept):
     confirmed; verga underside = min(opening head, top plate underside − 0,22) (§3; L72; `estrutura_dc.emoldurar`).
     The 110×75 jamb piece over the verga's ends (verga's top to top plate / module top) also **confirmed 2026-11-07**:
     "Sim, confirmo" (gap otherwise ≈ 45 cm > 40 cm clear).
+27. **Timber purchase** (2026-11-19, the Listagem's «Compra», §0a, §11): are 11x3,5 / 7,5x3,5 / 11x7,5 / 22x7,5 cut from
+    casquinha 230x78 board (our yield 4 / 6 / 2 / 1 per board; 6 × 7,5 leaves 5 mm for the saw)? Which waste % on timber
+    (none counted today)? The "+6 m" stock's lengths for pieces over 5,70 m (Ribamar's 8,89 m joists).
 ### [TV] to ask, low priority (TV comparison)
 - The pergola: slope and what is under the ceramic tiles, tile battens, gutter section and material, where the 2 downpipes
   discharge, sections and post bases, the exterior glulam treatment's name (§8, TV #21, #22).
@@ -181,7 +186,7 @@ Other items (numbers kept):
 ### [SB] open (Sobral paused, "estará para avançar brevemente")
 - Vigas de amarração on the ground-floor walls under the floor joists (with an afinação?) (§4 — now [RB] too, below);
   living-room joists at 0,50 (§5); keep pitch or keep ridge (SB #22, §7).
-### [RB] Ribamar = Casa CL as built (2026-11-19; the house's own list: `Construção Ribamar/docs/estado.md` "Open questions" Q1–Q12)
+### [RB] Ribamar = Casa CL as built (2026-11-19; the house's own list: `Construção Ribamar/docs/estado.md` "Open questions" Q1–Q13)
 Each point is a Ribamar fact against a rule; the rule stands until he answers. Asked 2026-11-19: Q1–Q6; not asked yet: Q7–Q12.
 - **"Casa CL" = Ribamar's module sheets** (byte-identical; title block a template) — confirm (Q1, asked). Until then the
   legend's reading holds: Casa CL's framing = method, its house features = [RB].

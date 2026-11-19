@@ -166,6 +166,17 @@ outlines and interior areas, pé direito, amarração runs, the floor between st
 pipes), modules outside on both faces (loggia returns, porch), the façade band at the floor zone, the dados da obra.
 Example: `Construção Ribamar/modelos/listagem/config.json`. Module sheets and drawings stay local (`desenhos/`).
 
+**The Listagem's «Compra» and timber totals** (every house, 2026-11-19, user: totals per section and "utiliza a secção de
+compra … como referência para cada produto"): `gerar.doc_listagem` adds "Total madeira <secção>" lines (pieces, m, m³,
+purchase, pieces > 5,70 m) and fills «Compra» for every line through `ferramentas/documentos/compra.py`: the Hub material
+of the line's code (`orcamentacao/ligacoes.json`, the Orçamentação's conversion) in its own unit and size (rolls, plates,
+3 / 4,5 m bars; timber = m³ of casquinha 230x78 board by the cutting yield in `compra.RENDIMENTO`, ours), named in the
+PDF's product column and in the CSV's `referencia_compra`. It needs the LOCAL copy of the Hub materials
+`_trabalho/hub/materiais.json` (git-ignored; refresh it from the Design Supabase `hub_materiais` + `hub_material_precos`
+for the ids in `ligacoes.json`: name, unit, comprimento, largura, espessura, designação — never prices, never in Git);
+without it the standard's purchase units stay. Purchases the Orçamentação converts from (`base: compra`: OSB, Pladur,
+Traspir, cantoneira) are never changed.
+
 ## New house type (e.g. Tipo 2)
 1. Copy `modelos/tipo1/config.json` to `modelos/<tipo>/`; set `nome`, `descricao`, `dwfx`, `saida`.
 2. Locate views (skill ler-dwfx): `regiao_alcados`, `plantas` {"0": GF wall plan, "1": upper}, `pavimento.regiao`,

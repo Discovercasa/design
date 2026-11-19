@@ -110,6 +110,8 @@ Why Claude learns the method; "vamos passo a passo" — an overall idea, then an
    a casa sem erros e já como irá ficar no fim da construção"; with "um documento com a listagem de material"
    (2026-10-20) → `ferramentas/documentos/gerar.py` (Módulos, Cobertura, Listagem de material; `sistema-construtivo.md`
    §2c). The Módulos reviewed "está absolutamente correto"; the other two: his review pending.
+   **Listagem (2026-11-19):** a total per timber section ("madeira total de 22x7,5, madeira total de 11x7,5 …", with m³)
+   and a «Compra» for every product in the material the company buys (the Hub list) — rulebook §0a.
 2. **Budgeting from the materials**: "futuramente eu vou-te fornecer e terás acesso a uma lista de materiais e
    fornecedores onde vais conseguir ter o preço de cada material" (PENDING), showing how the sums are made. The price:
    "materiais, mão de obra, fundação, caixilharia, especialidades, instalações e pré-instalações, licenciamento e IVA"

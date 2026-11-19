@@ -17,7 +17,8 @@
   metres only (purchase = metres ÷ 2 of 75×35 in stock lengths — not given, not in the tools).
 - Module timber: D2503 Módulos gives a cut list per house ([TV] 11×3,5 220 pcs / 473,0 m; 11×7,5 50 / 139,0; 7,5×3,5 199 /
   379,1; 7,5×11 24 / 46,3; studs 3,43 ext / 2,46 int) — company document — the model gives pieces and metres per section;
-  stock lengths and the cutting plan not computed. By volume ≈ the draft's 40 / 40 / 20 (§2).
+  stock lengths and the cutting plan not computed. By volume ≈ the draft's 40 / 40 / 20 (§2). Purchase since 2026-11-19:
+  m³ of casquinha 230x78 board by our cutting yield, pieces over 5,70 m flagged — assumed (§0a, `documentos/compra.py`).
 - Contra-ripado 30×20 and cork battens: product, length, purchase unit — OPEN — metres only.
 - Pladur N / H1 / F 13: board 1200×2600 (assumed), waste 10 % (assumed) — JSON. ⚠ Walls floor to ceiling = the pé direito:
   past 2,60 longer boards (2,70 / 2,80 / 3,00 — supplier) or a joint backed by the OSB 15 — ours; the tools count boards by

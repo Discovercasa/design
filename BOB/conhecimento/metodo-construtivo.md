@@ -6,13 +6,13 @@ How DiscoverCasa builds a house, ordered like the work on site. Kept by the agen
 version, how to use the book, the section map and the legend; the rules are in `conhecimento/metodo/`, one file per topic,
 text unchanged, § numbers and rule IDs kept ("rulebook §7", "metodo-construtivo.md §13" resolve through the map below).
 
+**Version 8.17, 2026-11-19** — **the Listagem gives a total per timber section (pieces, m, m³) and a «Compra» for every product in the Hub material the company buys** (user rule, §0a); ours: timber as m³ of casquinha 230x78 board by our cutting yield, pieces > 5,70 m flagged (§0a, §11; open: §15 item 27).
 **Version 8.16, 2026-11-19** — **"Casa CL" = Ribamar's module sheets as built** (byte-identical, found 2026-11-19, to confirm;
 new scope tag **[RB]**): module heights read again — upper exterior 3,52 only on the two gutter sides (was our "upper 3,52 ext",
 §2, §5); wide openings given as clear rough openings, M014's verga over 2,77 = as-built evidence for the OPEN threshold (§3,
 §13); the PDF module-sheet readers (§0a, §5); Ribamar's points against the rulebook (§15 [RB], X-list [RB]). No new user rule.
 **Version 8.15, 2026-11-10** — an opening cuts only the faces parallel to its module, never the perpendicular façade at a corner (§3, L75; AR-test model error, fixed in `camadas.aberturas_face`).
-**Version 8.14, 2026-11-07** — the raise applies to houses from a plan only; houses from the engineer's module drawings (`estrutura_dc.py`, Sobral) keep the drawings' module height and heads ≈ 3 cm lower — confirmed exception (user "Sim, ficam"; §3, X1(b)).
-Older notes (v8.13 … v8.6 moved in v8.16; v8.5, v8.4, v8.3, v8.1–v8.2, v8.0: condensed at the user's
+Older notes (v8.14 moved in v8.17; v8.13 … v8.6 moved in v8.16; v8.5, v8.4, v8.3, v8.1–v8.2, v8.0: condensed at the user's
 request; before it: git) and the original header paragraph in full: `metodo/00-historico.md`. The user's words in full:
 `conhecimento/registo-conversas*.md` (since 2026-11-09 `-2026-3`); the "why" of each detail: the topic docs.
 

@@ -117,6 +117,18 @@
   through `gerar.doc_listagem` (same PDF / CSV and product codes); what the sheets do not show (floor, ceilings, roof,
   finishes) comes from the per-project defaults, said in the delivery — tools, no new rule. [RB] run 2026-11-19: 59 modules,
   cfg `Construção Ribamar/modelos/listagem/config.json` (its assumptions: X-list [RB] in `12-desvios-construtor.md`).
+- **Listagem: a total per timber section, and a «Compra» for every product in what the company buys** (every house) —
+  user 2026-11-19 "adciones os metros quadrados totais e os metros cubicos totais de cada viga por exemplo madeira total
+  de 22x7,5, madeira total de 11x7,5, madeira total 11x3,5 etc"; "utiliza a secção de compra que criaste no documento
+  como referência para cada produto" — confirmed / tentative: "metros quadrados" read as running metres (asked back
+  2026-11-19, §15) — `gerar.doc_listagem` ("Total madeira <secção>": pieces, m, m³, purchase) +
+  `ferramentas/documentos/compra.py` (the «Compra» column in the unit of the Hub material each product code is linked to,
+  `orcamentacao/ligacoes.json`; the Hub list = the company's official materials list, 2026-11-10; local copy git-ignored).
+  **Assumed (ours, to confirm):** timber bought as m³ of casquinha 230x78 board, yield per board 4 × 11x3,5, 6 × 7,5x3,5,
+  2 × 11x7,5, 1 × 22x7,5 (ripado 3,75x3,5: 12, §11), no length offcuts counted; pieces over 5,70 m (the Hub's normal
+  board length) flagged for the "+6 m" stock; a product not in the Hub list stays in metres. ⚠ 3 × 75 across the 230
+  leaves 5 mm for two saw cuts: 6 × 7,5x3,5 per board may really be 5. OPEN (§15 item 27): sections cut from 230x78?
+  waste % on timber? [RB] v2 2026-11-19: 14,62 m³ of board (`Construção Ribamar/docs/estado.md`).
 - **The chain: per-project questions → model → documents**; he reviews the documents — confirmed (each step) / assumed
   (order). ⚠ His wording runs documents → model; one source means they never disagree, but the module choices (split,
   corners, openings) must be reviewable on the documents before the model is final — tell him.
