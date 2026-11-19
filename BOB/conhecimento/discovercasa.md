@@ -403,7 +403,9 @@ Agreed from the user-supplied "HIERARQUIA_E_ROADMAP_INTEGRADO_DISCOVERCASA" docu
   alteração em obra") → ask before turning a photo detail into a rule.
 - He shares documents of other DiscoverCasa houses to teach the method (Casa CL modules 2026-09-30; "3_Vigamento"
   2026-10-15 — "este não é o mesmo projeto mas é para perceberes como operamos") → company standard
-  (`sistema-construtivo.md`), files in `fontes/`.
+  (`sistema-construtivo.md`), files in `fontes/`. **Casa CL = Ribamar's modules as built** (found 2026-11-19: the same
+  files sit in the hub's «Ribamar Módulos» folder; to confirm) and the draft's foundation list is "Copiado de Ribamar"
+  → a shared document can be a real house's: its project features stay that house's (`Construção Ribamar/docs/estado.md`).
 - He audits the knowledge agents ("diz-me se o nosso agente de detalhes … anotou tudo o que era importante e percebeu a
   lógica") → answer with a comparison of what was filed against the source. 2026-10-29, on token cost: "perguntar sobre
   otimização dos nossos tokens, se o guardião,mestre estão a anotar toda a informação ou a filtrar aquilo que apontam"

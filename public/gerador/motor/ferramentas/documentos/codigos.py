@@ -22,7 +22,7 @@ PRODUTOS = {
     "VIGA-APOIO-COB": "Vigas de apoio à cobertura em casquinha 110x75",
     "OSB-09": "OSB3 9 mm",
     "OSB-15": "OSB3 15 mm",
-    "OSB-22": "OSB3 22 mm (fundo da caleira oculta)",
+    "OSB-22": "OSB3 22 mm (fundo da caleira oculta; pavimento entre pisos)",
     "MEMB-T95": "Membrana respirável Traspir 95",
     "RIPA-37x35": "Ripado 37,5x35 (viga 75x35 cortada ao meio)",
     "RIPA-30x20": "Ripado ou contra-ripado 30x20",
@@ -70,6 +70,7 @@ REGRAS = [
     (None, ("Base metálica",), "FERR-BASE-PILAR"),
     (None, ("OSB 9",), "OSB-09"),
     (None, ("OSB 15",), "OSB-15"),
+    (None, ("OSB 22",), "OSB-22"),
     (None, ("Membrana Traspir",), "MEMB-T95"),
     (None, ("Ripado 37,5x35",), "RIPA-37x35"),
     (None, ("Ripado 30x20", "Contra-ripado 30x20"), "RIPA-30x20"),
@@ -142,7 +143,10 @@ def codigo(capitulo, descricao, produto=""):
 
 def areas(G):
     """[(code, description, m²)] of the house for the Listagem's «Dados da obra» lines: the foundation outline
-    (G["fundacao"]["contorno"], the modules' outer faces) and that area times the number of floors."""
+    (G["fundacao"]["contorno"], the modules' outer faces) and that area times the number of floors; a house listed from
+    its module sheets (listagem_modulos.py: storeys of different size) gives its own lines in G["areas_obra"]."""
+    if G.get("areas_obra"):
+        return [tuple(x) for x in G["areas_obra"]]
     pts = ((G.get("fundacao") or {}).get("contorno")) or G.get("contorno_estrutura") or []
     if len(pts) < 3:
         return []

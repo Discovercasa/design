@@ -123,8 +123,12 @@
   (**PO Q5**). What follows (ours; hidden roof, ceiling 0,148 under the beams): interior modules = pé direito + 0,043
   (studs pé direito − 0,027); exterior full-height ≈ pé direito + 1,00 at TV (two slopes; depends on beams and roof
   rise), studs ≈ + 0,93; **more on a one-água roof — the rise grows with the whole run** (his U 18,95 × 12,65: parapet
-  3,82 vs TV 3,49 — the engine's arithmetic, §7). Heights built elsewhere: Casa CL ground floor 2,97 ext / 2,80 int, upper 3,52 ext / 2,68 int (reference);
-  SB 2,58, upper 2,40 (§13).
+  3,82 vs TV 3,49 — the engine's arithmetic, §7). Heights built elsewhere: **[RB] (= Casa CL, as built)** ground floor
+  exterior 2,97 (2,67 on the short returns at the entrance porch M003 and the deck step M008), interior 2,80 / 2,60;
+  upper floor exterior **3,52 only on the two gutter sides (with the parapet)**, 2,97 front, 2,94 back (the glazed
+  openings to the varandas), 2,67 the varanda returns (M126, M128, M129); upper interior 2,68 — company document (one
+  house; sheets read again 2026-11-19, RB `docs/desenhos.md`) (was "upper 3,52 ext" — our earlier reading of Casa CL,
+  corrected 2026-11-19; not a user rule); SB 2,58, upper 2,40 (§13).
 - ⚠ **What a taller pé direito changes** (ours, to tell — not limits): exterior studs ≈ pé direito + 0,93 → past ≈ 3,0
   stock length and buckling / wind on 110×35 → engineer (CM §1); the 4,0 m Tremolo needs a joint in height (§8); Pladur
   past 2,60 (§11); the licensed height (cércea, PDM — TV #7) and the price. At the low end (2,40) a 2,20 janela de correr
@@ -137,6 +141,13 @@
   `estrutura.platibanda_modulos_inteiros` true). The ring and the beams on it: §4. Without real modules the builder models
   the one module in two parts (framed to the ring, studs running on into a parapet part, joints `juntas_w`) — a modelling
   split (L30).
+- ⚠ **[RB] as built does not follow this everywhere** (Casa CL sheets, received 2026-09-30, before the rule was stated): on Piso 1's
+  two-slope hidden roof (7 %, behind parapets) the full-height modules (3,52) stand only on the two gutter sides; the front
+  2,97 and back 2,94 stop below the parapet top; the lower roof over the Piso 0 strip has a 0,45 parapet in the
+  architecture that its 2,97 modules do not reach. How those parapets / roof edges were built: **OPEN** — asked 2026-11-19
+  (RB Q4, Q5; §15 [RB]). The rule above stays confirmed (his words, 2026-10-16 / 10-21; [TV] exterior 3,50 in one piece,
+  below; one top level on every side, `06-cobertura-oculta.md`) until he answers; Ribamar is not a precedent for lower
+  front / back modules.
 - [TV] **Module heights as built: exterior 3,50 in one piece** (studs 3,43 + two plates), **interior 2,53** (studs 2,46)
   — D2503 Módulos. ⚠ CONFLICTS, OPEN, low priority: the roof sections put the parapet top at 3,4915; the interior 2,53 is
   13 mm under the made-to-measure 2,543 (rounding / another datum / taken up on site — TV #6); the model follows the rule.

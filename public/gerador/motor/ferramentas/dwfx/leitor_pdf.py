@@ -309,7 +309,116 @@ class Pdf:
         return out
 
     def glyphs(self, folha):
-        return []  # text is not read (AutoCAD plots draw it with embedded fonts; the scale is deduced instead)
+        return []  # text is not read here (the plan readers deduce the scale); textos() reads it when a tool needs it
+
+    def textos(self, folha):
+        """The page's text runs: [(text, x mm, y mm (down), height mm, angle degrees)] in sheet millimetres like paths()
+        (x, y = the start of the run's baseline; angle 0 = left to right, -90 = read upwards on the sheet, as the PDF
+        rotates it). Fonts with a ToUnicode map (AutoCAD's Type0 Identity-H) or single-byte fonts. 2026-11-19, the
+        module sheets of a house plotted to PDF (ferramentas/documentos/modulos_pdf.py)."""
+        pg, h = self.pages[folha - 1]
+        x0, y0, x1, y1 = [float(self.obj(v)) for v in h.get("MediaBox", [0, 0, 595, 842])]
+        rot = int(h.get("Rotate", 0) or 0) % 360
+        base = {90: (0, MM, MM, 0, -y0 * MM, -x0 * MM), 180: (-MM, 0, 0, MM, x1 * MM, -y0 * MM),
+                270: (0, -MM, -MM, 0, y1 * MM, x1 * MM)}.get(rot, (MM, 0, 0, -MM, -x0 * MM, y1 * MM))
+        cont = self.obj(pg.get("Contents"))
+        partes = cont if isinstance(cont, list) else [cont] if cont else []
+        dados = b"\n".join(self.dados(self.obj(p)) for p in partes if isinstance(self.obj(p), Stream))
+        out = []
+        self._textos(dados, self.obj(h.get("Resources")) or {}, base, out, 0)
+        return out
+
+    def _mapa_fonte(self, fonte):
+        """(bytes per code, {code: text}) of a font, from its ToUnicode CMap (else latin-1, one byte)."""
+        f = self.obj(fonte) or {}
+        dois = self.obj(f.get("Subtype")) == "Type0"
+        m = {}
+        tu = self.obj(f.get("ToUnicode"))
+        if isinstance(tu, Stream):
+            t = self.dados(tu).decode("latin-1")
+            for blk in re.findall(r"beginbfchar(.*?)endbfchar", t, re.S):
+                for a, b in re.findall(r"<([0-9A-Fa-f]+)>\s*<([0-9A-Fa-f]*)>", blk):
+                    m[int(a, 16)] = bytes.fromhex(b).decode("utf-16-be", "replace") if b else ""
+            for blk in re.findall(r"beginbfrange(.*?)endbfrange", t, re.S):
+                for a, b, c in re.findall(r"<([0-9A-Fa-f]+)>\s*<([0-9A-Fa-f]+)>\s*<([0-9A-Fa-f]+)>", blk):
+                    a, b, c0 = int(a, 16), int(b, 16), int(c, 16)
+                    for k in range(a, min(b, a + 4096) + 1):
+                        m[k] = chr(c0 + k - a)
+        return (2 if dois else 1), m
+
+    def _textos(self, dados, recursos, ctm, out, nivel):
+        if nivel > 8:
+            return
+        fontes = self.obj(recursos.get("Font")) or {}
+        xobj = self.obj(recursos.get("XObject")) or {}
+        mapas = {}
+
+        def mul(a, b):  # a then b
+            return (a[0] * b[0] + a[1] * b[2], a[0] * b[1] + a[1] * b[3], a[2] * b[0] + a[3] * b[2],
+                    a[2] * b[1] + a[3] * b[3], a[4] * b[0] + a[5] * b[2] + b[4], a[4] * b[1] + a[5] * b[3] + b[5])
+
+        pilha, args = [], []
+        fonte, tam, lead = None, 1.0, 0.0
+        tm = tl = (1, 0, 0, 1, 0, 0)
+
+        def texto(b):
+            n, m = mapas.setdefault(fonte, self._mapa_fonte(fontes.get(fonte)) if isinstance(fontes, dict) else (1, {}))
+            if n == 2:
+                return "".join(m.get(int.from_bytes(b[i:i + 2], "big"), "") for i in range(0, len(b) - 1, 2))
+            return "".join(m.get(c, chr(c)) for c in b)
+
+        def emitir(s):
+            if not s.strip():
+                return
+            k = mul(mul((tam, 0, 0, tam, 0, 0), tm), ctm)
+            out.append((s, round(k[4], 3), round(k[5], 3), round(math.hypot(k[2], k[3]), 3),
+                        round(math.degrees(math.atan2(-k[1], k[0])))))
+
+        it = _tokens(dados)
+        for t, _ in it:
+            if not isinstance(t, Op):
+                args.append(_valor(it, t) if t in ("[", "<<") else t)
+                continue
+            try:
+                if t == "q":
+                    pilha.append(ctm)
+                elif t == "Q" and pilha:
+                    ctm = pilha.pop()
+                elif t == "cm":
+                    ctm = mul(tuple(float(v) for v in args[-6:]), ctm)
+                elif t == "BT":
+                    tm = tl = (1, 0, 0, 1, 0, 0)
+                elif t == "Tf":
+                    fonte, tam = str(args[-2]), float(args[-1])
+                elif t == "TL":
+                    lead = float(args[-1])
+                elif t == "Tm":
+                    tm = tl = tuple(float(v) for v in args[-6:])
+                elif t in ("Td", "TD"):
+                    if t == "TD":
+                        lead = -float(args[-1])
+                    tm = tl = mul((1, 0, 0, 1, float(args[-2]), float(args[-1])), tl)
+                elif t == "T*":
+                    tm = tl = mul((1, 0, 0, 1, 0, -lead), tl)
+                elif t == "Tj":
+                    emitir(texto(bytes(args[-1])))
+                elif t in ("'", '"'):
+                    tm = tl = mul((1, 0, 0, 1, 0, -lead), tl)
+                    emitir(texto(bytes(args[-1])))
+                elif t == "TJ":
+                    emitir("".join(texto(bytes(a)) for a in args[-1] if isinstance(a, (bytes, bytearray))))
+                elif t == "Do":
+                    x = self.obj(xobj.get(args[-1])) if isinstance(xobj, dict) else None
+                    if isinstance(x, Stream) and x.dic.get("Subtype") == "Form":
+                        mat = tuple(float(self.obj(v)) for v in (self.obj(x.dic.get("Matrix")) or [1, 0, 0, 1, 0, 0]))
+                        self._textos(self.dados(x), self.obj(x.dic.get("Resources")) or recursos, mul(mat, ctm), out, nivel + 1)
+                elif t == "BI":
+                    for t2, _ in it:
+                        if t2 == Op("EI"):
+                            break
+            except (TypeError, ValueError, IndexError, KeyError):
+                pass
+            args = []
 
     # ---------------------------------------------------------------- content
     def _cor(self, cs, vals):

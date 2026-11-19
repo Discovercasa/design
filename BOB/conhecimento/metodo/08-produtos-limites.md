@@ -96,7 +96,8 @@ Each line points to the rule's home section.
   not a standard section, not sized.
 - Caleira oculta: fall ≈ 2 %, bottom never closer than ≈ 4–5 cm to the madre's top, 0,31 clear ([TV]) — §7.
 - **Verga 220×75 from ≈ 2,8–3 m** (over 3 m confirmed; threshold OPEN; JSON 2,8), the norm in every module; widest seen
-  4,52 (Casa CL M007); upper limit OPEN; [TV] 11×7,5 at 3,00 engineer-approved — §3.
+  4,37 clear / 4,52 over the posts ([RB] = Casa CL M007); [RB] M014 a verga over a 2,77 clear opening (threshold evidence);
+  upper limit OPEN; [TV] 11×7,5 at 3,00 engineer-approved — §3.
 - **Modules**: factory normally ≤ 3 m, exterior up to 3 m, interior 2,75 (ours), 5 m done once; bigger ones site-built,
   as short as the opening needs by default (PO Q6); pier ≥ 0,32; smallest 0,60 (ours); plain 2,21 / 1,78 / 2,65 (5 / 4 / 6
   bays); [TV] factory ≤ ≈ 2,64 / 2,72, M1 3,82 site-built — §2. JSON `estrutura.divisor` (`comprimento_max` 3,0,

@@ -1,0 +1,52 @@
+{
+ "nome": "Ribamar",
+ "_doc": "Listagem de material de Ribamar a partir das folhas de módulos como foram feitas (hub, gerador, Documentos adicionais > Ribamar > 'Ribamar Módulos'; cópia local em ../../desenhos/modulos/, fora do Git) — ferramentas/documentos/listagem_modulos.py (2026-11-19). As folhas chamam 'piso 1' e 'piso 2' aos pisos que a arquitetura chama Piso 0 e Piso 1 (a cave, Piso -1, é de betão e fica fora). Medidas em planta lidas das plantas das mesmas folhas (faces exteriores dos módulos, m); origem no canto do alpendre, y a partir do lado do deck.",
+ "documentos": {"obra": "Ribamar", "projeto": "Moradia unifamiliar - 2 pisos em madeira (módulos como feitos)"},
+ "nomes_pisos": {"0": "Piso 0", "1": "Piso 1"},
+ "folhas": [
+  {"pdf": "../../desenhos/modulos/modulos piso 1 ext.pdf", "tipo": "exterior", "piso": 0},
+  {"pdf": "../../desenhos/modulos/modulos piso 1 int v2.pdf", "tipo": "interior", "piso": 0},
+  {"pdf": "../../desenhos/modulos/modulos piso 2 ext.pdf", "tipo": "exterior", "piso": 1},
+  {"pdf": "../../desenhos/modulos/modulos piso 2 int.pdf", "tipo": "interior", "piso": 1}
+ ],
+ "_planta_doc": "Piso 0: 14,106 x 9,008 (contorno dos módulos), menos o recorte do deck 9,473 x 1,481 (M008) e o alpendre 1,342 x 2,776 (M003, M001/M002, M020) = 109,31 m². Piso 1: 10,989 x 9,000 por cima do lado do alpendre; fechado 10,989 x 7,522 = 82,66 m²; varandas 4,352 x 1,48 e 5,021 x 1,48 por cima da ala do atelier (M007) e do deck. Faixa do Piso 0 fora do Piso 1: 3,117 x 7,527 com cobertura própria. Áreas interiores = contorno - paredes exteriores x 0,1375 (módulo 0,11 + OSB 15 + Pladur 12,5) - paredes interiores x 0,13; abertura da escada 3,10 x 1,10 (corte B: 3,10 de lanço; largura assumida).",
+ "pisos": {
+  "0": {"pe_direito": 2.80, "area_interior": 100.1, "area_teto": 96.7, "espacamento_apoios_teto": 0.67, "perimetro_tetos": 90.2,
+        "area_teto_cobertura": 21.0,
+        "_doc": "pé direito 2,8 (corte B); teto sob as vigas do pavimento (0,615) e sob a cobertura baixa (1,0): espaçamento médio 0,67; teto menos a escada 3,4 m²; lã 100 só sob a cobertura baixa (21 m²)"},
+  "1": {"pe_direito": 2.50, "area_interior": 71.8, "area_teto": 75.2, "espacamento_apoios_teto": 1.0, "perimetro_tetos": 73.0,
+        "area_teto_cobertura": 75.2,
+        "_doc": "pé direito 2,5 (corte B); vinílico menos a escada; teto falso em todo o fechado com lã 100 por cima"}
+ },
+ "faces_exteriores": {"M128": 1.0, "M129": 1.0, "M020": 0.61, "M124": 0.64,
+  "_doc": "Módulos com o exterior nas duas faces: retornos das varandas (M128, M129), o troço do M124 ao lado da varanda 1 (1,48 de 2,30) e o do M020 no alpendre (1,34 de 2,19): a face interior leva o revestimento de fachada em vez de OSB 15 + Pladur."},
+ "faixa_piso": {"comprimento": 40.0, "altura": 0.39,
+  "_doc": "Fachada na zona do pavimento entre pisos (vigas 0,22 + barrotes 0,075 + OSB 0,022 + amarração 0,075): contorno do Piso 1 (10,99 + 9,0 + 10,99 + 9,0 sobre a cobertura baixa)."},
+ "amarracoes": [
+  {"grupo": "Amarração 11x7,5 (Piso 1, anel da cobertura)", "trocos": [10.769, 10.769, 7.302, 7.302],
+   "regra": "cobertura oculta: anel 110x75 na face interior dos módulos exteriores, sob as vigas do teto (método §4)."},
+  {"grupo": "Amarração 11x7,5 (Piso 1, paredes interiores)", "trocos": [10.77, 4.34, 2.89],
+   "regra": "viga de amarração interior 110x75 ao alto sobre os módulos interiores, ao nível do anel (método §4)."},
+  {"grupo": "Amarração 11x7,5 (Piso 0, sob o vigamento)", "trocos": [10.88, 8.79, 4.52, 6.24],
+   "regra": "dois pisos: amarração 110x75 nas paredes exteriores do Piso 0 sob as vigas do pavimento (3_Vigamento; leitura nossa, método §4 — EM ABERTO)."},
+  {"grupo": "Amarração 11x7,5 (cobertura baixa)", "trocos": [7.307, 3.007, 3.007, 7.307],
+   "regra": "anel nos três módulos exteriores da faixa + régua de apoio junto à parede do Piso 1 (método §4; a régua é nossa)."}
+ ],
+ "pavimento_entre_pisos": {"vao": 8.89, "largura": 10.77, "area_osb": 71.8,
+  "_doc": "Vigas 22x7,5 no sentido curto (9,0 - 0,11 até à borda das varandas), ao longo dos 10,77 interiores; OSB 22 e lã 100 só no interior aquecido (sem varandas nem escada). As vigas sob a varanda 2 ficam em consola 1,48 sobre o deck (M009-M011 com vãos de 2,9 e 4,0 sob vergas 22x7,5): engenheiro."},
+ "coberturas": [
+  {"nome": "Cobertura do Piso 1", "pendente_pct": 7.0, "vao_vigas": 10.769, "comprimento_vigas_ao_longo": 8.78, "comprimento_madres": 8.78,
+   "aguas": [{"comprimento": 5.075, "largura": 9.0}, {"comprimento": 5.075, "largura": 9.0}],
+   "caleiras": [8.78, 8.78], "tubos": 4, "altura_tubos": 6.2, "cumeeira": 9.0, "chapeu": 18.0,
+   "nota": "Duas águas a 7 % com a cumeeira a meio dos 10,99 (arquitetura, corte B e planta de cobertura); caleiras junto às platibandas dos lados (módulos de 3,52); frente e traseira com módulos de 2,97 / 2,94 (sem platibanda nos módulos)."},
+  {"nome": "Cobertura baixa (Piso 0)", "pendente_pct": 7.0, "vao_vigas": 3.007, "comprimento_vigas_ao_longo": 7.307, "comprimento_madres": 7.307,
+   "aguas": [{"comprimento": 2.697, "largura": 7.307}],
+   "caleiras": [7.307], "tubos": 2, "altura_tubos": 3.4, "remate_topo": 7.307,
+   "nota": "Uma água (método: uma água sempre que dá) para a fachada de fora, caleira ao longo dela, remate de topo contra a parede do Piso 1; a platibanda que a arquitetura desenha (0,45) não está nos módulos (2,97)."}
+ ],
+ "caixilharia": {"produto": "Caixilharia em alumínio lacado RAL 7016 com vidro duplo incolor (notas da arquitetura); tipo de abertura e medidas finais pelo mapa de vãos"},
+ "dados_obra": [
+  ["AREA-IMPLANTACAO", "Área de implantação (contorno dos módulos do Piso 0)", 109.31],
+  ["AREA-CONSTRUCAO", "Área de construção (Piso 0 109,31 + Piso 1 fechado 82,66; varandas 13,9 à parte)", 191.97]
+ ]
+}

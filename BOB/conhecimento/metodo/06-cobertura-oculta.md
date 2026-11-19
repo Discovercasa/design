@@ -100,6 +100,9 @@
   altura em todos as arestas da mesma ou lados da mesma"; draft "Cobertura oculta em todas as fachadas" — confirmed ("é
   suposto" on one model, kept as a rule — L17) — `casa_planta.construir` (one `z_plat`). **The parapet is the top of the
   exterior modules, one piece from the base, on every hidden roof** (§2) — JSON `estrutura.platibanda_modulos_inteiros`.
+  ⚠ [RB] as built (Casa CL): the 3,52 parapet modules only on Piso 1's two gutter sides, front 2,97 / back 2,94 below
+  them, the lower roof's 0,45 parapet (architecture) not in its 2,97 modules — OPEN, asked 2026-11-19 (§2, §15 [RB]); the
+  rule stands meanwhile.
 - **Parapet top ≈ 3 cm above the ridge cap** — the roof just hidden ([TV] 3,4915 vs cap 3,465; ≈ 7 cm above the panel top
   at the ridge 3,42; ≈ 0,30 above the panel ends at the main block's gutters, ≈ 0,45 at the wing — our arithmetic) — D2503
   sheet 5 — company document — TV cfg `platibanda.topo` (3,4915 v4; 3,50 v5 = the module table — which was built: OPEN).
@@ -117,7 +120,9 @@
   colour as the Munditelha, never grey; the grey was only Sobral's** — user 2026-10-30 "é o ral 8004 e sim é o painel de 5
   ondas imitação cor telha, o cinzento foi apenas para sobral"; before, 2026-10-29 "cor original do painel de sandwich … e
   não cinzenta a cobertura" — confirmed (closes §15 B1 colour, E1) — JSON `materiais."Painel sandwich 5 ondas"` #8F4E35
-  (was #9A4F33 assumed until 2026-10-30, grey #9AA0A6 until 2026-10-29); [SB] Sobral's grey stays a project fact. **Panel
+  (was #9A4F33 assumed until 2026-10-30, grey #9AA0A6 until 2026-10-29); [SB] Sobral's grey stays a project fact; [RB]
+  RAL 8017 in the architecture and on the client page — kept for that house like Sobral's grey? not asked yet (RB Q7;
+  the RB Listagem names no colour). **Panel
   length variable, 1 m wide, one panel interlocks with the next — "eles já são produzidos de forma a isto ser possível fazer
   sem problemas"** (user 2026-10-30 "Comprimento do painel é váriavel a largura é de um metro e nós encaixamos um painel no
   outro") — confirmed (the maximum: next line) — JSON `cobertura.painel_oculto`.

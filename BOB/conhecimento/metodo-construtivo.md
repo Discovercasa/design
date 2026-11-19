@@ -6,37 +6,15 @@ How DiscoverCasa builds a house, ordered like the work on site. Kept by the agen
 version, how to use the book, the section map and the legend; the rules are in `conhecimento/metodo/`, one file per topic,
 text unchanged, § numbers and rule IDs kept ("rulebook §7", "metodo-construtivo.md §13" resolve through the map below).
 
+**Version 8.16, 2026-11-19** — **"Casa CL" = Ribamar's module sheets as built** (byte-identical, found 2026-11-19, to confirm;
+new scope tag **[RB]**): module heights read again — upper exterior 3,52 only on the two gutter sides (was our "upper 3,52 ext",
+§2, §5); wide openings given as clear rough openings, M014's verga over 2,77 = as-built evidence for the OPEN threshold (§3,
+§13); the PDF module-sheet readers (§0a, §5); Ribamar's points against the rulebook (§15 [RB], X-list [RB]). No new user rule.
 **Version 8.15, 2026-11-10** — an opening cuts only the faces parallel to its module, never the perpendicular façade at a corner (§3, L75; AR-test model error, fixed in `camadas.aberturas_face`).
 **Version 8.14, 2026-11-07** — the raise applies to houses from a plan only; houses from the engineer's module drawings (`estrutura_dc.py`, Sobral) keep the drawings' module height and heads ≈ 3 cm lower — confirmed exception (user "Sim, ficam"; §3, X1(b)).
-**Version 8.13, 2026-11-07** — **from a plan the modules rise, an opening is never lowered** (user "altera isso e faz com que os módulos subam"; §3, L73, X1 closed for `casa_planta`, a760ce8).
-**Version 8.12, 2026-11-07** — the 110×75 jamb piece over the verga's ends is **confirmed** (user "Sim, confirmo"; §3, L72, §15 item 26).
-**Version 8.11, 2026-11-07** — **the verga sits on the opening head** when a wide opening is lower than the top-plate
-underside − 0,22 (user 2026-11-06 "Sim, baixa a verga"; §3, L72; §15 item 26 closed); jamb pieces over its ends (confirmed in v8.12).
-**Version 8.10, 2026-11-06 (later)** — **no cripples over a verga** in an ordinary module, cripples from the verga's top to the
-module top in a full-height one (§3, L72; engine fix, our reading, no new user fact); new open item §15 no. 26: where the verga
-sits when a wide opening is lower than it (suggestion: onto the opening head).
-**Version 8.9, 2026-11-06** — **no trim along the gables of the exposed roof** (E8, L71; supersedes the remates laterais) and the
-parapet's visible roof-side face is drawn in the façade's own cladding (06, L71).
-**Version 8.8, 2026-10-30 (later still)** — latest notes. **v8.8** (his answers to our five points): **the hidden-roof downpipe is
-100 × 50** ("Sim usa de 100x50": ≈ 50 m² per pipe, his L 4 pipes not 7, [TV] 2 = as built; fits the standard Tremolo cavity —
-contra-ripado 20 + ripado 35 —, a local recess in cork / XPS where shallower, never a hole in the visible boards: one more
-reason to keep the contra-ripado; supersedes the 80 × 35; PO Q16's section part closed); the **hidden sandwich panel is 80 mm**
-("usamos os de 80mm" — whether also the Munditelha: asked, open) with the 15 m panel's transport / movement accepted ("Sim
-tranquilo"); PIR vs PUR and the marine-air coating per house ("Ok tranquilo"; "já foi verificado" for TV); **what [TV] is**
-("um projeto usado para tu aprenderes sobre nós e nós irmos também avaliando as tuas sugestões"); interior walls only in an
-attached block stays our reading ("parece-me bem", his test pending) (§0, §7, §8, §11, §15; L70). **Files**: 06 split — the
-hidden gutter / downpipe detail moved to the new `11-caleiras-tubos-oculta.md`; 10 split — the builder's deviations (X1–X20)
-moved to the new `12-desvios-construtor.md`. **v8.7** (his answers, later the same day): downpipe outlet = the pipe's own
-section (80 × 35 hidden / 80 × 80 exposed), two per gutter, one on one ≤ 4,0 m, more by area (1 cm² per m²); the one-água high
-side closed per his detail (folded waterproof sheet + metal flashing, E3 closed); hidden panel Mundiperfil MC 1000/5, maximum
-15 m (E2 closed); garage gate top 0,30 under the ceiling; a separate building ≥ 2,00 m (closes 3 vs 2); interior walls only in
-attached blocks (§3, §7, §8, §15; supersedes the 10 cm bocal and the 13,5 m). **v8.6** (his answers to the roof questionnaire
-and step 7): panel colour RAL 8004 (Munditelha and the hidden 5-ondas; Sobral's grey = [SB]; flashings, lining assumed the
-same), downpipes two per gutter / one on a small one (replaces "one per 37 m²"), pergola top ≤ the ground floor's top, an
-attached block's wall flush with its neighbours (§7, §8, §11, §15; L70).
-Older notes (v8.5, v8.4, v8.3, v8.1–v8.2, v8.0: condensed at the user's
+Older notes (v8.13 … v8.6 moved in v8.16; v8.5, v8.4, v8.3, v8.1–v8.2, v8.0: condensed at the user's
 request; before it: git) and the original header paragraph in full: `metodo/00-historico.md`. The user's words in full:
-`conhecimento/registo-conversas.md`; the "why" of each detail: the topic docs.
+`conhecimento/registo-conversas*.md` (since 2026-11-09 `-2026-3`); the "why" of each detail: the topic docs.
 
 ## How to use (read ≈ 20–50 KB per task, not 190 KB)
 1. Read this index, then **only the topic file(s) the task touches** (map below); roof work: 05 and/or 06 (gutters and downpipes
@@ -61,26 +39,32 @@ request; before it: git) and the original header paragraph in full: `metodo/00-h
 | 8, 9 | `07-paredes-exterior-interior.md` | Exterior walls outside (OSB, Traspir, finishes A/B/C, battens; pergolas, garages, annexes); walls inside (wool, Pladur) |
 | 11, 12, 13 | `08-produtos-limites.md` | Products, brands, purchase units, waste; site consumables; spans and limits the company uses |
 | 14 | `09-licoes.md` | Lessons L1–L75 from model errors: what went wrong → the rule → where it lives |
-| 15 | `10-pontos-abertos.md` | Still unknown or assumed: promised, pending, the roof questionnaire (A1–E8), to ask / tell, ours |
+| 15 | `10-pontos-abertos.md` | Still unknown or assumed: promised, pending, the roof questionnaire (A1–E8), [SB] / [RB] points, to ask / tell, ours |
 | 15 | `12-desvios-construtor.md` | What the builder still assumes or does differently from the rulebook (X1–X20, other assumptions) |
 | header | `00-historico.md` | The original version paragraph (v8.0–v8.3) |
 
 ## Legend — line format, scope, sources, status (valid in every file)
 **Line format:** `- rule — source — status — where applied`
-- **Scope**: no tag = **company standard** (every house). **[TV]** = Torres Vedras only, **[SB]** = Sobral only — a
+- **Scope**: no tag = **company standard** (every house). **[TV]** = Torres Vedras only, **[SB]** = Sobral only, **[RB]** =
+  Ribamar only (since v8.16: the house behind "Casa CL", `Construção Ribamar/docs/`) — a
   project fact (that project's cfg and `docs/`), never copied to another house without the user calling it the norm
   (§0 "Scope"). **Why [TV] is in the book** — his words, 2026-10-30 (later still): "torres vedras foi um projeto usado para
   tu aprenderes sobre nós e nós irmos também avaliando as tuas sugestões": a house already built, given to us to learn how
   DiscoverCasa builds and where our suggestions are evaluated; its as-built facts teach and test, they are not the standard
   by themselves (§0 "What [TV] is"). **[cfgr]** = a configurator product rule (the spec `configurador/docs/especificacao.md` is its home).
-- Sources: `user YYYY-MM-DD "quote"` (verbatim in the registo, `registo-conversas.md`) · **draft** =
-  company draft "Execução Técnica OBRA" (`fontes/execucao-tecnica-obra_2026-09-24.md`) · **Casa CL** = company module
-  drawings (`fontes/estrutura-exemplo-casa-cl/`) · **3_Vigamento** = company base-framing sheet of another house
+- Sources: `user YYYY-MM-DD "quote"` (verbatim in the registo, `registo-conversas*.md`) · **draft** =
+  company draft "Execução Técnica OBRA" (`fontes/execucao-tecnica-obra_2026-09-24.md`; its foundation list "Copiado de
+  Ribamar") · **Casa CL** = company module drawings (`fontes/estrutura-exemplo-casa-cl/`) = **Ribamar's module sheets as
+  built** — byte-identical to the hub's «Ribamar Módulos», the «CASA CL» title block a template (found 2026-11-19; user
+  "tens os módulos direitinhos de como foram feitos para ribamar"; **to confirm with him**): its general framing teaches the
+  method, its house-specific features are **[RB]** project facts (§0 Scope; read in `Construção Ribamar/docs/desenhos.md`;
+  sheet «piso 1» = Piso 0, «piso 2» = Piso 1) · **3_Vigamento** = company base-framing sheet of another house
   (`fontes/vigamento-base/3_Vigamento.pdf`) · **D2503** = DiscoverCasa's roof production drawing of TV, the roof as built
   (`Construção Torres Vedras/desenhos/250828_D2503_Cobertura.dwfx`; read in TV `docs/cobertura-D2503.md`) · **D2503
   Módulos** = the wall-module production drawing of TV (`…/250828_D2503_Modulos.dwfx`; TV `docs/modulos-D2503.md`) ·
-  project drawings. Topic docs: **SC** = `sistema-construtivo.md`, **CM** = `construcao-madeira.md`; **TV** / **SB** =
-  `Construção Torres Vedras/` / `Construção Sobral/` docs (`#n` = item in that project's `docs/revisao-tecnica.md`).
+  project drawings. Topic docs: **SC** = `sistema-construtivo.md`, **CM** = `construcao-madeira.md`; **TV** / **SB** / **RB** =
+  `Construção Torres Vedras/` / `Construção Sobral/` / `Construção Ribamar/` docs (`#n` = item in that project's
+  `docs/revisao-tecnica.md`; RB: `docs/estado.md` "Open questions" Qn).
 - Status: **confirmed** (the user said it) · **tentative** (said with "acho que", "diria que sim", "não sei ao certo",
   "parecem" — confirm with a document before building on it) · **company document** · **assumed** (ours, not said) ·
   **delegated** (he left the choice to us — "vai com a opção que achares melhor": ours to make and change, never cited as

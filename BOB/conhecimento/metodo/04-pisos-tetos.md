@@ -4,7 +4,11 @@
 - **Two storeys: the wall modules are built the same way on both storeys** — user 2026-10-20 (night) "emtermos de paredes
   nada muda e o segundo piso eu já expliquei no outro chat como era composto o segundo piso" — confirmed —
   `estrutura_dc.py`; the builder from a plan and the configurator: single storey first ("começamos com térreas e depois
-  avançamos para dois pisos", 2026-10-20). Module heights per storey: PO Q5 (Casa CL 2,97 / 3,52 reference).
+  avançamos para dois pisos", 2026-10-20); from the company's module sheets in PDF, two storeys included (Listagem only,
+  no model): `ferramentas/documentos/modulos_pdf.py` + `listagem_modulos.py` (§0a; [RB] 2026-11-19). Module heights per
+  storey: PO Q5 (reference [RB] = Casa CL: ground floor exterior 2,97, interior 2,80 / 2,60; upper exterior 3,52 only on
+  the gutter sides, 2,97 / 2,94 front / back, interior 2,68 — §2; was "2,97 / 3,52", our reading, until 2026-11-19). How
+  the floor sits on ground-floor walls of different heights (2,97 exterior / 2,80 interior): OPEN (§4, §15 [RB]).
 - Joists 220×75 solid, on edge, wall to wall, **≤ 0,615 m** apart (equal division; 3_Vigamento 0,614 over 4,90,
   continuous over an interior wall) — user 2026-10-09 "Floor joists is also 22x7,5"; 3_Vigamento (2026-10-15 "representa
   bem o nosso vigamento base") — confirmed + company document — JSON `estrutura.pavimento.vigas.espacamento` 0,615.

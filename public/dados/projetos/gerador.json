@@ -6,18 +6,21 @@
   "descricao": "Recebe a planta de arquitetura (DWFx ou PDF vetorial), encontra sozinho as plantas, monta a casa com o motor do Builder e devolve três documentos: Módulos, Cobertura e Listagem de material, com uma vista 3D. Corre tudo no browser.",
   "fase": "Protótipo publicado",
   "situacao": {
-    "dia": "2026-11-11",
+    "dia": "2026-11-19",
     "feito": [
       "Online desde 30/10; documento Módulos aprovado.",
-      "Listagem de material com um código de produto em cada linha e só a fachada escolhida (11/11)."
+      "Listagem de material com um código de produto em cada linha e só a fachada escolhida (11/11).",
+      "Listagem de material a partir das folhas de módulos em PDF (dois pisos, módulos reais): primeira obra, Ribamar (19/11)."
     ],
     "agora": [
+      "Revisão da Listagem de Ribamar e respostas às perguntas da obra (mapa de vãos, varandas, cobertura baixa).",
       "Revisão da Discovercasa dos documentos Cobertura e Listagem de material.",
       "Lê plantas sem paredes a vermelho (leitor por forma, 11/11); por melhorar: ficheiros grandes lentos, casa e terreno na mesma vista."
     ],
     "falta": [
       "Política de libertação: marcar documentos com erros bloqueantes e rascunhos não aprovados.",
-      "Ler DXF e IFC."
+      "Ler DXF e IFC.",
+      "Listagem a partir das folhas de módulos na página do gerador (hoje só pela linha de comandos)."
     ]
   },
   "objetivos": [

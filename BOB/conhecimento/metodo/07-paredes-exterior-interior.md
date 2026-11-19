@@ -10,7 +10,9 @@
 - **Finish = the client's choice**: the three done most — **A wood, B ETICS, C cork**; others on request (stone) — user
   2026-09-24 — confirmed — JSON `exterior.opcoes`, `opcao_visivel` ([SB] B, [TV] A). Per house, with or without the
   contra-ripado: **PO Q18**. The finish covers the whole house, parapets' roof side included (§7 Parapets; user 2026-10-28
-  "o capoto tem que ficar na casa toda").
+  "o capoto tem que ficar na casa toda"). ⚠ [RB] the architecture has Tremolo boards and also a "C/ REV. CAPOTO" (ETICS)
+  façade detail (ARQ.11) — whether a house may mix finishes by façade (the 2026-10-28 words were said of the parapet's roof
+  side) and which façades: OPEN, asked 2026-11-19 (RB Q6, §15 [RB]); the RB Listagem assumed Tremolo on every façade.
 - **A. Wood: Piveteau TREMOLO Douglas vertical** (class 3.2 "marron", T&G 22 × 135 useful × 4 m) — user 2026-10-15
   "Tremolo fica na vertical como é o nosso padrão" — confirmed — JSON `exterior.opcoes.A.forro`. ⚠ On a hidden roof the
   boards run the full-height module (≈ pé direito + 1,0) → past ≈ 2,9–3,0 of pé direito a horizontal joint with a drip /

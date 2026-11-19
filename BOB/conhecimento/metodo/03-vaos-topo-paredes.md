@@ -16,8 +16,9 @@
 - **Peitoril 110×75** under every window, between the jambs ([TV] sill tops ≈ 1,03–1,04) — Casa CL; D2503 — company
   document — `estrutura_dc.emoldurar`.
 - **Verga 220×75 over wide openings**, sitting ON THE OPENING HEAD (as the padieira), the two 110×75 posts stopping under it
-  (Casa CL 2,92 · 2,96 ·
-  3,06 · 4,14 · 4,52) — user 2026-10-13 "a partir de 2,8 m-3m mais o menos entre esses valores"; 2026-10-22 "lembra-te mais
+  ([RB] = Casa CL, clear rough openings 2,77 · 2,81 · 2,91 · 3,99 · 4,37, upstairs 4,02 · 4,11 — the 2,92 · 2,96 · 3,06 ·
+  4,14 · 4,52 cited until v8.15 are the module lengths over the two posts, + 0,15; corrected 2026-11-19, as-built line
+  below) — user 2026-10-13 "a partir de 2,8 m-3m mais o menos entre esses valores"; 2026-10-22 "lembra-te mais
   de 3 metros usamos 22x7,5" — confirmed (over 3 m) / **OPEN: the threshold — 2,8, 3,0 or over 3,0, on the rough opening
   or the frame** — JSON `estrutura.verga_grande.vao_min` **2,8** (the lower end kept — ours; measured on the rough opening:
   `para_construtor` frame + 0,05, `casa_planta` / `estrutura_dc` the opening). **The norm in every module, full-height
@@ -26,7 +27,7 @@
   lintel alone ≈ 2,5–3,5× over; the ≈ 1,2 m of sheathed frame above with the ring acts as header) — keep the engineer's
   note and conditions (OSB fixings for shear, ring unjointed over the opening, deflection) in the project file (TV #17);
   per house **PO Q8** (with Q3). Whether the engineer also covered TV's 2,00 janelas de correr on P03 / P01: OPEN. Upper
-  verga limit: OPEN (widest seen 4,52). **Where it sits — in a wide opening lower than the top-plate underside − 0,22, the
+  verga limit: OPEN (widest seen 4,37 clear, 4,52 over the posts — [RB] M007). **Where it sits — in a wide opening lower than the top-plate underside − 0,22, the
   verga is lowered onto the opening head** (Claude: "Num vão largo mais baixo que a verga, baixo a verga até ao vão?" —
   user 2026-11-06 "Sim, baixa a verga") — confirmed. Verga underside = min(opening head, top plate underside − 0,22); the
   two 110×75 posts stop under it; where the verga reaches the top plate (opening at its highest) there is nothing above
@@ -38,6 +39,15 @@
   comment updated 7743ec4); `casa_planta` still caps an opening head
   under its own framing (X1, unchanged). Closes the 17–19 cm unframed strip of L72 / §15 item 26 ([TV] P03.1 builder
   model, configurator 3,00 portão beside a taller opening).
+- [RB] **Wide openings as built** (the Casa CL sheets read through `modulos_pdf.py` — our reading): in the 2,97 / 2,94
+  modules the wide opening fills the module — two 110×75 posts and the 22×7,5 verga as its top member (M007, M014, M125:
+  only these three pieces), the opening up to the verga (M007 4,37 × 2,76, M010 2,91 × 2,76, M011 3,99 × 2,76, M014 2,77 ×
+  2,72; upstairs M125 4,02 × 2,72, M127 4,11 × 2,72) = the verga at its highest; in the full-height M132 (≈ 3,49) the
+  verga sits on the head of a 2,81 × 2,09 opening, 110×75 jamb pieces over its ends, 110×35 studs on the grid above it to
+  the top plate — **the as-built form of the 2026-11-06 / 11-07 rules** (verga on the head, jamb pieces over its ends).
+  **Threshold evidence: M014 carries the 22×7,5 verga over a 2,77 clear opening** (2,92 over the posts) — below the
+  JSON's 2,8 on the rough opening (the tools would frame it with a padieira) → the company's line is ≤ 2,77 on the rough
+  opening, or ≈ 2,8–3,0 measured over the posts / module; **still OPEN** (§15 item 9) — company document (one house).
 - **Vertical 7,5×3,5 pieces (cripples)** above every opening up to the top plate and below every window down to the bottom
   plate, "para dar estabilidade ao vão"; no horizontal pieces — user 2026-10-15 "por nroma só tem as 7,5x3,5 verticais",
   "os nossos módulos base não possuem esse vigamento de 7,5x3,5 na horizontal nos vão" — confirmed —
@@ -53,7 +63,8 @@
 - **Interior doors 2,00 × 0,80 → rough opening 0,87 × 2,03** above the finished floor (3 cm on top, 3,5 cm each side) —
   user 2026-10-09 "usually we use 2mx0,8m doors and we leabe 3cm on top and 3,5 cm on each side" — confirmed — JSON
   `estrutura.porta_interior`; `casa_planta` centres it on the architect's door (assumed). [TV] all 8 = 0,87 × 2,03 (D2503).
-  Other sizes: **PO Q13**. [cfgr] a **"Porta interior"** card (0,80 × 2,00, rough 0,87 × 2,03) on interior walls — user
+  Other sizes: **PO Q13**. [RB] interior openings **1,69 × 2,06** (M031, M103, M106, M109; Casa CL sheets) — double or
+  pocket (correr embutida) doors? OPEN, not asked yet (RB Q8, §15 [RB]); not a second standard size. [cfgr] a **"Porta interior"** card (0,80 × 2,00, rough 0,87 × 2,03) on interior walls — user
   2026-10-28 "Adicionar portas interiores ao menu de portas e janelas e permitir colocar portas e janelas nas paredes
   interiores" — confirmed — `colocar.js` → `para_construtor` (doors only on interior walls). **Interior walls take doors
   only (0,80 × 2,00), no windows** — user 2026-10-29 "Só portas por norma ninguém usa janelas nas paredes interiores" —
@@ -237,4 +248,9 @@
   ⚠ [TV] D2503 cuts the madres into pieces ≤ 3,66 jointed on a lamelada — which rule for which piece: OPEN.
 - Two storeys: vigas de amarração 110×75 also on the ground-floor exterior walls, under the floor joists (3_Vigamento;
   none on interior walls; no afinação) — company document (our reading) — OPEN ([SB] asked 2026-10-15) — not in the tools
-  (`estrutura_dc` puts the joists on the top plate).
+  (`estrutura_dc` puts the joists on the top plate). ⚠ **[RB] now concerns it too** (Casa CL as built): Piso 0 exterior
+  2,97, interior 2,80 / 2,60 → by the made-to-measure rule (§2, carried to floor joists — ours) the joists bear at ≈ 2,91
+  (2,80 + 0,11) on the interior walls, so on the exterior walls they cannot sit on top (2,97 + amarração ≈ 3,08): hung
+  inside the exterior modules on a ring, as on the hidden roof? — the details keeper's arithmetic (ours) — OPEN, not asked
+  yet (RB Q9, §15 [RB]); the answer settles this rule and the façade band at the floor (RB cfg `faixa_piso` 0,39 assumes the
+  joists stacked on the walls). The RB Listagem counts the 110×75 on the Piso 0 exterior walls (assumed, X-list [RB]).

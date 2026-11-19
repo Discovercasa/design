@@ -115,7 +115,9 @@ Other items (numbers kept):
    vapour-open board (ours: XPS on both faces under a metal chapéu traps the frame's moisture) (§7 Parapets; the façade
    finish there confirmed 2026-10-28 — L52) (= E7).
 9. **The verga threshold**: "mais de 3 metros" vs "a partir de 2,8 m-3m" and the 3,00 garage "por norma" — 2,8, 3,0 or
-   over 3,0, on the rough opening or the frame (§3).
+   over 3,0, on the rough opening or the frame (§3). **As-built evidence (2026-11-19)**: [RB] M014 carries a 22×7,5 verga
+   over a 2,77 clear opening (2,92 over the posts) — ask with M014's elevation: "below 2,8 too, or is the 2,8 measured
+   over the posts?".
 (Item 10, "does the beirado's 0,20 minimum bind the verges?": CLOSED 2026-10-29 night — the verge equals the eave, §7.)
 12. **Sliding windows of 3 and 4 leaves**: sizes, heights, usually an estore?, which leaves slide (§3).
 14. **The opening details**: the maker's shutter-box height and a 2,5 cm over the box (2,425 vs 2,40) (PO Q11); the head
@@ -177,8 +179,31 @@ Other items (numbers kept):
   (§10; L74; production-model gap X21: fixed 2026-11-09, `camadas.faixas_portas`). Still open: the exterior-door threshold (PO Q23, §3); where the finish changes
   between two rooms (under the door leaf, ours) and whether a transition profile is used (§10).
 ### [SB] open (Sobral paused, "estará para avançar brevemente")
-- Vigas de amarração on the ground-floor walls under the floor joists (with an afinação?) (§4); living-room joists at 0,50
-  (§5); keep pitch or keep ridge (SB #22, §7).
+- Vigas de amarração on the ground-floor walls under the floor joists (with an afinação?) (§4 — now [RB] too, below);
+  living-room joists at 0,50 (§5); keep pitch or keep ridge (SB #22, §7).
+### [RB] Ribamar = Casa CL as built (2026-11-19; the house's own list: `Construção Ribamar/docs/estado.md` "Open questions" Q1–Q12)
+Each point is a Ribamar fact against a rule; the rule stands until he answers. Asked 2026-11-19: Q1–Q6; not asked yet: Q7–Q12.
+- **"Casa CL" = Ribamar's module sheets** (byte-identical; title block a template) — confirm (Q1, asked). Until then the
+  legend's reading holds: Casa CL's framing = method, its house features = [RB].
+- **(a) Hidden roof, parapets** (§2, §7): on Piso 1 the full-height 3,52 modules only on the two gutter sides; front 2,97
+  and back 2,94 stop below the parapet; the lower roof's 0,45 parapet (architecture) is not in its 2,97 modules — against
+  "the exterior modules run in one piece from the base to the parapet top — on every hidden roof" (user 2026-10-21) and
+  "the same height on every side" (2026-10-16). How the roof edge / parapet was closed there (Q5), the lower roof's parapet
+  and M132's 2,81 × 2,09 opening onto it — terrace or roof? (Q4) — asked. Ask also (ours): an exception for these walls, or
+  built before the rule?
+- **(b) Floor on ground-floor walls of different heights** (§4, §5): exterior 2,97, interior 2,80 / 2,60 → by the
+  made-to-measure rule the joists bear at ≈ 2,91 on the interior walls, so not on top of the exterior ones (2,97 +
+  amarração ≈ 3,08): hung inside on a ring, as on the hidden roof? (the details keeper's arithmetic — ours) — not asked yet
+  (Q9); it closes the OPEN "amarração 110×75 under the floor joists on two storeys" ([SB] above) and the façade band.
+- **(c) Mixed façade** (§8): Tremolo boards plus an ETICS ("C/ REV. CAPOTO") detail in the architecture vs "the finish
+  covers the whole house" (2026-10-28, said of the parapet's roof side) — which façades (Q6, asked); may a house mix finishes
+  by façade (ours, ask with it).
+- **(d) Interior openings 1,69 × 2,06** (M031, M103, M106, M109) vs the standard door rough opening 0,87 × 2,03 (§3) —
+  double or pocket (correr embutida) doors? (Q8, not asked yet; PO Q13).
+- Also from the sheets (one line each): the roof colour RAL 8017 (project) vs RAL 8004 (company) — kept as [RB] like
+  Sobral's grey? (Q7); Piso 1 clear height 2,5 (architecture) vs ≈ 2,64 from the modules (Q10); the 8,89 m joists in one
+  piece vs the longest 22×7,5 bought (Q11; "Timber" below); the stage of the obra (Q12); window schedule, varandas and the
+  1,48 cantilever (Q2, Q3, asked); the verga threshold evidence (item 9 above).
 ### Not asked yet (worth asking, low priority)
 - Battens: contra-ripado section / spacing / on the stud lines; why TV went without and when others do; ripado 35 cm centres
   or clear; cork battens 37,5×35 and round its openings; vertical battens in the outer layer too; batten wood and treatment;

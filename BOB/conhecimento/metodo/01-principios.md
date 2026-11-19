@@ -42,7 +42,12 @@
   (wording) / working rule ours (L40). An approval covers the point that was asked, not every detail of the modelled
   thing (L40); a site photo contradicting an approved model → ask "method or this house?" first.
 - Company documents (draft, Casa CL, 3_Vigamento) show the company standard — user 2026-10-15 "este não é o mesmo projeto
-  mas é para perceberes como operamos" — confirmed.
+  mas é para perceberes como operamos" — confirmed. **Casa CL = Ribamar's module sheets as built** (byte-identical,
+  found 2026-11-19 — user "tens os módulos direitinhos de como foram feitos para ribamar" — to confirm with him), and the
+  draft's foundation list is "Copiado de Ribamar": their framing (sections, studs, plates, jambs, padieira, peitoril,
+  verga) teaches the method; Ribamar's own choices (module heights per wall, RAL 8017 roof, front / back modules below the
+  parapet, 1,69 interior openings, the capoto detail) are **[RB]** project facts by the Scope rule above, not the standard
+  because "Casa CL" is cited — ours (insight 2026-11-19) — `Construção Ribamar/docs/`.
 - **A company production drawing of a built house (TV: D2503) wins over descriptions from memory**, his included: ask for
   the production drawings (roof, modules, framing) first — user 2026-10-16 "arranjei o documento exato sobre a cobertura
   de torres vedra e eu disse-te mal como seriam as aguas" — confirmed (L23, L24). Keep the reason of each detail ("de
@@ -107,6 +112,11 @@
   "<project>/modelos/casa/config.json"` → `<project>/documentos/<obra>_Modulos.pdf`, `_Cobertura.pdf`,
   `_Listagem_Material.pdf` + `.csv` (cfg `documentos`: `obra`, `projeto`, `local`, `revisoes`). The list's footer names
   what it leaves out: consumables (§12), foundation, interior doors, installations. [TV] run: Módulos 6 sheets, Cobertura 4.
+  **From the company's own module sheets plotted to PDF** (two storeys included, no 3D model): `ferramentas/documentos/modulos_pdf.py`
+  reads them (scale from the dimensions, every member, openings, wall areas) and `listagem_modulos.py` makes the Listagem
+  through `gerar.doc_listagem` (same PDF / CSV and product codes); what the sheets do not show (floor, ceilings, roof,
+  finishes) comes from the per-project defaults, said in the delivery — tools, no new rule. [RB] run 2026-11-19: 59 modules,
+  cfg `Construção Ribamar/modelos/listagem/config.json` (its assumptions: X-list [RB] in `12-desvios-construtor.md`).
 - **The chain: per-project questions → model → documents**; he reviews the documents — confirmed (each step) / assumed
   (order). ⚠ His wording runs documents → model; one source means they never disagree, but the module choices (split,
   corners, openings) must be reviewable on the documents before the model is final — tell him.

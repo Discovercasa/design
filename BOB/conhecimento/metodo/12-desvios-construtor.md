@@ -114,6 +114,16 @@ base, no flashing at the ledger, tiles on the slats).
 - [SB] from the engineer's drawings: `estrutura_dc.py` (beams 0 → D on the amarração, purlins ≤ 1,2 tilted, the eave one on
   the beams, prumos on every beam, empenas, verges 0,12) + `camadas.cobertura` (rectangle only: gutter flat, downpipes 0,30
   from the ends at the eave line ≈ 0,25 off the frame running to Z 0 — the "ligeiramente acima" and the swan-neck missing).
+- [RB] from the company's module sheets in PDF (2026-11-19): `modulos_pdf.py` + `listagem_modulos.py` (Listagem only, no
+  model; cfg `Construção Ribamar/modelos/listagem/config.json`) — the walls as drawn; the rest from the PO defaults (RB
+  `docs/estado.md` "Listagem 2026-11-19"): Tremolo on every façade (the capoto detail not applied, §8); the 110×75
+  amarração on the Piso 0 exterior walls under the joists (rule OPEN, §4) and `faixa_piso` 0,39 (joists stacked); floor
+  joists 22×7,5 at 0,598 in one piece wall to wall (8,89 m — stock OPEN, §11) + barrotes at 0,60 + OSB 22, wool in the
+  heated part; ceiling beams 22×7,5 at 1 m; Piso 1 roof two slopes at 7 % with the gutters at the side parapets, the lower
+  roof one slope, one gutter, a remate de topo against the Piso 1 wall; the panel line with no colour (RAL 8017 / 8004
+  open); stair opening 3,10 × 1,10 (width assumed); the Piso 1 Pladur at 2,50; 12 exterior openings as rough openings (no
+  window schedule). What the Listagem counts for the front / back roof edges and the lower roof's parapet (not in the
+  sheets) is not recorded in RB `docs/` — check on the next run (§15 [RB] (a)).
 **Other assumptions** (see the lines above): wall position default "face_interior" (D2503: "face_exterior", set per
 project); bandeiras; réguas one per perfil; perfis 47×17; prumos 110×75; contra-ripado 30×20 at 0,35 from the façade end;
 ripado at 0,35 centres from the bottom; corner / jamb verticals in both batten layers; no gaps where battens meet; Tremolo

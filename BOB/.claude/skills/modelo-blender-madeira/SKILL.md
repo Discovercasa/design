@@ -154,6 +154,18 @@ The module sheets and the cut list use `membros_fabrico` (stored by casa_planta:
 (empty since 2026-10-21). TV check (2026-10-20): identical to the members drawn in D2503 (228 × 11x3,5,
 50 × 11x7,5, 24 × 7,5x11, 207 × 7,5x3,5); D2503's own table says 220 / 50 / 24 / 199.
 
+**From the company's module sheets in PDF** (two timber storeys, real modules — the builder does one storey from a plan;
+first house Ribamar, 2026-11-19): `python ferramentas/documentos/modulos_pdf.py "<sheet>.pdf" --tipo exterior|interior`
+reads one sheet (scale = median of dimension line / number; every member by colour: black 11x3,5 / 7,5x3,5, red
+11x7,5, orange 22x7,5; modules from the plates, names from the labels by their dimension line; openings; it prints
+each module's length against its dimension — check the "?" names, "cota" mismatches and the warnings), then
+`python ferramentas/documentos/listagem_modulos.py "<project>/modelos/listagem/config.json"` writes
+`<obra>_Listagem_Material.pdf/.csv` (via `gerar.doc_listagem`, same codes) + `_Listagem_resumo.json` (every rule
+used and every warning). The config gives what the sheets do not draw, measured on the sheets' own plans: storey
+outlines and interior areas, pé direito, amarração runs, the floor between storeys, the roofs (slopes, gutters,
+pipes), modules outside on both faces (loggia returns, porch), the façade band at the floor zone, the dados da obra.
+Example: `Construção Ribamar/modelos/listagem/config.json`. Module sheets and drawings stay local (`desenhos/`).
+
 ## New house type (e.g. Tipo 2)
 1. Copy `modelos/tipo1/config.json` to `modelos/<tipo>/`; set `nome`, `descricao`, `dwfx`, `saida`.
 2. Locate views (skill ler-dwfx): `regiao_alcados`, `plantas` {"0": GF wall plan, "1": upper}, `pavimento.regiao`,

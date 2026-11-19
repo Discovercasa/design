@@ -197,6 +197,12 @@ he answers (`metodo-construtivo.md`). Condensed 2026-10-28 (history in git).
   23/09/2025–31/12/2029; value cap 648 000 € or 660 982 €, sources disagree: check the decree). It changes the final
   price by about 15 %. Decide with the accountant; the configurator may need to ask the client if the house is their
   permanent home — **open**, hub task 43 / 169 note 8. Researched on the web, not yet checked against the decree text.
+- **2026-11-19** — **"Casa CL" = Ribamar's modules as built**: the 2026-09-30 sheets are byte-identical to the hub's
+  «Ribamar Módulos» and their plans match Ribamar's architecture; the company draft's foundation list is also "Copiado de
+  Ribamar". Why it matters: rules cited "Casa CL" (company document) came from one real house, so its project features
+  (RAL 8017 roof, gable-end modules below the parapet, 1,69 interior openings) must not become company rules without
+  asking → Ribamar's facts kept in `Construção Ribamar/docs/` — **raised in the 2026-11-19 reply with the Listagem's open
+  questions; confirmation pending**.
 
 ## Recorded, not yet told (raise when it fits)
 - **2026-11-18** — Client pages look "modelled" mainly because every texture, piece of furniture and tree is generated
@@ -472,7 +478,8 @@ he answers (`metodo-construtivo.md`). Condensed 2026-10-28 (history in git).
   orange tile vs flat white/grey, colour, pool/solar panels), and missing buildings are picked by their corners on the
   screenshot and converted back to the house frame. Ribamar: a mix — traditional tile-roofed houses to the west and
   south, modern flat-roofed villas next to the lot. Storeys are guessed (2, or 1 for small ones); Street View or the
-  DGT LiDAR would confirm them.- **2026-11-13** — **status: told to the user.** The quality ceiling of the client page's 3D. Ribamar's 3D (three.js, light
+  DGT LiDAR would confirm them.
+- **2026-11-13** — **status: told to the user.** The quality ceiling of the client page's 3D. Ribamar's 3D (three.js, light
   baked in Cycles: lightmaps 2048/1024, GLB textures 512 px, ~7 MB, opens offline on a phone) is a balance, not the
   maximum. Same technology, higher: 1–2K textures (KTX2 needs the Basis transcoder — a new dependency, ask first),
   4K lightmaps and a baked interior, the furnished interior and the real surroundings inside the 3D (with LOD), baked
@@ -497,3 +504,14 @@ he answers (`metodo-construtivo.md`). Condensed 2026-10-28 (history in git).
   roughly 4–6x the GTX 1050 Ti. Disk (15 GB / 83 GB free) is still the first limit — the 2 TB NVMe planned for Phase 4
   also serves this. (3) **Tour:** points per room from the house description, 4096 x 2048 Cycles panoramas, ~8–12 per
   house, furnished and lit, the real exterior first (open data), reviewed with the page.
+- **2026-11-19** — **status: not yet told.** Ribamar is a second as-built test case, like Torres Vedras with D2503:
+  its module sheets give the real modules and now a Listagem made from them (`ferramentas/documentos/listagem_modulos.py`)
+  → run the builder / configurator on Ribamar's architecture and compare modules, heights and quantities with it (the
+  first two-storey check). From the same sheets (`Construção Ribamar/docs/estado.md`, open 7–11): (1) M014 has a 22×7,5
+  verga over a 2,77 clear rough opening (2,92 over the posts) — as-built evidence for the verga threshold at or below
+  2,8 on the rough opening (rulebook §3, OPEN); (2) on Piso 1 the exterior modules reach the parapet only on the gutter
+  sides (3,52), not on the gable ends (2,97 / 2,94) — against "modules full height to the parapet top on every hidden
+  roof" (§2): ask how the gable-end parapet / roof edge is built; (3) Piso 0 exterior 2,97 vs interior 2,80 means the
+  floor joists cannot simply sit on top of both (our arithmetic: hung inside the exterior modules on a ring?) — the
+  answer closes the OPEN amarração-under-the-joists rule (§4); (4) the Listagem has 19 joists of 8,89 m in one piece:
+  likely past the stock length (longest 22×7,5 bought: OPEN) → joints over an interior wall, cut list.

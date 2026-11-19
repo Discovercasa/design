@@ -26,6 +26,8 @@
  "ferramentas/documentos/de_desenhos.py",
  "ferramentas/documentos/folha.py",
  "ferramentas/documentos/gerar.py",
+ "ferramentas/documentos/listagem_modulos.py",
+ "ferramentas/documentos/modulos_pdf.py",
  "ferramentas/documentos/pdf.py",
  "ferramentas/configurador/__init__.py",
  "ferramentas/configurador/auditar_cobertura.py",
