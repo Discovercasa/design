@@ -682,8 +682,10 @@ document.addEventListener('click', async (e) => {
       const s = E.seccoes.find((x) => x.id === Number(el.dataset.seccao));
       if (!s) return;
       const n = E.documentos.filter((d) => d.seccao_id === s.id).length;
-      if (n) return aviso(`Para apagar a secção «${esc(s.nome)}», muda de secção ou apaga primeiro os seus ${n} ${n === 1 ? 'documento' : 'documentos'}.`, { icone: 'atencao' });
-      if (!confirm(`Apagar a secção «${s.nome}»?`)) return;
+      const obra = s.tipo === 'pagina';
+      if (n) return aviso(obra ? `Para apagar a obra «${esc(s.nome)}», muda de obra ou apaga primeiro as suas ${n} ${n === 1 ? 'página' : 'páginas'}.`
+        : `Para apagar a secção «${esc(s.nome)}», muda de secção ou apaga primeiro os seus ${n} ${n === 1 ? 'documento' : 'documentos'}.`, { icone: 'atencao' });
+      if (!confirm(`Apagar a ${obra ? 'obra' : 'secção'} «${s.nome}»?`)) return;
       if (await tentar(() => D.apagarSeccao(s.id))) depois();
       return;
     }
@@ -882,7 +884,11 @@ document.addEventListener('change', async (e) => {
         const ficheiro = el.files[0]; el.value = '';
         const titulo = ((await ficheiro.slice(0, 16384).text()).match(/<title>([^<]{1,200})<\/title>/i) || [])[1] || ficheiro.name.replace(/\.html?$/i, '');
         aviso(`A carregar «${esc(titulo.trim())}»…`, { icone: 'info', duracao: 3 });
-        if (await tentar(() => D.carregarDocumento(el.dataset.projeto, 'pagina', ficheiro, titulo.trim(), ''))) { aviso('Página carregada.', { icone: 'certo', duracao: 3 }); depois(); }
+        const seccao = el.dataset.seccao ? Number(el.dataset.seccao) : null;   // the obra it was loaded into (migração 0026)
+        if (await tentar(() => D.carregarDocumento(el.dataset.projeto, 'pagina', ficheiro, titulo.trim(), '', { seccao_id: seccao }))) {
+          if (seccao) V.seccoesAbertas.add(`sec:${seccao}`);
+          aviso('Página carregada.', { icone: 'certo', duracao: 3 }); depois();
+        }
         return;
       }
       if (el.name === 'anexos-ficheiros') { await enviarAnexos(el.dataset.alvo, Number(el.dataset.ref), el.files); el.value = ''; }
@@ -978,7 +984,7 @@ document.addEventListener('submit', async (e) => {
         ok = await tentar(async () => { if (s) await D.renomearSeccao(s, v('nome')); else nova = await D.criarSeccao(f.dataset.projeto, f.dataset.tipoDoc, v('nome')); }, f);
         if (ok) {
           fecharDialogo(dlg);
-          if (nova) { V.seccoesAbertas.add(`sec:${nova.id}`); aviso(`Secção «${esc(nova.nome)}» criada. Acrescenta-lhe ficheiros ou uma pasta.`, { icone: 'certo', duracao: 4 }); }
+          if (nova) { V.seccoesAbertas.add(`sec:${nova.id}`); aviso(nova.tipo === 'pagina' ? `Obra «${esc(nova.nome)}» criada. Carrega-lhe as páginas.` : `Secção «${esc(nova.nome)}» criada. Acrescenta-lhe ficheiros ou uma pasta.`, { icone: 'certo', duracao: 4 }); }
           depois();
         }
         return;
@@ -1195,7 +1201,7 @@ document.addEventListener('drop', async (e) => {
 // sections and folders stay open while one works in the tab
 document.addEventListener('toggle', (e) => {
   const d = e.target;
-  if (!d.matches || !d.matches('#documentos details[data-aberto]')) return;
+  if (!d.matches || !d.matches('#documentos details[data-aberto], #paginas details[data-aberto]')) return;
   if (d.open) V.seccoesAbertas.add(d.dataset.aberto); else V.seccoesAbertas.delete(d.dataset.aberto);
 }, true);
 

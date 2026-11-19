@@ -1,5 +1,14 @@
 [
   {
+    "dia": "2026-11-19",
+    "titulo": "Builder: as páginas por obra",
+    "itens": [
+      "Na aba «Páginas», cada obra tem o seu grupo, que abre e fecha (Ribamar, Porto Dinheiro, Espinho, Matosinhos); ao abrir a aba estão todos fechados.",
+      "Quem edita cria uma obra com «Nova obra», carrega uma página dentro dela («Carregar página» do grupo) e muda uma página de obra com o ícone da pasta; uma obra só se apaga vazia.",
+      "Matosinhos tem a página da habitação bifamiliar em Guifões."
+    ]
+  },
+  {
     "dia": "2026-11-12",
     "titulo": "Builder: a aba Páginas",
     "itens": [

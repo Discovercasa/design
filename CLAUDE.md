@@ -66,7 +66,8 @@ Projeto Design da Discovercasa (`design.discovercasa.pt`). Responder em portugu�
   carregamento dos modelos AR. Nenhuma chave permanente guardada.
 - **Aba Páginas** (2026-11-12, migração 0025; o JSON do projeto diz `"paginas": true`, hoje só o Builder): as páginas
   entregues aos clientes são documentos do tipo `pagina` no armazenamento privado `documentos` (nunca no Git: são casas de
-  clientes) e abrem-se noutra janela a partir da memória; a aba tem os seus checkpoints (`checkpoints.aba = 'paginas'`,
+  clientes) e abrem-se noutra janela a partir da memória; agrupam-se por obra, um colapsável por casa (secções do tipo
+  `pagina` em `documentos_seccoes`, migração 0026, 2026-11-19); a aba tem os seus checkpoints (`checkpoints.aba = 'paginas'`,
   fora do Workflow). O Claude carrega uma página pela função temporária com chave de uso único (como os modelos AR).
 - **Página de um projeto** (2026-11-11): abas Workflow, Documentos e (Step Inside) Teste do AR; pipeline e «sobre»
   dentro do Workflow; tudo fechado sempre que se abre; descrição das tarefas em acordeão; o ponto de situação do

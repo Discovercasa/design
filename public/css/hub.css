@@ -583,6 +583,12 @@ dialog.gaveta::backdrop { background: oklch(0.2 0.01 85 / 0.25); }
 .pagina-texto h3 { font-size: 1rem; margin: 0 0 2px; overflow-wrap: anywhere; }
 .pagina-texto p { margin: 2px 0 0; color: var(--tinta-2); overflow-wrap: anywhere; }
 .pagina-acoes { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+/* the pages by obra (2026-11-19): one collapsible per house */
+.pag-obras { display: grid; gap: 10px; }
+.pag-obra summary { font-size: 1rem; font-weight: 600; }
+.pag-obra summary .num { font-weight: 400; margin-left: 4px; }
+.pag-obra .paginas { margin-top: 4px; }
+.pag-soltas { font-size: 0.9375rem; margin: 20px 0 10px; color: var(--tinta-2); }
 @media (max-width: 560px) {
   .pagina-cartao { grid-template-columns: 40px minmax(0, 1fr); }
   .pagina-icone { height: 40px; }

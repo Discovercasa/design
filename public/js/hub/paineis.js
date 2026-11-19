@@ -314,6 +314,10 @@ export function dlgDocumento(projetoId, tipo) {
 }
 // secção do documento: as secções dos dois tipos (escolher uma secção escolhe também o tipo), ou só as de um tipo
 function opcoesSeccao(projetoId, atual = null, soTipo = null) {
+  if (soTipo === 'pagina') {   // the Páginas tab: its sections are the obras (migração 0026)
+    return `<label class="campo-grupo"><span>Obra</span><select class="campo" name="seccao">
+      <option value="">Sem obra</option>${seccoesDe(projetoId, 'pagina').map((s) => `<option value="${s.id}"${s.id === atual ? ' selected' : ''}>${esc(s.nome)}</option>`).join('')}</select></label>`;
+  }
   const grupo = (tipo, rotulo) => {
     const ss = soTipo && soTipo !== tipo ? [] : seccoesDe(projetoId, tipo);
     return ss.length ? `<optgroup label="${rotulo}">${ss.map((s) => `<option value="${s.id}" data-tipo="${tipo}"${s.id === atual ? ' selected' : ''}>${esc(s.nome)}</option>`).join('')}</optgroup>` : '';
@@ -323,22 +327,24 @@ function opcoesSeccao(projetoId, atual = null, soTipo = null) {
 }
 // criar uma secção, ou mudar-lhe o nome
 export function dlgSeccao(projetoId, tipo, s = null) {
-  return `<form data-form="seccao" data-projeto="${projetoId}" data-tipo-doc="${tipo}"${s ? ` data-seccao="${s.id}"` : ''}>${cabeca(s ? 'Mudar o nome da secção' : 'Nova secção',
-    esc(nomeProjeto(projetoId)) + ' · documentos ' + (tipo === 'informativo' ? 'informativos' : 'adicionais'))}
+  const obra = tipo === 'pagina';   // in the Páginas tab a section is an obra (one house: its pages)
+  return `<form data-form="seccao" data-projeto="${projetoId}" data-tipo-doc="${tipo}"${s ? ` data-seccao="${s.id}"` : ''}>${cabeca(s ? `Mudar o nome da ${obra ? 'obra' : 'secção'}` : obra ? 'Nova obra' : 'Nova secção',
+    esc(nomeProjeto(projetoId)) + (obra ? ' · páginas' : ' · documentos ' + (tipo === 'informativo' ? 'informativos' : 'adicionais')))}
     <div class="dlg-corpo">
-      <label class="campo-grupo"><span>Nome</span><input class="campo" name="nome" maxlength="120" required value="${s ? esc(s.nome) : ''}" placeholder="ex.: Torres Vedras, Desenhos de execução"></label>
-      ${s ? '' : '<p class="fraco mini">Depois de criada, acrescenta-lhe ficheiros ou uma pasta inteira (ou arrasta-os para a secção).</p>'}
+      <label class="campo-grupo"><span>Nome</span><input class="campo" name="nome" maxlength="120" required value="${s ? esc(s.nome) : ''}" placeholder="${obra ? 'ex.: Ribamar, Matosinhos' : 'ex.: Torres Vedras, Desenhos de execução'}"></label>
+      ${s ? '' : `<p class="fraco mini">${obra ? 'Depois de criada, carrega-lhe as páginas desta obra.' : 'Depois de criada, acrescenta-lhe ficheiros ou uma pasta inteira (ou arrasta-os para a secção).'}</p>`}
       <p class="erro-msg pequeno" role="alert"></p>
     </div>
-    <div class="dlg-rodape"><button class="btn texto" type="button" data-acao="fechar-dlg">Cancelar</button><button class="btn primario" type="submit">${s ? 'Guardar' : 'Criar secção'}</button></div>
+    <div class="dlg-rodape"><button class="btn texto" type="button" data-acao="fechar-dlg">Cancelar</button><button class="btn primario" type="submit">${s ? 'Guardar' : obra ? 'Criar obra' : 'Criar secção'}</button></div>
   </form>`;
 }
 // mudar um documento de secção
 export function dlgMover(d) {
-  return `<form data-form="mover-doc" data-id="${d.id}">${cabeca('Mudar de secção', esc(d.titulo))}
+  const obra = d.tipo === 'pagina';
+  return `<form data-form="mover-doc" data-id="${d.id}">${cabeca(obra ? 'Mudar de obra' : 'Mudar de secção', esc(d.titulo))}
     <div class="dlg-corpo">
       ${opcoesSeccao(d.projeto, d.seccao_id, d.tipo)}
-      <p class="fraco mini">As secções dos documentos ${d.tipo === 'informativo' ? 'informativos' : 'adicionais'}.</p>
+      <p class="fraco mini">${obra ? 'As obras da aba Páginas.' : `As secções dos documentos ${d.tipo === 'informativo' ? 'informativos' : 'adicionais'}.`}</p>
       <p class="erro-msg pequeno" role="alert"></p>
     </div>
     <div class="dlg-rodape"><button class="btn texto" type="button" data-acao="fechar-dlg">Cancelar</button><button class="btn primario" type="submit">Mudar</button></div>

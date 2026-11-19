@@ -42,6 +42,44 @@ test('Páginas: a aba do Builder carrega uma página e abre-a noutra janela', as
   expect(erros).toEqual([]);
 });
 
+// 2026-11-19: «cria Collapsables onde cada projeto tem as suas páginas» → uma obra por casa (secção do tipo 'pagina')
+test('Páginas: por obra, em colapsáveis; carregar numa obra e mudar uma página de obra', async ({ page }) => {
+  const erros = await abrir(page, { rota: '/#/projeto/builder/paginas' });
+  const dlg = page.locator('#dlg');
+  await page.locator('.seccao-cabeca input[name="pagina-ficheiro"]').setInputFiles({ name: 'casa-teste.html', mimeType: 'text/html', buffer: Buffer.from(PAGINA) });
+  await expect(page.locator('.pagina-cartao', { hasText: 'Casa Teste' })).toBeVisible();
+  // a new obra: created open and empty; the loose page goes under «Sem obra»
+  await page.getByRole('button', { name: 'Nova obra' }).click();
+  await expect(dlg.getByRole('heading', { name: 'Nova obra' })).toBeVisible();
+  await dlg.getByLabel('Nome').fill('Ribamar');
+  await dlg.getByRole('button', { name: 'Criar obra' }).click();
+  const obra = page.locator('details.pag-obra', { hasText: 'Ribamar' });
+  await expect(obra).toHaveAttribute('open', '');
+  await expect(obra).toContainText('Ainda sem páginas desta obra.');
+  await expect(page.getByRole('heading', { name: 'Sem obra' })).toBeVisible();
+  expect(await db(page, () => window.__fake.db.documentos_seccoes.filter((s) => s.tipo === 'pagina').map((s) => [s.projeto, s.nome]))).toEqual([['builder', 'Ribamar']]);
+  // move the loose page into the obra
+  await page.locator('.pagina-cartao', { hasText: 'Casa Teste' }).getByRole('button', { name: /Mudar de obra/ }).click();
+  await dlg.getByLabel('Obra').selectOption({ label: 'Ribamar' });
+  await dlg.getByRole('button', { name: 'Mudar' }).click();
+  await expect(obra.locator('.pagina-cartao', { hasText: 'Casa Teste' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Sem obra' })).toHaveCount(0);
+  // a page loaded straight into the obra
+  await obra.locator('input[name="pagina-ficheiro"]').setInputFiles({ name: 'casa-dois.html', mimeType: 'text/html', buffer: Buffer.from(PAGINA.replace('Casa Teste', 'Casa Dois')) });
+  await expect(obra.locator('.pagina-cartao', { hasText: 'Casa Dois' })).toBeVisible();
+  await expect(obra.locator('summary')).toContainText('2 páginas');
+  expect(await db(page, () => { const f = window.__fake.db; const s = f.documentos_seccoes.find((x) => x.nome === 'Ribamar');
+    return f.documentos.filter((d) => d.tipo === 'pagina').every((d) => d.seccao_id === s.id); })).toBe(true);
+  // an obra with pages cannot be deleted
+  await obra.getByRole('button', { name: /Apagar a obra/ }).click();
+  await expect(page.getByText(/Para apagar a obra «Ribamar»/)).toBeVisible();
+  // closed again when the tab is opened again
+  await page.locator('#sub-abas').getByRole('link', { name: /Workflow/ }).click();
+  await page.locator('#sub-abas').getByRole('link', { name: /Páginas/ }).click();
+  await expect(page.locator('details.pag-obra', { hasText: 'Ribamar' })).not.toHaveAttribute('open', '');
+  expect(erros).toEqual([]);
+});
+
 test('Páginas: checkpoints e tarefas próprios da aba, fora do Workflow', async ({ page }) => {
   const erros = await abrir(page, { rota: '/#/projeto/builder/paginas' });
   await page.locator('[data-acao="acrescentar"][data-tipo="checkpoint"][data-aba="paginas"]').click();

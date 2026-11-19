@@ -212,9 +212,14 @@ function workflow(p) {
 // ---------------------------------------------------------------- aba Páginas (as páginas para os clientes)
 // As páginas ficam no armazenamento privado (documentos do tipo 'pagina'); abrem-se noutra janela a partir da memória.
 // Por baixo, os checkpoints e as tarefas desta aba (checkpoints.aba = 'paginas'), como no Workflow.
+// As páginas agrupam-se por obra (o utilizador, 2026-11-19: «cria Collapsables onde cada projeto tem as suas páginas»):
+// cada obra é uma secção do tipo 'pagina' (documentos_seccoes, migração 0026), fechada ao abrir a aba.
 function paginas(p) {
-  const ps = documentosDe(p.id, 'pagina').slice().sort((a, b) => (a.criado_em < b.criado_em ? 1 : -1));
+  const todas = documentosDe(p.id, 'pagina').slice().sort((a, b) => (a.criado_em < b.criado_em ? 1 : -1));
+  const obras = seccoesDe(p.id, 'pagina'), ids = new Set(obras.map((s) => s.id));
+  const soltas = todas.filter((d) => !ids.has(d.seccao_id));
   const cps = checkpointsDaAba(p.id, 'paginas'), feitos = cps.filter((c) => c.estado === 'concluido').length;
+  const carregar = (s, classe = 'btn') => `<label class="${classe}">${ic('mais', classe === 'btn' ? '' : 'ic-sm')}Carregar página<input type="file" name="pagina-ficheiro" data-projeto="${p.id}"${s ? ` data-seccao="${s.id}"` : ''} accept=".html,.htm,text/html" class="so-leitor"></label>`;
   const cartao = (d) => `<li class="pagina-cartao" id="doc-${d.id}">
       <span class="pagina-icone" aria-hidden="true">${ic('casa')}</span>
       <div class="pagina-texto"><h3>${esc(d.titulo)} ${novo('documento', d.id)}</h3>
@@ -222,14 +227,28 @@ function paginas(p) {
         <p class="fraco mini">${esc(d.criado_por_nome || 'Alguém')} · ${dia(d.criado_em)} · ${tamanho(d.tamanho || 0)}</p></div>
       <div class="pagina-acoes"><button class="btn primario pequeno" type="button" data-acao="abrir-pagina" data-id="${d.id}">${ic('abrir', 'ic-sm')}Abrir a página</button>
         <button class="btn pequeno texto" type="button" data-acao="descarregar-pagina" data-id="${d.id}">Descarregar</button>
-        ${E.eu.editar ? `<button class="icone-botao" type="button" data-acao="apagar-doc" data-id="${d.id}" aria-label="Apagar ${esc(d.titulo)}" title="Apagar">${ic('apagar', 'ic-sm')}</button>` : ''}</div>
+        ${E.eu.editar ? `<button class="icone-botao" type="button" data-acao="mover-doc" data-id="${d.id}" aria-label="Mudar de obra: ${esc(d.titulo)}" title="Mudar de obra">${ic('pasta', 'ic-sm')}</button>
+        <button class="icone-botao" type="button" data-acao="apagar-doc" data-id="${d.id}" aria-label="Apagar ${esc(d.titulo)}" title="Apagar">${ic('apagar', 'ic-sm')}</button>` : ''}</div>
     </li>`;
-  return `<section aria-labelledby="t-paginas">
+  const lista = (ps, vazio) => (ps.length ? `<ul class="paginas">${ps.map(cartao).join('')}</ul>` : `<p class="vazio pequeno">${vazio}</p>`);
+  const obra = (s) => {
+    const ps = todas.filter((d) => d.seccao_id === s.id), k = `sec:${s.id}`;
+    return `<details class="doc-grupo pag-obra" data-seccao="${s.id}" data-aberto="${k}"${seccoesAbertas.has(k) ? ' open' : ''}>
+      <summary>${esc(s.nome)} <span class="fraco num">${ps.length} ${ps.length === 1 ? 'página' : 'páginas'}</span></summary>
+      ${E.eu.editar ? `<div class="sec-acoes">${carregar(s, 'btn pequeno')}
+        <button class="icone-botao" type="button" data-acao="sec-renomear" data-seccao="${s.id}" aria-label="Mudar o nome da obra ${esc(s.nome)}" title="Mudar o nome">${ic('editar', 'ic-sm')}</button>
+        <button class="icone-botao" type="button" data-acao="sec-apagar" data-seccao="${s.id}" aria-label="Apagar a obra ${esc(s.nome)}" title="Apagar a obra">${ic('apagar', 'ic-sm')}</button></div>` : ''}
+      ${lista(ps, 'Ainda sem páginas desta obra.')}
+    </details>`;
+  };
+  const corpo = !todas.length && !obras.length ? '<p class="vazio">Ainda sem páginas.</p>'
+    : `<div class="pag-obras">${obras.map(obra).join('')}</div>${soltas.length ? `${obras.length ? '<h3 class="pag-soltas">Sem obra</h3>' : ''}${lista(soltas, '')}` : ''}`;
+  return `<section id="paginas" aria-labelledby="t-paginas">
       <div class="seccao-cabeca">
-        <div><h2 id="t-paginas">Páginas</h2><p>As páginas que entregamos aos clientes: um só ficheiro com a casa em 3D, as imagens, os pisos e os materiais. Ficam em privado; «Abrir a página» abre-a noutra janela e «Descarregar» guarda o ficheiro para enviar.</p></div>
-        ${E.eu.editar ? `<div class="botoes"><label class="btn">${ic('mais')}Carregar página<input type="file" name="pagina-ficheiro" data-projeto="${p.id}" accept=".html,.htm,text/html" class="so-leitor"></label></div>` : ''}
+        <div><h2 id="t-paginas">Páginas</h2><p>As páginas que entregamos aos clientes, por obra: um só ficheiro com a casa em 3D, as imagens, os pisos e os materiais. Ficam em privado; «Abrir a página» abre-a noutra janela e «Descarregar» guarda o ficheiro para enviar.</p></div>
+        ${E.eu.editar ? `<div class="botoes"><button class="btn" type="button" data-acao="nova-seccao" data-projeto="${p.id}" data-tipo-doc="pagina">${ic('pasta')}Nova obra</button>${carregar(null)}</div>` : ''}
       </div>
-      ${ps.length ? `<ul class="paginas">${ps.map(cartao).join('')}</ul>` : '<p class="vazio">Ainda sem páginas.</p>'}
+      ${corpo}
     </section>
     <section aria-labelledby="t-paginas-wf" style="margin-top:32px">
       <div class="seccao-cabeca">
