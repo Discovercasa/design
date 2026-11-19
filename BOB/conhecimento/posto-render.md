@@ -76,6 +76,9 @@ wants this work on that PC (2026-11-13), which implies it may hold client files 
 - **CC0 assets (user 2026-11-18: «Sim, podes»):** photo textures and models from Poly Haven (public domain), fetched by
   `ferramentas/pagina/descarregar_ativos.py` (manifest with source, licence, size) into `_trabalho/assets/polyhaven`
   (office) and copied to `D:\BOB-posto\assets` (station); renders run with `--ativos D:\BOB-posto\assets`. Never in Git.
+- **Shutting it down when done (user 2026-11-19):** «consegues encerrar o meu PC de casa quando tiver feito?» → copy the
+  results to the office and check them (MD5) first, then `shutdown /s /t 60 /c "<message>"` over SSH (`shutdown /a`
+  cancels). No Wake-on-LAN: the user switches it on for the next job.
 - **Following from elsewhere (optional, ask first):** Remote Control in the Claude app (phone, office); later SSH
   (OpenSSH + a VPN such as Tailscale) so an office session can start jobs there.
 - **Memory:** a session there does not see the office conversations; the shared memory is the repo (`BOB/CLAUDE.md`,
