@@ -821,3 +821,25 @@ The team's notes on hub task 84 (written in the hub by [membro da equipa] on 202
   "Asked, answer pending" and Ribamar Q13; cut from 230x78? / timber waste % / "+6 m" lengths → `10-pontos-abertos.md` item
   27; Listagem v2 and its totals → `Construção Ribamar/docs/estado.md` "▶ Where we stopped" (+ Q11); the user's document
   preference → `conhecimento/discovercasa.md` Product vision 1.
+
+### 2026-11-20 — Ribamar page of 20/11 uploaded; images not yet [Builder]
+> sim por favor diz-me etretanto o estado de ribamar e da upload ao link final
+> Ainda não
+- Done: «Casa Ribamar» (20/11, documentos 115) in the obra Ribamar: new Tremolo colour, no band at the storey joints
+  (checked in the web 3D), 7 panoramas with the cladding re-rendered on the home PC; 19/11 kept as «(versão de 19/11)».
+- «Ainda não» = answer to «Refaço as imagens e afino o forro nas panorâmicas?»: the 10 images (old cladding) and the
+  panoramas' lighter, pinkish cladding (Cycles exposure, ≈ #a88573) stay as they are for now.
+
+### 2026-11-20 — The team's critique of the 3D (hub critique 3): all points fixed except vegetation [Builder]
+> diz-me as alterações que o [colega] tinha feito como crítica por favor
+> corrige também essa faixa que aparece no print por favor.
+> Podes proseguir com todas as alterações/fixes sugeridas pelo [colega] e no ponto 4 o botão"ecrã inteiro" também não funciona. Para além disso podes ignorar o ponto 9
+- (Name of the colleague left out: public repo.) The print: a thin vertical light line in the sky above the house.
+- Found and fixed (`ferramentas/pagina/modelo_pagina.html`, every page): views were an eased pull that never ended
+  (cameras below the controls' lowest angle) — it undid the wheel's zoom and fought «Rodar»; the panorama's drag took
+  the pointer, so «Ver de fora», «Ecrã inteiro» and the points never got their clicks (full screen can also be refused
+  or left pending inside another app → the 3D fills the window); the ground mesh has a hole under the house (capped
+  while the storeys are hidden); «Exterior» held the drive and the walls; plan labels sat on the tour's points
+  (8 → 0). Added «Início» and «Sombras». Sky line: not reproduced here; fixed the most likely cause (the sky picture's
+  seam: ends blended, no mipmaps). Point 9 (vegetation) ignored (user). Page uploaded (documentos 116); critique 3
+  resolved; hub Log 108. Filed: `conhecimento/discovercasa.md`.

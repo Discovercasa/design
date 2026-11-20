@@ -98,6 +98,14 @@ Why Claude learns the method; "vamos passo a passo" — an overall idea, then an
    a few metres round it, real ground, nothing invented (no trees unless drawn); **no «Como construímos» and no
    closing «Próximo passo» on any page** ("não vamos querer isso de raiz"); no loungers on loggias, the ones on the
    ground face the garden.
+   **3D viewer after a colleague's critique in the hub (2026-11-20, user: "Podes proseguir com todas as alterações …
+   podes ignorar o ponto 9"):** «Início» button (everything shown, first view); «Sombras» tick (off = no baked light, no
+   sun shadows); «Exterior» hides only the fences (drive and walls stay with the ground); the ground's hole under the
+   house is capped while the storeys that fill it are hidden; views are timed flights (zoom works at once, «De cima»
+   steady, «Rodar» turns round the house and stops on a second press); tour buttons over the panorama work, «Ecrã
+   inteiro» fills the window where the browser refuses full screen; room names step aside from the tour's points in the
+   plans. No added vegetation (point 9 ignored). The critique's other suggestion: test the page with people who get no
+   explanation (onboarding?) — open.
    **Real exterior always (2026-11-13):** "o exterior não deve estar só presente na tour 360 mas sim sempre em todos os
    projetos a não ser que seja mencionado que não queremos" — the surroundings are in the 3D, the images and the tour
    of every house unless told otherwise. Render stations: any PC (first the home PC, RTX 2060 6 GB — user confirmed,

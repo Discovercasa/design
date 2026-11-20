@@ -98,6 +98,10 @@ button{font:inherit;color:inherit}
 .vista{position:relative;height:clamp(420px,66vh,720px);background:#cfd8de}
 .vista canvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none}
 .carregar{position:absolute;inset:0;display:grid;place-items:center;color:#3d464b;padding:20px;text-align:center}
+.inicio3d{position:absolute;top:12px;left:12px;z-index:3;height:40px;padding:0 14px 0 10px;border:0;border-radius:999px;background:rgba(255,255,255,.88);color:#2c3236;font-family:inherit;font-size:14px;font-weight:600;display:flex;align-items:center;gap:7px;cursor:pointer;box-shadow:0 1px 6px rgba(0,0,0,.15)}
+.inicio3d:hover{background:#fff}
+.inicio3d[hidden]{display:none}
+.vista.cheio{position:fixed;inset:0;height:auto;z-index:1000}
 .norte{position:absolute;top:12px;right:12px;width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.88);display:grid;place-items:center;box-shadow:0 1px 6px rgba(0,0,0,.15)}
 aside.mostrar{padding:18px 18px 20px;border-left:1px solid var(--mesa-linha);display:flex;flex-direction:column;gap:2px}
 .fl{display:flex;gap:12px;align-items:flex-start;padding:9px 0;border-bottom:1px solid var(--mesa-linha);cursor:pointer}
@@ -223,6 +227,7 @@ footer .largura{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8p
     <div class="palco3d">
       <div class="vista" id="vista">
         <div class="carregar" id="carregar">A preparar o modelo…</div>
+        <button class="inicio3d so-explorar" id="b3dInicio" type="button" title="Voltar à vista inicial, com tudo à mostra"><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11.5 12 4l8 7.5M6.5 9.5V20h11V9.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Início</button>
         <div class="norte" title="Norte"><svg width="24" height="24" viewBox="0 0 22 22" id="seta" aria-label="Norte"><path d="M11 2 L15 15 L11 12 L7 15 Z" fill="#2c3236"/><text x="11" y="21" text-anchor="middle" font-size="6" font-family="sans-serif" fill="#2c3236">N</text></svg></div>
         <div class="alvos3d" id="alvos3d" hidden></div>
         <div class="dica3d" id="dica3d" hidden>Toque num círculo para entrar nessa divisão</div>
@@ -380,8 +385,19 @@ __PANOS__
     });
     if (opc.moveis) P.moveis.forEach((pts) => (s += poli(pts, c.movel, `stroke="${c.linha}" stroke-width=".015"`)));
     if (opc.nomes) P.divisoes.forEach((d) => {
-      const cx = (d.caixa[0] + d.caixa[2]) / 2, cy = (d.caixa[1] + d.caixa[3]) / 2, w = d.caixa[2] - d.caixa[0];
+      const cx = (d.caixa[0] + d.caixa[2]) / 2, w = d.caixa[2] - d.caixa[0];
       const t = Math.min(0.42, Math.max(0.22, w / 9));
+      // the label spans [cy - 1.4t, cy + t] (name above, area below); a point of the tour inside it moves the label
+      // just above or below the point, whichever stays in the room and is nearer the middle
+      let cy = (d.caixa[1] + d.caixa[3]) / 2;
+      const meia = Math.max(esc(d.nome).length * t * 0.3, t * 2.6) + 0.32;
+      const choca = (y) => (opc.evitar || []).some((q) => Math.abs(q[0] - cx) < meia && q[1] > y - 1.4 * t - 0.32 && q[1] < y + t + 0.32);
+      if (choca(cy)) {
+        const ops = (opc.evitar || []).filter((q) => Math.abs(q[0] - cx) < meia).flatMap((q) => [q[1] + 0.34 + 1.4 * t, q[1] - 0.34 - t])
+          .filter((y) => y - 1.4 * t > d.caixa[1] + 0.05 && y + t < d.caixa[3] - 0.05 && !choca(y))
+          .sort((a, b) => Math.abs(a - cy) - Math.abs(b - cy));
+        if (ops.length) cy = ops[0];
+      }
       s += `<text x="${X(cx)}" y="${Y(cy)}" text-anchor="middle" font-size="${t}" font-weight="600" fill="${c.texto}" font-family="Source Sans 3,Segoe UI,sans-serif">${esc(d.nome)}</text>`
         + `<text x="${X(cx)}" y="${(+Y(cy) + t * 1.15).toFixed(3)}" text-anchor="middle" font-size="${t * 0.85}" fill="${c.suave}" font-family="Source Sans 3,Segoe UI,sans-serif">${fmt(d.area)} m²</text>`;
     });
@@ -403,7 +419,7 @@ __PANOS__
   }
   function planta(id) {
     [...segP.children].forEach((b) => b.setAttribute('aria-pressed', b.dataset.p === id));
-    const r = desenharPlanta(svgP, id, { nomes: true, moveis: true, cores: cores() });
+    const r = desenharPlanta(svgP, id, { nomes: true, moveis: true, cores: cores(), evitar: V.filter((v) => v.piso === id).map((v) => v.camara) });
     if (!r) return;
     V.filter((v) => v.piso === id && r.dentro(v.camara[0], v.camara[1])).forEach((v) => {
       const g = document.createElementNS(NS, 'g');
@@ -656,6 +672,7 @@ __PANOS__
     if (m) { await voo; setTimeout(() => { if (!ecra.hidden) m.pausar(true); }, 400); }   // the 3D rests behind the panorama
   }
   function sair360() {
+    if (vista.classList.contains('cheio')) { vista.classList.remove('cheio'); rotEcra(); }
     if (ecra.hidden) return;
     ecra.hidden = true; ecra.style.opacity = '0';
     if (M()) M().pausar(false);
@@ -668,7 +685,10 @@ __PANOS__
 
   // dragging, pinch and wheel
   const toques = new Map();
-  ecra.addEventListener('pointerdown', (e) => { ecra.setPointerCapture(e.pointerId); toques.set(e.pointerId, [e.clientX, e.clientY]); });
+  ecra.addEventListener('pointerdown', (e) => {
+    if (e.target.closest('button')) return;   // «Ver de fora», «Ecrã inteiro», the points: their own clicks
+    ecra.setPointerCapture(e.pointerId); toques.set(e.pointerId, [e.clientX, e.clientY]);
+  });
   ecra.addEventListener('pointermove', (e) => {
     if (!toques.has(e.pointerId)) return;
     const ant = toques.get(e.pointerId); toques.set(e.pointerId, [e.clientX, e.clientY]);
@@ -688,11 +708,25 @@ __PANOS__
     e.preventDefault(); desenhar();
   });
   ecra.tabIndex = 0;
-  document.getElementById('b360ecra').addEventListener('click', (e) => {
+  // full screen: the browser's own, or the 3D filling the window where there is none (iPhone)
+  const bEcra = document.getElementById('b360ecra');
+  const cheio = () => !!(document.fullscreenElement || document.webkitFullscreenElement || vista.classList.contains('cheio'));
+  const rotEcra = () => { bEcra.textContent = cheio() ? 'Sair do ecrã inteiro' : 'Ecrã inteiro'; requestAnimationFrame(desenhar); };
+  bEcra.addEventListener('click', (e) => {
     e.stopPropagation();
-    if (document.fullscreenElement) document.exitFullscreen(); else if (vista.requestFullscreen) vista.requestFullscreen();
+    if (vista.classList.contains('cheio')) vista.classList.remove('cheio');
+    else if (document.fullscreenElement || document.webkitFullscreenElement) (document.exitFullscreen || document.webkitExitFullscreen).call(document);
+    else if (vista.requestFullscreen || vista.webkitRequestFullscreen) {
+      // refused or left pending (a page inside another app): the 3D fills the window instead
+      const janela = () => { if (!document.fullscreenElement && !document.webkitFullscreenElement && !vista.classList.contains('cheio')) { vista.classList.add('cheio'); rotEcra(); } };
+      const r = (vista.requestFullscreen || vista.webkitRequestFullscreen).call(vista);
+      if (r && r.catch) r.catch(janela);
+      setTimeout(janela, 1200);
+    } else vista.classList.add('cheio');
+    rotEcra();
   });
-  document.addEventListener('fullscreenchange', () => requestAnimationFrame(desenhar));
+  ['fullscreenchange', 'webkitfullscreenchange'].forEach((t) => document.addEventListener(t, rotEcra));
+  addEventListener('keydown', (e) => { if (e.key === 'Escape' && vista.classList.contains('cheio')) { vista.classList.remove('cheio'); rotEcra(); } });
   addEventListener('resize', desenhar);
   window.__visita = { entrar, verDeFora, definirModo };
 })();
@@ -786,6 +820,8 @@ async function iniciar(L, D) {
     const M = {};
     o.userData.g = subir(o, 'grupo') || 'casa';
     o.userData.vidro = nm.startsWith('vidro');
+    o.userData.sombra = !o.userData.vidro && o.userData.g !== 'terreno';
+    if (o.userData.g === 'envolvente' && /^(muro|piso_livre)/.test(o.name || (o.parent && o.parent.name) || '')) o.userData.g = 'terreno';
     if (real.map) real.map.anisotropy = renderer.capabilities.getMaxAnisotropy();
     if (o.userData.vidro) {
       const guarda = nm.includes('guarda');
@@ -808,7 +844,7 @@ async function iniciar(L, D) {
       }
     }
     o.userData.M = M;
-    o.castShadow = !o.userData.vidro && o.userData.g !== 'terreno';
+    o.castShadow = o.userData.sombra;
     malhas.push(o);
   });
 
@@ -833,9 +869,22 @@ async function iniciar(L, D) {
   const envMaq = pmrem.fromScene(new L.RoomEnvironment(), 0.04).texture;
   // the sky of the images, shown as it came out of Blender (outside the tone mapping, which greyed it)
   let domo = null;
+  let ceuDomo = ceuTex;
+  if (ceuTex && ceuTex.image && ceuTex.image.width) {
+    const im = ceuTex.image, cvC = document.createElement('canvas'); cvC.width = im.width; cvC.height = im.height;
+    const g2 = cvC.getContext('2d'); g2.drawImage(im, 0, 0);
+    const n = 8, W = cvC.width, H = cvC.height, a = g2.getImageData(0, 0, n, H), b = g2.getImageData(W - n, 0, n, H);
+    for (let y = 0; y < H; y++) for (let k = 0; k < n; k++) {
+      const ia = (y * n + k) * 4, ib = (y * n + (n - 1 - k)) * 4, w = 0.5 * (1 - k / n);
+      for (let c = 0; c < 3; c++) { const va = a.data[ia + c], vb = b.data[ib + c]; a.data[ia + c] = va + (vb - va) * w; b.data[ib + c] = vb + (va - vb) * w; }
+    }
+    g2.putImageData(a, 0, 0); g2.putImageData(b, W - n, 0);
+    ceuDomo = new THREE.CanvasTexture(cvC);
+    ceuDomo.colorSpace = THREE.SRGBColorSpace; ceuDomo.generateMipmaps = false; ceuDomo.minFilter = THREE.LinearFilter; ceuDomo.wrapS = THREE.RepeatWrapping;
+  }
   if (ceuTex) {
     domo = new THREE.Mesh(new THREE.SphereGeometry(1800, 48, 24), new THREE.ShaderMaterial({
-      uniforms: { t: { value: ceuTex } }, side: THREE.BackSide, depthWrite: false, toneMapped: false,
+      uniforms: { t: { value: ceuDomo } }, side: THREE.BackSide, depthWrite: false, toneMapped: false,
       vertexShader: 'varying vec3 vD; void main(){ vD = position; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }',
       fragmentShader: 'uniform sampler2D t; varying vec3 vD; void main(){ vec3 d = normalize(vD); vec2 uv = vec2(atan(d.z, d.x) * 0.15915494 + 0.5, asin(clamp(d.y, -1.0, 1.0)) * 0.31830988 + 0.5); gl_FragColor = vec4(texture2D(t, uv).rgb * 0.94, 1.0);' + String.fromCharCode(10) + '#include <colorspace_fragment>' + String.fromCharCode(10) + '}',
     }));
@@ -859,12 +908,16 @@ async function iniciar(L, D) {
   const AJ = Object.assign({ exposicao: 0.87, contraste: 1.1, saturacao: 1.04, ceu: 1.0, sol: 4.0, fundo: 0.55, relva: [0.62, 0.84, 0.84] }, D.ajuste || {});
   function aplicar() {
     const corte = ['cobertura', 'piso1', 'piso0'].some((id) => cx(id) && !cx(id).checked);
+    const sb = document.getElementById('cxSombras'), sombras = !sb || sb.checked;   // off: no baked light, no sun shadows
     for (const o of malhas) {
       const M = o.userData.M;
-      const luz = M.realLuz && !(corte && CASA.has(o.userData.g));
+      const luz = sombras && M.realLuz && !(corte && CASA.has(o.userData.g));
       o.material = aspeto === 'maquete' ? (luz ? M.maqLuz : M.maq) : (luz ? M.realLuz : M.real);
-      o.receiveShadow = !luz;
+      o.receiveShadow = sombras && !luz;
+      o.castShadow = sombras && o.userData.sombra;
     }
+    for (const t of tampas) { t.material = aspeto === 'maquete' ? t.userData.M.maq : t.userData.M.real; t.receiveShadow = sombras; }
+    sol.castShadow = sombras;
     if (aspeto === 'maquete') {
       cena.background = new THREE.Color(0xe7e8e3); cena.environment = envMaq; cena.environmentIntensity = 0.6; if (domo) domo.visible = false;
       sol.intensity = AJ.sol * 0.8; sol.color.set(0xffffff); hemi.intensity = 0.35;
@@ -886,42 +939,165 @@ async function iniciar(L, D) {
   const ORDEM = ['cave', 'piso0', 'piso1', 'cobertura'];
   const itens = [{ id: 'cobertura', nome: 'Cobertura', sub: 'cota ' + D.cota_topo }]
     .concat([...D.pisos].reverse().map((p) => ({ id: p.id, nome: p.nome, sub: 'cota ' + p.cota_txt })))
-    .concat([{ id: 'envolvente', nome: 'Exterior', sub: 'muros e vedações' }, { id: 'terreno', nome: 'Terreno', sub: 'tire-o para ver a cave' }]);
+    .concat([{ id: 'envolvente', nome: 'Exterior', sub: 'vedações' }, { id: 'terreno', nome: 'Terreno', sub: 'tire-o para ver a cave' }]);
   const painel = document.getElementById('pisos');
-  painel.innerHTML = itens.map((i) => `<label class="fl"><input type="checkbox" data-g="${i.id}" checked><span><b>${i.nome}</b><small>${i.sub}</small></span></label>`).join('');
+  painel.innerHTML = itens.map((i) => `<label class="fl"><input type="checkbox" data-g="${i.id}" checked><span><b>${i.nome}</b><small>${i.sub}</small></span></label>`).join('')
+    + '<label class="fl"><input type="checkbox" id="cxSombras" checked><span><b>Sombras</b><small>a luz e as sombras do sol</small></span></label>';
   const cx = (id) => painel.querySelector(`[data-g="${id}"]`);
   painel.addEventListener('change', (e) => {
+    if (e.target.id === 'cxSombras') { aplicar(); return; }
     const id = e.target.dataset.g, k = ORDEM.indexOf(id);
     if (k >= 0) ORDEM.forEach((o, j) => { if (e.target.checked && j < k) cx(o).checked = true; if (!e.target.checked && j > k) cx(o).checked = false; });
     sincronizar();
   });
   function sincronizar() {
     for (const o of malhas) { const c = cx(o.userData.g); o.visible = c ? c.checked : true; }
+    // the ground's hole under the house is closed while the storeys that fill it are hidden: all of it without the
+    // cave, around the cave with it (critique 2026-11-19: «ao tirar certos pisos … cave fica um buraco no chão»)
+    const ter = !cx('terreno') || cx('terreno').checked, p0 = !cx('piso0') || cx('piso0').checked, cave = !cx('cave') || cx('cave').checked;
+    for (const t of tampas) t.visible = ter && !p0 && (t.userData.anel ? cave : !cave);
     aplicar();
   }
+
+  // the caps: the hole's edge in the ground mesh (edges used by one triangle), filled flat between its heights
+  const tampas = [];
+  (function () {
+    const V3t = () => new THREE.Vector3();
+    const casaCx = new THREE.Box3(), caveCx = [];
+    for (const o of malhas) {
+      if (o.userData.g === 'cave' || o.userData.g === 'piso0') casaCx.expandByObject(o);
+      if (o.userData.g === 'cave' && /^cave/.test(o.name || '')) {
+        o.updateMatrixWorld(); const ps = o.geometry.attributes.position, v = V3t();
+        for (let i = 0; i < ps.count; i++) { v.fromBufferAttribute(ps, i).applyMatrix4(o.matrixWorld); caveCx.push([v.x, v.z]); }
+      }
+    }
+    if (casaCx.isEmpty()) return;
+    const area = (l) => { let a = 0; for (let i = 0; i < l.length; i++) { const p = l[i], q = l[(i + 1) % l.length]; a += p.x * q.z - q.x * p.z; } return a / 2; };
+    function lacos(o) {
+      o.updateMatrixWorld();
+      const g = o.geometry, ps = g.attributes.position, idx = g.index, v = V3t(), mapa = new Map(), pts = [], k = [];
+      for (let i = 0; i < ps.count; i++) {
+        v.fromBufferAttribute(ps, i).applyMatrix4(o.matrixWorld);
+        const c = `${Math.round(v.x * 200)},${Math.round(v.y * 200)},${Math.round(v.z * 200)}`;
+        let j = mapa.get(c); if (j === undefined) { j = pts.length; mapa.set(c, j); pts.push(v.clone()); } k.push(j);
+      }
+      const nTri = idx ? idx.count : ps.count, ix = (i) => (idx ? idx.getX(i) : i), ar = new Map();
+      for (let t = 0; t + 2 < nTri; t += 3) for (let e = 0; e < 3; e++) {
+        const a = k[ix(t + e)], b = k[ix(t + (e + 1) % 3)]; if (a === b) continue;
+        const c = a < b ? a + '_' + b : b + '_' + a, r = ar.get(c); if (r) r.n++; else ar.set(c, { a, b, n: 1 });
+      }
+      const viz = new Map();
+      for (const r of ar.values()) if (r.n === 1) { if (!viz.has(r.a)) viz.set(r.a, []); if (!viz.has(r.b)) viz.set(r.b, []); viz.get(r.a).push(r.b); viz.get(r.b).push(r.a); }
+      const usados = new Set(), out = [];
+      for (const ini of viz.keys()) {
+        if (usados.has(ini)) continue;
+        const l = [ini]; usados.add(ini); let cur = ini;
+        for (;;) { const nx = (viz.get(cur) || []).find((n) => !usados.has(n)); if (nx === undefined) break; l.push(nx); usados.add(nx); cur = nx; }
+        if (l.length >= 3) out.push(l.map((i) => pts[i]));
+      }
+      return out;
+    }
+    function casco(pts) {          // the cave's outline in plan: the convex hull of its vertices
+      const P = pts.slice().sort((a, b) => a[0] - b[0] || a[1] - b[1]), cr = (o, a, b) => (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0]);
+      const lo = [], hi = [];
+      for (const p of P) { while (lo.length >= 2 && cr(lo[lo.length - 2], lo[lo.length - 1], p) <= 0) lo.pop(); lo.push(p); }
+      for (const p of P.reverse()) { while (hi.length >= 2 && cr(hi[hi.length - 2], hi[hi.length - 1], p) <= 0) hi.pop(); hi.push(p); }
+      return lo.slice(0, -1).concat(hi.slice(0, -1));
+    }
+    const caveContorno = caveCx.length ? casco(caveCx) : null;
+    // a grid in the house's own axes whose lines are the corners' coordinates: rectangular holes are filled exactly,
+    // and the cave's outline (which shares edges with the hole) can be left out cell by cell
+    let ang = 0;
+    if (caveContorno) { let m = 0; caveContorno.forEach((p, i) => { const q = caveContorno[(i + 1) % caveContorno.length], l = Math.hypot(q[0] - p[0], q[1] - p[1]); if (l > m) { m = l; ang = Math.atan2(q[1] - p[1], q[0] - p[0]); } }); }
+    const ca = Math.cos(ang), sa = Math.sin(ang);
+    const P = (x, z) => [x * ca + z * sa, -x * sa + z * ca], Q = (u, w) => [u * ca - w * sa, u * sa + w * ca];
+    const dentro = (pol, u, w) => { let d = false; for (let i = 0, j = pol.length - 1; i < pol.length; j = i++) { const [ui, wi] = pol[i], [uj, wj] = pol[j]; if ((wi > w) !== (wj > w) && u < (uj - ui) * (w - wi) / (wj - wi) + ui) d = !d; } return d; };
+    const linhas = (vs) => { const o = vs.map((v) => Math.round(v * 100) / 100).sort((a, b) => a - b), r = []; for (const v of o) if (!r.length || v - r[r.length - 1] > 0.02) r.push(v); return r; };
+    function tampa(laco, buraco, M, anel) {
+      const L = laco.map((p) => P(p.x, p.z)), E = buraco ? buraco.map((q) => P(q[0], q[1])) : null;
+      const us = linhas([...L, ...(E || [])].map((p) => p[0])), ws = linhas([...L, ...(E || [])].map((p) => p[1]));
+      const alt = (u, w) => { const [x, z] = Q(u, w); let m = Infinity, y = 0; for (const p of laco) { const d = (p.x - x) ** 2 + (p.z - z) ** 2; if (d < m) { m = d; y = p.y; } } return y + 0.005; };
+      const pos = [], uv = [], H = new Map(), h = (u, w) => { const k = u + ',' + w; if (!H.has(k)) H.set(k, alt(u, w)); return H.get(k); };
+      const ponto = (u, w) => { const [x, z] = Q(u, w); return [x, h(u, w), z]; };
+      for (let i = 0; i + 1 < us.length; i++) for (let j = 0; j + 1 < ws.length; j++) {
+        const cu = (us[i] + us[i + 1]) / 2, cw = (ws[j] + ws[j + 1]) / 2;
+        if (!dentro(L, cu, cw) || (E && dentro(E, cu, cw))) continue;
+        const a = ponto(us[i], ws[j]), b = ponto(us[i + 1], ws[j]), c = ponto(us[i + 1], ws[j + 1]), d = ponto(us[i], ws[j + 1]);
+        for (const [p1, p2, p3] of [[a, b, c], [a, c, d]]) {
+          const ny = (p2[2] - p1[2]) * (p3[0] - p1[0]) - (p2[0] - p1[0]) * (p3[2] - p1[2]);
+          for (const q of ny >= 0 ? [p1, p2, p3] : [p1, p3, p2]) { pos.push(...q); uv.push(q[0] / 3, -q[2] / 3); }
+        }
+      }
+      if (!pos.length) return;
+      const g = new THREE.BufferGeometry();
+      g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3)); g.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2));
+      g.computeVertexNormals();
+      const m = new THREE.Mesh(g, M.real);
+      m.userData = { M, anel }; m.visible = false; m.receiveShadow = true;
+      cena.add(m); tampas.push(m);
+    }
+    const perto = casaCx.clone().expandByScalar(0.6);
+    for (const o of malhas) {
+      if (o.userData.g !== 'terreno' || !/^terreno/.test(o.name || '') || !o.userData.M.real) continue;
+      const ls = lacos(o); if (ls.length < 2) continue;
+      const maior = Math.max(...ls.map((l) => Math.abs(area(l))));
+      for (const l of ls) {
+        if (Math.abs(area(l)) >= maior * 0.5) continue;
+        const c = l.reduce((s, p) => s.add(p), V3t()).multiplyScalar(1 / l.length);
+        if (c.x < perto.min.x || c.x > perto.max.x || c.z < perto.min.z || c.z > perto.max.z) continue;
+        tampa(l, null, o.userData.M, false);
+        tampa(l, caveContorno, o.userData.M, true);
+      }
+    }
+  })();
 
   // views
   const VIS = D.vistas.map((v) => ({ ...v, c: new THREE.Vector3(...v.camara), a: new THREE.Vector3(...v.alvo) }));
   const caixa = new THREE.Box3();
   for (const o of malhas) if (['piso0', 'piso1', 'cobertura'].includes(o.userData.g)) caixa.expandByObject(o);
   const meio = caixa.getCenter(new THREE.Vector3());
-  VIS.push({ nome: 'cima', titulo: 'De cima', c: meio.clone().add(new THREE.Vector3(0, 42, 0.01)), a: meio.clone() });
+  VIS.push({ nome: 'cima', titulo: 'De cima', c: meio.clone().add(new THREE.Vector3(0, 42, 0.6)), a: meio.clone() });
   VIS.push({ nome: 'rodar', titulo: 'Rodar', c: null });
   const bv = document.getElementById('vistas');
   bv.innerHTML = VIS.map((v, i) => `<button data-i="${i}" aria-pressed="${i === 0}">${v.titulo}</button>`).join('');
-  let alvoCam = null;
+  // a view is a flight of about a second that ends where it should; the camera never sits below the lowest angle the
+  // controls allow (it was pulled there for ever: the wheel's zoom was undone and «Rodar» turned against it)
+  const limitar = (c, a) => {
+    const d = c.clone().sub(a), r = d.length(), min = Math.cos(controlos.maxPolarAngle - 0.01) * r;
+    if (d.y < min) { const h = Math.sqrt(Math.max(r * r - min * min, 0)), hz = Math.hypot(d.x, d.z) || 1; d.set(d.x / hz * h, min, d.z / hz * h); }
+    return a.clone().add(d);
+  };
+  const premir = (i) => bv.querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', +b.dataset.i === i));
+  function voar(c, a, ms, fim) {
+    if (voo) { const f = voo.ok; voo = null; f(); }
+    voo = { c0: camara.position.clone(), a0: controlos.target.clone(), c1: limitar(c, a), a1: a.clone(), t0: performance.now(), ms, ok: () => {}, fim };
+  }
   function irPara(i) {
     const v = VIS[i];
-    controlos.autoRotate = v.nome === 'rodar';
-    controlos.autoRotateSpeed = 0.9;
-    if (v.c) {
+    if (v.nome === 'rodar' && controlos.autoRotate) { parar(); return; }   // pressed again: it stops
+    controlos.autoRotate = false;
+    if (v.nome === 'rodar') {   // round the house from a little above, at the first view's distance
+      const d = camara.position.clone().sub(meio); d.y = 0; if (d.lengthSq() < 1e-6) d.set(1, 0, 0); d.normalize();
+      const L = VIS[0].c.distanceTo(VIS[0].a) * Math.max(1, Math.pow(1.5 / camara.aspect, 0.7)) * 1.1;
+      voar(meio.clone().addScaledVector(d, L * Math.cos(0.4)).add(new THREE.Vector3(0, L * Math.sin(0.4), 0)), meio.clone(), 1100,
+        () => { controlos.autoRotateSpeed = 1.1; controlos.autoRotate = true; });
+    } else {
       const longe = Math.max(1, Math.pow(1.5 / camara.aspect, 0.7));
-      alvoCam = { c: v.a.clone().addScaledVector(v.c.clone().sub(v.a), longe), a: v.a.clone(), t: 0 };
+      voar(v.a.clone().addScaledVector(v.c.clone().sub(v.a), longe), v.a.clone(), 1000);
     }
-    bv.querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', +b.dataset.i === i));
+    premir(i);
+  }
+  function parar() {   // the person takes the camera: no flight, no turning
+    if (voo) { const f = voo.ok; voo = null; f(); }
+    if (controlos.autoRotate) { controlos.autoRotate = false; premir(-1); }
   }
   bv.addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) irPara(+b.dataset.i); });
-  renderer.domElement.addEventListener('pointerdown', () => { alvoCam = null; if (voo) { voo.ok(); voo = null; } });
+  renderer.domElement.addEventListener('pointerdown', parar);
+  renderer.domElement.addEventListener('wheel', parar, { passive: true });
+  document.getElementById('b3dInicio').addEventListener('click', () => {   // «Início»: everything shown, the first view
+    painel.querySelectorAll('input').forEach((x) => (x.checked = true));
+    aspeto = 'realista'; sincronizar(); irPara(0);
+  });
 
   // for the 360 tour: cut the storeys, fly the camera, project the points
   let voo = null, pausado = false;
@@ -934,10 +1110,10 @@ async function iniciar(L, D) {
     sincronizar();
   };
   API.mostrarTudo = () => { painel.querySelectorAll('input').forEach((i) => (i.checked = true)); sincronizar(); };
-  API.colocar = (c, a) => { voo = null; alvoCam = null; camara.position.copy(V3(c)); controlos.target.copy(V3(a)); camara.lookAt(controlos.target); };
+  API.colocar = (c, a) => { voo = null; controlos.autoRotate = false; camara.position.copy(V3(c)); controlos.target.copy(V3(a)); camara.lookAt(controlos.target); };
   API.voarPara = (v, ms = 900) => new Promise((ok) => {
     if (voo) voo.ok();
-    controlos.autoRotate = false; alvoCam = null;
+    controlos.autoRotate = false;
     voo = { c0: camara.position.clone(), a0: controlos.target.clone(), c1: V3(v.c), a1: V3(v.a), t0: performance.now(), ms, ok };
   });
   API.vistaDeFora = (pts) => {
@@ -976,7 +1152,7 @@ async function iniciar(L, D) {
   }
   document.getElementById('carregar').remove();
   const seta = document.getElementById('seta');
-  const tmp = new THREE.Vector3();
+  const tmp = new THREE.Vector3(), relogio = new THREE.Clock();
   renderer.setAnimationLoop(() => {
     if (pausado) return;
     if (voo) {                              // a flight of the tour: eased, the camera looking where it goes
@@ -984,15 +1160,10 @@ async function iniciar(L, D) {
       camara.position.lerpVectors(voo.c0, voo.c1, k);
       controlos.target.lerpVectors(voo.a0, voo.a1, k);
       camara.lookAt(controlos.target);
-      if (t >= 1) { const f = voo.ok; voo = null; f(); }
-    } else if (alvoCam) {
-      alvoCam.t = Math.min(1, alvoCam.t + 0.06);
-      const k = 1 - Math.pow(1 - alvoCam.t, 3);
-      camara.position.lerp(alvoCam.c, k * 0.35 + 0.02);
-      controlos.target.lerp(alvoCam.a, k * 0.35 + 0.02);
-      if (camara.position.distanceTo(alvoCam.c) < 0.05) alvoCam = null;
+      if (t >= 1) { const f = voo.ok, fim = voo.fim; voo = null; if (fim) fim(); f(); }
     }
-    if (!voo) controlos.update();
+    const dt = relogio.getDelta();
+    if (!voo) controlos.update(dt);   // with the time step, «Rodar» turns at the same speed on a slow phone
     if (domo) domo.position.copy(camara.position);
     camara.getWorldDirection(tmp);
     seta.style.transform = `rotate(${-Math.atan2(tmp.x, -tmp.z)}rad)`;   // where north is on the screen
