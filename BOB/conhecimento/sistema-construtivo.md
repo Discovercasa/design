@@ -330,6 +330,17 @@ revisions A "Dimensões para execução" … E "Cobertura e Módulos - Correçã
        darker, which may explain why the built-house photos looked more orange. Does the house get wax + Velatura Nogueira
        over the Marron (then the finished colour is darker / warmer than the swatch), and is that per house? The user's
        latest instruction (2026-11-20): the model must look like the Marron swatch.
+       **Model look, update (2026-11-20, later; user: "too much tones on the wood it looks like the wood has 4 different
+       colors of wood in it, just make slight adjustments to the color and make it look like it was envernizada that kind
+       of gloss on wood finish"):** the model must show ONE even tone (four wood colours read wrong) with a varnished,
+       glossy look. `tremolo()` now: board variation ±3 % (garage door ±4 %), tint ±1 %, softer grain and profile shading
+       (strip 0.94, groove 0.66, joint 0.45); base colour #795936 (was #7f5d3a, superseded 2026-11-20, see registo) plus
+       `VERNIZ` (clearcoat weight 1.0, roughness 0.15) on `ripado` and `porta_garagem`; the web viewer (`modelo_pagina.html`)
+       renders the clearcoat with the baked light as the whole diffuse and a capped grazing reflection (F90 0.4). Measured:
+       sunlit façade ≈ #856f51 at 26 m (swatch ≈ #856d4c), shaded ≈ #59523b. This is how the model must LOOK; whether the
+       real façade is varnished is a separate point, still OPEN above (wax nº 55 + Velatura Nogueira is the recorded
+       finish): the user's "envernizada" request suggests a finish coat over the Marron with a glossy look is expected,
+       but nothing is decided. Images and the 360° tour still show the earlier, more orange cladding.
        The gaps the user reported ("havia pequenos gaps no tremolo ...") were an AR-model bug (gaps between the model's
        cladding pieces), not a fact about the real façade: the Piveteau tongue and groove profile above stands.
      - **Contra-ripado**: the user's rule of 2026-09-24 — "we do a slatted against slatted with 30x20mm … so the zone

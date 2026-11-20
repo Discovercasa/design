@@ -150,33 +150,34 @@ def tabuas(n, nt, cor, var=0.12, junta=0.07, escuro=0.35, comprimentos=None, sem
     return np.clip(col, 0, 1), h
 
 
-def tremolo(n, nt, cor, var=0.10, semente=3):
+def tremolo(n, nt, cor, var=0.03, semente=3):
     """The Piveteaubois TREMOLO board (Douglas, 22 mm, 135 mm useful; catalogue p. 29), boards along v. Per board,
     across the 135 mm: the joint shadow, a recessed strip, the wide face, one groove and the lower face (the profile's
     "vibration"). The relief is also shaded into the colour, because the web 3D shows the baked light with a basic
-    material that ignores normal maps. Returns colour (n,n,3) and height (n,n)."""
+    material that ignores normal maps. One even colour with only slight board-to-board and grain variation, and a soft
+    relief (user 2026-11-20: too many tones read as four kinds of wood). Returns colour (n,n,3) and height (n,n)."""
     u = (np.arange(n) + 0.5) / n
     k = np.floor(u * nt).astype(int)
     fr = u * nt - k
     rng = np.random.default_rng(semente)
     tom = 1 + (rng.random(nt) - 0.5) * 2 * var
-    verde = 1 + (rng.random(nt) - 0.5) * 0.08          # coloured pressure treatment: some boards greener, some browner
+    verde = 1 + (rng.random(nt) - 0.5) * 0.02          # coloured pressure treatment: a hint greener or browner
     grao = ruido_esticado(n, nt * 6, 3, semente + 1)
     fio = ruido_esticado(n, nt * 48, 10, semente + 2)
     # (from, to) as a fraction of the 135 mm, height, shade
-    perfil = ((0.000, 0.025, 0.00, 0.30), (0.025, 0.200, 0.55, 0.80), (0.200, 0.580, 1.00, 1.00),
-              (0.580, 0.690, 0.25, 0.42), (0.690, 1.000, 1.00, 0.97))
+    perfil = ((0.000, 0.025, 0.00, 0.45), (0.025, 0.200, 0.55, 0.94), (0.200, 0.580, 1.00, 1.00),
+              (0.580, 0.690, 0.25, 0.66), (0.690, 1.000, 1.00, 1.00))
     alt, som = np.ones(n), np.ones(n)
     for a, b, hh, ss in perfil:
         sel = (fr >= a) & (fr < b)
         alt[sel], som[sel] = hh, ss
     sel = (fr >= 0.16) & (fr < 0.20)                   # the wide face's edge shades the strip next to it a little
-    som[sel] *= 0.92
+    som[sel] *= 0.96
     r = max(1, n // 700)                               # soften the edges over ~1.5 mm
     alt = sum(np.roll(alt, d) for d in range(-r, r + 1)) / (2 * r + 1)
     som = sum(np.roll(som, d) for d in range(-r, r + 1)) / (2 * r + 1)
     col = np.ones((n, n, 3)) * cor[None, None, :]
-    f = tom[k][None, :] * (0.88 + 0.16 * grao + 0.14 * (fio - 0.5)) * som[None, :]
+    f = tom[k][None, :] * (0.92 + 0.08 * grao + 0.06 * (fio - 0.5)) * som[None, :]
     col = col * f[:, :, None]
     col[:, :, 1] *= verde[k][None, :]
     h = np.ones((n, n)) * alt[None, :] + 0.03 * (fio - 0.5)
@@ -207,29 +208,32 @@ def imagem(nome, arr, nao_cor=False):
     return img
 
 
-COR = {"ripado": "#7f5d3a", "deck": "#8f6c4c", "soalho": "#c09e78", "interior": "#eeebe4", "betao": "#a6a39c",
+COR = {"ripado": "#795936", "deck": "#8f6c4c", "soalho": "#c09e78", "interior": "#eeebe4", "betao": "#a6a39c",
        "painel": "#45322e", "metal": "#383e42", "pedra": "#c8b68f", "relva": "#6f7d3a", "relva_fora": "#66733a",
-       "asfalto": "#3a3a3a", "berma": "#56703a", "brita": "#a49d90", "porta_garagem": "#7f5d3a", "tecido": "#9c968c", "toros": "#9a7a55"}
+       "asfalto": "#3a3a3a", "berma": "#56703a", "brita": "#a49d90", "porta_garagem": "#795936", "tecido": "#9c968c", "toros": "#9a7a55"}
 COR.update(E.get("materiais_cor", {}))
 TILE = {"berma": 3.0, "ripado": 1.08, "deck": 1.4, "soalho": 1.8, "betao": 2.4, "painel": 1.0, "relva": 3.0, "relva_fora": 3.0,
         "asfalto": 3.0, "brita": 1.5, "pedra": 1.2, "porta_garagem": 1.2, "interior": 2.0, "metal": 1.0,
         "tecido": 1.0, "toros": 1.0}
 N = 1024
+# varnished wood (user 2026-11-20: «make it look like it was envernizada, that kind of gloss on wood finish»):
+# coat weight and roughness
+VERNIZ = {"ripado": (1.0, 0.15), "porta_garagem": (1.0, 0.15)}
 
 
 def gerar_texturas():
     T = {}
     # the Tremolo (Piveteaubois, Douglas 22 x 135, coloured pressure treatment "Marron", catalogue p. 29; user
-    # 2026-11-20): vertical boards of 135 mm useful with the profile's groove and step. Colour: the catalogue swatch
-    # (~#856d4c); base #7f5d3a makes the web 3D (AgX, baked light, CSS contrast/saturate) show a sunlit façade as
-    # ~#846e51 at 26 m and the board faces as ~#876f52 at 15 m (measured on the canvas)
+    # 2026-11-20): vertical boards of 135 mm useful with the profile's groove and step, one even colour, varnished
+    # (VERNIZ). Colour: the catalogue swatch (~#856d4c); base #795936 with the varnish makes the web 3D (AgX, baked
+    # light, CSS contrast/saturate) show a sunlit façade as ~#856f51 at 26 m (measured on the canvas)
     c, h = tremolo(N, 8, hex_rgb(COR["ripado"]), semente=3)
     T["ripado"] = (c, normal_de(h, 6.0), 0.7)
     c, h = tabuas(N, 10, hex_rgb(COR["deck"]), var=0.14, junta=0.06, escuro=0.3, comprimentos=1, semente=5)
     T["deck"] = (c, normal_de(h, 5.0), 0.7)
     c, h = tabuas(N, 10, hex_rgb(COR["soalho"]), var=0.08, junta=0.015, escuro=0.7, comprimentos=1, semente=9)
     T["soalho"] = (c, normal_de(h, 2.0), 0.45)
-    c, h = tabuas(N, 10, hex_rgb(COR["porta_garagem"]), var=0.12, junta=0.06, escuro=0.3, semente=11)
+    c, h = tabuas(N, 10, hex_rgb(COR["porta_garagem"]), var=0.04, junta=0.06, escuro=0.45, semente=11)
     T["porta_garagem"] = (np.transpose(c, (1, 0, 2)).copy(), normal_de(h.T.copy(), 5.0), 0.75)
     c, h = tabuas(N, 4, hex_rgb(COR["toros"]), var=0.18, junta=0.0, escuro=1.0, semente=13)
     T["toros"] = (c, normal_de(h, 1.5), 0.8)
@@ -276,7 +280,7 @@ def principled(m):
     return next(n for n in m.node_tree.nodes if n.type == "BSDF_PRINCIPLED")
 
 
-def mat_textura(nome, cor, normal, rug, metal=0.0):
+def mat_textura(nome, cor, normal, rug, metal=0.0, verniz=None):
     m = bpy.data.materials.new(nome)
     try:
         m.use_nodes = True
@@ -286,6 +290,8 @@ def mat_textura(nome, cor, normal, rug, metal=0.0):
     bsdf = principled(m)
     bsdf.inputs["Roughness"].default_value = rug
     bsdf.inputs["Metallic"].default_value = metal
+    if verniz:          # (weight, roughness) of a varnish coat; the glTF carries it as KHR_materials_clearcoat
+        bsdf.inputs["Coat Weight"].default_value, bsdf.inputs["Coat Roughness"].default_value = verniz
     ic = no(nt, "ShaderNodeTexImage", -500, 200)
     ic.image = imagem(nome + "_cor", cor)
     nt.links.new(ic.outputs["Color"], bsdf.inputs["Base Color"])
@@ -343,7 +349,7 @@ FOTO = {"soalho": ("oak_wood_planks", 0.6, 1.0, {}),
 def criar_materiais():
     T = gerar_texturas()
     for nome, (c, nrm, rug) in T.items():
-        MATS[nome] = mat_textura(nome, c, nrm, rug, metal=0.25 if nome == "painel" else 0.0)
+        MATS[nome] = mat_textura(nome, c, nrm, rug, metal=0.25 if nome == "painel" else 0.0, verniz=VERNIZ.get(nome))
     MATS["interior"] = mat_simples("interior", COR["interior"], 0.85)
     if COM_ATIVOS and ativos.tem("painted_plaster_wall"):
         MATS["interior"] = ativos.material("interior", "painted_plaster_wall", cor=COR["interior"], forca=0.12,

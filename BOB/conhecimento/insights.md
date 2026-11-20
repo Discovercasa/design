@@ -528,3 +528,5 @@ he answers (`metodo-construtivo.md`). Condensed 2026-10-28 (history in git).
   swatch is the new board, not the façade after some years → tell the client the maintenance (wax / stain every few years)
   and show the "Pré-grisée" option as the honest long-term look. Detail: `sistema-construtivo.md` §3.A; registo-2026-3
   2026-11-20.
+  Update 2026-11-20 (later): the user asked for the model to look "envernizada … gloss on wood finish" (varnished,
+  even tone): supports a finish coat over the Marron being expected; status unchanged (open).

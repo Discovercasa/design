@@ -813,6 +813,25 @@ async function iniciar(L, D) {
   const corMaq = (nm) => /relva|brita|berma/.test(nm) ? 0xdcdcd4 : /asfalto/.test(nm) ? 0xc8c8c4 : /metal|painel/.test(nm) ? 0xbdbab3 : 0xf4f2ee;
   const VID = new THREE.MeshStandardMaterial({ color: 0xbfd0d6, roughness: 0.1, transparent: true, opacity: 0.35, depthWrite: false });
   const RELVA = (D.ajuste && D.ajuste.relva) || [0.62, 0.84, 0.84];
+  // varnished wood (a clearcoat in the GLB): the baked light stays the whole diffuse (the sun's and the sky's diffuse are
+  // dropped from the shader) and the varnish adds its reflection of the sky and the sun's glint. Its grazing reflection is
+  // capped (F90 0.4): at full strength the shaded side façades mirrored the sky and read as grey, not wood
+  const semDifusa = (s) => {
+    s.fragmentShader = s.fragmentShader
+      .replace('#include <lights_physical_fragment>', '#include <lights_physical_fragment>\n\tmaterial.clearcoatF90 = 0.4;')
+      .replace('#include <lights_fragment_maps>',THREE.ShaderChunk.lights_fragment_maps.replace('iblIrradiance += getIBLIrradiance( geometryNormal );', ''))
+      .replace('#include <lights_fragment_end>', '#include <lights_fragment_end>\n\treflectedLight.directDiffuse = vec3( 0.0 );');
+  };
+  const verniz = (real, lm) => {
+    const p = { map: real.map || null, color: real.color.clone(), lightMap: lm.t, lightMapIntensity: lm.I, roughness: 1, metalness: 0,
+      specularIntensity: 0, clearcoat: real.clearcoat, clearcoatRoughness: real.clearcoatRoughness };
+    if (real.normalMap) Object.assign(p, { clearcoatNormalMap: real.normalMap, clearcoatNormalScale: real.normalScale.clone() });
+    const m = new THREE.MeshPhysicalMaterial(p);
+    m.onBeforeCompile = semDifusa;
+    m.customProgramCacheKey = () => 'verniz';
+    m.userData.verniz = true;
+    return m;
+  };
   const malhas = [];
   modelo.traverse((o) => {
     if (!o.isMesh) return;
@@ -836,7 +855,8 @@ async function iniciar(L, D) {
       M.maq = new THREE.MeshStandardMaterial({ color: /tronco/.test(nm) ? 0xe9e9e4 : corMaq(nm), roughness: 0.92 });
       const lm = LUZ[subir(o, 'lm')];
       if (lm && o.geometry.attributes.uv1) {        // baked light: colour x light, exactly as in Cycles
-        M.realLuz = new THREE.MeshBasicMaterial({ map: real.map || null, color: real.color ? real.color.clone() : 0xffffff, lightMap: lm.t, lightMapIntensity: lm.I });
+        M.realLuz = real.clearcoat > 0 ? verniz(real, lm)
+          : new THREE.MeshBasicMaterial({ map: real.map || null, color: real.color ? real.color.clone() : 0xffffff, lightMap: lm.t, lightMapIntensity: lm.I });
         if (/relva|berma/.test(nm)) M.realLuz.color.multiply(new THREE.Color(...RELVA));   // the grass of the images is longer and greener than its texture
         M.maqLuz = new THREE.MeshBasicMaterial({ color: corMaq(nm), lightMap: lm.t, lightMapIntensity: lm.I });
       } else if (CASA.has(o.userData.g) && real.isMeshStandardMaterial) {
@@ -913,7 +933,7 @@ async function iniciar(L, D) {
       const M = o.userData.M;
       const luz = sombras && M.realLuz && !(corte && CASA.has(o.userData.g));
       o.material = aspeto === 'maquete' ? (luz ? M.maqLuz : M.maq) : (luz ? M.realLuz : M.real);
-      o.receiveShadow = sombras && !luz;
+      o.receiveShadow = sombras && (!luz || (aspeto !== 'maquete' && !!M.realLuz.userData.verniz));   // the varnish's glint stays out of the shadows
       o.castShadow = sombras && o.userData.sombra;
     }
     for (const t of tampas) { t.material = aspeto === 'maquete' ? t.userData.M.maq : t.userData.M.real; t.receiveShadow = sombras; }

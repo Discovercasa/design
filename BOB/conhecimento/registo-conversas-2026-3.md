@@ -881,3 +881,22 @@ The team's notes on hub task 84 (written in the hub by [membro da equipa] on 202
 - Filed in: `conhecimento/sistema-construtivo.md` §3.A → catalogue facts + "Model texture (2026-11-20)" (supersedes the
   2026-11-19 colour for the model) + OPEN point (finish over the Marron); `conhecimento/insights.md` → 2026-11-20 insight
   (open); `Construção Ribamar/docs/estado.md` → one line (page version).
+
+### 2026-11-20 — Cladding in the 3D: one even tone, varnished (gloss) look [Ribamar, Builder]
+> too much tones on the wood it looks like the wood has 4 different colors of wood in it, just make slight adjustments to the color and make it look like it was envernizada that kind of gloss on wood finish
+- Context: later the same day, feedback on the web 3D of the Ribamar client page (documento 117) with the new Tremolo Marron
+  texture (entry above), whose boards had ±10 % tone variation, a greener/browner tint per board and a strongly shaded
+  profile (recessed strip and groove).
+- Done by the session (reported): `ferramentas/pagina/casa_blender.py`: `tremolo()` draws one even colour: board-to-board
+  variation ±3 %, tint ±1 %, softer grain, softer profile shading (strip 0.94, groove 0.66, joint 0.45); garage door boards
+  ±4 %; default base colour `ripado`/`porta_garagem` #795936 (was #7f5d3a); new `VERNIZ` = coat weight 1.0, coat roughness
+  0.15 on `ripado` and `porta_garagem` (Principled "Coat"; the glTF carries KHR_materials_clearcoat).
+  `ferramentas/pagina/modelo_pagina.html`: varnished material for baked meshes whose GLB material has a clearcoat: the baked
+  light stays the whole diffuse (the sun's and sky's diffuse removed from the shader), the clearcoat adds the sky reflection
+  and the sun's glint; grazing reflection capped (F90 0.4) because at full strength the shaded side façades mirrored the sky
+  and read as grey. Measured on the web 3D canvas: sunlit façade ≈ #856f51 at 26 m (Marron swatch ≈ #856d4c); shaded
+  façades ≈ #59523b. Ribamar page uploaded to the hub as documento 118 (the previous one renamed «(versão de 20/11, 3.ª)»).
+  The images and the 360° tour (Cycles) still show the earlier, more orange cladding.
+- Filed in: `conhecimento/sistema-construtivo.md` §3.A → "Model texture" note updated (even tone, varnished look, base
+  #795936 + VERNIZ, measured ≈ #856f51), linked to the OPEN finish point (wax nº 55 + Velatura Nogueira), not decided;
+  `conhecimento/insights.md` → one line on the 2026-11-20 insight (status open).
