@@ -843,3 +843,41 @@ The team's notes on hub task 84 (written in the hub by [membro da equipa] on 202
   (8 → 0). Added «Início» and «Sombras». Sky line: not reproduced here; fixed the most likely cause (the sky picture's
   seam: ends blended, no mipmaps). Point 9 (vegetation) ignored (user). Page uploaded (documentos 116); critique 3
   resolved; hub Log 108. Filed: `conhecimento/discovercasa.md`.
+
+### 2026-11-20 — Photoreal aerial of the Quinta da Encosta (Sobral development) from the promoters' 3D page [Sobral, renders]
+> Quero que transformes estas 4 imagens em imagens ultra-realistas usando aquilo que temos vindo a usar. Quero apenas que me forneças as imagens prontas para apresentar ao cliente mais nada. Tem atenção a todos os detalhes e faz com que a vegetação não pareça tão mal distribuida como nessas imagens que e que pareça real. Devem parecer imagens tiradas no momento, ou seja super-ultra-realistas
+> podes usar o pc de casa
+> afinal só quero uma imagem dessa vista em ultra realista. E consegues a partir desse HTML extrair a informação que precisas?
+- (Relayed by the session that started this one, then typed here.) The source is a self-contained page «Quinta da
+  Encosta — Apresentação aos promotores» (rev3, local copy only, not in Git or the hub): three.js, with all its data
+  embedded (terrain 1 m grid, 16 houses Tipo 1/2 with soleira and base levels, platforms, accesses, gabions,
+  concrete and boundary walls, apoio building, pool and padel «proposta», car park 16 + 2 accessible, ground texture
+  with roads and paths). Its local frame matches the Sobral survey (PT-TM06 shift found from the 450 survey points,
+  median 0,16 m).
+- Decided (user): only one image, the whole-site view (screenshot 22); the user approved the OpenStreetMap download
+  for the real surroundings («Sim, descarrega», 0,4 MB) — DEM from the Copernicus tile already on the PC.
+- Noted for the user: the page shows terracotta standing-seam roofs; `Construção Sobral/CLAUDE.md` records a dark grey
+  tile-effect sandwich panel for Tipo 1 (2026-09-24). The render follows the page.
+> ja estou a ver um problema, corrige a parte da entrada que o chão é todo cimentado e tem uma parte em madeira e uma porta. Remove também estas partes brancas que estão a passar por dentro do telhado.
+- (With a screenshot of the promoters' page — the apoio building's road gable — and a marked crop of our render.) Fixed:
+  the apoio now follows the page (sheet 11): cemented forecourt (adro) from the road to the garage, garage floor set
+  back 2,02 m under the upper floor with the slatted timber garage door and the dark entrance door in the stair strip,
+  slatted timber door and canopy on the patio gable; windows only where the page has them. The white marks on the
+  roofs were the window frames (1,3 m high up to the eave) crossing our 0,25 m roof overhang: windows 1,1 m high now.
+  Also found: the page's terrain runs flat through the pool (the water showed grey): the ground is cut under the basin.
+
+### 2026-11-20 — Exterior cladding: the catalogue Tremolo, colour Marron, to match Ribamar's cladding [Ribamar, Builder]
+> [link do catálogo Calaméo, não guardado] aqui está o link para o forro exterior que usamos, página 29 do catálogo e a cor é a que eu fiz um círculo no screenshot, queria que aproximasses o forro exterior de ribamar ao nosso forro.
+- Context: follows the colour rounds of 2026-11-09, 2026-11-18 and 2026-11-19 (Ribamar client page, "forro"). The link carries
+  a private access id: redacted here, not stored. Screenshot (not stored): Piveteaubois catalogue pp. 28–29, TREMOLO, Douglas
+  fir (French), 22 mm thick, 135 mm cover width, 10-year guarantee; planed (brushed if stained); fixing 2 visible stainless
+  screws or annular ring-shank nails; vertical and horizontal installation ("idéal en pose verticale"); board ends tongue
+  and groove; use class up to 3.2 (natural sapwood-free, coloured pressure treated), 3.1 with stain. Finishes: coloured
+  pressure treatment «Pré-grisée» or «Marron» (10-year colour guarantee), natural Douglas, semi-transparent stain range
+  (Gris nacré, Gris patiné, Gris carbone, Noir réglisse, Brun badiane, Topaze, Tonka, Orange cannelle). **Circled by the
+  user: «Imprégnation colorée — MARRON / Brown».** Profile per 135 mm board: wide face, narrower recessed strip, one groove.
+- Done by the session (reported): `ferramentas/pagina/casa_blender.py` draws the Tremolo with `tremolo()`; Ribamar page of
+  20/11 with the Marron Tremolo uploaded to the hub as documento 117 (page files local only).
+- Filed in: `conhecimento/sistema-construtivo.md` §3.A → catalogue facts + "Model texture (2026-11-20)" (supersedes the
+  2026-11-19 colour for the model) + OPEN point (finish over the Marron); `conhecimento/insights.md` → 2026-11-20 insight
+  (open); `Construção Ribamar/docs/estado.md` → one line (page version).

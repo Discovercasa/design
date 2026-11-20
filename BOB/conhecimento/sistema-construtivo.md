@@ -308,6 +308,28 @@ revisions A "Dimensões para execução" … E "Cobertura e Módulos - Correçã
        of 2026-11-18 is no longer used for it), base #754115 = texture mean #673912, matched to two photos of built
        façades (lit ≈ #7a4a12–#875527, side ≈ #5e300c): the web 3D shows it as ≈ #7d4a1a. A weakly saturated base
        (#7a5639) reads as grey tan under AgX tone mapping — `casa_blender.py` default.
+       (colour superseded for the model 2026-11-20, see below and registo-2026-3; history kept)
+       **Catalogue facts (user 2026-11-20; source: Piveteaubois catalogue, TREMOLO, p. 29):** Douglas fir (French), 22 mm
+       thick, 135 mm cover width, guarantee up to 10 years; planed (brushed if stained); fixing 2 visible stainless screws
+       or annular ring-shank nails; vertical and horizontal installation ("idéal en pose verticale"); board ends tongue and
+       groove; use class up to 3.2 (natural sapwood-free and coloured pressure treated), 3.1 with stain. Finishes: coloured
+       pressure treatment «Pré-grisée» or «Marron» (10-year colour guarantee), natural Douglas, semi-transparent stain
+       range (Gris nacré, Gris patiné, Gris carbone, Noir réglisse, Brun badiane, Topaze, Tonka, Orange cannelle).
+       **The user circled «Imprégnation colorée — MARRON / Brown»** ("a cor é a que eu fiz um círculo"). Profile per 135 mm
+       board: wide face, narrower recessed strip, one groove (the "vibration" that names the product).
+       **Model texture (2026-11-20, "queria que aproximasses o forro exterior de ribamar ao nosso forro"):** the Marron
+       swatch measures ≈ #856d4c (muted, slightly olive brown). `ferramentas/pagina/casa_blender.py` now draws the Tremolo
+       with `tremolo()` (135 mm vertical boards with the profile: joint, recessed strip, wide face, one groove, lower
+       face; the relief is also shaded into the colour because the web viewer shows baked light with a basic material
+       that ignores normal maps); default base colour #7f5d3a for `ripado` and `porta_garagem`. Measured on the web 3D
+       canvas: sunlit façade ≈ #846e51 at 26 m, board faces ≈ #876f52 at 15 m, shaded façades ≈ #58503a (before ≈ #7c4a1a,
+       more orange). **Supersedes the 2026-11-19 colour (base #754115) for the model** — kept above as history.
+       ⚠ OPEN (2026-11-20): the finish recorded above is "wax nº 55 + Velatura Nogueira (Froschemie)" (TV), and the earlier
+       photos of built houses looked warm orange-brown (≈ #C0935C sun / #895332 shade). The Marron swatch is the raw
+       coloured-pressure-treated board; a walnut ("nogueira") stain over it would make the finished façade warmer and
+       darker, which may explain why the built-house photos looked more orange. Does the house get wax + Velatura Nogueira
+       over the Marron (then the finished colour is darker / warmer than the swatch), and is that per house? The user's
+       latest instruction (2026-11-20): the model must look like the Marron swatch.
        The gaps the user reported ("havia pequenos gaps no tremolo ...") were an AR-model bug (gaps between the model's
        cladding pieces), not a fact about the real façade: the Piveteau tongue and groove profile above stands.
      - **Contra-ripado**: the user's rule of 2026-09-24 — "we do a slatted against slatted with 30x20mm … so the zone

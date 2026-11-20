@@ -150,6 +150,39 @@ def tabuas(n, nt, cor, var=0.12, junta=0.07, escuro=0.35, comprimentos=None, sem
     return np.clip(col, 0, 1), h
 
 
+def tremolo(n, nt, cor, var=0.10, semente=3):
+    """The Piveteaubois TREMOLO board (Douglas, 22 mm, 135 mm useful; catalogue p. 29), boards along v. Per board,
+    across the 135 mm: the joint shadow, a recessed strip, the wide face, one groove and the lower face (the profile's
+    "vibration"). The relief is also shaded into the colour, because the web 3D shows the baked light with a basic
+    material that ignores normal maps. Returns colour (n,n,3) and height (n,n)."""
+    u = (np.arange(n) + 0.5) / n
+    k = np.floor(u * nt).astype(int)
+    fr = u * nt - k
+    rng = np.random.default_rng(semente)
+    tom = 1 + (rng.random(nt) - 0.5) * 2 * var
+    verde = 1 + (rng.random(nt) - 0.5) * 0.08          # coloured pressure treatment: some boards greener, some browner
+    grao = ruido_esticado(n, nt * 6, 3, semente + 1)
+    fio = ruido_esticado(n, nt * 48, 10, semente + 2)
+    # (from, to) as a fraction of the 135 mm, height, shade
+    perfil = ((0.000, 0.025, 0.00, 0.30), (0.025, 0.200, 0.55, 0.80), (0.200, 0.580, 1.00, 1.00),
+              (0.580, 0.690, 0.25, 0.42), (0.690, 1.000, 1.00, 0.97))
+    alt, som = np.ones(n), np.ones(n)
+    for a, b, hh, ss in perfil:
+        sel = (fr >= a) & (fr < b)
+        alt[sel], som[sel] = hh, ss
+    sel = (fr >= 0.16) & (fr < 0.20)                   # the wide face's edge shades the strip next to it a little
+    som[sel] *= 0.92
+    r = max(1, n // 700)                               # soften the edges over ~1.5 mm
+    alt = sum(np.roll(alt, d) for d in range(-r, r + 1)) / (2 * r + 1)
+    som = sum(np.roll(som, d) for d in range(-r, r + 1)) / (2 * r + 1)
+    col = np.ones((n, n, 3)) * cor[None, None, :]
+    f = tom[k][None, :] * (0.88 + 0.16 * grao + 0.14 * (fio - 0.5)) * som[None, :]
+    col = col * f[:, :, None]
+    col[:, :, 1] *= verde[k][None, :]
+    h = np.ones((n, n)) * alt[None, :] + 0.03 * (fio - 0.5)
+    return np.clip(col, 0, 1), h
+
+
 def normal_de(h, forca):
     dx = (np.roll(h, -1, 1) - np.roll(h, 1, 1)) * forca
     dy = (np.roll(h, -1, 0) - np.roll(h, 1, 0)) * forca
@@ -174,9 +207,9 @@ def imagem(nome, arr, nao_cor=False):
     return img
 
 
-COR = {"ripado": "#754115", "deck": "#8f6c4c", "soalho": "#c09e78", "interior": "#eeebe4", "betao": "#a6a39c",
+COR = {"ripado": "#7f5d3a", "deck": "#8f6c4c", "soalho": "#c09e78", "interior": "#eeebe4", "betao": "#a6a39c",
        "painel": "#45322e", "metal": "#383e42", "pedra": "#c8b68f", "relva": "#6f7d3a", "relva_fora": "#66733a",
-       "asfalto": "#3a3a3a", "berma": "#56703a", "brita": "#a49d90", "porta_garagem": "#754115", "tecido": "#9c968c", "toros": "#9a7a55"}
+       "asfalto": "#3a3a3a", "berma": "#56703a", "brita": "#a49d90", "porta_garagem": "#7f5d3a", "tecido": "#9c968c", "toros": "#9a7a55"}
 COR.update(E.get("materiais_cor", {}))
 TILE = {"berma": 3.0, "ripado": 1.08, "deck": 1.4, "soalho": 1.8, "betao": 2.4, "painel": 1.0, "relva": 3.0, "relva_fora": 3.0,
         "asfalto": 3.0, "brita": 1.5, "pedra": 1.2, "porta_garagem": 1.2, "interior": 2.0, "metal": 1.0,
@@ -186,11 +219,11 @@ N = 1024
 
 def gerar_texturas():
     T = {}
-    # the Tremolo as built (Piveteau Douglas 22 x 135, oiled): vertical boards of 135 mm useful, board-to-board tone
-    # variation and a dark joint line (the look the user preferred, 2026-11-19: «gosto mais do forro anterior»). Colour
-    # from the photos of built houses: base #754115 = texture mean #673912, which the web 3D (AgX, baked light) shows as
-    # the photos' warm orange-brown (~#7d4a1a); AgX greys a less saturated base (#7a5639 showed as grey-tan)
-    c, h = tabuas(N, 8, hex_rgb(COR["ripado"]), var=0.16, junta=0.08, escuro=0.25, semente=3)
+    # the Tremolo (Piveteaubois, Douglas 22 x 135, coloured pressure treatment "Marron", catalogue p. 29; user
+    # 2026-11-20): vertical boards of 135 mm useful with the profile's groove and step. Colour: the catalogue swatch
+    # (~#856d4c); base #7f5d3a makes the web 3D (AgX, baked light, CSS contrast/saturate) show a sunlit façade as
+    # ~#846e51 at 26 m and the board faces as ~#876f52 at 15 m (measured on the canvas)
+    c, h = tremolo(N, 8, hex_rgb(COR["ripado"]), semente=3)
     T["ripado"] = (c, normal_de(h, 6.0), 0.7)
     c, h = tabuas(N, 10, hex_rgb(COR["deck"]), var=0.14, junta=0.06, escuro=0.3, comprimentos=1, semente=5)
     T["deck"] = (c, normal_de(h, 5.0), 0.7)

@@ -519,3 +519,12 @@ he answers (`metodo-construtivo.md`). Condensed 2026-10-28 (history in git).
   floor joists cannot simply sit on top of both (our arithmetic: hung inside the exterior modules on a ring?) — the
   answer closes the OPEN amarração-under-the-joists rule (§4); (4) the Listagem has 19 joists of 8,89 m in one piece:
   likely past the stock length (longest 22×7,5 bought: OPEN) → joints over an interior wall, cut list.
+- **2026-11-20** — **status: open (not yet told).** (1) The catalogue colour the user circled, Tremolo «Marron» (coloured
+  pressure treatment, swatch ≈ #856d4c), against the recorded finish «wax nº 55 + Velatura Nogueira» (TV list): a walnut
+  stain over the Marron makes the finished façade warmer and darker than the swatch, probably why the photos of built
+  houses looked more orange (≈ #C0935C sun) → ask whether the wax + Velatura goes on every house; if yes, model and client
+  page should show the finished colour (a sample board with the finish), not the raw swatch. (2) Coloured pressure
+  treatment (and any unmaintained finish) on exterior Douglas tends to grey with sun and rain over the years, so the
+  swatch is the new board, not the façade after some years → tell the client the maintenance (wax / stain every few years)
+  and show the "Pré-grisée" option as the honest long-term look. Detail: `sistema-construtivo.md` §3.A; registo-2026-3
+  2026-11-20.
