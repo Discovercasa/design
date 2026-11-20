@@ -733,3 +733,91 @@ The team's notes on hub task 84 (written in the hub by [membro da equipa] on 202
   down over SSH (`shutdown /s /t 60` with a message; `shutdown /a` cancels). It cannot be woken remotely: for the next
   renders the user switches it on. Page «Casa Ribamar» (19/11, documentos 97) uploaded; 96 kept as «versão de 18/11, 1.ª».
   Filed: `conhecimento/posto-render.md`.
+
+### 2026-11-19 — The previous Tremolo texture, in the colour of the built houses [Builder]
+> gosto mais do forro anterior mas a cor tem de ser mais próxima da cor correta, tal como na imagens anexadas.
+> da re-render ao 3d atual mas com esse forro exterior melhorado
+- Attached: a screenshot of the 3D of 18/11 (first version, procedural boards) and two photos of built DiscoverCasa
+  façades in Tremolo (photos not stored in Git).
+- Measured (photos): warm orange-brown, hue 26–32°, saturation 0.5–0.9; lit faces ≈ #7a4207, #794b17, #875527, side
+  ≈ #5e300c, shade ≈ #3e2814. The 3D of 18/11 showed its #7a5639 as a grey tan (#836b53, saturation 0.22): the web
+  viewer's AgX tone mapping greys a weakly saturated base.
+- Done: the Tremolo is the board texture again (135 mm boards, per-board tone variation, dark joint line — the 18/11
+  look), the cedar photo is no longer used for it; base #754115 (texture mean #673912), found by matching the web 3D
+  to the photos (shows ≈ #7d4a1a on the façades). Same colour on the clad garage door. 3D rebaked with it on the office
+  PC (the home PC is off). Filed: `conhecimento/sistema-construtivo.md` (Tremolo model texture), `casa_blender.py`.
+
+### 2026-11-19 — The shadow-like band round the house in the 3D [Builder]
+> uma mudança o render do 3d esta com uma espécie de faixa que parece uma sombra a volta de todo o perimetro da casa tanto no piso 0 como no piso 1, queria que removesses essa faixa.
+- Found: a baked-light artefact at each storey joint (the boxes of piso 0 / piso 1 / roof meet at 2.94 m and 6.10 m).
+  The bake filled each wall island's margin with the light of the next face in 3D (Blender's default «adjacent
+  faces»); at a joint that face is the top/bottom hidden between two boxes, dark, and it bled into the wall's edge
+  (measured in the web 3D: ~7 % darker over ~3 cm at 2.94 m, wider at a distance). Done: bake margin «extend» (each
+  island repeats its own edge) in `casa_blender.py`; the 3D rebaked with it and with the new Tremolo colour.
+
+### 2026-11-19 — Pages by obra in the Builder's Páginas tab [hub, Builder]
+> Na Aba das páginas dentro do builder e dentro da secção das páginas cria Collapsables onde cada projeto tem as suas páginas para cada projeto, a pasta de Ribamar neste caso vai ter 3 páginas, depois um collapsable com o nome Porto dinheiro e tem essa página, um collapsable para espinho e cria um collapsable para Matosinhos com a página anexada
+- Attached: a self-contained 3D page of a two-family house in Guifões (Matosinhos), not stored in Git.
+- Done: one collapsible per obra in the Páginas tab (an obra = a `documentos_seccoes` row of type `pagina`, migration
+  0026); Ribamar (the 3 versions), Porto Dinheiro (its page), Espinho (its page), Matosinhos (the attached page,
+  uploaded through the one-time-key function, switched off again). Editors create obras, upload into one, move a page
+  between obras; an obra is deleted only when empty; all closed when the tab opens. Commit d2a9c2e; hub Log 101.
+  Filed: `CLAUDE.md` (Aba Páginas), `public/dados/projetos/builder.json`, `public/dados/novidades.json`.
+
+### 2026-11-19 — Listagem de material of Ribamar from its real modules [Gerador, Ribamar]
+> No gerador de documentos nos documentos adicionais eu criei um ficheiro de ribamar quero que uses o gerador de documentos para me criar a listagem de material desta obra. Para além dos documentos dos projetos num subficheiro da pasta de ribamar tens os módulos direitinhos de como foram feitos para ribamar.
+- (Relayed by the session that started this one.) Read from the hub (generator › Documentos adicionais › «Ribamar»): 10
+  architecture sheets (ARQ.03–ARQ.12, pasta «Ribamar Documentos Projetos etc») and 4 module sheets (pasta «Ribamar
+  Módulos»: modulos piso 1 ext / piso 1 int v2 / piso 2 ext / piso 2 int); downloaded once through the one-time-key
+  function (back to 410, key deleted), kept local only.
+- Found: the 4 module sheets are byte-identical to the ones received 2026-09-30 and filed as "Casa CL"
+  (`fontes/estrutura-exemplo-casa-cl/`); their title block says «CASA CL», D2512, lot 574 m², 2 storeys, no cave. The
+  user now says they are Ribamar's modules as built, and the plans agree with Ribamar's architecture (Piso 0 14,11 ×
+  9,01 with the deck notch 9,47 × 1,48 and the porch 1,34 × 2,78; Piso 1 10,99 × 9,00 with the two varandas 1,48 deep,
+  6,4 / 7,4 m²; the top-end wall 4,52 + 2,71 + 0,29). So "Casa CL" = Ribamar's module sheets on a template title block
+  (to confirm with the user). Sheet «piso 1» = Piso 0, «piso 2» = Piso 1 (the cave, Piso -1, is concrete).
+- Done: `ferramentas/documentos/modulos_pdf.py` (reads module sheets plotted to PDF: scale from the dimensions, every
+  member, openings, wall areas; 59 modules) and `listagem_modulos.py` (the Listagem through `gerar.doc_listagem`, same
+  PDF/CSV and product codes); `leitor_pdf.Pdf.textos()`; config `Construção Ribamar/modelos/listagem/config.json`.
+  Delivered to the hub (same section, pasta «Ribamar Listagem de material», documents 113 PDF / 114 CSV; Log 102).
+- Totals: timber 632 pieces, 1 751,6 m, 13,28 m³; façade 218,8 m²; OSB 15 / Pladur 320,1 m²; vinyl 171,9 m²; roof
+  panels 111,3 m²; 12 exterior openings (rough).
+- Assumed (defaults, PO): finish A Tremolo everywhere; vinyl; Piso 1 roof two slopes at 7 % (architecture) with gutters
+  at the side parapets; the low part of Piso 0 a hidden one-slope roof; ceiling beams 22×7,5 at 1 m; floor joists 22×7,5
+  at 0,598 + barrotes at 0,60; amarração under the joists (OPEN rule); stair opening 3,10 × 1,10.
+- Open (asked): window schedule; varandas (floor, edge beam, soffit) and the 1,48 cantilever over the deck; the low
+  roof's parapet (0,45 in the architecture, not in the modules) and M132's 2,81 × 2,09 opening to the floor onto it;
+  the roof edges over the 2,97 front / back walls.
+- Filed in: Ribamar status, delivery, assumptions, differences from the standard, open questions 1–12 →
+  `Construção Ribamar/docs/estado.md` (new); module heights, openings, plans, architecture notes, drawing slips →
+  `Construção Ribamar/docs/desenhos.md` (new); project pointer → `Construção Ribamar/CLAUDE.md` (new); "Casa CL" =
+  Ribamar → `conhecimento/fontes/estrutura-exemplo-casa-cl/README.md` (new), `conhecimento/discovercasa.md` (documents
+  of other houses), `conhecimento/insights.md` (2026-11-19, told + not yet told). Not written (keeper's limits):
+  `sistema-construtivo.md` §2 Casa CL lines and the rulebook legend — listed for the caller / `mestre-construtor`.
+
+### 2026-11-19 — Colour palette for real estate [brand]
+> diz-me uma coisa, normalmente qual a palete de cores mais associada a imobiliário e o porquê e se resulta?
+> vamos manter como estão então
+- Answered: blue/navy + white/grey (trust, neutral next to the photos), black/gold for luxury, earth/green for
+  sustainable; no good evidence that a colour itself sells more, what works is fit with the brand and being
+  recognisable. Suggested a palette from the product (Tremolo brown, anthracite RAL 7016, warm whites, green, the logo's
+  yellow as accent). Decided (user): keep the current colours. Filed: `conhecimento/insights.md`.
+
+### 2026-11-19 — Listagem: timber totals by section and the purchase of every product from the Hub materials [Gerador, Ribamar]
+> ok já te respondo as questões todas, neste momento quero que adciones os metros quadrados totais e os metros cubicos totais de cada viga por exemplo madeira total de 22x7,5, madeira total de 11x7,5, madeira total 11x3,5 etc
+> E agora que tens acesso aos materiais que usamos utiliza a secção de compra que criaste no documento como referência para cada produto, vi que já o fizeste em alguns dos produtos.
+- Read as: a "Total madeira <secção>" line per section (pieces, length, m³ and the purchase) — "metros quadrados" taken
+  as running metres (asked back); the «Compra» column filled for every product in the unit of the Hub material it is
+  linked to (`orcamentacao/ligacoes.json`), with the material named in the document.
+- Done: `ferramentas/documentos/compra.py` + `gerar.doc_listagem` (every house): timber bought as m³ of casquinha
+  230x78 board (yield ours: 4 × 11x3,5, 6 × 7,5x3,5, 2 × 11x7,5, 1 × 22x7,5 per board; no length offcuts) and pieces
+  over 5,70 m flagged (the Hub's normal board length); wool in rolls (12 / 9,6 m²), plates, bars of 3 / 4,5 m; items not
+  in the Hub list in metres. Local copy of the Hub materials `_trabalho/hub/materiais.json` (git-ignored). Ribamar
+  totals: 22x7,5 5,44 m³ (29 pieces > 5,70 m), 11x7,5 5,12 m³ (42), 11x3,5 1,92 m³, 7,5x3,5 0,80 m³; 14,62 m³ of board.
+  Hub documents 113 / 114 replaced (version 2); Log 103.
+- Filed in: the rule (total per timber section with m³; «Compra» of every product from the Hub materials; our timber
+  assumptions) → `metodo/01-principios.md` §0a (rulebook v8.17, index `metodo-construtivo.md`; v8.14 note →
+  `metodo/00-historico.md`), pointer `metodo/08-produtos-limites.md` §11; "m² or running metres?" → `metodo/10-pontos-abertos.md`
+  "Asked, answer pending" and Ribamar Q13; cut from 230x78? / timber waste % / "+6 m" lengths → `10-pontos-abertos.md` item
+  27; Listagem v2 and its totals → `Construção Ribamar/docs/estado.md` "▶ Where we stopped" (+ Q11); the user's document
+  preference → `conhecimento/discovercasa.md` Product vision 1.

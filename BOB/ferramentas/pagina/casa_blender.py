@@ -174,9 +174,9 @@ def imagem(nome, arr, nao_cor=False):
     return img
 
 
-COR = {"ripado": "#925725", "deck": "#8f6c4c", "soalho": "#c09e78", "interior": "#eeebe4", "betao": "#a6a39c",
+COR = {"ripado": "#754115", "deck": "#8f6c4c", "soalho": "#c09e78", "interior": "#eeebe4", "betao": "#a6a39c",
        "painel": "#45322e", "metal": "#383e42", "pedra": "#c8b68f", "relva": "#6f7d3a", "relva_fora": "#66733a",
-       "asfalto": "#3a3a3a", "berma": "#56703a", "brita": "#a49d90", "porta_garagem": "#925725", "tecido": "#9c968c", "toros": "#9a7a55"}
+       "asfalto": "#3a3a3a", "berma": "#56703a", "brita": "#a49d90", "porta_garagem": "#754115", "tecido": "#9c968c", "toros": "#9a7a55"}
 COR.update(E.get("materiais_cor", {}))
 TILE = {"berma": 3.0, "ripado": 1.08, "deck": 1.4, "soalho": 1.8, "betao": 2.4, "painel": 1.0, "relva": 3.0, "relva_fora": 3.0,
         "asfalto": 3.0, "brita": 1.5, "pedra": 1.2, "porta_garagem": 1.2, "interior": 2.0, "metal": 1.0,
@@ -186,10 +186,12 @@ N = 1024
 
 def gerar_texturas():
     T = {}
-    # the Tremolo as built (Piveteau Douglas 22 x 135, oiled; photo of the Torres Vedras house): vertical boards of
-    # 135 mm useful, even warm reddish-brown tone, a fine V joint that draws a shadow line on every board
-    c, h = tabuas(N, 8, hex_rgb(COR["ripado"]), var=0.07, junta=0.065, escuro=0.3, semente=3)
-    T["ripado"] = (c, normal_de(h, 7.0), 0.6)
+    # the Tremolo as built (Piveteau Douglas 22 x 135, oiled): vertical boards of 135 mm useful, board-to-board tone
+    # variation and a dark joint line (the look the user preferred, 2026-11-19: «gosto mais do forro anterior»). Colour
+    # from the photos of built houses: base #754115 = texture mean #673912, which the web 3D (AgX, baked light) shows as
+    # the photos' warm orange-brown (~#7d4a1a); AgX greys a less saturated base (#7a5639 showed as grey-tan)
+    c, h = tabuas(N, 8, hex_rgb(COR["ripado"]), var=0.16, junta=0.08, escuro=0.25, semente=3)
+    T["ripado"] = (c, normal_de(h, 6.0), 0.7)
     c, h = tabuas(N, 10, hex_rgb(COR["deck"]), var=0.14, junta=0.06, escuro=0.3, comprimentos=1, semente=5)
     T["deck"] = (c, normal_de(h, 5.0), 0.7)
     c, h = tabuas(N, 10, hex_rgb(COR["soalho"]), var=0.08, junta=0.015, escuro=0.7, comprimentos=1, semente=9)
@@ -294,9 +296,9 @@ def mat_vidro(nome, rug=0.0, cor=(0.92, 0.96, 0.95)):
     return m
 
 
-# material -> (CC0 asset, normal strength, size factor, extra) — the Tremolo: 135 mm boards from the cedar's ~80 mm
-FOTO = {"ripado": ("japanese_cedar_planks", 1.0, 1.67, {"contraste": 0.8, "rug_mult": 0.8, "tom_unico": True}),
-        "soalho": ("oak_wood_planks", 0.6, 1.0, {}),
+# material -> (CC0 asset, normal strength, size factor, extra). Not the Tremolo: the user preferred the board texture
+# above to the photo of cedar planks (2026-11-19)
+FOTO = {"soalho": ("oak_wood_planks", 0.6, 1.0, {}),
         "deck": ("oak_wood_planks", 0.8, 1.2, {"rug_mult": 1.2}),
         "betao": ("concrete_floor_02", 0.6, 1.0, {}),
         "relva": ("leafy_grass", 0.8, 1.0, {}), "relva_fora": ("leafy_grass", 0.8, 1.0, {}),
@@ -1162,8 +1164,11 @@ def gravar_luz(amostras=128):
             ob["lm"] = nome
         bpy.context.view_layer.objects.active = obs[0]
         t0 = __import__("time").time()
+        # margin EXTEND (each island repeats its own edge): the default (adjacent faces) filled the wall's edge with
+        # the light of the face next to it in 3D, at a storey joint the dark top/bottom face hidden between two boxes,
+        # which drew a shadow-like band round the whole house at each storey (user 2026-11-19)
         bpy.ops.object.bake(type="DIFFUSE", pass_filter={"DIRECT", "INDIRECT"}, uv_layer="lm", margin=8,
-                            use_clear=True, target="IMAGE_TEXTURES")
+                            margin_type="EXTEND", use_clear=True, target="IMAGE_TEXTURES")
         px = np.array(img.pixels[:], dtype=np.float32).reshape(n, n, 4)[..., :3]
         px = _limpar(px)
         K = float(np.percentile(px, 99.7)) or 1.0

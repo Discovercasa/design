@@ -203,6 +203,10 @@ he answers (`metodo-construtivo.md`). Condensed 2026-10-28 (history in git).
   (RAL 8017 roof, gable-end modules below the parapet, 1,69 interior openings) must not become company rules without
   asking → Ribamar's facts kept in `Construção Ribamar/docs/` — **raised in the 2026-11-19 reply with the Listagem's open
   questions; confirmation pending**.
+- **2026-11-19** — brand colours: real estate leans on blue (trust) or black/gold (luxury), but no good evidence that a
+  colour sells; what works is fit and being recognisable, and an all-blue market does not tell anyone apart → a palette
+  from the product itself (Tremolo brown, anthracite RAL 7016, warm whites, the plot's green, the logo's yellow only as
+  accent), neutral backgrounds on client pages — **told; declined** ("vamos manter como estão então"): colours stay.
 
 ## Recorded, not yet told (raise when it fits)
 - **2026-11-18** — Client pages look "modelled" mainly because every texture, piece of furniture and tree is generated
