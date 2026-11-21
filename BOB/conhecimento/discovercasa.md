@@ -57,7 +57,7 @@ Why Claude learns the method; "vamos passo a passo" — an overall idea, then an
    for now (`_trabalho/ribamar/`, local); the automatic reading should later produce `casa.json`.
    **Documents per client page (2026-11-12):** each page is a different project and client, so each needs its own
    files. Claude's proposed list waited for Dinis's validation (hub task 182 «Validar a lista de documentos para fazer uma
-   página», Builder › Páginas › Estrutura da página). **Validated by Dinis 2026-11-18 (changed; the text after this
+   página», hub › Páginas › Estrutura da página; the Páginas tab moved from the Builder to the hub's nav-bar on 2026-11-21, user message in registo). **Validated by Dinis 2026-11-18 (changed; the text after this
    is the original proposal, superseded 2026-11-18, see registo):** A essential = only the floor plan (if it has no
    dimensions, two dimensions typed by hand so the program can estimate the scale); former A.2 elevations and sections,
    A.3 site plan + topographic survey, A.4 finishes move to B (if not submitted, DiscoverCasa's predefined defaults);

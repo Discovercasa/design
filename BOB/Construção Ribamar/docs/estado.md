@@ -42,7 +42,7 @@ in DiscoverCasa timber modules. The user's words: `conhecimento/registo-conversa
   of Piso 0 not under Piso 1 (3,12 × 7,53, 7 %, parapet 0,45 drawn).
 - Caixilharia aluminium lacado RAL 7016, vidro duplo incolor (= the company standard, PO Q12).
 - Façade: Tremolo Douglas marron boards (finish A); ARQ.11 also details a capoto (ETICS) façade — which façades: unknown.
-- The client page (Builder › Páginas, obra «Ribamar») shows the same finishes (roof RAL 8017, rufos RAL 7016).
+- The client page (hub › Páginas, obra «Ribamar»; was Builder › Páginas until 2026-11-21) shows the same finishes (roof RAL 8017, rufos RAL 7016).
 - Areas: implantação 109,31 m² (Piso 0 module outline); construção 191,97 m² (Piso 0 + Piso 1 closed 82,66); varandas
   13,9 m² (Listagem, 2026-11-19). The client page's table, from the architecture: 183,01 m² interior, 43,97 m² deck and
   balconies (2026-11-11).

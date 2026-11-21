@@ -10,7 +10,13 @@ The user's words: `conhecimento/registo-conversas-2026-3.md` (entries 2026-11-20
 - Renders running overnight on the office PC (user 2026-11-20: «faças os renders deste novo projeto no pc da empresa»;
   timings and finals in `conhecimento/posto-render.md`).
 
-## Delivered 2026-11-21 (~01:40)
+## Current page: doc 120 (uploaded 2026-11-21 ~16:15, user asked to be told: «quando deres upload avisa-me por favor»)
+- Final page «Habitação bifamiliar · Guifões», hub → Páginas (project 'paginas'), obra Matosinhos. Doc 119 was renamed
+  «Habitação bifamiliar · Guifões (versão de 21/11, 1.ª)» and is the earlier version (the «doc 119» mentions below describe it).
+- Fixed before upload (Piso 1 bedroom): wardrobe faced the wall (now faces the room); floor was the garage concrete (now a timber
+  floor over the slab, also in the nook by the I.S. door).
+
+## Delivered 2026-11-21 (~01:40) — first version, doc 119
 - Client page in the hub, obra Matosinhos, doc 119 «Habitação bifamiliar · Guifões — imagens, 3D e visita 360°» (6,9 MB).
   Keeps the hub page's 3D whole (doc 112 stays there too) and adds 7 Cycles images (rua, entradas, aérea, sala A, cozinha A,
   quarto principal A, sala B), a 360° tour with 6 points (sala A, quarto A, varanda A, sala B, quarto B, jardim A), floors
