@@ -116,6 +116,15 @@ Why Claude learns the method; "vamos passo a passo" — an overall idea, then an
    Implemented in `ferramentas/pagina/interior.py`: sofa redesigned (straight, slim arms, crisp cushions, slim black legs,
    linen `tecido_sofa`); `larg` ~1.1 gives the one-seat sofa; `mesa_jantar` gained `redonda`, `mat`, `mat_base` and chair
    materials `cadeira {estrutura, assento, costas}`. (Earlier sofa/bed critique: 2026-11-18, registo.)
+   **STANDARD for every page delivered to a client (user 2026-11-21, Matosinhos; he expected it already defined):** «quando
+   digo o 3D digo mesmo o 3D interativo» and «a visita 360 deve estar incluida como uma feature também dentro do 3D tal como
+   fizemos na nossa página de ribamar … padrão para qualquer página que seja para entregar ao cliente» — one interactive 3D at
+   our quality (Blender-baked light, real materials; «tens de fazer o 3D com a nossa qualidade também»), with the 360° tour as
+   a mode inside it (Modo Explorar | Visita 360°). When the project already has an interactive 3D on the hub, «the 3D» is that
+   one: keep all its controls on our baked model; no separate low-quality «modelo técnico» beside it. Outside ripado is modelled
+   real, covering exactly its zone. Tool: `ferramentas/pagina/gerar_pagina.py` + `modelo_pagina.html` accept a «camada» (ES module
+   added to our 3D: moving parts, shutters, electrical symbols, neighbours); for Matosinhos the hub's static parts were baked
+   (sun 21 Sep 10:00, live sun when moved). Consistent with the 2026-11-18 «tour is a mode of the 3D viewer» rule above.
    **Real exterior always (2026-11-13):** "o exterior não deve estar só presente na tour 360 mas sim sempre em todos os
    projetos a não ser que seja mencionado que não queremos" — the surroundings are in the 3D, the images and the tour
    of every house unless told otherwise. Render stations: any PC (first the home PC, RTX 2060 6 GB — user confirmed,

@@ -201,17 +201,32 @@ footer .largura{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8p
   .ficha div:nth-child(n+3){border-top:1px solid var(--linha)}
 }
 @media (prefers-reduced-motion:reduce){.imagens img{transition:none}}
+/* language switch (pages with an English dictionary) and the project's technical model (an extra 3D, loaded on demand) */
+.lingua{position:absolute;top:calc(12px + env(safe-area-inset-top,0px));right:max(16px,env(safe-area-inset-right,0px));z-index:3;display:inline-flex;
+  background:rgba(20,24,26,.45);border:1px solid rgba(255,255,255,.28);border-radius:999px;padding:3px;backdrop-filter:blur(6px)}
+.lingua button{all:unset;cursor:pointer;padding:5px 12px;border-radius:999px;font:600 13px/1 var(--texto);color:#fff;letter-spacing:.04em}
+.lingua button[aria-pressed=true]{background:#fff;color:#1d2326}
+.lingua button:focus-visible{outline:2px solid #fff;outline-offset:2px}
+.tecnico .quadro{position:relative;border:1px solid var(--linha);border-radius:8px;overflow:hidden;background:var(--folha);height:min(82vh,820px)}
+.tecnico iframe{width:100%;height:100%;border:0;display:block}
+.tecnico .abrir{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;height:100%;padding:24px;text-align:center;color:var(--suave)}
+.tecnico .abrir button{all:unset;cursor:pointer;background:var(--tinta);color:var(--folha);padding:12px 22px;border-radius:999px;font-weight:600}
+.tecnico .abrir button:focus-visible{outline:2px solid var(--madeira);outline-offset:3px}
+.tecnico .abrir button[disabled]{opacity:.6;cursor:progress}
+.tecnico ul{margin:0;padding:0;list-style:none;display:flex;flex-wrap:wrap;gap:6px 8px;justify-content:center;max-width:64ch}
+.tecnico li{border:1px solid var(--linha);border-radius:999px;padding:3px 11px;font-size:14px;color:var(--tinta)}
 </style>
 </head>
 <body>
 <section class="abertura" aria-label="__TITULO__">
   <div class="marca">DiscoverCasa</div>
+  __LINGUA__
   <div class="foto">__HERO__</div>
   <div class="titulo"><div class="largura"><h1>__TITULO__</h1><p>__SUBTITULO__</p></div></div>
 </section>
 <div class="ficha"><div class="largura"><dl>__FICHA__</dl></div></div>
 <nav class="menu" aria-label="Secções"><div class="largura">
-  <a href="#explorar" data-modo="visita">Visita 360°</a><a href="#h-imagens">Imagens</a><a href="#explorar" data-modo="explorar">3D</a><a href="#h-plantas">Plantas</a>
+  <a href="#explorar" data-modo="visita">Visita 360°</a><a href="#h-imagens">Imagens</a><a href="#explorar" data-modo="explorar">3D</a><a href="#h-plantas">Plantas</a>__MENU_TECNICO__
   <a href="#h-pisos">Áreas e materiais</a></div></nav>
 
 <section class="bloco mesa" id="explorar" aria-labelledby="h-3d">
@@ -278,6 +293,7 @@ footer .largura{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8p
   </div>
 </section>
 
+__TECNICO__
 <footer><div class="largura"><span>DiscoverCasa, __TITULO__</span><span>__DATA__. __LEGAL__</span></div></footer>
 
 <div class="visor" id="visor" hidden role="dialog" aria-modal="true" aria-label="Imagem em ecrã inteiro">
@@ -290,6 +306,7 @@ footer .largura{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8p
 <script id="glb" type="text/plain">__GLB__</script>
 <script id="texturas" type="application/json">__TEXTURAS__</script>
 __PANOS__
+__CAMADA__
 <script>
 // images, storeys and finishes: plain script, so they show even where the 3D cannot start
 (function () {
@@ -362,6 +379,8 @@ __PANOS__
     if (!P) { svg.innerHTML = ''; return null; }
     const xs = [], ys = [];
     [...P.solidos, ...P.exteriores].forEach((b) => { xs.push(b[0], b[2]); ys.push(b[1], b[3]); });
+    const PG = P.poligonos || [];        // a plan drawn from walls (an exported 3D): floors, balconies, walls as polygons
+    PG.forEach((g) => g.pts.forEach((q) => { xs.push(q[0]); ys.push(q[1]); }));
     const m = opc.margem ?? 1.2, X0 = Math.min(...xs) - m, X1 = Math.max(...xs) + m, Y0 = Math.min(...ys) - m, Y1 = Math.max(...ys) + m;
     const W = X1 - X0, H = Y1 - Y0;
     svg.setAttribute('viewBox', `0 0 ${W.toFixed(2)} ${H.toFixed(2)}`);
@@ -371,12 +390,16 @@ __PANOS__
     const c = opc.cores;
     let s = `<defs><pattern id="ris-${svg.id}" width=".25" height=".25" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2=".25" stroke="${c.risco}" stroke-width=".035"/></pattern></defs>`;
     P.exteriores.forEach((b) => (s += rect(b, `url(#ris-${svg.id})`, `stroke="${c.risco}" stroke-width=".02"`)));
+    PG.filter((g) => g.f === 'ext').forEach((g) => (s += poli(g.pts, `url(#ris-${svg.id})`, `stroke="${c.risco}" stroke-width=".02"`)));
+    PG.filter((g) => g.f === 'chao').forEach((g) => (s += poli(g.pts, c.chao)));
     P.solidos.forEach((b) => (s += rect(b, c.parede)));
     P.vazios.forEach((b) => (s += rect(b, b[4] === 'ext' ? `url(#ris-${svg.id})` : c.chao)));
     P.vazios.filter((b) => b[4] === 'ext').forEach((b) => (s += rect(b, c.chao, 'opacity=".55"')));
+    PG.filter((g) => g.f === 'parede').forEach((g) => (s += poli(g.pts, c.parede)));
     P.vaos.forEach((v) => {             // glazing: a thin line along the opening
       const [x0, y0, x1, y1, e] = v;
-      s += e === 'x' ? `<line x1="${X((x0 + x1) / 2)}" y1="${Y(y0)}" x2="${X((x0 + x1) / 2)}" y2="${Y(y1)}" stroke="${c.vidro}" stroke-width=".06"/>`
+      s += e === 'l' ? `<line x1="${X(x0)}" y1="${Y(y0)}" x2="${X(x1)}" y2="${Y(y1)}" stroke="${c.vidro}" stroke-width=".06"/>`
+        : e === 'x' ? `<line x1="${X((x0 + x1) / 2)}" y1="${Y(y0)}" x2="${X((x0 + x1) / 2)}" y2="${Y(y1)}" stroke="${c.vidro}" stroke-width=".06"/>`
         : `<line x1="${X(x0)}" y1="${Y((y0 + y1) / 2)}" x2="${X(x1)}" y2="${Y((y0 + y1) / 2)}" stroke="${c.vidro}" stroke-width=".06"/>`;
     });
     P.escadas.forEach((e) => {
@@ -433,7 +456,7 @@ __PANOS__
   if (segP && PL.pisos.length) {
     segP.innerHTML = PL.pisos.map((p) => `<button data-p="${p.id}">${esc(p.nome)}</button>`).join('');
     segP.addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) planta(b.dataset.p); });
-    planta((PL.pisos.find((p) => p.id === 'piso0') || PL.pisos[0]).id);
+    planta((PL.pisos.find((p) => p.id === (PL.inicial || 'piso0')) || PL.pisos[0]).id);
     matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => planta(segP.querySelector('[aria-pressed=true]').dataset.p));
   }
 
@@ -611,6 +634,7 @@ __PANOS__
     document.getElementById('ladoExplorar').hidden = m !== 'explorar';
     document.getElementById('ladoVisita').hidden = m !== 'visita';
     ajuda.textContent = m === 'visita' ? 'Toque num círculo para entrar nessa divisão e depois ande de divisão em divisão; arraste para olhar à volta. «Ver de fora» volta a mostrar a casa.' : ajudaExplorar;
+    if (M() && M().aoMudarModo) M().aoMudarModo(m);     // a layer's own state (walking, cut walls, the sun) gives way to the tour
     if (m === 'explorar') {
       sair360(); alvos.hidden = true; dica.hidden = true;
       if (M()) M().aCadaFrame = null;
@@ -775,6 +799,7 @@ async function iniciar(L, D) {
   renderer.shadowMap.type = THREE.PCFShadowMap;
   renderer.toneMapping = THREE.AgXToneMapping;
   renderer.toneMappingExposure = 1.0;
+  renderer.localClippingEnabled = true;     // «paredes em corte» of a layer (API.cortarParedes)
   vista.prepend(renderer.domElement);
   const cena = new THREE.Scene();
   const camara = new THREE.PerspectiveCamera(40, 1.6, 0.1, 3000);
@@ -809,7 +834,9 @@ async function iniciar(L, D) {
     folhaBranca = new THREE.CanvasTexture(cv); folhaBranca.flipY = false; folhaBranca.colorSpace = THREE.SRGBColorSpace;
   }
   const subir = (o, chave) => { while (o) { if (o.userData && o.userData[chave]) return o.userData[chave]; o = o.parent; } return null; };
-  const CASA = new Set(['cave', 'piso0', 'piso1', 'cobertura']);
+  // the storeys from the bottom up, then the roof (a house's own: cave/piso0/piso1, piso1/piso2…)
+  const ORDEM = [...D.pisos].sort((a, b) => a.cota - b.cota).map((p) => p.id).concat(['cobertura']);
+  const CASA = new Set(ORDEM);
   const corMaq = (nm) => /relva|brita|berma/.test(nm) ? 0xdcdcd4 : /asfalto/.test(nm) ? 0xc8c8c4 : /metal|painel/.test(nm) ? 0xbdbab3 : 0xf4f2ee;
   const VID = new THREE.MeshStandardMaterial({ color: 0xbfd0d6, roughness: 0.1, transparent: true, opacity: 0.35, depthWrite: false });
   const RELVA = (D.ajuste && D.ajuste.relva) || [0.62, 0.84, 0.84];
@@ -904,9 +931,9 @@ async function iniciar(L, D) {
   }
   if (ceuTex) {
     domo = new THREE.Mesh(new THREE.SphereGeometry(1800, 48, 24), new THREE.ShaderMaterial({
-      uniforms: { t: { value: ceuDomo } }, side: THREE.BackSide, depthWrite: false, toneMapped: false,
+      uniforms: { t: { value: ceuDomo }, k: { value: 0.94 } }, side: THREE.BackSide, depthWrite: false, toneMapped: false,
       vertexShader: 'varying vec3 vD; void main(){ vD = position; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }',
-      fragmentShader: 'uniform sampler2D t; varying vec3 vD; void main(){ vec3 d = normalize(vD); vec2 uv = vec2(atan(d.z, d.x) * 0.15915494 + 0.5, asin(clamp(d.y, -1.0, 1.0)) * 0.31830988 + 0.5); gl_FragColor = vec4(texture2D(t, uv).rgb * 0.94, 1.0);' + String.fromCharCode(10) + '#include <colorspace_fragment>' + String.fromCharCode(10) + '}',
+      fragmentShader: 'uniform sampler2D t; uniform float k; varying vec3 vD; void main(){ vec3 d = normalize(vD); vec2 uv = vec2(atan(d.z, d.x) * 0.15915494 + 0.5, asin(clamp(d.y, -1.0, 1.0)) * 0.31830988 + 0.5); vec3 c = texture2D(t, uv).rgb; if (d.y < 0.0) c = mix(texture2D(t, vec2(uv.x, 0.505)).rgb, vec3(0.34, 0.35, 0.30), smoothstep(0.0, 0.12, -d.y)); gl_FragColor = vec4(c * k, 1.0);' + String.fromCharCode(10) + '#include <colorspace_fragment>' + String.fromCharCode(10) + '}',
     }));
     domo.frustumCulled = false; domo.renderOrder = -1;
     cena.add(domo);
@@ -926,40 +953,64 @@ async function iniciar(L, D) {
 
   let aspeto = 'realista';
   const AJ = Object.assign({ exposicao: 0.87, contraste: 1.1, saturacao: 1.04, ceu: 1.0, sol: 4.0, fundo: 0.55, relva: [0.62, 0.84, 0.84] }, D.ajuste || {});
+  // a layer (pagina.json "camada") may move the sun (the baked light is then left for the sun's own light and
+  // shadows) and cut a storey's walls with a horizontal plane (the cut faces drawn solid grey, as in a section)
+  let solLivre = null, corteP = null;
+  const planoCorte = new THREE.Plane(new THREE.Vector3(0, -1, 0), 0), cortados = new WeakMap();
+  const pocheCorte = (s) => {
+    s.fragmentShader = s.fragmentShader.replace('#include <clipping_planes_fragment>',
+      '#include <clipping_planes_fragment>\n\tif ( !gl_FrontFacing ) { gl_FragColor = vec4( 0.30, 0.31, 0.31, 1.0 ); return; }');
+  };
+  function cortado(m) {
+    if (!cortados.has(m)) {
+      const c = m.clone(), antes = m.onBeforeCompile, chave = m.customProgramCacheKey ? m.customProgramCacheKey() : '';
+      c.clippingPlanes = [planoCorte]; c.side = THREE.DoubleSide;
+      c.onBeforeCompile = (s, r) => { if (antes) antes.call(m, s, r); pocheCorte(s); };
+      c.customProgramCacheKey = () => 'corte' + chave;
+      c.userData = { ...m.userData };
+      cortados.set(m, c);
+    }
+    return cortados.get(m);
+  }
   function aplicar() {
-    const corte = ['cobertura', 'piso1', 'piso0'].some((id) => cx(id) && !cx(id).checked);
+    const corte = ORDEM.slice(1).some((id) => cx(id) && !cx(id).checked);
     const sb = document.getElementById('cxSombras'), sombras = !sb || sb.checked;   // off: no baked light, no sun shadows
     for (const o of malhas) {
       const M = o.userData.M;
-      const luz = sombras && M.realLuz && !(corte && CASA.has(o.userData.g));
-      o.material = aspeto === 'maquete' ? (luz ? M.maqLuz : M.maq) : (luz ? M.realLuz : M.real);
+      const luz = sombras && M.realLuz && !solLivre && !(corte && CASA.has(o.userData.g));
+      let m = aspeto === 'maquete' ? (luz ? M.maqLuz : M.maq) : (luz ? M.realLuz : M.real);
+      if (corteP && o.userData.g === corteP.g && !o.userData.vidro) m = cortado(m);
+      o.material = m;
       o.receiveShadow = sombras && (!luz || (aspeto !== 'maquete' && !!M.realLuz.userData.verniz));   // the varnish's glint stays out of the shadows
       o.castShadow = sombras && o.userData.sombra;
     }
     for (const t of tampas) { t.material = aspeto === 'maquete' ? t.userData.M.maq : t.userData.M.real; t.receiveShadow = sombras; }
     sol.castShadow = sombras;
+    const solDir = solLivre ? solLivre.dir : dirSol;
+    sol.position.copy(centro).addScaledVector(solDir, 70);
     if (aspeto === 'maquete') {
       cena.background = new THREE.Color(0xe7e8e3); cena.environment = envMaq; cena.environmentIntensity = 0.6; if (domo) domo.visible = false;
       sol.intensity = AJ.sol * 0.8; sol.color.set(0xffffff); hemi.intensity = 0.35;
       renderer.toneMappingExposure = AJ.exposicao; renderer.domElement.style.filter = '';
     } else {
       cena.background = domo ? null : new THREE.Color(0xcfdbe3); if (domo) domo.visible = true;
-      cena.environment = envCeu; cena.environmentIntensity = AJ.ceu;
-      sol.intensity = AJ.sol; sol.color.set(0xfff3e6); hemi.intensity = 0.0;
+      cena.environment = envCeu; cena.environmentIntensity = AJ.ceu * (solLivre ? solLivre.ceu : 1);
+      sol.intensity = AJ.sol * (solLivre ? solLivre.forca : 1); sol.color.set(solLivre && solLivre.cor ? solLivre.cor : 0xfff3e6); hemi.intensity = 0.0;
+      if (domo) domo.material.uniforms.k.value = 0.94 * (solLivre ? Math.max(0.25, solLivre.ceu) : 1);
       renderer.toneMappingExposure = AJ.exposicao;
       renderer.domElement.style.filter = `contrast(${AJ.contraste}) saturate(${AJ.saturacao})`;   // the "Medium High Contrast" look of the images
     }
-    usarAO = !!composer && corte;
+    usarAO = !!composer && (corte || !!solLivre);
     document.querySelectorAll('#segAspeto button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.v === aspeto));
   }
   function aplicarAspeto(a) { aspeto = a; aplicar(); }
   document.getElementById('segAspeto').addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) aplicarAspeto(b.dataset.v); });
 
   // what is shown: storeys cut from the top down
-  const ORDEM = ['cave', 'piso0', 'piso1', 'cobertura'];
   const itens = [{ id: 'cobertura', nome: 'Cobertura', sub: 'cota ' + D.cota_topo }]
     .concat([...D.pisos].reverse().map((p) => ({ id: p.id, nome: p.nome, sub: 'cota ' + p.cota_txt })))
-    .concat([{ id: 'envolvente', nome: 'Exterior', sub: 'vedações' }, { id: 'terreno', nome: 'Terreno', sub: 'tire-o para ver a cave' }]);
+    .concat([{ id: 'envolvente', nome: 'Exterior', sub: (D.textos && D.textos.exterior) || 'vedações' },
+      { id: 'terreno', nome: 'Terreno', sub: ORDEM.includes('cave') ? 'tire-o para ver a cave' : 'o chão à volta da casa' }]);
   const painel = document.getElementById('pisos');
   painel.innerHTML = itens.map((i) => `<label class="fl"><input type="checkbox" data-g="${i.id}" checked><span><b>${i.nome}</b><small>${i.sub}</small></span></label>`).join('')
     + '<label class="fl"><input type="checkbox" id="cxSombras" checked><span><b>Sombras</b><small>a luz e as sombras do sol</small></span></label>';
@@ -1074,7 +1125,7 @@ async function iniciar(L, D) {
   // views
   const VIS = D.vistas.map((v) => ({ ...v, c: new THREE.Vector3(...v.camara), a: new THREE.Vector3(...v.alvo) }));
   const caixa = new THREE.Box3();
-  for (const o of malhas) if (['piso0', 'piso1', 'cobertura'].includes(o.userData.g)) caixa.expandByObject(o);
+  for (const o of malhas) if (ORDEM.includes(o.userData.g) && o.userData.g !== 'cave') caixa.expandByObject(o);
   const meio = caixa.getCenter(new THREE.Vector3());
   VIS.push({ nome: 'cima', titulo: 'De cima', c: meio.clone().add(new THREE.Vector3(0, 42, 0.6)), a: meio.clone() });
   VIS.push({ nome: 'rodar', titulo: 'Rodar', c: null });
@@ -1148,6 +1199,15 @@ async function iniciar(L, D) {
   const proj = new THREE.Vector3();
   API.projetar = (p) => { proj.set(...p).project(camara); return { x: proj.x, y: proj.y, atras: proj.z > 1 }; };
   API.pausar = (s) => { pausado = s; };
+  // for a layer (pagina.json "camada": a module that adds its own controls and parts to this 3D)
+  API.definirSol = (s) => { solLivre = s; aplicar(); };          // null: the baked light; {dir (three), forca, ceu, cor}
+  API.cortarParedes = (c) => { corteP = c; if (c) planoCorte.constant = c.y; aplicar(); };   // null or {g: storey id, y}
+  API.grupos = (est) => { for (const [g, v] of Object.entries(est)) if (cx(g)) cx(g).checked = !!v; sincronizar(); };
+  API.visivel = (g) => !cx(g) || cx(g).checked;
+  API.parar = parar;
+  API.dirSol0 = dirSol.clone();
+  API.aCadaPasso = null;      // (dt) => true when it placed the camera itself (walking)
+  API.depois = null;          // after each frame is drawn (labels on the 3D)
 
   // size and loop
   function tamanho() {
@@ -1170,6 +1230,12 @@ async function iniciar(L, D) {
     camara.updateProjectionMatrix();
     camara.position.copy(v0.c); controlos.target.copy(v0.a);
   }
+  const camada = document.getElementById('camada');
+  if (camada) {      // the project's layer: a module (gzipped here) with a default export (ctx) => Promise
+    const url = URL.createObjectURL(new Blob([await gunzip(camada.textContent)], { type: 'text/javascript' }));
+    const mod = await import(url);
+    await mod.default({ THREE, L, D, API, cena, camara, controlos, renderer, vista, malhas, aplicar, sincronizar });
+  }
   document.getElementById('carregar').remove();
   const seta = document.getElementById('seta');
   const tmp = new THREE.Vector3(), relogio = new THREE.Clock();
@@ -1183,17 +1249,125 @@ async function iniciar(L, D) {
       if (t >= 1) { const f = voo.ok, fim = voo.fim; voo = null; if (fim) fim(); f(); }
     }
     const dt = relogio.getDelta();
-    if (!voo) controlos.update(dt);   // with the time step, «Rodar» turns at the same speed on a slow phone
+    const andou = API.aCadaPasso ? API.aCadaPasso(dt) : false;
+    if (!voo && !andou) controlos.update(dt);   // with the time step, «Rodar» turns at the same speed on a slow phone
     if (domo) domo.position.copy(camara.position);
     camara.getWorldDirection(tmp);
     seta.style.transform = `rotate(${-Math.atan2(tmp.x, -tmp.z)}rad)`;   // where north is on the screen
     if (usarAO) composer.render(); else renderer.render(cena, camara);
     if (API.aCadaFrame) API.aCadaFrame();
+    if (API.depois) API.depois();
   });
   window.__modelo = Object.assign(API, { cena, camara, controlos, irPara, aplicarAspeto, malhas });
   window.__pronto = true;
   dispatchEvent(new Event('modelo-pronto'));
 }
+</script>
+<script>
+// the project's technical model (pagina.json "tecnico": another 3D page, gzipped inside this one), opened on demand
+// its language follows the page's: its setLang, or a click on its own switch ([data-l])
+window.__linguaTecnico = (l) => {
+  try {
+    const w = window.__tecnico && window.__tecnico.contentWindow;
+    if (!w) return;
+    if (typeof w.setLang === 'function') w.setLang(l);
+    else { const x = w.document.querySelector(`[data-l="${l}"]`); if (x) x.click(); }
+  } catch (e) { /* its own switch stays */ }
+};
+(function () {
+  const b = document.getElementById('abrirTecnico');
+  if (!b) return;
+  b.addEventListener('click', async () => {
+    const q = document.getElementById('quadroTecnico');
+    b.disabled = true;
+    try {
+      const bytes = Uint8Array.from(atob(document.getElementById('tecnico-html').textContent.trim()), (c) => c.charCodeAt(0));
+      const html = await new Response(new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'))).text();
+      const f = document.createElement('iframe');
+      f.title = b.dataset.titulo || 'Modelo técnico';
+      f.setAttribute('allow', 'fullscreen');
+      f.allowFullscreen = true;
+      f.addEventListener('load', () => setTimeout(() => { if (document.documentElement.lang === 'en') window.__linguaTecnico('en'); }, 400));
+      f.srcdoc = html;
+      q.replaceChildren(f);
+      window.__tecnico = f;
+    } catch (e) {
+      console.error(e);
+      b.disabled = false;
+    }
+  });
+})();
+</script>
+<script>
+// Portuguese / English (pagina.json "en": {PT text: EN text}, "en_padroes": [[regex, replacement]]): every text node
+// and label of the page, also those the scripts write later; the choice is remembered on this device
+(function () {
+  const D = JSON.parse(document.getElementById('dados').textContent);
+  const EN = D.en;
+  const seg = document.getElementById('lingua');
+  if (!EN || !seg) return;
+  const PAD = (D.en_padroes || []).map(([a, b]) => [new RegExp(a), b]);
+  const ATR = ['aria-label', 'title', 'alt', 'data-titulo'];
+  const orig = new WeakMap(), posto = new WeakMap(), origAt = new WeakMap();
+  let lingua = 'pt';
+  // a pattern's replacement: $1 = the group as it is, {1} = the group translated
+  const traduzir = (t) => {
+    if (EN[t]) return EN[t];
+    for (const [r, b] of PAD) { const m = t.match(r); if (m) return b.replace(/\{(\d)\}/g, (_, i) => EN[m[i]] || m[i]).replace(/\$(\d)/g, (_, i) => m[i]); }
+    return null;
+  };
+  const fora = (n) => n.parentNode && n.parentNode.closest && n.parentNode.closest('script,style');
+  function texto(n) {
+    if (fora(n)) return;
+    if (!orig.has(n) || (posto.has(n) && n.nodeValue !== posto.get(n))) orig.set(n, n.nodeValue);   // a script rewrote it
+    const o = orig.get(n), ot = o.trim();
+    if (!ot) return;
+    const e = lingua === 'en' ? traduzir(ot) : null, v = e ? o.replace(ot, e) : o;
+    if (n.nodeValue !== v) n.nodeValue = v;
+    posto.set(n, v);
+  }
+  function elemento(el) {
+    let m = origAt.get(el);
+    if (!m) { m = {}; origAt.set(el, m); }
+    for (const a of ATR) {
+      if (!el.hasAttribute(a)) continue;
+      const atual = el.getAttribute(a);
+      if (!(a in m) || (m['_' + a] !== undefined && atual !== m['_' + a])) m[a] = atual;
+      const e = lingua === 'en' ? traduzir(m[a].trim()) : null, v = e || m[a];
+      if (atual !== v) el.setAttribute(a, v);
+      m['_' + a] = v;
+    }
+  }
+  function percorrer(r) {
+    if (r.nodeType === 3) { texto(r); return; }
+    if (r.nodeType !== 1 || (r.closest && r.closest('script,style'))) return;
+    elemento(r);
+    r.querySelectorAll('*').forEach(elemento);
+    const tw = document.createTreeWalker(r, NodeFilter.SHOW_TEXT);
+    let n;
+    while ((n = tw.nextNode())) texto(n);
+  }
+  new MutationObserver((ms) => {
+    for (const m of ms) {
+      if (m.type === 'childList') m.addedNodes.forEach(percorrer);
+      else if (m.type === 'characterData') texto(m.target);
+      else if (m.type === 'attributes' && ATR.includes(m.attributeName)) elemento(m.target);
+    }
+  }).observe(document.body, { childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: ATR });
+  function aplicar(l) {
+    lingua = l;
+    document.documentElement.lang = l;
+    seg.querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', b.dataset.l === l));
+    percorrer(document.body);
+    document.title = l === 'en' && traduzir(D.titulo || '') ? traduzir(D.titulo) : (D.titulo || document.title);
+    if (window.__linguaTecnico) window.__linguaTecnico(l);
+    try { localStorage.setItem('lingua', l); } catch (e) { /* private mode */ }
+  }
+  seg.addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) aplicar(b.dataset.l); });
+  let guardada = null;
+  try { guardada = localStorage.getItem('lingua'); } catch (e) { /* private mode */ }
+  if (guardada === 'en') aplicar('en');
+})();
 </script>
 </body>
 </html>

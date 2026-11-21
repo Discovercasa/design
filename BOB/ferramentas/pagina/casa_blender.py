@@ -14,11 +14,13 @@ casa.json (local metres, x/y on the plan, z up from the reference floor; see ger
   materiais_cor   optional colour overrides {"ripado": "#6a4a35", ...}
   solidos   [{nome, caixa [x0,y0,z0,x1,y1,z1], mat, grupo, mats {base, topo, lados}}]   volumes that get carved
   vazios    [{caixa, em [solid names], mats {lados, chao, teto}}]   rooms, loggias, openings, roof wells
-  caixas    [{caixa, mat, grupo}]                                     plain boxes (deck, copings, fins, slabs)
+  caixas    [{caixa, mat, grupo, uv0}]                                plain boxes (deck, copings, fins, slabs,
+            cladding); uv0 [x,y,z] = the texture's origin (a Tremolo board joint there), else the world's
   vaos      [{caixa, eixo x|y, plano, paineis, tipo correr|janela|fixo|porta|garagem, grupo}] frames, glass, leaves
   guardas   [{de [x,y], ate [x,y], z0, altura, grupo}]               glass balustrades
   muros     [{pontos [[x,y,zbase,ztopo],...], esp, mat, grupo}]       walls along a line, top following the ground
-  pisos_livres [{pontos [[x,y,z],...], mat, grupo}]                  a polygon surface (ramp floor)
+  pisos_livres [{pontos [[x,y,z],...], mat, grupo, sem_luz}]         a polygon surface (ramp floor); sem_luz: not in
+            the web model's baked light (a far ground plane)
   toros     [{pontos [[x,y,z],...], passo, altura, diam, grupo}]      timber log fence along a line (base at z);
             passo >= 1.5 m: posts with a three-wire sheep net
   faixas    [{a [[x,y,z],...], b [...] (same count), mat}]          a strip between two lines (a road between kerbs)
@@ -41,7 +43,9 @@ casa.json (local metres, x/y on the plan, z up from the reference floor; see ger
             numbering from 0), local metres, z up.
             A batch's material: mapa[nome] = a MATS name, "#hex:rug:metal" (a plain one) or "vidro:rug"; else one
             from the batch's own colour (glass when opac < 1). Batches on "relva"/"relva_fora" get the hair grass
-            in the renders; the ground batches (grupo "terreno") cast no shadow, like the terrain grid.
+            in the renders; the ground batches (grupo "terreno") cast no shadow, like the terrain grid. Groups: p1/p2 ->
+            piso1/piso2, rf -> cobertura, site -> envolvente; --luz bakes them with the storeys, the outside walls and the
+            ground (luz_plano [x0, y0, x1, y1]: the plan area of the ground's lightmap).
   rodar_graus   rotation of the whole model about z (plan frame -> north up)
   sol       {azimute (deg from north, clockwise), elevacao}
 Output: casa.glb (web, textures 1024 px JPEG, groups in extras), casa.blend, render_<vista>.jpg (Cycles), texturas/.
@@ -54,6 +58,7 @@ import sys
 import bmesh
 import bpy
 import numpy as np
+from mathutils import Vector
 
 # ---------------------------------------------------------------------------------------------- arguments
 argv = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else []
@@ -492,12 +497,14 @@ def uvs_mundo(ob):
         me.uv_layers.new(name="UVMap")
     uv = me.uv_layers.active.data
     mw = ob.matrix_basis
+    o = ob.get("uv0")                    # a box's own texture origin (cladding: a board joint at its edge)
+    o = Vector(tuple(o)) if o is not None else Vector((0, 0, 0))
     nomes = [m.name if m else "" for m in me.materials]
     for p in me.polygons:
         n = p.normal
         t = TILE.get(nomes[p.material_index].split(".")[0], 1.2) if nomes else 1.2
         for li in p.loop_indices:
-            co = mw @ me.vertices[me.loops[li].vertex_index].co
+            co = mw @ me.vertices[me.loops[li].vertex_index].co - o
             if abs(n.z) > 0.7:
                 uv[li].uv = (co.x / t, co.y / t)
             elif abs(n.x) >= abs(n.y):
@@ -597,8 +604,10 @@ def construir_vaos():
 
 def construir_extras():
     for k, c in enumerate(E.get("caixas", [])):
-        caixa(c.get("nome", f"caixa{k}"), c["caixa"], c["mat"], c.get("grupo"),
-              faces_mats(c["mat"], c.get("topo"), c.get("fundo"), c.get("lados")))
+        ob = caixa(c.get("nome", f"caixa{k}"), c["caixa"], c["mat"], c.get("grupo"),
+                   faces_mats(c["mat"], c.get("topo"), c.get("fundo"), c.get("lados")))
+        if c.get("uv0"):
+            ob["uv0"] = c["uv0"]
     for k, gd in enumerate(E.get("guardas", [])):
         (xa, ya), (xb, yb) = gd["de"], gd["ate"]
         z0, h = gd["z0"], gd.get("altura", 1.1)
@@ -641,7 +650,9 @@ def construir_extras():
         bm.to_mesh(me)
         bm.free()
         me.materials.append(MATS[pl.get("mat", "betao")])
-        ligar(bpy.data.objects.new(f"piso_livre{k}", me), pl.get("grupo", "envolvente"))
+        ob = ligar(bpy.data.objects.new(f"piso_livre{k}", me), pl.get("grupo", "envolvente"))
+        if pl.get("sem_luz"):          # a far ground plane: no lightmap (it would take the whole exterior map)
+            ob["sem_luz"] = True
     for k, fx in enumerate(E.get("faixas", [])):
         A_, B_ = fx["a"], fx["b"]
         n = len(A_)
@@ -697,7 +708,7 @@ def construir_extras():
 
 MALHAS_RELVA = []      # (object, "relva" | "relva_fora"): hair grass in the renders
 MALHAS_CHAO = []       # ground batches: no shadow cast (like the terrain grid)
-GRUPO_MALHA = {"p1": "piso1", "p2": "piso2", "rf": "cobertura", "site": "exterior", "terreno": "terreno"}
+GRUPO_MALHA = {"p1": "piso1", "p2": "piso2", "rf": "cobertura", "site": "envolvente", "terreno": "terreno"}
 
 
 def _mat_malha(L, alvo):
@@ -758,6 +769,7 @@ def construir_malhas():
         if L.get("suave"):
             me.polygons.foreach_set("use_smooth", [True] * len(me.polygons))
         ob = ligar(bpy.data.objects.new(nome, me), GRUPO_MALHA.get(L["grupo"], L["grupo"]))
+        ob["malha"] = True
         if L.get("suave"):
             ob["suave"] = True
         if L["grupo"] == "terreno":
@@ -1248,13 +1260,17 @@ def gravar_luz(amostras=128):
     'casa' (every storey, frames, copings, deck), 'exterior' (walls, ramp, road), 'terreno' (the ground near the house).
     Saved as sRGB JPEG divided by K (luz.json says K per map); the page multiplies the texture colour by it."""
     vidro = lambda ob: any(m and m.name.startswith("vidro") for m in ob.data.materials)
-    meshes = [o for o in cena.objects if o.type == "MESH" and not o.hide_get() and o.data.polygons]
+    meshes = [o for o in cena.objects if o.type == "MESH" and not o.hide_get() and o.data.polygons
+              and not o.get("sem_luz")]
+    andar = lambda g: g in ("cave", "cobertura") or str(g).startswith("piso")     # every storey (piso0, piso1, piso2…)
     grupos = {
-        "casa": [o for o in meshes if o.get("grupo") in ("cave", "piso0", "piso1", "cobertura") and not vidro(o)
-                 and not o.get("suave")],
+        "casa": [o for o in meshes if andar(o.get("grupo")) and not vidro(o) and not o.get("suave")],
         "mobilia": [o for o in meshes if o.get("suave") and not vidro(o) and not o.get("pesado")],   # interior.py
-        "exterior": [o for o in meshes if o.name.startswith(("muro", "piso_livre", "faixa"))],
-        "terreno": [o for o in meshes if o.name == "terreno"],
+        # walls, ramp, road; and the outside meshes of an exported 3D (malhas: walls, gates, steps)
+        "exterior": [o for o in meshes if (o.name.startswith(("muro", "piso_livre", "faixa"))
+                                          or (o.get("malha") and o.get("grupo") == "envolvente"))
+                     and not vidro(o) and not o.get("suave")],
+        "terreno": [o for o in meshes if o.name == "terreno" or (o.get("malha") and o.get("grupo") == "terreno")],
     }
     tamanho = {"casa": 4096, "mobilia": 4096, "exterior": 1024, "terreno": 2048}   # 4096: sharper light on the walls and furniture
     # triangulate the baked meshes (simpler islands; the web model is triangles anyway)

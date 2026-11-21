@@ -977,3 +977,25 @@ The team's notes on hub task 84 (written in the hub by [membro da equipa] on 202
 > quanto tempo para os renders? / estado da nossa página? / precisas deste PC ligado? / do PC de casa?
 - Context: status questions; no facts. Separately, the home station was checked and cleaned with the user and verified with a Defender offline scan (one neutral line, no details).
 - Filed in: `conhecimento/posto-render.md` → Station 1 (2026-11-21 line); `Construção Matosinhos/docs/estado.md` → Delivered 2026-11-21 (page, timings).
+
+### 2026-11-21 (morning) — Matosinhos page: 3D at our quality, real ripado, final page, slimmer chairs [Matosinhos, Builder]
+> tens de fazer o 3D com a nossa qualidade também!!! e arranja as partes de ripado na parte de fora, devem ser reais e em concordância com a área que ocupam... de forma a ficar tal como ficaria na realidade. quero uma página final para apresentar ao cliente !!! e sim podes refazer as cadeiras mai finas
+- Context: reaction to the delivered page (doc 119), whose 3D was the hub's flat page; «as cadeiras» = the dining chairs Claude had flagged as blocky.
+- Filed in: `Construção Matosinhos/docs/estado.md` → «Round 2 (2026-11-21)» (3D at our quality; ripado modelled real, 70 mm and drip flashing as a MODELLING ASSUMPTION; final page; chairs slimmer); `conhecimento/discovercasa.md` → client page standard (3D quality).
+
+### 2026-11-21 (about 12:50) — The 3D is the interactive 3D; the 360° tour inside it is the standard for every client page [Matosinhos, Builder]
+> quando digo o 3D digo mesmo o 3D interativo!!! o que está na imagem do SCREENSHIOT!!!
+> e a visita 360 deve estar incluida como uma feature também dentro do 3D tal como fizemos na nossa página de ribamar e que já devias ter definido como padrão para qualquer página que seja para entregar ao cliente!!
+- Context: came with a screenshot of the hub's interactive 3D of the house (buttons Geral, Da rua, Tardoz, De cima, Pessoa, Caixilharias, Rodar). Corrects Claude's reading of message 1: "o 3D" = the interactive one, rebuilt on our baked model, not a separate extra viewer.
+- Filed in: `conhecimento/discovercasa.md` → client page, «Standard for every page delivered to a client (2026-11-21)» (standing rule); `Construção Matosinhos/docs/estado.md` → Round 2 (single interactive 3D, all hub controls kept, «modelo técnico» removed, tour as mode); `conhecimento/discovercasa.md` → tool note («camada»).
+
+### 2026-11-21 (about 13:15) — Matosinhos: roof panel is tile-imitation colour; entrance doors like the ripado; garage doors stay grey [Matosinhos, Builder]
+> estava a reparar nos creenshots e eu errei, o painel sandwich é com a cor imitação telha
+> e as portas devem ter a mesma cor e textura do ripado usado nos detalhes
+- Context: after seeing screenshots of the page. Claude then asked «Os portões das garagens (seccionados, hoje cinzento escuro) também passam a ter a cor e a textura do ripado Tremolo, como as portas de entrada?» — user's answer: «Não, só as portas».
+- Filed in: `Construção Matosinhos/docs/estado.md` → Round 2 (roof RAL 8004, entrance doors as ripado, garage doors grey, 77 mm); corrects the 2026-11-20 answer «3. painel sandwich» (it never said grey; the grey was Claude's reading).
+
+### 2026-11-21 (about 13:40) — Matosinhos: fração A's four bedrooms (T4) [Matosinhos, Builder]
+> Closet e Arrumos 17 m²
+- Context: the user had asked «o que precisas em relação ao quarto da fração ?»; Claude asked: «A fração A é T4, mas nas plantas de licenciamento só há 2 divisões chamadas «Quarto» (16,40 m² e 10,80 m², no Piso 2). As outras divisões são «Closet» (14,00 m², Piso 2) e «Arrumos» (17,00 m², Piso 1, ao lado de uma I.S.). Na página (plantas, áreas, mobiliário do 3D), como devo mostrar os 4 quartos?» — options «Closet e Arrumos 17 m²» / «Manter os nomes» / «Só o Closet». The quote above is the user's answer.
+- Filed in: `Construção Matosinhos/docs/estado.md` → Round 2 (T4 bedrooms, pending closed) and Open questions (closed); `Construção Matosinhos/docs/desenhos.md` → cross-reference (drawing names kept).

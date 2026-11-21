@@ -491,26 +491,55 @@ def mesa_jantar(p, d):
         cadeira(p, cd, (L / 2 + 0.08, 0, 0), 90)
 
 
+def _ret_redondo(x0, y0, x1, y1, r, seg=5):
+    """A rectangle with rounded corners as a polygon (counter-clockwise)."""
+    pts = []
+    for cx_, cy_, a0 in ((x1 - r, y0 + r, -90), (x1 - r, y1 - r, 0), (x0 + r, y1 - r, 90), (x0 + r, y0 + r, 180)):
+        for k in range(seg + 1):
+            a = math.radians(a0 + 90 * k / seg)
+            pts.append((cx_ + r * math.cos(a), cy_ + r * math.sin(a)))
+    return pts
+
+
 def cadeira(p, d, o=(0, 0, 0), rot=0):
-    """Dining chair; its back is on the far side from the table: front faces +y in its own frame, rotated by rot."""
+    """Dining chair, slim (user 2026-11-21: «refazer as cadeiras mais finas»): steel legs, rails and back posts of 16 mm,
+    a 15 mm seat with rounded corners and a curved 12 mm backrest. Its back is on the far side from the table: front
+    faces +y in its own frame, rotated by rot. Every part is built in the chair's own frame, so any angle works (the
+    old axis-aligned boxes grew into squares at 45° round a round table: the «blocky» chairs)."""
     R = Matrix.Rotation(math.radians(rot), 3, "Z")
 
     def P_(x, y, z):
         v = R @ Vector((x, y, z))
         return (o[0] + v.x, o[1] + v.y, o[2] + v.z)
 
-    def cx(mat, x0, y0, z0, x1, y1, z1, b=0.0):
-        a, c = P_(x0, y0, z0), P_(x1, y1, z1)
-        p.caixa(mat, min(a[0], c[0]), min(a[1], c[1]), z0 + o[2], max(a[0], c[0]), max(a[1], c[1]), z1 + o[2], b)
-    est, ass = d.get("estrutura", "nogueira"), d.get("assento", "tecido_escuro")   # frame, seat (and back)
+    def placa(mat, pts, z0, z1, suave=False):      # a prism from a polygon of the chair's frame
+        n = len(pts)
+        vs = [P_(x, y, z0) for x, y in pts] + [P_(x, y, z1) for x, y in pts]
+        fs = [list(range(n - 1, -1, -1)), list(range(n, 2 * n))] + \
+             [[i, (i + 1) % n, n + (i + 1) % n, n + i] for i in range(n)]
+        p.malha(mat, vs, fs, suave=suave)
+
+    est, ass = d.get("estrutura", "nogueira"), d.get("assento", "tecido_escuro")   # frame, seat
+    cos_ = d.get("costas", ass)
+    zs = 0.445                                       # top of the rails = underside of the seat
     for sx in (-1, 1):
-        for sy in (-1, 1):
-            p.tubo(est, P_(sx * 0.2, sy * 0.2 - 0.25, 0), P_(sx * 0.21, sy * 0.21 - 0.25, 0.45), 0.014)
-    cx(est, -0.23, -0.48, 0.44, 0.23, -0.02, 0.47, 0.01)
-    cx(ass, -0.22, -0.46, 0.47, 0.22, -0.04, 0.51, 0.015)
-    p.tubo(est, P_(-0.2, -0.46, 0.47), P_(-0.21, -0.5, 0.82), 0.014)
-    p.tubo(est, P_(0.2, -0.46, 0.47), P_(0.21, -0.5, 0.82), 0.014)
-    cx(d.get("costas", est), -0.22, -0.52, 0.66, 0.22, -0.47, 0.82, 0.01)
+        p.tubo(est, P_(sx * 0.205, -0.05, 0), P_(sx * 0.19, -0.07, zs), 0.008, 10)          # front legs
+        p.tubo(est, P_(sx * 0.205, -0.455, 0), P_(sx * 0.19, -0.43, zs), 0.008, 10)         # rear legs
+        p.tubo(est, P_(sx * 0.19, -0.43, zs), P_(sx * 0.195, -0.47, 0.785), 0.008, 10)      # back posts
+        placa(est, [(sx * 0.19 - 0.006, -0.43), (sx * 0.19 + 0.006, -0.43), (sx * 0.19 + 0.006, -0.07),
+                    (sx * 0.19 - 0.006, -0.07)], zs - 0.022, zs)                            # side rails
+    for y in (-0.07, -0.43):
+        placa(est, [(-0.19, y - 0.006), (0.19, y - 0.006), (0.19, y + 0.006), (-0.19, y + 0.006)], zs - 0.022, zs)
+    placa(ass, _ret_redondo(-0.215, -0.465, 0.215, -0.04, 0.045), zs, zs + 0.015)          # seat, 15 mm
+    # backrest: a band curved round the sitter (radius 0.55 m), 12 mm thick, 15 cm high, on the posts
+    Rr, t, cy, n = 0.55, 0.012, 0.06, 14
+    a1 = math.asin(0.225 / Rr)
+    arco = [(-a1 + 2 * a1 * k / n) for k in range(n + 1)]
+    frente = [(Rr * math.sin(a), cy - Rr * math.cos(a)) for a in arco]
+    tras = [((Rr + t) * math.sin(a), cy - (Rr + t) * math.cos(a)) for a in reversed(arco)]
+    # counter-clockwise like every placa (faces outward): clockwise, the web 3D culled the outer faces and the baked
+    # light, computed on inward normals, drew the backrests black
+    placa(cos_, list(reversed(frente + tras)), 0.635, 0.785)
 
 
 def tapete(p, d):

@@ -11,7 +11,19 @@ pagina.json: {"titulo", "subtitulo", "modelo": "<folder with casa.glb and render
               "pisos": [{"id", "nome", "cota", "divisoes": [[nome, m2], ...]}], "cota_topo",
               "imagens": [{"vista", "titulo"}], "acabamentos": [{"parte", "texto", "cor"}], "ficha": [[k, v], ...],
               optional: "renders" (folder of the images and panoramas, default "modelo"),
-              "legal" (the footer's line). No «Como construímos» and no closing section (user 2026-11-18).}
+              "legal" (the footer's line), "planta_inicial" (the plan shown first), "textos" {exterior: the 3D's
+              sub-label for the outside}, "en" {PT text: EN text} + "en_padroes" [[regex, replacement: $1 the group, {1} the group translated]]
+              (a PT/EN switch),
+              "tecnico" {html, titulo, texto, botao, itens} (another 3D page of the project, opened on demand),
+              "camada" (an ES module added to OUR 3D: default export (ctx) -> Promise; ctx.API has definirSol
+              (a sun of its own: the baked light gives way to the sun's), cortarParedes ({g, y}: a storey's walls cut
+              by a plane, the cut drawn solid), grupos/visivel (storeys shown), parar, voarPara/colocar, aCadaPasso
+              (dt; true when it placed the camera itself), depois (after each frame), aoMudarModo (the 360° tour)).
+              No «Como construímos» and no closing section (user 2026-11-18).}
+Standard (user 2026-11-21): ONE interactive 3D at our quality with the 360° tour inside it. When the project has a 3D on
+the hub, its controls are rebuilt as a "camada" on our baked model (Matosinhos: the hub's static meshes exported without
+the parts that move, baked; the layer draws only doors, windows, gates, shutters, the electrical symbols and the
+neighbours, and keeps the hub's walls and floors invisible for walking) — never a second, flat technical model.
 The tour (casa.json "visita": points with camara, olhar, liga) shows render_pano_<id>.jpg, as a mode of the 3D viewer
 (the house from outside, a circle per point, fly in, walk panorama to panorama); the plans are drawn from
 casa.json (storey volumes, rooms, openings, stairs, the furniture's footprints, "divisoes" for names and areas).
@@ -150,12 +162,15 @@ def gerar(pagina, saida):
         xr, yr = x * math.cos(th) - y * math.sin(th), x * math.sin(th) + y * math.cos(th)
         return [round(xr, 3), round(z, 3), round(-yr, 3)]
     titulos = {i["vista"]: i["titulo"] for i in P.get("imagens", [])}
-    vistas = [{"nome": v["nome"], "titulo": titulos.get(v["nome"], v["nome"].capitalize()),
-               "camara": tres(v["camara"]), "alvo": tres(v["alvo"]), "lente": v.get("lente", 26)} for v in C.get("vistas", [])]
+    # the 3D's view buttons: the images' cameras (in the images' order); never the panoramas' or unused cameras
+    # (they showed up as «Pano_sala_a», «Tardoz»…)
+    porNome = {v["nome"]: v for v in C.get("vistas", []) if not v.get("panorama")}
+    vistas = [{"nome": n, "titulo": titulos[n], "camara": tres(porNome[n]["camara"]), "alvo": tres(porNome[n]["alvo"]),
+               "lente": porNome[n].get("lente", 26)} for n in titulos if n in porNome]
     cx, cy = C.get("centro", [0, 0])
     pisos = [{**p, "cota_txt": _num(p["cota"])} for p in P["pisos"]]
     dados = {"pisos": pisos, "cota_topo": _num(P["cota_topo"]), "cota_topo_num": P["cota_topo"], "vistas": vistas, "sol": C.get("sol", {}),
-             "centro": tres([cx, cy, 2.0]), "acabamentos": P.get("acabamentos", [])}
+             "centro": tres([cx, cy, 2.0]), "acabamentos": P.get("acabamentos", []), "rodar": C.get("rodar_graus", 0.0)}
     sol = dict(dados["sol"])
     sol["azimute"] = sol.get("azimute", 235)
     dados["sol"] = sol
@@ -174,7 +189,13 @@ def gerar(pagina, saida):
     visita = [v for v in C.get("visita", []) if (renders / f"render_pano_{v['id']}.jpg").exists()]
     ids = {v["id"] for v in visita}
     dados["visita"] = [{**v, "p3": tres(v["camara"]), "liga": [o for o in v.get("liga", []) if o in ids]} for v in visita]
-    dados["planta"] = _planta(C, P["pisos"])
+    # the plans: from casa.json's volumes and rooms, or drawn by the project's generator (casa.json "planta": a house
+    # whose 3D came from elsewhere, with "poligonos" [{pts, f chao|ext|parede}] and vaos [x0, y0, x1, y1, "l"])
+    dados["planta"] = C["planta"] if C.get("planta") else _planta(C, P["pisos"])
+    if P.get("planta_inicial"):
+        dados["planta"]["inicial"] = P["planta_inicial"]
+    if P.get("textos"):
+        dados["textos"] = P["textos"]
     panos = "\n".join(f'<script type="text/plain" id="pano-{v["id"]}">'
                        + base64.b64encode((renders / f"render_pano_{v['id']}.jpg").read_bytes()).decode("ascii")
                        + "</script>" for v in visita)
@@ -192,6 +213,34 @@ def gerar(pagina, saida):
             f'<figure><button data-foto data-titulo="{tit}" aria-label="Ver em ecrã inteiro: {tit}">'
             f'<img src="data:image/jpeg;base64,{b}" alt="{tit}" loading="lazy"></button><figcaption>{tit}</figcaption></figure>'
             for b, tit in fotos[1:])
+    # English (optional): the PT -> EN dictionary of the page's texts, and a switch on the opening photograph
+    lingua = ""
+    if P.get("en"):
+        dados["en"], dados["en_padroes"], dados["titulo"] = P["en"], P.get("en_padroes", []), P["titulo"]
+        lingua = ('<div class="lingua" id="lingua" role="group" aria-label="Idioma / Language">'
+                  '<button data-l="pt" aria-pressed="true">PT</button><button data-l="en" aria-pressed="false">EN</button></div>')
+    # the project's technical model (optional): another 3D page (e.g. the hub's), gzipped, opened on demand
+    tecnico = menu_tecnico = ""
+    if P.get("tecnico"):
+        T = P["tecnico"]
+        bruto = (base / T["html"]).read_bytes()
+        itens = "".join(f"<li>{html.escape(i)}</li>" for i in T.get("itens", []))
+        tecnico = (f'<section class="bloco tecnico" aria-labelledby="h-tecnico"><div class="largura">'
+                   f'<div class="cab"><h2 id="h-tecnico">{html.escape(T.get("titulo", "Modelo técnico"))}</h2>'
+                   f'<p>{html.escape(T.get("texto", ""))}</p></div>'
+                   f'<div class="quadro" id="quadroTecnico"><div class="abrir"><ul>{itens}</ul>'
+                   f'<button id="abrirTecnico" data-titulo="{html.escape(T.get("titulo", "Modelo técnico"))}">'
+                   f'{html.escape(T.get("botao", "Abrir o modelo técnico"))}</button></div></div></div></section>'
+                   f'<script id="tecnico-html" type="text/plain">'
+                   + base64.b64encode(gzip.compress(bruto, 9, mtime=0)).decode("ascii") + "</script>")
+        menu_tecnico = f'<a href="#h-tecnico">{html.escape(T.get("titulo", "Modelo técnico"))}</a>'
+    # the project's layer (optional): an ES module whose default export (ctx) adds controls and parts to the 3D, e.g.
+    # the hub's interactive model rebuilt on our baked one (floors, sun, cut walls, doors, shutters, walking...)
+    camada = ""
+    if P.get("camada"):
+        src = (base / P["camada"]).read_bytes()
+        camada = ('<script id="camada" type="text/plain">'
+                  + base64.b64encode(gzip.compress(src, 9, mtime=0)).decode("ascii") + "</script>")
     hoje = datetime.date.today()
     legal = P.get("legal", "Imagens ilustrativas: o mobiliário, a decoração e a envolvente (casas vizinhas, "
                            "vegetação, céu) são indicativos. Áreas do projeto de arquitetura.")
@@ -208,6 +257,10 @@ def gerar(pagina, saida):
         "TEXTURAS": json.dumps(texturas, separators=(",", ":")),
         "PANOS": panos,
         "LEGAL": html.escape(legal),
+        "LINGUA": lingua,
+        "TECNICO": tecnico,
+        "MENU_TECNICO": menu_tecnico,
+        "CAMADA": camada,
     }
     tpl = (AQUI / "modelo_pagina.html").read_text(encoding="utf-8")
     pagina_html = re.sub(r"__(" + "|".join(valores) + ")__", lambda m: valores[m.group(1)], tpl)

@@ -19,7 +19,38 @@ The user's words: `conhecimento/registo-conversas-2026-3.md` (entries 2026-11-20
   (~7–13 min each). Dropped as weak: an aerial from the west (mostly neighbours' roofs) and the fração B garden (blank wall).
 - Interiors (user 2026-11-20): kitchen of fração A as on the hub page; the rest from the architect's plans; modern minimalist
   furniture — rule in `conhecimento/discovercasa.md` (client page, «Interiors when a 3D page already exists»).
-- Known: the dining chairs read a bit blocky (solid oak seat and back).
+- Known: the dining chairs read a bit blocky (solid oak seat and back). (superseded 2026-11-21: rebuilt slimmer, see Round 2)
+
+## Round 2 (2026-11-21; log: `registo-conversas-2026-3.md`, entries "morning" and "about 12:50")
+Supersedes the doc-119 layout above («keeps the hub page's 3D whole … adds» a separate viewer): (superseded 2026-11-21, see registo).
+- **One interactive 3D at our quality** (user: «quando digo o 3D digo mesmo o 3D interativo»): the hub page's 3D with all its
+  controls (Pisos, Sol with hour and 4 dates, Paredes inteiras/em corte, Portas e janelas, Estores, Eletricidade, Envolvente,
+  Ecrã inteiro, views Geral/Da rua/Tardoz/De cima/Pessoa/Caixilharias/Rodar, Níveis) but on our Blender-baked model with real
+  materials. No separate low-quality «modelo técnico» (removed). The 360° tour is a mode inside this 3D (Modo Explorar | Visita 360°),
+  as on Ribamar. Hub static parts exported without moving parts (doors, windows, gates, garage doors), baked in Blender; a
+  «camada» (ES module) draws only what moves plus shutters, electrical symbols and neighbours (scripts local in `_trabalho/matosinhos`).
+  Baked light = hub sun 21 Sep 10:00; moving the sun switches to live sun and shadows.
+- **Ripado modelled real** (user: «devem ser reais e em concordância com a área que ocupam»): Tremolo boards cover exactly each zone
+  (pillars, strips over garages and entrances, over fração B's corner window; rest ETICS, decision 2026-11-20). Built as cladding
+  boxes **70 mm proud** of the wall face (boards on battens) with a metal drip flashing under the horizontal strips.
+  **MODELLING ASSUMPTION, not a user decision** — to confirm with the method / the user.
+- **Dining chairs slimmer** (user: «podes refazer as cadeiras mai finas»): 8 mm tube legs and rails, 15 mm seat, curved backrest. Closes "Known: chairs blocky".
+- **Final page for the client** (user: «quero uma página final para apresentar ao cliente») delivered in the hub, obra Matosinhos.
+- Standing rule from this: `conhecimento/discovercasa.md` (client page standard).
+- **Corrections 2026-11-21 (about 13:15):** «eu errei, o painel sandwich é com a cor imitação telha» — roof panel in the
+  tile-imitation colour, company Munditelha RAL 8004 (screen #8F4E35), on the hidden flat roof behind the parapet; supersedes the
+  grey shown in the page (decision 3 above stays «painel sandwich»; the colour is the company's, grey was Sobral only, see
+  `sistema-construtivo.md:611`). «as portas devem ter a mesma cor e textura do ripado usado nos detalhes» — entrance doors
+  (frações A and B, Piso 1) = Tremolo ripado look (vertical boards, Marron, varnished). Garage doors: «Não, só as portas» —
+  stay sectional, dark grey (closes the earlier question wood vs grey: grey).
+- **Cladding depth corrected 70 → 77 mm** (counter-battens 20 + battens 35 + Tremolo ~22, `sistema-construtivo.md`); the drip
+  flashing under the horizontal strips stays a MODELLING ASSUMPTION. (The 70 mm above is superseded.)
+- **Fração A's four bedrooms (user 2026-11-21 ~13:40, «Closet e Arrumos 17 m²»):** Quarto 16,40 and Quarto 10,80 (Piso 2), the
+  14,00 m² «Closet» (Piso 2) and the 17,00 m² «Arrumos» (Piso 1, next to the 2,10 m² I.S., own glazed door to the street and a
+  door to the garage). On the client page both are named «Quarto» (plans, areas table) and furnished as bedrooms: the Closet
+  already had the double bed on the plan; the Piso 1 room got a double bed against the south wall between its sockets, a 1,8 m
+  wardrobe on the garage wall, a downlight. The licensing drawings keep their own names. CLOSED.
+- Pending (still open): none.
 
 ## Requirement (user 2026-11-20)
 «mantem as features que estão na página que esta disponivel no hub» — keep: storeys, sun hour/season, walls whole/cut,
@@ -45,5 +76,5 @@ ripado na página levam ripado mas são apenas aqueles detalhes que estão lá, 
 ## Open questions
 - None from the first list. Still to verify when modelling: exact extent of the ripado details against the hub page (the answer
   refers to "those details", not listed one by one); which openings are windows vs doors for the estores (rule applied per opening);
-  with fração A = T4, check which rooms count as the four bedrooms (Quarto 16,40, "Closet" 14,00, Quarto 10,80, and the Piso 1
-  Arrumos with I.S.?) — not asked, do not assume.
+  with fração A = T4, which rooms are the four bedrooms — ANSWERED 2026-11-21: Quarto 16,40, Quarto 10,80, Closet 14,00 and
+  Arrumos 17,00 (see Round 2).

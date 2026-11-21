@@ -11,7 +11,8 @@ Architect's notes fix the geometry; DiscoverCasa decides how it is built.
 ## Fração A (m²)
 - Piso 2: Sala/Cozinha 43,60; Quarto 16,40 (with I.S. 5,45); "Closet" 14,00 (drawn with a double bed); Quarto 10,80;
   I.S. 3,40; Varanda 8,30.
-- Piso 1: Garagem 36,15; Arrumos 17,00 (with I.S. 2,10 and shower); Entrada 5,20; Arrumos 2,60.
+- Piso 1: Garagem 36,15; Arrumos 17,00 (with I.S. 2,10 and shower); Entrada 5,20; Arrumos 2,60. (Drawing names kept; the client
+  page shows the 17,00 Arrumos and the Piso 2 Closet 14,00 as «Quarto» — fração A's T4, user 2026-11-21, see estado.md.)
 
 ## Fração B (m²)
 - Piso 2: Sala/Cozinha 27,75; Quarto 10,80 ×2; I.S. 5,80; Circulação 4,60; Varanda 3,00.

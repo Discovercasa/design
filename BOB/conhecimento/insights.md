@@ -536,3 +536,10 @@ he answers (`metodo-construtivo.md`). Condensed 2026-10-28 (history in git).
   This saved writing a house description by hand and keeps the page's features and the renders identical → if more pages
   come from that source, keep its exporter in `ferramentas/pagina/` so it is repeatable. Detail: `Construção
   Matosinhos/docs/estado.md`; registo-2026-3 2026-11-20 (evening).
+- **2026-11-21** — **status: told (2026-11-21).** Matosinhos, fração A as a T4: the 4th bedroom is the 17 m² «Arrumos» of
+  Piso 1 (user's choice for the client page), which opens straight into the garage and has a glazed door to the street.
+  If it is really sold and built as a bedroom: a fire-rated, self-closing door between garage and bedroom (to confirm in
+  the fire-safety rules, RT-SCIE), the habitable-room checks of the RGEU (glazing ≥ 1/10 of the floor: the 1,46 × 2,40 m
+  glazed door is enough; minimum area: 17 m² is enough) and the same for the 14 m² «Closet» of Piso 2 if the licensing
+  project files it as a closet → raise it with the architect before construction; the page itself only names and
+  furnishes the rooms. Detail: `Construção Matosinhos/docs/estado.md`; registo-2026-3 2026-11-21 (13:40).
