@@ -75,6 +75,7 @@ def materiais():
     _mat("bancada", "#e9e6e1", 0.18, coat=0.3)      # quartz worktop
     _mat("microcimento", "#9d978d", 0.75)
     _mat("tecido", "#b9b1a4", 0.95, sheen=0.6)      # linen sofa
+    _mat("tecido_sofa", "#8d887f", 0.95, sheen=0.5)  # the tailored sofa: grey-beige linen
     _mat("tecido_escuro", "#58534d", 0.95, sheen=0.6)
     _mat("almofada", "#d9cbb3", 0.95, sheen=0.7)
     _mat("almofada2", "#8a6f57", 0.95, sheen=0.7)
@@ -114,6 +115,7 @@ def materiais():
             "bancada": ("marble_01", "#e9e6e1", 0.3, 1.0, {"rug": 0.15, "coat": 0.3}),
             "microcimento": ("concrete_floor_02", "#9d978d", 0.4, 0.5, {}),
             "tecido": ("rough_linen", "#b9b1a4", 0.8, 1.0, {"sheen": 0.6}),
+            "tecido_sofa": ("rough_linen", "#8d887f", 0.9, 0.7, {"sheen": 0.5}),
             "tecido_escuro": ("rough_linen", "#58534d", 0.8, 1.0, {"sheen": 0.6}),
             "almofada": ("velour_velvet", "#d9cbb3", 0.6, 1.0, {"sheen": 0.8}),
             "almofada2": ("velour_velvet", "#8a6f57", 0.6, 1.0, {"sheen": 0.8}),
@@ -391,25 +393,35 @@ class Peca:
 
 # ------------------------------------------------------------------------------------------------ the pieces
 def sofa(p, d):
-    """A deep sofa: soft base, rounded arms and back, filled seat and back cushions, two scatter cushions."""
-    L, P = d.get("larg", 2.5), d.get("prof", 0.95)
+    """A minimalist modern sofa (user 2026-11-20: the rounded one «parece demasiado fake»; «procura algo moderno ou
+    modela tu consoante uma referência mais moderna e minimalista»): low and straight, after the slim-armed sofas of
+    current Scandinavian design — a thin upholstered frame on slim black legs, straight arms the height of the back,
+    firm cushions with crisp edges (one seat cushion per place, low back cushions), one flat scatter cushion.
+    Fabric: mat (default the grey-beige linen "tecido_sofa"). A narrow one (larg ~1.1) is the single-seat «mini
+    sofá» of the same style (user 2026-11-20, in place of the armchair)."""
+    L, P = d.get("larg", 2.4), d.get("prof", 0.9)
     x0, x1, y0, y1 = -L / 2, L / 2, -P / 2, P / 2
-    tec = d.get("mat", "tecido")
-    p.caixa("metal_preto", x0 + 0.06, y0 + 0.08, 0, x1 - 0.06, y1 - 0.08, 0.06, 0.004)              # recessed plinth
-    p.macio(tec, 0, 0, 0.15, L / 2, P / 2, 0.095, e1=0.25, e2=0.08)                                 # base
+    tec = d.get("mat", "tecido_sofa")
+    pe = d.get("pes", "metal_preto")
+    h0, hs, ha, ba, bt = 0.15, 0.30, 0.66, 0.11, 0.13   # legs, frame top under the seat, arms/back top, arm width, back
+    for sx in (-1, 1):                                                                             # slim legs
+        for sy in (-1, 1):
+            p.caixa(pe, sx * (L / 2 - 0.06) - 0.012, sy * (P / 2 - 0.06) - 0.012, 0.0,
+                    sx * (L / 2 - 0.06) + 0.012, sy * (P / 2 - 0.06) + 0.012, h0, 0.003)
+    p.caixa(tec, x0, y0, h0, x1, y1, hs, 0.012, 2)                                                 # frame
     for sx in (-1, 1):                                                                             # arms
-        p.macio(tec, sx * (L / 2 - 0.085), 0.0, 0.43, 0.085, P / 2, 0.2, e1=0.4, e2=0.35, puff=0.012)
-    p.macio(tec, 0, y0 + 0.1, 0.48, L / 2 - 0.15, 0.1, 0.25, e1=0.35, e2=0.3)                       # back
-    n = max(2, round((L - 0.34) / 0.8))
-    w = (L - 0.34) / n
+        p.caixa(tec, x1 - ba if sx > 0 else x0, y0, hs - 0.01, x1 if sx > 0 else x0 + ba, y1, ha, 0.015, 3)
+    p.caixa(tec, x0 + ba - 0.005, y0, hs - 0.01, x1 - ba + 0.005, y0 + bt, ha, 0.015, 3)          # back
+    n = max(1, round((L - 2 * ba) / 0.8))
+    w = (L - 2 * ba) / n
     for i in range(n):
-        cx = x0 + 0.17 + (i + 0.5) * w
-        p.macio(tec, cx, y0 + 0.2 + (P - 0.2) / 2, 0.34, w / 2 - 0.004, (P - 0.2) / 2, 0.1,
-                e1=0.42, e2=0.18, puff=0.025)                                                      # seat cushions
-        p.macio(tec, cx, y0 + 0.28, 0.66, w / 2 - 0.01, 0.1, 0.2, e1=0.5, e2=0.3, puff=0.03, eixo="y",
-                inclinar=10)                                                                       # back cushions
-    for a_, mat, inc in ((x0 + 0.38, "almofada", 16), (x1 - 0.4, "almofada2", 12)):
-        p.travesseiro(mat, a_, y0 + 0.42, 0.66, 0.21, 0.21, 0.075, inclinar=inc)
+        cx = x0 + ba + (i + 0.5) * w
+        dy = (P - bt) / 2
+        p.caixa(tec, cx - w / 2 + 0.004, y0 + bt + 0.004, hs, cx + w / 2 - 0.004, y1 - 0.004, hs + 0.13,
+                0.022, 4)                                                                          # seat cushions
+        p.macio(tec, cx, y0 + bt + 0.07, hs + 0.13 + 0.19, w / 2 - 0.008, 0.07, 0.19,
+                e1=0.12, e2=0.06, puff=0.006, eixo="y", inclinar=6)                                # back cushions
+    p.travesseiro("almofada", x0 + ba + 0.26, y0 + bt + 0.2, hs + 0.13 + 0.2, 0.2, 0.2, 0.055, inclinar=12)
 
 
 def maple(p, d):
@@ -445,7 +457,22 @@ def mesa_centro(p, d):
 
 
 def mesa_jantar(p, d):
+    """Dining table and chairs. redonda: a round top of diameter larg on a pedestal (mat_base), the chairs around it.
+    mat (top), cadeira {estrutura, assento}: the materials, to match the room (user 2026-11-20: «a mesa e cadeiras
+    devem combinar com a envolvente»)."""
     L, P, h = d.get("larg", 1.8), d.get("prof", 0.9), 0.75
+    cd = d.get("cadeira", {})
+    if d.get("redonda"):
+        r, tampo = L / 2, d.get("mat", "carvalho")
+        p.cil(tampo, 0, 0, h - 0.035, h, r, seg=64)
+        p.cil(d.get("mat_base", "metal_preto"), 0, 0, 0.03, h - 0.035, 0.045, seg=24)
+        p.cil(d.get("mat_base", "metal_preto"), 0, 0, 0.0, 0.03, 0.26, seg=48)
+        jarra(p, {"alt": 0.28}, (0.0, 0.0, h))
+        n = d.get("cadeiras", 4)
+        for k in range(n):
+            a = math.radians(d.get("angulo0", 45) + 360 * k / n)
+            cadeira(p, cd, ((r + 0.04) * math.cos(a), (r + 0.04) * math.sin(a), 0), math.degrees(a) + 90)
+        return
     p.caixa("carvalho", -L / 2, -P / 2, h - 0.04, L / 2, P / 2, h, 0.006)
     for sx in (-1, 1):
         for sy in (-1, 1):
@@ -458,10 +485,10 @@ def mesa_jantar(p, d):
     xs = [(-L / 2 + (i + 0.5) * L / lado) for i in range(lado)]
     for sy, r in ((-1, 0), (1, 180)):
         for x in xs:
-            cadeira(p, {}, (x, sy * (P / 2 + 0.05), 0), r)
+            cadeira(p, cd, (x, sy * (P / 2 + 0.05), 0), r)
     if n > 4:
-        cadeira(p, {}, (-L / 2 - 0.08, 0, 0), -90)
-        cadeira(p, {}, (L / 2 + 0.08, 0, 0), 90)
+        cadeira(p, cd, (-L / 2 - 0.08, 0, 0), -90)
+        cadeira(p, cd, (L / 2 + 0.08, 0, 0), 90)
 
 
 def cadeira(p, d, o=(0, 0, 0), rot=0):
@@ -475,14 +502,15 @@ def cadeira(p, d, o=(0, 0, 0), rot=0):
     def cx(mat, x0, y0, z0, x1, y1, z1, b=0.0):
         a, c = P_(x0, y0, z0), P_(x1, y1, z1)
         p.caixa(mat, min(a[0], c[0]), min(a[1], c[1]), z0 + o[2], max(a[0], c[0]), max(a[1], c[1]), z1 + o[2], b)
+    est, ass = d.get("estrutura", "nogueira"), d.get("assento", "tecido_escuro")   # frame, seat (and back)
     for sx in (-1, 1):
         for sy in (-1, 1):
-            p.tubo("nogueira", P_(sx * 0.2, sy * 0.2 - 0.25, 0), P_(sx * 0.21, sy * 0.21 - 0.25, 0.45), 0.014)
-    cx("nogueira", -0.23, -0.48, 0.44, 0.23, -0.02, 0.47, 0.01)
-    cx("tecido_escuro", -0.22, -0.46, 0.47, 0.22, -0.04, 0.51, 0.015)
-    p.tubo("nogueira", P_(-0.2, -0.46, 0.47), P_(-0.21, -0.5, 0.82), 0.014)
-    p.tubo("nogueira", P_(0.2, -0.46, 0.47), P_(0.21, -0.5, 0.82), 0.014)
-    cx("nogueira", -0.22, -0.52, 0.66, 0.22, -0.47, 0.82, 0.01)
+            p.tubo(est, P_(sx * 0.2, sy * 0.2 - 0.25, 0), P_(sx * 0.21, sy * 0.21 - 0.25, 0.45), 0.014)
+    cx(est, -0.23, -0.48, 0.44, 0.23, -0.02, 0.47, 0.01)
+    cx(ass, -0.22, -0.46, 0.47, 0.22, -0.04, 0.51, 0.015)
+    p.tubo(est, P_(-0.2, -0.46, 0.47), P_(-0.21, -0.5, 0.82), 0.014)
+    p.tubo(est, P_(0.2, -0.46, 0.47), P_(0.21, -0.5, 0.82), 0.014)
+    cx(d.get("costas", est), -0.22, -0.52, 0.66, 0.22, -0.47, 0.82, 0.01)
 
 
 def tapete(p, d):

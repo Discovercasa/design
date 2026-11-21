@@ -530,3 +530,9 @@ he answers (`metodo-construtivo.md`). Condensed 2026-10-28 (history in git).
   2026-11-20.
   Update 2026-11-20 (later): the user asked for the model to look "envernizada … gloss on wood finish" (varnished,
   even tone): supports a finish coat over the Marron being expected; status unchanged (open).
+- **2026-11-20** — **status: open (not yet told).** The 3D of a hub page made outside this repo (Matosinhos, doc 112) can
+  feed our renders directly: export its three.js scene (geometry by material, the ground split by the zone painted on its
+  texture) and load it with `casa_blender.py`'s new `malhas` key (new materials `reboco`, `mosaico`, `cubos`, `lajes`).
+  This saved writing a house description by hand and keeps the page's features and the renders identical → if more pages
+  come from that source, keep its exporter in `ferramentas/pagina/` so it is repeatable. Detail: `Construção
+  Matosinhos/docs/estado.md`; registo-2026-3 2026-11-20 (evening).

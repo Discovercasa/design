@@ -20,6 +20,12 @@ in DiscoverCasa timber modules. The user's words: `conhecimento/registo-conversa
   Ask them in one message, skipping what the drawings already answer; also the stage of the obra (Ribamar is an obra
   followed for social content, `conhecimento/discovercasa.md` "Social media").
 
+## ▶ On hold (2026-11-20, user's choice)
+- Re-renders of the images and the 360° tour with the varnished Tremolo Marron cladding: «os de ribamar quero que fiquem
+  parados». Started on the office PC and stopped; nothing produced; local `casa_env.json` already carries #795936 for the
+  restart. The page's web 3D already shows the new cladding (hub doc 118); its images and 360° still show the earlier,
+  more orange cladding.
+
 ## "Casa CL" = Ribamar's modules (found 2026-11-19 — ours, to confirm)
 - The 4 module sheets of the hub's «Ribamar Módulos» are byte-identical to the 4 PDFs the user sent on 2026-09-30 ("it is
   a different house" — i.e. not Sobral), filed as "Casa CL" and cited as "Casa CL" in the rulebook and in

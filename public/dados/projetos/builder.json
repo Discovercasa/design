@@ -6,7 +6,7 @@
   "descricao": "Assim que um cliente tem o projeto de arquitetura, a casa fica pronta no Builder: lê as plantas (DWFx ou PDF), monta a estrutura de madeira em módulos sobre a fundação de betão, acrescenta as camadas (OSB, membrana, isolamento, acabamentos, cobertura) e tira as quantidades. É aqui que vive o livro de regras do método Discovercasa.",
   "fase": "Em desenvolvimento",
   "situacao": {
-    "dia": "2026-11-20",
+    "dia": "2026-11-21",
     "feito": [
       "Torres Vedras modelada a partir da arquitetura.",
       "Verificação das madeiras sem Blender (choques, peças fora do sítio).",
@@ -14,7 +14,8 @@
       "Página da Casa Ribamar completa para os testes finais (aba Páginas, 18/11): casa mobilada, visita 360° com 11 pontos como modo do 3D (a casa vista de fora, entrar num ponto e andar de divisão em divisão), 10 imagens e panoramas na qualidade máxima feitos no PC de casa (RTX 2060), plantas por piso, Como construímos.",
       "Aba Páginas por obra (19/11): um colapsável por casa — Ribamar (3 versões), Porto Dinheiro, Espinho e Matosinhos (habitação bifamiliar em Guifões); quem edita cria obras, carrega páginas dentro de cada uma e muda uma página de obra.",
       "Casa Ribamar, versão de 20/11: forro Tremolo com as tábuas anteriores na cor das obras, sem a faixa escura nas junções entre pisos, e as 7 panorâmicas da visita onde se vê o forro refeitas.",
-      "Casa Ribamar, 4.ª versão de 20/11: forro Tremolo na cor Marron do catálogo Piveteaubois (p. 29), num só tom e envernizado (reflexo do verniz no 3D), com o perfil da tábua; as imagens e a visita 360° ainda têm o forro anterior."
+      "Casa Ribamar, 4.ª versão de 20/11: forro Tremolo na cor Marron do catálogo Piveteaubois (p. 29), num só tom e envernizado (reflexo do verniz no 3D), com o perfil da tábua; as imagens e a visita 360° ainda têm o forro anterior.",
+      "Matosinhos (habitação bifamiliar em Guifões), 21/11: página do cliente que mantém inteiro o 3D da página anterior do hub (pisos, sol, paredes em corte, portas, estores, eletricidade, vistas, passeio virtual, PT/EN) e junta 7 imagens, visita 360° com 6 pontos, pisos e áreas e materiais; fração A T4 e B T2, caixilharia RAL 7016, cobertura em painel sandwich, ETICS com ripado nos pormenores; renders no PC do escritório."
     ],
     "agora": [
       "Testes finais da página de Ribamar (tarefas «Página do cliente num ficheiro HTML» e «Visita virtual 360°» à espera de aprovação). A seguir: a aplicação no hub que gera a página a partir dos desenhos e a leitura de qualquer planta.",

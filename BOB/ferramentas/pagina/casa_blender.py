@@ -35,6 +35,13 @@ casa.json (local metres, x/y on the plan, z up from the reference floor; see ger
             arvores [[x, y, z, variante 0-8, altura, rotacao]], mar {z, raio, curvatura}, neblina {distancia}}:
             hipped tile roofs, rendered walls with windows, trees as instances, the sea following the earth's curve,
             far things fade into the sky's own colour (aerial perspective)
+  malhas    {geo, bin, mapa {batch name: material}, omitir [names]}   meshes exported from another 3D viewer (a
+            three.js page: see the project's exportar.js). geo.json lists batches {nome, grupo, v0, nv, i0, ni, cor, rug,
+            metal, opac, suave}; geo.bin = float32 xyz (nv*3) then uint32 triangle indices (ni, each batch's own
+            numbering from 0), local metres, z up.
+            A batch's material: mapa[nome] = a MATS name, "#hex:rug:metal" (a plain one) or "vidro:rug"; else one
+            from the batch's own colour (glass when opac < 1). Batches on "relva"/"relva_fora" get the hair grass
+            in the renders; the ground batches (grupo "terreno") cast no shadow, like the terrain grid.
   rodar_graus   rotation of the whole model about z (plan frame -> north up)
   sol       {azimute (deg from north, clockwise), elevacao}
 Output: casa.glb (web, textures 1024 px JPEG, groups in extras), casa.blend, render_<vista>.jpg (Cycles), texturas/.
@@ -210,7 +217,8 @@ def imagem(nome, arr, nao_cor=False):
 
 COR = {"ripado": "#795936", "deck": "#8f6c4c", "soalho": "#c09e78", "interior": "#eeebe4", "betao": "#a6a39c",
        "painel": "#45322e", "metal": "#383e42", "pedra": "#c8b68f", "relva": "#6f7d3a", "relva_fora": "#66733a",
-       "asfalto": "#3a3a3a", "berma": "#56703a", "brita": "#a49d90", "porta_garagem": "#795936", "tecido": "#9c968c", "toros": "#9a7a55"}
+       "asfalto": "#3a3a3a", "berma": "#56703a", "brita": "#a49d90", "porta_garagem": "#795936", "tecido": "#9c968c", "toros": "#9a7a55",
+       "reboco": "#f1efe9", "mosaico": "#b8b4ab", "cubos": "#8e8b85", "lajes": "#a8a49b"}
 COR.update(E.get("materiais_cor", {}))
 TILE = {"berma": 3.0, "ripado": 1.08, "deck": 1.4, "soalho": 1.8, "betao": 2.4, "painel": 1.0, "relva": 3.0, "relva_fora": 3.0,
         "asfalto": 3.0, "brita": 1.5, "pedra": 1.2, "porta_garagem": 1.2, "interior": 2.0, "metal": 1.0,
@@ -343,7 +351,12 @@ FOTO = {"soalho": ("oak_wood_planks", 0.6, 1.0, {}),
         "relva": ("leafy_grass", 0.8, 1.0, {}), "relva_fora": ("leafy_grass", 0.8, 1.0, {}),
         "berma": ("leafy_grass", 0.8, 1.0, {}),
         "brita": ("gravel_floor_02", 1.0, 1.0, {}), "asfalto": ("asphalt_02", 0.8, 1.0, {}),
-        "pedra": ("marble_01", 0.3, 1.0, {"rug": 0.25, "coat": 0.2})}
+        "pedra": ("marble_01", 0.3, 1.0, {"rug": 0.25, "coat": 0.2}),
+        # rendered walls (ETICS look), tiled terraces, pavers and slabs (2026-11-20, first used by Matosinhos)
+        "reboco": ("painted_plaster_wall", 0.25, 1.0, {"rug": 0.9, "contraste": 0.25}),
+        "mosaico": ("large_grey_tiles", 0.5, 1.0, {"rug": 0.5}),
+        "cubos": ("concrete_pavers_02", 0.8, 1.0, {}),
+        "lajes": ("large_grey_tiles", 0.5, 1.4, {"rug": 0.7})}
 
 
 def criar_materiais():
@@ -357,6 +370,9 @@ def criar_materiais():
         TILE["interior"] = 2.0
     MATS["metal"] = mat_simples("metal", COR["metal"], 0.38, 0.6)
     MATS["tecido"] = mat_simples("tecido", COR["tecido"], 0.95)
+    for nome, rug in (("reboco", 0.9), ("mosaico", 0.5), ("cubos", 0.85), ("lajes", 0.75)):     # without the photos
+        MATS[nome] = mat_simples(nome, COR[nome], rug)
+        TILE.setdefault(nome, 1.0)
     # CC0 photo textures (ativos.py): the photo's detail in the house's colours; TILE = the photo's real size
     for nome, (aid, forca, esc, extra) in FOTO.items():
         if COM_ATIVOS and ativos.tem(aid):
@@ -679,6 +695,78 @@ def construir_extras():
             ligar(bpy.data.objects.new(f"rede{k}", me), t.get("grupo", "envolvente"))
 
 
+MALHAS_RELVA = []      # (object, "relva" | "relva_fora"): hair grass in the renders
+MALHAS_CHAO = []       # ground batches: no shadow cast (like the terrain grid)
+GRUPO_MALHA = {"p1": "piso1", "p2": "piso2", "rf": "cobertura", "site": "exterior", "terreno": "terreno"}
+
+
+def _mat_malha(L, alvo):
+    if alvo in MATS:
+        return MATS[alvo]
+    chave = "malha_" + (alvo or L["nome"])
+    if chave in MATS:
+        return MATS[chave]
+    if alvo and alvo.startswith("vidro"):
+        rug = float(alvo.split(":")[1]) if ":" in alvo else 0.05
+        MATS[chave] = mat_vidro(chave, rug)
+    elif alvo and alvo.startswith("#"):
+        p = alvo.split(":") + ["0.8", "0.0"]
+        MATS[chave] = mat_simples(chave, p[0], float(p[1]), float(p[2]))
+    elif L.get("opac", 1) < 1:
+        MATS[chave] = mat_vidro(chave, 0.05)
+    else:
+        MATS[chave] = mat_simples(chave, L.get("cor") or "#cccccc", float(L.get("rug") or 0.8),
+                                  float(L.get("metal") or 0.0))
+    return MATS[chave]
+
+
+def construir_malhas():
+    D = E.get("malhas")
+    if not D:
+        return
+    pasta = os.path.dirname(ESPEC)
+    cab = json.load(open(os.path.join(pasta, D["geo"]), encoding="utf-8"))
+    raw = np.fromfile(os.path.join(pasta, D["bin"]), dtype=np.uint8)
+    nv, ni = cab["nv"], cab["ni"]
+    P = raw[:nv * 12].view(np.float32).reshape(-1, 3)
+    I = raw[nv * 12:nv * 12 + ni * 4].view(np.uint32)
+    mapa, omitir = D.get("mapa", {}), set(D.get("omitir", []))
+    for k, L in enumerate(cab["lotes"]):
+        if L["nome"] in omitir or not L["ni"]:
+            continue
+        v = P[L["v0"]:L["v0"] + L["nv"]]
+        f = I[L["i0"]:L["i0"] + L["ni"]].astype(np.int64).reshape(-1, 3)      # indices local to the batch
+        f = f[(f[:, 0] != f[:, 1]) & (f[:, 1] != f[:, 2]) & (f[:, 0] != f[:, 2])]   # cones' poles: degenerate
+        if not len(f):
+            continue
+        nome = f"m{k}_{L['nome']}_{L['grupo']}"
+        me = bpy.data.meshes.new(nome)
+        me.from_pydata(v.tolist(), [], f.tolist())
+        me.validate()
+        me.update()
+        bm = bmesh.new()             # three.js duplicates the corners per face: weld them (smooth shading, grass)
+        bm.from_mesh(me)
+        bmesh.ops.remove_doubles(bm, verts=bm.verts, dist=1e-4)
+        if L.get("suave"):
+            for e in bm.edges:
+                if len(e.link_faces) == 2 and e.calc_face_angle(0) > math.radians(40):
+                    e.smooth = False
+        bm.to_mesh(me)
+        bm.free()
+        alvo = mapa.get(L["nome"])
+        me.materials.append(_mat_malha(L, alvo))
+        if L.get("suave"):
+            me.polygons.foreach_set("use_smooth", [True] * len(me.polygons))
+        ob = ligar(bpy.data.objects.new(nome, me), GRUPO_MALHA.get(L["grupo"], L["grupo"]))
+        if L.get("suave"):
+            ob["suave"] = True
+        if L["grupo"] == "terreno":
+            MALHAS_CHAO.append(ob)
+        if alvo in ("relva", "relva_fora"):
+            MALHAS_RELVA.append((ob, alvo))
+    print("malhas:", len(cab["lotes"]), "lotes,", nv, "vértices")
+
+
 ARVORES = []
 
 
@@ -847,17 +935,21 @@ def construir_terreno():
     return ligar(bpy.data.objects.new("terreno", me), "terreno")
 
 
-def relva_cycles(terreno, nome="relva", densidade=900, raio=None):
-    """Hair grass on the meadow faces (render only, never exported)."""
-    T = E["terreno"]
-    if nome not in T["mats"]:
-        return None
-    k = T["mats"].index(nome)
+def relva_cycles(terreno, nome="relva", densidade=900, raio=None, inteiro=False):
+    """Hair grass on the meadow faces (render only, never exported). inteiro: every face of the object (a ground
+    batch from "malhas", one material)."""
+    if inteiro:
+        k = None
+    else:
+        T = E["terreno"]
+        if nome not in T["mats"]:
+            return None
+        k = T["mats"].index(nome)
     cx, cy = E.get("centro", [0, 0])
     me = terreno.data.copy()
     bm = bmesh.new()
     bm.from_mesh(me)
-    fora = [f for f in bm.faces if f.material_index != k
+    fora = [f for f in bm.faces if (k is not None and f.material_index != k)
             or (raio and math.hypot(f.calc_center_median().x - cx, f.calc_center_median().y - cy) > raio)]
     bmesh.ops.delete(bm, geom=fora, context="FACES")
     bm.to_mesh(me)
@@ -1905,6 +1997,7 @@ criar_materiais()
 construir_solidos()
 construir_vaos()
 construir_extras()
+construir_malhas()
 if E.get("interior"):
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
     import interior  # noqa: E402
@@ -1956,10 +2049,17 @@ if not OPC.get("sem-glb"):
 
 if OPC["render"]:
     # the ground casts no shadow: grass roots sit on it and half the triangles shaded them (patches); it still receives
-    terreno.visible_shadow = False
+    if terreno:
+        terreno.visible_shadow = False
+    for ob in MALHAS_CHAO:
+        ob.visible_shadow = False
     if not OPC.get("sem-relva"):
-        relva_cycles(terreno, "relva", 1200)
-        relva_cycles(terreno, "relva_fora", 320, raio=34)
+        if terreno:
+            relva_cycles(terreno, "relva", 1200)
+            relva_cycles(terreno, "relva_fora", 320, raio=34)
+        for ob, nome in MALHAS_RELVA:
+            relva_cycles(ob, nome, 1200 if nome == "relva" else 320, raio=None if nome == "relva" else 34,
+                         inteiro=True)
     folhas_cycles()
     for ob in CARTAS:
         ob.hide_render = True

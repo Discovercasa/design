@@ -14,6 +14,9 @@ uses its GPU**. The first station is the user's home PC (below); Sebastião's PC
 The setup below is the same on every station.
 
 ## Station 1: the user's home PC
+2026-11-21: the home station was checked and cleaned with the user (not related to our work) and verified with a Defender
+offline scan; usable again.
+
 Inventory 2026-11-07 (script output); GPU confirmed by the user 2026-11-13 («sim é uma RTX 2060»):
 Ryzen 9 5900X (12 cores) · 32 GB DDR4-3200 · **RTX 2060 6 GB** (Turing: Cycles uses OptiX) · SATA SSDs, one with
 ~200 GB free (2026-11-13) · no NVMe yet (2 TB planned before the Unreal phase). Already there (user): Blender
@@ -73,6 +76,10 @@ wants this work on that PC (2026-11-13), which implies it may hold client files 
   «podes correr os renders no PC de casa na RTX2060» → full pages render on this station, driven over SSH from the
   office session (tools from `git pull`, the house's casa*.json copied by scp into `D:\BOB-posto\<obra>\`, results
   copied back; the client data stays local, never in Git). The office GTX 1050 Ti is for quick previews.
+- **Matosinhos renders on the office PC (user 2026-11-20):** «faças os renders deste novo projeto no pc da empresa»
+  (correcting a first reading that took them for Ribamar's; Ribamar's stay on hold). Office card GTX 1050 Ti, CUDA.
+  Measured there: an 800×500 preview at 32 samples ≈ 40–55 s per view; a 2048×1024 panorama at 32 samples ≈ 4 min.
+  Finals: images 1800×1125 at 96 samples, panoramas 3072×1536 at 64 (chosen by Claude to fit one night on that card).
 - **CC0 assets (user 2026-11-18: «Sim, podes»):** photo textures and models from Poly Haven (public domain), fetched by
   `ferramentas/pagina/descarregar_ativos.py` (manifest with source, licence, size) into `_trabalho/assets/polyhaven`
   (office) and copied to `D:\BOB-posto\assets` (station); renders run with `--ativos D:\BOB-posto\assets`. Never in Git.

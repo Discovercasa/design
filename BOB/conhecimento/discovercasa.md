@@ -106,6 +106,16 @@ Why Claude learns the method; "vamos passo a passo" — an overall idea, then an
    inteiro» fills the window where the browser refuses full screen; room names step aside from the tour's points in the
    plans. No added vegetation (point 9 ignored). The critique's other suggestion: test the page with people who get no
    explanation (onboarding?) — open.
+   **Interiors when a 3D page already exists (user 2026-11-20, Matosinhos):** «quero que faças os interiores tal como
+   estão na página... a cozinha da fração A deve ser como está na página / O resto dos interiores que não está presente
+   na página faz como as plantas do projeto» — the renders use the hub page's interiors (kitchens, bathrooms, wardrobes) as
+   they are; the rest of the furniture follows the architect's plans (positions, round tables, armchairs on balconies).
+   Style: modern and minimalist — the rounded procedural sofa was «demasiado fake», classic CC0 sofas (chesterfield,
+   tufted chair from Poly Haven) «terríveis»; «a mesa e cadeiras devem combinar com a envolvente» (oak like the floor,
+   black like the window frames); the armchair beside the sofa becomes a one-seat «mini sofá» of the same style.
+   Implemented in `ferramentas/pagina/interior.py`: sofa redesigned (straight, slim arms, crisp cushions, slim black legs,
+   linen `tecido_sofa`); `larg` ~1.1 gives the one-seat sofa; `mesa_jantar` gained `redonda`, `mat`, `mat_base` and chair
+   materials `cadeira {estrutura, assento, costas}`. (Earlier sofa/bed critique: 2026-11-18, registo.)
    **Real exterior always (2026-11-13):** "o exterior não deve estar só presente na tour 360 mas sim sempre em todos os
    projetos a não ser que seja mencionado que não queremos" — the surroundings are in the 3D, the images and the tour
    of every house unless told otherwise. Render stations: any PC (first the home PC, RTX 2060 6 GB — user confirmed,

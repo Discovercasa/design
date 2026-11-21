@@ -900,3 +900,80 @@ The team's notes on hub task 84 (written in the hub by [membro da equipa] on 202
 - Filed in: `conhecimento/sistema-construtivo.md` §3.A → "Model texture" note updated (even tone, varnished look, base
   #795936 + VERNIZ, measured ≈ #856f51), linked to the OPEN finish point (wax nº 55 + Velatura Nogueira), not decided;
   `conhecimento/insights.md` → one line on the 2026-11-20 insight (status open).
+
+### 2026-11-20 (evening) — Client page for the Matosinhos project; renders on the office PC [Matosinhos, renders]
+> corre no pc da empresa os renders agora, faz uma página de cliente para o projeto de matosinhos que esta no hub e tens aqui o ficheiro para veres os detalhes
+- Context: attached the licensing drawing set `Matosinhos_T3.dwfx` (16 sheets; local only, not in Git). The hub already had
+  a 3D page of the project (obra Matosinhos, «Habitação bifamiliar · Guifões — modelo 3D», hub doc 112, made outside this repo).
+- Filed in: `Construção Matosinhos/` (new: `CLAUDE.md`, `docs/estado.md` → status and open questions, `docs/desenhos.md` →
+  facts from the drawings); `conhecimento/posto-render.md` → office-PC renders (2026-11-20).
+
+### 2026-11-20 (evening) — Correction: the renders are the new project's, on the office PC [Matosinhos, renders]
+> não, quero que faças os renders deste novo projeto no pc da empresa
+- Context: correction of the previous message: the renders asked for are Matosinhos' (not Ribamar's), on the office PC.
+- Filed in: `conhecimento/posto-render.md` → "Matosinhos renders on the office PC (2026-11-20)" (quote, timings, finals);
+  `Construção Matosinhos/docs/estado.md` → renders running overnight.
+
+### 2026-11-20 (evening) — Ribamar renders on hold [Ribamar, renders]
+> os de ribamar quero que fiquem parados
+- Context: Claude had started the Ribamar re-renders (varnished Tremolo cladding) on the office PC and stopped them; nothing
+  was produced. `casa_env.json` locally now carries the new cladding colour #795936 for when they resume.
+- Filed in: `Construção Ribamar/docs/estado.md` → "▶ On hold (2026-11-20)".
+
+### 2026-11-20 (evening) — Matosinhos page must keep every feature of the hub's 3D page [Matosinhos, Builder]
+> esqueci-me de dizer mantem as features que estão na página que esta disponivel no hub
+- Context: the hub page (doc 112, rev7) has: storeys, sun hour/season, walls whole/cut, doors and windows open/closed,
+  shutters, electrical layout, surroundings on/off, views Geral/Da rua/Tardoz/De cima/Pessoa (walk mode)/Caixilharias
+  (window tour)/Rodar, levels panel, PT/EN switch, full screen. Claude kept that page whole and added Cycles images, a 360°
+  tour, a table of floors and areas and a materials list.
+- Filed in: `Construção Matosinhos/docs/estado.md` → requirement «keep the features» with the list;
+  `conhecimento/insights.md` → 2026-11-20 insight (hub page's 3D feeds our renders).
+
+### 2026-11-20 (late evening) — Answers to the five open points of Matosinhos [Matosinhos]
+> 1. T4
+> 2. RAL 7016 como no HUB
+> 3. painel sandwich
+> 4. as que estão com revestimento com ripado na página levam ripado mas são apenas aqueles detalhes que estão lá, a maioria é etics
+> 5. sim exatamente
+- Context: answers to the five numbered open questions in `Construção Matosinhos/docs/estado.md`. (1) typology of fração A;
+  (2) window colour; (3) roof finish; (4) façade: ETICS vs ripado; (5) shutters on windows only, never doors (company rule).
+  Reading (caller): 1 fração A = T4, fração B stays T2 (the hub page's labels were right, the file name "Matosinhos_T3" was not);
+  2 aluminium RAL 7016, not the architect's white PVC; 3 sandwich-panel roof, not gravel flat roof; 4 mostly ETICS, ripado only
+  on the details the hub page shows with it (slatted screens at the Piso 1 entrances, soffits under the balconies, high band at
+  fração B's north end) — a project-specific exception to «o capoto tem que ficar na casa toda» (user 2026-10-28), decided for
+  this house; 5 estores on windows only, never on doors.
+- Filed in: `Construção Matosinhos/docs/estado.md` → open questions closed, decision log 2026-11-20; `docs/desenhos.md` →
+  "Decisions that override the architect's notes" (cross-reference); nothing in the rulebook (rules 2, 5 and the capoto
+  exception are already covered or project-specific).
+
+### 2026-11-20 (late night) — Interiors as on the hub page, rest as the plans [Matosinhos, renders]
+> quero que faças os interiores tal como estão na página... a cozinha da fração A deve ser como está na página
+> O resto dos interiores que não está presente na página faz como as plantas do projeto
+- Context: instruction for the Matosinhos renders (hub page's interiors vs architect's plans).
+- Filed in: `conhecimento/discovercasa.md` → client page, «Interiors when a 3D page already exists» (rule);
+  `Construção Matosinhos/docs/estado.md` → Delivered 2026-11-21.
+
+### 2026-11-20 (late night) — The sofa is too fake [Matosinhos, renders]
+> ok perfeito essa é a cozinha, esse sofá parece demasiado fake
+- Context: after seeing the kitchen of fração A in the hub page's walk mode and a render with the old rounded sofa.
+- Filed in: `conhecimento/discovercasa.md` → same section (style: modern, minimalist; sofa redesigned in `interior.py`).
+
+### 2026-11-20 (late night) — Table and chairs match the surroundings [Matosinhos, renders]
+> e a mesa e cadeiras devem combinar com a envolvente
+- Context: dining furniture of the same renders.
+- Filed in: `conhecimento/discovercasa.md` → same section (oak like the floor, black like the frames; `mesa_jantar` options).
+
+### 2026-11-21 (early) — Poly Haven sofas rejected; modern, minimalist reference [Matosinhos, renders]
+> esses sofás que mandaste foto também são terriveis... procura algo moderno ou modela tu consoante uma referência mais moderna e minimalista
+- Context: the photos were two Poly Haven CC0 pieces, a chesterfield and a tufted dining chair; not used.
+- Filed in: `conhecimento/discovercasa.md` → same section (sofa modelled in-house, minimalist).
+
+### 2026-11-21 (early) — New sofa approved; armchair becomes a mini sofa [Matosinhos, renders]
+> serve mas ajusta a cadeira de lado para um mini sofá do mesmo estilo
+- Context: approval of the new minimalist sofa; the armchair beside it becomes a one-seat sofa of the same style.
+- Filed in: `conhecimento/discovercasa.md` → same section (`larg` ~1.1 gives the one-seat sofa).
+
+### 2026-11-21 (early) — Questions on render time and page status; home station exchanges [Matosinhos, stations]
+> quanto tempo para os renders? / estado da nossa página? / precisas deste PC ligado? / do PC de casa?
+- Context: status questions; no facts. Separately, the home station was checked and cleaned with the user and verified with a Defender offline scan (one neutral line, no details).
+- Filed in: `conhecimento/posto-render.md` → Station 1 (2026-11-21 line); `Construção Matosinhos/docs/estado.md` → Delivered 2026-11-21 (page, timings).
