@@ -32,23 +32,24 @@ test('sem sessão mostra a entrada com a conta do Hub', async ({ page }) => {
 test('Início: barra de navegação, projetos, ligações, decisões e feito', async ({ page }) => {
   const erros = await abrir(page);
   const nav = page.getByRole('navigation', { name: 'Secções' });
-  await expect(nav.getByRole('link')).toHaveText(['Início', 'Gerador de documentos', 'Builder', 'Orçamentação', 'Build Your House', 'Step Inside', 'Materiais', 'Redes sociais']);
+  await expect(nav.getByRole('link')).toHaveText(['Início', 'Gerador de documentos', 'Builder', 'Build Your House', 'Step Inside', 'Páginas', 'Redes sociais']);
   await expect(nav.getByRole('link', { name: 'Início' })).toHaveAttribute('aria-current', 'page');
   await expect(page.getByRole('heading', { level: 1 })).toContainText('Teste');
   const linhas = page.locator('.projeto-linha');
   await expect(linhas).toHaveCount(5);
   await expect(linhas.nth(0)).toContainText('Gerador de documentos');
-  await expect(linhas.nth(3)).toContainText('Protótipo publicado');
-  await expect(linhas.nth(3)).toContainText('3 de 15 checkpoints');
-  await expect(linhas.nth(3)).toContainText('Respostas pendentes');
-  await expect(linhas.nth(4)).toContainText('Step Inside');
-  await expect(linhas.nth(4)).toContainText('0 de 10 checkpoints');
+  await expect(linhas.nth(2)).toContainText('Protótipo publicado');
+  await expect(linhas.nth(2)).toContainText('3 de 15 checkpoints');
+  await expect(linhas.nth(2)).toContainText('Respostas pendentes');
+  await expect(linhas.nth(3)).toContainText('Step Inside');
+  await expect(linhas.nth(3)).toContainText('0 de 10 checkpoints');
+  await expect(linhas.nth(4)).toContainText('Páginas');
   await expect(page.getByRole('heading', { name: 'Como os projetos se ligam' })).toBeVisible();
   await expect(page.locator('.nota').first()).toContainText('Cada aplicação funciona sozinha');
-  await expect(page.locator('.ligacao')).toHaveCount(10);
+  await expect(page.locator('.ligacao')).toHaveCount(11);
   await expect(page.locator('#decisoes-abertas .decisao-pill')).toHaveCount(13);
   // agrupadas por projeto, pela ordem das abas
-  await expect(page.locator('#decisoes-abertas .decisoes-projeto-nome')).toHaveText([/Builder\s*1/, /Orçamentação\s*1/, /Build Your House\s*5/, /Step Inside\s*6/]);
+  await expect(page.locator('#decisoes-abertas .decisoes-projeto-nome')).toHaveText([/Gerador de documentos\s*1/, /Builder\s*1/, /Build Your House\s*5/, /Step Inside\s*6/]);   // the Orçamentação's is the Gerador's (0027)
   await expect(page.locator('.tempo li').first()).toContainText('2026');
   for (const b of ['Sugestões', 'Notificações', 'Perfil']) await expect(page.getByRole('button', { name: b })).toBeVisible();
   await captura(page, 'inicio');
@@ -142,11 +143,11 @@ test('checkpoints e tarefas: acrescentar no Início e no projeto, concluir com a
   await abrir(page);
   await page.getByRole('button', { name: /Acrescentar checkpoint ou tarefa/ }).click();
   const dlg = page.locator('#dlg');
-  await dlg.getByLabel('Projeto').selectOption('orcamentacao');
+  await dlg.getByLabel('Projeto').selectOption('gerador');
   await dlg.getByLabel('Título').fill('Comparar dois fornecedores de OSB');
   await dlg.getByRole('button', { name: 'Acrescentar', exact: true }).click();
   await expect(dlg).toBeHidden();
-  await page.getByRole('navigation', { name: 'Secções' }).getByRole('link', { name: 'Orçamentação' }).click();
+  await page.getByRole('navigation', { name: 'Secções' }).getByRole('link', { name: 'Gerador de documentos' }).click();
   const passo = page.locator('.passo', { hasText: 'Comparar dois fornecedores de OSB' });
   await passo.locator('.passo-topo').click();
   await passo.getByLabel('Nova tarefa neste checkpoint').fill('Pedir preço ao fornecedor A');
@@ -264,8 +265,8 @@ test('perfil: área pessoal, definições (nome, tema), novidades e sair', async
   await captura(page, 'inicio-escuro');
   await page.getByRole('button', { name: 'Perfil' }).click();
   await page.locator('#pop-perfil').getByRole('menuitem', { name: /Novidades/ }).click();
-  await expect(page.locator('.novidade').first()).toContainText('Builder: a aba Páginas');
-  await expect(page.locator('.novidade').nth(1)).toContainText('Tarefas para ti: também as que te marcaram');
+  await expect(page.locator('.novidade').first()).toContainText('A barra segue os projetos');
+  await expect(page.locator('.novidade').nth(1)).toContainText('Builder: as páginas por obra');
   await page.getByRole('button', { name: 'Perfil' }).click();
   await page.locator('#pop-perfil').getByRole('menuitem', { name: 'Sair' }).click();
   await expect(page.getByRole('button', { name: 'Entrar com a conta do Hub' })).toBeVisible();
@@ -291,7 +292,7 @@ test('sem as tabelas novas: aviso claro e o resto do hub funciona', async ({ pag
 
 test('sem deslocamento horizontal e páginas a caber no ecrã', async ({ page }) => {
   await abrir(page);
-  for (const rota of ['/#/', '/#/projeto/step-inside', '/#/projeto/builder', '/#/projeto/gerador', '/#/projeto/orcamentacao', '/#/projeto/build-your-house', '/#/pessoal', '/#/definicoes', '/#/novidades', '/#/social', '/#/social/obras']) {
+  for (const rota of ['/#/', '/#/projeto/step-inside', '/#/projeto/builder', '/#/projeto/gerador', '/#/projeto/gerador/orcamentacao', '/#/projeto/gerador/materiais', '/#/projeto/paginas', '/#/projeto/build-your-house', '/#/pessoal', '/#/definicoes', '/#/novidades', '/#/social', '/#/social/obras']) {
     await page.goto(rota);
     await page.waitForTimeout(150);
     // innerWidth cresce no telemóvel quando algo é largo demais: compara com a largura real do ecrã
@@ -304,10 +305,10 @@ test('sem deslocamento horizontal e páginas a caber no ecrã', async ({ page })
 test('logótipo: volta ao Início e atualiza o hub', async ({ page }) => {
   await abrir(page, { rota: '/#/projeto/step-inside' });
   await expect(page.locator('.projeto-linha')).toHaveCount(0);
-  await db(page, () => window.__fake.comoOutro((x) => x.checkpoints.insert({ projeto: 'orcamentacao', titulo: 'Escolher o software de faturação', ordem: 4 })));
+  await db(page, () => window.__fake.comoOutro((x) => x.checkpoints.insert({ projeto: 'paginas', titulo: 'Escolher o software de faturação', ordem: 1 })));
   await page.getByRole('link', { name: /Discovercasa Design/ }).click();
   await expect(page).toHaveURL(/#\/$/);
-  await expect(page.locator('.projeto-linha').nth(2)).toContainText('0 de 4 checkpoints');   // dado novo, sem recarregar a página
+  await expect(page.locator('.projeto-linha').nth(4)).toContainText('0 de 1 checkpoints');   // dado novo, sem recarregar a página
   await expect(page.locator('.aviso', { hasText: 'acrescentou o checkpoint' })).toContainText('Escolher o software de faturação');
   // já no Início: clicar outra vez também atualiza
   await db(page, () => window.__fake.comoOutro((x) => x.tarefas.update({ estado: 'concluida' }).eq('id', 36)));
@@ -349,7 +350,7 @@ test('projeto: acrescentar tarefa e checkpoint na posição escolhida; mover um 
   await expect(page.locator('.passo.em_curso .tarefa', { hasText: 'Pedir a revisão por email' })).toBeVisible();
   // checkpoint na posição 2
   await page.locator('#vista').getByRole('button', { name: 'Checkpoint', exact: true }).click();
-  await expect(dlg.getByLabel('Posição no workflow')).toHaveValue('6');           // por defeito no fim (5 + 1)
+  await expect(dlg.getByLabel('Posição no workflow').locator('option:checked')).toHaveText('6 · no fim');   // por defeito no fim (5 + 1; a aba Orçamentação conta à parte)
   await dlg.getByLabel('Posição no workflow').selectOption('2');
   await dlg.getByLabel('Título').fill('Ler plantas de dois pisos');
   await dlg.getByRole('button', { name: 'Acrescentar', exact: true }).click();
@@ -363,7 +364,7 @@ test('projeto: acrescentar tarefa e checkpoint na posição escolhida; mover um 
   await dlg.getByLabel('Posição no workflow').selectOption('1');
   await dlg.getByRole('button', { name: 'Guardar' }).click();
   await expect(page.locator('.passo').nth(0)).toContainText('Mais formatos de entrada');
-  const ordens = await db(page, () => window.__fake.db.checkpoints.filter((c) => c.projeto === 'gerador').sort((a, b) => a.ordem - b.ordem).map((c) => c.ordem));
+  const ordens = await db(page, () => window.__fake.db.checkpoints.filter((c) => c.projeto === 'gerador' && !c.aba).sort((a, b) => a.ordem - b.ordem).map((c) => c.ordem));
   expect(ordens).toEqual([1, 2, 3, 4, 5, 6]);
 });
 
@@ -430,7 +431,7 @@ test('em direto: o que outra pessoa muda aparece sem recarregar, em todos os sí
   // e no Início também
   await page.getByRole('link', { name: 'Início', exact: true }).click();
   await db(page, () => window.__fake.comoOutro((x) => x.checkpoints.update({ estado: 'concluido' }).eq('id', 4)));
-  await expect(page.locator('.projeto-linha').nth(3)).toContainText('4 de 15 checkpoints');
+  await expect(page.locator('.projeto-linha').nth(2)).toContainText('4 de 15 checkpoints');
   await expect(page.locator('#contador')).not.toBeHidden();
 });
 
@@ -499,8 +500,8 @@ const MATERIAIS = {
 
 test('Materiais: aba só de consulta — preço por fornecedor, histórico, filtros, CSV e o bloco dos projetos', async ({ page }) => {
   await page.addInitScript((m) => { window.__FIXTURE_MATERIAIS = m; }, MATERIAIS);
-  const erros = await abrir(page, { rota: '/#/materiais' });
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Materiais e preços');
+  const erros = await abrir(page, { rota: '/#/projeto/gerador/materiais' });
+  await expect(page.getByRole('heading', { name: 'Materiais e preços' })).toBeVisible();   // a tab of the Gerador (0027)
   await expect(page.locator('.cabeca-pagina')).toContainText('3 materiais');
   await expect(page.locator('.cabeca-pagina')).toContainText('2 fornecedores');
   await expect(page.locator('.mat-cat')).toHaveText([/Isolamentos\s*1/, /Placas\s*2/]);
@@ -534,14 +535,14 @@ test('Materiais: aba só de consulta — preço por fornecedor, histórico, filt
   expect(csv).toContain('OSB 3 12 mm;Placas;Painel;Madeiras do Norte;OSB/3 2500x1250x12;2500 x 1250 x 12;20;placa;10;18;23');
   expect(csv.trim().split('\r\n')).toHaveLength(1 + 3 + 1);   // header, 3 prices, Pladur without a price
   // a deep link opens the material
-  await page.goto(`/#/materiais/m-${A2}`);
+  await page.goto(`/#/materiais/m-${A2}`);   // the old address still opens it, in the Gerador's tab
   await expect(page.locator(`#m-${A2} details`)).toHaveAttribute('open', '');
   // the projects that use the list say what for and link to it
-  await page.goto('/#/projeto/orcamentacao/sobre');
+  await page.goto('/#/projeto/gerador/orcamentacao');
   const bloco = page.locator('.bloco-materiais');
   await expect(bloco).toContainText('Materiais do Hub');
   await expect(bloco).toContainText('3 materiais · 2 fornecedores');
-  await expect(bloco.getByRole('link', { name: 'Materiais e preços' })).toHaveAttribute('href', '#/materiais');
+  await expect(bloco.getByRole('link', { name: 'Materiais e preços' })).toHaveAttribute('href', '#/projeto/gerador/materiais');
   await page.goto('/#/projeto/builder/sobre');
   await expect(page.locator('.organizacao')).toBeVisible();
   await expect(page.locator('.bloco-materiais')).toHaveCount(0);
@@ -549,7 +550,7 @@ test('Materiais: aba só de consulta — preço por fornecedor, histórico, filt
 });
 
 test('Materiais: ainda sem dados do Hub — diz quando chegam', async ({ page }) => {
-  const erros = await abrir(page, { rota: '/#/materiais' });
+  const erros = await abrir(page, { rota: '/#/projeto/gerador/materiais' });
   await expect(page.locator('.vazio')).toContainText('Ainda sem materiais. O Hub envia a lista nos dias úteis às 6h');
   await expect(page.getByRole('button', { name: 'Descarregar CSV' })).toHaveCount(0);
   expect(erros).toEqual([]);

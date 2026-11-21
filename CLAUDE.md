@@ -37,12 +37,12 @@ Projeto Design da Discovercasa (`design.discovercasa.pt`). Responder em portugu�
   notificações para coisas que têm impacto».
 - **Redes sociais** (aba do hub, `#/social`): planeamento dos posts, aprovação, obras e fases (migrações 0009/0010,
   `public/js/hub/social*.js`). As fotos ficam no armazenamento privado `social`, nunca no Git.
-- **Materiais do Hub** (aba do hub, `#/materiais`; migração 0016, 2026-11-10): materiais, preços por fornecedor e
+- **Materiais do Hub** (aba do Gerador de documentos, `#/projeto/gerador/materiais`, desde 2026-11-21; migração 0016, 2026-11-10): materiais, preços por fornecedor e
   histórico de preços, nas tabelas `hub_*`. O Hub envia-as nos dias úteis às 6h (Lisboa) com a chave de serviço deste
   projeto. **Só de consulta:** nunca escrever nelas, nunca acrescentar regras de criar/editar/apagar nem mudar colunas
   sem falar com o Sebastião (o envio do Hub deixava de funcionar). Para as ler (hub e aplicações), usar o módulo comum
   `public/js/materiais.js`; os projetos que as usam dizem para quê no campo `materiais` do seu JSON.
-- **Orçamentação** (`/orcamentacao/`, 2026-11-11): cada linha da Listagem de material tem um código de produto estável
+- **Orçamentação** (`/orcamentacao/`, 2026-11-11; no hub é uma aba do Gerador, `#/projeto/gerador/orcamentacao`, desde 2026-11-21): cada linha da Listagem de material tem um código de produto estável
   (`BOB/ferramentas/documentos/codigos.py`); `BOB/orcamentacao/ligacoes.json` liga cada código a um material do Hub (só o
   id: nunca nomes nem preços do Hub no repositório público); o cálculo comum é `public/js/orcamento.js`. As parcelas do
   preço final (mão de obra, fundação, margem, IVA…) ficam só na tabela `orcamento_parcelas` (migração 0017), nunca no código.
@@ -64,11 +64,20 @@ Projeto Design da Discovercasa (`design.discovercasa.pt`). Responder em portugu�
   privado e só se lê descarregando-o: **por uma função temporária com chave de uso único** (decisão do utilizador,
   2026-11-11: «ok chave de uso único então»), desligada logo a seguir (410, `verify_jwt`) e a chave apagada, como no
   carregamento dos modelos AR. Nenhuma chave permanente guardada.
-- **Aba Páginas** (2026-11-12, migração 0025; o JSON do projeto diz `"paginas": true`, hoje só o Builder): as páginas
+- **Barra = projetos** (2026-11-21, migração 0027: «coloques a orçamentação e os materiais como abas do gerador de documentos
+  e que movas a aba das Páginas de dentro do builder para a nav-bar inicial … nas sugestões e criticas … ajustado aos
+  projetos que temos na nav-bar»): a barra mostra Gerador de documentos, Builder, Build Your House, Step Inside e, à parte,
+  Páginas e Redes sociais (`IDS` em `public/js/hub/dados.js`). O JSON de um projeto pode dar as suas abas (`"abas"`, a
+  primeira abre-se primeiro); a Orçamentação vive no Gerador (`DENTRO` em `dados.js`; os seus checkpoints têm
+  `aba = 'orcamentacao'`; a linha `orcamentacao` da tabela `projetos` fica para a «App sugerida»). Os endereços antigos
+  (`#/materiais`, `#/projeto/orcamentacao`, `#/projeto/builder/paginas`) levam ao sítio novo. Sugestões e críticas
+  escolhem entre os projetos da barra (sugestões também «Redes sociais»).
+- **Páginas** (projeto da barra, `#/projeto/paginas`, id `paginas`, desde 2026-11-21; antes a aba Páginas do Builder,
+  migração 0025; o JSON diz `"paginas": true`): as páginas
   entregues aos clientes são documentos do tipo `pagina` no armazenamento privado `documentos` (nunca no Git: são casas de
   clientes) e abrem-se noutra janela a partir da memória; agrupam-se por obra, um colapsável por casa (secções do tipo
-  `pagina` em `documentos_seccoes`, migração 0026, 2026-11-19); a aba tem os seus checkpoints (`checkpoints.aba = 'paginas'`,
-  fora do Workflow). O Claude carrega uma página pela função temporária com chave de uso único (como os modelos AR).
+  `pagina` em `documentos_seccoes`, migração 0026, 2026-11-19); os seus checkpoints são o Workflow do projeto Páginas. O Claude carrega uma página pela função temporária com chave
+  de uso único (como os modelos AR), com `projeto = 'paginas'` (a obra, `documentos_seccoes`, tem de ser do mesmo projeto).
 - **Página de um projeto** (2026-11-11): abas Workflow, Documentos e (Step Inside) Teste do AR; pipeline e «sobre»
   dentro do Workflow; tudo fechado sempre que se abre; descrição das tarefas em acordeão; o ponto de situação do
   projeto é por tópicos no JSON (`situacao`: dia, feito, agora, falta) — atualizá-lo a cada entrega.

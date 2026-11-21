@@ -1,5 +1,7 @@
-// Aba Páginas (migração 0025). O utilizador (2026-11-12): «Dentro do projeto do Builder cria uma aba que vai ter as nossas
-// páginas … Quero também que cries tarefas e checkpoints nessa aba». Base de dados simulada: nada toca no Supabase real.
+// Páginas (migração 0025; 0027). O utilizador (2026-11-12): «Dentro do projeto do Builder cria uma aba que vai ter as nossas
+// páginas … Quero também que cries tarefas e checkpoints nessa aba»; 2026-11-21: «movas a aba das Páginas de dentro do
+// builder para a nav-bar inicial» → as Páginas são um projeto da barra; as abas com checkpoints próprios ficam (a
+// Orçamentação do Gerador). Base de dados simulada: nada toca no Supabase real.
 import { test, expect } from '@playwright/test';
 import { readFileSync } from 'node:fs';
 
@@ -19,8 +21,9 @@ async function abrir(page, { utilizador, rota = '/' } = {}) {
 }
 const db = (page, expr, arg) => page.evaluate(expr, arg);
 
-test('Páginas: a aba do Builder carrega uma página e abre-a noutra janela', async ({ page }) => {
-  const erros = await abrir(page, { rota: '/#/projeto/builder/paginas' });
+test('Páginas (na barra): carrega uma página e abre-a noutra janela', async ({ page }) => {
+  const erros = await abrir(page, { rota: '/#/projeto/paginas' });
+  await expect(page.getByRole('navigation', { name: 'Secções', exact: true }).getByRole('link', { name: 'Páginas' })).toHaveAttribute('aria-current', 'page');
   const abas = page.locator('#sub-abas');
   await expect(abas.getByRole('link', { name: 'Páginas' })).toHaveAttribute('aria-current', 'page');
   await expect(page.getByRole('heading', { level: 2, name: 'Páginas', exact: true })).toBeVisible();
@@ -28,7 +31,7 @@ test('Páginas: a aba do Builder carrega uma página e abre-a noutra janela', as
   await page.locator('input[name="pagina-ficheiro"]').setInputFiles({ name: 'casa-teste.html', mimeType: 'text/html', buffer: Buffer.from(PAGINA) });
   const cartao = page.locator('.pagina-cartao', { hasText: 'Casa Teste' });
   await expect(cartao).toBeVisible();   // the title comes from the page's <title>
-  expect(await db(page, () => window.__fake.db.documentos.filter((d) => d.tipo === 'pagina').map((d) => [d.projeto, d.caminho.split('/')[1]]))).toEqual([['builder', 'pagina']]);
+  expect(await db(page, () => window.__fake.db.documentos.filter((d) => d.tipo === 'pagina').map((d) => [d.projeto, d.caminho.split('/')[1]]))).toEqual([['paginas', 'pagina']]);
   await expect(abas.getByRole('link', { name: /Páginas/ })).toContainText('1');
   // it is not a document of the Documentos tab
   await abas.getByRole('link', { name: /Documentos/ }).click();
@@ -44,7 +47,7 @@ test('Páginas: a aba do Builder carrega uma página e abre-a noutra janela', as
 
 // 2026-11-19: «cria Collapsables onde cada projeto tem as suas páginas» → uma obra por casa (secção do tipo 'pagina')
 test('Páginas: por obra, em colapsáveis; carregar numa obra e mudar uma página de obra', async ({ page }) => {
-  const erros = await abrir(page, { rota: '/#/projeto/builder/paginas' });
+  const erros = await abrir(page, { rota: '/#/projeto/paginas' });
   const dlg = page.locator('#dlg');
   await page.locator('.seccao-cabeca input[name="pagina-ficheiro"]').setInputFiles({ name: 'casa-teste.html', mimeType: 'text/html', buffer: Buffer.from(PAGINA) });
   await expect(page.locator('.pagina-cartao', { hasText: 'Casa Teste' })).toBeVisible();
@@ -57,7 +60,7 @@ test('Páginas: por obra, em colapsáveis; carregar numa obra e mudar uma págin
   await expect(obra).toHaveAttribute('open', '');
   await expect(obra).toContainText('Ainda sem páginas desta obra.');
   await expect(page.getByRole('heading', { name: 'Sem obra' })).toBeVisible();
-  expect(await db(page, () => window.__fake.db.documentos_seccoes.filter((s) => s.tipo === 'pagina').map((s) => [s.projeto, s.nome]))).toEqual([['builder', 'Ribamar']]);
+  expect(await db(page, () => window.__fake.db.documentos_seccoes.filter((s) => s.tipo === 'pagina').map((s) => [s.projeto, s.nome]))).toEqual([['paginas', 'Ribamar']]);
   // move the loose page into the obra
   await page.locator('.pagina-cartao', { hasText: 'Casa Teste' }).getByRole('button', { name: /Mudar de obra/ }).click();
   await dlg.getByLabel('Obra').selectOption({ label: 'Ribamar' });
@@ -80,19 +83,21 @@ test('Páginas: por obra, em colapsáveis; carregar numa obra e mudar uma págin
   expect(erros).toEqual([]);
 });
 
-test('Páginas: checkpoints e tarefas próprios da aba, fora do Workflow', async ({ page }) => {
-  const erros = await abrir(page, { rota: '/#/projeto/builder/paginas' });
-  await page.locator('[data-acao="acrescentar"][data-tipo="checkpoint"][data-aba="paginas"]').click();
+test('Orçamentação (aba do Gerador): checkpoints e tarefas próprios da aba, fora do Workflow', async ({ page }) => {
+  const erros = await abrir(page, { rota: '/#/projeto/gerador/orcamentacao' });
+  await page.locator('[data-acao="acrescentar"][data-tipo="checkpoint"][data-aba="orcamentacao"]').click();
   const dlg = page.locator('#dlg');
   await expect(dlg.getByLabel('Posição no workflow')).toBeHidden();   // they go to the end of the tab
   await dlg.getByLabel('Título').fill('Estrutura da página');
   await dlg.getByRole('button', { name: 'Acrescentar' }).click();
   const cp = page.locator('.passo', { hasText: 'Estrutura da página' });
   await expect(cp).toBeVisible();
-  expect(await db(page, () => window.__fake.db.checkpoints.find((c) => c.titulo === 'Estrutura da página').aba)).toBe('paginas');
-  // a task in it, from the tab's «Tarefa» button: only this tab's checkpoints are offered
-  await page.locator('[data-acao="acrescentar"][data-tipo="tarefa"][data-aba="paginas"]').click();
-  await expect(dlg.getByLabel('Checkpoint')).toHaveText('Estrutura da página');
+  expect(await db(page, () => window.__fake.db.checkpoints.find((c) => c.titulo === 'Estrutura da página').aba)).toBe('orcamentacao');
+  // a task in it, from the tab's «Tarefa» button: only this tab's checkpoints are offered (3 + the new one)
+  await page.locator('[data-acao="acrescentar"][data-tipo="tarefa"][data-aba="orcamentacao"]').click();
+  await expect(dlg.getByLabel('Checkpoint').locator('option')).toHaveCount(4);
+  await expect(dlg.getByLabel('Checkpoint')).not.toContainText('Gerador online');
+  await dlg.getByLabel('Checkpoint').selectOption({ label: 'Estrutura da página' });
   await dlg.getByLabel('Título').fill('Pormenores da página');
   await dlg.getByRole('button', { name: 'Acrescentar' }).click();
   await expect(cp).toContainText('Pormenores da página');
@@ -100,13 +105,24 @@ test('Páginas: checkpoints e tarefas próprios da aba, fora do Workflow', async
   await page.locator('#sub-abas').getByRole('link', { name: /Workflow/ }).click();
   await expect(page.locator('.passo', { hasText: 'Estrutura da página' })).toHaveCount(0);
   const tid = await db(page, () => window.__fake.db.tarefas.find((t) => t.titulo === 'Pormenores da página').id);
-  await page.goto(`/#/projeto/builder/t-${tid}`);
-  await expect(page.locator('#sub-abas').getByRole('link', { name: /Páginas/ })).toHaveAttribute('aria-current', 'page');
+  await page.goto(`/#/projeto/gerador/t-${tid}`);
+  await expect(page.locator('#sub-abas').getByRole('link', { name: /Orçamentação/ })).toHaveAttribute('aria-current', 'page');
+  // the task's screen names the tab
+  await page.locator('.passo', { hasText: 'Estrutura da página' }).locator('.tarefa-titulo', { hasText: 'Pormenores da página' }).click();
+  await expect(page.locator('#ficha .ficha-caminho')).toContainText('Orçamentação');
   expect(erros).toEqual([]);
 });
 
-test('Páginas: só os projetos com a aba a mostram', async ({ page }) => {
+test('as abas de cada projeto: o Gerador com a Orçamentação e os Materiais; o Builder já sem Páginas; endereços antigos', async ({ page }) => {
   await abrir(page, { rota: '/#/projeto/gerador' });
-  await expect(page.locator('#sub-abas').getByRole('link', { name: /Workflow/ })).toBeVisible();
+  await expect(page.locator('#sub-abas').getByRole('link')).toHaveText([/Workflow/, /Orçamentação/, /Materiais/, /Documentos/]);
+  await page.goto('/#/projeto/builder');
   await expect(page.locator('#sub-abas').getByRole('link', { name: /Páginas/ })).toHaveCount(0);
+  await page.goto('/#/projeto/builder/paginas');
+  await expect(page).toHaveURL(/#\/projeto\/paginas$/);
+  await page.goto('/#/projeto/orcamentacao');
+  await expect(page).toHaveURL(/#\/projeto\/gerador\/orcamentacao$/);
+  await expect(page.getByRole('link', { name: /Abrir a Orçamentação/ })).toBeVisible();
+  await page.goto('/#/materiais');
+  await expect(page).toHaveURL(/#\/projeto\/gerador\/materiais$/);
 });

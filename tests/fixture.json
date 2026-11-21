@@ -11,7 +11,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "criterio_saida": ""
+   "criterio_saida": "",
+   "aba": null
   },
   {
    "id": 2,
@@ -24,7 +25,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "criterio_saida": ""
+   "criterio_saida": "",
+   "aba": null
   },
   {
    "id": 3,
@@ -37,7 +39,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "criterio_saida": ""
+   "criterio_saida": "",
+   "aba": null
   },
   {
    "id": 4,
@@ -50,7 +53,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "criterio_saida": "Decisões que mudam a geometria registadas; teste da equipa concluído; bugs críticos resolvidos ou aceites."
+   "criterio_saida": "Decisões que mudam a geometria registadas; teste da equipa concluído; bugs críticos resolvidos ou aceites.",
+   "aba": null
   },
   {
    "id": 5,
@@ -63,7 +67,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "criterio_saida": "Nenhum preço provisório aparece como real; cada preço mostra a versão e a data."
+   "criterio_saida": "Nenhum preço provisório aparece como real; cada preço mostra a versão e a data.",
+   "aba": null
   },
   {
    "id": 6,
@@ -76,7 +81,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "criterio_saida": "Testado em telemóvel e tablet; aprovação formal da Discovercasa; termos e permissões revistos."
+   "criterio_saida": "Testado em telemóvel e tablet; aprovação formal da Discovercasa; termos e permissões revistos.",
+   "aba": null
   },
   {
    "id": 7,
@@ -89,7 +95,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "criterio_saida": ""
+   "criterio_saida": "",
+   "aba": null
   },
   {
    "id": 8,
@@ -102,7 +109,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "criterio_saida": ""
+   "criterio_saida": "",
+   "aba": null
   },
   {
    "id": 9,
@@ -115,7 +123,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "criterio_saida": ""
+   "criterio_saida": "",
+   "aba": null
   },
   {
    "id": 10,
@@ -128,7 +137,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "criterio_saida": "Tolerância de erro definida por família de material; as diferenças fora da tolerância estão explicadas, corrigidas ou aceites."
+   "criterio_saida": "Tolerância de erro definida por família de material; as diferenças fora da tolerância estão explicadas, corrigidas ou aceites.",
+   "aba": null
   },
   {
    "id": 11,
@@ -141,7 +151,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "criterio_saida": ""
+   "criterio_saida": "",
+   "aba": null
   },
   {
    "id": 12,
@@ -154,7 +165,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "criterio_saida": ""
+   "criterio_saida": "",
+   "aba": null
   },
   {
    "id": 13,
@@ -167,7 +179,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "criterio_saida": ""
+   "criterio_saida": "",
+   "aba": null
   },
   {
    "id": 14,
@@ -180,7 +193,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "criterio_saida": ""
+   "criterio_saida": "",
+   "aba": null
   },
   {
    "id": 15,
@@ -193,7 +207,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "criterio_saida": "Módulos, Cobertura e Listagem de material aprovados e testados contra o Builder e uma obra de referência."
+   "criterio_saida": "Módulos, Cobertura e Listagem de material aprovados e testados contra o Builder e uma obra de referência.",
+   "aba": null
   },
   {
    "id": 16,
@@ -206,46 +221,50 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "criterio_saida": "Matriz de formatos publicada; testes com ficheiros válidos, ambíguos e inválidos."
+   "criterio_saida": "Matriz de formatos publicada; testes com ficheiros válidos, ambíguos e inválidos.",
+   "aba": null
   },
   {
    "id": 17,
-   "projeto": "orcamentacao",
+   "projeto": "gerador",
    "titulo": "Lista de materiais e fornecedores",
    "descricao": "A Discovercasa vai fornecer a lista com o preço de cada material.",
-   "ordem": 1,
+   "ordem": 101,
    "estado": "por_fazer",
    "concluido_em": null,
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "criterio_saida": "Cada linha com preço tem código, unidade e fonte do preço; as exceções estão à vista."
+   "criterio_saida": "Cada linha com preço tem código, unidade e fonte do preço; as exceções estão à vista.",
+   "aba": "orcamentacao"
   },
   {
    "id": 18,
-   "projeto": "orcamentacao",
+   "projeto": "gerador",
    "titulo": "Composição do preço final",
    "descricao": "Materiais, mão de obra, fundação, caixilharia, especialidades, instalações e pré-instalações, licenciamento e IVA.",
-   "ordem": 2,
+   "ordem": 102,
    "estado": "por_fazer",
    "concluido_em": null,
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "criterio_saida": "Orçamento reproduzível e comparável entre revisões, com as contas à vista."
+   "criterio_saida": "Orçamento reproduzível e comparável entre revisões, com as contas à vista.",
+   "aba": "orcamentacao"
   },
   {
    "id": 19,
-   "projeto": "orcamentacao",
+   "projeto": "gerador",
    "titulo": "Preço em direto no Build Your House",
    "descricao": "O configurador passa a usar os preços reais.",
-   "ordem": 3,
+   "ordem": 103,
    "estado": "por_fazer",
    "concluido_em": null,
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "criterio_saida": ""
+   "criterio_saida": "",
+   "aba": "orcamentacao"
   },
   {
    "id": 20,
@@ -258,7 +277,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "criterio_saida": "Relatório da arquitetura atual, sem alterações de produção e sem despesas."
+   "criterio_saida": "Relatório da arquitetura atual, sem alterações de produção e sem despesas.",
+   "aba": null
   },
   {
    "id": 21,
@@ -271,7 +291,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "criterio_saida": "Nenhum dado inferido aparece como confirmado; NEEDS_HUMAN_REVIEW trava o que depende dele."
+   "criterio_saida": "Nenhum dado inferido aparece como confirmado; NEEDS_HUMAN_REVIEW trava o que depende dele.",
+   "aba": null
   },
   {
    "id": 22,
@@ -284,7 +305,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "criterio_saida": "Um projeto de outro arquiteto e um projeto Discovercasa preparados para a visita."
+   "criterio_saida": "Um projeto de outro arquiteto e um projeto Discovercasa preparados para a visita.",
+   "aba": null
   },
   {
    "id": 23,
@@ -297,7 +319,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "criterio_saida": "Exportação reproduzível, sem perder os IDs e as relações."
+   "criterio_saida": "Exportação reproduzível, sem perder os IDs e as relações.",
+   "aba": null
   },
   {
    "id": 24,
@@ -310,7 +333,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "criterio_saida": "Casa de referência aprovada, desempenho medido e custo do build conhecido."
+   "criterio_saida": "Casa de referência aprovada, desempenho medido e custo do build conhecido.",
+   "aba": null
   },
   {
    "id": 25,
@@ -323,7 +347,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "criterio_saida": "Custo completo por sessão e capacidade por GPU medidos, antes de prometer o serviço."
+   "criterio_saida": "Custo completo por sessão e capacidade por GPU medidos, antes de prometer o serviço.",
+   "aba": null
   },
   {
    "id": 26,
@@ -336,7 +361,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "criterio_saida": "Um cliente nunca abre o projeto de outro (testado); backups e restauração testados."
+   "criterio_saida": "Um cliente nunca abre o projeto de outro (testado); backups e restauração testados.",
+   "aba": null
   },
   {
    "id": 27,
@@ -349,7 +375,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "criterio_saida": "Escala, ancoragem, materiais e desempenho aceitáveis nos telemóveis de teste."
+   "criterio_saida": "Escala, ancoragem, materiais e desempenho aceitáveis nos telemóveis de teste.",
+   "aba": null
   },
   {
    "id": 28,
@@ -362,7 +389,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "criterio_saida": "Prova real com pessoas e critérios de conforto atingidos (não basta aparecer imagem no headset)."
+   "criterio_saida": "Prova real com pessoas e critérios de conforto atingidos (não basta aparecer imagem no headset).",
+   "aba": null
   },
   {
    "id": 29,
@@ -375,7 +403,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "criterio_saida": "Operação segura e auditável, com custos por casa e por sessão conhecidos."
+   "criterio_saida": "Operação segura e auditável, com custos por casa e por sessão conhecidos.",
+   "aba": null
   },
   {
    "id": 30,
@@ -388,7 +417,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "criterio_saida": "Arquitetura atual documentada e plano de integração aprovado, sem alterações destrutivas."
+   "criterio_saida": "Arquitetura atual documentada e plano de integração aprovado, sem alterações destrutivas.",
+   "aba": null
   },
   {
    "id": 31,
@@ -401,7 +431,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "criterio_saida": ""
+   "criterio_saida": "",
+   "aba": null
   },
   {
    "id": 32,
@@ -414,7 +445,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "criterio_saida": ""
+   "criterio_saida": "",
+   "aba": null
   },
   {
    "id": 33,
@@ -427,7 +459,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "criterio_saida": ""
+   "criterio_saida": "",
+   "aba": null
   },
   {
    "id": 34,
@@ -440,7 +473,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "criterio_saida": ""
+   "criterio_saida": "",
+   "aba": null
   },
   {
    "id": 35,
@@ -453,7 +487,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "criterio_saida": ""
+   "criterio_saida": "",
+   "aba": null
   },
   {
    "id": 36,
@@ -466,7 +501,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "criterio_saida": ""
+   "criterio_saida": "",
+   "aba": null
   },
   {
    "id": 37,
@@ -479,7 +515,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "criterio_saida": ""
+   "criterio_saida": "",
+   "aba": null
   },
   {
    "id": 38,
@@ -492,7 +529,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "criterio_saida": ""
+   "criterio_saida": "",
+   "aba": null
   },
   {
    "id": 39,
@@ -505,7 +543,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "criterio_saida": "Os testes de referência passam sem colisões não intencionais; as sobreposições intencionais estão documentadas; a lista de corte bate com a geometria."
+   "criterio_saida": "Os testes de referência passam sem colisões não intencionais; as sobreposições intencionais estão documentadas; a lista de corte bate com a geometria.",
+   "aba": null
   },
   {
    "id": 40,
@@ -518,7 +557,8 @@
    "criado_por": null,
    "criado_por_nome": "Equipa",
    "criado_em": "2026-11-05T10:00:00Z",
-   "criterio_saida": "Não é possível confundir um documento de rascunho com um documento validado para produção."
+   "criterio_saida": "Não é possível confundir um documento de rascunho com um documento validado para produção.",
+   "aba": null
   }
  ],
  "tarefas": [
@@ -1227,7 +1267,7 @@
   {
    "id": 40,
    "checkpoint_id": 17,
-   "projeto": "orcamentacao",
+   "projeto": "gerador",
    "titulo": "Receber a lista de materiais e fornecedores com preços",
    "descricao": "À espera da Discovercasa.",
    "estado": "bloqueada",
@@ -1245,7 +1285,7 @@
   {
    "id": 41,
    "checkpoint_id": 17,
-   "projeto": "orcamentacao",
+   "projeto": "gerador",
    "titulo": "Ligar cada linha da Listagem de material a um preço",
    "descricao": "",
    "estado": "por_fazer",
@@ -1263,7 +1303,7 @@
   {
    "id": 42,
    "checkpoint_id": 18,
-   "projeto": "orcamentacao",
+   "projeto": "gerador",
    "titulo": "Definir como se calcula cada parcela do preço",
    "descricao": "",
    "estado": "por_fazer",
@@ -1281,7 +1321,7 @@
   {
    "id": 43,
    "checkpoint_id": 18,
-   "projeto": "orcamentacao",
+   "projeto": "gerador",
    "titulo": "Confirmar a taxa de IVA a aplicar",
    "descricao": "",
    "estado": "por_fazer",
@@ -1299,7 +1339,7 @@
   {
    "id": 44,
    "checkpoint_id": 18,
-   "projeto": "orcamentacao",
+   "projeto": "gerador",
    "titulo": "Mostrar as contas à vista até ao preço final",
    "descricao": "",
    "estado": "por_fazer",
@@ -1317,7 +1357,7 @@
   {
    "id": 45,
    "checkpoint_id": 19,
-   "projeto": "orcamentacao",
+   "projeto": "gerador",
    "titulo": "Ligar a orçamentação ao Build Your House",
    "descricao": "",
    "estado": "por_fazer",
@@ -3207,7 +3247,7 @@
   {
    "id": 150,
    "checkpoint_id": 17,
-   "projeto": "orcamentacao",
+   "projeto": "gerador",
    "titulo": "Modelo de dados do catálogo (códigos, unidades, fornecedores, validade) com dados de teste",
    "descricao": "Pode começar já. Os dados de teste ficam marcados como teste e nunca aparecem como preços reais.",
    "estado": "por_fazer",
@@ -3225,7 +3265,7 @@
   {
    "id": 151,
    "checkpoint_id": 17,
-   "projeto": "orcamentacao",
+   "projeto": "gerador",
    "titulo": "Códigos de produto estáveis em cada linha da Listagem de material",
    "descricao": "A ligação entre a Listagem e a lista de preços faz-se pelo código, não pelo nome.",
    "estado": "por_fazer",
@@ -3243,7 +3283,7 @@
   {
    "id": 152,
    "checkpoint_id": 18,
-   "projeto": "orcamentacao",
+   "projeto": "gerador",
    "titulo": "Aceitar também listas de quantidades manuais ou importadas (CSV / Excel)",
    "descricao": "A Orçamentação não depende só do Gerador: serve obras antigas e orçamentos rápidos.",
    "estado": "por_fazer",
@@ -3454,7 +3494,7 @@
   },
   {
    "id": 13,
-   "projeto": "orcamentacao",
+   "projeto": "gerador",
    "tarefa_id": null,
    "pergunta": "Quem mantém os códigos de produto usados pela Listagem e pelos preços?",
    "contexto": "A Listagem de material (Builder/Gerador) e a lista de preços (Orçamentação) têm de falar dos mesmos produtos.",

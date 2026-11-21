@@ -58,11 +58,18 @@ export function htmlPerfil(novidadeNova) {
 
 // ---------------------------------------------------------------- acrescentar / editar
 // posição de um checkpoint novo (1..n+1, por defeito no fim) ou de um que já existe (1..n)
-export function opcoesPosicao(pid, atualId) {
-  const cps = checkpointsDe(pid).filter((c) => c.id !== atualId);
-  const atualPos = atualId ? checkpointsDe(pid).findIndex((c) => c.id === atualId) + 1 : cps.length + 1;
-  const ops = cps.map((c, i) => `<option value="${i + 1}"${i + 1 === atualPos ? ' selected' : ''}>${i + 1} · antes de «${esc(c.titulo)}»</option>`);
-  ops.push(`<option value="${cps.length + 1}"${cps.length + 1 === atualPos ? ' selected' : ''}>${cps.length + 1} · no fim</option>`);
+// The position in the checkpoint's own tab (the Workflow, or e.g. the Gerador's Orçamentação tab): the list shows only
+// that tab's checkpoints; each option's value is the position among ALL the project's checkpoints, which is what
+// inserir_checkpoint / mover_checkpoint renumber (before 2026-11-21 the Workflow also listed the Páginas tab's ones)
+export function opcoesPosicao(pid, atualId, aba) {
+  const todos = checkpointsDe(pid), atual = todos.find((c) => c.id === atualId);
+  const tab = aba !== undefined ? (aba || null) : atual ? (atual.aba || null) : null;
+  const outros = todos.filter((c) => c.id !== atualId), daAba = outros.filter((c) => (c.aba || null) === tab);
+  const pos = (c) => outros.indexOf(c) + 1, fim = atualId ? todos.length : todos.length + 1;
+  let sel = fim;   // where it is now: before the next one of its tab, or at the end
+  if (atual) { const lista = todos.filter((c) => (c.aba || null) === tab), prox = lista[lista.indexOf(atual) + 1]; sel = prox ? pos(prox) : fim; }
+  const ops = daAba.map((c, i) => `<option value="${pos(c)}"${pos(c) === sel ? ' selected' : ''}>${i + 1} · antes de «${esc(c.titulo)}»</option>`);
+  ops.push(`<option value="${fim}"${fim === sel ? ' selected' : ''}>${daAba.length + 1} · no fim</option>`);
   return ops.join('');
 }
 
@@ -80,7 +87,7 @@ export function dlgAcrescentar(projetoId, cpId, tipoInicial, aba = '') {
       <div class="grelha-campos">
         <label class="campo-grupo"><span>Projeto</span><select class="campo" name="projeto" data-acao="projeto-novo">${opcoesProjetos(pid)}</select></label>
         <label class="campo-grupo so-tarefa"${tarefa ? '' : ' hidden'}><span>Checkpoint</span><select class="campo" name="checkpoint">${opcoesCheckpoints(pid, cpId, aba)}</select></label>
-        <label class="campo-grupo so-checkpoint"${tarefa || aba ? ' hidden' : ''}${aba ? ' data-sem-posicao' : ''}><span>Posição no workflow</span><select class="campo" name="posicao">${opcoesPosicao(pid)}</select></label>
+        <label class="campo-grupo so-checkpoint"${tarefa || aba ? ' hidden' : ''}${aba ? ' data-sem-posicao' : ''}><span>Posição no workflow</span><select class="campo" name="posicao">${opcoesPosicao(pid, null, aba)}</select></label>
       </div>
       <label class="campo-grupo"><span>Título</span><input class="campo" name="titulo" maxlength="200" required autocomplete="off"></label>
       <label class="campo-grupo"><span>Descrição <small>(opcional)</small></span><textarea class="campo" name="descricao" maxlength="4000"></textarea></label>
@@ -239,7 +246,9 @@ export function dlgNovaDecisao(tarefa, projetoId) {
 }
 
 // ---------------------------------------------------------------- sugestões (gaveta): sugestões + checklist
-const FERRAMENTAS = { geral: 'Geral (o hub)', gerador: 'Gerador de documentos', builder: 'Builder', orcamentacao: 'Orçamentação', build_your_house: 'Build Your House', plataforma_cliente: 'Step Inside' };
+// «Sobre» das sugestões = a barra de navegação (2026-11-21, migração 0027: «nas sugestões e criticas mudares o que está lá
+// para ficar ajustado aos projetos que temos na nav-bar»); a Orçamentação e os Materiais são abas do Gerador
+const FERRAMENTAS = { geral: 'Geral (o hub)', gerador: 'Gerador de documentos', builder: 'Builder', build_your_house: 'Build Your House', plataforma_cliente: 'Step Inside', paginas: 'Páginas', social: 'Redes sociais' };
 const ESTADOS_S = { nova: 'Nova', em_analise: 'Em análise', feita: 'Concluída', recusada: 'Recusada' };
 const COR_S = { nova: 'por_fazer', em_analise: 'em_curso', feita: 'concluida', recusada: 'bloqueada' };
 export function htmlGaveta(sep, sugestoes, abertas, erro, log = '') {

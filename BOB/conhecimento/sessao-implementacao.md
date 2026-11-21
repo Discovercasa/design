@@ -50,7 +50,7 @@ pushing to `main` if unsure. Read the repo root `CLAUDE.md` (Design rules: Supab
   transport, dimensions…) and `hub_material_precos_historico`, sent on working days at 6:00 Lisbon (migration
   `supabase/migrations/0016_materiais_hub.sql`). READ ONLY: never write to them nor change their columns (the Hub's
   send would break). Read them with `public/js/materiais.js` (same origin and session as the apps); the team sees them
-  in the hub's Materiais tab (`#/materiais`), with a CSV download for offline tools. Supplier contacts stay in the Hub.
+  in the Materiais tab of the hub's Gerador de documentos (`#/projeto/gerador/materiais`; `#/materiais` until 2026-11-21), with a CSV download for offline tools. Supplier contacts stay in the Hub.
   Discount and VAT come as fractions (0.23 = 23 %; first send, 2026-11-10: 54 suppliers, 971 materials of which 74
   services, 1 090 prices; most materials have no category yet). The module also accepts 0–100.
 - Costing (Orçamentação, 2026-11-11): every Listagem line carries a stable product code (`ferramentas/documentos/codigos.py`,

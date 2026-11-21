@@ -4,13 +4,17 @@
 import { carregarSocial } from './social-dados.js';
 import { reduzir, fazerMiniatura, nomeBase } from './imagens.js';
 
-// ordem das abas e das listas (pedido de 2026-11-06)
-export const IDS = ['gerador', 'builder', 'orcamentacao', 'build_your_house', 'plataforma_cliente'];
+// ordem das abas e das listas (pedido de 2026-11-06). 2026-11-21 (migração 0027): «coloques a orçamentação e os materiais
+// como abas do gerador de documentos e que movas a aba das Páginas de dentro do builder para a nav-bar inicial» — os
+// projetos são os da barra (Páginas no fim, ao lado das Redes sociais); a Orçamentação vive dentro do Gerador (DENTRO).
+export const IDS = ['gerador', 'builder', 'build_your_house', 'plataforma_cliente', 'paginas'];
+export const DENTRO = { orcamentacao: { de: 'gerador', aba: 'orcamentacao' } };   // projeto → [projeto da barra, aba]
 
 export const E = {
   eu: { id: null, nome: '', editar: false },
   perfil: null,            // a minha linha em perfis
-  projetos: [],            // JSON de cada projeto
+  projetos: [],            // JSON de cada projeto da barra
+  dentro: [],              // JSON dos que vivem numa aba de outro (a Orçamentação, aba do Gerador)
   checkpoints: [], tarefas: [], decisoes: [], perfis: [], notificacoes: [], documentos: [], seccoes: [],   // secções dos documentos (migração 0024)
   obras: [], fases: [], posts: [], media: [], comentarios: [], socialErro: null,   // redes sociais
   notas: [], anexos: [],  // notas de teste/revisão e imagens anexadas (migração 0011)
@@ -24,9 +28,18 @@ const sb = () => window.Design.sb;
 
 export const projeto = (id) => E.projetos.find((p) => p.id === id);
 export const projetoPorSlug = (slug) => E.projetos.find((p) => p.slug === slug);
-export const nomeProjeto = (id) => (projeto(id) || {}).nome || id;
+export const dentroPorSlug = (slug) => E.dentro.find((p) => p.slug === slug);   // um antigo projeto, hoje aba de outro
+export const dentroDe = (id) => E.dentro.find((p) => p.id === id);
+export const nomeProjeto = (id) => (projeto(id) || dentroDe(id) || {}).nome || (id === 'social' ? 'Redes sociais' : id);
+// o endereço de um projeto: o seu, ou a aba onde hoje vive (a Orçamentação → #/projeto/gerador/orcamentacao)
+export function linkProjeto(id) {
+  const d = DENTRO[id];
+  if (d) return `#/projeto/${(projeto(d.de) || {}).slug || d.de}/${d.aba}`;
+  return `#/projeto/${(projeto(id) || {}).slug || id}`;
+}
 export const checkpointsDe = (id) => E.checkpoints.filter((c) => c.projeto === id).sort((a, b) => a.ordem - b.ordem || a.id - b.id);
-// os checkpoints de uma aba do projeto (migração 0025): sem aba = o Workflow; 'paginas' = a aba Páginas
+// os checkpoints de uma aba do projeto (migrações 0025, 0027): sem aba = o Workflow; 'orcamentacao' = a aba Orçamentação
+// do Gerador ('paginas' foi a aba Páginas do Builder até 0027)
 export const checkpointsDaAba = (id, aba = null) => checkpointsDe(id).filter((c) => (c.aba || null) === (aba || null));
 export const tarefasDe = (cpId) => E.tarefas.filter((t) => t.checkpoint_id === cpId).sort((a, b) => a.ordem - b.ordem || a.id - b.id);
 export const decisaoDaTarefa = (tId) => E.decisoes.find((d) => d.tarefa_id === tId);
@@ -34,7 +47,8 @@ export const decisoesDe = (id) => E.decisoes.filter((d) => d.projeto === id);
 export const chave = (tipo, id) => `${tipo}:${id}`;
 
 export async function carregarProjetos() {
-  E.projetos = await Promise.all(IDS.map((id) => fetch(`/dados/projetos/${id}.json`).then((r) => r.json())));
+  const ler = (id) => fetch(`/dados/projetos/${id}.json`).then((r) => r.json());
+  [E.projetos, E.dentro] = await Promise.all([Promise.all(IDS.map(ler)), Promise.all(Object.keys(DENTRO).map(ler))]);
 }
 
 // perfil: cria a minha linha na primeira visita (o nome vem do Hub); depois fica o que eu escrever nas Definições

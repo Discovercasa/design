@@ -7,12 +7,13 @@ uma página (`#/projeto/<slug>`), um ficheiro de dados, uma pasta de código e u
 |---|---|---|---|---|---|---|
 | Gerador de documentos | `gerador` | `#/projeto/gerador` | `public/dados/projetos/gerador.json` | `BOB/gerador/web/`, `BOB/ferramentas/documentos/` | `public/gerador/` | `gerador/<tarefa>` |
 | Builder | `builder` | `#/projeto/builder` | `public/dados/projetos/builder.json` | `BOB/ferramentas/modelo/`, `BOB/conhecimento/` | (ainda sem página) | `builder/<tarefa>` |
-| Orçamentação | `orcamentacao` | `#/projeto/orcamentacao` | `public/dados/projetos/orcamentacao.json` | `BOB/orcamentacao/` (página `web/`, `ligacoes.json`), `public/js/orcamento.js` (cálculo comum) | `public/orcamentacao/` | `orcamentacao/<tarefa>` |
+| Orçamentação (aba do Gerador desde 2026-11-21) | `orcamentacao` (os dados passaram para `gerador`, checkpoints com `aba = 'orcamentacao'`) | `#/projeto/gerador/orcamentacao` | `public/dados/projetos/orcamentacao.json` | `BOB/orcamentacao/` (página `web/`, `ligacoes.json`), `public/js/orcamento.js` (cálculo comum) | `public/orcamentacao/` | `orcamentacao/<tarefa>` |
+| Páginas (na barra desde 2026-11-21; antes aba do Builder) | `paginas` | `#/projeto/paginas` | `public/dados/projetos/paginas.json` | `BOB/ferramentas/pagina/` | armazenamento privado `documentos` (tipo `pagina`) | `paginas/<tarefa>` |
 | Build Your House | `build_your_house` | `#/projeto/build-your-house` | `public/dados/projetos/build_your_house.json` | `BOB/configurador/` | `public/build-your-house/` | `build-your-house/<tarefa>` |
 | Step Inside (VR/AR) | `plataforma_cliente` | `#/projeto/step-inside` | `public/dados/projetos/plataforma_cliente.json` | `BOB/step-inside/` | (ainda sem página) | `step-inside/<fase>-<tarefa>` |
 | Hub do Design | — | `#/` | `public/dados/novidades.json` | `public/index.html`, `public/js/hub/`, `public/css/hub.css` | `public/` | `hub/<tarefa>` |
 | Redes sociais (do hub) | — (tabelas `obras`, `obras_fases`, `posts`, `posts_media`, `posts_comentarios`) | `#/social`, `#/social/obras` | Supabase (migrações 0009/0010) | `public/js/hub/social*.js`, `public/css/social.css` | `public/` | `hub/<tarefa>` |
-| Materiais do Hub (só de consulta) | — (tabelas `hub_fornecedores`, `hub_materiais`, `hub_material_precos`, `hub_material_precos_historico`, escritas só pelo Hub) | `#/materiais`, `#/materiais/m-<id>` | Supabase (migração 0016) | `public/js/materiais.js` (módulo comum: hub e aplicações), `public/js/hub/materiais-vista.js` | `public/` | `hub/<tarefa>` |
+| Materiais do Hub (só de consulta) | — (tabelas `hub_fornecedores`, `hub_materiais`, `hub_material_precos`, `hub_material_precos_historico`, escritas só pelo Hub) | `#/projeto/gerador/materiais` (aba do Gerador desde 2026-11-21), `#/projeto/gerador/m-<id>` | Supabase (migração 0016) | `public/js/materiais.js` (módulo comum: hub e aplicações), `public/js/hub/materiais-vista.js` | `public/` | `hub/<tarefa>` |
 
 ## Regras
 - **Um ramo por tarefa**, com o prefixo do projeto (ex.: `gerador/ler-dxf`). `main` = o que está online: um push para

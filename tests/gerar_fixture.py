@@ -169,5 +169,17 @@ for d in db["documentos"]:
         d["seccao_id"] = s["id"]
         d["titulo"] = d["titulo"][len(nome) + 3:]
 for t in db["tarefas"]: t.setdefault("revisao", False)
+# 0027: the hub follows the nav-bar — the Orçamentação is a tab of the Gerador (its checkpoints get aba 'orcamentacao'
+# and everything of the project goes with them); the Páginas (then a tab of the Builder) are a project of their own
+for c in db["checkpoints"]:
+    c.setdefault("aba", None)
+    if c["projeto"] == "orcamentacao": c["projeto"], c["aba"], c["ordem"] = "gerador", "orcamentacao", c["ordem"] + 100
+    elif c["projeto"] == "builder" and c["aba"] == "paginas": c["projeto"], c["aba"] = "paginas", None
+para = {c["id"]: c["projeto"] for c in db["checkpoints"]}
+for t in db["tarefas"]: t["projeto"] = para.get(t["checkpoint_id"], t["projeto"])
+for k in ("decisoes", "documentos", "documentos_seccoes", "tarefas_notas"):
+    for x in db[k]:
+        if x.get("projeto") == "orcamentacao": x["projeto"] = "gerador"
+        if k in ("documentos", "documentos_seccoes") and x.get("projeto") == "builder" and x.get("tipo") == "pagina": x["projeto"] = "paginas"
 (RAIZ / "tests" / "fixture.json").write_text(json.dumps(db, ensure_ascii=False, indent=1), encoding="utf-8")
 print({k: len(v) for k, v in db.items()})

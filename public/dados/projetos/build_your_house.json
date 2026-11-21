@@ -33,10 +33,23 @@
   ],
   "materiais": "Os preços reais para o preço em direto do configurador, em vez dos provisórios (através da Orçamentação).",
   "metodo": "Segue o método construtivo Discovercasa. No futuro deve funcionar também com outros métodos.",
-  "app": { "url": "/build-your-house/", "rotulo": "Abrir o Build Your House" },
-  "organizacao": { "codigo": "BOB/configurador/", "publicado": "public/build-your-house/", "ramo": "build-your-house/<tarefa>" },
+  "app": {
+    "url": "/build-your-house/",
+    "rotulo": "Abrir o Build Your House"
+  },
+  "organizacao": {
+    "codigo": "BOB/configurador/",
+    "publicado": "public/build-your-house/",
+    "ramo": "build-your-house/<tarefa>"
+  },
   "ligacoes": [
-    { "com": "builder", "texto": "A casa configurada converte-se nos dados do Builder (estrutura, camadas, quantidades)." },
-    { "com": "orcamentacao", "texto": "Vai receber os preços reais da Orçamentação." }
+    {
+      "com": "builder",
+      "texto": "A casa configurada converte-se nos dados do Builder (estrutura, camadas, quantidades)."
+    },
+    {
+      "com": "gerador",
+      "texto": "Vai receber os preços reais da Orçamentação (aba do Gerador de documentos)."
+    }
   ]
 }

@@ -1,11 +1,11 @@
 // As páginas do hub, desenhadas a partir do estado E (dados.js). Os botões levam data-acao; o app.js trata dos cliques.
 import { E, projeto, nomeProjeto, checkpointsDe, tarefasDe, decisaoDaTarefa, decisoesDe, resumo, feitosDe, chave, documentosDe, seccoesDe, anexosDe, notasDe, TIPOS_NOTA, podeMexerNota,
-  marcadosEm, criticasDe, paraMim, minhaMarcacao, checkpointsDaAba } from './dados.js';
+  marcadosEm, criticasDe, paraMim, minhaMarcacao, checkpointsDaAba, linkProjeto, dentroDe } from './dados.js';
 import { img } from './imagens.js';
 import { ic, esc, dia, diaCurto, iniciais, euros, ha } from './util.js';
 import { htmlCriticas } from './equipa.js';
 import { resumoInicio } from './social.js';
-import { blocoProjeto as blocoMateriais } from './materiais-vista.js';
+import { blocoProjeto as blocoMateriais, pagina as paginaMateriais, contagem as nMateriais } from './materiais-vista.js';
 import { htmlDiagnostico } from './ar-android.js';
 
 const ROTULO = { por_fazer: 'Por fazer', em_curso: 'Em curso', bloqueada: 'Bloqueada', por_aprovar: 'À espera de aprovação', concluida: 'Concluída', concluido: 'Concluído' };
@@ -20,7 +20,6 @@ export function fecharTudo() { abertos.clear(); descricoesAbertas.clear(); notas
 
 const saudacao = () => { const h = new Date().getHours(); return h < 6 ? 'Boa noite' : h < 13 ? 'Bom dia' : h < 20 ? 'Boa tarde' : 'Boa noite'; };
 const novo = (tipo, id) => (E.novos.has(chave(tipo, id)) ? '<span class="chip novo">Novo</span>' : '');
-const linkProjeto = (id) => `#/projeto/${(projeto(id) || {}).slug || id}`;
 const appChip = (id) => (id ? `<a class="chip app" href="${linkProjeto(id)}" title="Esta tarefa poupa tempo com outra aplicação">${ic('app', 'ic-sm')}Sugerido: usar ${esc(nomeProjeto(id))}</a>` : '');
 const custoChip = (c) => (c ? `<span class="chip custo">${ic('custo', 'ic-sm')}${esc(c)}</span>` : '');
 const pillDecisao = (d) => (d ? `<button type="button" class="decisao-pill ${d.estado}" data-acao="ver-decisao" data-id="${d.id}">${ic('decisao', 'ic-sm')}${d.estado === 'aberta' ? 'Decisão' : 'Decidido'}</button>` : '');
@@ -109,24 +108,34 @@ export function inicio() {
 // apenas as abas pipeline e custos e sobre o projeto dentro da aba do workflow como sub-secções dela, tal como estava
 // anteriormente» — ficam Workflow, Documentos e (no Step Inside) Teste do AR.
 // 2026-11-12: «Dentro do projeto do Builder cria uma aba que vai ter as nossas páginas» → Páginas (o JSON diz "paginas": true)
-export const ABAS = { workflow: 'Workflow', paginas: 'Páginas', documentos: 'Documentos', 'teste-ar': 'Teste do AR' };
-export const abasDe = (p) => Object.keys(ABAS).filter((k) => (k !== 'teste-ar' || p.teste_ar) && (k !== 'paginas' || p.paginas));
-// a aba de uma rota: o nome da aba, ou a aba onde está o item (t-, cp- → Workflow; doc- → Documentos ou Teste do AR)
+// 2026-11-21 (migração 0027): «coloques a orçamentação e os materiais como abas do gerador de documentos e que movas a aba
+// das Páginas de dentro do builder para a nav-bar inicial» → o JSON de um projeto pode dar as suas abas, por ordem
+// ("abas"; a primeira abre-se em #/projeto/<slug>): o Gerador tem Workflow, Orçamentação, Materiais e Documentos; as
+// Páginas (projeto da barra) abrem nas páginas e têm o seu Workflow.
+export const ABAS = { workflow: 'Workflow', paginas: 'Páginas', orcamentacao: 'Orçamentação', materiais: 'Materiais', documentos: 'Documentos', 'teste-ar': 'Teste do AR' };
+export const abasDe = (p) => (p.abas || Object.keys(ABAS).filter((k) => !['paginas', 'orcamentacao', 'materiais'].includes(k)))
+  .filter((k) => ABAS[k] && (k !== 'teste-ar' || p.teste_ar));
+// a aba de uma rota: o nome da aba, ou a aba onde está o item (t-, cp- → a aba do checkpoint; doc- → Documentos, Páginas
+// ou Teste do AR; m- → Materiais); sem nada, a primeira
 export function abaDe(p, alvo) {
   if (!p) return 'workflow';
-  if (abasDe(p).includes(alvo)) return alvo;
+  const abas = abasDe(p);
+  if (abas.includes(alvo)) return alvo;
   const m = /^doc-(\d+)$/.exec(alvo || '');
   if (m) {
     const d = E.documentos.find((x) => x.id === Number(m[1]));
-    return d && d.tipo === 'ar' && p.teste_ar ? 'teste-ar' : d && d.tipo === 'pagina' && p.paginas ? 'paginas' : 'documentos';
+    const k = d && d.tipo === 'ar' ? 'teste-ar' : d && d.tipo === 'pagina' ? 'paginas' : 'documentos';
+    return abas.includes(k) ? k : abas.includes('documentos') ? 'documentos' : abas[0];
   }
-  const c = /^(cp|t)-(\d+)$/.exec(alvo || '');   // a checkpoint or task of the Páginas tab opens there
-  if (c && p.paginas) {
+  if (/^m-[0-9a-f-]+$/.test(alvo || '') && abas.includes('materiais')) return 'materiais';
+  const c = /^(cp|t)-(\d+)$/.exec(alvo || '');   // a checkpoint or task opens in its checkpoint's tab
+  if (c) {
     const cpId = c[1] === 'cp' ? Number(c[2]) : (E.tarefas.find((t) => t.id === Number(c[2])) || {}).checkpoint_id;
     const cp = E.checkpoints.find((x) => x.id === cpId);
-    if (cp && cp.aba === 'paginas') return 'paginas';
+    const k = (cp && cp.aba) || 'workflow';
+    if (abas.includes(k)) return k;
   }
-  return 'workflow';
+  return abas[0];
 }
 // o ponto de situação do projeto, por tópicos (o utilizador, 2026-11-11: «o objetivo de um ponto de situação é ser por
 // tópicos e preciso e claro»): public/dados/projetos/<id>.json → situacao { dia, feito, agora, falta }
@@ -137,14 +146,17 @@ export function htmlSituacao(p, aberta = false) {
   return `<details class="situacao"${aberta ? ' open' : ''}><summary>Ponto de situação${s.dia ? ` <span class="fraco">· ${dia(s.dia)}</span>` : ''}</summary>
     <div class="sit">${g('Feito', s.feito, 'feito')}${g('Agora', s.agora, 'agora')}${g('Falta ou à espera', s.falta, 'falta')}</div></details>`;
 }
-export function paginaProjeto(p, aba = 'workflow') {
+export function paginaProjeto(p, aba) {
   const abas = abasDe(p);
-  if (!abas.includes(aba)) aba = 'workflow';
+  if (!abas.includes(aba)) aba = abas[0];
   const r = resumo(p.id);
   const nDocs = documentosDe(p.id).filter((d) => d.tipo !== 'ar' && d.tipo !== 'pagina').length, nAR = documentosDe(p.id, 'ar').length;
   const wf = checkpointsDaAba(p.id), wfFeitos = wf.filter((c) => c.estado === 'concluido').length;
-  const conta = { workflow: wf.length ? `${wfFeitos}/${wf.length}` : '', paginas: documentosDe(p.id, 'pagina').length || '', documentos: nDocs || '', 'teste-ar': nAR || '' };
-  const corpo = aba === 'documentos' ? documentos(p) : aba === 'teste-ar' ? testeAR(p) : aba === 'paginas' ? paginas(p) : workflow(p, r);
+  const orc = checkpointsDaAba(p.id, 'orcamentacao'), orcFeitos = orc.filter((c) => c.estado === 'concluido').length;
+  const conta = { workflow: wf.length ? `${wfFeitos}/${wf.length}` : '', paginas: documentosDe(p.id, 'pagina').length || '', documentos: nDocs || '', 'teste-ar': nAR || '',
+    orcamentacao: orc.length ? `${orcFeitos}/${orc.length}` : '', materiais: nMateriais() || '' };
+  const corpo = aba === 'documentos' ? documentos(p) : aba === 'teste-ar' ? testeAR(p) : aba === 'paginas' ? paginas(p)
+    : aba === 'orcamentacao' ? orcamentacao(p) : aba === 'materiais' ? `<section aria-label="Materiais">${paginaMateriais({ emAba: true })}</section>` : workflow(p, r);
 
   return `
   <div class="projeto-cabeca">
@@ -155,7 +167,7 @@ export function paginaProjeto(p, aba = 'workflow') {
   </div>
   ${p.app ? `<div class="cta-app"><div><h3>${esc(p.nome)} está online</h3><p>Lê primeiro em que ponto está e o próximo passo; depois abre a aplicação.</p></div>
     <a class="btn primario grande" href="${esc(p.app.url)}" target="_blank" rel="noopener" title="Abre noutra janela">${esc(p.app.rotulo)}${ic('abrir')}<span class="so-leitor"> (abre noutra janela)</span></a></div>` : ''}
-  <nav class="sub-abas" id="sub-abas" aria-label="Secções do projeto">${abas.map((k) => `<a href="#/projeto/${p.slug}${k === 'workflow' ? '' : '/' + k}"${k === aba ? ' aria-current="page"' : ''}>${ABAS[k]}${conta[k] ? ` <span class="num">${conta[k]}</span>` : ''}</a>`).join('')}</nav>
+  <nav class="sub-abas" id="sub-abas" aria-label="Secções do projeto">${abas.map((k) => `<a href="#/projeto/${p.slug}${k === abas[0] ? '' : '/' + k}"${k === aba ? ' aria-current="page"' : ''}>${ABAS[k]}${conta[k] ? ` <span class="num">${conta[k]}</span>` : ''}</a>`).join('')}</nav>
   <div class="aba-corpo">${corpo}</div>`;
 }
 
@@ -250,14 +262,49 @@ function paginas(p) {
       </div>
       ${corpo}
     </section>
-    <section aria-labelledby="t-paginas-wf" style="margin-top:32px">
+    ${cps.length || !abasDe(p).includes('workflow') ? `<section aria-labelledby="t-paginas-wf" style="margin-top:32px">
       <div class="seccao-cabeca">
         <div><h2 id="t-paginas-wf">Checkpoints e tarefas das páginas</h2><p>O que falta para as páginas, por ordem. <span class="num">${feitos} de ${cps.length}</span> concluídos. Clica num checkpoint para ver as tarefas e numa tarefa para o ponto de situação e a conversa.</p></div>
         ${E.eu.editar ? `<div class="botoes"><button class="btn" type="button" data-acao="acrescentar" data-projeto="${p.id}" data-tipo="checkpoint" data-aba="paginas">${ic('mais')}Checkpoint</button>
           <button class="btn" type="button" data-acao="acrescentar" data-projeto="${p.id}" data-tipo="tarefa" data-aba="paginas"${cps.length ? '' : ' disabled title="Acrescenta primeiro um checkpoint"'}>${ic('mais')}Tarefa</button></div>` : ''}
       </div>
       ${cps.length ? `<ol class="workflow">${cps.map((c, i) => passo(c, i)).join('')}</ol>` : '<p class="vazio">Ainda sem checkpoints nesta aba.</p>'}
-    </section>`;
+    </section>` : ''}`;
+}
+
+// ---------------------------------------------------------------- aba Orçamentação do Gerador (migração 0027)
+// O que era o projeto Orçamentação: a aplicação (/orcamentacao/), o que é e o ponto de situação (orcamentacao.json) e
+// os seus checkpoints e tarefas (checkpoints.aba = 'orcamentacao' no Gerador).
+function orcamentacao(p) {
+  const s = dentroDe('orcamentacao') || {};
+  const cps = checkpointsDaAba(p.id, 'orcamentacao'), feitos = cps.filter((c) => c.estado === 'concluido').length;
+  const lista = (t, l, icone) => (l && l.length ? `<section class="bloco-lateral"><h3>${t}</h3><ul class="lista-simples">${l.map((o) => `<li>${ic(icone, 'ic-sm')}<span class="pequeno">${esc(o)}</span></li>`).join('')}</ul></section>` : '');
+  return `<div class="grelha-2">
+    <div>
+      <section aria-labelledby="t-orc">
+        <div class="seccao-cabeca">
+          <div><h2 id="t-orc">Orçamentação${s.fase ? ` <span class="fase">${esc(s.fase)}</span>` : ''}</h2><p>${esc(s.descricao || '')}</p></div>
+          ${s.app ? `<div class="botoes"><a class="btn primario" href="${esc(s.app.url)}" target="_blank" rel="noopener" title="Abre noutra janela">${esc(s.app.rotulo)}${ic('abrir')}<span class="so-leitor"> (abre noutra janela)</span></a></div>` : ''}
+        </div>
+        ${htmlSituacao(s)}
+      </section>
+      <section aria-labelledby="t-orc-wf" style="margin-top:32px">
+        <div class="seccao-cabeca">
+          <div><h2 id="t-orc-wf">Checkpoints e tarefas da orçamentação</h2><p>Os checkpoints por ordem e as tarefas para chegar a cada um. <span class="num">${feitos} de ${cps.length}</span> concluídos. Clica num checkpoint para ver as tarefas e numa tarefa para o ponto de situação e a conversa.</p></div>
+          ${E.eu.editar ? `<div class="botoes"><button class="btn" type="button" data-acao="acrescentar" data-projeto="${p.id}" data-tipo="checkpoint" data-aba="orcamentacao">${ic('mais')}Checkpoint</button>
+            <button class="btn" type="button" data-acao="acrescentar" data-projeto="${p.id}" data-tipo="tarefa" data-aba="orcamentacao"${cps.length ? '' : ' disabled title="Acrescenta primeiro um checkpoint"'}>${ic('mais')}Tarefa</button></div>` : ''}
+        </div>
+        ${cps.length ? `<ol class="workflow">${cps.map((c, i) => passo(c, i)).join('')}</ol>` : '<p class="vazio">Ainda sem checkpoints nesta aba.</p>'}
+      </section>
+    </div>
+    <aside class="lateral">
+      ${blocoMateriais(s)}
+      ${lista('Objetivos', s.objetivos, 'certo')}
+      ${lista('Futuro', s.futuro, 'seta')}
+      ${s.organizacao ? `<section class="bloco-lateral"><h3>Organização</h3>
+        <dl class="organizacao"><dt>Código</dt><dd>${esc(s.organizacao.codigo)}</dd><dt>Publicado</dt><dd>${esc(s.organizacao.publicado)}</dd><dt>Ramo</dt><dd>${esc(s.organizacao.ramo)}</dd></dl></section>` : ''}
+    </aside>
+  </div>`;
 }
 
 // imagens anexadas (checkpoint, tarefa ou nota): miniaturas que abrem em grande no visor

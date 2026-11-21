@@ -7,7 +7,7 @@
 import { E, projeto, tarefasDe, decisaoDaTarefa, anexosDe, notasDe, TIPOS_NOTA, marcadosEm, carregarAtividade, escrever, apagarMensagem,
   darSituacao, pedirSituacao, pedirAprovacao, decidirAprovacao, marcar, desmarcar, marcacoesVistas, mudarTarefa } from './dados.js';
 import { $, ic, esc, iniciais, aviso, abrirDialogo, fecharDialogo, dia, ha, mov } from './util.js';
-import { galeria } from './vistas.js';
+import { galeria, ABAS } from './vistas.js';
 import * as CV from './conversa.js';
 
 export const ROTULO = { por_fazer: 'Por fazer', em_curso: 'Em curso', bloqueada: 'Bloqueada', por_aprovar: 'À espera de aprovação', concluida: 'Concluída', concluido: 'Concluído' };
@@ -31,7 +31,7 @@ function html() {
   const cp = tarefa ? E.checkpoints.find((c) => c.id === x.checkpoint_id) : x;
   return `<div class="ficha">
     <div class="ficha-topo">
-      <nav class="ficha-caminho" aria-label="Onde está"><span>${esc(p.nome)}</span>${tarefa && cp ? `<span aria-hidden="true">/</span><button type="button" class="ligacao-texto" data-acao="ficha-abrir" data-alvo="checkpoint" data-id="${cp.id}" title="Abrir o checkpoint">${esc(cp.titulo)}</button>` : ''}</nav>
+      <nav class="ficha-caminho" aria-label="Onde está"><span>${esc(p.nome)}</span>${cp && cp.aba && ABAS[cp.aba] ? `<span aria-hidden="true">/</span><span>${ABAS[cp.aba]}</span>` : ''}${tarefa && cp ? `<span aria-hidden="true">/</span><button type="button" class="ligacao-texto" data-acao="ficha-abrir" data-alvo="checkpoint" data-id="${cp.id}" title="Abrir o checkpoint">${esc(cp.titulo)}</button>` : ''}</nav>
       <div class="ficha-topo-acoes"><a class="btn pequeno" href="#/projeto/${p.slug}/${tarefa ? 't' : 'cp'}-${x.id}" data-acao="ficha-ir">${ic('abrir', 'ic-sm')}Abrir o projeto</a>
         <button class="icone-botao" type="button" data-acao="fechar-dlg" aria-label="Fechar">${ic('fechar')}</button></div>
     </div>

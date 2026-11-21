@@ -63,7 +63,7 @@ test('Início: cada projeto abre um pop-up com o que está em curso e o que prec
 });
 
 test('ecrã da tarefa: ponto de situação por tópicos, marcar, pedir, mensagem com ficheiro e áudio, sugestão', async ({ page }) => {
-  const erros = await abrir(page, { rota: '/#/projeto/orcamentacao' });
+  const erros = await abrir(page, { rota: '/#/projeto/gerador/orcamentacao' });
   // everything collapsed: open the checkpoint, then the task title opens its screen
   await page.locator('.passo', { hasText: 'Composição do preço final' }).locator('.passo-topo').click();
   await page.locator('.tarefa-titulo', { hasText: 'Definir como se calcula cada parcela' }).click();
@@ -119,7 +119,7 @@ test('ecrã da tarefa: ponto de situação por tópicos, marcar, pedir, mensagem
   // the project button
   await f.getByRole('link', { name: 'Abrir o projeto' }).click();
   await expect(f).toBeHidden();
-  await expect(page).toHaveURL(/#\/projeto\/orcamentacao\/t-\d+$/);
+  await expect(page).toHaveURL(/#\/projeto\/gerador\/t-\d+$/);
   expect(erros).toEqual([]);
 });
 
@@ -220,7 +220,7 @@ test('críticas: deixar uma crítica com imagem, a equipa é avisada, passar a t
   expect(n).toEqual([[null, 'Teste Hub deixou uma crítica no Gerador de documentos (Algo correu mal): Larguei a planta e o PDF da Cobertura saiu em branco.']]);
   // the Início shows it needs attention
   await page.goto('/#/');
-  await expect(page.locator('.projeto-linha', { hasText: 'Gerador de documentos' }).locator('.chip.atencao')).toContainText('1 precisa de atenção');
+  await expect(page.locator('.projeto-linha', { hasText: 'Gerador de documentos' }).locator('.chip.atencao')).toContainText('2 precisam de atenção');   // the critique and a task of the Orçamentação tab
   await page.locator('.projeto-linha', { hasText: 'Gerador de documentos' }).click();
   const pop = page.locator('#projeto-pop');
   await expect(pop.locator('#pp-criticas')).toContainText('saiu em branco');
@@ -236,7 +236,7 @@ test('críticas: deixar uma crítica com imagem, a equipa é avisada, passar a t
 
 test('Log: ao lado da checklist, com filtro; avisos de lado do que mudou; desligar nas Definições', async ({ page }) => {
   const erros = await abrir(page, { equipa: { registo: [
-    { id: 1, projeto: 'orcamentacao', tipo: 'situacao', texto: 'Claude enviou 11 perguntas ao Dinis', detalhe: 'Itens 1 a 11 da tarefa 169.', ator_id: null, ator_nome: 'Claude', ref_tipo: 'tarefa', ref_id: 169, criada_em: '2026-11-10T09:00:00Z' },
+    { id: 1, projeto: 'gerador', tipo: 'situacao', texto: 'Claude enviou 11 perguntas ao Dinis', detalhe: 'Itens 1 a 11 da tarefa 169.', ator_id: null, ator_nome: 'Claude', ref_tipo: 'tarefa', ref_id: 169, criada_em: '2026-11-10T09:00:00Z' },
   ] } });
   // another person changes things: a notice on the side, from the Log (not a notification)
   await db(page, () => window.__fake.comoOutro((x) => x.tarefas.update({ estado: 'em_curso' }).eq('id', 72)));
@@ -252,7 +252,7 @@ test('Log: ao lado da checklist, com filtro; avisos de lado do que mudou; deslig
   await expect(claude).toContainText('Claude enviou 11 perguntas');
   await claude.locator('summary').click();
   await expect(claude).toContainText('Itens 1 a 11 da tarefa 169.');
-  await g.locator('[data-log="projeto"]').selectOption('orcamentacao');
+  await g.locator('[data-log="projeto"]').selectOption('gerador');
   await expect(g.locator('.log-linha')).toHaveCount(1);
   await captura(page, 'equipa-log');
   await page.keyboard.press('Escape');
@@ -290,10 +290,10 @@ test('Comentar em todas as abas do hub: o botão da barra de cima, já com o pro
   await d.getByLabel('O que aconteceu?').fill('As cores do preço final confundem.');
   await d.getByRole('button', { name: 'Enviar' }).click();
   await expect(d).toBeVisible();   // without a project the form does not go
-  await d.getByLabel('Sobre que projeto?').selectOption('orcamentacao');
+  await d.getByLabel('Sobre que projeto?').selectOption('gerador');
   await d.getByRole('button', { name: 'Enviar' }).click();
   await expect(d).toBeHidden();
-  expect(await db(page, () => window.__fake.db.criticas.map((c) => [c.projeto, c.tipo]))).toEqual([['orcamentacao', 'nao_gostei']]);
+  expect(await db(page, () => window.__fake.db.criticas.map((c) => [c.projeto, c.tipo]))).toEqual([['gerador', 'nao_gostei']]);
   // on a project tab the project is already chosen
   await page.goto('/#/projeto/builder');
   await page.getByRole('button', { name: 'Crítica ou comentário sobre um projeto' }).click();
@@ -302,7 +302,7 @@ test('Comentar em todas as abas do hub: o botão da barra de cima, já com o pro
   expect(erros).toEqual([]);
 });
 
-for (const [rota, nome, projeto] of [['/gerador/', 'Gerador de documentos', 'gerador'], ['/orcamentacao/', 'Orçamentação', 'orcamentacao']]) {
+for (const [rota, nome, projeto] of [['/gerador/', 'Gerador de documentos', 'gerador'], ['/orcamentacao/', 'Gerador de documentos · Orçamentação', 'gerador']]) {
   test(`Comentar dentro da app: ${nome}`, async ({ page }) => {
     const erros = [];
     page.on('pageerror', (e) => erros.push(e.message));

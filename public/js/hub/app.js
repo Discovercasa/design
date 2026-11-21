@@ -152,37 +152,49 @@ async function verificarVersao() {
 }
 
 // ---------------------------------------------------------------- navegação e rotas
+// endereços antigos (migração 0027, 2026-11-21): a Orçamentação e os Materiais são abas do Gerador; as Páginas, que eram
+// uma aba do Builder, são um projeto da barra
+function antigo(a, b, c) {
+  if (a === 'materiais') return `#/projeto/gerador/${b || 'materiais'}`;
+  const dentro = a === 'projeto' && D.dentroPorSlug(b);
+  if (dentro) { const d = D.DENTRO[dentro.id]; return `#/projeto/${(D.projeto(d.de) || {}).slug || d.de}/${c || d.aba}`; }
+  if (a === 'projeto' && b === 'builder' && c === 'paginas') return '#/projeto/paginas';
+  return null;
+}
 function rota() {
   const h = location.hash.replace(/^#\/?/, '');
   const [a, b, c] = h.split('/');
+  const novo = antigo(a, b, c);
+  if (novo) return { nome: 'mudou', para: novo };
   if (a === 'projeto') return { nome: 'projeto', p: D.projetoPorSlug(b), alvo: c };
   if (['pessoal', 'definicoes', 'novidades'].includes(a)) return { nome: a };
   if (a === 'social') return { nome: 'social', sub: b === 'obras' ? 'obras' : 'planeamento', alvo: b === 'obras' ? c : b };
-  if (a === 'materiais') return { nome: 'materiais', alvo: b };
   return { nome: 'inicio' };
 }
+// a barra: os projetos e, à parte, as Páginas (as que entregamos aos clientes) e as Redes sociais
 function desenharNav() {
   const r = rota();
+  const link = (p, cls = '') => `<a${cls ? ` class="${cls}"` : ''} href="#/projeto/${p.slug}"${r.nome === 'projeto' && r.p === p ? ' aria-current="page"' : ''}>${esc(p.nome)}</a>`;
   $('#nav').innerHTML = `<a href="#/"${r.nome === 'inicio' ? ' aria-current="page"' : ''}>Início</a>` +
-    E.projetos.map((p) => `<a href="#/projeto/${p.slug}"${r.nome === 'projeto' && r.p === p ? ' aria-current="page"' : ''}>${esc(p.nome)}</a>`).join('') +
-    `<a class="nav-separada" href="#/materiais"${r.nome === 'materiais' ? ' aria-current="page"' : ''}>Materiais</a>` +
+    E.projetos.filter((p) => p.id !== 'paginas').map((p) => link(p)).join('') +
+    E.projetos.filter((p) => p.id === 'paginas').map((p) => link(p, 'nav-separada')).join('') +
     `<a class="nav-separada" href="#/social"${r.nome === 'social' ? ' aria-current="page"' : ''}>Redes sociais</a>`;
   const atual = $('#nav [aria-current]');
   if (atual) atual.scrollIntoView({ block: 'nearest', inline: 'nearest' });
 }
 function desenhar(mudouRota) {
   const r = rota(), v = $('#vista');
+  if (r.nome === 'mudou') { location.replace(r.para); return; }
   const aviso_ = E.erro ? `<div class="nota" style="margin-bottom:32px;border-color:var(--erro)">${ic('atencao')}<p><b>Os checkpoints, tarefas e decisões ainda não estão disponíveis.</b> A base de dados do hub precisa das migrações 0004 e 0005. <span class="fraco">(${esc(E.erro)})</span></p></div>` : '';
   let html;
   if (r.nome === 'projeto' && r.p) { html = V.paginaProjeto(r.p, V.abaDe(r.p, r.alvo)); document.title = `${r.p.nome} · Discovercasa Design`; }
   else if (r.nome === 'pessoal') { html = V.pessoal(); document.title = 'Área pessoal · Discovercasa Design'; }
   else if (r.nome === 'definicoes') { html = V.definicoes(!!pedidoInstalar); document.title = 'Definições · Discovercasa Design'; }
   else if (r.nome === 'social') { html = SO.pagina(r.sub); document.title = 'Redes sociais · Discovercasa Design'; }
-  else if (r.nome === 'materiais') { html = MV.pagina(); document.title = 'Materiais · Discovercasa Design'; }
   else if (r.nome === 'novidades') { html = V.novidades(novidades); document.title = 'Novidades · Discovercasa Design'; marcarNovidadesVistas(); }
   else { html = V.inicio(); document.title = 'Início · Discovercasa Design'; }
   // materials from the Hub (migration 0016): read once, when the Materiais tab or a project that uses them is opened
-  if (MV.precisa() && (r.nome === 'materiais' || (r.nome === 'projeto' && r.p && r.p.materiais))) MV.garantir().then(() => desenhar(false));
+  if (MV.precisa() && r.nome === 'projeto' && r.p && (r.p.materiais || V.abasDe(r.p).includes('materiais'))) MV.garantir().then(() => desenhar(false));
   const y = window.scrollY;
   v.innerHTML = aviso_ + html;
   encherBarras(v);
@@ -222,6 +234,7 @@ const chaveDe = (r) => r.nome + (r.p ? r.p.id + ':' + V.abaDe(r.p, r.alvo) : '')
 window.addEventListener('hashchange', () => {
   if (!E.eu.id) return;
   const r = rota();
+  if (r.nome === 'mudou') { location.replace(r.para); return; }
   const chaveRota = chaveDe(r);
   fecharPops();
   desenharNav();
@@ -864,7 +877,7 @@ document.addEventListener('change', async (e) => {
       else el.checked = !el.checked;
       return;
     case 'estado-cp': if (await tentar(() => D.mudarCheckpoint(id, { estado: el.value }))) depois(); return;
-    case 'projeto-novo': { const f = el.closest('form'); f.elements.checkpoint.innerHTML = P.opcoesCheckpoints(el.value, null, f.elements.aba ? f.elements.aba.value : undefined); f.elements.posicao.innerHTML = P.opcoesPosicao(el.value); return; }
+    case 'projeto-novo': { const f = el.closest('form'); f.elements.checkpoint.innerHTML = P.opcoesCheckpoints(el.value, null, f.elements.aba ? f.elements.aba.value : undefined); f.elements.posicao.innerHTML = P.opcoesPosicao(el.value, null, f.elements.aba ? f.elements.aba.value : ''); return; }
     case undefined:
       if ((el.name === 'ficheiros' || el.name === 'pasta') && el.closest('form')) {
         const f = el.closest('form'), lista = f.querySelector('[data-escolhidos]');
@@ -956,7 +969,8 @@ document.addEventListener('submit', async (e) => {
       case 'editar-cp':
         ok = await tentar(async () => {
           const id = Number(f.dataset.id), c = E.checkpoints.find((x) => x.id === id);
-          const antes = D.checkpointsDe(c.projeto).findIndex((x) => x.id === id) + 1, depoisPos = Number(v('posicao'));
+          const inicial = [...f.elements.posicao.options].find((o) => o.defaultSelected);   // where it was (the tab's own list)
+          const antes = inicial ? Number(inicial.value) : 0, depoisPos = Number(v('posicao'));
           await D.mudarCheckpoint(id, { titulo: v('titulo'), descricao: v('descricao'), estado: v('estado'), criterio_saida: v('criterio_saida') });
           if (depoisPos && depoisPos !== antes) await D.moverCheckpoint(id, depoisPos);
         }, f);

@@ -1,5 +1,15 @@
 [
   {
+    "dia": "2026-11-21",
+    "titulo": "A barra segue os projetos: Páginas na barra; Orçamentação e Materiais no Gerador",
+    "itens": [
+      "As «Páginas» (as que entregamos aos clientes, por obra) saíram de dentro do Builder: estão na barra, ao lado das Redes sociais, com o seu Workflow e os seus documentos.",
+      "O Gerador de documentos tem agora as abas Workflow, Orçamentação (a aplicação, o ponto de situação e os seus checkpoints e tarefas) e Materiais (os materiais e preços do Hub), além dos Documentos.",
+      "As sugestões e as críticas escolhem entre os projetos da barra: o que era da Orçamentação passou para o Gerador; as críticas sobre as páginas passaram para as Páginas.",
+      "Os endereços antigos continuam a funcionar e levam ao sítio novo; a posição de um checkpoint conta só os da sua aba."
+    ]
+  },
+  {
     "dia": "2026-11-19",
     "titulo": "Builder: as páginas por obra",
     "itens": [

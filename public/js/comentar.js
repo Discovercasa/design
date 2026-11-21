@@ -11,7 +11,7 @@
   const APPS = [
     [/^\/build-your-house\//, 'build_your_house', 'Build Your House', 'build-your-house', 64],
     [/^\/gerador\//, 'gerador', 'Gerador de documentos', 'gerador', 0],
-    [/^\/orcamentacao\//, 'orcamentacao', 'Orçamentação', 'orcamentacao', 0],
+    [/^\/orcamentacao\//, 'gerador', 'Gerador de documentos · Orçamentação', 'gerador', 0],   // aba do Gerador (2026-11-21)
     [/^\/ar-teste\.html/, 'plataforma_cliente', 'Step Inside', 'step-inside', 0],
   ];
   const app = APPS.find((a) => a[0].test(location.pathname));

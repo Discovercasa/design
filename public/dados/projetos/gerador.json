@@ -3,7 +3,7 @@
   "slug": "gerador",
   "nome": "Gerador de documentos",
   "resumo": "Larga a planta de arquitetura e recebe os documentos de produção da obra.",
-  "descricao": "Recebe a planta de arquitetura (DWFx ou PDF vetorial), encontra sozinho as plantas, monta a casa com o motor do Builder e devolve três documentos: Módulos, Cobertura e Listagem de material, com uma vista 3D. Corre tudo no browser.",
+  "descricao": "Recebe a planta de arquitetura (DWFx ou PDF vetorial), encontra sozinho as plantas, monta a casa com o motor do Builder e devolve três documentos: Módulos, Cobertura e Listagem de material, com uma vista 3D. Corre tudo no browser. A Orçamentação (o preço a partir da Listagem de material) e os Materiais do Hub são abas deste projeto desde 21/11.",
   "fase": "Protótipo publicado",
   "situacao": {
     "dia": "2026-11-19",
@@ -34,10 +34,25 @@
   ],
   "materiais": "O código de produto de cada linha da Listagem de material liga-a ao material do Hub; o preço faz-se na Orçamentação.",
   "metodo": "Usa o motor e as regras do Builder.",
-  "app": { "url": "/gerador/", "rotulo": "Abrir o Gerador" },
-  "organizacao": { "codigo": "BOB/gerador/web/ e BOB/ferramentas/documentos/", "publicado": "public/gerador/", "ramo": "gerador/<tarefa>" },
+  "app": {
+    "url": "/gerador/",
+    "rotulo": "Abrir o Gerador"
+  },
+  "organizacao": {
+    "codigo": "BOB/gerador/web/ e BOB/ferramentas/documentos/",
+    "publicado": "public/gerador/",
+    "ramo": "gerador/<tarefa>"
+  },
   "ligacoes": [
-    { "com": "orcamentacao", "texto": "A Listagem de material é a base do preço." },
-    { "com": "plataforma_cliente", "texto": "Os leitores de DWFx e PDF servem a interpretação dos documentos." }
+    {
+      "com": "plataforma_cliente",
+      "texto": "Os leitores de DWFx e PDF servem a interpretação dos documentos."
+    }
+  ],
+  "abas": [
+    "workflow",
+    "orcamentacao",
+    "materiais",
+    "documentos"
   ]
 }

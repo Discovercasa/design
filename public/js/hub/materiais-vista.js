@@ -1,4 +1,4 @@
-// Aba «Materiais» do hub (#/materiais) e o bloco «Materiais do Hub» das páginas dos projetos que usam a lista
+// Aba «Materiais» do Gerador de documentos (#/projeto/gerador/materiais; até 2026-11-21 uma aba da barra, #/materiais) e o bloco «Materiais do Hub» das páginas dos projetos que usam a lista
 // (campo "materiais" em public/dados/projetos/<id>.json). Só de consulta: os dados vêm do Hub (migração 0016) e lêem-se
 // com o módulo comum /js/materiais.js, que as aplicações também usam.
 import * as M from '../materiais.js';
@@ -80,11 +80,13 @@ export function lista() {
     + (r.length > ver.length ? `<p class="suave pequeno mat-rodape">A mostrar ${ver.length} de ${r.length}. <button class="btn pequeno" type="button" data-acao="mat-mais">Mostrar mais</button></p>` : '');
 }
 
-export function pagina() {
-  const L = E.mat;
-  const cab = `<div class="cabeca-pagina"><div class="texto"><h1>Materiais e preços</h1>
+// 2026-11-21 (migração 0027): é uma aba do Gerador de documentos (#/projeto/gerador/materiais); emAba: um h2 em vez do h1
+export const contagem = () => (E.mat && E.mat.n ? E.mat.n.materiais : 0);
+export function pagina({ emAba = false } = {}) {
+  const L = E.mat, h = emAba ? 'h2' : 'h1';
+  const cab = `<div class="cabeca-pagina"><div class="texto"><${h}>Materiais e preços</${h}>
     <p class="suave">Do Hub, só de consulta: os materiais, o preço de cada fornecedor (com desconto e IVA) e o histórico dos preços.
-      O Hub atualiza-os nos dias úteis às 6h (Lisboa). Servem a Orçamentação, o Build Your House, o Gerador e o Step Inside.</p>
+      O Hub atualiza-os nos dias úteis às 6h (Lisboa). Servem a Orçamentação (a aba ao lado), o Build Your House, o Gerador e o Step Inside.</p>
     ${L ? `<div class="para-ti"><span class="chip">${ic('pasta', 'ic-sm')}<span class="num">${L.n.materiais}</span> materiais</span>
       <span class="chip">${ic('pessoa', 'ic-sm')}<span class="num">${L.n.fornecedores}</span> fornecedores</span>
       <span class="chip">${ic('custo', 'ic-sm')}<span class="num">${L.n.precos}</span> preços</span>
@@ -114,7 +116,7 @@ export function blocoProjeto(p) {
     : 'Ainda sem dados: o Hub envia a lista nos dias úteis às 6h.';
   return `<section class="bloco-lateral bloco-materiais"><h3>Materiais do Hub</h3>
     <p class="pequeno">${esc(p.materiais)}</p><p class="fraco mini" style="margin:8px 0 12px">${esc(estado)}</p>
-    <a class="btn pequeno" href="#/materiais">${ic('pasta', 'ic-sm')}Materiais e preços</a></section>`;
+    <a class="btn pequeno" href="#/projeto/gerador/materiais">${ic('pasta', 'ic-sm')}Materiais e preços</a></section>`;
 }
 
 export function descarregarCSV() {
