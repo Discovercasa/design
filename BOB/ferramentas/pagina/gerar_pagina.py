@@ -253,7 +253,8 @@ def gerar(pagina, saida):
         "GALERIA": galeria,
         "DADOS": json.dumps(dados, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/"),
         "MODULOS": json.dumps(_modulos(), separators=(",", ":")),
-        "GLB": base64.b64encode((modelo / "casa.glb").read_bytes()).decode("ascii"),
+        # gzipped (about 40 % of the GLB): pages with furniture, trees and grass stay under the hub's 50 MB file limit
+        "GLB": base64.b64encode(gzip.compress((modelo / "casa.glb").read_bytes(), 9, mtime=0)).decode("ascii"),
         "TEXTURAS": json.dumps(texturas, separators=(",", ":")),
         "PANOS": panos,
         "LEGAL": html.escape(legal),

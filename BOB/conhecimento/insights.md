@@ -543,3 +543,35 @@ he answers (`metodo-construtivo.md`). Condensed 2026-10-28 (history in git).
   glazed door is enough; minimum area: 17 m² is enough) and the same for the 14 m² «Closet» of Piso 2 if the licensing
   project files it as a closet → raise it with the architect before construction; the page itself only names and
   furnishes the rooms. Detail: `Construção Matosinhos/docs/estado.md`; registo-2026-3 2026-11-21 (13:40).
+- **2026-11-21** — **status: applied (Matosinhos round 3); not yet told as an insight.** A 3D exported from the hub must be
+  checked for hidden helper geometry before baking: black backing boxes behind the ripado (stuck out of our 77 mm cladding),
+  single-face soffits, inverted extrusion faces (parapet invisible from inside), open L corners, plasterboard and skirting
+  running into perpendicular walls. Unlit they pass unnoticed; once lit they show as black stains, holes and black corners →
+  run a check (face orientation, zero-thickness faces, objects inside walls, camera points inside furniture) on every
+  imported scene and fix it in the exporter so it is repeatable. Detail: `Construção Matosinhos/docs/estado.md` (Round 3);
+  registo-2026-3 2026-11-21 (16:40).
+  **Two more checks (added 2026-11-21 evening):** (a) coplanar overlapping faces render black lines in Cycles (two slabs
+  overlapping 2,4 cm in the same plane; the bottom of a wall in the plane of the slab underside): remove the overlap or lift
+  the wall (6 mm) — check for overlapping coplanar faces; (b) check lamp heights (a ceiling height given relative to the floor
+  where the tool expects it absolute hung every Piso 2 lamp 65 cm under the floor): a room without light in a 360° render is
+  the symptom, so also check that every toured room has a light source.
+  **Update 2026-11-22:** the coplanar-overlap check is now automatic in the Matosinhos pipeline (`gerar_casa.py`
+  `_sem_sobrepostas`: same-facing overlapping coplanar faces are layered 1,5 mm apart; none remain afterwards). The same
+  causes recurred in the frames (uprights and head/sill in one plane) and in wall corners closed flush (now 2 mm short).
+  **Suggestion:** move the check into the general tool (`ferramentas/pagina/casa_blender.py`) so every exported 3D gets it, not
+  only Matosinhos. Detail: `Construção Matosinhos/docs/estado.md` (Round 4); registo-2026-3 2026-11-22.
+- **2026-11-23** — **status: applied in part (Matosinhos round 5: `forro()`, pier to the ground, `_colisoes`); not yet told as
+  an insight.** Logical review checklist of a 3D before showing it (user: the errors found were ones «um ponto de vista lógico»
+  should catch): (1) cladding planes flush with the finish they replace (no recessed or projecting boards), width limited to
+  the facade it belongs to; (2) finishes that must reach the ground do (piers, returns); (3) furniture type by space (outdoor
+  on balconies/terraces, indoor inside); (4) collisions furniture vs railings/walls/other furniture (automatic `_colisoes`);
+  (5) floor finish per room as decided; (6) black zones from coplanar faces (`_sem_sobrepostas`). **Suggestion:** move
+  `_colisoes` and the checklist into the general tool (`ferramentas/pagina/casa_blender.py`) and make it a gate before every
+  preview. Detail: `Construção Matosinhos/docs/estado.md` (Round 5); registo-2026-3 2026-11-23.
+- **2026-11-23** — **status: done 2026-11-23 in Matosinhos (`_caixas_sem_coplanares` in `gerar_casa.py`); proposed: move into
+  the shared tool as a gate; not yet told.** Coplanar cladding boxes render black in Cycles: the faces of our own boxes
+  (ripado, pier, lintel bands) lay in the plane of a hub wall/slab face and showed as black strips beside the pier's ripado
+  (user screenshot 2026-11-24). The earlier check (`_sem_sobrepostas`) covers the hub's own faces only → check every new box
+  against the hub geometry automatically (each coplanar face moved 2 mm out before every render). **Suggestion:** put it in
+  `ferramentas/pagina/casa_blender.py` as a gate with the other checks. Detail: `Construção Matosinhos/docs/estado.md`
+  (Round 5); registo-2026-3 2026-11-24.

@@ -125,6 +125,20 @@ Why Claude learns the method; "vamos passo a passo" — an overall idea, then an
    real, covering exactly its zone. Tool: `ferramentas/pagina/gerar_pagina.py` + `modelo_pagina.html` accept a «camada» (ES module
    added to our 3D: moving parts, shutters, electrical symbols, neighbours); for Matosinhos the hub's static parts were baked
    (sun 21 Sep 10:00, live sun when moved). Consistent with the 2026-11-18 «tour is a mode of the 3D viewer» rule above.
+   **360° tour in EVERY room (user 2026-11-21, Matosinhos):** «quero que tenha pontos 360 em todas as divisórias: quartos,
+   sala, casas de banho, garagem, tudo, até uma vista de cada casa da parte de trás no jardim. É suposto ser um tour pela
+   casa, apresentar a casa a um cliente, atenção no detalhe» — a point in every room (bedrooms, living rooms, bathrooms,
+   kitchen, garage, storage, halls, balconies) plus one view of each house from its back garden; it must work as a tour
+   presenting the house to a client: no camera inside furniture or walls, no black corners or black door/wall parts, no
+   furniture in walls, aligned walls. Check these before delivering (Matosinhos doc 120 failed them; round 3 redid it, 24 points).
+   **Logical review of the 3D before every preview (user 2026-11-23, Matosinhos):** «estes erros … são erros que se tu analisares
+   o 3D de um ponto de vista lógico tu não deverias cometer» — review the model logically, not only visually: balcony/terrace
+   furniture is outdoor furniture (black-metal bistro sets); check furniture against railings and walls (collision check) before
+   every render; cladding in the plane of the finish it replaces and down to the ground; fix the errors found and any others.
+   **Preview and approval before upload (user 2026-11-21, Matosinhos):** «quando acabares os renders e o 3D da upload ao
+   link para o hub» and «antes e fazeres tudo mostra-me um preview do 3D e dos renders 360 para aprovar» — standing rule for
+   client pages from now on: show the user a preview of the 3D (captures) and of the 360° renders (contact sheets) and get
+   approval BEFORE uploading a client page to the hub. After approval, build the final page and upload it.
    **Real exterior always (2026-11-13):** "o exterior não deve estar só presente na tour 360 mas sim sempre em todos os
    projetos a não ser que seja mencionado que não queremos" — the surroundings are in the 3D, the images and the tour
    of every house unless told otherwise. Render stations: any PC (first the home PC, RTX 2060 6 GB — user confirmed,

@@ -1009,3 +1009,57 @@ The team's notes on hub task 84 (written in the hub by [membro da equipa] on 202
 > quando deres upload avisa-me por favor
 - Context: standing request for this delivery (the user asked to be told at upload). Final page «Habitação bifamiliar · Guifões» uploaded at about 16:15 as document 120, obra Matosinhos (now under the Páginas project); doc 119 renamed «Habitação bifamiliar · Guifões (versão de 21/11, 1.ª)». Before upload two defects of the new Piso 1 bedroom were fixed: wardrobe faced the wall (now faces the room), floor was garage concrete (now timber floor over the slab, also in the nook by the I.S. door).
 - Filed in: `Construção Matosinhos/docs/estado.md` → Delivered (doc 120 is the current page).
+
+### 2026-11-21 (about 16:40) — Matosinhos: list of defects in the page's 3D, «dá fix a tudo» [Matosinhos, Builder]
+> Anotei mais o menos todas as falhas que tinha no 3D de matosinhos, sei que foram falhas que já tinha na outra página mas quero que corrijas, maior parte são erros de geometria no exterior. Bugs visuais de manchas negras por todo o modelo, o ripado das portas singulares que estão na zona da garagem está diferente do nosso ripado, o ripado da varanda está completamente fora do sitio, uma das varandas a cobertura é uma face não tem espessura, a cobertura quando se vê pela parte de dentro aparece invisivel (consegue-se ver tudo por trás), nos quartos de tras da fração B tem pedra no chao em vez de madeira naquela zona e relva, o muro que divide as frações na parte de trás esta completamente errado. Disse por alto alguns pontos mas dá fix a tudo por favor.
+- Context: came with 5 screenshots of the 3D of the Matosinhos page (doc 120). Standing request: fix every defect listed and any other of the same kind.
+- Filed in: `Construção Matosinhos/docs/estado.md` → Round 3 (black stains, entrance doors, balcony soffits and ripado, parapet seen from inside, deck behind fração B, dividing wall); `conhecimento/insights.md` (hidden helper geometry in exported 3D).
+
+### 2026-11-21 (shortly after 16:40) — Matosinhos: interior geometry, 360° renders, a point in every room [Matosinhos, Builder]
+> a geometria do interior também está toda bugada, paredes desalinhada e fora do sítio, muitos dos renders 360 estão inaproveitáveis, portas e paredes com partes pretas principalmente junto dos cantos, mobília no meio de paredes e quero que tenha pontos 360 em todas as divisórias: quartos, sala, casas de banho, garagem, tudo, até uma vista de cada casa da parte de trás no jardim. É suposto ser um tour pela casa, apresentar a casa a um cliente, atenção no detalhe.
+- Context: continuation of the previous message (same screenshots).
+- Filed in: `conhecimento/discovercasa.md` → client page standard (360° tour in every room + back-garden view of each house; standing rule); `Construção Matosinhos/docs/estado.md` → Round 3 (walls, corners, furniture, 24-point tour; supersedes the 6-point tour of doc 119).
+
+### 2026-11-21 (evening) — Matosinhos: the team's VR project is the same house, our version follows the licensing drawings [Matosinhos, Builder]
+> sim exatamente é a mesma casa simplesmentes algumas mudanças na planta nesta versão que tens que criar
+- Context: answer to Claude's question whether the team's VR project for Matosinhos (company «VR PROJECTS/Matosinhos» folder: SketchUp model, GLB, panoramas) is the same house. Meaning: same house; the version we build follows the licensing drawings (DWFx rev 3), which have some plan changes compared with the VR project.
+- Filed in: `Construção Matosinhos/docs/estado.md` → Round 3 (VR project = same house, plan differences; the licensing drawings rule).
+
+### 2026-11-21 (about 19:00) — Matosinhos: upload the finished page to the hub [Matosinhos, Builder]
+> quando acabares os renders e o 3D da upload ao link para o hub
+- Context: instruction while the round-3 renders and 3D were being finished. Meaning: when the renders and the 3D are done, upload the page to the hub.
+- Filed in: `Construção Matosinhos/docs/estado.md` → Round 3 (status: upload after approval, see next entry).
+
+### 2026-11-21 (a few minutes after 19:00) — Matosinhos: preview of the 3D and the 360° renders for approval before anything is done [Matosinhos, Builder]
+> antes e fazeres tudo mostra-me um preview do 3D e dos renders 360 para aprovar
+- Context: follow-up to the previous message. Meaning (as relayed by the caller): before doing the whole job (final build and upload), show a preview of the 3D and of the 360° renders for the user's approval. Standing rule for client pages.
+- Filed in: `conhecimento/discovercasa.md` → client page standard (preview of the 3D and the 360° renders, approval before upload; standing rule); `Construção Matosinhos/docs/estado.md` → Round 3 (status: preview shown, awaiting approval).
+
+### 2026-11-22 (around midday) — Matosinhos: circled faulty zones; garage-only microcement; black zones; ripado over fração B's window [Matosinhos, Builder]
+> dei circle as zonas que estavam piores e com falhas. o chão apenas da garagem é de microcimento todas as outra zonas usam o pavimento comum das outras divisões.
+> Continua com zonas pretas nas paredes e portas
+> Já deste fix ao modelo 3D exterior? Do screenshot que vi as portas já estão com a textura correta mas continua com imensas zonas pretas. A geometria do detalhe por cima da janela grande da fração B está completamente errada, é suposto substituir a zona da parede com revestimento a capoto pelo revestimento em madeira e ocupar a largura toda, não parecer que está a sobrepor o revestimento e a sair para fora como está neste momento.
+- Context: came with the two panorama contact sheets (24 panoramas) and a capture of the 3D's street view, faulty zones circled: kitchen A (dark band at the foot of the tall units), bathroom A and Piso 1 bathroom A (black squares at the door frames' top corners, a strip of concrete at the shower wall), entrances A and B (stair foot), kitchen B (black strip at the stair); in the 3D street view: black on the left boundary wall, the gate, beside both entrance doors, under the balconies, and the timber band over fração B's big window. Answers the round-3 status (preview awaiting approval).
+- Filed in: `Construção Matosinhos/docs/estado.md` → Round 4 (floors decision; ripado over a window; root causes and fixes; status); `conhecimento/discovercasa.md` nothing (house-specific); `conhecimento/insights.md` → 2026-11-21 hidden-geometry insight (automatic coplanar check); facts for the rulebook listed in the report (ripado flush with ETICS; floor finish).
+
+### 2026-11-23 (morning) — Matosinhos: three screenshots of the 3D street view; ripado plane, balcony chair, pier to the ground; «review the 3D logically» [Matosinhos, Builder]
+> no primeiro screenshot esta tira de ripado tem de estar no mesmo nivel emtermos de espessura que o revestimento exterior, não pode estar mais dentro e em termos de largura não pode estar a sair pela varanda.
+> no segundo screenshot a cadeira da varand esquerda está a passar pelo guarda corpos da varanda.... e essas cadeiras são cadeiras de interiores.
+> no terceiro screenshot a area que eu marquei o ripado não vai até ao chão... é suposto ir. estes erros que te estou a dizer são erros que se tu analisares o 3D de um ponto de vista lógico tu não deverias cometer. Dá fix neles e noutros que encontres
+- Context: came with 3 screenshots of our 3D (street view): (1) the timber ripado band above the large upper window of fração B; (2) the left balcony (fração A) with its furniture; (3) a pier/pillar at the front where the ripado was marked. Follows the 22/11 round 4 (ripado over fração B's window) and the pending preview.
+- Filed in: `Construção Matosinhos/docs/estado.md` → Round 5 (band plane and width, balcony furniture, pier to the ground, fixes, status); `conhecimento/sistema-construtivo.md` → §3 finish A/B (ripado cladding replaces the ETICS zone, flush plane, corner to corner of its facade, pier to the ground); `conhecimento/discovercasa.md` → client-page standard (outdoor furniture on balconies/terraces, collision check, logical review before every preview); `conhecimento/insights.md` → 2026-11-23 logical review checklist of a 3D.
+
+### 2026-11-24 (about 01:25) — Matosinhos: «did you make the last version of the 3D and upload it?» [Matosinhos, Páginas]
+> já fizeste a ultima versão do 3d e deste upload no site?
+- Context: the final bake and renders (round 5, after the 23/11 corrections) were still running; nothing had been uploaded. Claude answered: not yet, with the timings.
+- Filed in: `Construção Matosinhos/docs/estado.md` → Round 5 (status unchanged: batch running, page not yet uploaded); nothing else new.
+
+### 2026-11-24 (about 01:45) — Matosinhos: black parts in the ripado of pier B (screenshot) [Matosinhos, Páginas]
+> neste print aparecem umas partes pretas no ripado, isso está assim neste momento?
+- Context: came with a screenshot of the close-up test render of pier B and the garage of fração B, showing black strips on both sides of the pier's ripado. It was the first close-up test of 23/11, from before the fix: the faces of our cladding boxes were coplanar with the hub's walls and Cycles paints overlapping coplanar faces black. The fix was already in (`_caixas_sem_coplanares` moves each such face 2 mm out before every render); the second test showed no black. The thin dark line under the garage band is intentional: the metal rufo (drip flashing) over the door, in the frames' colour. Claude sent the corrected image.
+- Filed in: `Construção Matosinhos/docs/estado.md` → Round 5 (already has the black-patches line, 23/11; no change); `conhecimento/insights.md` → 2026-11-23 coplanar cladding boxes insight (new).
+
+### 2026-11-24 (about 01:50) — Matosinhos: «go ahead with everything and publish» (round 5) [Matosinhos, Páginas]
+> prossehue entao com tudo e publica
+- Context: follows the two messages above. Meaning (as relayed by the caller): proceed and publish the page in the hub when the batch is done, WITHOUT waiting for the approval preview this time. The user's decision for THIS version (round 5, 24/11); it does not cancel the standing rule «preview the 3D and the 360 renders for approval before upload» (21/11), which stays in force for later versions.
+- Filed in: `Construção Matosinhos/docs/estado.md` → Round 5 (publishing authorised without the preview, 24/11); `conhecimento/discovercasa.md` nothing (the standing rule is unchanged).

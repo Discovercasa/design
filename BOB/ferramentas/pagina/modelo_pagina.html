@@ -303,7 +303,7 @@ __TECNICO__
 
 <script id="dados" type="application/json">__DADOS__</script>
 <script id="modulos" type="application/json">__MODULOS__</script>
-<script id="glb" type="text/plain">__GLB__</script>
+<script id="glb" type="text/plain" data-gzip="1">__GLB__</script>
 <script id="texturas" type="application/json">__TEXTURAS__</script>
 __PANOS__
 __CAMADA__
@@ -810,7 +810,11 @@ async function iniciar(L, D) {
   controlos.maxDistance = 140;
 
   // the model
-  const gltf = await new Promise((ok, erro) => new L.GLTFLoader().parse(b64bytes(document.getElementById('glb').textContent).buffer, '', ok, erro));
+  const glb = document.getElementById('glb');
+  const glbBytes = glb.dataset.gzip
+    ? await new Response(new Blob([b64bytes(glb.textContent)]).stream().pipeThrough(new DecompressionStream('gzip'))).arrayBuffer()
+    : b64bytes(glb.textContent).buffer;
+  const gltf = await new Promise((ok, erro) => new L.GLTFLoader().parse(glbBytes, '', ok, erro));
   const modelo = gltf.scene;
   cena.add(modelo);
   // the light of the photographs, baked in Blender (Cycles): one map per part, its scale K in D.luz
@@ -964,8 +968,11 @@ async function iniciar(L, D) {
   function cortado(m) {
     if (!cortados.has(m)) {
       const c = m.clone(), antes = m.onBeforeCompile, chave = m.customProgramCacheKey ? m.customProgramCacheKey() : '';
-      c.clippingPlanes = [planoCorte]; c.side = THREE.DoubleSide;
-      c.onBeforeCompile = (s, r) => { if (antes) antes.call(m, s, r); pocheCorte(s); };
+      c.clippingPlanes = [planoCorte];
+      if (!m.transparent) {      // glass is cut too, but stays glass (no solid grey inside)
+        c.side = THREE.DoubleSide;
+        c.onBeforeCompile = (s, r) => { if (antes) antes.call(m, s, r); pocheCorte(s); };
+      }
       c.customProgramCacheKey = () => 'corte' + chave;
       c.userData = { ...m.userData };
       cortados.set(m, c);
@@ -979,7 +986,7 @@ async function iniciar(L, D) {
       const M = o.userData.M;
       const luz = sombras && M.realLuz && !solLivre && !(corte && CASA.has(o.userData.g));
       let m = aspeto === 'maquete' ? (luz ? M.maqLuz : M.maq) : (luz ? M.realLuz : M.real);
-      if (corteP && o.userData.g === corteP.g && !o.userData.vidro) m = cortado(m);
+      if (corteP && o.userData.g === corteP.g) m = cortado(m);
       o.material = m;
       o.receiveShadow = sombras && (!luz || (aspeto !== 'maquete' && !!M.realLuz.userData.verniz));   // the varnish's glint stays out of the shadows
       o.castShadow = sombras && o.userData.sombra;
@@ -1022,7 +1029,7 @@ async function iniciar(L, D) {
     sincronizar();
   });
   function sincronizar() {
-    for (const o of malhas) { const c = cx(o.userData.g); o.visible = c ? c.checked : true; }
+    for (const o of malhas) { const c = cx(o.userData.g); o.visible = (c ? c.checked : true) && !o.userData.oculto; }   // oculto: a layer hides it (e.g. a closed door while it opens)
     // the ground's hole under the house is closed while the storeys that fill it are hidden: all of it without the
     // cave, around the cave with it (critique 2026-11-19: «ao tirar certos pisos … cave fica um buraco no chão»)
     const ter = !cx('terreno') || cx('terreno').checked, p0 = !cx('piso0') || cx('piso0').checked, cave = !cx('cave') || cx('cave').checked;

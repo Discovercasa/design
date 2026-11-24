@@ -263,3 +263,9 @@ circled (`discovercasa.md`).
   openings on parallel faces only. Excluding perpendicular modules from the face altogether was tried and wrongly removed
   7 m² of interior OSB / Pladur at the Sobral doorway jambs (the end of the perpendicular module keeps its lining). Effect on
   TV: Tremolo 164,8 → 165,0 m² (629 boards), OSB 9 mm and membrane +0,2 m²; Sobral unchanged → `camadas.aberturas_face`.
+- **L76** (Matosinhos client 3D, 2026-11-22/23; user's screenshots) Ripado band over a window first modelled proud of the
+  facade and too wide, then recessed; pier cladding stopped above the ground; indoor chairs on balconies passing through the
+  railing. Rules: ripado on an ETICS facade replaces the ETICS zone, flush with the render, corner to corner of its own
+  facade; pier cladding to the ground; balcony furniture is outdoor furniture and nothing crosses a railing or wall (§8).
+  His meta-point: before any preview, a logical review of the 3D — cladding planes, finishes down to the ground, furniture
+  type by space, collisions — then show it. Fix: local `gerar_casa.py` (`forro()`, `_colisoes` before every render).

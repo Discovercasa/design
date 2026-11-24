@@ -356,6 +356,10 @@ revisions A "Dimensões para execução" … E "Cobertura e Módulos - Correçã
        every exterior corner on both faces. ⚠ Leave 10–20 mm gaps where horizontal battens meet vertical ones and at the
        ends of head battens (drainage, air) (TV #3, #14: a head flashing with a drip over every opening).
      - TV as built: "paredes exteriores são em tremolo no revestimento exterior", the rest the standard build-up.
+   - **Ripado cladding on an ETICS facade (detail areas; user 2026-11-22 and 2026-11-23, Matosinhos):** the timber cladding
+     *replaces* the ETICS zone: its face ends in the plane of the render (flush, at most a few mm proud), never a board
+     laid over the render and projecting or recessed behind it; it runs corner to corner of the facade it belongs to (not out
+     over a balcony or neighbouring volume); cladding of a pier/pillar goes down to the ground, side returns too.
    - **B. ETICS ("capoto")**: insulation boards (DiscoverCasa uses XPS; thickness from the thermal project — Sobral
      section ≈ 60 mm), plate fixings, reinforcing mesh, corner beads, base coat, paint; usually **white**.
      ⚠ (2026-09-24) XPS (μ ≈ 80–250; 60 mm → Sd ≈ 6–9 m) on the cold side of the frame, with a more open inside

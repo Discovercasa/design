@@ -6,6 +6,7 @@ How DiscoverCasa builds a house, ordered like the work on site. Kept by the agen
 version, how to use the book, the section map and the legend; the rules are in `conhecimento/metodo/`, one file per topic,
 text unchanged, § numbers and rule IDs kept ("rulebook §7", "metodo-construtivo.md §13" resolve through the map below).
 
+**Version 8.18, 2026-11-23** — ripado cladding on an ETICS facade replaces the ETICS zone, flush with the render, corner to corner; pier cladding to the ground (§8); L76 (Matosinhos 3D review before any preview). Depth 66 vs 74 vs 77 mm open.
 **Version 8.17, 2026-11-19** — **the Listagem gives a total per timber section (pieces, m, m³) and a «Compra» for every product in the Hub material the company buys** (user rule, §0a); ours: timber as m³ of casquinha 230x78 board by our cutting yield, pieces > 5,70 m flagged (§0a, §11; open: §15 item 27).
 **Version 8.16, 2026-11-19** — **"Casa CL" = Ribamar's module sheets as built** (byte-identical, found 2026-11-19, to confirm;
 new scope tag **[RB]**): module heights read again — upper exterior 3,52 only on the two gutter sides (was our "upper 3,52 ext",

@@ -19,6 +19,8 @@ casa.json (local metres, x/y on the plan, z up from the reference floor; see ger
   vaos      [{caixa, eixo x|y, plano, paineis, tipo correr|janela|fixo|porta|garagem, grupo}] frames, glass, leaves
   guardas   [{de [x,y], ate [x,y], z0, altura, grupo}]               glass balustrades
   muros     [{pontos [[x,y,zbase,ztopo],...], esp, mat, grupo}]       walls along a line, top following the ground
+  luz_tamanhos {grupo: px}                                        lightmap sizes per group (exterior 1024, terreno 2048…)
+  relva_excluir [[x0,y0,x1,y1],...]                               plan boxes without hair grass (ground under a floor)
   pisos_livres [{pontos [[x,y,z],...], mat, grupo, sem_luz}]         a polygon surface (ramp floor); sem_luz: not in
             the web model's baked light (a far ground plane)
   toros     [{pontos [[x,y,z],...], passo, altura, diam, grupo}]      timber log fence along a line (base at z);
@@ -46,6 +48,7 @@ casa.json (local metres, x/y on the plan, z up from the reference floor; see ger
             in the renders; the ground batches (grupo "terreno") cast no shadow, like the terrain grid. Groups: p1/p2 ->
             piso1/piso2, rf -> cobertura, site -> envolvente; --luz bakes them with the storeys, the outside walls and the
             ground (luz_plano [x0, y0, x1, y1]: the plan area of the ground's lightmap).
+  luz_por_piso  true: a lightmap per storey (casa_piso1, casa_piso2…, the roof at 2048) instead of one for the house
   rodar_graus   rotation of the whole model about z (plan frame -> north up)
   sol       {azimute (deg from north, clockwise), elevacao}
 Output: casa.glb (web, textures 1024 px JPEG, groups in extras), casa.blend, render_<vista>.jpg (Cycles), texturas/.
@@ -790,11 +793,13 @@ def construir_arvores():
     for k, t in enumerate(E["arvores"]):
         x, y, z, h, c = t["x"], t["y"], t["z"], t.get("altura", 7.0), t.get("copa", 2.2)
         bm = bmesh.new()
-        res = bmesh.ops.create_cone(bm, cap_ends=True, segments=10, radius1=0.04 * h / 2.5, radius2=0.05, depth=h * 0.62)
+        # 16 sides, smooth: with 10 flat sides the trunk read as a post close up (360° views from the gardens)
+        res = bmesh.ops.create_cone(bm, cap_ends=True, segments=16, radius1=0.04 * h / 2.5, radius2=0.05, depth=h * 0.62)
         bmesh.ops.translate(bm, verts=res["verts"], vec=(x, y, z + h * 0.31 - 0.05))
         me = bpy.data.meshes.new(f"tronco{k}")
         bm.to_mesh(me)
         bm.free()
+        me.shade_smooth()
         me.materials.append(MATS["tronco"])
         ligar(bpy.data.objects.new(f"tronco{k}", me), "envolvente")
         bm = bmesh.new()
@@ -961,8 +966,13 @@ def relva_cycles(terreno, nome="relva", densidade=900, raio=None, inteiro=False)
     me = terreno.data.copy()
     bm = bmesh.new()
     bm.from_mesh(me)
+    # casa.json "relva_excluir": [[x0, y0, x1, y1], ...] plan boxes without hair grass (ground under a floor: the blades
+    # came up through the entrances' floor, Matosinhos 22/11)
+    exc = E.get("relva_excluir", [])
+    dentro = lambda c: any(b[0] <= c.x <= b[2] and b[1] <= c.y <= b[3] for b in exc)
     fora = [f for f in bm.faces if (k is not None and f.material_index != k)
-            or (raio and math.hypot(f.calc_center_median().x - cx, f.calc_center_median().y - cy) > raio)]
+            or (raio and math.hypot(f.calc_center_median().x - cx, f.calc_center_median().y - cy) > raio)
+            or (exc and dentro(f.calc_center_median()))]
     bmesh.ops.delete(bm, geom=fora, context="FACES")
     bm.to_mesh(me)
     bm.free()
@@ -1229,6 +1239,38 @@ def _limpar(px):
     return leve * (1 - w) + forte * w
 
 
+def _sem_ruido(img, n):
+    """The bake's noise taken out by OIDN (the compositor's Denoise node), in an empty scene of its own so that nothing
+    else is rendered. The blur of _limpar left soft blotches on the walls of the rooms, where the light is weak
+    (Matosinhos 21/11). Returns the float pixels (n, n, 3), or None when it cannot run."""
+    try:
+        sc = bpy.data.scenes.new("_sem_ruido")
+        sc.render.resolution_x = sc.render.resolution_y = n
+        sc.render.resolution_percentage = 100
+        sc.render.engine = "CYCLES"
+        sc.cycles.samples = 1
+        nt = bpy.data.node_groups.new("_sem_ruido", "CompositorNodeTree")
+        sc.compositing_node_group = nt
+        nt.interface.new_socket("Image", in_out="OUTPUT", socket_type="NodeSocketColor")
+        saida, ni, dn = nt.nodes.new("NodeGroupOutput"), nt.nodes.new("CompositorNodeImage"), nt.nodes.new("CompositorNodeDenoise")
+        ni.image = img
+        nt.links.new(ni.outputs[0], dn.inputs[0])
+        nt.links.new(dn.outputs[0], saida.inputs[0])
+        sc.render.image_settings.file_format = "OPEN_EXR"
+        sc.render.filepath = os.path.join(SAIDA, "_sem_ruido.exr")
+        bpy.ops.render.render(write_still=True, scene=sc.name)
+        res = bpy.data.images.load(sc.render.filepath)
+        px = np.array(res.pixels[:], dtype=np.float32).reshape(n, n, 4)[..., :3].copy()
+        bpy.data.images.remove(res)
+        os.remove(sc.render.filepath)
+        bpy.data.node_groups.remove(nt)
+        bpy.data.scenes.remove(sc)
+        return np.clip(px, 0, None)
+    except Exception as e:      # noqa: BLE001 — any failure: fall back to the blur
+        print("SEM_RUIDO falhou:", e)
+        return None
+
+
 def uv_luz(obs, plano=None):
     """Second UV map 'lm' for the bake: a plan projection (the ground) or islands packed into one square (the rest)."""
     for ob in obs:
@@ -1273,18 +1315,26 @@ def gravar_luz(amostras=128):
         "terreno": [o for o in meshes if o.name == "terreno" or (o.get("malha") and o.get("grupo") == "terreno")],
     }
     tamanho = {"casa": 4096, "mobilia": 4096, "exterior": 1024, "terreno": 2048}   # 4096: sharper light on the walls and furniture
+    tamanho.update(E.get("luz_tamanhos", {}))   # casa.json "luz_tamanhos": {"exterior": 4096, …} (thin gates, wall bases)
+    if E.get("luz_por_piso"):
+        # a map per storey (casa.json "luz_por_piso"): one 4096 map for the whole house left a few texels per corner, and
+        # the corners of the rooms came out dark (Matosinhos, user 2026-11-21: «partes pretas principalmente junto dos
+        # cantos»); the roof (slabs, parapets) needs less
+        casa = grupos.pop("casa")
+        for g in sorted({o.get("grupo") for o in casa}):
+            grupos["casa_" + g] = [o for o in casa if o.get("grupo") == g]
+            tamanho["casa_" + g] = 2048 if g == "cobertura" else 4096
     # triangulate the baked meshes (simpler islands; the web model is triangles anyway)
-    for nome in ("casa", "mobilia", "exterior"):
+    for nome in [k for k in grupos if k != "terreno"]:
         for ob in grupos[nome]:
             bm = bmesh.new()
             bm.from_mesh(ob.data)
             bmesh.ops.triangulate(bm, faces=bm.faces)
             bm.to_mesh(ob.data)
             bm.free()
-    uv_luz(grupos["casa"])
-    if grupos["mobilia"]:
-        uv_luz(grupos["mobilia"])
-    uv_luz(grupos["exterior"])
+    for nome in [k for k in grupos if k != "terreno"]:
+        if grupos[nome]:
+            uv_luz(grupos[nome])
     uv_luz(grupos["terreno"], plano=E.get("luz_plano", (-45, -15, 45, 55)))
     configurar_cycles()
     cena.cycles.samples = amostras
@@ -1316,8 +1366,9 @@ def gravar_luz(amostras=128):
         # which drew a shadow-like band round the whole house at each storey (user 2026-11-19)
         bpy.ops.object.bake(type="DIFFUSE", pass_filter={"DIRECT", "INDIRECT"}, uv_layer="lm", margin=8,
                             margin_type="EXTEND", use_clear=True, target="IMAGE_TEXTURES")
-        px = np.array(img.pixels[:], dtype=np.float32).reshape(n, n, 4)[..., :3]
-        px = _limpar(px)
+        px = _sem_ruido(img, n)
+        if px is None:     # no denoiser: the old blur (it left blotches on the walls of the rooms)
+            px = _limpar(np.array(img.pixels[:], dtype=np.float32).reshape(n, n, 4)[..., :3])
         K = float(np.percentile(px, 99.7)) or 1.0
         enc = _srgb(px / K)
         out = bpy.data.images.new("lm_" + nome + "_8", n, n, alpha=False)

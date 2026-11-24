@@ -6,16 +6,18 @@
   "descricao": "Cada obra tem aqui as suas páginas: um só ficheiro HTML que abre em qualquer computador ou telemóvel, com a casa em 3D (luz gravada no Blender, materiais reais, mobiliário), a visita 360° dentro do 3D, as imagens, as plantas com as áreas e os materiais, em português e inglês. Ficam em privado; «Abrir a página» abre-a noutra janela e «Descarregar» guarda o ficheiro para enviar. Até 21/11 era uma aba do Builder.",
   "fase": "Em testes",
   "situacao": {
-    "dia": "2026-11-21",
+    "dia": "2026-11-24",
     "feito": [
       "Primeira página 3D do cliente num só ficheiro HTML: Casa Ribamar, feita a partir do DWG (convertido em DXF), com pisos, cobertura, terreno, aspeto Maquete/Realista e quadro de áreas.",
       "Página da Casa Ribamar completa para os testes finais (aba Páginas, 18/11): casa mobilada, visita 360° com 11 pontos como modo do 3D (a casa vista de fora, entrar num ponto e andar de divisão em divisão), 10 imagens e panoramas na qualidade máxima feitos no PC de casa (RTX 2060), plantas por piso, Como construímos.",
       "Aba Páginas por obra (19/11): um colapsável por casa — Ribamar (3 versões), Porto Dinheiro, Espinho e Matosinhos (habitação bifamiliar em Guifões); quem edita cria obras, carrega páginas dentro de cada uma e muda uma página de obra.",
       "Casa Ribamar, versão de 20/11: forro Tremolo com as tábuas anteriores na cor das obras, sem a faixa escura nas junções entre pisos, e as 7 panorâmicas da visita onde se vê o forro refeitas.",
       "Casa Ribamar, 4.ª versão de 20/11: forro Tremolo na cor Marron do catálogo Piveteaubois (p. 29), num só tom e envernizado (reflexo do verniz no 3D), com o perfil da tábua; as imagens e a visita 360° ainda têm o forro anterior.",
-      "Matosinhos (habitação bifamiliar em Guifões), página final de 21/11: o 3D interativo do hub (pisos, sol, paredes em corte, portas e janelas, estores, eletricidade, envolvente, pessoa, caixilharias, níveis) sobre o nosso modelo com luz gravada, ripado Tremolo real, cobertura em painel sandwich cor telha, a visita 360° dentro do 3D (6 pontos), 7 imagens, plantas com os 4 quartos da fração A, PT/EN."
+      "Matosinhos (habitação bifamiliar em Guifões), página final de 21/11: o 3D interativo do hub (pisos, sol, paredes em corte, portas e janelas, estores, eletricidade, envolvente, pessoa, caixilharias, níveis) sobre o nosso modelo com luz gravada, ripado Tremolo real, cobertura em painel sandwich cor telha, a visita 360° dentro do 3D (6 pontos), 7 imagens, plantas com os 4 quartos da fração A, PT/EN.",
+      "Matosinhos, versão de 24/11: todas as correções pedidas desde 21/11 — ripado no plano do reboco e até ao chão, banda da fração B só na largura da fachada, mobiliário de exterior nas varandas, sem zonas pretas, soalho em tudo menos nas garagens (microcimento), deck nas três zonas da planta, luz em todas as divisões; visita 360° com 24 pontos (todas as divisões e os dois jardins); imagens novas da rua, entradas, aérea e sala A."
     ],
     "agora": [
+      "Matosinhos: a renderizar no PC do escritório a cozinha A refeita e duas imagens novas (sala da fração B e quarto principal da fração A), para atualizar a página.",
       "Testes finais da página de Ribamar (tarefas «Página do cliente num ficheiro HTML» e «Visita virtual 360°» à espera de aprovação). A seguir: a aplicação no hub que gera a página a partir dos desenhos e a leitura de qualquer planta.",
       "Padrão de todas as páginas (21/11): um só 3D interativo com a nossa qualidade e a visita 360° dentro dele; quando a obra já tem um 3D no hub, os comandos desse 3D passam para o nosso modelo."
     ],

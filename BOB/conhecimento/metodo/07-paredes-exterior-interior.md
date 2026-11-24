@@ -57,6 +57,17 @@
   white finish — user 2026-09-24; draft — confirmed — JSON `exterior.opcoes.B` (XPS 60, boards 1250×600, render 6 mm —
   assumed). On the whole house, parapets included (user 2026-10-28, §7). ⚠ XPS outside is tighter to vapour than the inside
   → a Glaser check or a vapour-open board (SC §3 B, SB #19) — OPEN.
+- **Timber ripado cladding on an ETICS facade REPLACES the ETICS zone** (it is not laid over it): its outer face ends in the
+  plane of the render face (flush — not recessed, not proud; the model's 3 mm proud is only "flush to the eye"); it runs
+  corner to corner of the facade it belongs to (e.g. the full width of the volume above a window), never past it (not over a
+  neighbouring balcony) — user 2026-11-22 «substituir a zona da parede com revestimento a capoto pelo revestimento em madeira
+  e ocupar a largura toda, não parecer que está a sobrepor»; 2026-11-23 «tem de estar no mesmo nivel em termos de espessura
+  que o revestimento exterior, não pode estar mais dentro … não pode estar a sair pela varanda» — confirmed ([MAT]) — not in
+  the tools (local Matosinhos `forro()`). ⚠ Depth: the ripado assembly sits in the depth the ETICS takes (XPS 60 + render
+  6 ≈ 66 mm behind the render plane); the Matosinhos model uses 74 mm, option A's stack is 77 (Tremolo 22 + ripado 35 +
+  contra-ripado 20, no cavity air gaps counted) → numbers do not agree; the ripado build-up on ETICS facades: OPEN (§15).
+- **Ripado cladding on piers / pillars goes down to the finished ground level**, side returns included — user 2026-11-23 —
+  confirmed ([MAT]) — not in the tools (local `forro()`: from ground −0,02 to 2,90).
 - **C. Cork 60 mm 1000×500** (e.g. Amorim MDFachada) on battens + counter-battens 30×20, ventilated, not glued — user
   2026-09-24 — confirmed — JSON `exterior.opcoes.C` (both layers 30×20 at 0,35; whether option A's 37,5×35 applies: OPEN).
 

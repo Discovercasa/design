@@ -10,11 +10,130 @@ The user's words: `conhecimento/registo-conversas-2026-3.md` (entries 2026-11-20
 - Renders running overnight on the office PC (user 2026-11-20: «faças os renders deste novo projeto no pc da empresa»;
   timings and finals in `conhecimento/posto-render.md`).
 
-## Current page: doc 120 (uploaded 2026-11-21 ~16:15, user asked to be told: «quando deres upload avisa-me por favor»)
+## Current page: doc 121 (uploaded 2026-11-24 ~14:30, without the approval preview: user 24/11 «prossehue entao com tudo e publica»)
+- «Habitação bifamiliar · Guifões», hub → Páginas, obra Matosinhos: rounds 3, 4 and 5 (below) in one upload; 24-point tour;
+  images rua, entradas, aérea, sala A (24/11) and cozinha A (23/11, nothing that changed shows in it). Doc 120 renamed
+  «… (versão de 21/11, 2.ª)». Hub Log entry 118.
+- The page embeds the GLB gzipped (base64, decompressed in the browser with DecompressionStream): 38,2 MB, under the
+  bucket's 50 MiB file limit (it was 58,7 MB uncompressed).
+- Render speed: the office PC (GTX 1050 Ti, 4 GB) ran out of video memory with the furnished, planted model (other apps
+  and the preview tabs hold VRAM): sala A took 4 h (was 8–30 min), panoramas 11 min–2,7 h. Close WebGL previews before a
+  batch; heavy batches belong on the home render station (RTX 2060, `conhecimento/posto-render.md`).
+- Still rendering (same batch): cozinha A redone, sala B and quarto principal A (new views) → a page update when done.
+
+## Earlier page: doc 120 (uploaded 2026-11-21 ~16:15, user asked to be told: «quando deres upload avisa-me por favor»)
 - Final page «Habitação bifamiliar · Guifões», hub → Páginas (project 'paginas'), obra Matosinhos. Doc 119 was renamed
   «Habitação bifamiliar · Guifões (versão de 21/11, 1.ª)» and is the earlier version (the «doc 119» mentions below describe it).
 - Fixed before upload (Piso 1 bedroom): wardrobe faced the wall (now faces the room); floor was the garage concrete (now a timber
   floor over the slab, also in the nook by the I.S. door).
+
+## Round 3 (2026-11-21, evening; log: `registo-conversas-2026-3.md`, entries «about 16:40», «shortly after 16:40», «evening»)
+User's defect list on doc 120's 3D («dá fix a tudo»), all fixed in the export / model:
+- **Black stains:** the hub's 3D put a 2 cm black backing box behind each ripado; it stuck out of our 77 mm Tremolo cladding.
+  Left out of the export.
+- **Entrance doors** (single doors next to the garages): used the hub's own slat texture; now our ripado material (same colour
+  and texture as the ripado details, as decided 2026-11-21 13:15).
+- **Balcony soffits** were single faces (fração B's balcony had no cover above): now boards with thickness; fração B's balcony
+  has a cover slab. (The user also said the balcony ripado was «completamente fora do sítio»: addressed by this rebuild of the
+  balcony soffit/cover; to confirm visually on the new render.)
+- **Roof parapet invisible from inside:** inner faces were inverted in the export; orientation fixed in the exporter.
+- **Behind fração B's rear bedrooms:** stone and grass replaced by timber deck. (extended, see «Found and done since» below)
+- **Dividing wall between the two rear gardens:** was 2.4–3.7 m tall and stepped; now one wall 1.65 m above the garden
+  (top ≈ 51.70), as on the rear elevation (sheet 08).
+- **Walls:** L corners were open (notches) and the 15 mm plasterboard and skirting ran into the perpendicular walls (black
+  corners in the baked light). Now L corners closed; plasterboard and skirting stop at the face of the wall they meet.
+- **Furniture** 2–4 cm inside walls moved out. Camera points are now chosen automatically at the clearest spot of each room
+  (the old living-room point of fração A was inside the sofa).
+- **360° tour: 24 points** (supersedes the 6 points of doc 119): fração A: sala, cozinha, quartos 1–4, WCs 1–3, varanda,
+  garagem, arrumos, entrada; fração B: sala, cozinha, quartos 1–2, circulação, WC, varanda, entrada, garagem; plus one view of
+  each house from its back garden. Links follow the doors and the stairs. Standing rule: `conhecimento/discovercasa.md`.
+- **Light baked per storey** (separate lightmaps per floor) for sharper interiors. **Cut mode** now also cuts glass.
+- **VR project:** user 2026-11-21: the team's VR project (SketchUp/GLB/panoramas, kept in the company's VR folder, not in Git)
+  is the same house; our version follows the licensing drawings (DWFx rev 3), which have some plan changes against it.
+  Where the two differ, the licensing drawings rule.
+- **Status / pending:** (superseded 2026-11-21 evening, see registo «about 19:00» and below) overnight render running (bake,
+  7 images, 24 panoramas); the page will be uploaded as a new version in
+  the hub's Páginas (doc 120 becomes the «2.ª» version of 21/11). The user is to be told at upload (standing request).
+  Pending: check the new render against the defect list (balcony ripado, dividing wall, corners).
+
+### Found and done since round 3 was filed (2026-11-21, evening)
+- **Deck (3 zones):** the licensing plan of Piso 2 draws three deck zones at 50,00 (striped hatch) that together make the
+  «deck 30,00 m²» of the area table: (1) behind fração B's bedrooms, from their back wall to the line of fração A's back wall
+  (about 6,1 × 1,4 m); (2) by fração B's side door, from the wall to the boundary wall (about 3,5 × 3,2 m); (3) fração A's
+  terrace by the slanted wall of the living room (triangle, about 10 m²). The 3D had stone and grass in all three; all three
+  are timber deck now. The earlier «T_claro → deck» change was a mistake (that material is a light strip by the gates): back
+  to stone slabs. Fração A's terrace was stone slabs in the hub's 3D; made deck because the plan hatches it like the other
+  two. **Pending: the user to confirm** (question asked).
+- **Hub «Tardoz» camera** sat inside the neighbouring building: moved over the rear road.
+- **Web 3D light:** baked per storey and now denoised (OIDN, compositor Denoise node) instead of blurred: blotches on the
+  room walls gone. «Pessoa» mode opens up indoors (exposure × 1,6). Piso 1 cut: earth behind the garages in an earth colour
+  (was black); fração A's terrace deck hides with Piso 2.
+- **Lamps:** every Piso 2 downlight and pendant hung 65 cm under the Piso 2 floor (ceiling height given relative where the tool
+  expects absolute): Piso 2 bathrooms dark, lamps showed as discs under the Piso 1 ceilings. Fixed. Every toured room without
+  a downlight got lights (60 W bathrooms and store room, 40 W garages, 24 W elsewhere): windowless rooms had come out black in
+  the 360° renders.
+- **Black line across fração A's Piso 1 bedroom ceiling:** fração A's terrace slab overlapped the house slab by 2,4 cm in the
+  same plane (under the slanted wall): overlap removed. Bottoms of the Piso 2 outer walls sat in the plane of the slab
+  underside: lifted 6 mm (removed black patches on the entrance ceiling).
+- **Entrances:** the two entrances run 0,65 m in front of the garages past the Piso 1 slab: grass showed through the floor;
+  floor now carries on. Fração A's Piso 1 I.S., store room and both entrances (up to the stairs' landings) get the house's
+  timber floor like the Piso 1 bedroom (were bare concrete); the garages stay concrete.
+- **Fração A garden 360° point** moved clear of the trees.
+- **Status (2026-11-21 evening):** the 3D was shown to the user (8 captures) and the 24 panoramas (two contact sheets);
+  awaiting approval. The final page is built after the last web bake; upload ONLY after approval (user, about 19:00 and a few
+  minutes later; rule in `conhecimento/discovercasa.md`).
+
+## Round 4 (2026-11-22, midday; log: `registo-conversas-2026-3.md`, entry «around midday»)
+User's message with the circled faulty zones (kitchen A plinth band, door-frame corners in the bathrooms, stair foot at the
+entrances, black on the boundary wall / gate / beside the entrance doors / under the balconies, timber band over fração B's big window).
+- **Floors (user decision for this house; also a sensible default):** «o chão apenas da garagem é de microcimento todas as outra
+  zonas usam o pavimento comum das outras divisões» — **only the garage floor is microcement; every other room uses the same
+  floor as the other rooms (the common timber floor)**, including the Piso 1 entrances, the Piso 1 I.S., the store room and the
+  Piso 1 bedroom. Supersedes «the garages stay concrete» (Found and done since round 3, Entrances) (superseded 2026-11-22, see registo).
+- **Ripado over a window (detail):** the timber cladding *replaces* the ETICS render in that zone, flush with the render and across
+  the full width of the facade (corner to corner); it must not look like a board laid over the render and projecting. Fração B's
+  band is now x 10,75 → 15,20 (the whole front of the volume), at the hub detail's height (52,18 → 52,75), only 3 mm proud.
+  Supersedes the 77 mm-proud cladding boxes for this band (Round 2) (superseded 2026-11-22, see registo).
+- **Root causes of the black zones, fixed:** (1) door/window frames: uprights and head/sill overlapped at the corners in one
+  plane → black squares at the door tops; uprights now stop between head and sill. (2) Round-3 wall-corner closing extended a wall
+  exactly to the next wall's face (two faces in one plane) → black patches at junctions; now 2 mm short. (3) A general check runs on
+  the whole exported geometry: any two same-facing overlapping coplanar faces (slab edges behind outer walls, site walls built of
+  overlapping segments, frames on walls…) are layered 1,5 mm apart; afterwards no overlapping faces remain (checked). (4) Kitchen
+  plinths were in the near-black worktop colour: now the units' light colour. (5) Web 3D: frosted side lights of the entrance
+  doors showed the dark hall (black strips) → pale milky pane; bathroom mirrors (black) → pale glass tone; light outside (site walls,
+  gates, ground by the house) baked at 4× resolution. (6) Grass came up through the entrances' floor in the 360° renders → no grass
+  under that floor.
+- **Status:** full re-render running (web 3D bake, 24 panoramas, 7 images, about 8 h); preview for the user's approval before
+  uploading (standing rule). The earlier «waiting for approval» preview is superseded by this round.
+
+## Round 5 (2026-11-23, morning; log: `registo-conversas-2026-3.md`, entry «morning» of 23/11)
+User's message with 3 screenshots of the 3D street view; meta-point: these are errors a **logical** review of the 3D should
+catch before showing it («se tu analisares o 3D de um ponto de vista lógico tu não deverias cometer»), so the model is reviewed
+logically, not only visually, before every preview. «Dá fix neles e noutros que encontres.»
+- **Fração B ripado band (screenshot 1):** the band must be **flush with the exterior render/ETICS face** (same thickness plane,
+  not recessed) and only **as wide as the facade above the window (x 10,80 → 15,20 in our plan frame)**, not running out over
+  the balcony. Refines Round 4's «x 10,75 → 15,20 … 3 mm proud» (10,75 superseded 2026-11-23, see registo).
+- **Balcony furniture (screenshot 2):** the left balcony (fração A) chair passed through the railing, and it was an indoor chair.
+  Balcony/terrace furniture must be **outdoor furniture** (we now use black-metal bistro sets); nothing may pass through a
+  railing or wall.
+- **Pier/pillar (screenshot 3):** the ripado cladding of the pier did not reach the ground; it must go **down to the ground**
+  (also its side return).
+- **Our fixes:** `forro()` puts the ripado face 3 mm proud of the render face (flush to the eye) and its back 74 mm into the wall
+  (replacing the ETICS; was a 77 mm-proud box); pier cladding from ground level (zt − 0,02) to 2,90; a collision check
+  (`_colisoes` in the local `gerar_casa.py`) between furniture and railings/walls runs before every render.
+- **B's front in one plane (found in the close-up check, 23/11):** the hub drew the volume's walls at y −5,20 (x 10,755 →
+  15,205) but its roof slab and parapet 5 cm proud (−5,25, x 10,80 → 15,20). A band flush with the parapet stood 5 cm proud of
+  the walls beside the window, so the walls beside and under the window get render out to −5,25 (the RAL 7016 shutter guides
+  at 11,03 and 14,915 stay in the reveal) and the band runs the walls' full width, 10,755 → 15,205 (supersedes [10,80 → 15,20]).
+- **Black patches from our own boxes (23/11):** box faces lying in the plane of a hub face (the B pier's ends, the band's top
+  corner on the roof slab's side, the lintel bands' undersides, the pier's side return on its front) rendered black. Every
+  box face in a coplanar overlap now moves 2 mm outwards automatically (`_caixas_sem_coplanares` in the local `gerar_casa.py`,
+  after `_sem_sobrepostas` for the hub's own faces). Garden tree trunks: 16 sides, smooth (they read as posts close up).
+- **Publishing without the preview (user 2026-11-24 ~01:50):** «prossehue entao com tudo e publica» — the user authorised
+  publishing round 5 in the hub when the batch is done, without the approval preview, for this version only; the standing
+  preview rule stays for later versions (see registo-2026-3, 24/11).
+- **Status:** (superseded 2026-11-24, see «Current page: doc 121») final batch running (web model final_web8, the 6 panoramas
+  that see the balconies, the 7 images); page not yet re-uploaded.
 
 ## Delivered 2026-11-21 (~01:40) — first version, doc 119
 - Client page in the hub, obra Matosinhos, doc 119 «Habitação bifamiliar · Guifões — imagens, 3D e visita 360°» (6,9 MB).
