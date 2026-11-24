@@ -30,10 +30,20 @@ storeys (upper floor Z 3,117, +0,139) · 2026-10-15 central floor beam removed; 
 
 ## Open questions
 - **Step Inside Phase 2, 2026-11-08** (terrain of the lot and Casa Tipo 1 placed on lot P; visit model, WARNING; hub
-  tasks 160, 161, 162). Asked, not answered: (1) confirm the house orientation on lot P (as in the engineer's drawing =
-  0°, or turned 180°); (2) confirm with the surveyor the coordinate system, vertical datum, survey date and precision;
-  (3) the terrain modelling of sheet 4 (walls, banks, roads) is not modelled yet — only a flat platform at slab level
-  around the house.
+  tasks 160, 161, 162). Asked: (1) confirm the house orientation on lot P (as in the engineer's drawing = 0°, or turned
+  180°); (2) confirm with the surveyor the coordinate system, vertical datum, survey date and precision; (3) the terrain
+  modelling of sheet 4 (walls, banks, roads) is not modelled yet — only a flat platform at slab level around the house.
+  **Answer (Dinis, hub task 160, 2026-11-12; read 2026-11-24):** the architecture set as a DWG
+  («SMA_012_arquitectura_pecas_desenhadas_especialidades», AutoCAD 2018, kept in `desenhos/hub-2026-11-12/`, DXF in
+  `_trabalho/sobral/`; both tasks marked done by Dinis without a written answer). What it settles:
+  (1) **orientation 0° CONFIRMED:** on the implantation house P has its entrance (arrow, threshold) on the east side,
+  i.e. Pátio Nascente, as in the Tipo 1 plan with X = east / Y = north. **Levels CONFIRMED** for P: piso inferior
+  223,90, soleira 223,88, piso superior 226,78 (the visit model used 223,88 as floor: 2 cm low).
+  (2) **only partly:** the drawing is in the national M/P grid in metres (grid labelled «mM / mP», the plan at real
+  coordinates plus copies 1 km apart, one per sheet: LEVANTAMENTO, SOLUÇÃO = real position, PAVIMENTOS, P. HORIZONT);
+  spot heights 201–241 m on the site. It names no datum, survey date or precision: PT-TM06/ETRS89 and Cascais stay
+  INFERRED (they would need the surveyor's own file). (3) the DWG has the terrain as layers (curvas de nível, cotas,
+  talude, muro, aterro, valas, caminho, pavimentos, vedação, cadastro): task 162 can be modelled from it.
   Since 2026-11-10 (AR version 7) the Sobral AR model turns so that the façade with the most ground-floor doors faces the
   viewer: INFERRED from the doors until the orientation (task 161, item (1)) is known; adjust when answered.
   **Decision (user 2026-11-10):** Sobral in AR has exactly four models: whole house with terrain (maquete), whole house

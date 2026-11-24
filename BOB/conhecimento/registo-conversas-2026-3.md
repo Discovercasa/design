@@ -1078,3 +1078,10 @@ The team's notes on hub task 84 (written in the hub by [membro da equipa] on 202
 > da tag ao dinis no novo upload de matosinhos
 - Context: hub marcações exist only for tasks (`marcacoes.tarefa_id`), so Claude sent Dinis a personal hub notification of type «marcado» pointing to the page (doc 122, «Ver» opens it in Páginas), as earlier Claude tags were written (author 'Claude', no session).
 - Filed in: nothing new (no construction fact); the hub notification is the record.
+
+### 2026-11-24 (about 16:05) — Step Inside: carry on with the project [Step Inside]
+> vamos prossefuir como step inside
+> vamos prosseguir com o projeto step inside
+- Context: Claude gave the status (Phases 0–3 and 7 done or nearly; Phase 3 waits for the user's phone test of the furnished AR, task 170; Dinis's Sobral attachment of 12/11 on task 160 unread; Unreal — Phase 4 — postponed 18/11; home station on and reachable) and proposed: (1) read Dinis's attachment, (2) start Phase 4 on the home PC (fix the Unreal version, open Torres Vedras in Unreal 5.8, measure FPS on the RTX 2060, first images for approval).
+> sim avança
+- Done: (1) Dinis's attachment = the architecture set as a DWG → orientation of house P 0° CONFIRMED (entrance east), house P levels confirmed (piso inferior 223,90, soleira 223,88, piso superior 226,78), M/P grid in metres but no datum/date/precision written. Filed: `Construção Sobral/docs/estado.md` (Open questions), `step-inside/docs/fase2/README.md` (Em aberto); reply in hub task 160 and Log. (2) Phase 4 started: `step-inside/docs/fase4/README.md` (versions fixed: Unreal 5.8.4; project StepInside on the home station's D:; Torres Vedras furnished imported; first GPU test).

@@ -72,6 +72,12 @@ wants this work on that PC (2026-11-13), which implies it may hold client files 
   logged-in desktop (a scheduled task started over SSH), not in the SSH session. To cut access: Tailscale off on the
   home PC, or delete the `bob-escritorio` line in `C:\ProgramData\ssh\administrators_authorized_keys`.
 - **Unreal phase postponed (user 2026-11-18):** asked «Começamos o Unreal do Step Inside a partir daqui?», answer «Mais tarde»; when resumed it is driven from the office session.
+- **Unreal phase resumed (user 2026-11-24, «sim avança»):** driven from the office session over SSH. Unreal 5.8.4 at
+  `D:\Epic Games\UE_5.8`; project `D:\BOB-posto\unreal\StepInside` (content only); Unreal caches on D:
+  (`D:\BOB-posto\unreal\DDC`, Zen data path in the project's DefaultEngine.ini) because C: has ~14 GB free. Windowed jobs
+  (editor, -game) run in the logged-in desktop through a one-off scheduled task (`schtasks /RU pc /IT`), deleted after
+  use. In -game runs the log and the CSV go to `%LOCALAPPDATA%\UnrealEngine\5.8\Saved\`. First GPU test: 87–91 FPS at
+  1080p with Lumen (`step-inside/docs/fase4/README.md`).
 - **Client-page renders (user 2026-11-18):** first «usa o PC do escritório onde esta sessão corre», then the same day
   «podes correr os renders no PC de casa na RTX2060» → full pages render on this station, driven over SSH from the
   office session (tools from `git pull`, the house's casa*.json copied by scp into `D:\BOB-posto\<obra>\`, results

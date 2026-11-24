@@ -284,8 +284,12 @@ Um levantamento georreferenciado localiza o terreno do cliente. Fica no PC, como
 
 - **Torres Vedras:** confirmar a cota do pavimento (117,50) e a exterior (117,48), por exemplo com fotos da casa
   construída.
-- **Sobral:** confirmar com o topógrafo o CRS, o datum, a data e a precisão do levantamento.
-- **Sobral:** confirmar a orientação da casa no lote (0° como no desenho do engenheiro, ou 180°).
+- **Sobral:** confirmar com o topógrafo o CRS, o datum, a data e a precisão do levantamento. **Em parte (2026-11-24):**
+  o Dinis enviou a 12/11 o projeto de arquitetura em DWG (tarefa 160). Está na quadrícula M/P em metros; não diz o
+  datum, a data nem a precisão. PT-TM06/ETRS89 e Cascais continuam INFERRED.
+- **Sobral:** ~~confirmar a orientação da casa no lote~~ **0° CONFIRMED** pelo mesmo DWG (2026-11-24): a casa P tem a
+  entrada a nascente, como a planta da Casa Tipo 1. Cotas da casa P CONFIRMED: piso inferior 223,90 (o modelo de
+  visita usava 223,88, que é a soleira), soleira 223,88, piso superior 226,78.
 - **Modelação do terreno:** completar a modelação (muros, taludes, arruamentos da folha 4). Para já há só uma
   plataforma plana à volta da casa.
 - **Torres Vedras:** os 36 choques de madeira resolvem-se no construtor (tarefas 137, 139 e 140 do hub), não no Step Inside.

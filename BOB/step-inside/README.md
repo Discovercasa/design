@@ -9,6 +9,7 @@ hub. Trabalha-se uma fase de cada vez, em ramos `step-inside/<fase>-<tarefa>`.
 | `docs/fase1/` | Fase 1: contrato de dados, matriz de formatos, resultados |
 | `docs/fase2/` | Fase 2: terreno e modelo de visita — entradas, verificações, resultados |
 | `docs/fase3/` | Fase 3: catálogo comum de materiais, mapeamentos por construtor, exportação |
+| `docs/fase4/` | Fase 4: Unreal — versões fixadas, projeto StepInside no posto de render, importação, imagens e FPS |
 | `docs/fase7/` | Fase 7: AR no telemóvel — variantes casa e maquete, orçamento, resultados |
 | `materiais/` | `catalogo.json` (IDs `MAT_*` comuns) e `mapeamentos/<construtor>.json` |
 | `schema/fontes_projeto.schema.json` | O contrato de dados: cada valor da casa com origem e confiança |
@@ -19,6 +20,7 @@ hub. Trabalha-se uma fase de cada vez, em ramos `step-inside/<fase>-<tarefa>`.
 | `ferramentas/materiais/` | Validação do catálogo e dos mapeamentos; resolução produto → ID e PBR |
 | `ferramentas/exportar/` | FBX / GLB / USDZ, `manifest.json`, teste de determinismo e de reimportação |
 | `ferramentas/ar/` | AR leve para o telemóvel (GLB + USDZ), orçamento e reabertura |
+| `ferramentas/unreal/` | Unreal 5.8: GLB e vistas do Blender, projeto, importação, capturas, FPS (CSV) |
 | `projetos-teste/<obra>/` | Projetos de teste: catálogo, declarações à mão, `fontes.json`, `terreno.json`, `visita.json`, relatórios |
 | `tests/` | `python -m unittest discover -s step-inside/tests` (a partir de `BOB/`) |
 
