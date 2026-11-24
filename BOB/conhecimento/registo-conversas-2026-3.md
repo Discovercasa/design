@@ -1073,3 +1073,8 @@ The team's notes on hub task 84 (written in the hub by [membro da equipa] on 202
 > Sim, continua
 - Context: answer to «leave the 3 interior images rendering and update the page when they finish, or stop?». They finished by 14:26 (8–22 min each once the previews were closed); the page with all 7 images was published as doc 122.
 - Filed in: `Construção Matosinhos/docs/estado.md` → «Current page: doc 122».
+
+### 2026-11-24 (about 16:00) — Matosinhos: tag Dinis on the new upload [Matosinhos, Páginas]
+> da tag ao dinis no novo upload de matosinhos
+- Context: hub marcações exist only for tasks (`marcacoes.tarefa_id`), so Claude sent Dinis a personal hub notification of type «marcado» pointing to the page (doc 122, «Ver» opens it in Páginas), as earlier Claude tags were written (author 'Claude', no session).
+- Filed in: nothing new (no construction fact); the hub notification is the record.
