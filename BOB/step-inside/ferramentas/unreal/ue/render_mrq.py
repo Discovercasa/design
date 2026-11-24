@@ -11,7 +11,8 @@ Reads render_mrq.json next to this script: {"nivel": "/Game/Visita/<Nivel>", "pa
 1. one Level Sequence per camera (/Game/Visita/Sequencias/SEQ_<id>): one frame, a camera cut to that camera;
 2. one Movie Render Queue job per sequence: deferred pass, PNG, the resolution, anti-aliasing by temporal samples,
    game overrides (cinematic quality, flush shader and asset compilation before rendering);
-3. renders with the PIE executor, writes render_resumo.json and closes the editor when the queue is done.
+3. warm-up (every camera, wait for all compilation, until a pass compiles nothing), then renders with the PIE
+   executor, writes render_resumo.json and closes the editor when the queue is done.
 """
 import json
 import os
@@ -106,5 +107,34 @@ def acabou(executor, ok):
     unreal.SystemLibrary.quit_editor()
 
 
-EXEC = fila_sub.render_queue_with_executor(unreal.MoviePipelinePIEExecutor)
-EXEC.on_executor_finished_delegate.add_callable(acabou)
+# warm-up first: the viewport looks through every camera in turn and the editor waits for all in-flight compilation
+# (shaders, meshes); the queue starts when a whole pass compiled nothing (on a project's first run the default
+# checker materials otherwise end up in the images)
+les = unreal.get_editor_subsystem(unreal.LevelEditorSubsystem)
+aq = {"t": 0.0, "k": 0, "acc": 0.0, "passes": 0, "h": None, "exec": None}
+
+
+def tique(dt):
+    aq["t"] += dt
+    if aq["t"] < 3 or aq["exec"]:
+        return
+    aq["t"] = 0.0
+    c0 = time.time()
+    unreal.AutomationUtilsBlueprintLibrary.finish_all_asset_compilation()
+    aq["acc"] += time.time() - c0
+    aq["k"] += 1
+    if aq["k"] % max(1, len(cams)) == 0:
+        aq["passes"] += 1
+        unreal.log(f"SI_MRQ aquecimento passagem {aq['passes']}: {aq['acc']:.1f} s a compilar")
+        if aq["acc"] < 2 or aq["passes"] >= 20:
+            les.eject_pilot_level_actor()
+            unreal.unregister_slate_post_tick_callback(aq["h"])
+            aq["exec"] = fila_sub.render_queue_with_executor(unreal.MoviePipelinePIEExecutor)
+            aq["exec"].on_executor_finished_delegate.add_callable(acabou)
+            return
+        aq["acc"] = 0.0
+    if cams:
+        les.pilot_level_actor(cams[aq["k"] % len(cams)])
+
+
+aq["h"] = unreal.register_slate_post_tick_callback(tique)

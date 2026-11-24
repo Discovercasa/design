@@ -1,0 +1,15 @@
+{
+	"FileVersion": 3,
+	"EngineAssociation": "5.8",
+	"Category": "",
+	"Description": "Step Inside (DiscoverCasa): a visita em VR (Fase 8). Projeto só de conteúdo: renderizador forward, luz cozida, OpenXR.",
+	"Plugins": [
+		{ "Name": "OpenXR", "Enabled": true },
+		{ "Name": "OpenXRHandTracking", "Enabled": true },
+		{ "Name": "PythonScriptPlugin", "Enabled": true },
+		{ "Name": "EditorScriptingUtilities", "Enabled": true },
+		{ "Name": "Interchange", "Enabled": true },
+		{ "Name": "InterchangeEditor", "Enabled": true },
+		{ "Name": "MovieRenderPipeline", "Enabled": true }
+	]
+}

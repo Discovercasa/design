@@ -10,7 +10,9 @@ Reads iluminacao.json next to this script:
    "exposicao_ev", "tint": exposure bias and white tint, "relva_material": the terrain's glTF grass instance,
    "relva_cor": [r, g, b, a] multiplier of the grass, "ocultas_material": paint the hidden layers with this glTF
    instance instead of deleting them, "importar_resumo": importar.py's summary (the move to the origin),
-   "luzes_extra": [{"nome", "blender_xy": [x, y], "altura_m" above the floor, "lumens", "kelvin"}]}
+   "luzes_extra": [{"nome", "blender_xy": [x, y], "altura_m" above the floor, "lumens", "kelvin"}],
+   VR (baked light, Phase 8): "mobilidade": "STATIC" (lights baked by Lightmass), "nuvens": false (volumetric clouds
+   cost too much per eye), "lumen": false (no Lumen post-process entries; the VR project has no Lumen)}
 Why (first test, 2026-11-24): the glTF materials were right, the look was wrong because only the blue sky lit the
 rooms, automatic exposure pushed everything up, no lamp was on, and software Lumen leaks through thin walls. So:
 1. sun in real units (lux) from the afternoon side, sky atmosphere + volumetric clouds, sky light captured in real time;
@@ -75,26 +77,29 @@ sol = eas.spawn_actor_from_class(unreal.DirectionalLight, unreal.Vector(0, 0, 20
                                  unreal.Rotator(0, -el, math.degrees(math.atan2(sy * dy, dx))))
 sol.set_actor_label("SI_Sol")
 lc = sol.get_component_by_class(unreal.DirectionalLightComponent)
-lc.set_editor_property("mobility", unreal.ComponentMobility.MOVABLE)
+MOB = getattr(unreal.ComponentMobility, CFG.get("mobilidade", "MOVABLE"))
+lc.set_editor_property("mobility", MOB)
 lc.set_editor_property("intensity", float(CFG["sol"]["lux"]))
 lc.set_editor_property("atmosphere_sun_light", True)
 lc.set_editor_property("light_source_angle", 0.5357)  # the sun's real disc: soft shadow edges
 ceu = eas.spawn_actor_from_class(unreal.SkyAtmosphere, unreal.Vector(0, 0, 0))
 ceu.set_actor_label("SI_Atmosfera")
-nuv = eas.spawn_actor_from_class(unreal.VolumetricCloud, unreal.Vector(0, 0, 0))
-nuv.set_actor_label("SI_Nuvens")
+if CFG.get("nuvens", True):
+    nuv = eas.spawn_actor_from_class(unreal.VolumetricCloud, unreal.Vector(0, 0, 0))
+    nuv.set_actor_label("SI_Nuvens")
 sl = eas.spawn_actor_from_class(unreal.SkyLight, unreal.Vector(0, 0, 600))
 sl.set_actor_label("SI_LuzCeu")
 slc = sl.get_component_by_class(unreal.SkyLightComponent)
-slc.set_editor_property("mobility", unreal.ComponentMobility.MOVABLE)
-slc.set_editor_property("real_time_capture", True)
+slc.set_editor_property("mobility", MOB)
+slc.set_editor_property("real_time_capture", MOB == unreal.ComponentMobility.MOVABLE)
 slc.set_editor_property("lower_hemisphere_is_black", False)
 slc.set_editor_property("lower_hemisphere_color", unreal.LinearColor(0.08, 0.09, 0.06, 1))
-nev = eas.spawn_actor_from_class(unreal.ExponentialHeightFog, unreal.Vector(0, 0, -300))
-nev.set_actor_label("SI_Nevoeiro")
-fc = nev.get_component_by_class(unreal.ExponentialHeightFogComponent)
-fc.set_editor_property("fog_density", 0.006)
-fc.set_editor_property("fog_height_falloff", 0.05)
+if CFG.get("nevoeiro", True):  # VR: off (in the forward renderer it filled the rooms with a blue haze)
+    nev = eas.spawn_actor_from_class(unreal.ExponentialHeightFog, unreal.Vector(0, 0, -300))
+    nev.set_actor_label("SI_Nevoeiro")
+    fc = nev.get_component_by_class(unreal.ExponentialHeightFogComponent)
+    fc.set_editor_property("fog_density", 0.006)
+    fc.set_editor_property("fog_height_falloff", 0.05)
 
 # 2. lamps
 cand = CFG["candeeiro"]
@@ -108,7 +113,7 @@ for a in atores:
     n_luz += 1
     p.set_actor_label(f"SI_Luz_{n_luz:02d}")
     pc = p.get_component_by_class(unreal.PointLightComponent)
-    pc.set_editor_property("mobility", unreal.ComponentMobility.MOVABLE)
+    pc.set_editor_property("mobility", MOB)
     pc.set_editor_property("intensity_units", unreal.LightUnits.LUMENS)
     pc.set_editor_property("intensity", float(cand["lumens"]))
     pc.set_editor_property("use_temperature", True)
@@ -131,7 +136,7 @@ for lx in CFG.get("luzes_extra", []):
     n_luz += 1
     p.set_actor_label(f"SI_Luz_{n_luz:02d}_{lx['nome']}")
     pc = p.get_component_by_class(unreal.PointLightComponent)
-    pc.set_editor_property("mobility", unreal.ComponentMobility.MOVABLE)
+    pc.set_editor_property("mobility", MOB)
     pc.set_editor_property("intensity_units", unreal.LightUnits.LUMENS)
     pc.set_editor_property("intensity", float(lx["lumens"]))
     pc.set_editor_property("use_temperature", True)
@@ -164,12 +169,13 @@ pp("local_exposure_highlight_contrast_scale", 0.7)
 pp("local_exposure_shadow_contrast_scale", 0.85)
 pp("bloom_intensity", 0.25)
 pp("vignette_intensity", 0.25)
-pp("lumen_scene_lighting_quality", 2.0)
-pp("lumen_scene_detail", 2.0)
-pp("lumen_final_gather_quality", 2.0)
-pp("lumen_reflection_quality", 2.0)
-pp("lumen_ray_lighting_mode", unreal.LumenRayLightingModeOverride.HIT_LIGHTING_FOR_REFLECTIONS)
-pp("lumen_max_trace_distance", 20000.0)
+if CFG.get("lumen", True):
+    pp("lumen_scene_lighting_quality", 2.0)
+    pp("lumen_scene_detail", 2.0)
+    pp("lumen_final_gather_quality", 2.0)
+    pp("lumen_reflection_quality", 2.0)
+    pp("lumen_ray_lighting_mode", unreal.LumenRayLightingModeOverride.HIT_LIGHTING_FOR_REFLECTIONS)
+    pp("lumen_max_trace_distance", 20000.0)
 ppv.set_editor_property("settings", ps)
 
 # 4. grass ground under the site

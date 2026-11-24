@@ -78,6 +78,9 @@ wants this work on that PC (2026-11-13), which implies it may hold client files 
   (editor, -game) run in the logged-in desktop through a one-off scheduled task (`schtasks /RU pc /IT`), deleted after
   use. In -game runs the log and the CSV go to `%LOCALAPPDATA%\UnrealEngine\5.8\Saved\`. First GPU test: 87–91 FPS at
   1080p with Lumen (`step-inside/docs/fase4/README.md`).
+- **VR (2026-11-24):** a second Unreal project `D:\BOB-posto\unreal\StepInsideVR` (forward, baked light, OpenXR) with its
+  scripts in `D:\BOB-posto\step-inside\unreal-vr\`. The user asked that the VR tour start on request once the headset is
+  connected: procedure in `step-inside/docs/fase8/README.md` («Iniciar o tour VR»). No headset software installed yet.
 - **Client-page renders (user 2026-11-18):** first «usa o PC do escritório onde esta sessão corre», then the same day
   «podes correr os renders no PC de casa na RTX2060» → full pages render on this station, driven over SSH from the
   office session (tools from `git pull`, the house's casa*.json copied by scp into `D:\BOB-posto\<obra>\`, results

@@ -1090,3 +1090,12 @@ The team's notes on hub task 84 (written in the hub by [membro da equipa] on 202
 > Sim, avança, as imagens que mandaste do unreal não estavam nada boas em termos de aspeto e realismo
 - Context: answer to «advance now with materials and light in Unreal (task 69)?» after the first-test images (blue, dark ceilings, silver leather, white sheen on the floor).
 - Done: diagnosis by variants and MRQ passes (base colours right; Lumen reflections leaking); root cause: ray tracing was never on (shaders SM5 only → software Lumen); project set to SM6; hidden layers painted; master material M_SI_PBR; real light, ground, WC light and mirror; Path Tracer stills and hardware-Lumen images sent; FPS with hardware Lumen 31–40 on the RTX 2060. Filed: `step-inside/docs/fase4/README.md`; `conhecimento/insights.md` (2026-11-24); hub tasks 68, 69, Log.
+
+### 2026-11-24 (about 19:00–20:45) — Step Inside: VR on the RTX 2060; prepare everything for the headset [Step Inside, Phase 8]
+> quero saber se ja consigo testar a cena em VR com a minha placa primeiro, e como o consigo fazer ?
+- Answered: yes, with the spec's VR_BAKED profile (no Lumen: 31–40 FPS at 1080p mono is far from 72–90 per eye); the home PC had no OpenXR runtime, no Meta Quest Link, no SteamVR; the user installs the headset's PC software; which headset was asked.
+> prepara tudo de forma a quando tiver os óculos ser só ligar os óculos ao PC e pedir-te para iniciar o tour VR
+- Rule (user): the VR tour must start on request once the headset is connected — procedure in `step-inside/docs/fase8/README.md` («Iniciar o tour VR»). Headset still unknown (hub task 86).
+> status?
+> quanto tempo para terminar?
+- Done: separate VR project (forward, instanced stereo, MSAA, baked light) with Unreal's XR template pawn; VR level from the same scripts + `vr_preparar.py`; launchers and headset check; first bakes and images (look not approved yet: over-exposure, black patches, black sky); emulated-stereo 59 FPS. Filed: `step-inside/docs/fase8/README.md`, `conhecimento/posto-render.md`, hub tasks 86–88, Log.

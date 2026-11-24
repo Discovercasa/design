@@ -11,6 +11,7 @@ hub. Trabalha-se uma fase de cada vez, em ramos `step-inside/<fase>-<tarefa>`.
 | `docs/fase3/` | Fase 3: catálogo comum de materiais, mapeamentos por construtor, exportação |
 | `docs/fase4/` | Fase 4: Unreal — versões fixadas, projeto StepInside no posto de render, importação, imagens e FPS |
 | `docs/fase7/` | Fase 7: AR no telemóvel — variantes casa e maquete, orçamento, resultados |
+| `docs/fase8/` | Fase 8: VR — projeto VR à parte (luz cozida, OpenXR), **como iniciar o tour VR**, resultados |
 | `materiais/` | `catalogo.json` (IDs `MAT_*` comuns) e `mapeamentos/<construtor>.json` |
 | `schema/fontes_projeto.schema.json` | O contrato de dados: cada valor da casa com origem e confiança |
 | `ferramentas/inventario_workstation.ps1` | Inventário só de leitura de um PC candidato a workstation |
