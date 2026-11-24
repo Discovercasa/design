@@ -10,7 +10,14 @@ The user's words: `conhecimento/registo-conversas-2026-3.md` (entries 2026-11-20
 - Renders running overnight on the office PC (user 2026-11-20: «faças os renders deste novo projeto no pc da empresa»;
   timings and finals in `conhecimento/posto-render.md`).
 
-## Current page: doc 121 (uploaded 2026-11-24 ~14:30, without the approval preview: user 24/11 «prossehue entao com tudo e publica»)
+## Current page: doc 122 (uploaded 2026-11-24 ~14:50; user «Sim, continua»: let the interiors finish and update the page)
+- Same as doc 121 with all 7 images (cozinha A redone; new sala B and quarto principal A); 39,0 MB. Doc 121 renamed
+  «… (versão de 24/11, 1.ª)». Hub Log entry 119.
+- Noticed in the quarto A image (not changed, for the user to judge): through the window, between the stair wall and the
+  boundary wall, the back terrain rises as a steep grass strip (hub terrain), which reads oddly; a retaining wall or
+  steps would be more logical there.
+
+## Doc 121 (uploaded 2026-11-24 ~14:30, without the approval preview: user 24/11 «prossehue entao com tudo e publica»)
 - «Habitação bifamiliar · Guifões», hub → Páginas, obra Matosinhos: rounds 3, 4 and 5 (below) in one upload; 24-point tour;
   images rua, entradas, aérea, sala A (24/11) and cozinha A (23/11, nothing that changed shows in it). Doc 120 renamed
   «… (versão de 21/11, 2.ª)». Hub Log entry 118.
@@ -20,6 +27,7 @@ The user's words: `conhecimento/registo-conversas-2026-3.md` (entries 2026-11-20
   and the preview tabs hold VRAM): sala A took 4 h (was 8–30 min), panoramas 11 min–2,7 h. Close WebGL previews before a
   batch; heavy batches belong on the home render station (RTX 2060, `conhecimento/posto-render.md`).
 - Still rendering (same batch): cozinha A redone, sala B and quarto principal A (new views) → a page update when done.
+  (done 2026-11-24, see «Current page: doc 122»)
 
 ## Earlier page: doc 120 (uploaded 2026-11-21 ~16:15, user asked to be told: «quando deres upload avisa-me por favor»)
 - Final page «Habitação bifamiliar · Guifões», hub → Páginas (project 'paginas'), obra Matosinhos. Doc 119 was renamed

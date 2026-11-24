@@ -1063,3 +1063,13 @@ The team's notes on hub task 84 (written in the hub by [membro da equipa] on 202
 > prossehue entao com tudo e publica
 - Context: follows the two messages above. Meaning (as relayed by the caller): proceed and publish the page in the hub when the batch is done, WITHOUT waiting for the approval preview this time. The user's decision for THIS version (round 5, 24/11); it does not cancel the standing rule «preview the 3D and the 360 renders for approval before upload» (21/11), which stays in force for later versions.
 - Filed in: `Construção Matosinhos/docs/estado.md` → Round 5 (publishing authorised without the preview, 24/11); `conhecimento/discovercasa.md` nothing (the standing rule is unchanged).
+
+### 2026-11-24 (about 14:00) — Matosinhos: «is it ready?» [Matosinhos, Páginas]
+> já está pronmto?
+- Context: the 6 panoramas and the 3 outside images were done; the interiors were crawling (sala A 4 h) because the office GTX 1050 Ti was out of video memory with the 3D previews open. Claude closed the previews, built the page with what was ready (5 images) and published it (doc 121), then asked whether to let the 3 remaining interiors finish and update the page.
+- Filed in: `Construção Matosinhos/docs/estado.md` → «Doc 121»; `conhecimento/posto-render.md` → office card video memory.
+
+### 2026-11-24 (about 14:30) — Matosinhos: «yes, carry on» (let the interiors finish) [Matosinhos, Páginas]
+> Sim, continua
+- Context: answer to «leave the 3 interior images rendering and update the page when they finish, or stop?». They finished by 14:26 (8–22 min each once the previews were closed); the page with all 7 images was published as doc 122.
+- Filed in: `Construção Matosinhos/docs/estado.md` → «Current page: doc 122».

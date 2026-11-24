@@ -80,6 +80,10 @@ wants this work on that PC (2026-11-13), which implies it may hold client files 
   (correcting a first reading that took them for Ribamar's; Ribamar's stay on hold). Office card GTX 1050 Ti, CUDA.
   Measured there: an 800×500 preview at 32 samples ≈ 40–55 s per view; a 2048×1024 panorama at 32 samples ≈ 4 min.
   Finals: images 1800×1125 at 96 samples, panoramas 3072×1536 at 64 (chosen by Claude to fit one night on that card).
+- **Office card video memory (2026-11-24):** the GTX 1050 Ti has 4 GB and the furnished, planted Matosinhos model fills
+  it; the desktop apps and every open WebGL tab (the page previews in Claude's browser pane) take their share. With the
+  previews open an interior image (2400×1500, 128 samples) took 4 h and panoramas up to 2,7 h; with the previews closed
+  the next interiors took 8–22 min. Close the 3D previews (and check `nvidia-smi`) before starting a batch there.
 - **CC0 assets (user 2026-11-18: «Sim, podes»):** photo textures and models from Poly Haven (public domain), fetched by
   `ferramentas/pagina/descarregar_ativos.py` (manifest with source, licence, size) into `_trabalho/assets/polyhaven`
   (office) and copied to `D:\BOB-posto\assets` (station); renders run with `--ativos D:\BOB-posto\assets`. Never in Git.
