@@ -575,3 +575,11 @@ he answers (`metodo-construtivo.md`). Condensed 2026-10-28 (history in git).
   against the hub geometry automatically (each coplanar face moved 2 mm out before every render). **Suggestion:** put it in
   `ferramentas/pagina/casa_blender.py` as a gate with the other checks. Detail: `Construção Matosinhos/docs/estado.md`
   (Round 5); registo-2026-3 2026-11-24.
+
+- **2026-11-24** — Step Inside Phase 4 (Unreal 5.8 on the RTX 2060): (1) ray tracing needs the project's shaders in SM6
+  (`+D3D12TargetedShaderFormats=PCD3D_SM6`); with SM5 only, Unreal silently turns it off and Lumen runs in software,
+  which leaks sky and wall light through our thin plasterboard walls — the "washed, blue, silver" look of the first test.
+  (2) The glTF materials were right all along (checked with the MRQ Unlit pass): judge looks with diagnosis passes and
+  rendered variants, not by guessing. (3) Stills for approval: Unreal's Path Tracer (≈ 100 s per 1080p image), Cycles-like;
+  real time: hardware Lumen, 31–40 FPS at 1080p on the RTX 2060 — below 60, the data the audit wanted for the GPU
+  decision (user's call). Status: suggested to the user 2026-11-24.
