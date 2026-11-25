@@ -7,7 +7,7 @@
   "descricao": "Serviço comercial da Discovercasa que substitui o Enscape + Chaos Cloud. Os documentos do projeto passam a um modelo Blender, o Unreal Engine dá-lhe o aspeto final e o cliente explora a casa por um link privado: no browser (Pixel Streaming a partir de uma GPU na cloud), no telemóvel em realidade aumentada (modelo próprio, leve) ou num headset VR (depois de uma prova de conceito).",
   "fase": "Fase 4 · Unreal Viewer (em curso)",
   "situacao": {
-    "dia": "2026-11-24",
+    "dia": "2026-11-25",
     "feito": [
       "Especificação aprovada (05/11); auditoria e Fase 1 feitas (07/11).",
       "Terreno do levantamento e a casa no lote: Torres Vedras e Sobral (Fase 2).",
@@ -16,11 +16,11 @@
       "Lista oficial de materiais: 21 de 44 produtos confirmados; ferramenta foto → textura (11/11).",
       "Sobral (24/11): o DWG enviado pelo Dinis confirma a orientação da casa P (0°, entrada a nascente) e as cotas.",
       "Fase 4 (24/11): Unreal 5.8.4 no PC de casa com ray tracing; Torres Vedras mobilada com aspeto realista — imagens de aprovação pelo Path Tracer, Lumen por hardware para andar; material mestre, luz real e o nível refeito num só comando.",
-      "VR preparado (24/11): projeto VR à parte no PC de casa (luz cozida, OpenXR, pawn VR do Unreal) — basta ligar os óculos e pedir «inicia o tour VR»; 59 FPS em estéreo emulado."
+      "VR pronto a testar (25/11): projeto VR à parte no PC de casa com luz cozida de produção, céu próprio, exposição por divisão; 102 FPS em estéreo emulado (densidade 0,78, MSAA 4×) — basta ligar os óculos e pedir «inicia o tour VR»."
     ],
     "agora": [
       "Fase 4 · materiais e luz (tarefa 69): faltam as juntas parede/teto no modelo de visita, um exterior mais rico e a aprovação das imagens. Desempenho: 31–40 FPS a 1080p na RTX 2060 com Lumen por hardware — decisão da placa (tarefa 68).",
-      "Fase 8 · VR: afinar o aspeto da luz cozida (lightmaps a partir do Blender, exposição, céu) e os FPS para 72–90; escolher os óculos (tarefa 86).",
+      "Fase 8 · VR: aspeto e FPS prontos; falta testar com os óculos (latência, conforto, FPS reais — tarefa 88) e escolhê-los (tarefa 86).",
       "Interiores em teste em Torres Vedras: à espera do teste no telemóvel e da decisão sobre o mobiliário (tarefa 170).",
       "Fotos dos produtos reais para as texturas (os fabricantes não publicam texturas)."
     ],

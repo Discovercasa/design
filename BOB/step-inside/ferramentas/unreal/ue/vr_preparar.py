@@ -6,8 +6,14 @@ material_mestre / pos_processo, before the light bake.
 
 Reads vr_preparar.json next to this script:
   {"nivel", "vistas": vistas.json (Blender world), "importar_resumo": importar.py's summary (the move to the origin),
+   "uv_lightmap": "glb" (UV channel 1 comes in the GLB, made in Blender — preferred) or "gerar" (Unreal generates it),
    "texel_m": lightmap texels per metre, "res_min", "res_max", "res_chao", "nav_margem_m",
-   "lightmass": {"ressaltos", "escala", "qualidade_indireta", "suavidade"}}
+   "lightmass": {"ressaltos", "escala", "qualidade_indireta", "suavidade", "celula_volumetrica_cm"},
+   "volumetrico": label prefixes lit by the volumetric lightmap instead of a lightmap (furniture: dense meshes whose
+   per-face lightmap UVs showed triangle facets), "ressalto": {label prefix: Lightmass diffuse boost} (the sunlit grass
+   and the wood floor bounced so much colour that the white living-room ceiling came out lime, then mustard; this damps
+   their bounce in the bake without changing how they look), "lightmass": {"ressaltos_ceu": sky light bounces,
+   "comprimir": false (uncompressed lightmaps)}}
 1. every static mesh: lightmap UVs generated in channel 1 (build settings), static mobility, a lightmap resolution
    that follows the piece's size (texels per metre of its largest face, powers of two, clamped); the 3 km grass
    ground gets a small fixed one;
@@ -48,7 +54,7 @@ def pot2(v):
 
 
 # 1. lightmaps
-malhas_feitas, n_uv, n_act = set(), 0, 0
+malhas_feitas, n_uv, n_act, n_vol, n_boost = set(), 0, 0, 0, 0
 casa_lo, casa_hi = [1e18] * 3, [-1e18] * 3
 for a in eas.get_all_level_actors():
     if not isinstance(a, unreal.StaticMeshActor):
@@ -58,15 +64,27 @@ for a in eas.get_all_level_actors():
     if not sm:
         continue
     rot = a.get_actor_label()
+    if rot == "SI_Ceu":  # the sky dome (iluminacao.py): movable on purpose, outside Lightmass and the house box
+        continue
     if sm.get_path_name() not in malhas_feitas:
         malhas_feitas.add(sm.get_path_name())
         bs = sme.get_lod_build_settings(sm, 0)
-        bs.set_editor_property("generate_lightmap_u_vs", True)
-        bs.set_editor_property("src_lightmap_index", 0)
-        bs.set_editor_property("dst_lightmap_index", 1)
-        sme.set_lod_build_settings(sm, 0, bs)
-        n_uv += 1
+        gerar = CFG.get("uv_lightmap", "gerar") == "gerar"  # "glb": UV channel 1 made in Blender (blender_para_unreal.py --lightmap)
+        if bs.get_editor_property("generate_lightmap_u_vs") != gerar:
+            bs.set_editor_property("generate_lightmap_u_vs", gerar)
+            bs.set_editor_property("src_lightmap_index", 0)
+            bs.set_editor_property("dst_lightmap_index", 1)
+            sme.set_lod_build_settings(sm, 0, bs)
+            n_uv += 1
     smc.set_editor_property("mobility", unreal.ComponentMobility.STATIC)
+    vol = rot.startswith(tuple(CFG.get("volumetrico", [])))
+    smc.set_editor_property("lightmap_type", unreal.LightmapType.FORCE_VOLUMETRIC if vol else unreal.LightmapType.DEFAULT)
+    n_vol += vol
+    boost = next((float(b) for pre, b in CFG.get("ressalto", {}).items() if rot.startswith(pre)), 1.0)
+    lms = smc.get_editor_property("lightmass_settings")
+    lms.set_editor_property("diffuse_boost", boost)
+    smc.set_editor_property("lightmass_settings", lms)
+    n_boost += boost != 1.0
     o, e = a.get_actor_bounds(False)
     dims = sorted([e.x * 2 / 100, e.y * 2 / 100, e.z * 2 / 100], reverse=True)  # metres, largest first
     if rot == "SI_Chao":
@@ -89,8 +107,9 @@ for caminho in sorted(malhas_feitas):
     sm.set_editor_property("light_map_resolution", 64)
     unreal.EditorAssetLibrary.save_loaded_asset(sm, False)
 amostra = unreal.EditorAssetLibrary.load_asset(sorted(malhas_feitas)[0])
-diz("lightmaps: malhas", len(malhas_feitas), "UV gerados", n_uv, "atores", n_act, "amostra: canais",
+diz("lightmaps: malhas", len(malhas_feitas), "definicoes mudadas", n_uv, "atores", n_act, "amostra: canais",
     sme.get_num_uv_channels(amostra, 0), "indice", amostra.get_editor_property("light_map_coordinate_index"))
+diz("iluminados pelo lightmap volumetrico", n_vol, "ressalto mudado", n_boost, CFG.get("ressalto", {}))
 diz("caixa da casa cm", [round(x) for x in casa_lo], [round(x) for x in casa_hi])
 
 
@@ -136,7 +155,16 @@ lm.set_editor_property("static_lighting_level_scale", float(L["escala"]))
 lm.set_editor_property("indirect_lighting_quality", float(L["qualidade_indireta"]))
 lm.set_editor_property("indirect_lighting_smoothness", float(L["suavidade"]))
 lm.set_editor_property("use_ambient_occlusion", True)
+if L.get("ressaltos_ceu"):
+    lm.set_editor_property("num_sky_lighting_bounces", int(L["ressaltos_ceu"]))
+if L.get("celula_volumetrica_cm"):  # the volumetric lightmap lights the furniture: finer than the 2 m default
+    lm.set_editor_property("volumetric_lightmap_detail_cell_size", float(L["celula_volumetrica_cm"]))
+if "comprimir" in L:  # uncompressed lightmaps: no block artefacts in the soft gradients of white walls (4x the memory)
+    lm.set_editor_property("compress_lightmaps", bool(L["comprimir"]))
 ws.set_editor_property("lightmass_settings", lm)
+diz("lightmass", {k: str(lm.get_editor_property(k)) for k in (
+    "num_indirect_lighting_bounces", "static_lighting_level_scale", "indirect_lighting_quality",
+    "indirect_lighting_smoothness", "num_sky_lighting_bounces", "compress_lightmaps")})
 unreal.EditorLoadingAndSavingUtils.save_map(mundo, CFG["nivel"])
 unreal.EditorLoadingAndSavingUtils.save_dirty_packages(True, True)
 diz("FEITO")

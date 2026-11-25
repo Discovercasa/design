@@ -5,7 +5,9 @@ images of every SI_CAM_* camera and the frame time at each view (Step Inside Pha
                         -ExecutePythonScript, which closes the editor as soon as the script returns)
 
 Reads capturas.json next to this script: {"pasta": output folder, "res": [w, h], "espera_s": warm-up seconds,
-"amostra_frames": frames measured per view}. Steps, one per editor tick (nothing blocks the editor):
+"amostra_frames": frames measured per view, "camaras": [ids] (optional: only these), "modos": [{"sufixo",
+"comandos": [console commands]}] (optional: one more round of the cameras per mode, e.g. a diagnosis without the
+reflection captures or with the lighting only; the images get the suffix)}. Steps, one per editor tick (nothing blocks the editor):
 1. viewport in real time and game view; warm-up: passes over every camera, each time waiting for all in-flight
    compilation (shaders, meshes, distance fields), until a whole pass waits < 2 s and espera_s has gone by;
 2. per camera: the viewport takes the camera's place, frames settle, the frame times are recorded (median, p90 ->
@@ -29,10 +31,18 @@ os.makedirs(PASTA, exist_ok=True)
 W, H = CFG.get("res", [1920, 1080])
 eas = unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
 ues = unreal.get_editor_subsystem(unreal.UnrealEditorSubsystem)
-cams = sorted((a for a in eas.get_all_level_actors() if a.get_actor_label().startswith("SI_CAM_")),
+cams = sorted((a for a in eas.get_all_level_actors() if a.get_actor_label().startswith("SI_CAM_")
+               and (not CFG.get("camaras") or a.get_actor_label()[len("SI_CAM_"):] in CFG["camaras"])),
               key=lambda a: a.get_actor_label())
+MODOS = CFG.get("modos") or [{"sufixo": "", "comandos": []}]
 les = unreal.get_editor_subsystem(unreal.LevelEditorSubsystem)
-estado = {"fase": "aquecer", "t0": time.time(), "i": 0, "frames": [], "espera": 0, "res": []}
+estado = {"fase": "aquecer", "t0": time.time(), "i": 0, "frames": [], "espera": 0, "res": [], "m": 0}
+
+
+def modo(m):
+    for cmd in MODOS[m].get("comandos", []):
+        unreal.SystemLibrary.execute_console_command(ues.get_editor_world(), cmd)
+    unreal.log(f"SI_CAP modo {m} {MODOS[m]}")
 # started by a scheduled task the editor is not the foreground window: without this it is held at 8 FPS
 # ("Use Less CPU when in Background"); the project's Config/DefaultEditorSettings.ini says the same
 try:
@@ -75,10 +85,16 @@ def tique(dt):
             if (passagem < 2 and agora - e["t0"] > CFG.get("espera_s", 240)) or agora - e["t0"] > 1800:
                 e["aquecer_s"] = round(time.time() - e["t0"])
                 unreal.log(f"SI_CAP aquecido em {e['aquecer_s']} s")
+                modo(0)
                 e["fase"], e["espera"] = "posicionar", 0
                 return
         les.pilot_level_actor(cams[e["k"] % len(cams)])
         e["espera"] = 0
+        return
+    if e["i"] >= len(cams) and e["m"] + 1 < len(MODOS):
+        e["m"] += 1
+        modo(e["m"])
+        e["i"], e["fase"], e["espera"] = 0, "posicionar", 0
         return
     if e["i"] >= len(cams):
         if e["fase"] != "fim":
@@ -92,7 +108,7 @@ def tique(dt):
             unreal.SystemLibrary.quit_editor()
         return
     cam = cams[e["i"]]
-    nome = cam.get_actor_label()[len("SI_CAM_"):]
+    nome = cam.get_actor_label()[len("SI_CAM_"):] + MODOS[e["m"]].get("sufixo", "")
     if e["fase"] == "posicionar":
         les.pilot_level_actor(cam)
         e["fase"], e["espera"], e["frames"] = "assentar", 0, []

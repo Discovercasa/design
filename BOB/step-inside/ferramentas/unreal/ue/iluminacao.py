@@ -11,7 +11,9 @@ Reads iluminacao.json next to this script:
    "relva_cor": [r, g, b, a] multiplier of the grass, "ocultas_material": paint the hidden layers with this glTF
    instance instead of deleting them, "importar_resumo": importar.py's summary (the move to the origin),
    "luzes_extra": [{"nome", "blender_xy": [x, y], "altura_m" above the floor, "lumens", "kelvin"}],
-   VR (baked light, Phase 8): "mobilidade": "STATIC" (lights baked by Lightmass), "nuvens": false (volumetric clouds
+   VR (baked light, Phase 8): "mobilidade": "STATIC" (lamps baked by Lightmass), "mobilidade_sol": "STATIONARY" (sun
+   and sky light: a static sun leaves the sky black), "ceu": "gradiente" (our own unlit sky dome instead of the sky
+   atmosphere, which renders black in the VR project; "ceu_parametros" overrides its values), "nuvens": false (volumetric clouds
    cost too much per eye), "lumen": false (no Lumen post-process entries; the VR project has no Lumen)}
 Why (first test, 2026-11-24): the glTF materials were right, the look was wrong because only the blue sky lit the
 rooms, automatic exposure pushed everything up, no lamp was on, and software Lumen leaks through thin walls. So:
@@ -45,8 +47,103 @@ def diz(*a):
     unreal.log("SI_LUZ " + s)
 
 
+def ceu_gradiente(para_sol, par):
+    """A sky dome: the engine's basic sphere with an unlit material M_SI_Ceu made here — horizon to zenith blue in
+    real luminance (cd/m2, the units of the sun in lux), a halo and a small disc towards the sun, a dim neutral
+    ground below the horizon (the sky light ignores it: lower hemisphere solid black). Movable and without shadows or collision: Lightmass ignores it (as static geometry it would block
+    every sky ray of the bake) while the sky light and the reflection captures photograph it."""
+    mel, eal = unreal.MaterialEditingLibrary, unreal.EditorAssetLibrary
+    caminho = CFG["destino"] + "/M_SI_Ceu"
+    if eal.does_asset_exist(caminho):
+        m = eal.load_asset(caminho)
+        mel.delete_all_material_expressions(m)
+    else:
+        m = unreal.AssetToolsHelpers.get_asset_tools().create_asset("M_SI_Ceu", CFG["destino"], unreal.Material,
+                                                                     unreal.MaterialFactoryNew())
+    m.set_editor_property("shading_model", unreal.MaterialShadingModel.MSM_UNLIT)
+    m.set_editor_property("two_sided", True)
+    val = {"luminancia": 9000.0, "horizonte": [0.62, 0.75, 0.95], "zenite": [0.16, 0.36, 0.85],
+           "chao": [0.09, 0.09, 0.09], "halo": [1.0, 0.86, 0.62], "halo_forca": 0.5, "halo_exp": 10.0,
+           "disco_forca": 6.0, "gradiente_exp": 0.5}
+    val.update(par)
+    xy = [0]
+
+    def no(cls, **props):
+        xy[0] += 1
+        e = mel.create_material_expression(m, cls, -200 * (xy[0] % 8) - 300, 160 * (xy[0] // 8))
+        for k, v in props.items():
+            e.set_editor_property(k, v)
+        return e
+
+    def liga(a, b, entrada=""):
+        mel.connect_material_expressions(a, "", b, entrada)
+
+    def op(cls, a, b, **props):
+        e = no(cls, **props)
+        liga(a, e, "A")
+        if b is not None:
+            liga(b, e, "B")
+        return e
+
+    def rgb(e):  # a vector parameter gives four channels: keep three so the arithmetic types match
+        k = no(unreal.MaterialExpressionComponentMask, r=True, g=True, b=True, a=False)
+        liga(e, k)
+        return k
+
+    def cor(nome, c):
+        return rgb(no(unreal.MaterialExpressionVectorParameter, parameter_name=nome,
+                      default_value=unreal.LinearColor(c[0], c[1], c[2], 1.0)))
+
+    def escalar(nome, v):
+        return no(unreal.MaterialExpressionScalarParameter, parameter_name=nome, default_value=float(v))
+
+    def um(cls, a, **props):
+        e = no(cls, **props)
+        liga(a, e, "Base" if cls == unreal.MaterialExpressionPower else "")
+        return e
+
+    olhar = op(unreal.MaterialExpressionMultiply, no(unreal.MaterialExpressionCameraVectorWS), None, const_b=-1.0)
+    z = no(unreal.MaterialExpressionComponentMask, r=False, g=False, b=True, a=False)
+    liga(olhar, z)
+    t = um(unreal.MaterialExpressionPower, um(unreal.MaterialExpressionSaturate, z), const_exponent=val["gradiente_exp"])
+    ceu_cor = no(unreal.MaterialExpressionLinearInterpolate)
+    liga(cor("Horizonte", val["horizonte"]), ceu_cor, "A")
+    liga(cor("Zenite", val["zenite"]), ceu_cor, "B")
+    liga(t, ceu_cor, "Alpha")
+    abaixo = um(unreal.MaterialExpressionSaturate, op(unreal.MaterialExpressionMultiply, z, None, const_b=-10.0))
+    base = no(unreal.MaterialExpressionLinearInterpolate)
+    liga(ceu_cor, base, "A")
+    liga(cor("Chao", val["chao"]), base, "B")
+    liga(abaixo, base, "Alpha")
+    d = um(unreal.MaterialExpressionSaturate,
+           op(unreal.MaterialExpressionDotProduct, olhar, cor("DirecaoSol", [para_sol.x, para_sol.y, para_sol.z])))
+    halo = op(unreal.MaterialExpressionMultiply, um(unreal.MaterialExpressionPower, d, const_exponent=val["halo_exp"]),
+              op(unreal.MaterialExpressionMultiply, cor("Halo", val["halo"]), escalar("HaloForca", val["halo_forca"])))
+    disco = op(unreal.MaterialExpressionMultiply, um(unreal.MaterialExpressionPower, d, const_exponent=30000.0),
+               escalar("DiscoForca", val["disco_forca"]))
+    soma = op(unreal.MaterialExpressionAdd, op(unreal.MaterialExpressionAdd, base, halo), disco)
+    final = op(unreal.MaterialExpressionMultiply, soma, escalar("Luminancia", val["luminancia"]))
+    mel.connect_material_property(final, "", unreal.MaterialProperty.MP_EMISSIVE_COLOR)
+    mel.recompile_material(m)
+    eal.save_loaded_asset(m)
+    malha = eal.load_asset("/Engine/BasicShapes/Sphere")  # 5.8 no longer loads /Engine/EngineSky (BP_Sky_Sphere either)
+    raio = malha.get_bounds().get_editor_property("sphere_radius")
+    a = eas.spawn_actor_from_class(unreal.StaticMeshActor, unreal.Vector(0, 0, 0))
+    a.set_actor_label("SI_Ceu")
+    smc = a.static_mesh_component
+    smc.set_editor_property("mobility", unreal.ComponentMobility.MOVABLE)
+    smc.set_static_mesh(malha)
+    smc.set_material(0, m)
+    smc.set_editor_property("cast_shadow", False)
+    smc.set_collision_enabled(unreal.CollisionEnabled.NO_COLLISION)
+    r = float(val.get("raio_m", 5000)) * 100  # beyond the sky light's 1.5 km threshold: it counts as sky
+    a.set_actor_scale3d(unreal.Vector(r / raio, r / raio, r / raio))
+    diz("ceu gradiente: raio da malha", round(raio), "escala", round(r / raio, 1), "sol", [round(c, 3) for c in (para_sol.x, para_sol.y, para_sol.z)])
+    return a
+
+
 atores = eas.get_all_level_actors()
-FEITOS = ("SI_Sol", "SI_Atmosfera", "SI_LuzCeu", "SI_Nevoeiro", "SI_PosProcesso", "SI_Nuvens", "SI_Chao", "SI_Luz_")
+FEITOS = ("SI_Sol", "SI_Atmosfera", "SI_Ceu", "SI_LuzCeu", "SI_Nevoeiro", "SI_PosProcesso", "SI_Nuvens", "SI_Chao", "SI_Luz_")
 for a in atores:
     if a.get_actor_label().startswith(FEITOS):
         eas.destroy_actor(a)
@@ -78,22 +175,38 @@ sol = eas.spawn_actor_from_class(unreal.DirectionalLight, unreal.Vector(0, 0, 20
 sol.set_actor_label("SI_Sol")
 lc = sol.get_component_by_class(unreal.DirectionalLightComponent)
 MOB = getattr(unreal.ComponentMobility, CFG.get("mobilidade", "MOVABLE"))
-lc.set_editor_property("mobility", MOB)
+# the sun and the sky light may differ: a STATIC light does not exist in the game (baked only), so the sky atmosphere
+# has no sun and renders black — in VR they are STATIONARY (indirect light baked, sun and sky live)
+MOB_SOL = getattr(unreal.ComponentMobility, CFG.get("mobilidade_sol", CFG.get("mobilidade", "MOVABLE")))
+lc.set_editor_property("mobility", MOB_SOL)
 lc.set_editor_property("intensity", float(CFG["sol"]["lux"]))
 lc.set_editor_property("atmosphere_sun_light", True)
 lc.set_editor_property("light_source_angle", 0.5357)  # the sun's real disc: soft shadow edges
-ceu = eas.spawn_actor_from_class(unreal.SkyAtmosphere, unreal.Vector(0, 0, 0))
-ceu.set_actor_label("SI_Atmosfera")
+if CFG.get("ceu", "atmosfera") == "gradiente":
+    # VR (forward renderer): the sky atmosphere drew a black sky there, so the sky light captured only the green
+    # ground (a green cast indoors). An unlit sky dome of our own works in any renderer and costs one draw per eye
+    lc.set_editor_property("atmosphere_sun_light", False)
+    f = sol.get_actor_forward_vector()  # the light shines along it: the sun is the other way
+    ceu = ceu_gradiente(unreal.Vector(-f.x, -f.y, -f.z), CFG.get("ceu_parametros", {}))
+else:
+    ceu = eas.spawn_actor_from_class(unreal.SkyAtmosphere, unreal.Vector(0, 0, 0))
+    ceu.set_actor_label("SI_Atmosfera")
 if CFG.get("nuvens", True):
     nuv = eas.spawn_actor_from_class(unreal.VolumetricCloud, unreal.Vector(0, 0, 0))
     nuv.set_actor_label("SI_Nuvens")
 sl = eas.spawn_actor_from_class(unreal.SkyLight, unreal.Vector(0, 0, 600))
 sl.set_actor_label("SI_LuzCeu")
 slc = sl.get_component_by_class(unreal.SkyLightComponent)
-slc.set_editor_property("mobility", MOB)
-slc.set_editor_property("real_time_capture", MOB == unreal.ComponentMobility.MOVABLE)
-slc.set_editor_property("lower_hemisphere_is_black", False)
-slc.set_editor_property("lower_hemisphere_color", unreal.LinearColor(0.08, 0.09, 0.06, 1))
+slc.set_editor_property("mobility", MOB_SOL)
+slc.set_editor_property("real_time_capture", MOB_SOL == unreal.ComponentMobility.MOVABLE)
+if CFG.get("ceu", "atmosfera") == "gradiente":
+    # baked light (VR): what comes from below is the real ground, bounced by Lightmass; a captured lower half of the
+    # dome lit every ceiling (they face down) with its colour — olive-mustard ceilings in the living room
+    slc.set_editor_property("lower_hemisphere_is_black", True)
+    slc.set_editor_property("lower_hemisphere_color", unreal.LinearColor(0, 0, 0, 1))
+else:
+    slc.set_editor_property("lower_hemisphere_is_black", False)
+    slc.set_editor_property("lower_hemisphere_color", unreal.LinearColor(0.08, 0.09, 0.06, 1))
 if CFG.get("nevoeiro", True):  # VR: off (in the forward renderer it filled the rooms with a blue haze)
     nev = eas.spawn_actor_from_class(unreal.ExponentialHeightFog, unreal.Vector(0, 0, -300))
     nev.set_actor_label("SI_Nevoeiro")

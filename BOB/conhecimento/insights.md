@@ -583,3 +583,22 @@ he answers (`metodo-construtivo.md`). Condensed 2026-10-28 (history in git).
   rendered variants, not by guessing. (3) Stills for approval: Unreal's Path Tracer (≈ 100 s per 1080p image), Cycles-like;
   real time: hardware Lumen, 31–40 FPS at 1080p on the RTX 2060 — below 60, the data the audit wanted for the GPU
   decision (user's call). Status: suggested to the user 2026-11-24.
+
+- **2026-11-25** — Step Inside Phase 8 (VR, baked light in Unreal 5.8, forward renderer): (1) in the forward renderer the
+  `SkyAtmosphere` draws a black sky and the engine sky sphere no longer loads in 5.8 → our own gradient sky dome
+  (`M_SI_Ceu`, real luminance), **movable** (a static dome blocks every Lightmass sky ray). (2) A white ceiling came out lime,
+  then mustard: Lightmass bounced the orange floor and the green grass at full saturation. The fix is the `LightmassReplace`
+  node in the master material — Lightmass bounces a desaturated colour (0.9; at 0.6 still olive) while what you see does not change; diffuse
+  boost per piece and a black lower sky hemisphere did not fix it. Diagnose baked light with show flags
+  (`ShowFlag.GlobalIllumination 0`, `SkyLighting 0`, `ReflectionEnvironment 0`), not by guessing. (3) Dense furniture
+  meshes get triangle facets from per-face lightmaps → light them with the volumetric lightmap (`FORCE_VOLUMETRIC`, 50 cm
+  cells). (4) Wall blotches = indirect-light noise: static lighting scale 1.0 (not 0.5: more noise and far longer), indirect
+  quality 4, smoothness 0.9, uncompressed lightmaps; the production bake at 0.5/quality 2 took 99 min and still blotched.
+  Settle the look with preview bakes (≈ 2.5 min) and post-process camera variants (no rebake), bake production once.
+  (5) Interiors need ≈ +2 EV more than the garden: a bounded post-process volume over the house (the eye adapts on
+  entering) plus local exposure, so the windows do not darken the rooms. The production bake (2 h 17 min) is darker than
+  the preview (the preview overestimates indirect light): pick the exposure on the production bake. Histogram auto
+  exposure darkens the room that sees big windows; raising +EV burns the others — lifting shadows with local exposure
+  (shadows 0.45, highlights 0.5, +2.2 EV, 7500 K inside) brightens the living room and kitchen and leaves the bedrooms as
+  they were; clamping `auto_exposure_max_brightness` changed nothing.
+  Status: applied in `step-inside/ferramentas/unreal/` 2026-11-25; told the user with the VR results 2026-11-25.

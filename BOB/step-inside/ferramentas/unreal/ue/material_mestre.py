@@ -5,7 +5,8 @@ house (Step Inside Phase 4, task 69).
 
 Reads material_mestre.json next to this script:
   {"nivel", "destino": "/Game/<Obra>", "mestre": "/Game/SI_Materiais/M_SI_PBR",
-   "ajustes": {"<glTF material name>": {"RugMin", "RugMax", "Metal", "Especular"}}}
+   "ajustes": {"<glTF material name>": {"RugMin", "RugMax", "Metal", "Especular"}},
+   "lightmass_dessaturar": 0..1 (VR: the colour Lightmass bounces off is desaturated by this fraction)}
 Why (2026-11-24): the glTF instances of the Interchange importer were faithful to Blender in their values, yet under
 Lumen they read too reflective (the oak floor turned into a grey sheen, leather into silver). M_SI_PBR is plain and
 under our control:
@@ -78,7 +79,21 @@ liga(cor, "", masc, "")
 base = no(unreal.MaterialExpressionMultiply, -400, -200)
 liga(t_cor, "RGB", base, "A")
 liga(masc, "", base, "B")
-mel.connect_material_property(base, "", unreal.MaterialProperty.MP_BASE_COLOR)
+if CFG.get("lightmass_dessaturar"):
+    # baked light (VR): Lightmass bounces light off a partly desaturated colour; what is seen does not change. The
+    # orange wood floor and the green grass bounced between floor and white ceiling until it came out mustard (the
+    # baked indirect light alone gave it: off, the ceiling went black and the walls neutral)
+    fr = no(unreal.MaterialExpressionScalarParameter, -400, -420, parameter_name="DessaturarLightmass",
+            default_value=float(CFG["lightmass_dessaturar"]))
+    des = no(unreal.MaterialExpressionDesaturation, -250, -330)
+    liga(base, "", des, "")
+    liga(fr, "", des, "Fraction")
+    troca = no(unreal.MaterialExpressionLightmassReplace, -100, -200)
+    liga(base, "", troca, "Realtime")
+    liga(des, "", troca, "Lightmass")
+    mel.connect_material_property(troca, "", unreal.MaterialProperty.MP_BASE_COLOR)
+else:
+    mel.connect_material_property(base, "", unreal.MaterialProperty.MP_BASE_COLOR)
 
 t_mr = no(unreal.MaterialExpressionTextureSampleParameter2D, -900, 150, parameter_name="T_MR",
           sampler_type=T.SAMPLERTYPE_LINEAR_COLOR, texture=PADRAO["T_White_Linear"])

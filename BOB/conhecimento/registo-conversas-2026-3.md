@@ -1099,3 +1099,20 @@ The team's notes on hub task 84 (written in the hub by [membro da equipa] on 202
 > status?
 > quanto tempo para terminar?
 - Done: separate VR project (forward, instanced stereo, MSAA, baked light) with Unreal's XR template pawn; VR level from the same scripts + `vr_preparar.py`; launchers and headset check; first bakes and images (look not approved yet: over-exposure, black patches, black sky); emulated-stereo 59 FPS. Filed: `step-inside/docs/fase8/README.md`, `conhecimento/posto-render.md`, hub tasks 86–88, Log.
+
+### 2026-11-25 — Step Inside VR: continue; tell me when the most ultra-realistic VR is ready [Step Inside, Phase 8]
+> Sim, continua
+> quando o VR com aspeto mais ultra-realista possível estiver pornto avisa-me
+- Rule (user): keep working on the VR look until it is as ultra-realistic as possible (on the RTX 2060), then notify the user.
+- Work: lightmap UVs made in Blender (`blender_para_unreal.py --lightmap`); stationary sun and sky light; light baked in the editor with the GPU (`ue/cozer_gui.py`; headless, the sky light and reflection captures came out black). Filed: `step-inside/docs/fase8/README.md`.
+> status?
+> continua até atingires o objetivo de VR o mais ultra realista possível e a estar pronto para eu depois dar a ordem de iniciar o teste... vou estar meio away aqui do chat mas quero que continues até atingir esse goal.
+- Rule (user): work on unattended until the VR look is as ultra-realistic as possible AND the tour is ready to start on the user's order (the user is mostly away from the chat).
+- Work (afternoon): the sky atmosphere renders black in the forward renderer and 5.8 no longer loads `/Engine/EngineSky` → own unlit sky dome (`"ceu": "gradiente"`, `M_SI_Ceu`, movable so Lightmass ignores it); furniture lit by the volumetric lightmap (`"volumetrico"`, per-face lightmap UVs showed triangle facets); per-prefix Lightmass bounce (`"ressalto"`); the sky light's lower hemisphere black (the dome's ground colour tinted the ceilings); GUI task path fix in the runner. Filed: `step-inside/docs/fase8/README.md`.
+- Work (evening): wall blotches fixed by the Lightmass settings (static lighting scale 1.0, indirect quality 4,
+  smoothness 0.9, uncompressed lightmaps; production bake 2 h 17 min); interior exposure by a bounded post-process volume
+  over the house (+2.2 EV, 7500 K, local exposure shadows 0.45 / highlights 0.5), chosen from 2 rounds of camera variants
+  on the production bake; emulated-stereo FPS (sala): 180 %/MSAA 4 = 72, 140 %/4 = 102, 140 %/2 = 129, 120 %/2 = 157 →
+  the tour starts at pixel density 0.78 and MSAA 4 (`iniciar_vr.cmd [densidade] [MSAA]`); game camera back to the VR
+  pawn. Filed: `step-inside/docs/fase8/README.md` (Exposição, Iniciar, Resultados 2026-11-25), `conhecimento/insights.md`
+  (2026-11-25), hub tasks 87–88 and Log.
