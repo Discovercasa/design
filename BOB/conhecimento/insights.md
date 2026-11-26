@@ -216,8 +216,68 @@ he answers (`metodo-construtivo.md`). Condensed 2026-10-28 (history in git).
   live without its baked shadow: glass indoors turns into a white sheet and windows go hazy from inside → glass on its
   own lighting channel. (3) **Mirrors** reflect only the reflection captures (grey) unless they get a planar reflection,
   and in the forward renderer the material itself must have "Planar Reflections" on (plus `r.AllowGlobalClipPlane`).
-  Also hidden build-up layers need no lightmap (volumetric lightmap): less bake time for the visible surfaces.
-  Status: applied in `step-inside/ferramentas/unreal/` 2026-11-26; told the user 2026-11-26; the new bake is pending.
+  Hidden build-up layers get the smallest lightmap (4 texels): almost no bake time. (4) The **volumetric lightmap's first
+  sample layer is bright**: start the Lightmass importance volume well below the floor (−1.5 m), or every volumetric-lit
+  object blends with it up to the next layer (the lower 30 cm of all furniture glowed white). (5) **Volumetric-lit
+  objects bounce no light in the bake**: big light pieces (white kitchen units) must keep lightmaps or the walls and
+  ceiling round them go dark; only dense scanned meshes stay volumetric. Found with 2-minute preview bakes as the test
+  loop, switching one thing off at a time.
+  Status: applied in `step-inside/ferramentas/unreal/` 2026-11-26; told the user 2026-11-26.
+- **2026-11-26** — Realism of the VR/pages vs Twinmotion: same engine, the gap is content. (1) **Furniture**: the 16
+  Poly Haven scans are already real; the 11 parametric boxes (kitchen, island, fridge column, wardrobe, vanity, beds,
+  dining table, toilet, shower, TV) are what looks fake, and Poly Haven has no modern beds, toilets or kitchens. So:
+  made-to-measure pieces (kitchen, wardrobes, vanity) stay parametric (they must fit each house) but get real detail
+  (door and drawer gaps, handles or gola, plinth, worktop thickness, sink, tap, hob, oven, hood) and library textures;
+  sanitary ware, taps and appliances from the manufacturers' free 3D/BIM models of what DiscoverCasa installs (the client
+  sees the real product); loose furniture and textiles (beds, sofa, table, rugs, curtains, bedding) from an Unreal-ready
+  pack (Fab, with LODs: needed for 90 Hz on the RTX 2060) for the real project — paid, so only with the user's OK.
+  (2) **Surroundings**: Twinmotion-style examples use a library (trees, people, cars), a map context (OpenStreetMap
+  massing or Google photorealistic 3D tiles) and a photo sky. Closer to the real site: a **360° photo taken on the plot
+  at window height** as the backdrop of the window views (VR and 360 tour) and a **drone photogrammetry flight** of the
+  plot and neighbours (RealityScan/RealityCapture) for the page's aerial view and the near surroundings in VR; open
+  data (terrain + orthophoto + OSM buildings) when there is no site visit; Google 3D tiles only streamed in a web view
+  (key with billing, attribution, no storing; blurry at ground level and outside cities). (3) **VR at the client's
+  home** needs a PC with a graphics card and the headset; for the paid VR level: a session at DiscoverCasa with our PC,
+  a standalone Quest build (far less realistic) or cloud streaming (cost per hour).
+  Status: told the user 2026-11-26; photo sky downloaded and prepared (`ue/ceu_hdri.py`). **Declined**: a paid library
+  («Pagar uma libraria está fora de questão»); drone/site photos not viable for every house (simulate instead).
+- **2026-11-26** — The 3D is the base service: build ONE Blender scene per house and derive the rest from it. Today
+  there are two pipelines (the page's `ferramentas/pagina/casa_blender.py` + `interior.py`, and Step Inside's visit
+  model + `interiores/`) with two furniture sets. One scene → web 3D (Cycles light baked into lightmaps), 360° tour
+  (Cycles renders at the tour points), AR (the same GLB reduced: ≤ 50k triangles, few materials), VR (the same GLB, full
+  detail, to Unreal; the tour points as start/teleport points). Shared once: the furniture library (by style, each piece
+  with LODs: high for renders/VR, medium for the web, low for AR), the material catalogue, the sky file, the
+  surroundings, the points. To test: the Cycles light bake reused in VR instead of Lightmass (2 h 17 min).
+  **Furniture without a paid library**: interior styles as style sheets (palette of 3–4 CC0 photo materials, colours,
+  shape language: legs, edges, proportions) built from the user's reference images; every piece of a room from one
+  style (no clashes); pieces remodelled with real detail (rounded edges, seams and piping, cushions and bedding shaped by
+  Blender's cloth simulation, door gaps, handles) and approved one by one against the reference (close-up Cycles render
+  beside it); free makers' models for sanitary ware and appliances; Poly Haven pieces only where they fit a style.
+  **Sky**: a photo sky (HDRI, chosen per house by time of day and weather) with our own sun aligned to it beats a drawn
+  sky wherever the sky shows (windows, exteriors, reflections); the drawn (Nishita) sky stays for exact sun studies (a
+  movable sun). Use sky-only HDRIs and our open-data surroundings (`envolvente.py`) for the ground, so the photo never
+  fights the real site. Status: told the user 2026-11-26.
+- **2026-11-26** — Consistent realism across 3D, tour, AR and VR. (1) **AR**: 50k triangles is Google Scene Viewer's
+  guidance (ideal ≤ 50k, warning above 100k, ~10 MB, ≤ 2048 px textures, ≤ 10 materials), not a wall — go to 100k
+  where furniture shows it. What limits AR realism more is the phone viewer: it lights the model itself and ignores our
+  baked light. Keep the look by baking the full model's detail into normal maps of the light one and our light (at
+  least ambient occlusion) into its textures; later, on Android, our own viewer (WebXR, the web 3D with its baked light);
+  on the iPhone, today, only Quick Look. (2) **A material with no exact texture** (the Ribamar Tremolo): drawn in code
+  from the maker's catalogue (board 22 × 135, profile, the swatch circled by the user), colour tuned until the sunlit
+  façade measured like the swatch on the web 3D, then the user's notes (fewer tones, varnish). Best for the products on
+  every house (Tremolo, vinyl floor, tiles, sandwich panel): photograph the real sample flat in shade with a grey card
+  and make the texture ourselves (colour, relief, gloss) — free and exact; belongs to hub task 156. (3) **Vegetation**:
+  photo-scanned CC0 trees and shrubs (Poly Haven: island trees, jacaranda, searsia, shrubs — already in the library)
+  reduced to levels of detail (full for renders, reduced for the web and VR, cards far away), never procedural crowns.
+  Status: told the user 2026-11-26.
+- **2026-11-26** — Materials made from a reference (user rule: when no free library has it, Claude develops it from
+  a reference, ultra-realistic, in Blender and Unreal). One PBR texture set per material, at real size, tileable,
+  2k–4k: colour, normal (+ height), roughness, ambient occlusion, and coat/sheen where the product has it — the same
+  files in Cycles (3D, tour), the web 3D, AR and Unreal. What makes it read as real: the product's own geometry in the
+  relief (profile, joints, pores), roughness that varies (never one value), slight colour variation at two scales (no
+  visible tiling), edge wear only where real. Calibrate in a neutral "light booth" scene (grey card, daylight) against
+  the reference, side by side, before it goes into any house. A photo of the real sample (grey card, shade) beats any
+  reference image: use it for the products DiscoverCasa installs. Status: told the user 2026-11-26.
 
 ## Recorded, not yet told (raise when it fits)
 - **2026-11-18** — Client pages look "modelled" mainly because every texture, piece of furniture and tree is generated

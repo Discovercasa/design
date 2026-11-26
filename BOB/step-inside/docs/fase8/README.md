@@ -4,6 +4,19 @@ Tarefas do hub 86 a 89. Especificação §13 Fase 8 (perfil `VR_BAKED`: sem Lume
 utilizador (2026-11-24): «prepara tudo de forma a quando tiver os óculos ser só ligar os óculos ao PC e pedir-te para
 iniciar o tour VR». Os óculos ainda não estão escolhidos (tarefa 86).
 
+## Objetivo comercial e projeto de teste (utilizador, 2026-11-26)
+
+- **Torres Vedras é o projeto TESTE**: serve para perceber até onde chega o realismo da VR antes de avançar para um
+  projeto real. O mobiliário deve ser realista; a envolvente (vista aérea das páginas dos clientes e vistas das janelas)
+  deve aproximar-se do exterior real, como nos exemplos do Twinmotion que o utilizador viu.
+- **A página do cliente tem três níveis pagos**, conforme o que o cliente decide e paga: (1) 3D realista + tour;
+  (2) 3D realista + tour + AR; (3) 3D realista + tour + AR + VR. O nível 1 é o padrão das Páginas (um 3D com a nossa
+  qualidade e a visita 360° dentro dele); a AR vem da Fase 7; a VR é esta fase.
+- **Pergunta em aberto (2026-11-26): como se entrega o nível 3 (VR)?** A VR em casa do cliente precisa de um PC com
+  placa gráfica mais os óculos. Opções (insights 2026-11-26): sessão na DiscoverCasa com o nosso PC; versão autónoma
+  para Quest (muito menos realista); streaming na cloud (custo à hora). Por decidir. Também por definir: preços de cada
+  nível e como a página liga AR e VR ao 3D (hoje a AR está na página de teste do hub, a VR só no PC de casa).
+
 ## Porquê um projeto à parte
 
 A VR precisa de 72–90 FPS **por olho** a uma resolução acima de 1080p. Com o Lumen por hardware a RTX 2060 dá 31–40 FPS
@@ -93,8 +106,26 @@ refletida pelo Lightmass.
   cunhas escuras nas juntas parede/teto), abriam-se frestas nos cantos e os UVs de lightmap deformavam-se (manchas,
   faixas). Diagnóstico: raios da câmara contra os triângulos (o primeiro acerto era o `OSB_15_mm`, à frente do Pladur,
   com 1,5–3° de desvio), quando no Blender e no GLB as placas são paralelas. As camadas escondidas (OSB, lã mineral,
-  membrana, perfis e réguas do teto) passam ao lightmap volumétrico: não gastam texels na cozedura e continuam a tapar a
-  luz. Lightmaps a 56 texels/m. Pede uma cozedura nova.
+  membrana, perfis e réguas do teto) ficam com o lightmap mais pequeno (4 texels, `"minimo"`): quase nada a cozer e
+  continuam superfícies normais para o Lightmass. Lightmaps a 56 texels/m. Confirmado na cozedura de 2026-11-26 (1 h 42
+  min): as cunhas, frestas e faixas desapareceram.
+- **Base dos móveis branca** (cozedura de 2026-11-26): a parte de baixo de todos os móveis iluminados pelo lightmap
+  volumétrico brilhava a branco até ≈ 30 cm. Não era o sol, os candeeiros, a luz do céu, os reflexos, a exposição local,
+  o ressalto do chão, o Nanite, os espelhos nem o `r.AllowGlobalClipPlane` (cada um desligado à vez, em cozeduras de
+  pré-visualização de 2 min). Era o **volume do Lightmass**: começava na face de baixo da laje (z −20) e a primeira
+  camada de amostras do lightmap volumétrico, que sai sempre clara, ficava aí; tudo até à camada seguinte (+30 cm,
+  células de 50 cm) misturava-se com ela. Prova: com o volume a começar a +5 cm o branco subiu até 55 cm. Correção:
+  `"importancia_z_cm": [-150, null]` (o volume começa 1,5 m abaixo do chão). Também: o terreno tinha um buraco debaixo
+  da casa e a laje flutuava 2 m acima da relva, aberta ao céu dos lados — um bloco de solo enche-o (`"solo_sob"`).
+- **Móveis paramétricos com lightmap** (`"volumetrico_malhas": ["PH_"]`, 2026-11-26): pelo lightmap volumétrico, as peças
+  nossas (malhas `PAR_OBJ_*`: cozinha, roupeiros, camas, mesas, sanitários) só tapavam a luz na cozedura e não a
+  devolviam — a parede e o teto à volta dos armários brancos da cozinha ficavam escuros (o canto que o utilizador
+  marcou). Com lightmap (UV 1 do Blender) ficam claros; as peças digitalizadas (`PH_*`, malhas densas) continuam
+  volumétricas, porque com lightmap ficam manchadas.
+- **Céu fotográfico** (`ceu_hdri.py` + `ceu_hdri.json`, `blender_ceu.py`, 2026-11-26, utilizador: «então descarrega»):
+  `kloofendal_38d_partly_cloudy_puresky` (Poly Haven, CC0, 8k) na cúpula SI_Ceu, rodado para o sol da foto ficar no
+  azimute do sol do nível; o sol da foto é cortado ao brilho da nuvem mais clara (o nível tem o seu sol cozido) e a
+  escala dá a mesma luminância média do céu desenhado (4566 cd/m²). Sem nova cozedura (a cúpula é móvel).
 - `vr_preparar.py` e `espelhos.py` carregam o módulo `StaticMeshEditor` (numa *commandlet* o subsistema vinha vazio e a
   antiga `EditorStaticMeshLibrary` devolvia valores por omissão em silêncio: os registos «0 canais de UV» eram falsos);
   as malhas do motor (`/Engine/…`, o chão de relva é o `Plane`) já não são alteradas nem gravadas.
@@ -155,9 +186,10 @@ rotação por passos, botão de menu.
   densidade 0,78 (= 140 %) e MSAA 4×; com óculos a 72–80 Hz, 0,9 (= 160 %) é mais nítido. Ontem, antes dos móveis pelo lightmap volumétrico, 180 %/4× dava 59 FPS.
 - **Falta (com os óculos):** latência, conforto e os FPS reais no CSV do tour (tarefa 88); escolher os óculos (tarefa 86).
 - **Melhorias possíveis** (não bloqueiam o teste): relva e terreno do exterior lisos e facetados, o alpendre negro visto de
-  fora, o WC demasiado quente, janelas queimadas vistas de dentro (como numa foto); um céu HDRI e texturas melhores
-  para o chão precisam de descarregar ficheiros (pedir autorização). Resolvidos a 2026-11-26: o vidro do duche branco
-  («Vidro»), os espelhos cinzentos («Espelhos»); as cunhas e frestas nas juntas parede/teto eram do Nanite, não do
-  modelo do Blender («Nanite desligado» — falta a cozedura nova para o confirmar).
+  fora, o WC demasiado quente, janelas queimadas vistas de dentro (como numa foto); vegetação real à volta (árvores
+  digitalizadas com versões leves — `ferramentas/pagina/vegetacao.py`; a primeira técnica, folhas rareadas e
+  aumentadas, dá folhas grandes demais: falta a dos cartões com cachos de folhas). Resolvidos a 2026-11-26: o vidro do
+  duche branco («Vidro»), os espelhos cinzentos («Espelhos»), as cunhas e frestas («Nanite desligado»), a base branca
+  dos móveis e o canto escuro por cima dos armários (secções acima), o céu desenhado («Céu fotográfico»).
 - Cada imagem do nível VR no Movie Render Queue demora ≈ 5 min (um PIE por trabalho); `capturas_gui.cmd` tira as 6 vistas
   em ≈ 2 min; o primeiro arranque do projeto compila os shaders do forward.

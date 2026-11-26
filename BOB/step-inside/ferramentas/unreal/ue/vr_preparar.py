@@ -12,9 +12,16 @@ Reads vr_preparar.json next to this script:
    "nanite": false (default; the forward VR renderer has no Nanite and drew, and Lightmass baked, each mesh's Nanite
    FALLBACK — simplified at relative error 1.0: thin boards moved, the OSB behind poked through the plasterboard as
    dark wedges, gaps opened at corners, the lightmap UVs warped; 2026-11-26),
-   "volumetrico": label prefixes lit by the volumetric lightmap instead of a lightmap (furniture: dense meshes whose
-   per-face lightmap UVs showed triangle facets; the build-up layers hidden inside walls and ceilings: no lightmap
-   texels to bake, they still block light), "ressalto": {label prefix: Lightmass diffuse boost} (the sunlit grass
+   "volumetrico": label prefixes lit by the volumetric lightmap instead of a lightmap, "volumetrico_malhas": the same
+   by mesh-name prefix — the photo-scanned furniture "PH_" (dense meshes whose per-face lightmap UVs showed triangle
+   facets). Our parametric pieces (meshes PAR_OBJ_*: kitchen, wardrobes, beds, tables, sanitary ware) keep lightmaps:
+   lit by the volumetric lightmap they only blocked light in the bake and bounced none, so the walls and ceiling round
+   the white kitchen units came out dark (the corner above the wall cabinets, 2026-11-26),
+   "minimo": label prefixes that keep a lightmap of the smallest size
+   (4 texels: the build-up layers hidden inside walls, floors and ceilings — almost nothing to bake, and they stay
+   ordinary surfaces for Lightmass. Made volumetric instead (bake of 2026-11-26), the volumetric lightmap samples
+   inside the floor build-up lit up and the lower part of every piece of furniture glowed white),
+   "ressalto": {label prefix: Lightmass diffuse boost} (the sunlit grass
    and the wood floor bounced so much colour that the white living-room ceiling came out lime, then mustard; this damps
    their bounce in the bake without changing how they look), "lightmass": {"ressaltos_ceu": sky light bounces,
    "comprimir": false (uncompressed lightmaps)}}
@@ -60,8 +67,37 @@ def pot2(v):
     return 2 ** max(0, math.ceil(math.log2(max(v, 1))))
 
 
+# 0. the ground under the floor slab. The site terrain has a hole under the house, and the slab (20 cm) floated 2 m over
+# the grass plane, open to the sky at the sides (vertical and side rays under it, 2026-11-26). The volumetric lightmap
+# (50 cm cells) mixed that sunlit air into the rooms: the lower part of every piece of furniture glowed white and green.
+# (Before, Nanite's coarse fallback of the terrain had closed the hole.) A solid block in the slab's own footprint fills
+# it like the real ground: the samples inside it are dropped. "solo_sob": {"rotulo": text in the slab's label,
+# "ate_z_cm": its bottom}; its label starts with SI_VR_Solo (put that prefix in "minimo": it is hardly seen).
+for a in eas.get_all_level_actors():
+    if a.get_actor_label().startswith("SI_VR_Solo"):
+        eas.destroy_actor(a)
+SS = CFG.get("solo_sob")
+if SS:
+    laje = next(a for a in eas.get_all_level_actors()
+                if isinstance(a, unreal.StaticMeshActor) and SS["rotulo"] in a.get_actor_label())
+    bb = laje.static_mesh_component.static_mesh.get_bounding_box()
+    lo, hi = bb.get_editor_property("min"), bb.get_editor_property("max")
+    fundo = laje.get_actor_transform().transform_location(unreal.Vector((lo.x + hi.x) / 2, (lo.y + hi.y) / 2, lo.z))
+    z1 = float(SS.get("ate_z_cm", -240))
+    esc_l = laje.get_actor_scale3d()
+    # spawn_actor_from_object gave None in the commandlet: spawn the actor class, then give it the mesh
+    solo = eas.spawn_actor_from_class(unreal.StaticMeshActor, unreal.Vector(fundo.x, fundo.y, (fundo.z + z1) / 2),
+                                      laje.get_actor_rotation())
+    solo.static_mesh_component.set_static_mesh(unreal.EditorAssetLibrary.load_asset("/Engine/BasicShapes/Cube"))
+    solo.set_actor_label("SI_VR_Solo_sob_laje")
+    solo.set_actor_scale3d(unreal.Vector((hi.x - lo.x) * esc_l.x / 100, (hi.y - lo.y) * esc_l.y / 100,
+                                         (fundo.z - z1) / 100))  # the engine cube: 100 cm, centred
+    solo.static_mesh_component.set_material(0, laje.static_mesh_component.get_material(0))
+    diz("solo sob a laje", laje.get_actor_label(), "cm", round((hi.x - lo.x) * esc_l.x), "x",
+        round((hi.y - lo.y) * esc_l.y), "z", round(z1), "..", round(fundo.z))
+
 # 1. lightmaps
-malhas_feitas, n_uv, n_act, n_vol, n_boost, n_nan = set(), 0, 0, 0, 0, 0
+malhas_feitas, n_uv, n_act, n_vol, n_boost, n_nan, n_min = set(), 0, 0, 0, 0, 0, 0
 casa_lo, casa_hi = [1e18] * 3, [-1e18] * 3
 for a in eas.get_all_level_actors():
     if not isinstance(a, unreal.StaticMeshActor):
@@ -90,7 +126,8 @@ for a in eas.get_all_level_actors():
             sm.set_editor_property("nanite_settings", ns)
             n_nan += 1
     smc.set_editor_property("mobility", unreal.ComponentMobility.STATIC)
-    vol = rot.startswith(tuple(CFG.get("volumetrico", [])))
+    vol = (rot.startswith(tuple(CFG.get("volumetrico", [])))
+           or sm.get_name().startswith(tuple(CFG.get("volumetrico_malhas", []))))
     smc.set_editor_property("lightmap_type", unreal.LightmapType.FORCE_VOLUMETRIC if vol else unreal.LightmapType.DEFAULT)
     n_vol += vol
     boost = next((float(b) for pre, b in CFG.get("ressalto", {}).items() if rot.startswith(pre)), 1.0)
@@ -102,6 +139,9 @@ for a in eas.get_all_level_actors():
     dims = sorted([e.x * 2 / 100, e.y * 2 / 100, e.z * 2 / 100], reverse=True)  # metres, largest first
     if rot == "SI_Chao":
         res = CFG["res_chao"]
+    elif rot.startswith(tuple(CFG.get("minimo", []))):
+        res = 4
+        n_min += 1
     else:
         res = min(CFG["res_max"], max(CFG["res_min"], pot2(max(dims[0], 0.1) * CFG["texel_m"])))
         if not rot.startswith("SITE_"):
@@ -122,7 +162,8 @@ for caminho in sorted(malhas_feitas):
 amostra = unreal.EditorAssetLibrary.load_asset(sorted(malhas_feitas)[0])
 diz("lightmaps: malhas", len(malhas_feitas), "definicoes mudadas", n_uv, "nanite mudado", n_nan, "atores", n_act, "amostra: canais",
     sme.get_num_uv_channels(amostra, 0), "indice", amostra.get_editor_property("light_map_coordinate_index"))
-diz("iluminados pelo lightmap volumetrico", n_vol, "ressalto mudado", n_boost, CFG.get("ressalto", {}))
+diz("iluminados pelo lightmap volumetrico", n_vol, "lightmap minimo", n_min, "ressalto mudado", n_boost,
+    CFG.get("ressalto", {}))
 diz("caixa da casa cm", [round(x) for x in casa_lo], [round(x) for x in casa_hi])
 
 
@@ -139,7 +180,11 @@ def volume(cls, rotulo, margem_cm, z0=None, z1=None):
     return v
 
 
-volume(unreal.LightmassImportanceVolume, "SI_VR_Lightmass", 300)
+# "importancia_z_cm": [bottom, top] of the Lightmass volume (null = the house's own). The volumetric lightmap's sample
+# layers start at the volume's bottom: from the slab's underside (-20) its first layer lay inside the slab, whose
+# samples see the sky through it (bright), and every object up to the next layer (+30 cm) blended with them
+VZ = CFG.get("importancia_z_cm") or [None, None]
+volume(unreal.LightmassImportanceVolume, "SI_VR_Lightmass", 300, VZ[0], VZ[1])
 volume(unreal.NavMeshBoundsVolume, "SI_VR_Navegacao", CFG["nav_margem_m"] * 100, -150, 350)
 
 # 3. reflection captures, 4. player start

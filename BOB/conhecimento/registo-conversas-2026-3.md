@@ -1134,3 +1134,83 @@ wall, the corner column, the mottled corridor wall, a light band along the top o
   Nanite off in `vr_preparar.py` (`"nanite": false`), hidden build-up layers lit by the volumetric lightmap (no
   lightmap texels), 56 lightmap texels/m; needs a new bake. The home PC was in use (a video playing) during an FPS run:
   GUI jobs stopped, the screenshot deleted, no more screenshots. Filed: `step-inside/docs/fase8/README.md`.
+
+### 2026-11-26 (morning) — Step Inside VR: the new light bake [Step Inside, Phase 8]
+> Sim, coze já
+- Answer to "may I use the home PC now to bake the light (about 2–3 h, the Unreal window open and the processor
+  busy)?": yes. Work: production bake with Nanite off, then captures of every view, mirror FPS measured.
+> nós estamos a utilizar o twinmotion ?
+- Answer: no, Unreal Engine 5.8 (Twinmotion runs on Unreal with fewer options; Unreal can be driven by scripts, gives
+  the VR control and per-object settings).
+> era só para perceber se havia diferenças no aspeto final, se o twinmotion dava delivery a algo com mais qualidade que o unreal
+- Answer: no, same engine; the difference is the content (Twinmotion's ready library: textured materials, vegetation,
+  photo skies, people). Asked to download free CC0 textures and a photo sky (Poly Haven).
+> então descarrega, porque este projeto é um projeto teste para perceber o ponto de realidade que conseguimos chegar com o VR para depois avançarmos num projeto mais real. O mesmo se aplica a mobília que deve ser realista, para a mobília o que sugeres? E em relação ao envolvimento e o que tem à volta das casas o que sugeres, porque por exemplo eu vi exemplos de projetos do twinmotion e os envolvimentos de cidades e mesmo de casas estavam muito bons e eu queria conseguir que na vista aérea e na vista das janelas a proximidade do exterior real fosse essa, quando falo em vista aérea refiro-me mais a vista que vamos ter nas páginas que estamos a criar também.
+> O objetivo final de tudo isto é darmos uma página ao cliente que consoante o que o cliente decidir e pagar terá acesso ao 3D realista e ao tour, ao 3D realista ao tour e ao AR, 3D realista ao Tour ao AR e ao VR.
+- Facts (user): Torres Vedras is the TEST project, to find how far VR realism can go before a real project; furniture
+  must be realistic; surroundings: the aerial view (the client pages) and the window views should come close to the real
+  exterior, like the Twinmotion examples the user saw (cities and houses).
+- Product (user): the client page has three paid levels — (1) realistic 3D + tour; (2) realistic 3D + tour + AR;
+  (3) realistic 3D + tour + AR + VR — what the client decides and pays.
+- Work: the textures were already in the CC0 library (Phase 3/pages, 2k, `_trabalho/assets/polyhaven`, 722 MB); downloaded
+  the sky `kloofendal_38d_partly_cloudy_puresky` (Poly Haven, CC0, 8k + 2k .hdr, 82.5 MB; sun measured 37.9° up, the
+  level's is 28°) with `ferramentas/pagina/descarregar_ativos.py --ceus`; `blender_ceu.py` (EXR, sun capped, mean
+  luminance) and `ue/ceu_hdri.py` (the photo on the sky dome, no new bake). Suggestions for furniture and surroundings
+  given (see `conhecimento/insights.md`).
+- Filed (guardião, 2026-11-26): three paid levels + Torres Vedras as VR test project → `step-inside/docs/fase8/README.md`
+  → "Objetivo comercial e projeto de teste" (with the open question on VR delivery, pricing and page linking);
+  `public/dados/projetos/plataforma_cliente.json` → `futuro`; `public/dados/projetos/paginas.json` → `futuro`.
+> Sim eu sei que a página ainda não juntas o AR e o VR e para já é suposto estar assim mais para a frente vamos implementar isso. Quero é que percebas que visto que o serviço base vai ser o 3D, o que podes aproveitar do 3D e utilizar para os outros serviços.
+> Outro ponto o meu grande problema com a mobília desenhada por nós é muitas vezes a falta de detalhe ou não parecer realista e as vezes um estilo não encaixar com o outro, para isso que solução poderiamos ter? Talvez definir estilos de interiores dou-te referências de imagens e vais modelando até ficarmos com interiores realistas? Pagar uma libraria está fora de questão.
+> Quanto a envolvência o que é superior e vai apresentar melhor qualidade? Uma luz gerada por ti ou um HDRI o mais próximo possível? Quanto aos exteriores uma foto ou vídeo drone acho que não seja viável para todos os casos simplesmente tentarmos com os recursos que temos simular o máximo possível, neste projeto teste não precisas de aplicar isso. O maior impacto da envolvência até seria no 3D nas vistas de dentro da casa que se consegue ver o exterior.
+- Facts (user): the page not bundling AR/VR yet is intended (later); the 3D is the BASE service — reuse what it makes for
+  the tour, AR and VR. Furniture we draw: lacks detail, does not look real, styles clash. **Paying for a library is out
+  of the question** (the Fab pack suggestion is declined). Idea (user): define interior styles; the user gives reference
+  images and we model until the interiors are realistic. Surroundings: no site photos or drone video (not viable for
+  every case; as on 2026-11-12) — simulate as much as possible with our resources; not needed in this test project; the
+  biggest impact is in the 3D, in the views from inside through the windows.
+- Answers: reuse map (one Blender scene → web 3D, 360 tour, AR, VR); styles as style sheets with approved pieces;
+  sky: a photo sky (HDRI) with our own sun aligned beats a drawn sky wherever the sky shows. See `conhecimento/insights.md`.
+> 1. Em relação ao ponto 1 eu concordo com tudo se for possível, se de qualquer forma afetar o realismo no VR avisa-me. É isso que quero que percebas, o realismo do 3D de ve estar consistente entre o 3D,TOUR, AR e VR. Ou seja o melhor posssível em todas. O AR está limitado a 50 mil triângulos porquê ? Sim testa isso da luz mas a luz tem grande impacto então lembra-te o importante é ter o maior realismo possível.
+> 2. Sim esse plano parece-me muito bem, mas nao restrinjas a 3 e 4 materiais porque há combinações que ficam com bem com mais materiais do que 3 ou 4, podemos manter 3 ou 4 como referência mas não algo obrigatório. Anota isto como um checkpoint na aba das páginas e o que precisas para concluirmos o checkpoint.
+> 3. Ok aprovada essa solução. Só uma coisa a vegetação deverá ter um aspeto mais real também e não parecerem árvores modeladas deliberadamente.
+> Um ponto que quero falar, imagina que não encontramos um material exato que queremos como por exemplo aquele que usamos para a casa da [cliente] ribamar para o forro exterior, como chegaste até ao material ?
+(the client's first name redacted: public repo)
+- Decisions (user): one Blender scene per house as the source of the 3D, tour, AR and VR — approved "if possible";
+  warn if anything lowers the VR realism; realism must be consistent across the four, the best possible in each.
+  Test the Cycles light reused in VR, keeping whichever is more realistic (light has a big impact). Styles plan
+  approved; 3–4 materials per style only a reference, not a rule. Photo sky + simulated surroundings approved;
+  vegetation must look real, not deliberately modelled trees.
+- Done: hub checkpoint 44 «Interiores realistas por estilos» (Páginas, 6 tasks: references and brands from the user;
+  style sheets, remodelled pieces, three levels of detail, a furnished test page from Claude); hub Log 128.
+- Answers: AR 50k = Google Scene Viewer's guidance (ideal ≤ 50k, warning above 100k; `step-inside/docs/fase7/README.md`);
+  the Ribamar cladding: drawn in code from the catalogue (`ferramentas/pagina/casa_blender.py` `tremolo()`).
+> Exatamente quando quisermos atingir um material que não temos numa libraria free o processo deve ser esse usar a referência de algo e tu desenvolveres o material o mais próximo possível. dentro do blender e do unreal é possível alcançar isso certo? estes materiais gerados por ti devem ter alta qualidade e ser ultra-realistas
+- Rule (user): a material missing from the free libraries is made by Claude from a reference, as close as possible,
+  high quality and ultra-realistic; the same material in Blender and Unreal (one texture set for 3D, tour, AR, VR).
+- Work (afternoon): production bake with Nanite off (1 h 42 min): the wall wedges, corner gaps and bands are gone; new
+  fault: the lower part of the volumetric-lit furniture glowed white — the hidden build-up layers had been made
+  volumetric; they go back to ordinary lightmaps of the smallest size (`vr_preparar.json` "minimo"), to confirm with a
+  preview bake. Photo sky applied to the dome (`ue/ceu_hdri.py`: sun azimuth 155° in the level, scale 9560).
+> Sim, usa já
+- Answer to "may I use the home PC again with the Unreal window (about 2 h)?": yes — preview bake to check the furniture
+  glow, then the production bake, captures and FPS.
+> esse canto que dei highlight e por cima dos armários continua estranho... parece que tem um gradient preto a começar no canto superior direito e por cima dos armários está preto...
+(with the kitchen capture showing the volumetric lightmap samples, circled: the corridor corner behind the island and
+the wall/ceiling above the wall cabinets)
+- Work (evening, preview bakes of 2 min as the test loop): the white lower part of the furniture was NOT the hidden
+  layers, the air under the slab, the sun, the lamps, the sky light, reflections, local exposure, the floor bounce,
+  Nanite, the mirrors or r.AllowGlobalClipPlane (each switched off in turn). Cause found: the Lightmass importance
+  volume started at the slab's underside (z −20) and the volumetric lightmap's first sample layer (always bright) sat
+  there; everything up to the next layer (+30 cm) blended with it. Moving the volume's bottom to +5 cm made the white
+  reach 55 cm (confirmed); from −150 cm the kitchen and chair legs are right (`vr_preparar.json` "importancia_z_cm").
+  A solid ground block under the slab added too (the terrain had a hole under the house). The dark corner above the
+  wall cabinets: still there with the hidden layers lightmapped again; to judge on a production bake.
+> o canto ainda nao esta bom a cozedura vai dar fix nisso ?
+- Answer: no — the morning's production bake had it too. Likely cause: the parametric furniture (INT_, white kitchen
+  units) is lit by the volumetric lightmap, so in the bake it only blocks light and bounces none; test: INT_ pieces get
+  lightmaps (Blender UV1), only the scanned PH_ pieces stay volumetric.
+> tens de dar fix nesse canto está muito mau o aspeto
+- Work: test bakes confirmed it — with our parametric pieces (meshes PAR_OBJ_*) lightmapped, the wall and ceiling round
+  the wall cabinets are light again; the scanned pieces (PH_) stay on the volumetric lightmap (lightmapped they came
+  out blotchy). `vr_preparar.json` "volumetrico_malhas": ["PH_"]. Production bake started 18:15 (home PC, ~2 h).
