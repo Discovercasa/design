@@ -207,6 +207,17 @@ he answers (`metodo-construtivo.md`). Condensed 2026-10-28 (history in git).
   colour sells; what works is fit and being recognisable, and an all-blue market does not tell anyone apart → a palette
   from the product itself (Tremolo brown, anthracite RAL 7016, warm whites, the plot's green, the logo's yellow only as
   accent), neutral backgrounds on client pages — **told; declined** ("vamos manter como estão então"): colours stay.
+- **2026-11-26** — Unreal VR (forward renderer, baked light): three traps that look like modelling or lighting faults.
+  (1) **Nanite**: glTF imports come with Nanite on; the forward renderer has no Nanite, so it draws — and Lightmass
+  bakes — each mesh's simplified fallback (relative error 1.0). Thin build-up boards move: the hidden OSB pokes through
+  the plasterboard (dark wedges at wall/ceiling joints), gaps open at corners, lightmap UVs warp. Turn Nanite off for VR
+  (`vr_preparar.json` `"nanite": false`). Found by casting camera rays at the triangles (the first hit was the OSB, 1.5–3°
+  off), while Blender and the GLB had the boards exactly parallel. (2) A **stationary sun** lights translucent surfaces
+  live without its baked shadow: glass indoors turns into a white sheet and windows go hazy from inside → glass on its
+  own lighting channel. (3) **Mirrors** reflect only the reflection captures (grey) unless they get a planar reflection,
+  and in the forward renderer the material itself must have "Planar Reflections" on (plus `r.AllowGlobalClipPlane`).
+  Also hidden build-up layers need no lightmap (volumetric lightmap): less bake time for the visible surfaces.
+  Status: applied in `step-inside/ferramentas/unreal/` 2026-11-26; told the user 2026-11-26; the new bake is pending.
 
 ## Recorded, not yet told (raise when it fits)
 - **2026-11-18** — Client pages look "modelled" mainly because every texture, piece of furniture and tree is generated

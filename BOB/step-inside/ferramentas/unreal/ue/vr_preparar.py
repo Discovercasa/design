@@ -9,8 +9,12 @@ Reads vr_preparar.json next to this script:
    "uv_lightmap": "glb" (UV channel 1 comes in the GLB, made in Blender — preferred) or "gerar" (Unreal generates it),
    "texel_m": lightmap texels per metre, "res_min", "res_max", "res_chao", "nav_margem_m",
    "lightmass": {"ressaltos", "escala", "qualidade_indireta", "suavidade", "celula_volumetrica_cm"},
+   "nanite": false (default; the forward VR renderer has no Nanite and drew, and Lightmass baked, each mesh's Nanite
+   FALLBACK — simplified at relative error 1.0: thin boards moved, the OSB behind poked through the plasterboard as
+   dark wedges, gaps opened at corners, the lightmap UVs warped; 2026-11-26),
    "volumetrico": label prefixes lit by the volumetric lightmap instead of a lightmap (furniture: dense meshes whose
-   per-face lightmap UVs showed triangle facets), "ressalto": {label prefix: Lightmass diffuse boost} (the sunlit grass
+   per-face lightmap UVs showed triangle facets; the build-up layers hidden inside walls and ceilings: no lightmap
+   texels to bake, they still block light), "ressalto": {label prefix: Lightmass diffuse boost} (the sunlit grass
    and the wood floor bounced so much colour that the white living-room ceiling came out lime, then mustard; this damps
    their bounce in the bake without changing how they look), "lightmass": {"ressaltos_ceu": sky light bounces,
    "comprimir": false (uncompressed lightmaps)}}
@@ -34,7 +38,10 @@ with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "vr_preparar.
 mundo = unreal.EditorLoadingAndSavingUtils.load_map(CFG["nivel"])
 eas = unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
 # in a commandlet the editor subsystem can be None: the (older) static library has the same functions
-sme = unreal.get_editor_subsystem(unreal.StaticMeshEditorSubsystem) or unreal.EditorStaticMeshLibrary
+# in a commandlet the static mesh editor module is not loaded: without it the subsystem is None and the old
+# EditorStaticMeshLibrary fallback silently returned defaults (it logged "0 UV channels", set nothing)
+unreal.SystemLibrary.execute_console_command(None, "Module Load StaticMeshEditor")
+sme = unreal.get_editor_subsystem(unreal.StaticMeshEditorSubsystem)
 with open(CFG["importar_resumo"], encoding="utf-8") as f:
     desl = json.load(f)["deslocamento_cm"]
 with open(CFG["vistas"], encoding="utf-8") as f:
@@ -54,7 +61,7 @@ def pot2(v):
 
 
 # 1. lightmaps
-malhas_feitas, n_uv, n_act, n_vol, n_boost = set(), 0, 0, 0, 0
+malhas_feitas, n_uv, n_act, n_vol, n_boost, n_nan = set(), 0, 0, 0, 0, 0
 casa_lo, casa_hi = [1e18] * 3, [-1e18] * 3
 for a in eas.get_all_level_actors():
     if not isinstance(a, unreal.StaticMeshActor):
@@ -66,7 +73,8 @@ for a in eas.get_all_level_actors():
     rot = a.get_actor_label()
     if rot == "SI_Ceu":  # the sky dome (iluminacao.py): movable on purpose, outside Lightmass and the house box
         continue
-    if sm.get_path_name() not in malhas_feitas:
+    # the engine's own meshes (the grass ground is /Engine/BasicShapes/Plane) are left alone: never edit engine content
+    if sm.get_path_name() not in malhas_feitas and not sm.get_path_name().startswith("/Engine/"):
         malhas_feitas.add(sm.get_path_name())
         bs = sme.get_lod_build_settings(sm, 0)
         gerar = CFG.get("uv_lightmap", "gerar") == "gerar"  # "glb": UV channel 1 made in Blender (blender_para_unreal.py --lightmap)
@@ -76,6 +84,11 @@ for a in eas.get_all_level_actors():
             bs.set_editor_property("dst_lightmap_index", 1)
             sme.set_lod_build_settings(sm, 0, bs)
             n_uv += 1
+        ns = sm.get_editor_property("nanite_settings")
+        if ns.get_editor_property("enabled") != bool(CFG.get("nanite", False)):
+            ns.set_editor_property("enabled", bool(CFG.get("nanite", False)))
+            sm.set_editor_property("nanite_settings", ns)
+            n_nan += 1
     smc.set_editor_property("mobility", unreal.ComponentMobility.STATIC)
     vol = rot.startswith(tuple(CFG.get("volumetrico", [])))
     smc.set_editor_property("lightmap_type", unreal.LightmapType.FORCE_VOLUMETRIC if vol else unreal.LightmapType.DEFAULT)
@@ -107,7 +120,7 @@ for caminho in sorted(malhas_feitas):
     sm.set_editor_property("light_map_resolution", 64)
     unreal.EditorAssetLibrary.save_loaded_asset(sm, False)
 amostra = unreal.EditorAssetLibrary.load_asset(sorted(malhas_feitas)[0])
-diz("lightmaps: malhas", len(malhas_feitas), "definicoes mudadas", n_uv, "atores", n_act, "amostra: canais",
+diz("lightmaps: malhas", len(malhas_feitas), "definicoes mudadas", n_uv, "nanite mudado", n_nan, "atores", n_act, "amostra: canais",
     sme.get_num_uv_channels(amostra, 0), "indice", amostra.get_editor_property("light_map_coordinate_index"))
 diz("iluminados pelo lightmap volumetrico", n_vol, "ressalto mudado", n_boost, CFG.get("ressalto", {}))
 diz("caixa da casa cm", [round(x) for x in casa_lo], [round(x) for x in casa_hi])

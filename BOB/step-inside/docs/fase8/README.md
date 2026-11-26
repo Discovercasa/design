@@ -71,6 +71,33 @@ refletida pelo Lightmass.
   rondas de 4), sem voltar a cozer.
 - **Diagnóstico**: `capturas.json` aceita `"camaras"` (só estas) e `"modos"` (uma volta por modo, com comandos de
   consola, p. ex. `ShowFlag.GlobalIllumination 0`, `ShowFlag.SkyLighting 0`, `ShowFlag.ReflectionEnvironment 0`).
+- **Vidro** (`vidros.py` + `vidros.json`, 2026-11-26): o vidro do duche era uma folha branca opaca, fosse qual fosse a
+  cor, a opacidade ou a rugosidade. Causa: o sol é **estacionário** e ilumina as superfícies translúcidas ao vivo mas
+  **sem a sombra cozida** — o vidro dentro do WC fechado recebia o sol inteiro (com `ShowFlag.DirectionalLights 0`
+  ficava transparente); o mesmo nas janelas vistas de dentro (vidro dos dois lados, iluminado por trás). Correção:
+  `"sem_sol": true` põe cada malha com material translúcido só no canal de luz 1 (o sol fica no canal 0): guarda a luz
+  do céu, a luz cozida (lightmap volumétrico) e as capturas de reflexos; não é preciso voltar a cozer. E um vidro
+  próprio, `M_SI_Vidro` (translúcido, iluminado por píxel, dos dois lados, sem refração — barato em VR; opacidade
+  0,08 de frente e 0,5 de raspão, pelo Fresnel), no lugar do `INT_CFE0E8_05_A22` do glTF.
+- **Espelhos** (`espelhos.py` + `espelhos.json`, 2026-11-26): com luz cozida o *forward* só reflete as capturas de
+  reflexos (uma «fotografia» esférica pequena por divisão) — o espelho era uma folha cinzenta. Agora cada espelho tem um
+  reflexo planar (`PlanarReflection` `SI_VR_Espelho_*`, encontrado pela geometria da secção com o material do espelho,
+  do tamanho dele, a desvanecer a 0,5–2 cm do plano para não tocar a parede) e um material próprio `M_SI_Espelho`
+  (metal, «Planar Reflections» ligado nas definições Forward Shading — sem isto o *forward* ignora o reflexo planar).
+  Precisa de `r.AllowGlobalClipPlane=True` (`projeto_vr/Config/DefaultEngine.ini`; recompila os shaders). O custo
+  (uma segunda renderização da cena, a 50 % de resolução, só quando o espelho está à vista) ainda está por medir com o
+  PC livre: a primeira medição (77 FPS no WC a 140 %/4×) foi feita com o PC a ser usado.
+- **Nanite desligado** (`"nanite": false` em `vr_preparar.json`, 2026-11-26): as 377 malhas vinham do glTF com Nanite,
+  que o *forward* da VR não suporta — desenhava (e o Lightmass cozia) a **malha de recurso simplificada** de cada uma
+  (erro relativo 1,0). Nas placas finas a simplificação mexia os vértices: o OSB de trás atravessava o Pladur (as
+  cunhas escuras nas juntas parede/teto), abriam-se frestas nos cantos e os UVs de lightmap deformavam-se (manchas,
+  faixas). Diagnóstico: raios da câmara contra os triângulos (o primeiro acerto era o `OSB_15_mm`, à frente do Pladur,
+  com 1,5–3° de desvio), quando no Blender e no GLB as placas são paralelas. As camadas escondidas (OSB, lã mineral,
+  membrana, perfis e réguas do teto) passam ao lightmap volumétrico: não gastam texels na cozedura e continuam a tapar a
+  luz. Lightmaps a 56 texels/m. Pede uma cozedura nova.
+- `vr_preparar.py` e `espelhos.py` carregam o módulo `StaticMeshEditor` (numa *commandlet* o subsistema vinha vazio e a
+  antiga `EditorStaticMeshLibrary` devolvia valores por omissão em silêncio: os registos «0 canais de UV» eram falsos);
+  as malhas do motor (`/Engine/…`, o chão de relva é o `Plane`) já não são alteradas nem gravadas.
 
 ## Iniciar o tour VR (quando o utilizador pedir)
 
@@ -128,9 +155,9 @@ rotação por passos, botão de menu.
   densidade 0,78 (= 140 %) e MSAA 4×; com óculos a 72–80 Hz, 0,9 (= 160 %) é mais nítido. Ontem, antes dos móveis pelo lightmap volumétrico, 180 %/4× dava 59 FPS.
 - **Falta (com os óculos):** latência, conforto e os FPS reais no CSV do tour (tarefa 88); escolher os óculos (tarefa 86).
 - **Melhorias possíveis** (não bloqueiam o teste): relva e terreno do exterior lisos e facetados, o alpendre negro visto de
-  fora, o vidro do duche branco e opaco (material translúcido do glTF, `INT_CFE0E8_05_A22`: não reage à cor nem à
-  opacidade no forward — fazer um vidro próprio para a VR), o WC demasiado quente, frestas e pequenas fugas de luz nas juntas parede/teto (modelo do
-  Blender), janelas queimadas vistas de dentro (como numa foto); um céu HDRI e texturas melhores para o chão precisam de
-  descarregar ficheiros (pedir autorização).
+  fora, o WC demasiado quente, janelas queimadas vistas de dentro (como numa foto); um céu HDRI e texturas melhores
+  para o chão precisam de descarregar ficheiros (pedir autorização). Resolvidos a 2026-11-26: o vidro do duche branco
+  («Vidro»), os espelhos cinzentos («Espelhos»); as cunhas e frestas nas juntas parede/teto eram do Nanite, não do
+  modelo do Blender («Nanite desligado» — falta a cozedura nova para o confirmar).
 - Cada imagem do nível VR no Movie Render Queue demora ≈ 5 min (um PIE por trabalho); `capturas_gui.cmd` tira as 6 vistas
   em ≈ 2 min; o primeiro arranque do projeto compila os shaders do forward.

@@ -1116,3 +1116,21 @@ The team's notes on hub task 84 (written in the hub by [membro da equipa] on 202
   the tour starts at pixel density 0.78 and MSAA 4 (`iniciar_vr.cmd [densidade] [MSAA]`); game camera back to the VR
   pawn. Filed: `step-inside/docs/fase8/README.md` (Exposição, Iniciar, Resultados 2026-11-25), `conhecimento/insights.md`
   (2026-11-25), hub tasks 87–88 and Log.
+
+### 2026-11-26 (about 00:00–01:00) — Step Inside VR: the shower glass, the mirrors, the walls [Step Inside, Phase 8]
+> Sim, faz o vidro
+> os espelhos estão bons?
+> the walls are looking like this on the VR ?
+(with a kitchen capture of the VR level, circled: dark wedges at the wall/ceiling joints by the window and on the right
+wall, the corner column, the mottled corridor wall, a light band along the top of the left wall)
+- Answers: the mirrors were not good (a flat grey sheet: with baked light the forward renderer only reflects the
+  reflection captures); yes, the walls looked like that in VR.
+- Work: shower glass → own material `M_SI_Vidro` and glass meshes on lighting channel 1 (`vidros.py`): the white sheet
+  was the stationary sun lighting translucent surfaces without its baked shadow (also the hazy windows seen from
+  inside). Mirrors → planar reflections (`espelhos.py`, `r.AllowGlobalClipPlane`, own material `M_SI_Espelho` with
+  "Planar Reflections" on — needed in the forward renderer); the mirror now shows the bathroom. Walls → root cause: the
+  377 imported meshes had Nanite on, and the forward VR renderer drew (and Lightmass baked) each mesh's simplified
+  Nanite fallback: the OSB behind poked through the plasterboard (the wedges), gaps at corners, warped lightmap UVs.
+  Nanite off in `vr_preparar.py` (`"nanite": false`), hidden build-up layers lit by the volumetric lightmap (no
+  lightmap texels), 56 lightmap texels/m; needs a new bake. The home PC was in use (a video playing) during an FPS run:
+  GUI jobs stopped, the screenshot deleted, no more screenshots. Filed: `step-inside/docs/fase8/README.md`.
