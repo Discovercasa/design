@@ -141,8 +141,10 @@ O Claude (sessão do escritório, por SSH):
    que o faz: pede a conta dele). Se `servico` falso: abrir a app dos óculos. Se `projeto` falso: correr
    `construir_nivel_vr.cmd`.
 2. Tarefa agendada de uso único na sessão do Windows aberta:
-   `schtasks /Create /TN BOB_StepInside_VR /TR D:\BOB-posto\step-inside\unreal-vr\iniciar_vr.cmd /SC ONCE /ST 23:59 /RU pc /IT /F`
-   e `schtasks /Run /TN BOB_StepInside_VR`; apagar no fim (`schtasks /Delete … /F`). `iniciar_vr.cmd [densidade] [MSAA]`:
+   `schtasks /Create /TN BOB_StepInside_VR /TR D:\BOB-posto\step-inside\unreal-vr\iniciar_vr.cmd /SC ONCE /SD 01/01/2020 /ST 00:00 /RU pc /IT /F`
+   e `schtasks /Run /TN BOB_StepInside_VR`; apagar no fim (`schtasks /Delete … /F`). A data no passado faz com que a
+   tarefa nunca arranque sozinha («Next Run Time: N/A»): a 2026-11-26 uma tarefa com `/ST 23:59` ficou por apagar (a
+   sessão terminou antes) e voltou a abrir o Unreal à meia-noite. `iniciar_vr.cmd [densidade] [MSAA]`:
    por omissão densidade 0,78 e MSAA 4× (dá para 90 Hz na RTX 2060, ver «Resultados»); com óculos a 72 Hz pode subir-se
    a 0,9 (`/TR "…\iniciar_vr.cmd 0.9 4"`) — mais nítido. Antes do tour, `camara_jogo.json` com `"camara": "nenhuma"`
    (está assim desde 2026-11-25).
@@ -184,6 +186,11 @@ rotação por passos, botão de menu.
 
   A 90 Hz cada imagem tem 11,1 ms, e os óculos (compositor, codificação do Link) levam ≈ 1–2 ms: por omissão o tour usa
   densidade 0,78 (= 140 %) e MSAA 4×; com óculos a 72–80 Hz, 0,9 (= 160 %) é mais nítido. Ontem, antes dos móveis pelo lightmap volumétrico, 180 %/4× dava 59 FPS.
+- **Resultados (2026-11-27, cozedura final de 2026-11-26, 1 h 47 min):** paredes sem cunhas nem frestas; a base dos
+  móveis escura e com sombra de contacto; o canto por cima dos armários da cozinha claro (só a sombra suave junto ao
+  armário). FPS em estéreo emulado a 140 %/MSAA 4×: sala 107,8 (ontem 102); WC com espelho 111,8, sem espelho 165 — o
+  espelho custa ≈ 3 ms e cabe nos 90 Hz. Defeito novo: os reflexos têm um tom verde (cadeiras de couro, caixilhos,
+  puxadores) — vem das capturas de reflexos feitas nesta cozedura (sem elas as cadeiras ficam neutras); por resolver.
 - **Falta (com os óculos):** latência, conforto e os FPS reais no CSV do tour (tarefa 88); escolher os óculos (tarefa 86).
 - **Melhorias possíveis** (não bloqueiam o teste): relva e terreno do exterior lisos e facetados, o alpendre negro visto de
   fora, o WC demasiado quente, janelas queimadas vistas de dentro (como numa foto); vegetação real à volta (árvores

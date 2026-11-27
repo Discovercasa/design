@@ -1214,3 +1214,18 @@ the wall/ceiling above the wall cabinets)
 - Work: test bakes confirmed it — with our parametric pieces (meshes PAR_OBJ_*) lightmapped, the wall and ceiling round
   the wall cabinets are light again; the scanned pieces (PH_) stay on the volumetric lightmap (lightmapped they came
   out blotchy). `vr_preparar.json` "volumetrico_malhas": ["PH_"]. Production bake started 18:15 (home PC, ~2 h).
+
+### 2026-11-27 — Step Inside VR: status after the session break [Step Inside, Phase 8]
+> continua onde estavas e dá-me um ponto de situação
+- Found: the production bake of 2026-11-26 finished at 20:03 (6404 s) and was saved; its captures were never taken
+  (the session ended). A leftover one-off scheduled task (`/ST 23:59`) fired at midnight and opened the editor again
+  on the home PC (it did not save); deleted. Fix: one-off tasks are created with a start date in the past
+  (`/SD 01/01/2020 /ST 00:00`, never fire on their own) — `step-inside/docs/fase8/README.md` and the runner scripts.
+> Sim, usa já
+- Answer to "may I use the home PC now for about 30 min with the Unreal window?": yes — captures of the final bake, FPS.
+- Results (home PC, 15:10–15:30): captures of the final bake — the corner above the wall cabinets is light, the
+  furniture bases dark and correct; FPS (emulated stereo, 140 %/4×): living room 107.8, WC with the mirror 111.8,
+  without 165 (the mirror costs ≈ 3 ms, still above 90 Hz). New fault: a green tint in reflections (leather chairs,
+  frames, handles), from this bake's reflection captures (neutral with them off); to fix. Trees with leaf-cluster cards:
+  jacaranda VR level looks right but its trunk vanished (bark decimated too far), its web level too coarse; to fix.
+  Filed: `step-inside/docs/fase8/README.md` (Resultados 2026-11-27).
