@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mesa extensível — modelo 3D</title>
+<style>
+__FONTES__
+:root{--paper:#eef0ec;--sheet:#f8f9f6;--ink:#1d2a33;--mut:#5d6a72;--line:#c9cfcb;--acc:#c4512a;--sans:'Barlow',system-ui,sans-serif;--cond:'Barlow Condensed','Barlow',sans-serif;--mono:'JetBrains Mono',ui-monospace,monospace}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:14px}
+.sheet{max-width:1500px;margin:18px auto;background:var(--sheet);border:1px solid var(--line);box-shadow:0 1px 0 #fff inset,0 10px 30px rgba(29,42,51,.07);padding:0}
+.stamp{display:grid;grid-template-columns:1fr auto;border-bottom:2px solid var(--ink)}
+.stamp .t{padding:18px 22px 12px}
+.stamp h1{font-family:var(--cond);font-weight:600;font-size:34px;letter-spacing:.02em;margin:0;text-transform:uppercase}
+.stamp .sub{grid-column:1/3;padding:8px 22px;border-top:1px solid var(--line);color:var(--mut);font-size:14px}
+.meta{display:grid;grid-template-columns:repeat(4,auto);border-left:1px solid var(--line)}
+.meta div{padding:10px 16px;border-right:1px solid var(--line);min-width:110px}
+.meta div:last-child{border-right:0}
+.meta b{display:block;font-family:var(--cond);font-weight:500;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--mut);margin-bottom:4px}
+.meta span{font-family:var(--mono);font-size:13px}
+.lang{display:inline-flex;border:1.5px solid var(--acc);border-radius:3px;overflow:hidden}
+.lang button{border:0;background:transparent;font:600 12px var(--mono);padding:3px 9px;cursor:pointer;color:var(--acc)}
+.lang button.on{background:var(--acc);color:#fff}
+.bar{display:flex;flex-wrap:wrap;gap:10px 18px;padding:12px 22px;border-bottom:1px solid var(--line);align-items:flex-end}
+.ctl{display:flex;flex-direction:column;gap:4px}
+.ctl>label{font-family:var(--cond);font-weight:500;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--mut)}
+.seg{display:inline-flex;border:1px solid var(--ink);border-radius:3px;overflow:hidden;background:#fff}
+.seg button{border:0;border-right:1px solid var(--line);background:transparent;font:500 13px var(--sans);padding:5px 10px;cursor:pointer;color:var(--ink);white-space:nowrap}
+.seg button:last-child{border-right:0}
+.seg button:hover{background:#eef0ec}
+.seg button.on{background:var(--ink);color:#fff}
+.btn{border:1px solid var(--ink);background:#fff;border-radius:3px;font:500 13px var(--sans);padding:5px 12px;cursor:pointer}
+.btn:hover{background:var(--ink);color:#fff}
+.main{display:grid;grid-template-columns:1fr 340px;min-height:0}
+.viewwrap{position:relative;border-right:1px solid var(--line);background:#dfe2dd}
+#view{position:relative;width:100%;height:640px;overflow:hidden}
+#view canvas{display:block;width:100%;height:100%;touch-action:none}
+.views{position:absolute;left:12px;top:12px;display:flex;gap:6px;flex-wrap:wrap;z-index:3}
+.views button{border:1px solid rgba(29,42,51,.35);background:rgba(248,249,246,.92);border-radius:3px;font:500 12px var(--sans);padding:4px 9px;cursor:pointer}
+.views button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.lbl{position:absolute;z-index:2;transform:translate(-50%,-50%);font:600 13px var(--mono);color:#fff;background:var(--acc);padding:1px 6px;border-radius:2px;white-space:nowrap;pointer-events:none}
+.lbl.s{font-size:11px;background:rgba(196,81,42,.92)}
+.hint{position:absolute;right:12px;bottom:10px;font:12px var(--sans);color:rgba(29,42,51,.7);z-index:2}
+.fsbar,.fsexit{display:none}
+#view.fs .fsexit{display:block;position:absolute;right:12px;top:12px;z-index:5}
+#view.fs .fsbar{display:flex;position:absolute;left:50%;bottom:16px;transform:translateX(-50%);z-index:5;gap:12px;background:rgba(248,249,246,.95);padding:8px 12px;border:1px solid var(--line);border-radius:4px;flex-wrap:wrap;justify-content:center}
+#view.fs{height:100vh!important}
+.side{padding:16px 18px;display:flex;flex-direction:column;gap:10px}
+.side h3,.sec h3{font-family:var(--cond);font-weight:600;font-size:14px;letter-spacing:.12em;text-transform:uppercase;margin:0;border-bottom:1px solid var(--ink);padding-bottom:4px}
+.side svg{width:100%;height:auto;background:#fff;border:1px solid var(--line)}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:3px 12px;font-size:13px}
+.kv b{font-family:var(--mono);font-weight:400;text-align:right}
+.note{font-size:12px;color:var(--mut);line-height:1.45}
+.note em{font-style:normal;color:var(--acc)}
+.sec{padding:16px 22px;border-top:1px solid var(--line)}
+table{width:100%;border-collapse:collapse;font-size:13px;margin-top:8px}
+th{font-family:var(--cond);font-weight:500;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--mut);text-align:left;border-bottom:1px solid var(--ink);padding:6px 8px}
+td{border-bottom:1px solid var(--line);padding:6px 8px}
+td.n{font-family:var(--mono);text-align:right}
+th.n{text-align:right}
+tr.prop td{color:var(--acc)}
+tfoot td{font-weight:600;border-bottom:0}
+.foot{display:grid;grid-template-columns:repeat(3,1fr);border-top:2px solid var(--ink)}
+.foot div{padding:10px 22px;border-right:1px solid var(--line);font-size:13px}
+.foot div:last-child{border-right:0}
+.foot b{display:block;font-family:var(--cond);font-weight:500;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--mut)}
+#load{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font:600 14px var(--mono);color:var(--mut);z-index:6;background:#dfe2dd}
+@media (max-width:1100px){.main{grid-template-columns:1fr}.viewwrap{border-right:0}.meta{grid-template-columns:repeat(2,auto)}}
+@media (max-width:700px){#view{height:min(560px,70vh)}.bar{padding:10px 12px;gap:8px 10px}.stamp h1{font-size:26px}.sec{padding:12px}.sec table{display:block;overflow-x:auto}}
+</style>
+</head>
+<body>
+<div class="sheet">
+ <div class="stamp">
+  <div class="t"><h1>Mesa extensível</h1></div>
+  <div class="meta">
+   <div><b>Fase</b><span>Estudo</span></div>
+   <div><b>Idioma</b><span class="lang"><button class="on" data-lang="pt">PT</button><button data-lang="en">EN</button></span></div>
+   <div><b>Origem</b><span>MESA_EXTENSIVEL.stp</span></div>
+   <div><b>Data</b><span>__DATA__</span></div>
+  </div>
+  <div class="sub">Modelo 3D interativo à escala real, a partir do ficheiro STEP: 4 variantes, 2700 × 1200 × 750 mm fechada, numa sala com luz real de dia e de noite.</div>
+ </div>
+
+ <div class="bar" id="bar">
+  <div class="ctl"><label>Modelo</label><div class="seg" data-k="variant"><button data-v="0" class="on">A · Oval</button><button data-v="1">B · Retangular</button><button data-v="2">C · Almofada</button><button data-v="3">D · Escultórica</button></div></div>
+  <div class="ctl"><label>Mesa</label><div class="seg" data-k="leaves"><button data-v="0" class="on">Fechada</button><button data-v="1">+1 tábua</button><button data-v="2">+2 tábuas</button></div></div>
+  <div class="ctl"><label>Tampo</label><div class="seg" data-k="top"><button data-v="oak" class="on">Carvalho</button><button data-v="walnut">Nogueira</button><button data-v="lacq">Lacado branco</button><button data-v="marble">Mármore</button></div></div>
+  <div class="ctl"><label>Pés</label><div class="seg" data-k="legs"><button data-v="bronze" class="on">Bronze</button><button data-v="steel">Metal escovado</button><button data-v="black">Preto mate</button><button data-v="oak">Carvalho</button></div></div>
+  <div class="ctl"><label>Medidas</label><div class="seg" data-k="dims"><button data-v="0" class="on">Não</button><button data-v="1">Sim</button></div></div>
+  <div class="ctl"><label>Vista explodida</label><div class="seg" data-k="explode"><button data-v="0" class="on">Não</button><button data-v="1">Sim</button></div></div>
+  <div class="ctl"><label>Cadeiras</label><div class="seg" data-k="chairs"><button data-v="0">Não</button><button data-v="1" class="on">Sim</button></div></div>
+  <div class="ctl"><label>Ambiente</label><div class="seg" data-k="room"><button data-v="1" class="on">Sala</button><button data-v="0">Estúdio</button></div></div>
+  <div class="ctl"><label>Luz</label><div class="seg" data-k="night"><button data-v="0" class="on">Dia</button><button data-v="1">Noite</button></div></div>
+  <div class="ctl"><label>&nbsp;</label><button class="btn" id="fsBtn">⛶ Ecrã inteiro</button></div>
+ </div>
+
+ <div class="main">
+  <div class="viewwrap">
+   <div id="view">
+    <div id="load">A carregar o modelo…</div>
+    <div class="views" id="views">
+     <button data-view="geral" class="on">Geral</button><button data-view="frente">Frente</button><button data-view="lado">Lado</button><button data-view="cima">De cima</button><button data-view="pormenor">Pormenor do tampo</button><button data-view="baixo">Por baixo</button><button data-view="rodar">Rodar</button>
+    </div>
+    <button class="btn fsexit" id="fsExit">Sair ✕</button>
+    <div class="fsbar" id="fsbar"></div>
+    <div class="hint">Arrastar para rodar · roda/pinça para aproximar</div>
+   </div>
+  </div>
+  <div class="side">
+   <h3>Planta e alçado</h3>
+   <svg id="plan" viewBox="0 0 320 300"></svg>
+   <div class="kv" id="kv"></div>
+   <p class="note" id="matnote"></p>
+  </div>
+ </div>
+
+ <div class="sec">
+  <h3><span>Lista de peças</span> · <span id="ltitle"></span></h3>
+  <table id="parts"><thead><tr><th>Peça</th><th class="n">Qtd.</th><th class="n">Comprimento</th><th class="n">Largura</th><th class="n">Espessura</th><th>Material</th></tr></thead><tbody></tbody><tfoot></tfoot></table>
+  <p class="note">Medidas em mm, retiradas da geometria do ficheiro STEP (caixa envolvente de cada peça). Nos pés, a ordem é altura × profundidade × espessura. <em>A laranja: proposta minha, não está no ficheiro</em> (tábua de extensão de 500 mm, a confirmar).</p>
+ </div>
+
+ <div class="foot">
+  <div><b>Desenho do móvel</b>—</div>
+  <div><b>Ficheiro de origem</b>MESA_EXTENSIVEL.stp (30-01-2025)</div>
+  <div><b>Modelo 3D</b>DiscoverCasa · __DATA__</div>
+ </div>
+</div>
+<script id="dados" type="application/json">__DADOS__</script>
+<script id="modulos" type="application/json">__MODULOS__</script>
+__ATIVOS__
+<script type="module">
+// three.js (MIT) travels inside the page, compressed: the page opens offline
+'use strict';
+const $ = (s) => document.querySelector(s);
+const D = JSON.parse($('#dados').textContent);
+const MOBILE = !!D.movel;
+const LEAF_W = 0.5;                 // tábua de extensão proposta (m)
+const ST = { variant: 0, leaves: 0, top: 'oak', legs: 'bronze', dims: 0, explode: 0, chairs: 1, room: 1, night: 0, lang: 'pt' };
+const b64bytes = (s) => Uint8Array.from(atob(s.trim()), (c) => c.charCodeAt(0));
+const gunzip = async (s) => new Uint8Array(await new Response(new Blob([b64bytes(s)]).stream().pipeThrough(new DecompressionStream('gzip'))).arrayBuffer());
+const ativo = (k) => { const e = document.querySelector(`script[data-a="${k}"]`); return e ? e.textContent.trim() : null; };
+
+/* ---------------- PT/EN ---------------- */
+const EN = {
+ 'Mesa extensível':'Extending table','Fase':'Stage','Estudo':'Study','Idioma':'Language','Origem':'Source','Data':'Date',
+ 'Modelo 3D interativo à escala real, a partir do ficheiro STEP: 4 variantes, 2700 × 1200 × 750 mm fechada, numa sala com luz real de dia e de noite.':'Interactive full-scale 3D model from the STEP file: 4 variants, 2700 × 1200 × 750 mm closed, in a room with real day and night light.',
+ 'Modelo':'Model','Mesa':'Table','Fechada':'Closed','+1 tábua':'+1 leaf','+2 tábuas':'+2 leaves','Tampo':'Top','Pés':'Legs',
+ 'Carvalho':'Oak','Nogueira':'Walnut','Lacado branco':'White lacquer','Mármore':'Marble','Bronze':'Bronze','Metal escovado':'Brushed metal','Preto mate':'Matt black',
+ 'Medidas':'Dimensions','Vista explodida':'Exploded view','Cadeiras':'Chairs','Ambiente':'Setting','Sala':'Room','Estúdio':'Studio','Luz':'Light','Dia':'Day','Noite':'Night',
+ 'Não':'No','Sim':'Yes','⛶ Ecrã inteiro':'⛶ Full screen','Sair ✕':'Exit ✕','Geral':'Overview','Frente':'Front','Lado':'Side','De cima':'Top','Pormenor do tampo':'Top detail','Por baixo':'Underside','Rodar':'Rotate',
+ 'Arrastar para rodar · roda/pinça para aproximar':'Drag to orbit · wheel/pinch to zoom','A carregar o modelo…':'Loading model…',
+ 'Planta e alçado':'Plan and elevation','Lista de peças':'Parts list','Peça':'Part','Qtd.':'Qty','Comprimento':'Length','Largura':'Width','Espessura':'Thickness','Material':'Material',
+ 'Desenho do móvel':'Furniture design','Ficheiro de origem':'Source file','Modelo 3D':'3D model',
+ 'Medidas em mm, retiradas da geometria do ficheiro STEP (caixa envolvente de cada peça). Nos pés, a ordem é altura × profundidade × espessura.':'Dimensions in mm, taken from the STEP geometry (bounding box of each part). For legs the order is height × depth × thickness.',
+ 'A laranja: proposta minha, não está no ficheiro':'In orange: my proposal, not in the file','(tábua de extensão de 500 mm, a confirmar).':'(500 mm extension leaf, to be confirmed).',
+ 'Base do tampo':'Top base','Camada intermédia do tampo':'Top middle layer','Tampo superior (metade)':'Upper top (half)','Aro (quadro sob o tampo)':'Apron frame','Guia de extensão':'Extension runner',
+ 'Pé — face':'Leg — face','Pé — núcleo':'Leg — core','Pé escultórico — peça':'Sculpted leg — piece','Tábua de extensão':'Extension leaf','Total de peças':'Total parts',
+ 'Altura':'Height','Tampo (espessura)':'Top (thickness)','Altura livre sob o aro':'Clearance under apron','Lugares':'Seats',
+ 'Oval':'Oval','Retangular':'Rectangular','Almofada · pés lâmina':'Cushion · blade legs','Almofada · pés escultóricos':'Cushion · sculpted legs',
+ 'A · Oval':'A · Oval','B · Retangular':'B · Rectangular','C · Almofada':'C · Cushion','D · Escultórica':'D · Sculpted',
+ 'Planta':'Plan','Alçado frontal':'Front elevation','Metal (guias)':'Metal (runners)',
+ 'Este browser não consegue abrir o modelo 3D. Experimente o Chrome, o Edge, o Safari ou o Firefox atualizados.':'This browser cannot open the 3D model. Try an up-to-date Chrome, Edge, Safari or Firefox.',
+ 'Acabamentos de base: carvalho e bronze, os mesmos dos modelos 3ds Max. Madeiras e mármore com texturas digitalizadas (folha de carvalho, folha de nogueira, mármore branco polido); bronze e metal escovados, lacado e preto mate feitos por nós; a luz do dia e da noite foi calculada em Cycles.':'Base finishes: oak and bronze, the same as in the 3ds Max models. Woods and marble with scanned textures (oak veneer, walnut veneer, polished white marble); brushed bronze and metal, lacquer and matt black made by us; the day and night light was computed in Cycles.'
+};
+const ORIG = new WeakMap();
+function TL(s) { return ST.lang === 'en' && EN[s] ? EN[s] : s; }
+function applyLang() {
+  const w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+  let n;
+  while ((n = w.nextNode())) {
+    if (n.parentNode && /SCRIPT|STYLE/.test(n.parentNode.nodeName)) continue;
+    if (!ORIG.has(n)) ORIG.set(n, n.nodeValue);
+    const o = ORIG.get(n), k = o.trim();
+    if (!k) continue;
+    n.nodeValue = ST.lang === 'en' && EN[k] ? o.replace(k, EN[k]) : o;
+  }
+  document.documentElement.lang = ST.lang;
+}
+
+async function modulos() {
+  const M = JSON.parse($('#modulos').textContent);
+  const txt = {};
+  await Promise.all(Object.keys(M).map(async (p) => (txt[p] = new TextDecoder().decode(await gunzip(M[p])))));
+  const urls = {};
+  const resolver = (de, esp) => (esp === 'three' ? 'build/three.module.js' : new URL(esp, 'https://m/' + de).pathname.slice(1));
+  function url(p) {
+    if (urls[p]) return urls[p];
+    const src = txt[p].replace(/(\bfrom\s*|\bimport\s*\(\s*|\bimport\s+)(['"])([^'"\n]+)\2/g, (m, a, q, esp) => {
+      const alvo = resolver(p, esp);
+      return alvo in txt ? a + JSON.stringify(url(alvo)) : m;
+    });
+    return (urls[p] = URL.createObjectURL(new Blob([src], { type: 'text/javascript' })));
+  }
+  const imp = (p) => import(url(p));
+  const [THREE, OC, GL, EC, RP, GT, OP, RE] = await Promise.all([
+    imp('build/three.module.js'), imp('examples/jsm/controls/OrbitControls.js'), imp('examples/jsm/loaders/GLTFLoader.js'),
+    imp('examples/jsm/postprocessing/EffectComposer.js'),
+    imp('examples/jsm/postprocessing/RenderPass.js'), imp('examples/jsm/postprocessing/GTAOPass.js'),
+    imp('examples/jsm/postprocessing/OutputPass.js'), imp('examples/jsm/environments/RoomEnvironment.js')]);
+  return { THREE, ...OC, ...GL, ...EC, ...RP, ...GT, ...OP, ...RE };
+}
+try {
+  await iniciar(await modulos());
+} catch (e) {
+  console.error(e);
+  const l = $('#load');
+  if (l) l.textContent = TL('Este browser não consegue abrir o modelo 3D. Experimente o Chrome, o Edge, o Safari ou o Firefox atualizados.');
+}
+
+async function iniciar(L) {
+  const { THREE } = L;
+  const view = $('#view');
+  const carregar = (t) => { const l = $('#load'); if (l) l.textContent = TL('A carregar o modelo…') + (t ? ' ' + t : ''); };
+
+  /* ---------------- renderer / scene ---------------- */
+  const R = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true, powerPreference: 'high-performance' });
+  R.setPixelRatio(Math.min(window.devicePixelRatio, MOBILE ? 1.5 : 2));
+  R.toneMapping = THREE.AgXToneMapping;
+  R.shadowMap.enabled = true;
+  R.shadowMap.type = THREE.PCFShadowMap;
+  view.insertBefore(R.domElement, view.firstChild);
+  const S = new THREE.Scene();
+  const cam = new THREE.PerspectiveCamera(38, 1, 0.05, 120);
+  const ctl = new L.OrbitControls(cam, R.domElement);
+  ctl.enableDamping = true; ctl.dampingFactor = 0.08; ctl.target.set(0, 0.55, 0); ctl.maxPolarAngle = Math.PI * 0.495;
+  ctl.minDistance = 0.4; ctl.maxDistance = 12; ctl.autoRotateSpeed = 1.2;
+  const pmrem = new THREE.PMREMGenerator(R);
+  const SALA = D.sala, LZ = D.luz;
+  const RW = SALA.largura, RD = SALA.fundo, RH = SALA.altura;
+
+  /* ---------------- assets ---------------- */
+  const tl = new THREE.TextureLoader();
+  const ANI = R.capabilities.getMaxAnisotropy();
+  async function textura(k, cor, rep) {
+    const t = await tl.loadAsync(ativo('tex/' + k));
+    t.flipY = false;                         // the GLB's UVs (glTF: v from the top)
+    t.colorSpace = cor ? THREE.SRGBColorSpace : THREE.NoColorSpace;
+    t.wrapS = t.wrapT = THREE.RepeatWrapping;
+    t.anisotropy = ANI;
+    if (rep) t.repeat.set(rep, rep);
+    t.needsUpdate = true;
+    return t;
+  }
+  const clone = (t, rep) => { const c = t.clone(); c.repeat.set(rep, rep); c.needsUpdate = true; return c; };
+  async function glb(k) {
+    const buf = await gunzip(ativo('glb/' + k));
+    return new L.GLTFLoader().parseAsync(buf.buffer, '');
+  }
+  // the Cycles panoramas as sRGB JPEG of value / K (LZ.env[k]): the page multiplies by K (envMapIntensity, backgroundIntensity)
+  async function panorama(k) {
+    const t = await tl.loadAsync(ativo('env/' + k));
+    t.colorSpace = THREE.SRGBColorSpace; t.mapping = THREE.EquirectangularReflectionMapping;
+    return t;
+  }
+  const KE = LZ.env;
+  carregar('· 1/4');
+  const T = {};
+  const AC = D.acab;
+  for (const k of ['oak', 'walnut', 'marble']) {
+    const rep = 1 / AC[k].tamanho_m;
+    [T[k + '_cor'], T[k + '_nor'], T[k + '_rug']] = await Promise.all([textura(k + '_cor', true, rep), textura(k + '_nor', false, rep), textura(k + '_rug', false, rep)]);
+  }
+  const repT = 1 / D.tecido.tamanho_m;
+  [T.linho, T.tecido_nor, T.tecido_rug, T.escovado_nor, T.escovado_rug, T.po_nor, T.laca_nor] = await Promise.all([
+    textura('linho_cor', true, repT), textura('tecido_nor', false, repT), textura('tecido_rug', false, repT),
+    textura('escovado_nor', false, 4), textura('escovado_rug', false, 4), textura('po_nor', false, 12.5), textura('laca_nor', false, 2)]);
+  carregar('· 2/4');
+  const ENV = {}, CEU = await panorama('ceu');
+  for (const k of ['dia', 'noite']) { const t = await panorama(k); ENV[k] = pmrem.fromEquirectangular(t).texture; t.dispose(); }
+  ENV.estudio = pmrem.fromScene(new L.RoomEnvironment(), 0.04).texture;
+  const LM = {};
+  for (const modo of ['dia', 'noite']) {
+    LM[modo] = {};
+    for (const g of ['sala', 'moveis', 'fora']) {
+      const uri = ativo(`lm/${modo}_${g}`);
+      if (!uri) continue;
+      const t = await tl.loadAsync(uri);
+      t.flipY = false; t.channel = 1; t.colorSpace = THREE.SRGBColorSpace;
+      LM[modo][g] = { t, I: Math.PI * LZ.lm[`${modo}_${g}`].K };
+    }
+  }
+  carregar('· 3/4');
+  const [gMesa, gCadeira, gSala] = await Promise.all([glb('mesa'), glb('cadeira'), glb('sala')]);
+  carregar('· 4/4');
+
+  /* ---------------- materials ---------------- */
+  // the roughness map remapped to [a, b] as in Blender (a Map Range on the scan's map)
+  function remapRug(m, a, b) {
+    m.onBeforeCompile = (sh) => {
+      sh.uniforms.rugA = { value: a }; sh.uniforms.rugB = { value: b };
+      sh.fragmentShader = 'uniform float rugA;\nuniform float rugB;\n' + sh.fragmentShader.replace('#include <roughnessmap_fragment>',
+        THREE.ShaderChunk.roughnessmap_fragment.replace('roughnessFactor *= texelRoughness.g;', 'roughnessFactor = mix( rugA, rugB, texelRoughness.g );'));
+    };
+    m.customProgramCacheKey = () => `rug${a}_${b}`;
+  }
+  function madeira(k) {
+    const a = AC[k];
+    const m = new THREE.MeshPhysicalMaterial({ map: T[k + '_cor'], normalMap: T[k + '_nor'], roughnessMap: T[k + '_rug'], roughness: 1, metalness: 0,
+      clearcoat: a.verniz ? a.verniz[0] : 0, clearcoatRoughness: a.verniz ? a.verniz[1] : 0 });
+    m.normalScale.set(a.normal || 1, a.normal || 1);
+    remapRug(m, a.rug[0], a.rug[1]);
+    return m;
+  }
+  function metal(k) {
+    const a = AC[k];
+    const m = new THREE.MeshPhysicalMaterial({ color: new THREE.Color(a.cor), metalness: 1, roughness: a.rug[0], roughnessMap: T.escovado_rug,
+      normalMap: T.escovado_nor, anisotropy: a.escovado || 0, anisotropyRotation: Math.PI / 2 });
+    m.normalScale.set(0.25, 0.25);
+    return m;
+  }
+  const MAT = {
+    oak: madeira('oak'), walnut: madeira('walnut'), marble: madeira('marble'),
+    lacq: new THREE.MeshPhysicalMaterial({ color: new THREE.Color(AC.lacq.cor), roughness: AC.lacq.rug[0], metalness: 0, clearcoat: AC.lacq.verniz[0],
+      clearcoatRoughness: AC.lacq.verniz[1], clearcoatNormalMap: T.laca_nor, clearcoatNormalScale: new THREE.Vector2(0.1, 0.1) }),
+    bronze: metal('bronze'), steel: metal('steel'),
+    black: new THREE.MeshStandardMaterial({ color: new THREE.Color(AC.black.cor), roughness: AC.black.rug[0], metalness: 0, normalMap: T.po_nor,
+      normalScale: new THREE.Vector2(0.15, 0.15) }),
+    runner: new THREE.MeshStandardMaterial({ color: new THREE.Color(AC.runner.cor), roughness: AC.runner.rug[0], metalness: 1 }),
+    tecido: new THREE.MeshPhysicalMaterial({ map: T.linho, normalMap: T.tecido_nor, roughnessMap: T.tecido_rug, roughness: 0.95, metalness: 0,
+      sheen: 0.6, sheenRoughness: 0.5, sheenColor: new THREE.Color(D.tecido.cor) })
+  };
+  // the panorama was rendered without the table and chairs: as their AMBIENT (diffuse) light it sees the floor lit under
+  // the top, where the table really casts its shadow (at night the page was 1.7 x brighter than Cycles). Their diffuse
+  // share of it is scaled (LZ.difusa_ibl per mode, set against the Cycles references); the reflections stay whole
+  const U = { difIBL: { value: 1 } };
+  function difusaIBL(m) {
+    const ant = m.onBeforeCompile, k = m.customProgramCacheKey;
+    m.onBeforeCompile = (sh, r) => {
+      if (ant) ant.call(m, sh, r);
+      sh.uniforms.difIBL = U.difIBL;
+      sh.fragmentShader = 'uniform float difIBL;\n' + sh.fragmentShader.replace('#include <lights_fragment_maps>',
+        THREE.ShaderChunk.lights_fragment_maps.replace('iblIrradiance += getIBLIrradiance( geometryNormal );', 'iblIrradiance += difIBL * getIBLIrradiance( geometryNormal );'));
+    };
+    m.customProgramCacheKey = () => (k ? k.call(m) : '') + 'difIBL';
+  }
+  Object.values(MAT).forEach(difusaIBL);
+  const MATNAME = { oak: 'Carvalho', walnut: 'Nogueira', lacq: 'Lacado branco', marble: 'Mármore', bronze: 'Bronze', steel: 'Metal escovado', black: 'Preto mate' };
+  const TABMATS = Object.values(MAT);
+
+  /* ---------------- tables ---------------- */
+  const tableRoot = new THREE.Group(); S.add(tableRoot);
+  const VAR = D.variants.map((v) => ({ v, built: null }));
+  const pecas = {};
+  gMesa.scene.traverse((o) => {
+    if (!o.isMesh) return;
+    const u = o.userData.papel ? o.userData : o.parent.userData;
+    (pecas[u.variante] = pecas[u.variante] || []).push({ o, u });
+  });
+  const matFor = (papel) => papel === 'guia' ? MAT.runner : (papel === 'pe' || papel === 'pe_nucleo') ? MAT[ST.legs] : MAT[ST.top];
+  function build(i) {
+    const V = VAR[i]; if (V.built) return V.built;
+    const Lg = new THREE.Group(), Rg = new THREE.Group(), C = new THREE.Group(), leafG = new THREE.Group();
+    const meshes = [], tabua = [];
+    for (const { o, u } of pecas[V.v.key]) {
+      o.geometry.computeBoundingBox();
+      const m = new THREE.Mesh(o.geometry, matFor(u.papel));
+      m.castShadow = m.receiveShadow = true;
+      m.userData = { role: u.papel, side: u.lado, name: u.nome, z0: o.geometry.boundingBox.min.y };
+      if (u.lado === 'tabua') { tabua.push(m); continue; }
+      (u.lado === 'L' || u.lado === 'SL' ? Lg : u.lado === 'R' || u.lado === 'SR' ? Rg : C).add(m);
+      meshes.push(m);
+    }
+    const leaves = [0, 1].map((k) => {
+      const g = new THREE.Group();
+      for (const t of tabua) { const m = k ? t.clone() : t; m.userData = { ...t.userData, side: 'leaf' }; g.add(m); meshes.push(m); }
+      leafG.add(g); return g;
+    });
+    const G = new THREE.Group(); G.add(Lg, Rg, C, leafG);
+    V.built = { G, L: Lg, R: Rg, C, leaves, meshes };
+    return V.built;
+  }
+  let open = 0, openTarget = 0, expl = 0, explTarget = 0;
+  function setMaterials() {
+    VAR.forEach((V) => { if (!V.built) return; V.built.meshes.forEach((m) => { const u = m.userData; m.material = u.side === 'leaf' ? MAT[ST.top] : matFor(u.role); }); });
+  }
+  function explodeOffset(m) {
+    const z = m.userData.z0, r = m.userData.role;
+    if (r === 'tampo') { if (z > 0.7295) return 0.42; if (z > 0.7195) return 0.30; return 0.20; }
+    if (r === 'aro') return 0.10; if (r === 'guia') return 0.03; return 0;
+  }
+  function layoutTable() {
+    const B = build(ST.variant); const gap = open;
+    B.L.position.x = -gap / 2; B.R.position.x = gap / 2;
+    B.C.children.forEach((m) => { m.scale.x = 1 + gap / 1.5; });
+    const n = Math.max(ST.leaves, 1), per = gap / n;
+    B.leaves.forEach((g, k) => {
+      const on = gap > 0.0005 && k < n; g.visible = on; if (!on) return;
+      g.scale.x = Math.max(per - 0.0015, 0.0001) / LEAF_W; g.position.x = -gap / 2 + per * (k + 0.5);
+    });
+    B.meshes.forEach((m) => { m.position.y = explodeOffset(m) * expl; });
+    sombraMesa();
+  }
+  function showVariant() {
+    tableRoot.children.slice().forEach((c) => tableRoot.remove(c));
+    tableRoot.add(build(ST.variant).G); layoutTable();
+  }
+
+  /* ---------------- contact shadows (ambient occlusion baked per table state) ---------------- */
+  const DMAT = {};
+  const sombraTex = {};
+  async function sombra(k) {
+    if (!sombraTex[k]) { const uri = ativo('sombra/' + k); if (!uri) return null; sombraTex[k] = await tl.loadAsync(uri); }
+    return sombraTex[k];
+  }
+  const sombraG = new THREE.Group(); S.add(sombraG);
+  const planoSombra = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), new THREE.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.8, depthWrite: false }));
+  planoSombra.rotation.x = -Math.PI / 2; planoSombra.position.y = 0.0095; planoSombra.renderOrder = 1; sombraG.add(planoSombra);
+  let sombraChave = '';
+  function sombraMesa() {
+    const v = VAR[ST.variant].v, k = `${v.key}_${ST.leaves}`;
+    const dim = LZ.sombras && LZ.sombras[k];
+    if (!dim) { planoSombra.visible = false; return; }
+    if (sombraChave !== k) {
+      sombraChave = k;
+      sombra(k).then((t) => { if (t && sombraChave === k) { planoSombra.material.alphaMap = t; planoSombra.material.needsUpdate = true; } });
+    }
+    const alvo = 2.7 + ST.leaves * LEAF_W, agora = 2.7 + open;
+    planoSombra.scale.set(dim[0] * (agora + 1.2) / (alvo + 1.2), dim[1], 1);
+    planoSombra.material.opacity = 0.8 * (1 - 0.6 * expl);
+    planoSombra.visible = true;
+  }
+
+  /* ---------------- room ---------------- */
+  const room = new THREE.Group(); S.add(room);
+  const walls = {};
+  const PAREDE = { tras: [[0, 0, -RD / 2], [0, 0, 1]], frente: [[0, 0, RD / 2], [0, 0, -1]], esq: [[-RW / 2, 0, 0], [1, 0, 0]],
+    dir: [[RW / 2, 0, 0], [-1, 0, 0]], teto: [[0, RH, 0], [0, -1, 0]] };
+  const subir = (o, k) => { while (o) { if (o.userData && o.userData[k] !== undefined) return o.userData[k]; o = o.parent; } return null; };
+  const semDifusaIBL = (sh) => {     // the baked light is the diffuse light: the environment only adds its reflections
+    sh.fragmentShader = sh.fragmentShader.replace('#include <lights_fragment_maps>',
+      THREE.ShaderChunk.lights_fragment_maps.replace('iblIrradiance += getIBLIrradiance( geometryNormal );', ''));
+  };
+  const salaMats = [], foraMats = [], pendente = [];
+  let difusor = null;
+  const sombraParedes = new THREE.MeshBasicMaterial({ colorWrite: false, depthWrite: false });
+  const salaMeshes = [];
+  gSala.scene.traverse((o) => { if (o.isMesh) salaMeshes.push(o); });
+  // scanned pieces (sideboard, vases, plant): thousands of faces cut into thousands of tiny lightmap islands, too few
+  // texels each (the vases came out dark): lit in real time instead, by the room's panorama, the sun and the spots
+  const SCAN = /ceramic_vase|potted_plant|modern_wooden_cabinet/;
+  for (const o of salaMeshes) {
+    const nome = (o.name || '') + ' ' + ((o.parent && o.parent.name) || '');
+    const grupo = SCAN.test(nome) ? 'scan' : (subir(o, 'grupo') || 'sala'), parede = subir(o, 'parede');
+    const real = o.material;
+    let m;
+    if (grupo === 'fora') {
+      m = new THREE.MeshBasicMaterial({ map: real.map || null, color: real.color ? real.color.clone() : 0xffffff, alphaTest: real.alphaTest || 0,
+        transparent: !!real.transparent, side: real.side, alphaMap: real.alphaMap || null });
+      m.userData.grupo = grupo; foraMats.push(m);
+      o.castShadow = o.receiveShadow = false;
+    } else if (grupo === 'scan') {
+      m = real.clone();
+      m.lightMap = null;
+      m.userData.grupo = grupo; salaMats.push(m);
+      o.castShadow = o.receiveShadow = true;
+    } else {
+      m = real.clone();
+      m.onBeforeCompile = semDifusaIBL;
+      m.customProgramCacheKey = () => 'semDifusaIBL';
+      m.userData.grupo = grupo; salaMats.push(m);
+      if (/difusor/.test(nome)) difusor = m;
+      o.castShadow = !parede; o.receiveShadow = true;
+      if (m.map) m.map.anisotropy = ANI;
+    }
+    o.material = m;
+    if (/pendente|difusor|cabo/.test(nome)) pendente.push(o);
+    if (parede) {
+      (walls[parede] = walls[parede] || []).push(o);
+      const c = new THREE.Mesh(o.geometry, sombraParedes);      // casts the sun's shadow even when the wall is hidden
+      c.castShadow = true; c.receiveShadow = false;
+      c.position.copy(o.getWorldPosition(new THREE.Vector3())); c.quaternion.copy(o.getWorldQuaternion(new THREE.Quaternion()));
+      room.add(c);
+    }
+  }
+  room.add(gSala.scene);
+  // window glass (only in the page: the bake saw the opening)
+  {
+    const j = SALA.janela, vidro = new THREE.MeshPhysicalMaterial({ color: 0xffffff, metalness: 0, roughness: 0.03, transparent: true, opacity: 0.1, depthWrite: false });
+    salaMats.push(vidro); vidro.userData.vidro = true;
+    for (const x of [-j.largura / 4, j.largura / 4]) {
+      const g = new THREE.Mesh(new THREE.PlaneGeometry(j.largura / 2 - 0.08, j.altura - 0.1), vidro);
+      g.position.set(x, j.peitoril + j.altura / 2, -(RD / 2 + SALA.parede * 0.65) + 0.036);
+      room.add(g); (walls.tras = walls.tras || []).push(g);
+    }
+  }
+
+  /* ---------------- chairs ---------------- */
+  const chairParts = [];
+  gCadeira.scene.traverse((o) => { if (o.isMesh) chairParts.push({ geo: o.geometry, mat: subir(o, 'mat') }); });
+  const chairMat = (k) => k === 'madeira' ? (ST.legs === 'oak' && ST.top === 'walnut' ? MAT.walnut : MAT.oak) : MAT.tecido;
+  const chairs = new THREE.Group(); S.add(chairs);
+  const sombraCadeiraMat = new THREE.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.75, depthWrite: false });
+  sombra('cadeira').then((t) => { if (t) { sombraCadeiraMat.alphaMap = t; sombraCadeiraMat.needsUpdate = true; } });
+  function cadeira() {
+    const g = new THREE.Group();
+    for (const p of chairParts) { const m = new THREE.Mesh(p.geo, chairMat(p.mat)); m.castShadow = m.receiveShadow = true; m.userData.mat = p.mat; g.add(m); }
+    const s = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), sombraCadeiraMat);
+    s.rotation.x = -Math.PI / 2; s.position.y = 0.0097; s.renderOrder = 1; g.add(s);
+    return g;
+  }
+  function rnd(seed) { let s = seed >>> 0; return () => ((s = Math.imul(s ^ s >>> 15, 1 | s) + 0x6D2B79F5 | 0, (s ^ s >>> 7) >>> 0) / 4294967296); }
+  function layoutChairs() {
+    chairs.clear();
+    if (!ST.chairs) return;
+    const Lm = 2.7 + ST.leaves * LEAF_W, W = 1.2;
+    const n = Math.max(3, Math.round((Lm - 0.3) / 0.78)), span = Lm - 0.9;
+    const r = rnd(7 + ST.leaves);
+    // a chair slightly turned or pulled out, never a mess (rulebook 12.7)
+    const put = (x, z, ry) => { const c = cadeira(); c.position.set(x + (r() - 0.5) * 0.02, 0, z + (r() - 0.5) * 0.02); c.rotation.y = ry + (r() - 0.5) * 0.05; chairs.add(c); };
+    for (let i = 0; i < n; i++) { const x = -span / 2 + span * i / (n - 1); put(x, -(W / 2 + 0.12), Math.PI); put(x, W / 2 + 0.12, 0); }
+    put(-(Lm / 2 + 0.18), 0, -Math.PI / 2); put(Lm / 2 + 0.18, 0, Math.PI / 2);
+  }
+
+  /* ---------------- lights ---------------- */
+  const sun = new THREE.DirectionalLight(0xffffff, LZ.sol.forca);
+  const sd = new THREE.Vector3(...LZ.sol.de).normalize();
+  sun.position.copy(sd).multiplyScalar(12); sun.target.position.set(0, 0, 0);
+  S.add(sun, sun.target);
+  sun.castShadow = true; sun.shadow.mapSize.set(MOBILE ? 2048 : 4096, MOBILE ? 2048 : 4096);
+  Object.assign(sun.shadow.camera, { left: -4.8, right: 4.8, top: 4.8, bottom: -4.8, near: 1, far: 30 });
+  sun.shadow.bias = -0.0002; sun.shadow.normalBias = 0.02; sun.shadow.radius = 2;
+  const N = LZ.noite;
+  const lampL = N.focos_x.map((x, i) => {
+    const p = new THREE.SpotLight(new THREE.Color(N.cor || '#ffffff'), 0, 0, N.angulo, N.suave, 2);
+    p.position.set(x, N.focos_y, 0); p.target.position.set(x, 0, 0);
+    // every spot casts the table's shadow (with only the middle one, the other two lit the floor through the top and the
+    // night was 1.6 x brighter than the Cycles reference)
+    p.castShadow = !MOBILE || i === 1; p.shadow.mapSize.set(1024, 1024); p.shadow.bias = -0.0004; p.shadow.radius = 3;
+    S.add(p, p.target); return p;
+  });
+  const studio = new THREE.Mesh(new THREE.CircleGeometry(6, 64), new THREE.ShadowMaterial({ opacity: 0.28 }));
+  studio.rotation.x = -Math.PI / 2; studio.receiveShadow = true;
+  function aplicarAmbiente(m, modo) {
+    const g = m.userData.grupo;
+    if (g === 'fora') { const lm = LM[modo].fora; m.lightMap = lm ? lm.t : null; m.lightMapIntensity = lm ? lm.I : 1; }
+    else if (g === 'scan') { m.envMap = ENV[modo]; m.envMapIntensity = KE[modo]; }
+    else if (g) {
+      const lm = LM[modo][g]; m.lightMap = lm ? lm.t : null; m.lightMapIntensity = lm ? lm.I : 1;
+      m.envMap = ENV[modo]; m.envMapIntensity = KE[modo];
+    } else if (m.userData.vidro) { m.envMap = ENV[modo]; m.envMapIntensity = KE[modo]; }
+    m.needsUpdate = true;
+  }
+  function applyLight() {
+    const n = ST.night, sala = !!ST.room;
+    const modo = n ? 'noite' : 'dia';
+    sun.visible = !n; sun.intensity = sala ? LZ.sol.forca : 2.2;
+    if (sala) sun.position.copy(sd).multiplyScalar(12); else sun.position.set(-1.5, 7, -2.5).normalize().multiplyScalar(12);
+    lampL.forEach((l) => { l.intensity = n ? N.focos_w / (4 * Math.PI) : 0; l.visible = !!n; });
+    if (difusor) { difusor.emissive = new THREE.Color('#ffe2b0'); difusor.emissiveIntensity = n ? N.brilho_barra : 0; }
+    const envT = sala ? ENV[modo] : ENV.estudio;
+    TABMATS.forEach((m) => { m.envMap = envT; m.envMapIntensity = sala ? KE[modo] : (n ? 0.2 : 0.55); m.needsUpdate = true; });
+    U.difIBL.value = sala ? ((LZ.difusa_ibl || {})[modo] ?? 1) : 1;
+    salaMats.concat(foraMats).forEach((m) => aplicarAmbiente(m, modo));
+    R.toneMappingExposure = Math.pow(2, sala ? (n ? LZ.exposicao_noite : LZ.exposicao) : (n ? 0.8 : -0.1));
+    if (sala) { S.background = CEU; S.backgroundIntensity = KE.ceu * (n ? N.ceu_forca / (D.luz.ceu_forca || 1) : 1); }
+    else S.background = new THREE.Color(n ? 0x1a1f26 : 0xe7e9e5);
+  }
+  function applyRoom() {
+    room.visible = !!ST.room;
+    if (!ST.room) { if (!studio.parent) S.add(studio); } else if (studio.parent) S.remove(studio);
+    applyLight();
+  }
+
+  /* ---------------- dimensions ---------------- */
+  const dimG = new THREE.Group(); S.add(dimG);
+  const labels = [];
+  const LMAT = new THREE.LineBasicMaterial({ color: 0xc4512a, depthTest: false, transparent: true });
+  function dline(a, b, txt, small, vert) {
+    const A = new THREE.Vector3(...a), B = new THREE.Vector3(...b);
+    const l = new THREE.Line(new THREE.BufferGeometry().setFromPoints([A, B]), LMAT); l.renderOrder = 10; dimG.add(l);
+    const dir = B.clone().sub(A).normalize(); const t = new THREE.Vector3(0, 1, 0); if (Math.abs(dir.y) > 0.9) t.set(1, 0, 0);
+    const perp = new THREE.Vector3().crossVectors(dir, t).normalize().multiplyScalar(0.02).add(t.clone().multiplyScalar(0.02));
+    [A, B].forEach((P) => { const k = new THREE.Line(new THREE.BufferGeometry().setFromPoints([P.clone().sub(perp), P.clone().add(perp)]), LMAT); k.renderOrder = 10; dimG.add(k); });
+    const el = document.createElement('div'); el.className = 'lbl' + (small ? ' s' : ''); el.textContent = txt; view.appendChild(el);
+    labels.push({ el, p: A.clone().add(B).multiplyScalar(0.5), vert: !!vert, objs: dimG.children.slice(-3) });
+  }
+  function buildDims() {
+    dimG.children.slice().forEach((c) => dimG.remove(c)); labels.forEach((l) => l.el.remove()); labels.length = 0;
+    if (!ST.dims) return;
+    const v = VAR[ST.variant].v; const Lm = (v.L / 1000) + ST.leaves * LEAF_W, W = v.W / 1000, H = 0.75;
+    const zf = W / 2 + 0.12, e = expl * 0.42;
+    dline([-Lm / 2, H + 0.05 + e, zf], [Lm / 2, H + 0.05 + e, zf], `${Math.round(Lm * 1000)}`);
+    dline([Lm / 2 + 0.12, H + 0.05 + e, -W / 2], [Lm / 2 + 0.12, H + 0.05 + e, W / 2], `${Math.round(W * 1000)}`);
+    dline([Lm / 2 + 0.12, 0, W / 2 + 0.05], [Lm / 2 + 0.12, H, W / 2 + 0.05], '750', false, true);
+    dline([-Lm / 2 - 0.08, 0.70, 0], [-Lm / 2 - 0.08, 0.75, 0], '50', true, true);
+    dline([-0.3, 0, 0], [-0.3, 0.685, 0], '685', true, true);
+    const lx = v.legx; if (lx.length >= 2) { const a = lx[0] / 1000 - open / 2, b = lx[lx.length - 1] / 1000 + open / 2; dline([a, 0.05, -W / 2 - 0.1], [b, 0.05, -W / 2 - 0.1], `${Math.round((b - a) * 1000)}`, true); }
+    if (ST.leaves) dline([-open / 2, H + 0.02 + e, 0], [open / 2, H + 0.02 + e, 0], `${ST.leaves}×${LEAF_W * 1000}`, true);
+  }
+  const _v = new THREE.Vector3();
+  function placeLabels() {
+    const w = R.domElement.clientWidth, h = R.domElement.clientHeight;
+    const top = (cam.position.y - ctl.target.y) > 2.2 * Math.hypot(cam.position.x - ctl.target.x, cam.position.z - ctl.target.z);
+    labels.forEach((l) => { _v.copy(l.p).project(cam); const vis = _v.z < 1 && !(top && l.vert); l.objs.forEach((o) => (o.visible = !(top && l.vert))); l.el.style.display = vis ? '' : 'none'; l.el.style.left = ((_v.x + 1) / 2 * w) + 'px'; l.el.style.top = ((1 - _v.y) / 2 * h) + 'px'; });
+  }
+
+  /* ---------------- side panel: plan + elevation ---------------- */
+  function drawPlan() {
+    const v = VAR[ST.variant].v, svg = $('#plan');
+    const Lm = (v.L / 1000) + ST.leaves * LEAF_W, g = ST.leaves * LEAF_W * 1000;
+    const Lmm = v.L + g, sc = 280 / Math.max(Lmm, 3700), ox = 160, oy = 95;
+    const P = (x, y) => `${(ox + x * sc).toFixed(1)},${(oy - y * sc).toFixed(1)}`;
+    let s = `<text x="10" y="16" font-family="Barlow Condensed" font-size="11" letter-spacing="1.2" fill="#5d6a72">${TL('Planta').toUpperCase()}</text>`;
+    const polyH = (pts, st) => { const mx = pts.reduce((a, p) => a + p[0], 0) / pts.length; const sh = mx < 0 ? -g / 2 : g / 2; return `<polygon points="${pts.map((p) => P(p[0] + sh, p[1])).join(' ')}" ${st}/>`; };
+    v.plan.legs.forEach((p) => (s += polyH(p, 'fill="none" stroke="#5d6a72" stroke-dasharray="3 2" stroke-width="0.8"')));
+    v.plan.top.forEach((p) => (s += polyH(p, 'fill="rgba(192,148,104,.18)" stroke="#1d2a33" stroke-width="1.1"')));
+    if (g > 0) { const hw = v.W / 2 - 2; for (let k = 0; k < ST.leaves; k++) { const x0 = -g / 2 + k * LEAF_W * 1000; s += `<rect x="${(ox + x0 * sc).toFixed(1)}" y="${(oy - hw * sc).toFixed(1)}" width="${(LEAF_W * 1000 * sc).toFixed(1)}" height="${(2 * hw * sc).toFixed(1)}" fill="rgba(196,81,42,.14)" stroke="#c4512a" stroke-width="1"/>`; } }
+    const y1 = oy + v.W / 2 * sc + 14;
+    s += `<line x1="${ox - Lmm / 2 * sc}" y1="${y1}" x2="${ox + Lmm / 2 * sc}" y2="${y1}" stroke="#c4512a"/><text x="${ox}" y="${y1 + 12}" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="#c4512a">${Lmm}</text>`;
+    const x1 = ox + Lmm / 2 * sc + 10;
+    s += `<line x1="${x1}" y1="${oy - v.W / 2 * sc}" x2="${x1}" y2="${oy + v.W / 2 * sc}" stroke="#c4512a"/><text x="${x1 + 4}" y="${oy + 3}" font-family="JetBrains Mono" font-size="10" fill="#c4512a">${v.W}</text>`;
+    const ey = 285, eh = 750 * sc;
+    s += `<text x="10" y="${ey - eh - 30}" font-family="Barlow Condensed" font-size="11" letter-spacing="1.2" fill="#5d6a72">${TL('Alçado frontal').toUpperCase()}</text>`;
+    s += `<line x1="10" y1="${ey}" x2="310" y2="${ey}" stroke="#1d2a33" stroke-width="0.6"/>`;
+    s += `<rect x="${ox - Lmm / 2 * sc}" y="${ey - 750 * sc}" width="${Lmm * sc}" height="${50 * sc}" fill="rgba(192,148,104,.35)" stroke="#1d2a33" stroke-width="0.9"/>`;
+    const aw = 2357;
+    s += `<rect x="${ox - (aw / 2 + g / 2) * sc}" y="${ey - 700 * sc}" width="${(aw + g) * sc}" height="${15 * sc}" fill="#ddd" stroke="#1d2a33" stroke-width="0.5"/>`;
+    v.plan.legs.forEach((p) => { const xs = p.map((q) => q[0]); const a = Math.min(...xs), b = Math.max(...xs); const sh = (a + b) / 2 < 0 ? -g / 2 : g / 2;
+      s += `<rect x="${(ox + (a + sh) * sc).toFixed(1)}" y="${(ey - 685 * sc).toFixed(1)}" width="${Math.max((b - a) * sc, 1).toFixed(1)}" height="${(685 * sc).toFixed(1)}" fill="rgba(154,117,80,.35)" stroke="#1d2a33" stroke-width="0.5"/>`; });
+    s += `<line x1="${ox + Lmm / 2 * sc + 10}" y1="${ey}" x2="${ox + Lmm / 2 * sc + 10}" y2="${ey - eh}" stroke="#c4512a"/><text x="${ox + Lmm / 2 * sc + 14}" y="${ey - eh / 2 + 3}" font-family="JetBrains Mono" font-size="10" fill="#c4512a">750</text>`;
+    svg.innerHTML = s;
+    const seats = 2 * Math.max(3, Math.round((Lm - 0.3) / 0.78)) + 2;
+    $('#kv').innerHTML =
+      `<span>${TL('Comprimento')}</span><b>${Lmm} mm</b><span>${TL('Largura')}</span><b>${v.W} mm</b><span>${TL('Altura')}</span><b>750 mm</b>` +
+      `<span>${TL('Tampo (espessura)')}</span><b>20 + 10 + 20 mm</b><span>${TL('Altura livre sob o aro')}</span><b>685 mm</b><span>${TL('Lugares')}</span><b>${seats}</b>`;
+    $('#matnote').textContent = TL('Acabamentos de base: carvalho e bronze, os mesmos dos modelos 3ds Max. Madeiras e mármore com texturas digitalizadas (folha de carvalho, folha de nogueira, mármore branco polido); bronze e metal escovados, lacado e preto mate feitos por nós; a luz do dia e da noite foi calculada em Cycles.');
+  }
+  function drawParts() {
+    const v = VAR[ST.variant].v; const tb = $('#parts tbody'), tf = $('#parts tfoot');
+    $('#ltitle').textContent = TL(v.name);
+    const matOf = (r) => r === 'guia' ? TL('Metal (guias)') : (r === 'pe' || r === 'pe_nucleo') ? TL(MATNAME[ST.legs]) : TL(MATNAME[ST.top]);
+    let tot = 0, h = '';
+    v.list.forEach((r) => { tot += r.qty; h += `<tr><td>${TL(r.name)}</td><td class="n">${r.qty}</td><td class="n">${r.dims[0]}</td><td class="n">${r.dims[1]}</td><td class="n">${r.dims[2]}</td><td>${matOf(r.role)}</td></tr>`; });
+    if (ST.leaves) { tot += ST.leaves; h += `<tr class="prop"><td>${TL('Tábua de extensão')}</td><td class="n">${ST.leaves}</td><td class="n">${LEAF_W * 1000}</td><td class="n">${v.W}</td><td class="n">50</td><td>${matOf('tampo')}</td></tr>`; }
+    tb.innerHTML = h; tf.innerHTML = `<tr><td>${TL('Total de peças')}</td><td class="n">${tot}</td><td colspan="4"></td></tr>`;
+  }
+
+  /* ---------------- cameras ---------------- */
+  const VIEWS = {
+    geral: { p: [3.1, 2.0, 3.4], t: [0, 0.5, 0] }, frente: { p: [0, 1.05, 4.6], t: [0, 0.5, 0] }, lado: { p: [4.9, 1.05, 0], t: [0, 0.5, 0] },
+    cima: { p: [0, 5.6, 0.01], t: [0, 0.7, 0] }, pormenor: { p: [1.75, 0.98, 1.0], t: [1.3, 0.72, 0.55] }, baixo: { p: [2.2, 0.12, 2.0], t: [0, 0.62, 0] }
+  };
+  let anim = null;
+  function goView(k) {
+    document.querySelectorAll('#views button,[data-view]').forEach((b) => b.classList.toggle('on', b.dataset.view === k));
+    if (k === 'rodar') { ctl.autoRotate = !ctl.autoRotate; document.querySelectorAll('[data-view="rodar"]').forEach((b) => b.classList.toggle('on', ctl.autoRotate)); return; }
+    ctl.autoRotate = false;
+    const V = VIEWS[k]; const ext = (ST.leaves * LEAF_W) / 2; const sc = 1 + ext / 2.2;
+    const p = new THREE.Vector3(...V.p); if (k !== 'pormenor') p.multiplyScalar(sc); else p.x += ext;
+    const t = new THREE.Vector3(...V.t); if (k === 'pormenor') t.x += ext;
+    if (k !== 'pormenor') { const f = Math.pow(Math.max(1, 1.5 / cam.aspect), 0.85); p.sub(t).multiplyScalar(f).add(t); }
+    anim = { p0: cam.position.clone(), t0: ctl.target.clone(), p1: p, t1: t, s: performance.now(), d: 700 };
+  }
+
+  /* ---------------- walls cutaway ---------------- */
+  const _c = new THREE.Vector3();
+  function updateWalls() {
+    for (const [k, obs] of Object.entries(walls)) {
+      const [pos, n] = PAREDE[k];
+      const vis = _c.copy(cam.position).sub(new THREE.Vector3(...pos)).dot(new THREE.Vector3(...n)) > 0;
+      obs.forEach((o) => (o.visible = vis));
+    }
+    pendente.forEach((o) => (o.visible = !!ST.room && cam.position.y < 2.6));
+  }
+
+  /* ---------------- post (desktop): MSAA + ground-contact occlusion ---------------- */
+  let composer = null;
+  if (!MOBILE) {
+    const rt = new THREE.WebGLRenderTarget(800, 500, { type: THREE.HalfFloatType, samples: 4 });
+    composer = new L.EffectComposer(R, rt);
+    composer.addPass(new L.RenderPass(S, cam));
+    const gtao = new L.GTAOPass(S, cam, 800, 500);
+    gtao.updateGtaoMaterial({ radius: 0.25, distanceExponent: 1.5, thickness: 0.6, scale: 1.0, samples: 16 });
+    gtao.updatePdMaterial({ lumaPhi: 10, depthPhi: 2, normalPhi: 3, radius: 6, rings: 2, samples: 16 });
+    gtao.blendIntensity = 0.55;
+    composer.addPass(gtao);
+    composer.addPass(new L.OutputPass());
+  }
+
+  /* ---------------- UI ---------------- */
+  function syncSeg(k) { document.querySelectorAll(`.seg[data-k="${k}"] button`).forEach((b) => b.classList.toggle('on', String(ST[k]) === b.dataset.v)); }
+  function set(k, val) {
+    const num = ['variant', 'leaves', 'dims', 'explode', 'chairs', 'room', 'night'].includes(k); ST[k] = num ? +val : val; syncSeg(k);
+    if (k === 'variant') { sombraChave = ''; showVariant(); drawPlan(); drawParts(); buildDims(); }
+    if (k === 'leaves') { openTarget = ST.leaves * LEAF_W; layoutChairs(); drawPlan(); drawParts(); }
+    if (k === 'top' || k === 'legs') { setMaterials(); layoutChairs(); drawParts(); drawPlan(); }
+    if (k === 'dims') buildDims();
+    if (k === 'explode') explTarget = ST.explode;
+    if (k === 'chairs') layoutChairs();
+    if (k === 'room') applyRoom();
+    if (k === 'night') applyLight();
+  }
+  document.addEventListener('click', (e) => {
+    const b = e.target.closest('.seg button'); if (b) { set(b.parentNode.dataset.k, b.dataset.v); return; }
+    const vb = e.target.closest('[data-view]'); if (vb) { goView(vb.dataset.view); return; }
+    const lb = e.target.closest('[data-lang]'); if (lb) { ST.lang = lb.dataset.lang; document.querySelectorAll('[data-lang]').forEach((x) => x.classList.toggle('on', x.dataset.lang === ST.lang)); applyLang(); drawPlan(); drawParts(); }
+  });
+  (function () {
+    const fb = $('#fsbar');
+    ['variant', 'leaves', 'dims', 'explode', 'night'].forEach((k) => { const src = document.querySelector(`.seg[data-k="${k}"]`).closest('.ctl'); fb.appendChild(src.cloneNode(true)); });
+  })();
+  function isFs() { return view.classList.contains('fs'); }
+  function enterFs() { view.classList.add('fs'); if (!MOBILE && view.requestFullscreen) view.requestFullscreen().catch(() => {}); resize(); }
+  function exitFs() { view.classList.remove('fs'); if (document.fullscreenElement) document.exitFullscreen().catch(() => {}); resize(); }
+  $('#fsBtn').onclick = enterFs; $('#fsExit').onclick = exitFs;
+  document.addEventListener('fullscreenchange', () => { if (!document.fullscreenElement && isFs()) { view.classList.remove('fs'); resize(); } });
+  function resize() {
+    const w = view.clientWidth, h = view.clientHeight;
+    R.setSize(w, h, false); cam.aspect = w / h; cam.updateProjectionMatrix();
+    if (composer) composer.setSize(w, h);
+  }
+  window.addEventListener('resize', resize);
+
+  /* ---------------- loop ---------------- */
+  function tick(now) {
+    requestAnimationFrame(tick);
+    let dirty = false;
+    if (Math.abs(open - openTarget) > 0.0002) { open += (openTarget - open) * 0.08; if (Math.abs(open - openTarget) < 0.0005) open = openTarget; dirty = true; }
+    if (Math.abs(expl - explTarget) > 0.001) { expl += (explTarget - expl) * 0.1; if (Math.abs(expl - explTarget) < 0.002) expl = explTarget; dirty = true; }
+    if (dirty) { layoutTable(); if (ST.dims) buildDims(); }
+    if (anim) { const k = Math.min(1, (now - anim.s) / anim.d), e = k < 0.5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2;
+      cam.position.lerpVectors(anim.p0, anim.p1, e); ctl.target.lerpVectors(anim.t0, anim.t1, e); if (k >= 1) anim = null; }
+    ctl.update(); updateWalls();
+    if (composer) composer.render(); else R.render(S, cam);
+    placeLabels();
+  }
+
+  /* ---------------- start ---------------- */
+  cam.position.set(...VIEWS.geral.p);
+  resize(); showVariant(); layoutChairs(); applyRoom(); drawPlan(); drawParts(); goView('geral'); cam.position.copy(anim.p1); ctl.target.copy(anim.t1); anim = null;
+  $('#load').remove();
+  requestAnimationFrame(tick);
+  window.__ST = ST; window.__set = set; window.__goView = goView; window.__R = R; window.__S = S; window.__cam = cam; window.__ctl = ctl; window.__U = U;
+}
+</script>
+</body>
+</html>

@@ -1308,3 +1308,32 @@ the wall/ceiling above the wall cabinets)
 - Answer to «Passo as capturas de reflexo para caixas, uma por divisão (≈2 h no PC de casa)?» after the final bake
   (cap31: green reflections gone). Deferred, not rejected: stays in `step-inside/docs/fase8/README.md` «Melhorias
   possíveis»; hub Log 134 (tarefa 87).
+
+### 2026-11-27 — Extending table: ultra-realistic 3D and its page [geral]
+> @"<upload>/5457dbb3-MESA_EXTENSIVEL_realista.html" consegues perceber detalhadamente este 3D que está nesse página ?
+- Context: first message; the upload (here «a página da mesa extensível, carregada») is a self-contained three.js page of
+  an extending table made in another Claude conversation.
+- Filed in: `design/10-discovercasa.md` §4 (table source and tools); `insights.md` (2026-11-27 entry: table facts).
+
+> ainda estas a abrir a página? o que é que se passou ? estas a abrir a página ha imenso tempo
+- Context: the in-app browser hung opening the local file:// page; it was stopped.
+- Filed in: nothing new (the page is read through `ferramentas/movel/extrair_pagina.py` instead of a browser).
+
+> eu quero torna-la ultra realista com a maior qualidade possível!! E a nossa página para esta mesa deve ter exatamente as mesmas funcionalidades que a página que te enviei tem
+- Context: the task. Our own page must have exactly the same functions as the source page.
+- Filed in: `design/10-discovercasa.md` §4 (`gerar_pagina_mesa.py` + `modelo_mesa.html`, same functions as the source);
+  `insights.md` 2026-11-27 (a)–(d).
+
+> Sim, 4K (Recommended) · Modelar as nossas (Recommended) · Sim, podes usar · Só o ficheiro para mim · ambientCG Marble021 (Recommended)
+- Context: answers to Claude's questions, in order: textures (Poly Haven 4K: oak_veneer_01, walnut_veneer, marble_01);
+  chairs (model our own); home render PC for this table's Cycles bakes; where the page goes («Só o ficheiro para mim»:
+  the HTML file to the user only, not the hub, not Git); marble (ambientCG Marble021, after Claude found Poly Haven's
+  marble_01 is a stone paving with joints, unusable for a slab top).
+- Filed in: `design/10-discovercasa.md` §3 (ambientCG use approved for this table) and §4; `insights.md` 2026-11-27
+  (delivery: file only; home PC OK for this table only).
+
+> o movel no fundo da sala esta na vertical e os vasos/jarros estão a flutuar da fix nisso
+- Context: in the preview renders the Poly Haven sideboard (3 roots: body + 2 doors) was rotated per root about its own
+  origin, so the parts came apart and the vases stood on air; fixed with one common pivot for all roots, verified in a
+  new render.
+- Filed in: `design/11-licoes.md` L1 (execution error); fix noted in `insights.md` 2026-11-27.

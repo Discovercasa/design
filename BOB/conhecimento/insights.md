@@ -280,6 +280,24 @@ he answers (`metodo-construtivo.md`). Condensed 2026-10-28 (history in git).
   reference image: use it for the products DiscoverCasa installs. Status: told the user 2026-11-26.
 
 ## Recorded, not yet told (raise when it fits)
+- **2026-11-27** — Extending-table page (ultra-realistic, file for the user only). Technical: (a) Cycles light units,
+  verified by a test render: sun strength S = irradiance S; point/spot power P → intensity P/(4π); so three.js (physical
+  units) takes the same numbers (sun intensity = S, spot = P/4π) and lightmaps ×π·K. (b) Baking split for interactive
+  pieces: room lightmap = (direct+indirect) − (direct of the real-time lights), so the moving table/chairs get real-time
+  sun/spot shadows. (c) Panoramas as sRGB JPEG over K instead of HDR: same look, 12 MB → ~1 MB. (d) Every pendant spot
+  must cast shadows in the page, or light passes through the table (night was 1.6× too bright). (e) Scanned pieces
+  (Poly Haven sideboard, vases, plant) get NO lightmap: thousands of faces become thousands of tiny atlas islands and
+  the vases came out dark; they are lit in real time (room panorama, sun, spots). (f) Page calibrated against the
+  Cycles references by mean brightness (views geral/pormenor): day matches with exposure 1.2; the panorama (no table)
+  over-lights the table's ambient, so its diffuse share is 0.55 by day and 0.35 at night (0 made the chairs black, shaded
+  by the top), night exposure 1.3 instead of 1.9 (`mesa_extensivel.json` "pagina"). Page 33 MB (phone 24 MB). Table facts (source
+  `MESA_EXTENSIVEL.stp`, 30-01-2025, via the source page): 4 variants A Oval, B Rectangular (corner radius ≈190 mm),
+  C Cushion (sides bow in: 1196 wide mid, ≈1060 near ends) with blade legs, D Cushion with sculpted legs (6 inclined
+  blades per end, to ≈990 mm from centre); 2700 × 1200 × 750 closed; top 50 mm = base 20 + middle layer 10 (protrudes
+  1.5 mm: a fine line) + upper top 20 in two halves; apron frame 2357 × 857 × 15 (clearance 685); 3 runners
+  1500 × 40 × 60 (D: 2×1764 + 1456); blade legs 50 (20+10+20) × 710 × 685 at ±775 mm; 1 mm round edges; seats 8 closed,
+  10 with leaves. The 500 mm extension leaf is a PROPOSAL of the source page, not in the STEP: to confirm. Status: not
+  yet told (the user approved the home PC for this table's bakes only; the 2026-11-18 item below is still open).
 - **2026-11-18** — Client pages look "modelled" mainly because every texture, piece of furniture and tree is generated
   by code; photo-scanned CC0 textures (wood, fabric, plaster, grass) and CC0 furniture/plant/tree models (Poly Haven,
   ambientCG: public domain, commercial use free) are the big step to photo-real interiors and a more real 3D — **told**,

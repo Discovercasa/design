@@ -1,0 +1,29 @@
+{
+ "_": "Extending table page (user 2026-11-27: «quero torna-la ultra realista com a maior qualidade possível!! E a nossa página para esta mesa deve ter exatamente as mesmas funcionalidades que a página que te enviei tem»). Finishes, room and light, shared by blender_mesa.py (scene, bakes) and gerar_pagina_mesa.py (page). Texture folders are relative to the assets folder (--ativos); tamanho_m = the texture's real size.",
+ "acabamentos": {
+  "oak":    {"nome": "Carvalho", "tex": "oak_veneer_01/4k", "tamanho_m": 1.83, "rug": [0.42, 0.62], "normal": 0.6, "verniz": [0.35, 0.28]},
+  "walnut": {"nome": "Nogueira", "tex": "walnut_veneer/4k", "tamanho_m": 1.8, "rug": [0.40, 0.60], "normal": 0.6, "verniz": [0.35, 0.28]},
+  "lacq":   {"nome": "Lacado branco", "cor": "#f1eee8", "rug": [0.32, 0.32], "verniz": [1.0, 0.09]},
+  "marble": {"nome": "Mármore", "tex": "acg_Marble021/4k", "tamanho_m": 1.2, "rug": [0.03, 0.22], "normal": 0.35},
+  "bronze": {"nome": "Bronze", "cor": "#8f6f4a", "metal": 1, "rug": [0.30, 0.30], "escovado": 0.55},
+  "steel":  {"nome": "Metal escovado", "cor": "#c9cbcc", "metal": 1, "rug": [0.26, 0.26], "escovado": 0.6},
+  "black":  {"nome": "Preto mate", "cor": "#1e1e1f", "rug": [0.62, 0.62], "metal": 0, "po": true},
+  "runner": {"nome": "Metal (guias)", "cor": "#8d9093", "metal": 1, "rug": [0.35, 0.35]}
+ },
+ "tecido": {"tex": "rough_linen", "tamanho_m": 0.27, "cor": "#a39581", "rug": [0.85, 1.0], "normal": 1.0},
+ "sala": {
+  "largura": 7.2, "fundo": 5.8, "altura": 2.8, "parede": 0.12,
+  "janela": {"largura": 3.2, "altura": 2.1, "peitoril": 0.45},
+  "soalho": {"tex": "oak_wood_planks", "tamanho_m": 1.2, "rug": [0.42, 0.66]},
+  "estuque": {"tex": "painted_plaster_wall", "tamanho_m": 2.0, "cor": "#ebe7e0", "teto": "#f4f2ee", "rug": [0.85, 0.95]},
+  "relva": {"tex": "leafy_grass", "tamanho_m": 2.0, "cor": "#4c5c3a"},
+  "tapete": [4.0, 2.8]
+ },
+ "luz": {
+  "ceu": "kloofendal_38d_partly_cloudy_puresky/kloofendal_38d_partly_cloudy_puresky_2k.hdr",
+  "sol_de": [-2.4, 4.2, -7.1],
+  "sol_forca": 4.0, "ceu_forca": 1.0, "exposicao": 1.2, "exposicao_noite": 1.9,
+  "pagina": {"_": "the page set against the Cycles reference images (mean brightness, views geral and pormenor, 2026-11-27): the night lightmap was baked without the table, which would catch the spots' light, so the room bounces more than in Cycles (night exposure 1.3 instead of 1.9; with no ambient at night the chairs, shaded by the top from the spots, went black); the panorama has no table either, so the table's diffuse share of it is scaled (difusa_ibl)", "exposicao": {"dia": 1.2, "noite": 1.3}, "difusa_ibl": {"dia": 0.55, "noite": 0.35}},
+  "noite": {"focos_w": 30, "cor": "#ffd7a0", "focos_x": [-0.55, 0, 0.55], "focos_y": 1.58, "angulo": 0.98, "suave": 0.6, "brilho_barra": 6.0, "ceu_forca": 0.015}
+ }
+}

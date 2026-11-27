@@ -30,6 +30,9 @@ Rulebook v1.0 (2026-11-27). Not in the manual v1.0 — added for DiscoverCasa. T
   `ferramentas/pagina/descarregar_ativos.py`; interior models in `_trabalho/interiores/`, downloader
   `interiores/descarregar.py`, licences in `interiores/fontes.json`). Poly Haven has no beds, toilets or modern kitchens
   → those pieces are ours (parametric) and must reach the realism of the scanned ones.
+- **ambientCG** (CC0) first used by the downloader on 2026-11-27 (Marble021 for the extending table, user: «ambientCG
+  Marble021 (Recommended)»); Poly Haven 4K textures for that table (oak_veneer_01, walnut_veneer). Poly Haven
+  `marble_01` is a stone paving with joints: not for slab tops.
 - [REC] A new free source (another CC0 library, a maker's site) and every download need the user's OK first (repo rule).
 - Sanitary ware, taps, appliances: the makers' free 3D models of the brands the user gives (pending).
 - Missing materials: made by us from a reference, ultra-realistic, same in Blender and Unreal (`07-realismo-digital.md` §12.4).
@@ -40,6 +43,12 @@ Rulebook v1.0 (2026-11-27). Not in the manual v1.0 — added for DiscoverCasa. T
 - Page 3D: `ferramentas/pagina/interior.py` — ≈ 30 piece types drawn from boxes and cylinders (the pieces the user finds
   lacking detail and not realistic: to be remodelled, hub task «Remodelar as peças com detalhe real, por estilo»);
   `ferramentas/pagina/vegetacao.py`, `casa_blender.py` (house and materials), `gerar_pagina.py`, `modelo_pagina.html`.
+- Extending table (2026-11-27, `ferramentas/movel/`): `extrair_pagina.py` (decodes the source page's geometry),
+  `blender_mesa.py` (scene: table, our chair, real room, day/night light, bakes, Cycles reference renders),
+  `mesa_extensivel.json` (finishes/room/light), `aliviar_mesa.py` (lighter page assets from the saved scene),
+  `gerar_pagina_mesa.py` + `modelo_mesa.html` (the page, same functions as the source). `pagina/descarregar_ativos.py`
+  gained `--texturas=a,b` (other resolutions into `<id>/<res>/`) and `--ambientcg=ID`. The page is delivered as a file
+  to the user only (not hub, not Git).
 - Step Inside: `interiores/catalogo.json` (27 objects: 16 Poly Haven CC0 + 11 parametric — kitchen, island, fridge column,
   wardrobe, beds, dining table, WC, vanity, shower, TV), `step-inside/ferramentas/interiores/` (`pecas.py`,
   `interiores.py`, `blender_interiores.py`).
