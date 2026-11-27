@@ -1302,3 +1302,9 @@ the wall/ceiling above the wall cabinets)
   Filed: rulebook v1.2 — `conhecimento/design-interiores.md` («The aim» at the top; B3 now only "never invent facts"),
   `design/10-discovercasa.md` §2 (the aim; old split superseded) and §6–7, `05` §8.8, `06` §9.6, `07` §12.6, `08`
   §14.5/15.1/15.2, `09` checklist; agent `designer-interiores.md`; `insights.md` (2026-11-27 entry); hub Log.
+
+### 2026-11-27 — Step Inside VR: box reflection captures per room
+> Agora não
+- Answer to «Passo as capturas de reflexo para caixas, uma por divisão (≈2 h no PC de casa)?» after the final bake
+  (cap31: green reflections gone). Deferred, not rejected: stays in `step-inside/docs/fase8/README.md` «Melhorias
+  possíveis»; hub Log 134 (tarefa 87).
