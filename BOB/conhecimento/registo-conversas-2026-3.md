@@ -1253,3 +1253,27 @@ the wall/ceiling above the wall cabinets)
   (`ajustes_materiais.json`, also the terrain's M_SI_PBR instance and the far grass plane). Preview: the chairs are their
   real dark brown again, the TV black, the lawn a natural green; metal handles keep a slight green from the lawn seen
   through the window (as in reality). Production bake started 15:52.
+
+### 2026-11-27 — Interiores realistas por estilos: a design agent and the design rulebook [Páginas, checkpoint 44]
+> achas que seria melhor criarmos um agente que era responsável especificamente por fazer o design com todos os detalhes? Pensei nisto porque assim não haveria perda de informações e ele ia ficando cada vez melhor consoante o uso. O que achas ? Não cries dá-me só a tua opinião
+- Answer (opinion, nothing created): yes, as an interior designer / art director agent, but the agent itself does not
+  learn — the files it keeps do (same pattern as `mestre-construtor` + the method rulebook): style sheets, combination
+  rules, catalogue of approved pieces with their approved render, lessons from rejections. It (1) gives the rules before a
+  piece is modelled, (2) reviews each render against the user's references and the rulebook (an independent eye),
+  (3) folds each approval/rejection into the rules. The modelling stays in the main session (Blender, renders, the
+  back-and-forth with the user). Do not duplicate `guardiao-detalhes` (it keeps the user's words; the new agent keeps
+  design rules). Suggested creating it once it has real content (first approved style sheet).
+> ok imagina que tu eras um expert design senior em desenhar interiores, o que escreverias no livro de regras do design de interiores?
+- Answer: an 8-chapter outline — principles (one style, 60/30/10, whites, metals, woods, textures, forms), measures and
+  circulation, 3D realism, style sheets, combination rules, anatomy of each piece (+ three versions), DiscoverCasa-specific
+  (what we deliver = real product vs staging decoration), lessons and a pre-render checklist.
+> @"C:\Users\DiscoverCasa1\Downloads\Manual_Regras_Design_Interiores_Agente_IA.docx"
+> consegues ler esse documento ? isto será o nosso livro de regras do design sendo que eu quero acima de tudo que sejas flexível e não demasiado rigído com as regras, são mais guidelines do que regras na realidade.
+- Read: «Manual de Regras — Design de Interiores» v1.0 (27/11/2026): 16 chapters + annexes A (reference measures),
+  B (style sheet template), C (3D object sheet), D (principles never to forget); rule categories OBRIGATÓRIA /
+  RECOMENDADA / CONTEXTUAL / ESTÉTICA / TÉCNICA; conflict hierarchy safety → architecture → client → aesthetics →
+  product → digital; it softens the fixed numbers of the 8-chapter outline (sofa ≤ 2/3 wall, one white, two woods, groups
+  of 3 are starting points). No personal data in it (generated document, author "Equipa de Design").
+- Decision (user): this manual is DiscoverCasa's interior design rulebook, applied as guidelines, not rigid rules.
+  Filed: `conhecimento/insights.md` (2026-11-27); hub checkpoint 44 Log. The .docx is still only in the user's Downloads
+  (not in the repo yet).

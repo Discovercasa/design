@@ -673,3 +673,19 @@ he answers (`metodo-construtivo.md`). Condensed 2026-10-28 (history in git).
   (shadows 0.45, highlights 0.5, +2.2 EV, 7500 K inside) brightens the living room and kitchen and leaves the bedrooms as
   they were; clamping `auto_exposure_max_brightness` changed nothing.
   Status: applied in `step-inside/ferramentas/unreal/` 2026-11-25; told the user with the VR results 2026-11-25.
+
+- **2026-11-27** — Interior design rulebook and a design agent (checkpoint 44 «Interiores realistas por estilos»).
+  (1) The user's «Manual de Regras — Design de Interiores» v1.0 (16 chapters + annexes; a .docx, not in the repo
+  yet) is our design rulebook — **guidelines, not rules** (user: «quero acima de tudo que sejas flexível e não demasiado
+  rigído com as regras, são mais guidelines do que regras na realidade»). Treat as binding only: never change the
+  architecture without saying so, safety/technical requirements, and never show as delivered what is only illustrative;
+  everything else is a starting point that may be broken when the result is better, saying why. (2) Gaps for DiscoverCasa,
+  suggested to the user: our case (turnkey houses, client page often made before any interior briefing → chosen style +
+  a few interior questions in `perguntas-por-obra.md`); the split between what we deliver (kitchen, sanitary ware, taps,
+  floors, doors, fixed lighting = real product, brand and model) and staging decoration (illustrative); real numbers for
+  Web/AR/VR (our measured budgets: VR ≥ 90 Hz, AR model sizes, textures per level); free sources only (CC0, makers' free
+  models; «Pagar uma libraria está fora de questão»); tag each rule with its category (the manual defines them but tags
+  only 3.2). (3) A design agent: the agent does not learn, its files do — rulebook in Markdown, one file per chapter with
+  an index (as the method), plus style sheets, approved-piece catalogue and lessons; it advises before modelling, reviews
+  renders against the references, folds approvals/rejections; modelling stays in the main session.
+  Status: suggested to the user 2026-11-27; awaiting go-ahead to convert the manual and create the agent.
