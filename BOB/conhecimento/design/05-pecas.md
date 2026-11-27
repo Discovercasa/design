@@ -63,8 +63,8 @@ estilo não encaixar com o outro».
 - [TEC] Basin, top, tap, trap when visible, handles and joints.
 - [TEC] Materials fit for humidity and cleaning.
 - [TEC] Gaps, drawer opening, access to the tap, relation to mirror and light.
-- (DC) Sanitary ware, taps and appliances are products we deliver: model the real product (makers' free 3D models, brands
-  from the user — pending) [OBR B3]; see `10-discovercasa.md` §2.
+- (DC) [REC] Sanitary ware, taps and appliances: the makers' free 3D models of the brands the user gives (pending) —
+  real products read as real; see `10-discovercasa.md` §2.
 
 ## 8.9 Detail sheet per category
 - [OBR] (B3) When a model stands for a specific product, the digital drawing follows the real reference — never generic

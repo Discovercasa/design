@@ -691,3 +691,6 @@ he answers (`metodo-construtivo.md`). Condensed 2026-10-28 (history in git).
   Status: suggested to the user 2026-11-27; user «Sim, os dois» → done 2026-11-27: rulebook
   `conhecimento/design-interiores.md` + `conhecimento/design/` (gaps (2) written into `design/10-discovercasa.md`),
   source `fontes/design-interiores/manual-regras-v1.0.md`, agent `.claude/agents/designer-interiores.md`.
+  Update 2026-11-27: the delivered-vs-staging split in (2) dropped by the user — «nao te preocupes com o que a
+  discovercasa entrega»; the aim is «apenas com os interiores estarem os mais impressionantes possíveis e que o
+  cliente se apaixone pela casa» (rulebook v1.2).

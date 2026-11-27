@@ -1294,3 +1294,11 @@ the wall/ceiling above the wall cabinets)
   coffee table, one canopy on the glass pendant — both confirmed in `ferramentas/pagina/interior.py`). Its remarks on the
   book went into rulebook v1.1 (one time of day per image, exposure/white balance, scanned vs parametric pieces, CC0 at
   native size, camera numbers, more scale references; the agent asks for 1:1 crops and works without a reference).
+> nao te preocupes com o que a discovercasa entrega
+> apenas com os interiores estarem os mais impressionantes possíveis e que o cliente se apaixone pela casa
+- Answer to "are the recessed downlights (fixed lighting) part of what we deliver?" — not our concern.
+- Decision (user): the interiors' aim is to be as impressive as possible so the client falls in love with the house;
+  what DiscoverCasa delivers is not the designer's concern — no delivered-vs-staging split, no "illustrative" labels.
+  Filed: rulebook v1.2 — `conhecimento/design-interiores.md` («The aim» at the top; B3 now only "never invent facts"),
+  `design/10-discovercasa.md` §2 (the aim; old split superseded) and §6–7, `05` §8.8, `06` §9.6, `07` §12.6, `08`
+  §14.5/15.1/15.2, `09` checklist; agent `designer-interiores.md`; `insights.md` (2026-11-27 entry); hub Log.

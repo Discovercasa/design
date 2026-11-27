@@ -50,8 +50,7 @@ construction, scale and materials correctly, and how light interacts with each o
 - Credible contact shadows and ambient occlusion.
 - Furniture feet, skirtings, bases, taps and objects meet their surfaces correctly.
 - No intersections between objects, walls, floors and other furniture.
-- Sockets and switches in plausible positions consistent with the project, without inventing confirmed installations
-  [OBR B3].
+- Sockets and switches in plausible positions consistent with the project.
 
 ### 12.7 Controlled imperfection [EST]
 - Chairs slightly turned, books leaning a little, textiles with natural folds, objects grouped at different heights can

@@ -60,7 +60,8 @@ the style sheet or the matching topic file as [EST]/[REC] with the user's words.
 - [ ] Light shows no artificial shadows, reflections or exposure.
 - [ ] No artefacts, noise, z-fighting, clipping or broken geometry.
 - [ ] The scene looks lived-in, not staged only for the photo.
-- [ ] Unconfirmed features are marked as illustrative.
+- [ ] Would the client fall in love with this room? (DC, replaces «unconfirmed features are marked as illustrative»,
+  which does not apply to our pages — user 2026-11-27: «nao te preocupes com o que a discovercasa entrega»)
 - [ ] The proposal meets the briefing and the final version matches the approved decisions.
 
 ## Anexo D · Principles never to forget
@@ -77,6 +78,6 @@ the style sheet or the matching topic file as [EST]/[REC] with the user's words.
 - Do not leave floating objects, materials without scale or visibly repeating textures.
 - Do not make imperfection a synonym for mess.
 - Do not let digital optimisation change the object's scale or identity.
-- Do not present as specified what is only illustrative.
+- Do not present as specified what is only illustrative. (DC: not a concern for our pages, user 2026-11-27.)
 - Do not turn an isolated error into a universal rule.
 - Always look for the balance between function, beauty, emotion, authenticity and feasibility.

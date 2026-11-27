@@ -37,8 +37,9 @@ Light is a layer of the project, not lamps added at the end: understand daylight
 
 ### 9.6 Light in images
 - [EST] In evening renders the lamps may be on for atmosphere, if the light looks plausible.
-- [OBR] (B3) The image never suggests fixed or indirect lighting the project does not include; a conceptual image is
-  understood as a visual proposal, not an installation spec.
+- (DC) [EST] Draw the lighting that makes the room most impressive — downlights, coves, indirect light, lamps. What
+  the house includes is not our concern (user 2026-11-27: «nao te preocupes com o que a discovercasa entrega»); the manual's «the image never suggests fixed lighting
+  the project does not include» does not apply to DiscoverCasa pages.
 - (DC) Our lamps in the scene need a light source in every toured room (dark rooms otherwise) — rule of the client page
   standard; light has a big impact on realism (user 2026-11-26: «a luz tem grande impacto então lembra-te o importante é
   ter o maior realismo possível»).

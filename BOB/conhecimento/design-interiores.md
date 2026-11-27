@@ -4,6 +4,9 @@ How DiscoverCasa designs and draws interiors: composition, measures, styles, pie
 library for the page 3D, the 360° tour, AR and VR. Kept by the agent `designer-interiores`
 (`.claude/agents/designer-interiores.md`). Hub: Páginas, checkpoint 44 «Interiores realistas por estilos».
 
+**Version 1.2, 2026-11-27** — the aim set by the user: the most impressive interiors possible, so the client falls in
+love with the house; what DiscoverCasa delivers is not the designer's concern (no delivered-vs-staging split, no
+"illustrative" labels; B3 now only "never invent facts") — 10 §1–2, 06 §9.6, 08 §14.5, 09.
 **Version 1.1, 2026-11-27** — after the agent's first test review of real page stills: one time of day per image,
 exposure and white balance, scanned and parametric pieces in one frame, CC0 models at native size (07 §12.8–12.9);
 camera starting numbers (08 §14.3); several scale references, not only the door (02 §4.2, 07 §13.4); the baseline
@@ -13,6 +16,10 @@ review of our current interiors (10 §7); the agent asks for 1:1 crops and works
 category, plus the DiscoverCasa additions (marked **(DC)**, mostly in `design/10-discovercasa.md`). No style sheets or
 approved pieces yet: they come with the user's reference images (`_trabalho/referencias/<estilo>/`, local only).
 
+## The aim (user, 2026-11-27)
+The interiors exist to make the client **fall in love with the house**: «apenas com os interiores estarem os mais impressionantes possíveis e que o cliente se apaixone pela casa». What DiscoverCasa delivers is not the
+designer's concern: «nao te preocupes com o que a discovercasa entrega». Every guideline below serves that aim; when one gets in its way, the aim wins (within B1–B3).
+
 ## Read this first: guidelines, not rules
 The user, 2026-11-27: «isto será o nosso livro de regras do design sendo que eu quero acima de tudo que sejas flexível e
 não demasiado rigído com as regras, são mais guidelines do que regras na realidade.» The manual says the same: «Nenhuma
@@ -21,8 +28,8 @@ proporção estética ou medida genérica deve ser tratada como lei universal.»
   - **B1** never change the architecture silently (dimensions, openings, walls, stairs, ceiling height) — say it and keep
     the decoration proposal apart from any architectural change;
   - **B2** safety and technical requirements (structure, installations, regulations, makers' instructions) prevail;
-  - **B3** honesty: never show as delivered or specified what is only illustrative, never invent data, brands, models,
-    dimensions, certifications, prices or a client's tastes.
+  - **B3** never invent facts: a brand, model, dimension, certification, price or a client's taste stated as true must
+    be true (the pieces themselves are free: what the house includes is not our concern).
 - **Everything else is a starting point.** Break it when the result is better, and say why in one line. A measure is a
   comfort reference, a proportion is a visual habit, a style list is a tendency.
 - **The best interior is not the one that follows the most rules** (manual, «Princípio final»): it understands the space
@@ -60,7 +67,7 @@ Explain the conflict and offer an alternative; never hide a broken [OBR] behind 
 | `07-realismo-digital.md` | 12, 13 | 3D realism (edges, upholstery, bedding, PBR, grain, contact, controlled imperfection, exposure); three levels for render/VR, web, AR; **our budgets (DC)** |
 | `08-apresentacao-produtos.md` | 14, 15 | Impact, sophistication without excess, cameras, storytelling, visual honesty, options; concept first, investment levels, budget, product checks |
 | `09-metodo-qualidade.md` | 16, Anexo D | Work sequence, learning log rules, classifying a lesson, checklists before/after the render, principles never to forget |
-| `10-discovercasa.md` | (DC) | Our case: the four services, what we deliver vs staging, free sources only, files and tools, the approval loop, open items |
+| `10-discovercasa.md` | (DC) | Our case: the aim, the four services, free sources only, files and tools, the approval loop, open items, baseline review |
 | `11-licoes.md` | (DC) | Lessons from the user's verdicts (format of manual §16.2), classified (§16.3) |
 | `12-pecas-aprovadas.md` | (DC) | Catalogue of approved pieces, each with its approved close-up render and reference |
 | `estilos/<id>.md` | (DC) | One style sheet per style (template in `04-estilos.md`), written from the user's references |

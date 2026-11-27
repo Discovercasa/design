@@ -8,18 +8,20 @@ Rulebook v1.0 (2026-11-27). Not in the manual v1.0 — added for DiscoverCasa. T
   catalogue (`interiores/catalogo.json`: «one catalogue, not two»).
 - [CTX] The page is often made **before any interior briefing**. Defaults, until the client says otherwise: the style
   chosen for the house (or the one closest to its architecture and finishes), a bed in every bedroom (main bedroom
-  double, the others as the project shows or single), no personal objects. State these as assumptions (B3).
+  double, the others as the project shows or single), no personal objects. Say them to the user when showing.
 - [REC] Proposed (not yet asked of the user): add 3–4 interior questions to `conhecimento/perguntas-por-obra.md` —
   style, who lives there (children, pets), home office, furniture they keep.
 - [EST] The interior talks to the house: the style follows the façade and the finishes the client chose.
 
-## 2. What we deliver versus what is staging
-- [OBR] (B3) **Delivered** (to confirm the full list with the user): kitchen (made to measure), sanitary ware, taps,
-  appliances, floors, interior doors. These are drawn as the **real product** — brand and model, from the makers' free 3D
-  models where they exist (the user sends the brands with the prompt to analyse the reference images; hub task «Marcas de
-  sanitários, torneiras e eletrodomésticos»). Fixed lighting and built-in wardrobes: to confirm whether delivered.
-- **Staging** (sofas, rugs, chairs, beds, bedding, lamps, art, plants, objects): illustrative, credible and within the
-  client's reach — never a promise. The page says so where the client could take it as included.
+## 2. The aim: the client falls in love with the house
+- User 2026-11-27: «apenas com os interiores estarem os mais impressionantes possíveis e que o cliente se apaixone pela casa»; «nao te preocupes com o que a discovercasa entrega».
+- [EST] Draw whatever makes each room most impressive and most real — kitchen, lighting (downlights, coves, lamps),
+  furniture, art, plants — with no split between what the house includes and staging, and no "illustrative" labels.
+- [REC] Sanitary ware, taps and appliances: when the user gives the brands (with the prompt to analyse the reference
+  images; hub task «Marcas de sanitários, torneiras e eletrodomésticos»), use the makers' free 3D models — real
+  products read as real. Until then, the best-looking credible piece.
+- (superseded 2026-11-27: «what we deliver versus staging» — delivered products as the real product, staging marked
+  illustrative; the user: «nao te preocupes com o que a discovercasa entrega»)
 
 ## 3. Sources: free only
 - **User decision (binding, not a design guideline):** «Pagar uma libraria está fora de questão» (2026-11-26): no paid
@@ -29,7 +31,7 @@ Rulebook v1.0 (2026-11-27). Not in the manual v1.0 — added for DiscoverCasa. T
   `interiores/descarregar.py`, licences in `interiores/fontes.json`). Poly Haven has no beds, toilets or modern kitchens
   → those pieces are ours (parametric) and must reach the realism of the scanned ones.
 - [REC] A new free source (another CC0 library, a maker's site) and every download need the user's OK first (repo rule).
-- What we deliver: the makers' free BIM/3D models (brands pending).
+- Sanitary ware, taps, appliances: the makers' free 3D models of the brands the user gives (pending).
 - Missing materials: made by us from a reference, ultra-realistic, same in Blender and Unreal (`07-realismo-digital.md` §12.4).
 - [OBR] (B2) Never in Git: reference images (`_trabalho/referencias/`, copyright), downloaded models and textures
   (`_trabalho/`), client houses (Páginas pages live in the hub's private storage).
@@ -63,7 +65,6 @@ Rulebook v1.0 (2026-11-27). Not in the manual v1.0 — added for DiscoverCasa. T
 ## 6. Open items
 - Styles to do first and their references (user, in progress: folder `_trabalho/referencias/`).
 - Brands and models of sanitary ware, taps and appliances (user, with the prompt to analyse the images).
-- Full list of what DiscoverCasa delivers inside (fixed lighting? built-in wardrobes?) — ask the user.
 - Web budget for the page 3D (load time, FPS on a mid-range phone) — measure on the first furnished test page.
 - Interior questions in `perguntas-por-obra.md` — propose to the user.
 - How heavy wall-hung pieces fix in our walls (method has no rule) — ask when a design depends on it.
@@ -81,5 +82,5 @@ of 2026-11-24). Not yet a user verdict — a starting list for the remodelling t
 - Image-level: daylight outside with evening lamps inside, grey and under-exposed interiors, a soft wall shadow with no
   cause, bare walls with no focal point, repeated props, a pitched-down wide camera in the bedroom, no curtains on a
   full-height window, two oaks almost but not quite matching (table/chairs vs floor).
-- Binding (B3) points to settle with the user: delivered products drawn generic (kitchen, tap, floor, doors) until the
-  brands arrive; recessed downlights shown in every room while fixed lighting is not confirmed as delivered.
+- (superseded 2026-11-27: the review's two "delivered vs illustrative" points — generic delivered products, downlights
+  not confirmed — the user: «nao te preocupes com o que a discovercasa entrega»)
