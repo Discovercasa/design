@@ -1229,3 +1229,27 @@ the wall/ceiling above the wall cabinets)
   frames, handles), from this bake's reflection captures (neutral with them off); to fix. Trees with leaf-cluster cards:
   jacaranda VR level looks right but its trunk vanished (bark decimated too far), its web level too coarse; to fix.
   Filed: `step-inside/docs/fase8/README.md` (Resultados 2026-11-27).
+> Sim, avança
+- Answer to "go ahead with the green in the reflections (needs the home PC)?": yes.
+> abre um novo chat para começarmos a trabalhar na questão dos interiores que discutimos ontem e pede-me o que necessitas de referência
+- Done: a separate session «Interiores realistas por estilos (Páginas)» (hub checkpoint 44), which starts by asking the
+  user for the references (styles, 5–10 images per style, brands of sanitary ware, taps and appliances).
+- Work (green tint): with the far grass plane grey the living-room chairs lost the green; the lawn round the house
+  (terrain, M_SI_PBR instance) stayed neon green and still tinted the bedroom handles — the lawn seen through the windows
+  is the source.
+
+### 2026-11-27 — Interiores realistas por estilos: where the references go [Páginas, checkpoint 44]
+- Asked (Claude, new session): which styles first (suggested: warm contemporary, light Nordic, natural Mediterranean),
+  5–10 reference images per style (whole rooms + close-ups of pieces), the brands (and models) of sanitary ware, taps
+  and appliances DiscoverCasa installs, and whether the images come in the chat or in a folder.
+> cria uma pasta e diz-me o caminho assim crio subpastas lá para cada estilo e quando te mandar o prompt para ires analisar as imagens mando-te o nome das marcas que usamos para sanitários, torneiras e eletrodomésticos.
+- Done: folder `BOB/_trabalho/referencias/` (git-ignored, on this PC only, not the home PC: the reference images are
+  copyrighted and the repo is public), with a `LEIA-ME.txt` (one subfolder per style, optional `notas.txt`). The user
+  makes one subfolder per style; the brands come with the prompt to analyse the images.
+- Filed: hub checkpoint 44 (em curso, situação) and tasks «Escolher os estilos e enviar referências» /
+  «Marcas de sanitários, torneiras e eletrodomésticos» (situação); hub Log.
+- Work (green tint, cont.): the lawn texture (Grass005) averages (0.137, 0.239, 0.028) linear — almost no blue, neon
+  green; BaseColorFactor (0.473, 0.398, 1.449) makes it (0.065, 0.095, 0.040), a sunlit lawn's albedo
+  (`ajustes_materiais.json`, also the terrain's M_SI_PBR instance and the far grass plane). Preview: the chairs are their
+  real dark brown again, the TV black, the lawn a natural green; metal handles keep a slight green from the lawn seen
+  through the window (as in reality). Production bake started 15:52.

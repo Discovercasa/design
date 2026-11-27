@@ -126,6 +126,11 @@ refletida pelo Lightmass.
   `kloofendal_38d_partly_cloudy_puresky` (Poly Haven, CC0, 8k) na cúpula SI_Ceu, rodado para o sol da foto ficar no
   azimute do sol do nível; o sol da foto é cortado ao brilho da nuvem mais clara (o nível tem o seu sol cozido) e a
   escala dá a mesma luminância média do céu desenhado (4566 cd/m²). Sem nova cozedura (a cúpula é móvel).
+- **Relva com cor real** (`ajustes_materiais.json`, 2026-11-27): os reflexos ficaram verdes (cadeiras de couro,
+  caixilhos, puxadores) porque as capturas de reflexos viam pelas janelas a relva néon: a textura Grass005 tem média
+  (0,137; 0,239; 0,028) em linear, quase sem azul. O `BaseColorFactor` (0,473; 0,398; 1,449) dá (0,065; 0,095; 0,040),
+  o albedo de uma relva ao sol; também na instância M_SI_PBR do terreno e no plano de relva ao longe. As cadeiras voltam
+  ao castanho-escuro, a TV a preto; os puxadores metálicos ficam com um leve verde da relva vista pela janela (real).
 - `vr_preparar.py` e `espelhos.py` carregam o módulo `StaticMeshEditor` (numa *commandlet* o subsistema vinha vazio e a
   antiga `EditorStaticMeshLibrary` devolvia valores por omissão em silêncio: os registos «0 canais de UV» eram falsos);
   as malhas do motor (`/Engine/…`, o chão de relva é o `Plane`) já não são alteradas nem gravadas.
