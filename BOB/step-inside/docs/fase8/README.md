@@ -130,7 +130,9 @@ refletida pelo Lightmass.
   caixilhos, puxadores) porque as capturas de reflexos viam pelas janelas a relva néon: a textura Grass005 tem média
   (0,137; 0,239; 0,028) em linear, quase sem azul. O `BaseColorFactor` (0,473; 0,398; 1,449) dá (0,065; 0,095; 0,040),
   o albedo de uma relva ao sol; também na instância M_SI_PBR do terreno e no plano de relva ao longe. As cadeiras voltam
-  ao castanho-escuro, a TV a preto; os puxadores metálicos ficam com um leve verde da relva vista pela janela (real).
+  ao castanho-escuro, a TV a preto. Os puxadores do roupeiro do quarto 3 (cinzento-escuro #2B2B2B, metal 0,6) ainda
+  ficam verde-claros: vêem-se de raspão e refletem a captura esférica tirada do meio do quarto, que vê a relva pela
+  janela; de perto, o puxador refletiria a parede ao lado (ver «Melhorias possíveis»).
 - `vr_preparar.py` e `espelhos.py` carregam o módulo `StaticMeshEditor` (numa *commandlet* o subsistema vinha vazio e a
   antiga `EditorStaticMeshLibrary` devolvia valores por omissão em silêncio: os registos «0 canais de UV» eram falsos);
   as malhas do motor (`/Engine/…`, o chão de relva é o `Plane`) já não são alteradas nem gravadas.
@@ -195,12 +197,19 @@ rotação por passos, botão de menu.
   móveis escura e com sombra de contacto; o canto por cima dos armários da cozinha claro (só a sombra suave junto ao
   armário). FPS em estéreo emulado a 140 %/MSAA 4×: sala 107,8 (ontem 102); WC com espelho 111,8, sem espelho 165 — o
   espelho custa ≈ 3 ms e cabe nos 90 Hz. Defeito novo: os reflexos têm um tom verde (cadeiras de couro, caixilhos,
-  puxadores) — vem das capturas de reflexos feitas nesta cozedura (sem elas as cadeiras ficam neutras); por resolver.
+  puxadores) — vem das capturas de reflexos feitas nesta cozedura (sem elas as cadeiras ficam neutras); resolvido a
+  2026-11-27 («Relva com cor real»).
+- **Resultados (2026-11-27, cozedura final com a relva corrigida, 1 h 41 min; imagens em `unreal_vr/cap31/`):** sem
+  verde nos reflexos — cadeiras de couro castanho-escuras, TV preta, tampos e torneira neutros; a relva do exterior com
+  um verde natural em vez de néon; o canto da cozinha e a base dos móveis continuam certos.
 - **Falta (com os óculos):** latência, conforto e os FPS reais no CSV do tour (tarefa 88); escolher os óculos (tarefa 86).
 - **Melhorias possíveis** (não bloqueiam o teste): relva e terreno do exterior lisos e facetados, o alpendre negro visto de
-  fora, o WC demasiado quente, janelas queimadas vistas de dentro (como numa foto); vegetação real à volta (árvores
-  digitalizadas com versões leves — `ferramentas/pagina/vegetacao.py`; a primeira técnica, folhas rareadas e
-  aumentadas, dá folhas grandes demais: falta a dos cartões com cachos de folhas). Resolvidos a 2026-11-26: o vidro do
+  fora, o WC demasiado quente, janelas queimadas vistas de dentro (como numa foto), retângulos mais claros na relva do
+  lote; **capturas de reflexos em caixa, uma por divisão** (as caixas de `interiores.json`): hoje há 6 esferas de 7 m
+  nos pontos das vistas, sem correção de paralaxe (os puxadores do quarto 3 refletem a relva da janela em vez da parede
+  ao lado) e 6 divisões sem captura própria (garagem, arrumo, hall, closet, WC da suite, quarto 2), que em VR se
+  visitam; vegetação real à volta (árvores digitalizadas com versões leves — `ferramentas/pagina/vegetacao.py`, cartões
+  com cachos de folhas; falta manter o tronco da árvore grande e um arbusto real). Resolvidos a 2026-11-26: o vidro do
   duche branco («Vidro»), os espelhos cinzentos («Espelhos»), as cunhas e frestas («Nanite desligado»), a base branca
   dos móveis e o canto escuro por cima dos armários (secções acima), o céu desenhado («Céu fotográfico»).
 - Cada imagem do nível VR no Movie Render Queue demora ≈ 5 min (um PIE por trabalho); `capturas_gui.cmd` tira as 6 vistas
