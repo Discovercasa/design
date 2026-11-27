@@ -5,6 +5,7 @@ baking again (the room's lightmap UVs stay as they were baked):
   part of the page); sala_m.glb for phones (1024 / 512);
 - the HDR panoramas as sRGB JPEG over K (luz.json "env": {modo: K}): the page multiplies by K (12 MB of HDR -> ~1 MB);
 - the powder-coat normal map at 512 (it tiles 12.5 times per metre); the 4096 colour maps at WebP 80;
+- the outside's lightmaps and the linen colour at 1024;
 - --bordas: contact shadows of an older bake faded at their edges (sombra_limpa does it in new bakes).
 
     blender -b <saida>/mesa.blend --python ferramentas/movel/aliviar_mesa.py -- <saida>
@@ -159,6 +160,22 @@ def sombras_bordas():
         bpy.data.images.remove(im)
 
 
+def reduzir_mapas():
+    """1024 px where more is not seen: the outside's lightmaps (lawn and trees, only through the window) and the
+    chairs' linen colour (a 0.27 m weave: 1024 px is 0.26 mm per pixel). Keeps the desktop page under 30 MiB."""
+    for f in [os.path.join(SAIDA, f"lm_{m}_fora.jpg") for m in ("dia", "noite")] + [os.path.join(TEX, "linho_cor.jpg")]:
+        if not os.path.exists(f):
+            continue
+        im = bpy.data.images.load(f)
+        if im.size[0] > 1024:
+            im.scale(1024, 1024)
+            im.file_format = "JPEG"
+            bpy.context.scene.render.image_settings.quality = 90
+            im.save()
+        print("MAPA", os.path.basename(f), im.size[:], round(os.path.getsize(f) / 1e6, 2), "MB")
+        bpy.data.images.remove(im)
+
+
 def main():
     info = json.load(open(os.path.join(SAIDA, "luz.json"), encoding="utf-8"))
     sala = [o for o in bpy.data.objects if o.type == "MESH" and o.get("grupo") in ("sala", "moveis", "fora", "scan")]
@@ -169,6 +186,7 @@ def main():
     env_jpeg(info)
     po()
     webp_80()
+    reduzir_mapas()
     if "--bordas" in sys.argv:
         sombras_bordas()
     json.dump(info, open(os.path.join(SAIDA, "luz.json"), "w", encoding="utf-8"), indent=1, ensure_ascii=False)
