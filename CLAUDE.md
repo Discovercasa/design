@@ -22,7 +22,7 @@ Projeto Design da Discovercasa (`design.discovercasa.pt`). Responder em portugu�
   gerador de documentos, orçamentação, plataforma do cliente, construtor). O antigo repositório privado do BOB já não se usa.
 - O conhecimento e as ferramentas da DiscoverCasa estão em `BOB/`. **Para qualquer trabalho de aplicações ou de casas, ler
   primeiro `BOB/CLAUDE.md`** (regras, mapa, registo de cada detalhe). Os caminhos nos documentos do BOB são relativos a `BOB/`.
-- Os agentes `guardiao-detalhes` e `mestre-construtor` estão em `BOB/.claude/agents/`. Se não aparecerem como agentes,
+- Os agentes `guardiao-detalhes`, `mestre-construtor` e `designer-interiores` (design de interiores, 2026-11-27) estão em `BOB/.claude/agents/`. Se não aparecerem como agentes,
   lançar um agente geral com o conteúdo desse ficheiro como instruções.
 - O site serve versões compiladas: depois de mudar `BOB/configurador/web`, `BOB/gerador/web` ou o motor
   (`BOB/ferramentas/`), correr `python BOB/ferramentas/construir_site.py` e fazer commit do resultado

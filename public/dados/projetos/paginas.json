@@ -6,7 +6,7 @@
   "descricao": "Cada obra tem aqui as suas páginas: um só ficheiro HTML que abre em qualquer computador ou telemóvel, com a casa em 3D (luz gravada no Blender, materiais reais, mobiliário), a visita 360° dentro do 3D, as imagens, as plantas com as áreas e os materiais, em português e inglês. Ficam em privado; «Abrir a página» abre-a noutra janela e «Descarregar» guarda o ficheiro para enviar. Até 21/11 era uma aba do Builder.",
   "fase": "Em testes",
   "situacao": {
-    "dia": "2026-11-24",
+    "dia": "2026-11-27",
     "feito": [
       "Primeira página 3D do cliente num só ficheiro HTML: Casa Ribamar, feita a partir do DWG (convertido em DXF), com pisos, cobertura, terreno, aspeto Maquete/Realista e quadro de áreas.",
       "Página da Casa Ribamar completa para os testes finais (aba Páginas, 18/11): casa mobilada, visita 360° com 11 pontos como modo do 3D (a casa vista de fora, entrar num ponto e andar de divisão em divisão), 10 imagens e panoramas na qualidade máxima feitos no PC de casa (RTX 2060), plantas por piso, Como construímos.",
@@ -18,11 +18,13 @@
     ],
     "agora": [
       "Testes finais da página de Ribamar (tarefas «Página do cliente num ficheiro HTML» e «Visita virtual 360°» à espera de aprovação). A seguir: a aplicação no hub que gera a página a partir dos desenhos e a leitura de qualquer planta.",
-      "Padrão de todas as páginas (21/11): um só 3D interativo com a nossa qualidade e a visita 360° dentro dele; quando a obra já tem um 3D no hub, os comandos desse 3D passam para o nosso modelo."
+      "Padrão de todas as páginas (21/11): um só 3D interativo com a nossa qualidade e a visita 360° dentro dele; quando a obra já tem um 3D no hub, os comandos desse 3D passam para o nosso modelo.",
+      "Interiores realistas por estilos (checkpoint 44, 27/11): livro de regras de design de interiores feito a partir do manual do utilizador (orientações, não regras rígidas) e agente «designer-interiores» criado; pasta das imagens de referência pronta. À espera dos estilos, das imagens e das marcas para começar as fichas de estilo."
     ],
     "falta": [
       "A aplicação no hub que gera a página a partir dos desenhos.",
-      "Ler qualquer planta e qualquer tipo de parede (DWG, PDF, DWFx)."
+      "Ler qualquer planta e qualquer tipo de parede (DWG, PDF, DWFx).",
+      "Interiores realistas: fichas de estilo, peças remodeladas e aprovadas uma a uma, a mesma biblioteca no 3D, tour, AR e VR, página de teste mobilada."
     ]
   },
   "objetivos": [

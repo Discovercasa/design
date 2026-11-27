@@ -51,6 +51,7 @@ DiscoverCasa projects from any device.
 | skill `modelo-blender-madeira` | build/update Blender models from drawings (structure + build-up layers); production documents (Módulos, Cobertura, Listagem de material: `ferramentas/documentos/gerar.py`) | 3D modelling work; documents for a house |
 | agent `guardiao-detalhes` (`.claude/agents/`) | records every detail (log + docs) and checks for conflicts, pending items, improvements | end of every task with new user info; audits |
 | agent `mestre-construtor` + `conhecimento/metodo-construtivo.md` (index) → `conhecimento/metodo/` (topic files) | the METHOD rulebook (how DiscoverCasa builds, rule by rule, with sources and lessons from model errors), split by topic: read the index, then only the topic file(s) needed; checks models against it | after `guardiao-detalhes` files new facts; "how do we build X?"; before/after building a model |
+| agent `designer-interiores` + `conhecimento/design-interiores.md` (index) → `conhecimento/design/` (topic files, style sheets) | the interior DESIGN rulebook — **guidelines, not rigid rules** (user 2026-11-27), from the user's manual (`fontes/design-interiores/`): measures, colour/materials, styles, piece anatomy, light, 3D realism, Web/AR/VR, lessons, approved pieces | any interior/furniture work: brief before modelling, review renders against the references, write style sheets, file the user's verdicts |
 
 New project → new top-level folder `Construção <Nome>/` with the same layout
 (`CLAUDE.md`, `desenhos/`, `docs/`, `modelos/`). Nothing project-specific at the repo root.

@@ -688,4 +688,6 @@ he answers (`metodo-construtivo.md`). Condensed 2026-10-28 (history in git).
   only 3.2). (3) A design agent: the agent does not learn, its files do — rulebook in Markdown, one file per chapter with
   an index (as the method), plus style sheets, approved-piece catalogue and lessons; it advises before modelling, reviews
   renders against the references, folds approvals/rejections; modelling stays in the main session.
-  Status: suggested to the user 2026-11-27; awaiting go-ahead to convert the manual and create the agent.
+  Status: suggested to the user 2026-11-27; user «Sim, os dois» → done 2026-11-27: rulebook
+  `conhecimento/design-interiores.md` + `conhecimento/design/` (gaps (2) written into `design/10-discovercasa.md`),
+  source `fontes/design-interiores/manual-regras-v1.0.md`, agent `.claude/agents/designer-interiores.md`.

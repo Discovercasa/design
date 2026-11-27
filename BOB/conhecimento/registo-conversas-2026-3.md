@@ -1277,3 +1277,14 @@ the wall/ceiling above the wall cabinets)
 - Decision (user): this manual is DiscoverCasa's interior design rulebook, applied as guidelines, not rigid rules.
   Filed: `conhecimento/insights.md` (2026-11-27); hub checkpoint 44 Log. The .docx is still only in the user's Downloads
   (not in the repo yet).
+> Sim, os dois
+- Answer to "convert the manual into the repo and create the design agent now?": both.
+- Done: rulebook v1.0 `conhecimento/design-interiores.md` (index: the three binding points B1 architecture, B2 safety /
+  technical / legal, B3 honesty — everything else a starting point; tags [OBR] [TEC] [REC] [CTX] [EST]; conflict
+  hierarchy; map) → `conhecimento/design/01…12` (the manual translated and tightened, every rule tagged; DiscoverCasa
+  additions (DC) in `10-discovercasa.md`: four services from one scene, delivered vs staging, free sources only, files
+  and tools, the approval loop, our AR/VR budgets, open items; `11-licoes.md`, `12-pecas-aprovadas.md` empty);
+  the manual word for word: `conhecimento/fontes/design-interiores/manual-regras-v1.0.md`; agent
+  `.claude/agents/designer-interiores.md` (brief before modelling, review renders against references, write style
+  sheets, file verdicts; does not model). Maps: `BOB/CLAUDE.md`, root `CLAUDE.md`; `public/dados/projetos/paginas.json`
+  (situacao); `insights.md` status. Hub: task «Livro de regras de design e agente de interiores» (checkpoint 44) concluded.
