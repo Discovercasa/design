@@ -41,6 +41,9 @@ Rulebook v1.0 (2026-11-27). Not in the manual v1.0 — added for DiscoverCasa. T
 - Step Inside: `interiores/catalogo.json` (27 objects: 16 Poly Haven CC0 + 11 parametric — kitchen, island, fridge column,
   wardrobe, beds, dining table, WC, vanity, shower, TV), `step-inside/ferramentas/interiores/` (`pecas.py`,
   `interiores.py`, `blender_interiores.py`).
+- Which pieces are scanned CC0 and which are ours: Step Inside → `origem` in `interiores/catalogo.json`; page → the
+  `p.modelo("<asset>")` calls in `interior.py` (everything else there is ours). A fix says "swap" for a scanned model,
+  "remodel" for ours. One list for both comes with the common library.
 - Target (hub task «Mesma biblioteca no 3D, tour, AR e VR»): one library for the four services — each piece in three
   levels (full, web, AR) with the full version's detail baked into the light versions' textures.
 - [TEC] Our walls: timber frame, OSB 15 and Pladur inside (`sistema-construtivo.md`); interior doors 2,00 × 0,80; interior
@@ -64,3 +67,19 @@ Rulebook v1.0 (2026-11-27). Not in the manual v1.0 — added for DiscoverCasa. T
 - Web budget for the page 3D (load time, FPS on a mid-range phone) — measure on the first furnished test page.
 - Interior questions in `perguntas-por-obra.md` — propose to the user.
 - How heavy wall-hung pieces fix in our walls (method has no rule) — ask when a design depends on it.
+
+## 7. Baseline: first review of our current interiors (2026-11-27)
+The agent's first test reviewed the latest page stills of a recent test house (living room, kitchen, bedroom; renders
+of 2026-11-24). Not yet a user verdict — a starting list for the remodelling task:
+- Pieces to remodel first, by realism gained: (1) sofa and armchair — flat grey slabs, no weave, seams or cushion crown;
+  (2) bedding — regular sine-wave hems, flat top, rigid wedge pillows; (3) kitchen — plate fronts with pure-black gaps, no
+  hardware, no visible hood, empty worktops; (4) rugs — 14 mm slab with no pile (a cheap win); (5) bedside table and
+  lamp — plain crates with no drawer, lamp bases glowing as if translucent.
+- Quick fixes in the code, no remodel: the coffee table (Poly Haven `coffee_table_round_01`, scaled down in
+  `interior.py` `mesa_centro()`, a glam curled-steel base in a straight-lined room) → swap for a simple model at native
+  size; the glass pendant (`pendente()`) gets our black ceiling disc on top of the model's own canopy → one canopy only.
+- Image-level: daylight outside with evening lamps inside, grey and under-exposed interiors, a soft wall shadow with no
+  cause, bare walls with no focal point, repeated props, a pitched-down wide camera in the bedroom, no curtains on a
+  full-height window, two oaks almost but not quite matching (table/chairs vs floor).
+- Binding (B3) points to settle with the user: delivered products drawn generic (kitchen, tap, floor, doors) until the
+  brands arrive; recessed downlights shown in every room while fixed lighting is not confirmed as delivered.

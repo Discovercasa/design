@@ -36,13 +36,18 @@ product (kitchen, sanitary ware, taps, appliances, floors, doors): the real bran
 Keep it to what the task needs; mark each point with its tag ([OBR] / [TEC] / [REC] / [CTX] / [EST]).
 
 ## 2. Review a render
-Open the render and the reference(s). Report what a demanding art director would say, most important first:
+Open the render and the reference(s). With no reference or style sheet yet, infer the intended style from the house and
+the strongest pieces in the frame and judge coherence against that. Images reach you downscaled: for fabric weave, gaps,
+joints and floor boards ask the caller for 1:1 crops of those areas instead of guessing. Check scale against several
+known sizes (the project's doors — usually 2,00 × 0,80 but some houses differ — worktop 0,90, table 0,75, seat 0,45,
+the ceiling height). Report what a demanding art director would say, most important first:
 - **Does it look real?** geometry (edges, thickness, seams, compression, drape), materials (scale, roughness variation,
   repetition, grain direction, plastic look), contact (floating, intersections, contact shadows), light and exposure.
 - **Does it match the reference and the style?** palette, undertones, metals, woods, forms, density, atmosphere — and
   what clashes between pieces (the user's core complaint: «às vezes um estilo não encaixar com o outro»).
 - **Does it work?** scale against the 2,00 × 0,80 door, clearances, circulation, the composition and focal point.
-For each finding: what you see → why it matters → the concrete fix (numbers where useful) → its tag. Separate binding
+For each finding: what you see → why it matters → the concrete fix (numbers where useful; "swap" for a scanned CC0
+model, "remodel" for one of ours — `10-discovercasa.md` §4) → its tag. Separate binding
 problems (B1–B3) from suggestions. End with a one-line verdict: ready to show the user / fix first (the list).
 
 ## 3. Write a style sheet

@@ -1288,3 +1288,9 @@ the wall/ceiling above the wall cabinets)
   `.claude/agents/designer-interiores.md` (brief before modelling, review renders against references, write style
   sheets, file verdicts; does not model). Maps: `BOB/CLAUDE.md`, root `CLAUDE.md`; `public/dados/projetos/paginas.json`
   (situacao); `insights.md` status. Hub: task «Livro de regras de design e agente de interiores» (checkpoint 44) concluded.
+- Work (test of the agent, as a general agent with its file): reviewed the latest interior stills of a recent page
+  (living room, kitchen, bedroom of 2026-11-24). Findings filed as a baseline in `design/10-discovercasa.md` §7 (top 5
+  pieces to remodel: sofa/armchair, bedding, kitchen, rugs, bedside table and lamp; quick code fixes: swap the scaled
+  coffee table, one canopy on the glass pendant — both confirmed in `ferramentas/pagina/interior.py`). Its remarks on the
+  book went into rulebook v1.1 (one time of day per image, exposure/white balance, scanned vs parametric pieces, CC0 at
+  native size, camera numbers, more scale references; the agent asks for 1:1 crops and works without a reference).

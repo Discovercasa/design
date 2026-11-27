@@ -62,6 +62,19 @@ construction, scale and materials correctly, and how light interacts with each o
 - Balance natural and artificial light, exposure, contrast, reflections and temperature. Avoid over-lit interiors,
   shadows with no information, untextured materials or cinematic effects that distort the real colours. Make day and
   evening versions when useful.
+- (DC) [REC] One time of day per image: the sky and garden seen through the windows match the interior light (daylight
+  outside with evening lamps inside reads false) — lesson of the first agent review, 2026-11-27.
+- (DC) [REC] Exposure and white balance: walls meant to be white read white (neutral white balance, not grey or
+  yellow); a grey, under-exposed interior is corrected before showing (typically +0,5 to +1 EV); no unexplained soft
+  shadows on walls (find the light that casts them).
+
+### 12.9 Scanned and parametric pieces in one frame (DC)
+- [TEC] CC0 scanned models are used at their native size: scaling them changes their real dimensions and their texture
+  density; if the size does not fit, choose another model or make ours.
+- [REC] Our parametric pieces reach the detail of the scanned ones next to them (thickness, edge radii, seams, fabric
+  weave, roughness variation): a photo-scanned chair beside a plain box sofa is what makes a room look fake.
+- [EST] A scanned piece must also fit the style: a striking model that clashes (e.g. a glam curled-steel table in a
+  straight-lined Nordic room) is swapped, however real it looks.
 
 ## 13. Digital rules for Web, AR and VR
 The same object may need different levels of detail by presentation mode. Optimising never changes the visual identity,
@@ -94,7 +107,8 @@ the dimensions or the reading of the product.
   reads the same in the four services (hub task «Mesma biblioteca no 3D, tour, AR e VR»).
 
 ### 13.4 Required tests [TEC]
-- Check scale against a known dimension (DC: our 2,00 × 0,80 interior door).
+- Check scale against a known dimension (DC: the project's interior doors — usually 2,00 × 0,80, but check the house:
+  some projects have taller doors — and worktop 0,90, dining table 0,75, seat 0,45, the house's ceiling height).
 - Test light, reflections and look in different environments.
 - No inverted faces, wrong normals or missing textures.
 - Test loading and smoothness in a representative scene.

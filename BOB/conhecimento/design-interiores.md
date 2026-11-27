@@ -4,6 +4,10 @@ How DiscoverCasa designs and draws interiors: composition, measures, styles, pie
 library for the page 3D, the 360° tour, AR and VR. Kept by the agent `designer-interiores`
 (`.claude/agents/designer-interiores.md`). Hub: Páginas, checkpoint 44 «Interiores realistas por estilos».
 
+**Version 1.1, 2026-11-27** — after the agent's first test review of real page stills: one time of day per image,
+exposure and white balance, scanned and parametric pieces in one frame, CC0 models at native size (07 §12.8–12.9);
+camera starting numbers (08 §14.3); several scale references, not only the door (02 §4.2, 07 §13.4); the baseline
+review of our current interiors (10 §7); the agent asks for 1:1 crops and works without a reference.
 **Version 1.0, 2026-11-27** — built from the user's «Manual de Regras — Design de Interiores» v1.0 (source, word for word:
 `conhecimento/fontes/design-interiores/manual-regras-v1.0.md`), translated and tightened, every rule tagged with its
 category, plus the DiscoverCasa additions (marked **(DC)**, mostly in `design/10-discovercasa.md`). No style sheets or

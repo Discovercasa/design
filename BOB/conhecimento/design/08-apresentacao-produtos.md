@@ -25,6 +25,10 @@ picture their life in it.
 - [CTX] Show the relation between rooms in open plans or where there is visual continuity.
 - [OBR] (B3) Never hide layout defects with impossible framings.
 - [REC] Complementary views: overall, material detail, a view of use.
+- (DC) [REC] Starting numbers for interior stills: camera level at eye height 1,2–1,5 m; about 24 mm full-frame
+  equivalent (wider only when the room needs it, with shift instead of tilting so verticals stay straight); two-point
+  perspective; the room's subject in the frame — no large foreground backs of furniture. For the 360° tour the camera
+  height is the tour's own standard.
 
 ### 14.4 Visual storytelling [EST]
 - The image conveys an atmosphere — calm, welcoming, familiar, refined, creative, contemplative — born from consistent

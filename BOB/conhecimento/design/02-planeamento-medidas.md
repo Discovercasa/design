@@ -21,7 +21,7 @@ Solve the layout before the decoration:
 - [CTX] Judge passages in context: a secondary route, an entrance, a busy passage and an appliance's use area do not need
   the same.
 - (DC) Our interior doors are usually 2,00 × 0,80 m (`sistema-construtivo.md`, user 2026-10-09) and interior walls take
-  doors only — use them as the scale check in every room.
+  doors only — use the project's real doors as the scale check in every room (some projects have taller doors).
 
 ## 4.3 Living room
 - [EST] Do not force the sofa to at most two thirds of the wall: it may take 80 % or more if scale, circulation and
